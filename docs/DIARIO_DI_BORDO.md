@@ -285,3 +285,94 @@ Commit e Pull Request: da associare alla chiusura M2
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M3.
+
+---
+
+## 2026-08-24 15:19 — Implementazione e quality gate M3
+
+**Autore:** Codex
+**Milestone:** M3
+**Tipo:** Attuatori / Padé / Pianta completa / Analisi strutturale / Test / Documentazione
+
+### Attività svolta
+
+- Letto integralmente il prompt M3 e verificati AGENTS.md, roadmap, decisioni, stato e risultati M2.
+- Verificato che main contenesse il merge M2 f5800f2, quindi creato il branch codex/m3-actuator-dynamics senza iniziare M4.
+- Prima di consultare il riferimento, definita una griglia deterministica originale di 27 candidati: frequenze naturali 25/40/60 rad/s, damping 0.6/0.8/1.0 e ritardi 10/15/25 ms.
+- Selezionato autonomamente il candidato C14, con 40 rad/s, 0.8 e 15 ms, sulla base di rapidità, overshoot, roll-off prima dei modi elastici ed errore di fase Padé.
+- Centralizzati i parametri e implementati secondo ordine puro, Padé ordine 1, attuatore SISO di ordine 3 e due canali diagonali di ordine 6.
+- Costruita esplicitamente la cascata a 14 stati con convenzione [x_mech;x_act] e StateName verificati.
+- Implementata una seconda cascata indipendente con series e confrontata la risposta 4×2 su 601 frequenze fra 0.01 e 1000 rad/s.
+- Analizzati tutti i poli e ripetute controllabilità, stabilizzabilità, osservabilità e rilevabilità con SVD, scaling temporale e PBH.
+- Creati undici test M3, aggiornato run_all.m e generati dataset più tre figure.
+- Eseguito il primo PASS tecnico completo prima del confronto con il riferimento; soltanto dopo sono stati verificati ad alto livello i valori 30 rad/s, 0.7 e 20 ms usati dal progetto precedente.
+- Scritta da zero la documentazione M3 e approvata la decisione D-0006, senza approvare incertezze.
+
+### Errori e correzioni
+
+- Il primo run_all M3 ha fallito esclusivamente T5: MATLAB restituiva il canale nullo di freqresp come vettore 101×1, mentre il test lo confrontava con uno 1×101. L'asserzione è stata corretta senza modificare il modello; il rilancio completo ha superato 29/29 test.
+- Le matrici grezze ctrb e obsv hanno riportato rango numerico 10/14, con condizionamenti 1.851e23 e 2.477e19. Il risultato non è stato nascosto: una normalizzazione del tempo con scala 133.3333 rad/s restituisce rango 14/14, e PBH indipendenti su tutti i poli confermano controllabilità e osservabilità complete.
+- Le prime figure M3 ereditavano il tema scuro di MATLAB, rendendo testi e assi poco leggibili; dopo ispezione visiva sono stati fissati esplicitamente sfondo, colori, griglia, legende e marcatori delle frequenze.
+- Il grafico del modulo del solo ritardo mostrava rumore numerico dell'ordine di 1e-15; l'asse è stato limitato a ±0.02 dB per rappresentare correttamente l'identità all-pass.
+
+### Risultati
+
+- Candidato scelto: 40 rad/s, damping 0.8, ritardo 0.015 s, Padé ordine 1.
+- Secondo ordine puro: poli -32±24j, DC gain 1, rise 0.0616973 s, settling 0.0939060 s e overshoot 1.51646%.
+- Attuatore completo: ordine 3, poli -32±24j e -133.3333, zero RHP +133.3333 s⁻¹, DC gain 1, rise 0.0626454 s, settling 0.109362 s, overshoot 1.47221% e banda 34.7834 rad/s.
+- Errore fase Padé: 0.0000161° a 1 rad/s, 0.001063° e 0.006028° sui due modi instabili M2, 4.76162° a 70 rad/s e 6.82742° a 80 rad/s. Errore massimo di modulo del solo ritardo 2.220e-16.
+- Ordini SISO/MIMO/full: 3/6/14. GfullMeas ha 2 ingressi e 4 uscite.
+- Interconnessione esplicita contro series: massimo errore assoluto e relativo 0 entro precisione numerica.
+- Poli completi: 12 stabili, 2 instabili, 0 marginali; i sei poli attuativi sono stabili.
+- Tempo normalizzato: controllabilità 14/14 con cond 3.594e5; osservabilità [q;theta] 14/14 con cond 147.7; osservabilità q 14/14 con cond 2.933e4.
+- PBH su tutti i modi: minimo singolare 0.2064 per controllabilità, 0.005890 per osservabilità [q;theta] e 2.665e-5 per osservabilità q; stabilizzabilità e rilevabilità PASS.
+- run_all.m reale in MATLAB R2025b Update 4: 29/29 test top-level, regressioni annidate M0/M1/M2 e validazioni M1/M2/M3 PASS, exit code 0.
+
+### Confronto reference-last
+
+Il riferimento usa 30 rad/s, damping 0.7 e ritardo 20 ms. Il confronto, svolto soltanto dopo il primo PASS, conferma lo stesso ordine di grandezza e l'uso del Padé richiesto dalla traccia. La nostra scelta 40/0.8/15 ms è rimasta invariata ed è motivata dalla griglia originale; non sono stati copiati codice, realizzazioni, matrici, nomi, dataset, figure o risultati.
+
+### Risultato
+
+**SUCCESSO — quality gate tecnico M3 PASS.**
+
+### Problemi aperti
+
+I parametri non sono identificati sperimentalmente; i canali sono identici solo nel nominale; Padé ordine 1 sottostima la perdita di fase alle alte frequenze; lo scaling resta necessario. Incertezze, percentuali, pesi, specifiche e controllori restano fuori scope.
+
+### Prossimo passo
+
+Completare controllo statico e run_all finali, commit, push, Pull Request e handoff M3. Fermarsi senza iniziare M4.
+
+### Git
+
+Branch: codex/m3-actuator-dynamics
+Commit e Pull Request: da associare alla chiusura M3
+
+---
+
+## 2026-08-24 15:24 — Pubblicazione PR e preparazione handoff M3
+
+**Autore:** Codex
+**Milestone:** M3
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit 3da195f per implementazione, test e artifact, e 5ce3a33 per documentazione e decisioni.
+- Pubblicato codex/m3-actuator-dynamics su origin.
+- Aperta la Pull Request #4 verso main: https://github.com/Deda-404/Progetto_CR/pull/4.
+- Verificato tramite risposta GitHub che la PR fosse open e non merged.
+- Predisposto docs/handoff/Resoconto_M3_per_GPT.txt senza sovrascrivere gli handoff precedenti.
+
+### Problemi e correzioni
+
+Il primo comando locale usato per costruire la richiesta API GitHub conteneva un errore di quoting Python ed è terminato prima dell'invio. Il comando è stato corretto; la PR #4 è stata poi creata correttamente senza stampare o salvare credenziali.
+
+### Risultato
+
+**SUCCESSO** — M3 pubblicata per revisione, PR #4 aperta e nessun merge eseguito.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M4.

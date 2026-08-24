@@ -1,0 +1,667 @@
+RESOCONTO M3 PER CHATGPT
+Progetto di Controllo Robusto — Manipolatore SEA 2 DoF
+Data: 2026-08-24
+
+======================================================================
+1. ESITO SINTETICO
+======================================================================
+
+M3 è COMPLETE con quality gate PASS.
+
+È stata implementata e realmente validata in MATLAB R2025b Update 4 la
+dinamica nominale degli attuatori richiesta dalla traccia:
+
+  u
+  -> secondo ordine + ritardo approssimato con Padé ordine 1
+  -> tau
+  -> modello meccanico SEA M2
+  -> q, theta
+
+Risultati principali:
+
+- attuatore SISO: ordine 3;
+- due attuatori diagonali: ordine 6;
+- pianta nominale completa: ordine 14;
+- ingressi completi: 2;
+- uscite di misura [q;theta]: 4;
+- 29/29 test top-level PASS;
+- regressioni M0/M1/M2 PASS;
+- validazioni M1/M2/M3 PASS;
+- run_all PASS con exit code 0;
+- Code Analyzer: 0 messaggi;
+- PR #4 aperta e non unita;
+- M4 non è stata iniziata.
+
+======================================================================
+2. SCOPE E REGOLE APPLICATE
+======================================================================
+
+Sono stati rispettati:
+
+- AGENTS.md;
+- roadmap e decisioni già approvate;
+- modello M2 come unica base tecnica;
+- independent reconstruction / reference-last;
+- nessuna incertezza, ureal, ultidyn, ucover o peso WI;
+- nessuna specifica o sintesi di controllo;
+- nessun merge autonomo.
+
+Interpretazione fisica fissata:
+
+- u = comando richiesto al blocco attuatore esterno;
+- tau = coppia effettivamente applicata all'ingresso motore del modello
+  meccanico SEA M2;
+- la dinamica Jm*theta_ddot + Bm*theta_dot resta nella meccanica a otto
+  stati e non è stata duplicata.
+
+======================================================================
+3. GIT E PULL REQUEST
+======================================================================
+
+Repository:
+https://github.com/Deda-404/Progetto_CR
+
+Base M2 verificata su main:
+
+- merge commit: f5800f2
+
+Branch M3:
+
+- codex/m3-actuator-dynamics
+
+Commit principali:
+
+- 3da195f — feat: add M3 actuator dynamics and full plant
+- 5ce3a33 — docs: record M3 actuator analysis and decisions
+
+Pull Request:
+
+- #4 — M3 actuator dynamics and full 14-state plant
+- https://github.com/Deda-404/Progetto_CR/pull/4
+- stato verificato dopo la creazione: open
+- merged: false
+
+Il presente handoff e i metadati finali sono aggiunti dal commit di
+chiusura successivo ai due commit principali sopra elencati.
+
+======================================================================
+4. SELEZIONE AUTONOMA DEGLI ATTUATORI
+======================================================================
+
+Prima di consultare il progetto precedente è stata costruita una griglia
+deterministica originale di 27 candidati:
+
+- omega_n = 25, 40, 60 rad/s;
+- zeta = 0.6, 0.8, 1.0;
+- delay = 0.010, 0.015, 0.025 s;
+- Padé order = 1 per tutti.
+
+Metriche calcolate per ogni candidato:
+
+- rise time;
+- settling time;
+- overshoot;
+- banda;
+- posizione dello zero RHP Padé;
+- errore di fase Padé a 80 rad/s;
+- nota qualitativa.
+
+Range osservati sui 27 candidati:
+
+- rise time: 0.0313477–0.136115 s;
+- settling time: 0.0729080–0.262482 s;
+- overshoot: 0–9.45812%;
+- banda: 16.0573–68.8348 rad/s;
+- errore fase Padé a 80 rad/s: 2.23380–24.5916 gradi.
+
+Candidato selezionato:
+
+- ID: C14;
+- omega_n = 40 rad/s;
+- zeta = 0.8;
+- tau_d = 0.015 s;
+- Padé order = 1.
+
+Motivazione:
+
+- i modi instabili M2 sono a 4.04083 e 7.20943 s^-1, quindi l'attuatore
+  è più rapido delle dinamiche di stabilizzazione a bassa frequenza;
+- zeta 0.8 limita l'overshoot;
+- la banda 34.7834 rad/s introduce roll-off prima delle risonanze
+  meccaniche a circa 69.95 e 79.40 rad/s;
+- 15 ms costituiscono un ritardo significativo, con errore Padé ancora
+  molto piccolo sui modi instabili e moderato a 70–80 rad/s.
+
+Stato epistemico:
+
+I parametri non sono forniti dalla traccia e non derivano da
+identificazione sperimentale. Sono assunzioni nominali progettuali.
+L'incertezza sarà eventualmente definita e approvata soltanto in M4.
+
+Decisione:
+
+- D-0006 APPROVATA;
+- sostituisce la proposta P-0003;
+- non approva percentuali d'incertezza.
+
+======================================================================
+5. MODELLO DEL SECONDO ORDINE
+======================================================================
+
+Formula:
+
+  G0(s) = omega_n^2 /
+          (s^2 + 2*zeta*omega_n*s + omega_n^2)
+
+Per il nominale:
+
+  G0(s) = 1600 / (s^2 + 64*s + 1600)
+
+Risultati:
+
+- ordine: 2;
+- DC gain: 1;
+- poli: -32 + 24j, -32 - 24j s^-1;
+- tutti i poli stabili;
+- rise time: 0.0616972513 s;
+- settling time: 0.0939060246 s;
+- overshoot: 1.51645765%;
+- banda: 34.7833702 rad/s.
+
+======================================================================
+6. PADÉ DEL PRIMO ORDINE
+======================================================================
+
+Formula implementata autonomamente:
+
+  P1(s) = (1 - tau_d*s/2) / (1 + tau_d*s/2)
+
+Con tau_d = 0.015 s:
+
+- ordine: 1;
+- polo: -2/tau_d = -133.333333333 s^-1;
+- zero RHP: +2/tau_d = +133.333333333 s^-1;
+- DC gain: 1.
+
+Lo zero RHP rende il modello non minimum-phase ma non costituisce un
+polo instabile. La stabilità interna dell'attuatore è determinata dai
+poli, tutti nel semipiano sinistro.
+
+Confronto del solo ritardo:
+
+- risposta esatta: exp(-j*omega*tau_d);
+- risposta Padé: P1(j*omega);
+- griglia di confronto: 0.1–200 rad/s;
+- massimo errore di modulo: 2.220e-16;
+- comportamento all-pass verificato.
+
+Confronto di fase:
+
+  Frequenza       Fase esatta       Fase Padé        Errore assoluto
+  1 rad/s         -0.8594367 deg    -0.8594206 deg   0.0000161 deg
+  4.04083 rad/s   -3.4728406 deg    -3.4717780 deg   0.00106265 deg
+  7.20943 rad/s   -6.1960475 deg    -6.1900197 deg   0.00602777 deg
+  70 rad/s        -60.1605685 deg   -55.3989456 deg  4.76162287 deg
+  80 rad/s        -68.7549354 deg   -61.9275131 deg  6.82742235 deg
+
+Conclusione:
+
+- Padé ordine 1 è eccellente alle frequenze dei modi instabili M2;
+- l'errore cresce verso i modi elastici;
+- il limite è documentato e dovrà essere considerato nelle fasi robuste.
+
+======================================================================
+7. ATTUATORE SISO COMPLETO
+======================================================================
+
+Formula:
+
+  Ga(s) = G0(s)*P1(s)
+
+Risultati:
+
+- ordine: 3;
+- DC gain: 1;
+- poli:
+  -133.333333333
+  -32 + 24j
+  -32 - 24j
+- tutti i poli stabili;
+- zero: +133.333333333 s^-1, RHP;
+- rise time: 0.0626454 s;
+- settling time: 0.109362 s;
+- overshoot: 1.47221%;
+- banda: 34.7834 rad/s;
+- nessuna cancellazione artificiale o indesiderata.
+
+======================================================================
+8. DUE ATTUATORI E SIMMETRIA NOMINALE
+======================================================================
+
+Modello:
+
+  GA(s) = diag(Ga(s), Ga(s))
+
+Risultati:
+
+- dimensioni: 2 ingressi, 2 uscite;
+- ordine: 6;
+- ingressi: u1, u2;
+- uscite: tau1, tau2;
+- DC gain: identità 2x2;
+- canali incrociati: zero sulla griglia di test;
+- stati nominati act1_x1...act1_x3 e act2_x1...act2_x3.
+
+I canali sono identici soltanto nel nominale. La dispersione fra
+attuatori resta fuori scope M3.
+
+======================================================================
+9. PIANTA COMPLETA A 14 STATI
+======================================================================
+
+Convenzione:
+
+  x_full = [x_mech; x_act]
+
+Primi 8 stati:
+
+  q1, q2, q1dot, q2dot, theta1, theta2, theta1dot, theta2dot
+
+Ultimi 6 stati:
+
+  tre stati dell'attuatore 1, tre stati dell'attuatore 2
+
+Costruzione esplicita:
+
+  xdot_m = Am*x_m + Bm*tau
+  xdot_a = Aa*x_a + Ba*u
+  tau    = Ca*x_a + Da*u
+
+  Afull = [Am, Bm*Ca;
+           0,  Aa]
+
+  Bfull = [Bm*Da;
+           Ba]
+
+Per y = Cm*x_m + Dm*tau:
+
+  Cfull = [Cm, Dm*Ca]
+  Dfull = Dm*Da
+
+Modelli prodotti:
+
+- GfullMeas: 14 stati, 2 ingressi, 4 uscite [q;theta];
+- GfullQ: 14 stati, 2 ingressi, 2 uscite q.
+
+Le matrici hanno dimensioni:
+
+- Afull: 14x14;
+- Bfull: 14x2;
+- CfullMeas: 4x14;
+- DfullMeas: 4x2;
+- CfullQ: 2x14;
+- DfullQ: 2x2.
+
+======================================================================
+10. VERIFICA INDIPENDENTE DELL'INTERCONNESSIONE
+======================================================================
+
+La pianta esplicita è stata confrontata con:
+
+  series(GactuatorsMimo, GmechanicalMeas)
+
+Griglia:
+
+- 601 punti logaritmici;
+- 0.01–1000 rad/s.
+
+Metriche:
+
+- massimo errore assoluto: 0 entro precisione numerica;
+- massimo errore relativo: 0 entro precisione numerica;
+- la frequenza riportata come peggiore è 0.01 rad/s perché tutti gli
+  errori sono identicamente nulli sulla griglia;
+- tolleranza quality gate: 1e-9.
+
+Conclusione:
+
+L'augmentation esplicita delle matrici è equivalente alla cascata
+costruita indipendentemente.
+
+======================================================================
+11. POLI DELLA PIANTA COMPLETA
+======================================================================
+
+Poli meccanici complessi stabili:
+
+- -0.683828559885 +/- 79.4003109267j s^-1;
+- -0.961872494974 +/- 69.9477228456j s^-1.
+
+Poli meccanici reali:
+
+- +7.20942861374 s^-1, instabile;
+- +4.04083356564 s^-1, instabile;
+- -7.88550918251 s^-1, stabile;
+- -4.07335088716 s^-1, stabile.
+
+Poli attuativi, ciascuno con molteplicità due:
+
+- -32 + 24j s^-1;
+- -32 - 24j s^-1;
+- -133.333333333 s^-1.
+
+Classificazione:
+
+- stabili: 12;
+- instabili: 2;
+- marginali: 0;
+- massima parte reale: 7.20942861374 s^-1.
+
+I due modi instabili M2 restano presenti. Nessun nuovo polo attuativo è
+instabile. Lo zero Padé RHP non è contato fra i poli.
+
+======================================================================
+12. CONTROLLABILITÀ E STABILIZZABILITÀ
+======================================================================
+
+Diagnostica grezza:
+
+- matrice di controllabilità: rango numerico 10/14;
+- tolleranza SVD automatica: 4.926e14;
+- condizionamento: 1.851e23.
+
+Questo risultato è dominato dalla separazione di scale e non viene usato
+da solo per decidere la proprietà strutturale.
+
+Normalizzazione temporale:
+
+- scala = max(abs(poli)) = 133.333333333 rad/s;
+- A normalizzata = A/scala;
+- B normalizzata = B/scala;
+- rango controllabilità: 14/14;
+- condizionamento: 3.594e5.
+
+PBH:
+
+- tutti i 14 modi hanno rango PBH 14/14;
+- minimo singolare all-mode: 0.206406;
+- i due modi instabili hanno rango 14/14;
+- minimi singolari sui modi instabili: circa 0.5958 e 0.3069;
+- controllabile: PASS;
+- stabilizzabile: PASS.
+
+======================================================================
+13. OSSERVABILITÀ E RILEVABILITÀ
+======================================================================
+
+Misura principale approvata in M2:
+
+  y_meas = [q;theta]
+
+Diagnostica grezza:
+
+- rango numerico osservabilità: 10/14;
+- tolleranza automatica: 9.621e11;
+- condizionamento: 2.477e19.
+
+Tempo normalizzato:
+
+- rango osservabilità: 14/14;
+- condizionamento: 147.689.
+
+PBH [q;theta]:
+
+- tutti i 14 modi hanno rango 14/14;
+- minimo singolare all-mode: 0.00588983;
+- minimi singolari sui modi instabili: circa 0.1364 e 0.2368;
+- osservabile: PASS;
+- rilevabile: PASS.
+
+Caso informativo y = q:
+
+- rango sul tempo normalizzato: 14/14;
+- condizionamento: 29334.4;
+- PBH all-mode: PASS;
+- minimo singolare all-mode: 2.66524e-5;
+- rilevabile: PASS.
+
+La decisione M2 sulle misure non è stata modificata.
+
+======================================================================
+14. TEST E QUALITY GATE
+======================================================================
+
+File:
+
+  tests/test_m3_actuator_dynamics.m
+
+Test M3:
+
+- T1 parametri;
+- T2 secondo ordine;
+- T3 Padé ordine 1;
+- T4 attuatore SISO;
+- T5 due attuatori;
+- T6 pianta completa;
+- T7 interconnessione indipendente;
+- T8 poli completi;
+- T9 controllabilità/stabilizzabilità;
+- T10 osservabilità/rilevabilità;
+- T11 regressione M0/M1/M2.
+
+Esito finale:
+
+- test top-level complessivi: 29/29 PASS;
+- regressioni annidate M0/M1/M2: PASS;
+- validazione M1: PASS;
+- validazione M2: PASS;
+- validazione M3: PASS;
+- run_all: PASS;
+- exit code: 0;
+- Code Analyzer sui file M3 e run_all: 0 messaggi.
+
+Quality gate M3:
+
+[PASS] parametri nominali scelti autonomamente
+[PASS] analisi candidati documentata
+[PASS] secondo ordine implementato
+[PASS] DC gain = 1
+[PASS] Padé ordine 1 implementato
+[PASS] polo Padé verificato
+[PASS] zero RHP Padé verificato
+[PASS] confronto ritardo esatto/Padé eseguito
+[PASS] attuatore SISO ordine 3
+[PASS] blocco MIMO ordine 6
+[PASS] pianta completa ordine 14
+[PASS] convenzione stati documentata
+[PASS] interconnessione verificata indipendentemente
+[PASS] poli completi analizzati
+[PASS] stabilizzabilità verificata
+[PASS] rilevabilità verificata
+[PASS] figure generate
+[PASS] dataset M3 rigenerato
+[PASS] regressioni M0–M2
+[PASS] run_all
+[PASS] documentazione aggiornata
+[PASS] diario aggiornato
+
+Stato finale:
+
+- M3 COMPLETE;
+- quality gate PASS.
+
+======================================================================
+15. ERRORI INCONTRATI E CORREZIONI
+======================================================================
+
+1. Primo run_all M3:
+
+- T5 ha fallito per una differenza di forma, 101x1 contro 1x101, nel
+  vettore nullo restituito da freqresp;
+- il modello era corretto;
+- il test è stato corretto per usare il vettore colonna MATLAB;
+- il run completo successivo ha superato 29/29 test.
+
+2. Scaling strutturale:
+
+- ctrb e obsv grezze hanno suggerito rango 10/14 per condizionamento
+  estremo;
+- sono stati aggiunti scaling temporale e PBH su tutti i modi;
+- entrambi confermano rango strutturale pieno;
+- il risultato grezzo resta documentato.
+
+3. Figure:
+
+- la prima esportazione ereditava il tema scuro MATLAB;
+- colori, sfondi, testi, griglie e legende sono stati fissati;
+- il modulo all-pass mostrava rumore numerico dell'ordine di 1e-15;
+- l'asse è stato reso informativo;
+- le figure finali sono state ispezionate.
+
+4. Apertura PR:
+
+- il primo script locale aveva un errore di quoting e si è fermato prima
+  di inviare la richiesta;
+- il comando è stato corretto;
+- la PR #4 è stata creata;
+- nessuna credenziale è stata stampata o salvata.
+
+======================================================================
+16. REFERENCE-LAST
+======================================================================
+
+Sequenza applicata:
+
+1. traccia e modello M2;
+2. derivazione autonoma;
+3. griglia candidati autonoma;
+4. implementazione;
+5. test e primo PASS completo;
+6. solo dopo, confronto ad alto livello col riferimento.
+
+Il riferimento usa:
+
+- omega_n = 30 rad/s;
+- zeta = 0.7;
+- delay = 20 ms;
+- Padé ordine 1.
+
+La nostra scelta 40/0.8/15 ms non è stata cambiata. Il riferimento ha
+confermato soltanto l'ordine di grandezza e la metodologia richiesta.
+
+Non sono stati copiati:
+
+- codice;
+- realizzazioni state-space;
+- matrici;
+- nomi;
+- dataset;
+- figure;
+- testo;
+- risultati.
+
+======================================================================
+17. DATASET E FIGURE
+======================================================================
+
+Dataset:
+
+- results/data/m3_nominal_actuated_plant.mat
+
+Contenuto principale:
+
+- parametri meccanici M2;
+- parametri nominali attuatore;
+- equilibrio;
+- matrici A/B meccaniche;
+- modello attuatore SISO;
+- modello attuatori MIMO;
+- matrici complete A/B/C/D;
+- GfullMeas;
+- GfullQ;
+- poli;
+- metriche strutturali;
+- tabella dei 27 candidati;
+- metriche Padé;
+- metriche interconnessione.
+
+Figure:
+
+- results/figures/m3_delay_pade_comparison.png
+- results/figures/m3_actuator_bode.png
+- results/figures/m3_full_plant_sigma.png
+
+Tutte sono originali, rigenerabili da run_all.m e sono state ispezionate.
+
+======================================================================
+18. FILE PRINCIPALI
+======================================================================
+
+Parametri:
+
+- src/parameters/actuator_params_nominal.m
+
+Attuatori:
+
+- src/actuators/build_nominal_actuator.m
+- src/actuators/build_nominal_actuator_bank.m
+
+Pianta completa:
+
+- src/model/build_m3_full_plant.m
+
+Analisi:
+
+- analysis/nominal/select_nominal_actuator.m
+- analysis/nominal/analyze_m3_structure.m
+- analysis/nominal/validate_m3_nominal_actuated_plant.m
+
+Test:
+
+- tests/test_m3_actuator_dynamics.m
+
+Pipeline:
+
+- run_all.m
+
+Documentazione:
+
+- docs/DINAMICA_ATTUATORI.md
+- docs/DECISION_LOG.md
+- docs/PROJECT_STATUS.md
+- docs/REQUIREMENTS_CHECKLIST.md
+- docs/DIARIO_DI_BORDO.md
+- README.md
+- CHANGELOG.md
+
+Handoff:
+
+- docs/handoff/Resoconto_M3_per_GPT.txt
+
+======================================================================
+19. PROBLEMI APERTI E LIMITI
+======================================================================
+
+- I parametri attuativi non sono identificati sperimentalmente.
+- I due canali sono identici soltanto nel nominale.
+- Padé ordine 1 sottostima progressivamente la perdita di fase del
+  ritardo esatto verso e oltre 70–80 rad/s.
+- Le matrici strutturali grezze sono fortemente condizionate e le future
+  sintesi dovranno usare scaling esplicito.
+- Non sono approvati range o percentuali d'incertezza.
+- Non sono modellati saturazioni, dead-zone o limiti di coppia.
+- Non sono definite specifiche, bande finali, pesi o controllori.
+- Nessun risultato di robustezza è stato dichiarato.
+
+Nessun problema aperto blocca il completamento di M3.
+
+======================================================================
+20. ISTRUZIONE PER IL PASSO SUCCESSIVO
+======================================================================
+
+Fermarsi per revisione e merge manuale della PR #4.
+
+NON iniziare M4 senza un nuovo incarico esplicito e senza che main
+contenga il merge di M3.
+
+FINE RESOCONTO M3

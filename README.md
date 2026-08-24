@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M2 il comando pulisce e configura l'ambiente, esegue i test M0/M1/M2, ripete le validazioni M1 e M2 e rigenera dataset nominale e figura dei poli. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Alla milestone M3 il comando pulisce e configura l'ambiente, esegue i test M0/M1/M2/M3, ripete le validazioni M1–M3 e rigenera i dataset e le figure nominali. Sono inclusi selezione deterministica degli attuatori, confronto ritardo/Padé e quality gate della pianta completa a 14 stati. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M2 — Equilibrio, linearizzazione e analisi strutturale**.
-- Ultimo risultato validato: equilibrio verticale superiore, modello incrementale a 8 stati, 18 test top-level e quality gate M2 superato in MATLAB R2025b.
+- Milestone corrente: **M3 — Dinamica nominale degli attuatori e pianta completa**.
+- Ultimo risultato validato: attuatori nominali di ordine 3 per canale, blocco MIMO di ordine 6, pianta completa a 14 stati, 29 test top-level e quality gate M3 superato in MATLAB R2025b.
 - Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
-- Prossimo passo: revisione e merge della Pull Request M2; M3 non è iniziata.
+- Prossimo passo: revisione e merge della Pull Request M3; M4 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.
