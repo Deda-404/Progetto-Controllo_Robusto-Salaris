@@ -52,13 +52,21 @@ Dalla radice del repository:
 run_all
 ```
 
-Al completamento dell'ultima feasibility M7 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M6, rigenera i due checkpoint M7 e valuta il co-tuning augmentato a stadi. C1 esegue tutti i 75 punti autorizzati; poiché nessuno soddisfa il gate “promettente”, C2 e C3 non vengono forzate. La pipeline M6 resta validata e M7 non pubblica un controllore finale. Un errore software genera un codice di uscita non nullo, mentre il fallimento prestazionale atteso è segnalato come `PARTIAL`, non come PASS M7.
+Al completamento M8 il comando pulisce e configura l'ambiente, esegue le
+regressioni M0–M7, ricostruisce e valida il modello Simulink non lineare con
+il controllore M6 invariato, rigenera tracking, disturbi, rumore, confronti
+LTI/NL e le due sezioni RAS empiriche. M7 resta il risultato terminale
+`PARTIAL`; non viene eseguito altro tuning.
 
 ## Stato corrente
 
-- Milestone corrente: **M7 — LQG nominale con integratore, stato PARTIAL**.
-- Risultato strutturale: augmentazione 16×16 stabilizzabile, due integratori sulle posizioni e nessuna ostruzione a zero.
-- Risultato finale di feasibility: C1 0/75 ammissibili e 0/75 promettenti; C113 raggiunge 1.026 s ma con overshoot 40.8714%, mentre C161 resta sotto il 10% di overshoot senza assestarsi entro 3 s.
-- Prossimo passo: revisione formale della specifica M5. M5 resta per ora invariata, nessun controller finale è selezionato, altro tuning M7 non è autorizzato e M8 non è iniziata.
+- Milestone corrente: **M8 — Simulink e RAS LQG, COMPLETE**.
+- Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
+  invariati; M7 resta `PARTIAL` e congelata.
+- Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
+  rumore seeded completati; scarto LTI/NL massimo 0.0006201 rad.
+- RAS empirica: 57/57 punti convergenti in entrambe le sezioni entro il box
+  computazionale ±60°; la frontiera è quindi search-box limited.
+- Prossimo passo: **M9 — sintesi nominale `H_infinity mixsyn`**, non iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

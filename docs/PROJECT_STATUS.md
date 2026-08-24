@@ -1,13 +1,45 @@
 # Project Status
 
-**Current milestone:** M7 — LQG nominale con azione integrale
-**Status:** PARTIAL — ultima feasibility conclusa, nessun candidato LQI/LQG-I ammissibile
-**Last validated milestone:** M6
-**Last validated result:** `run_all.m` exit 0, 121/121 test PASS; suite M7 estesa 29/29 PASS; C1 0/75 ammissibili e 0/75 promettenti
-**Blocking issues:** con i costi fisicamente normalizzati analizzati, settling ≤0.8 s e overshoot ≤10% non sono simultaneamente raggiunti
-**Next task:** revisione formale della specifica M5; non eseguire altro tuning M7 e non iniziare M8
-**Pull Request:** [#12 — M7: final augmented-cost feasibility study](https://github.com/Deda-404/Progetto_CR/pull/12), aperta, non draft e non unita
-**Last update:** 2026-08-24, ultima feasibility del costo augmentato
+**Current milestone:** M8 — Simulink, validazione non lineare e RAS LQG
+**Status:** COMPLETE — quality gate tecnico M8 superato
+**Last validated milestone:** M8
+**Last validated controller:** M6 — LQG nominale senza integratore
+**M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
+**Blocking issues:** nessuno
+**Next milestone:** M9 — H-infinity `mixsyn` (NON INIZIATA)
+**Pull Request:** branch `codex/m8-simulink-lqg-ras`; PR M8 da aprire verso `main`, senza merge autonomo
+**Last update:** 2026-08-24, quality gate M8 superato
+
+## Quality gate M8 — COMPLETE
+
+| Requisito | Esito |
+| --- | --- |
+| governance M7 | PASS — `PARTIAL` terminale, M5 e checkpoint invariati |
+| controllore primario | PASS — M6 `K/L/Nr` identici al dataset |
+| modello Simulink | PASS — originale, modulare, senza base workspace |
+| plant non lineare | PASS — equazioni M1 reali, 8 stati |
+| attuatori M3 | PASS — secondo ordine + Padé 1, 6 stati |
+| ordine fisico / stimatore | PASS — 14 / 14; totale continuo 28 |
+| coordinate | PASS — plant assoluto, controller incrementale |
+| solver | PASS — `ode23t`, `1e-5/1e-7`, max step 5 ms |
+| equilibrio 4 s | PASS — errori q/theta/u `4.09e-17/3.85e-17/1.69e-15` |
+| tracking | PASS — 2/5/8° separati su entrambi i giunti |
+| LTI/NL | PASS — massimo scarto q `6.2015e-4 rad` |
+| disturbi | PASS — d1/d2 a 0.25/0.50/1.00 N m; offset M6 visibile |
+| rumore | PASS — seed 20260826, rilancio identico |
+| RAS primaria | PASS — 57/57 convergenti, box computazionale interamente convergente |
+| RAS secondaria | PASS diagnostico — stima iniziale coerente, 57/57 convergenti |
+| frontiera | PASS — 36 direzioni; search-box limited |
+| area poligonale | 14214 deg², non certificata oltre il box |
+| saturazione | PASS — nessuna inventata; `uScale` resta normalizzazione |
+| benchmark I25 | NOT RUN corretto — confronto lineare M7 preservato fuori dal gate |
+| dataset / figure | PASS — un dataset, cinque figure |
+| test M8 | PASS — T1–T18 |
+| test top-level / `run_all` | PASS — 139/139, exit code 0 |
+| Code Analyzer M8 | PASS — 0 messaggi su nove file |
+| stato | **COMPLETE** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M7 final feasibility — PARTIAL
 
