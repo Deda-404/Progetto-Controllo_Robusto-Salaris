@@ -21,6 +21,14 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 - Un risultato può essere dichiarato validato soltanto se deriva da codice realmente eseguito o da un calcolo analitico implementato e verificabile.
 - Se MATLAB, Simulink o un toolbox non sono disponibili, marcare il relativo lavoro `NON VALIDATO`.
 
+## Independent reconstruction rule
+
+- Il progetto di riferimento serve esclusivamente a comprendere metodologia, completezza e criticità; non costituisce la base diretta delle nuove implementazioni.
+- Derivare ogni nuova componente prioritariamente dalla traccia ufficiale, progettandone autonomamente formule, API, struttura software e test.
+- Non copiare né parafrasare direttamente codice, commenti, struttura interna delle funzioni, testo, grafici, dataset o risultati del riferimento.
+- Consultare preferibilmente il riferimento soltanto dopo avere progettato, implementato e testato una prima versione indipendente.
+- Usare il confronto successivo per controllare completezza e convenzioni, documentando le differenze senza modificare il nostro lavoro al solo scopo di farlo assomigliare al riferimento.
+
 ## Sviluppo e riproducibilità
 
 - MATLAB e Simulink sono gli ambienti tecnici principali.

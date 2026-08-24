@@ -284,3 +284,43 @@ Canali della pianta generalizzata, unità dei pesi e interpretazione di RP cambi
 ### Stato
 
 **PROPOSTA / DA VALUTARE**
+
+---
+
+## D-0002 — Convenzione unica dello stato non lineare
+
+**Data:** 2026-08-24
+**Milestone:** M1
+
+### Problema
+
+Fissare un ordine non ambiguo per coordinate di link, velocità, coordinate dei rotori e velocità dei rotori, valido per codice, test e futuro modello Simulink.
+
+### Alternative
+
+- raggruppare posizioni e velocità per ciascun giunto;
+- usare l'ordine \([q;\theta;\dot q;\dot\theta]\);
+- usare l'ordine fisico a blocchi \([q;\dot q;\theta;\dot\theta]\) indicato nel prompt M1.
+
+### Scelta
+
+Adottare in tutto il repository
+
+\[
+x=[q_1,q_2,\dot q_1,\dot q_2,\theta_1,\theta_2,
+\dot\theta_1,\dot\theta_2]^T=[q;\dot q;\theta;\dot\theta].
+\]
+
+L'ingresso è sempre la coppia motore \(\tau=[\tau_1,\tau_2]^T\).
+
+### Motivazione
+
+L'ordine separa chiaramente la dinamica lato link e lato motore, rende immediati i vincoli cinematici dell'RHS ed è fissato esplicitamente per M1.
+
+### Conseguenze
+
+Ogni modello, linearizzazione, interfaccia Simulink e test successivo dovrà mantenere questo ordine oppure applicare e documentare una trasformazione esplicita.
+
+### Stato
+
+**APPROVATA**
