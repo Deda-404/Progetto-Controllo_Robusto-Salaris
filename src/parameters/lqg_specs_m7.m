@@ -8,6 +8,8 @@ m6Config = lqg_specs_m6;
 
 config.wiCandidates = [0.05; 0.10; 0.25; 0.50; 1; 2; 4];
 config.rhoUCandidates = [4; 8; 12; 16];
+config.stageBWiCandidates = [4; 8; 16; 32; 64];
+config.stageBRhoUCandidates = [1; 2; 4; 8; 12];
 config.disturbanceSteadyStateTolerance = 1e-4;
 config.integratorArchitecture = "measured joint-position error";
 config.diagnosticIntegratorArchitecture = ...
@@ -22,6 +24,8 @@ config.settlingBandFraction = m6Config.settlingBandFraction;
 config.numericStabilityTolerance = m6Config.numericStabilityTolerance;
 config.separationTolerance = 1e-4;
 config.rankingTieTolerance = m6Config.rankingTieTolerance;
+config.feedforwardResidualTolerance = 1e-10;
+config.feedforwardConditionWarning = 1e8;
 config.antiWindupEnabled = false;
 config.saturationEnabled = false;
 end
