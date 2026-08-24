@@ -1,0 +1,130 @@
+RESOCONTO M6 PER GPT — COMPLETE
+Data: 2026-08-24
+Responsabile: Alessio
+Branch: codex/m6-lqg-no-integrator
+
+1. CLEANUP M5
+- qbar=[pi/2;0] riclassificato come decisione approvata D-0003.
+- Disturbo di coppia lato link riclassificato come scelta di modellazione D-0014 coerente con la traccia.
+- Nessun numero M5 modificato: settling 0.8s, omegaB 12rad/s, riferimento 5deg e uScale 12Nm invariati.
+
+2. PRIMO TENTATIVO rhoU-ONLY, PRESERVATO
+- Scale fisiche e priorità unitarie; rhoU=[0.5,1,2,4,8].
+- Tutti stabilizzanti, ma worst settling 1.222–1.232s: nessun ammissibile.
+- Diagnostica fino a rhoU=0.001: miglior settling 1.21251s, con forte crescita di K.
+- M6 fu correttamente arrestata PARTIAL prima del Kalman. Diario e D-0023 conservano lo stop.
+
+3. DIAGNOSI BASELINE
+- Scale: qScale=0.0872664626rad; qdotScale=1.047197551rad/s; deltaScale=0.0125rad; thetaDotScale=1.047197551rad/s.
+- Pesi equivalenti baseline: q=131.312254; qdot=0.911890653; delta=6400; thetaDot=0.911890653.
+- Rapporto peso posizione/deformazione=0.02051754; deformazione pesata 48.738 volte la posizione.
+- Q baseline: rango 8; condition number sui nonzero eigenvalues=14109.14.
+- Modo dominante con rhoU=0.5: -4.382767 +/- 1.161893i.
+- Partecipazioni aggregate: q 39.84%, qdot 47.49%, theta 8.07%, thetaDot 1.55%, stati attuatore 3.04%.
+- Il modo compare fra i maggiori residui r1->q1 ed è responsabile del settling lento.
+
+4. COARSE GRID AUTORIZZATA
+- wq=[1,2,4,8], wdelta=[0.1,0.25,0.5,1], wVelocity=[0.5,1,2], rhoU=[0.5,1,2,4,8].
+- 240/240 candidati costruiti realmente; nessuna preselezione.
+- 139 candidati rispettano stabilità, settling<=0.8s, overshoot<=10% ed errore statico<=5%.
+- Extended grid: NON ESEGUITA perché la coarse grid ha prodotto candidati tecnicamente selezionabili.
+
+5. RUOLO DI wdelta
+A wq=1, wVelocity=0.5, rhoU=8:
+wdelta | settling[s] | dominant real | peakU/uScale | peakDelta/deltaScale
+1.00   | 1.220       | -4.3377       | 0.5939       | 1.3653
+0.50   | 1.092       | -4.5381       | 0.4926       | 1.4778
+0.25   | 0.948       | -4.8570       | 0.4321       | 1.6361
+0.10   | 0.776       | -5.5051       | 0.3908       | 1.8917
+Conclusione supportata dai dati: il costo Bryson-like iniziale sovrapenalizzava theta-q rispetto al tracking.
+
+6. LQR FINALE
+- Candidato: C193, rank 1 secondo min peakUNormalized, poi peakDeltaNormalized, norm(K), maggiore rhoU e tie-break fissi.
+- wq=1; wqdot=0.5; wdelta=0.1; wthetaDot=0.5; rhoU=8.
+- Worst settling=0.776s; worst overshoot=0.26545%; ss error=5.25e-15; cross=0.17391.
+- Peak control=4.6897Nm; peakUNormalized=0.390804 (moderato, non saturazione).
+- Peak deformation giunti=0.023646/0.011557rad; normalized=1.8917.
+- Peak elastic torque giunti=1.1823/0.46229Nm; norm(K)=432.87.
+- Miglior cross-coupling fra gli ammissibili: C034, 0.14120, ma peakU/uScale=2.0907 e norm(K)=3221.2; non selezionato perché aggressivo.
+- K =
+[269.096310 18.972832 20.208359 4.277443 -176.926708 -14.032650 -1.098284 -0.834205 11.981208 22.978505 46.661719 -0.830591 -2.037634 -11.987668;
+ 19.082439 220.191060 5.354116 7.321418 -6.766182 -151.823365 -0.545249 1.316133 -0.830591 -1.894905 -9.225212 14.439464 28.797965 80.779678]
+
+7. PREFILTRO
+- Nr = [53.739433786 -0.796510791; 4.304445993 49.391564455].
+- cond(Gdc)=1.11439590; ||Gdc*Nr-I||F=1.38778e-17.
+- Nr è feedforward nominale e non un internal model.
+
+8. KALMAN
+- Gw=[BdFull,B], 14x4; w=[wd1,wd2,wu1,wu2].
+- 27 candidati: sigmaD=[0.025,0.05,0.10]Nm, sigmaU=[0.10,0.25,0.50]Nm, sigmaY=[0.05,0.10,0.25]deg.
+- Tre candidati rispettano ratio 1.5–5.
+- Selezionato KF03: sigmaD=0.10Nm, sigmaU=0.10Nm, sigmaY=0.05deg=0.000872665rad.
+- Regulator decay=5.505081; estimator decay=9.318740; ratio=1.69275.
+- norm(L)=7040.6; H2 noise metric=539.325.
+- Qn=diag([0.01,0.01,0.01,0.01]); Rn=(0.000872665)^2*I4.
+- L =
+[22.7086 -21.7936 9.04408 -5.522663;
+-21.7936 85.60432 -6.922626 23.47098;
+551.4684 -1274.373 233.2685 -349.3766;
+-1278.387 4200.935 -381.5968 1210.553;
+9.04408 -6.922626 64.37963 -3.421864;
+-5.522663 23.47098 -3.421864 79.19611;
+724.1313 -934.1036 2143.082 -313.4488;
+-755.8736 2801.521 -390.2761 3432.56;
+-0.415263 -2.254055 -35.11455 -1.728649;
+24.31993 14.40902 -92.13651 -0.288629;
+-30.06643 -12.67317 207.828 4.794787;
+-1.957895 4.813258 -1.702488 -30.03182;
+11.53993 -9.165097 1.360473 -101.9851;
+-9.758893 -0.590618 2.616963 207.4224]
+
+9. CONTROLLER LQG
+- Ordine 14; ingressi [r1,r2,q1,q2,theta1,theta2]; uscite [u1,u2].
+- Nessuno stato integrale aggiunto.
+- Separation error=2.43312e-6 tra combined poles e union(regulator,estimator), tolleranza 1e-4.
+
+10. TRACKING
+LQG r1=5deg: settling 0.776s; OS 0.26545%; ss error 1.62e-14; cross 0.17264; peakU 4.6897Nm.
+LQG r2=5deg: settling 0.514s; OS 0.02517%; ss error 7.79e-15; cross 0.17391; peakU 4.3102Nm.
+Full-state vs LQG deterministic: max q difference 3.69e-15rad, max u difference 1.08e-13Nm.
+
+11. DISTURBO COSTANTE
+d1=0.5Nm: peak q1 0.079791rad; offset q1 0.079585rad; settling 0.752s; cross 0.4635; peakU 1.2995Nm.
+d2=0.5Nm: peak q2 0.16025rad; offset q2 0.16023rad; settling 0.444s; cross 0.22888; peakU 1.1526Nm.
+Offset non nullo atteso senza integratore; benchmark preservato per M7.
+
+12. RUMORE
+- rng(20260826,'twister'), sigmaY selezionato sui quattro encoder.
+- RMS tracking complessivo=0.0150231rad.
+- RMS estimation error q=0.000233771rad.
+- RMS control variation=0.0802548Nm.
+- Secondo rilancio identico campione per campione.
+
+13. TEST/QUALITY GATE
+- Prima T1–T26: 25 PASS e T14 errored per struct2array su campi eterogenei; errore registrato e corretto con verifiche esplicite.
+- Rilancio T14 isolato: PASS.
+- Code Analyzer su 11 file: 0 messaggi.
+- run_all finale: 92/92 test top-level PASS, regressioni M0–M5 PASS, validazioni M1–M6 PASS, exit code 0.
+- Quality gate: M6 COMPLETE.
+
+14. ARTIFACT
+- results/data/m6_lqg_no_integrator.mat con tutti i campi richiesti.
+- Figure: m6_lqr_cost_tuning, m6_lqr_delta_weight_effect, m6_lqr_candidate_comparison, m6_lqg_reference_tracking, m6_lqg_disturbance_response, m6_lqg_estimation, m6_lqg_poles.
+- docs/LQG_SENZA_INTEGRATORE.md aggiornato con 14 sezioni.
+- Decisioni D-0021–D-0027 e diario aggiornati; precedente PARTIAL preservato.
+
+15. LIMITI
+- Validazione LTI nominale locale; nessuna sintesi incerta, nonlinear simulation, Simulink, RAS, Hinf o mu.
+- uScale e deltaScale sono scale prestazionali, non limiti hardware certificati.
+- Offset costante e cross-coupling di disturbo restano limiti espliciti.
+- M7 NON iniziata.
+
+16. GIT/PR
+- Branch: codex/m6-lqg-no-integrator.
+- Commit implementazione/artifact: cbb3921.
+- Commit documentazione/decisioni: e016b17.
+- Branch pubblicato su origin.
+- Pull Request #9: https://github.com/Deda-404/Progetto_CR/pull/9
+- Stato verificato: open, draft=false, merged=false.
+- Nessun merge eseguito.

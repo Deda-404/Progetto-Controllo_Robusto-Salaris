@@ -687,3 +687,153 @@ Creare commit piccoli, pubblicare il branch, aprire la Pull Request e completare
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M6.
+
+---
+
+## 2026-08-24 18:20 — Avvio M6 e cleanup epistemico preliminare
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Governance / Classificazione epistemica
+
+### Attività svolta
+
+- Verificato su `main` il merge M5 `6c4e0af` e creato `codex/m6-lqg-no-integrator` da worktree pulita.
+- Corretto in `performance_specs_m5.m` e `SPECIFICHE_PRESTAZIONE.md` lo stato epistemico dell'equilibrio verticale superiore: decisione approvata D-0003, non requisito della traccia.
+- Corretto lo stato epistemico della coppia esterna ai link: scelta di modellazione D-0014 coerente con la traccia, ma non imposta in modo univoco.
+- Registrata D-0021 senza riscrivere le decisioni storiche.
+
+### Risultato
+
+Cleanup esclusivamente documentale e semantico: nessun valore numerico, peso, scenario o modello M5 è stato modificato.
+
+### Prossimo passo
+
+Sintetizzare e validare il controllore LQG nominale M6 sui 14 stati, senza integratore e senza iniziare M7.
+
+---
+
+## 2026-08-24 18:45 — Arresto al quality gate LQR M6
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Sintesi LQR / Prestazioni / Quality gate
+
+### Attività svolta
+
+- Costruito il costo fisico sui 14 stati con (q_s=5°), scale di velocità (\omega_Bq_s) e deformazione SEA (\delta_s=0.0125) rad.
+- Analizzati in modo indipendente i candidati (\rho_U=[0.5,1,2,4,8]) con (R=\rho_U/u_{scale}^2 I_2).
+- Per ogni candidato sono stati calcolati (K), poli, precompensatore statico, tracking separato da 5°, cross-coupling, picco del comando e risposta ai disturbi da 0.5 N m.
+- Confrontata la metrica di assestamento implementata con `stepinfo` al 2%.
+- Eseguita una sola estensione diagnostica (\rho_U=[0.25,0.1,0.05,0.01,0.001]) per verificare se il fallimento dipendesse dal bordo inferiore della griglia.
+
+### Risultati
+
+Tutti i cinque candidati della griglia sono stabilizzanti, rispettano overshoot ed errore statico e mantengono il cross-coupling sotto il target preliminare del 25%. Il worst-case settling cresce da 1.222 s a 1.232 s ed eccede sempre il target M5 di 0.8 s. Anche l'estensione diagnostica più aggressiva raggiunge soltanto 1.21251 s; il limite non è quindi risolto abbassando semplicemente (\rho_U).
+
+### Quality gate
+
+**FAIL — nessun candidato LQR ammissibile; M6 dichiarata PARTIAL.**
+
+Come richiesto, non sono stati modificati M5, i pesi relativi o l'architettura e non sono state avviate selezione Kalman, costruzione LQG o M7.
+
+La regressione baseline `run_all.m` M0–M5 è stata rieseguita dopo il cleanup con 66/66 test top-level PASS ed exit code 0. Il Code Analyzer sui sei file nuovi/modificati direttamente coinvolti ha restituito 0 messaggi. Un doppio rilancio dello screening ha confermato tabella deterministica e assenza di candidati ammissibili.
+
+### Prossimo passo
+
+Richiedere revisione del gruppo sulla strategia di tuning prima di proseguire.
+
+---
+
+## 2026-08-24 20:05 — Ripresa autorizzata, retuning LQR e completamento tecnico M6
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Diagnosi / Tuning LQR / Kalman / LQG / Test
+
+### Attività svolta
+
+- Preservato integralmente il precedente stop PARTIAL e mantenuti invariati target, (\omega_B), ampiezza riferimento, (u_{scale}) e scale fisiche.
+- Quantificato il costo baseline: pesi equivalenti posizione/deformazione 131.312/6400, rapporto 0.02052, rango (Q)=8 e condition number non nullo 14109.1.
+- Identificato il modo dominante (-4.38277\pm1.16189j) e le partecipazioni aggregate in posizione, velocità, motore e attuatore.
+- Eseguita la coarse grid completa da 240 candidati, senza preselezione: 139 soddisfano i target fondamentali; la extended grid non è stata avviata.
+- Dimostrato l'effetto di (w_\delta): a parametri restanti fissi il settling passa da 1.220 a 0.776 s riducendo la priorità da 1 a 0.1.
+- Selezionato C193 con (w_q=1), (w_\delta=0.1), (w_{velocity}=0.5) e (\rho_U=8): picco comando 4.6897 N m, cross-coupling 17.39% e picco deformazione normalizzato 1.8917.
+- Analizzati 27 candidati Kalman; tre sono ammissibili e KF03 minimizza (H_2), con ratio di decay 1.6928.
+- Costruito il controllore LQG di ordine 14 senza integratori e verificato il principio di separazione con errore (2.43\times10^{-6}).
+- Generati dataset, sette figure e simulazione di rumore riproducibile con seed 20260826.
+
+### Problemi e correzioni
+
+La prima esecuzione T1–T26 ha prodotto un solo errore in T14: `struct2array` tentava di concatenare campi scalari e vettoriali delle metriche di rumore. Le restanti 25 verifiche, compresa la regressione M0–M5 da 66 test, erano PASS. T14 è stato corretto verificando esplicitamente ogni campo e il rilancio isolato è risultato PASS.
+
+### Risultati tecnici
+
+- Tracking LQG: settling 0.776/0.514 s, overshoot 0.265/0.025%, errore statico alla precisione numerica.
+- Disturbi costanti: offset 0.07959/0.16023 rad, mantenuti come benchmark senza integratore.
+- Rumore: RMS tracking 0.0150231 rad, stima (q) 0.000233771 rad, variazione comando 0.0802548 N m.
+- Code Analyzer sui file core eseguito durante lo sviluppo: un warning `STRNU` nella gestione della colorbar, corretto usando un handle esplicito.
+
+### Risultato
+
+**SINTESI E VALIDAZIONE M6 PASS; quality gate finale `run_all` ancora da eseguire.**
+
+### Prossimo passo
+
+Completare documentazione, rilanciare T1–T26 e `run_all`, ispezionare gli artifact e pubblicare la PR senza merge. Non iniziare M7.
+
+---
+
+## 2026-08-24 20:35 — Quality gate finale M6
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Quality gate / Artifact / Documentazione
+
+### Attività svolta
+
+- Eseguito Code Analyzer su 11 file core, test e pipeline: 0 messaggi.
+- Ispezionate le sette figure M6; evidenziato C193 nel confronto candidati e rimossa una voce di legenda spuria dal grafico dei poli.
+- Eseguito `matlab.exe -batch "run_all"` con pipeline completa M0–M6.
+- Rigenerati dataset e figure e verificati i campi obbligatori del dataset tramite test automatici.
+
+### Risultati finali
+
+- Test top-level: 92/92 PASS, incluse T1–T26 e regressione interna M0–M5 da 66 test.
+- Coarse grid: 240 candidati, 139 fondamentali PASS, extended grid non eseguita.
+- C193: worst settling 0.776 s, overshoot 0.26545%, cross-coupling 17.391%, peak control 4.6897 N m.
+- KF03: ratio 1.69275, (H_2=539.325), stimatore stabile.
+- LQG: ordine 14, zero integratori aggiunti, separation error (2.433\times10^{-6}).
+- `run_all`: exit code 0 e messaggio finale PASS.
+
+### Risultato
+
+**SUCCESSO — M6 COMPLETE, quality gate PASS e artifact riproducibili.**
+
+### Prossimo passo
+
+Creare commit piccoli, pubblicare il branch e aprire la Pull Request dedicata senza merge. Non iniziare M7.
+
+---
+
+## 2026-08-24 20:50 — Pubblicazione PR e handoff M6
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `cbb3921` per implementazione, test e artifact e `e016b17` per documentazione e decisioni.
+- Pubblicato `codex/m6-lqg-no-integrator` su `origin` mediante il credential manager configurato.
+- Aperta la Pull Request [#9](https://github.com/Deda-404/Progetto_CR/pull/9) verso `main`.
+- Verificato alla creazione che la PR fosse `open`, `draft=false` e `merged=false`.
+- Completato `docs/handoff/Resoconto_M6_per_GPT.txt` con tentativo fallito, diagnosi modale, tuning, matrici, metriche, test, artifact e limiti.
+
+### Risultato
+
+**SUCCESSO — M6 pubblicata per revisione, PR #9 aperta e nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M7.
