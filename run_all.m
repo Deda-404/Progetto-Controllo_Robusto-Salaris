@@ -16,17 +16,23 @@ addpath(genpath(fullfile(projectRoot, 'analysis')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf('Milestone implementata: M1 (modello non lineare SEA)\n\n');
+fprintf('Milestone implementata: M2 (equilibrio e linearizzazione SEA)\n\n');
 
 try
-    fprintf('--- Test automatici M0 + M1 ---\n');
+    fprintf('--- Test automatici M0 + M1 + M2 ---\n');
     testResults = runtests(fullfile(projectRoot, 'tests'));
     assertSuccess(testResults);
+    fprintf('Test automatici superati: %d/%d.\n', ...
+        sum([testResults.Passed]), numel(testResults));
 
     fprintf('\n--- Validazione numerica M1 ---\n');
     m1Metrics = validate_m1_nonlinear_model;
 
-    fprintf('\n[PASS] RUN_ALL completato: test M0/M1 e validazione M1 superati.\n');
+    fprintf('\n--- Validazione, dataset e figura M2 ---\n');
+    m2Metrics = validate_m2_equilibrium_linearization;
+
+    fprintf(['\n[PASS] RUN_ALL completato: test M0/M1/M2, validazioni M1/M2, ' ...
+        'dataset e figura M2 superati.\n']);
 catch executionError
     fprintf(2, '\n[FAIL] RUN_ALL interrotto: %s\n', executionError.message);
     rethrow(executionError);

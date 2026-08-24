@@ -324,3 +324,125 @@ Ogni modello, linearizzazione, interfaccia Simulink e test successivo dovrà man
 ### Stato
 
 **APPROVATA**
+
+---
+
+## D-0003 — Equilibrio verticale superiore
+
+**Data:** 2026-08-24
+**Milestone:** M2
+**Decisione precedente collegata:** P-0001
+
+### Problema
+
+Selezionare un punto statico fisicamente significativo per la linearizzazione del modello meccanico nominale a otto stati.
+
+### Alternative
+
+- configurazione verticale superiore \(\bar q=[\pi/2,0]^T\);
+- una configurazione con coppia gravitazionale non nulla e deformazione SEA statica;
+- una configurazione inferiore open-loop stabile.
+
+### Scelta
+
+Adottare
+
+\[
+\bar q=[\pi/2,0]^T,
+\quad
+\bar\theta=\bar q+K_s^{-1}G(\bar q),
+\quad
+\bar\tau=G(\bar q).
+\]
+
+Numericamente \(G(\bar q)\), \(\bar\theta-\bar q\) e \(\bar\tau\) sono inferiori a \(6\times10^{-16}\) nelle rispettive unità e \(\|f(\bar x,\bar\tau)\|_2=5.8387489976584098\times10^{-14}\).
+
+### Motivazione
+
+La configurazione è il verticale superiore, ha una relazione statica semplice derivata dal modello e produce due poli reali instabili, 7.20942861374 e 4.04083356564 s⁻¹. Costituisce quindi un problema di stabilizzazione significativo senza imporre artificialmente coppie nominali.
+
+### Conseguenze
+
+Jacobiani, modelli incrementali e future sintesi nominali useranno questo punto finché una decisione successiva non lo sostituirà. La validità del modello LTI resta locale.
+
+### Stato
+
+**APPROVATA — sostituisce la proposta P-0001**
+
+---
+
+## D-0004 — Misura principale delle posizioni link e motori
+
+**Data:** 2026-08-24
+**Milestone:** M2
+**Decisione precedente collegata:** P-0002
+
+### Problema
+
+Definire una configurazione di misura plausibile e adeguata per il futuro estimatore, mantenendola distinta dall'uscita di prestazione.
+
+### Alternative
+
+- misurare soltanto \(q\);
+- misurare \([q;\theta]\);
+- includere direttamente anche le velocità.
+
+### Scelta
+
+Adottare come misura principale
+
+\[
+y_{meas}=[q;\theta],
+\]
+
+selezionata da `Cmeas`; non assumere misure dirette di velocità.
+
+### Motivazione
+
+Encoder di posizione lato link e lato motore sono plausibili e rendono direttamente disponibile la deformazione SEA. La matrice di osservabilità ha rango SVD 8/8 con \(\sigma_{min}=3101.1254321359797\), superiore alla tolleranza 0.0078125. Il PBH sui due modi instabili ha rango 8/8, quindi la coppia è osservabile e rilevabile.
+
+### Conseguenze
+
+Le velocità dovranno essere stimate. Il futuro LQG userà questa configurazione come baseline; covarianze e architettura dell'estimatore non sono ancora approvate. La sola misura \(q\) resta un caso informativo, anch'esso osservabile/rilevabile nel modello M2.
+
+### Stato
+
+**APPROVATA — risolve la parte misure di P-0002**
+
+---
+
+## D-0005 — Uscita primaria di prestazione
+
+**Data:** 2026-08-24
+**Milestone:** M2
+**Decisione precedente collegata:** P-0002
+
+### Problema
+
+Separare le variabili fisiche da regolare dai segnali disponibili all'estimatore.
+
+### Alternative
+
+- regolare le sole posizioni dei link \(q\);
+- regolare congiuntamente \([q;\theta]\);
+- includere velocità o deformazioni come uscite primarie.
+
+### Scelta
+
+Adottare come uscita primaria di prestazione
+
+\[
+y_q=q,\qquad C_q=[I_2\ 0_{2\times6}],\qquad D_q=0.
+\]
+
+### Motivazione
+
+Le coordinate dei link descrivono direttamente la posa del manipolatore e sono distinte dalle misure aggiuntive necessarie alla stima. Il modello `Gmech_q` conserva ordine 8 e il caso \(C_q\) risulta anche osservabile e rilevabile, pur non essendo scelto come misura principale.
+
+### Conseguenze
+
+Le future specifiche di tracking/regolazione saranno formulate prioritariamente su \(q\). Pesi, bande, errori ammessi e limiti restano da approvare nelle milestone dedicate.
+
+### Stato
+
+**APPROVATA — risolve la parte uscite di P-0002**

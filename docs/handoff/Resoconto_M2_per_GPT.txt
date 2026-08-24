@@ -1,0 +1,450 @@
+RESOCONTO PER GPT — M2 EQUILIBRIO E LINEARIZZAZIONE DEL MODELLO SEA
+==================================================================
+
+Data: 2026-08-24
+Repository: https://github.com/Deda-404/Progetto_CR
+Milestone: M2 — Equilibrio, linearizzazione e analisi strutturale
+Esito: COMPLETE — QUALITY GATE PASS
+M3: NON INIZIATA
+
+
+1. SCOPE E GOVERNANCE
+---------------------
+
+M2 usa il modello meccanico nominale SEA a 8 stati validato in M1 e produce:
+
+- equilibrio statico generale e candidato verticale superiore;
+- Jacobiani simbolici A e B dell'esatto RHS M1;
+- controllo Jacobiani indipendente a differenze finite;
+- modelli state-space meccanici di ordine 8;
+- poli, controllabilità, stabilizzabilità, osservabilità e rilevabilità;
+- verifica locale LTI/non lineare;
+- dataset e figura rigenerabili;
+- test, decisioni e documentazione.
+
+Non sono inclusi attuatori esterni del secondo ordine, ritardo Padé, modello
+a 14 stati, incertezze, controllori, RAS o Monte Carlo.
+
+La ricostruzione è indipendente: prima sono stati usati traccia e modello M1,
+poi sono stati implementati codice e test ed eseguito MATLAB. Il riferimento
+è stato consultato soltanto dopo il primo PASS completo per un confronto ad
+alto livello. Nessun codice, matrice, dataset o risultato è stato copiato.
+
+
+2. GIT
+------
+
+Base verificata:
+- origin/main = 85075d7, merge PR #2 contenente M1
+
+Branch:
+- codex/m2-equilibrium-linearization
+
+Commit M2 già pubblicati:
+- 3dcbec8 — feat: add M2 equilibrium and linearization
+- 0d60428 — docs: record M2 analysis and decisions
+
+Pull Request:
+- numero: #3
+- URL: https://github.com/Deda-404/Progetto_CR/pull/3
+- base: main
+- stato alla chiusura: OPEN, NON MERGED
+
+Questo handoff è aggiunto con un successivo commit documentale sullo stesso
+branch; il relativo hash è ricavabile con git log.
+
+
+3. EQUILIBRIO STATICO GENERALE
+------------------------------
+
+Per una configurazione qbar qualsiasi:
+
+G(qbar) = Ks*(thetabar-qbar)
+taubar  = Ks*(thetabar-qbar)
+
+da cui:
+
+thetabar = qbar + Ks\G(qbar)
+taubar   = G(qbar)
+xbar     = [qbar; zeros(2,1); thetabar; zeros(2,1)]
+
+Implementazione:
+- src/model/sea_static_equilibrium.m
+
+La funzione richiama sempre sea_nonlinear_rhs(xbar,taubar,p) e restituisce
+il residuo; non dipende dal base workspace.
+
+
+4. EQUILIBRIO APPROVATO
+-----------------------
+
+qbar [rad]:
+[1.5707963267948966;
+ 0]
+
+Gbar = taubar [N*m]:
+[5.766616847825057e-16;
+ 1.4416542119562643e-16]
+
+thetabar [rad]:
+[1.5707963267948966;
+ 3.6041355298906603e-18]
+
+xbar:
+[1.5707963267948966;
+ 0;
+ 0;
+ 0;
+ 1.5707963267948966;
+ 3.6041355298906603e-18;
+ 0;
+ 0]
+
+Norma residuo RHS:
+5.8387489976584098e-14
+
+Tolleranza equilibrio:
+1e-10
+
+Esito:
+PASS. Gbar, thetabar-qbar e taubar sono numericamente prossimi a zero ma non
+sono stati imposti a zero. I residui floating-point derivano da cos(pi/2).
+
+Decisione:
+D-0003 approva qbar=[pi/2;0] come equilibrio verticale superiore.
+
+
+5. LINEARIZZAZIONE
+------------------
+
+Modello incrementale:
+
+Delta_xdot = A*Delta_x + B*Delta_tau
+
+A = df/dx valutata in (xbar,taubar)
+B = df/dtau valutata in (xbar,taubar)
+
+Implementazione simbolica:
+- src/model/sea_linearize_symbolic.m
+
+A, matrice 8x8:
+
+[0,          0,              1, 0,       0,              0,  0, 0;
+ 0,          0,              0, 1,       0,              0,  0, 0;
+-287.975,    563.713333333333,0, 0,     312.5,          -583.333333333333,0,0;
+ 704.641666666667,-1838.18666666667,0,0,-729.166666666667,1916.66666666667,0,0;
+ 0,          0,              0, 0,       0,              0,  1, 0;
+ 0,          0,              0, 0,       0,              0,  0, 1;
+ 5000,       0,              0, 0,      -5000,           0, -2, 0;
+ 0,          4000,           0, 0,       0,             -4000,0,-2]
+
+B, matrice 8x2:
+
+[0,   0;
+ 0,   0;
+ 0,   0;
+ 0,   0;
+ 0,   0;
+ 0,   0;
+ 100, 0;
+ 0, 100]
+
+Entrambe le matrici sono finite. Il dataset che le contiene è:
+- results/data/m2_linearization_nominal.mat
+
+
+6. VERIFICA JACOBIANI
+---------------------
+
+Metodo indipendente:
+- differenze finite centrate applicate direttamente a sea_nonlinear_rhs;
+- file analysis/nominal/finite_difference_jacobian.m;
+- passo h = 3e-6.
+
+Risultati A:
+- errore assoluto massimo = 4.125922714592889e-08
+- errore Frobenius = 6.1244117265199256e-08
+- errore relativo Frobenius = 6.4229732628019935e-12
+
+Risultati B:
+- errore assoluto massimo = 0
+- errore Frobenius = 0
+- errore relativo = 0
+
+Tolleranze:
+- assoluta/Frobenius = 1e-6
+- relativa = 1e-9
+
+Esito: PASS.
+
+Il passo è stato scelto dopo una scansione deterministica tra 1e-3 e 1e-7.
+Il primo passo 1e-6 era già PASS ma aveva errore massimo A 4.113e-7; il passo
+3e-6 riduce l'errore a 4.126e-8 bilanciando troncamento e cancellazione.
+
+
+7. USCITE E MISURE
+------------------
+
+Stato:
+x=[q; qdot; theta; thetadot]
+
+Uscita primaria di prestazione approvata, D-0005:
+y_q=q
+Cq=[I2 zeros(2,6)]
+Dq=zeros(2,2)
+
+Misura principale futura approvata, D-0004:
+y_meas=[q;theta]
+Cmeas seleziona gli stati 1,2,5,6
+Dmeas=zeros(4,2)
+
+Non sono assunte misure dirette di velocità.
+
+Modelli costruiti:
+- Gmech_state=ss(A,B,Cmeas,Dmeas), ordine 8
+- Gmech_q=ss(A,B,Cq,Dq), ordine 8
+
+Questi non includono gli attuatori esterni di M3.
+
+
+8. POLI E STABILITÀ OPEN-LOOP
+-----------------------------
+
+Tolleranza fascia marginale: 1e-8 s^-1
+
+Poli:
+- -0.683828559885 + 79.4003109267j  [stabile]
+- -0.683828559885 - 79.4003109267j  [stabile]
+- -0.961872494974 + 69.9477228456j  [stabile]
+- -0.961872494974 - 69.9477228456j  [stabile]
+-  7.20942861374                  [instabile]
+-  4.04083356564                  [instabile]
+- -7.88550918251                  [stabile]
+- -4.07335088716                  [stabile]
+
+Classificazione:
+- stabili: 6
+- instabili: 2
+- marginali: 0
+- massima parte reale: 7.20942861374 s^-1
+
+Conclusione:
+la configurazione verticale superiore è open-loop instabile.
+
+Figura originale:
+- results/figures/m2_open_loop_poles.png
+
+
+9. CONTROLLABILITÀ E STABILIZZABILITÀ
+-------------------------------------
+
+Matrice:
+Co=ctrb(A,B)
+
+Tolleranza SVD:
+max(size(Co))*eps(sigma_max) = 0.25
+
+Risultati:
+- rango = 8/8
+- sigma_min = 433.21929998023779
+- numero di condizionamento = 2.9957229275929797e11
+
+PBH sui due modi instabili:
+- ranghi = [8,8]
+- sigma_min = [0.635221991708346, 0.385353964545422]
+- tolleranze = [9.09494701772928e-12, 9.09494701772928e-12]
+
+Conclusioni:
+- controllabile: SÌ
+- stabilizzabile: SÌ
+
+Il condizionamento elevato è documentato e dovrà essere considerato nello
+scaling delle sintesi successive; non invalida rango e PBH verificati.
+
+
+10. OSSERVABILITÀ E RILEVABILITÀ
+--------------------------------
+
+Cmeas=[q;theta]:
+- rango osservabilità = 8/8
+- tolleranza SVD = 0.0078125
+- sigma_min = 3101.1254321359797
+- numero di condizionamento = 4.2585425124850553e8
+
+PBH Cmeas sui modi instabili:
+- ranghi = [8,8]
+- sigma_min = [0.137308853790714, 0.236897379586997]
+- tolleranze = [1.09139364212751e-11, 1.09139364212751e-11]
+
+Conclusioni Cmeas:
+- osservabile: SÌ
+- rilevabile: SÌ
+
+Caso informativo Cq=q:
+- rango = 8/8
+- tolleranza = 0.0009765625
+- sigma_min = 186.72810017380434
+- numero di condizionamento = 1.9069768020462918e9
+- rilevabilità PBH: PASS
+
+La sola q non sostituisce la misura principale approvata [q;theta].
+
+
+11. VALIDAZIONE LOCALE LTI/NON LINEARE
+--------------------------------------
+
+Confronto:
+f_nl = f(xbar+Delta_x,taubar+Delta_tau)
+f_lin = A*Delta_x+B*Delta_tau
+
+Direzioni di stato e ingresso sono deterministiche e non nulle.
+
+Ampiezza 1e-2:
+- errore assoluto = 1.1089741907062683e-4
+- errore relativo = 2.4191298402277601e-6
+
+Ampiezza 1e-3:
+- errore assoluto = 1.1089813179803198e-7
+- errore relativo = 2.4191431322431786e-8
+
+Ampiezza 1e-4:
+- errore assoluto = 1.1089909571529759e-10
+- errore relativo = 2.4191641366772758e-10
+
+Ampiezza 1e-5:
+- errore assoluto = 1.7824161749622497e-13
+- errore relativo = 3.8881807456371769e-12
+
+Ordini osservati:
+[2.9999972088386988, 2.9999962251651726, 2.7939188902528653]
+
+Esito:
+PASS. L'errore decresce monotonicamente e più rapidamente del primo ordine.
+Questo test non è una stima RAS né una regione generale di validità.
+
+
+12. TEST E RUN_ALL
+------------------
+
+Ambiente:
+MATLAB R2025b Update 4
+
+Test top-level:
+- M0: 2/2 PASS
+- M1: 7/7 PASS
+- M2: 9/9 PASS
+- totale: 18/18 PASS
+
+Regressione annidata T9 M2:
+- tutti i 7 test M1 rieseguiti: 7/7 PASS
+
+Test M2:
+- T1 equilibrio generale
+- T2 equilibrio scelto
+- T3 dimensioni/finitezza Jacobiani
+- T4 simbolico vs differenze finite
+- T5 validazione locale
+- T6 controllabilità/stabilizzabilità SVD/PBH
+- T7 osservabilità/rilevabilità SVD/PBH
+- T8 matrici di uscita
+- T9 regressione integrale M1
+
+Code Analyzer:
+- 0 messaggi
+
+run_all:
+- validazione M1 PASS
+- validazione M2 PASS
+- dataset rigenerato
+- figura rigenerata e ispezionata
+- exit code 0
+
+
+13. DATASET E FILE PRINCIPALI
+-----------------------------
+
+Dataset:
+- results/data/m2_linearization_nominal.mat
+
+Contiene:
+p, qbar, thetabar, xbar, taubar, A, B, Cq, Dq, Cmeas, Dmeas, poles,
+Gmech_state, Gmech_q, metriche equilibrio/Jacobiani/poli/SVD/PBH e verifica
+locale.
+
+Sorgenti:
+- src/model/sea_static_equilibrium.m
+- src/model/sea_linearize_symbolic.m
+- src/model/sea_output_matrices.m
+- analysis/nominal/finite_difference_jacobian.m
+- analysis/nominal/analyze_m2_structure.m
+- analysis/nominal/validate_m2_equilibrium_linearization.m
+- tests/test_m2_equilibrium_linearization.m
+
+Documentazione:
+- docs/EQUILIBRIO_LINEARIZZAZIONE.md
+- docs/DECISION_LOG.md
+- docs/PROJECT_STATUS.md
+- docs/DIARIO_DI_BORDO.md
+
+
+14. QUALITY GATE M2
+-------------------
+
+[PASS] main M1 aggiornato e verificato
+[PASS] equilibrio derivato autonomamente
+[PASS] relazione statica generale verificata
+[PASS] qbar=[pi/2;0] verificato
+[PASS] residuale nonlinear RHS prossimo a zero
+[PASS] A 8x8 e B 8x2
+[PASS] Jacobiani simbolici ottenuti dal nostro modello
+[PASS] confronto numerico indipendente A/B
+[PASS] validazione locale LTI/NL
+[PASS] poli open-loop calcolati
+[PASS] instabilità classificata
+[PASS] controllabilità verificata con tolleranza
+[PASS] stabilizzabilità verificata con PBH
+[PASS] Cmeas definita e motivata
+[PASS] osservabilità verificata con tolleranza
+[PASS] rilevabilità verificata con PBH
+[PASS] Cq definita come uscita prestazionale
+[PASS] dataset M2 rigenerato
+[PASS] figura poli rigenerata e ispezionata
+[PASS] run_all completo PASS
+[PASS] documentazione aggiornata
+[PASS] diario aggiornato
+
+Esito complessivo:
+M2 COMPLETE — QUALITY GATE PASS
+
+
+15. PROBLEMI E LIMITI APERTI
+----------------------------
+
+Nessun blocco per M2.
+
+Attenzioni future:
+- condizionamento elevato delle matrici Co/Ob: considerare scaling;
+- linearizzazione e confronto LTI/NL sono locali;
+- verifiche strutturali riferite al modello meccanico a 8 stati;
+- l'aggiunta degli attuatori esterni richiederà nuove verifiche in M3;
+- parametri attuatori, incertezze, Q/R, W/V, pesi robusti e limiti non sono
+  ancora approvati.
+
+Problemi risolti durante M2:
+- M1 inizialmente assente da main: il lavoro si è fermato fino al merge;
+- passo differenze finite ottimizzato mediante sweep deterministico;
+- figura iniziale influenzata dal tema scuro MATLAB: stile fissato e verificato.
+
+
+16. STATO PER IL PROSSIMO AGENTE
+--------------------------------
+
+- PR #3 è aperta e non deve essere unita senza revisione del gruppo.
+- M3 non è iniziata.
+- Prima di qualsiasi avanzamento leggere AGENTS.md, docs/PROJECT_STATUS.md,
+  docs/DECISION_LOG.md, docs/MODELLO_NON_LINEARE.md,
+  docs/EQUILIBRIO_LINEARIZZAZIONE.md e questa PR.
+- Non adottare automaticamente parametri degli attuatori del riferimento.
+- Non iniziare M3 senza nuova autorizzazione esplicita e main aggiornato.
+
+FINE RESOCONTO M2
