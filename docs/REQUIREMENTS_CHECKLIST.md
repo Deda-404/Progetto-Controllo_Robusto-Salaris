@@ -72,7 +72,7 @@ M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la 
 - [ ] Validare entrambe sul modello non lineare.
 - [ ] Stimare e documentare la RAS empirica di entrambe.
 
-Il checkpoint M7 ha completato augmentazione, verifica PBH e griglia LQI da 28 candidati: tutti annullano l’offset da disturbo costante, ma nessuno rispetta il settling M5 di 0.8 s. Il completamento autorizzato ha poi valutato un `Nff` candidato-specifico sugli stessi 28 punti e una sola Stage B da 25 punti. Anche il servo 2-DoF restituisce 0 candidati ammissibili; il miglior settling è 1.020 s con overshoot 40.6448%. La voce “LQG con integratore” resta correttamente aperta e nessun controllore finale è stato pubblicato.
+Il checkpoint M7 ha completato augmentazione, verifica PBH e griglia LQI da 28 candidati; il completamento 2-DoF ha poi valutato `Nff` candidato-specifico sugli stessi punti e una Stage B da 25. L'ultima feasibility autorizzata ha co-tunato le sole priorità adimensionali: C1 ha eseguito 75/75 candidati stabili, ma 0 sono ammissibili e 0 soddisfano il gate “promettente”. C2 e C3 non erano quindi autorizzate. Il miglior settling è 1.026 s con 40.8714% di overshoot; il minimo overshoot è 9.61367% con settling non raggiunto entro 3 s. La voce “LQG con integratore” resta correttamente aperta, nessun controllore finale è stato pubblicato e il prossimo passo richiede una revisione formale M5.
 
 ## Controllo \(H_\infty\)
 

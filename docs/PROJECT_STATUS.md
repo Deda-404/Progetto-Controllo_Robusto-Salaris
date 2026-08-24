@@ -1,13 +1,44 @@
 # Project Status
 
 **Current milestone:** M7 — LQG nominale con azione integrale
-**Status:** PARTIAL — completamento 2-DoF eseguito, Stage A e Stage B senza candidati ammissibili
+**Status:** PARTIAL — ultima feasibility conclusa, nessun candidato LQI/LQG-I ammissibile
 **Last validated milestone:** M6
-**Last validated result:** `run_all.m` exit 0, 111/111 test PASS; software M7 completion 19/19 isolati PASS, Stage A 0/28 e Stage B 0/25
-**Blocking issues:** neppure il servo 2-DoF candidato-specifico raggiunge insieme settling ≤0.8 s e overshoot ≤10%; nuova decisione del gruppo richiesta
-**Next task:** riesaminare struttura/feasibility M7 senza modificare M5 automaticamente; non iniziare M8
-**Pull Request:** [#11 — M7: document 2-DoF integral-servo feasibility](https://github.com/Deda-404/Progetto_CR/pull/11), aperta, non draft e non unita
-**Last update:** 2026-08-24, completamento 2-DoF
+**Last validated result:** `run_all.m` exit 0, 121/121 test PASS; suite M7 estesa 29/29 PASS; C1 0/75 ammissibili e 0/75 promettenti
+**Blocking issues:** con i costi fisicamente normalizzati analizzati, settling ≤0.8 s e overshoot ≤10% non sono simultaneamente raggiunti
+**Next task:** revisione formale della specifica M5; non eseguire altro tuning M7 e non iniziare M8
+**Pull Request:** branch `codex/m7-augmented-cost-retuning`, PR dedicata da aprire verso `main`
+**Last update:** 2026-08-24, ultima feasibility del costo augmentato
+
+## Quality gate M7 final feasibility — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| base Git | PASS — PR #11 unita in `main` al commit `b28a06a` |
+| checkpoint I25 / Stage A-B | PASS — dataset e risultati preservati |
+| architettura | PASS — `xi_dot=r-q`, `u=-Kx*x-Ki*xi+Nff*r` |
+| scale fisiche M6 / `xiScale` M7 | PASS — identiche per 75/75 candidati |
+| costruzione costo | PASS — `Qaug=CaugCost'*CaugCost` |
+| coefficienti variati | PASS — sole priorità adimensionali autorizzate |
+| Stage C1 | PASS software — griglia completa 75/75, tutti stabili |
+| candidati promettenti C1 | **0/75** |
+| candidati ammissibili C1 | **FAIL performance — 0/75** |
+| miglior settling C1 | C113: 1.026 s, 40.8714%, `peakU/uScale=2.08761` |
+| minimo overshoot | C161: 9.61367%, ma `Ts=Inf` entro 3 s |
+| Stage C2 | NOT RUN corretto — nessun seed C1 promettente |
+| Stage C3 | NOT RUN corretto — nessun candidato C2 vicino ai target |
+| ricerca oltre C3 | NO |
+| offset `d1/d2` | PASS — 75/75 entro `1e-4 rad`, massimo `2.241e-18` |
+| `Nff` candidato-specifico | PASS — max cond 1.66908, max residuo `3.140e-16` |
+| M5 / modello / Kalman / uncertainty set | PASS — invariati |
+| candidato finale / guadagni finali | NOT RUN — insieme ammissibile vuoto |
+| LQG-I ordine 16 / measured-estimated / rumore | NOT RUN — gate prestazionale fallito |
+| dataset/figure feasibility | PASS — un dataset e due figure |
+| Code Analyzer | PASS — 0 messaggi su otto file |
+| test M7 estesi | PASS — 29/29 |
+| test top-level / `run_all` | PASS software — 121/121, exit 0, esito finale PARTIAL |
+| stato | **PARTIAL — revisione formale M5 richiesta** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M7 completion 2-DoF — PARTIAL
 

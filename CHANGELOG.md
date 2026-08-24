@@ -6,6 +6,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Co-tuning M7 finale delle sole priorità adimensionali del costo augmentato, con Stage C1 completa da 75 candidati e gate vincolanti verso C2/C3.
+- Dataset `m7_augmented_cost_feasibility.mat`, frontiera di Pareto, figura trade-off e confronto M6/I25/E16/finale.
+- Funzioni riusabili per `Nff` candidato-specifico e valutazione del servo 2-DoF, più test M7 estesi per scale, stadi, target, offset e stop.
+- Handoff `Resoconto_M7_final_feasibility_per_GPT.txt` per la revisione formale successiva.
 - Servo LQI 2-DoF M7 con `Nff` derivato separatamente da ogni `Kx`, verifica DC, confronto 1-DoF/2-DoF e Stage A completa da 28 candidati.
 - Unica Stage B autorizzata da 25 candidati, feasibility table con guadagni/poli e dataset `m7_lqi_2dof_feasibility.mat`.
 - Figura dell’effetto feedforward e suite M7 completion T1–T20 per sequenza Stage A/B, derivazione `Nff`, indipendenza del rigetto e stop prestazionale.
@@ -55,6 +59,8 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- M7 resta `PARTIAL` dopo l'ultima feasibility: C1 produce 0/75 candidati ammissibili e 0/75 promettenti; C2/C3 non vengono eseguite e il prossimo passo è una revisione formale M5.
+- Il costo LQI può variare coefficienti adimensionali mantenendo esattamente le scale M6/M7 e la costruzione `Qaug=CaugCost'*CaugCost`.
 - M7 resta `PARTIAL` dopo il completamento 2-DoF: Stage A produce 0/28 candidati ammissibili e Stage B 0/25; M5 resta invariata.
 - Stato corrente portato a M7 `PARTIAL`: tutti i candidati annullano l’offset costante, ma il miglior settling è 1.964 s contro il target M5 di 0.8 s; nessuna modifica automatica di M5.
 - Corretta la classificazione epistemica M5: equilibrio D-0003 come decisione approvata e coppia ai link D-0014 come scelta di modellazione coerente con la traccia, senza variazioni numeriche.
