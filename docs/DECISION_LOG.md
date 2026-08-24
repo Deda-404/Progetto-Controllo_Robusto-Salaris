@@ -1376,3 +1376,39 @@ Nessun candidato è selezionato. Non vengono costruiti LQG-I finale, controller 
 ### Stato epistemico
 
 **QUALITY GATE PERFORMANCE FAIL — M7 RESTA PARTIAL, SECONDO STOP RICHIESTO**
+
+---
+
+## D-0033 — Stop definitivo del tuning M7 dopo il co-tuning augmentato
+
+**Data:** 2026-08-24
+**Milestone:** M7 final feasibility
+
+### Problema
+
+Verificare un'ultima volta se il fallimento dei checkpoint dipendesse dal riuso delle priorità M6, ottimizzate per il regolatore senza integratore, senza alterare scale fisiche, architettura o target M5.
+
+### Alternative
+
+- modificare indiscriminatamente scale e priorità con una grande griglia;
+- scegliere comunque E16 o il candidato C1 più rapido;
+- applicare la ricerca strutturata C1–C3 e rispettarne i gate;
+- cambiare M5, Kalman, architettura o iniziare M8.
+
+### Metriche, criterio e scelta
+
+È stata applicata la sola ricerca strutturata autorizzata. C1 ha valutato 75 combinazioni di `wq`, `wi` e `rhoU`, lasciando `wqdot=wthetaDot=0.5` e `wdelta=0.1`. Tutti i punti sono stabili e annullano gli offset, ma nessuno è ammissibile. C113 minimizza il settling a 1.026 s con overshoot 40.8714%, `peakU/uScale=2.08761` e `peakDelta/deltaScale=5.03633`. C161 raggiunge il minimo overshoot, 9.61367%, ma non si assesta entro l'orizzonte di 3 s (`Ts=Inf`).
+
+Nessun C1 soddisfa la definizione di “promettente”: `Ts<=1.0 s`, oppure `OS<=15%` con `Ts<=1.2 s`. C2 non è quindi autorizzata e riceve zero seed; C3 non è necessaria né autorizzata. Non è stata eseguita alcuna Stage ulteriore.
+
+### Motivazione
+
+La frontiera di Pareto conferma un conflitto continuo: i punti più rapidi hanno overshoot 40–41%, mentre la riduzione dell'overshoot porta il settling oltre 2 s o fuori orizzonte e non riduce comando/deformazione. Nessun ranking secondario può sostituire i requisiti fondamentali `Ts<=0.8 s` e `OS<=10%`.
+
+### Conseguenze e limiti
+
+Nessun candidato finale è selezionato. KF03 non viene associato a un servo non ammissibile; controller ordine 16, separation principle, measured/estimated error e rumore restano `NOT RUN`. M5, modello, uncertainty set e checkpoint restano invariati. La prossima attività ammissibile è una revisione formale della specifica M5; altro tuning M7 e M8 non sono autorizzati.
+
+### Stato epistemico
+
+**ULTIMA FEASIBILITY M7 CONCLUSA — PERFORMANCE FAIL, M7 PARTIAL, REVISIONE FORMALE M5 RICHIESTA**

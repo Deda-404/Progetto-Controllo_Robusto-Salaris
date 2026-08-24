@@ -1002,3 +1002,89 @@ Pubblicare il checkpoint completion sul branch dedicato e fermarsi per revisione
 ### Prossimo passo
 
 Fermarsi e attendere la decisione del gruppo. Non iniziare M8.
+
+---
+
+## 2026-08-24 — Ultima feasibility M7 con co-tuning del costo augmentato
+
+**Responsabile:** Alessio
+**Milestone:** M7 final feasibility
+**Tipo:** Sintesi / Tuning strutturato / Quality gate
+
+### Attività svolta
+
+- Verificato il merge della PR #11 su `origin/main` al commit `b28a06a` e creato `codex/m7-augmented-cost-retuning`.
+- Preservati i dataset e i risultati dei checkpoint I25 1-DoF e Stage A/B 2-DoF.
+- Esteso il costruttore LQI con `CaugCost` esplicita e priorità adimensionali opzionali, verificando l'identità delle scale fisiche M6 e di `xiScale` M7.
+- Implementati valutatore candidato 2-DoF, `Nff` candidato-specifico e ricerca strutturata limitata a C1–C3.
+- Eseguita integralmente C1 sui 75 punti autorizzati e applicata senza deroghe la definizione di punto promettente per l'accesso a C2.
+- Generati dataset di feasibility, frontiera di Pareto, figura del trade-off e confronto M6/I25/E16/finale.
+
+### Risultati
+
+C1 produce 75/75 candidati stabili e 75/75 con entrambi gli offset entro `1e-4 rad`, ma 0/75 candidati ammissibili e 0/75 promettenti. C113 (`wq=1`, `wi=32`, `rhoU=2`) ha il settling minimo, 1.026 s, con overshoot 40.8714%, comando 25.051 N m e deformazione normalizzata 5.03633. C161 ha il minimo overshoot, 9.61367%, ma worst settling `Inf` entro l'orizzonte di 3 s.
+
+Poiché nessun punto rispetta `Ts<=1.0 s` né la coppia `OS<=15%`, `Ts<=1.2 s`, C2 non riceve seed e non viene eseguita. C3 non è necessaria né autorizzata. Non è stata aggiunta alcuna ricerca oltre C3.
+
+### Quality gate
+
+**PARTIAL — 0/75 ammissibili; nessun controllore finale.**
+
+Con l'architettura LQI/LQG-I studiata e l'ensemble di costi fisicamente normalizzati analizzato, la coppia di requisiti `Ts<=0.8 s` e `OS<=10%` non è risultata simultaneamente raggiungibile.
+
+### Prossimo passo
+
+Fermarsi. La prossima attività richiede una revisione formale della specifica M5; non eseguire altro tuning M7 e non iniziare M8.
+
+---
+
+## 2026-08-24 — Quality gate software della feasibility finale M7
+
+**Responsabile:** Alessio
+**Milestone:** M7 final feasibility
+**Tipo:** Test / Pipeline / Artifact
+
+### Verifiche eseguite
+
+- Code Analyzer sugli otto file MATLAB nuovi o modificati: 0 messaggi.
+- Suite M7 estesa: 29/29 test PASS, 0 failed, 0 incomplete.
+- `matlab.exe -batch "run_all"`: 121/121 test top-level PASS, exit code 0.
+- Rigenerati tutti i dataset e le figure M0–M7, inclusi i tre artifact obbligatori della feasibility finale.
+- Verificata l'assenza di `results/data/m7_lqg_integral.mat` dopo il fallimento prestazionale.
+- Verificato `git diff --check` senza errori.
+
+### Distinzione dei gate
+
+- software/test: **PASS**;
+- Stage C1: **PASS software**, 75/75 punti;
+- performance: **FAIL**, 0/75 ammissibili;
+- C2/C3: **NOT RUN corretto** per assenza di seed promettenti;
+- stato M7: **PARTIAL**.
+
+### Prossimo passo
+
+Pubblicare la PR dedicata senza merge e fermarsi. Il passo successivo autorizzabile è una revisione formale M5, non altro tuning e non M8.
+
+---
+
+## 2026-08-24 — Pubblicazione della feasibility finale M7
+
+**Responsabile:** Alessio
+**Milestone:** M7 final feasibility
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `e95fbed` per software, test e artifact e `1c75d9b` per documentazione e handoff.
+- Pubblicato `codex/m7-augmented-cost-retuning` su `origin`.
+- Aperta la Pull Request [#12](https://github.com/Deda-404/Progetto_CR/pull/12) verso `main`.
+- Verificato via API che la PR sia `open`, `draft=false`, `merged=false`, con head e base corretti.
+- Aggiornato l'handoff scaricabile con C1/C2/C3, Pareto, punti diagnostici, confronto checkpoint, test, `run_all` e gate finale.
+
+### Risultato
+
+**Ultima feasibility M7 pubblicata per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Fermarsi. È richiesta una revisione formale della specifica M5; non ampliare le griglie, non eseguire altro tuning M7 e non iniziare M8.

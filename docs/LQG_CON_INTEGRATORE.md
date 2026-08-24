@@ -1,10 +1,10 @@
-# LQG nominale con azione integrale — M7 e completamento 2-DoF
+# LQG nominale con azione integrale — M7 e feasibility finale
 
-## Stato corrente dopo il completamento autorizzato
+## Stato corrente dopo l'ultima feasibility autorizzata
 
-M7 resta `PARTIAL`. Dopo il merge del checkpoint 1-DoF, il gruppo ha autorizzato un servo 2-DoF con feedforward di riferimento calcolato separatamente per ogni `Kx`. Stage A ha riesaminato gli stessi 28 candidati e Stage B ha eseguito una sola estensione da 25 candidati. Entrambe restituiscono zero progetti fondamentali ammissibili. M5 è invariata e nessun candidato estremo è stato promosso.
+M7 resta `PARTIAL`. I checkpoint 1-DoF e 2-DoF sono preservati integralmente. L'ultima espansione autorizzata ha effettuato il co-tuning delle sole priorità adimensionali del costo LQI augmentato, mantenendo scale fisiche, `xiScale`, modello, M5, KF03 e architettura invariati. Stage C1 ha valutato 75/75 candidati stabili, ma nessuno è risultato ammissibile o anche solo “promettente” secondo il gate approvato; C2 e C3 non erano quindi autorizzate. Non è stato pubblicato un controllore finale.
 
-Gli artifact correnti sono `results/data/m7_lqi_2dof_feasibility.mat`, `results/figures/m7_lqi_candidate_comparison.png` e `results/figures/m7_lqi_feedforward_effect.png`. Il precedente `m7_lqi_grid_partial.mat` resta conservato senza riscrittura.
+I nuovi artifact sono `results/data/m7_augmented_cost_feasibility.mat`, `results/figures/m7_augmented_cost_pareto.png` e `results/figures/m7_augmented_cost_tradeoff.png`. Restano conservati `m7_lqi_grid_partial.mat`, `m7_lqi_2dof_feasibility.mat` e le figure dei due checkpoint precedenti.
 
 ## Stato del checkpoint 1-DoF preservato
 
@@ -218,3 +218,70 @@ Il gate autorizzato prescrive lo stop se anche Stage B fallisce. Di conseguenza 
 - M8: non iniziata.
 
 Ogni ulteriore modifica della struttura del servo o dei target richiede una nuova decisione del gruppo.
+
+## 23. Ultima espansione autorizzata: costo augmentato
+
+Il costo M6 era stato ottimizzato per il regolatore senza integratore. L'ultima feasibility verifica, senza cambiare le normalizzazioni, se lo stesso bilanciamento fosse responsabile del fallimento M7. Per ogni candidato è costruito esplicitamente
+
+\[
+z=\begin{bmatrix}
+\sqrt{w_q}q/q_s\\
+\sqrt{w_{\dot q}}\dot q/\dot q_s\\
+\sqrt{w_\delta}(\theta-q)/\delta_s\\
+\sqrt{w_{\dot\theta}}\dot\theta/\dot\theta_s\\
+\sqrt{w_i}\xi/\xi_s
+\end{bmatrix},\qquad
+Q_{aug}=C_{aug,cost}^TC_{aug,cost}.
+\]
+
+Le scale `qScale`, `qdotScale`, `deltaScale` e `thetaDotScale` coincidono esattamente con M6; `xiScale=0.0698131701 rad s` coincide con i checkpoint M7. Soltanto `wq`, `wqdot`, `wdelta`, `wthetaDot`, `wi` e `rhoU` possono cambiare. La legge resta `u=-Kx*x-Ki*xi+Nff*r`, con `Kx/Ki` prodotti dallo stesso LQR augmentato e `Nff` derivato dal relativo `Kx`.
+
+## 24. Stage C1 e gate verso C2
+
+C1 ha eseguito il prodotto completo `wq=[1 2 4 8 16]`, `wi=[2 4 8 16 32]`, `rhoU=[2 4 8]`, con `wqdot=wthetaDot=0.5` e `wdelta=0.1`: 75 candidati, tutti stabili, tutti con entrambi gli offset entro `1e-4 rad`, zero ammissibili.
+
+Il passaggio a C2 richiedeva stabilità e almeno `Ts<=1.0 s`, oppure `OS<=15%` con `Ts<=1.2 s`. Nessun punto soddisfa la definizione. Non è stata quindi aggirata la regola selezionando “i cinque meno lontani”: C2 ha zero seed e zero valutazioni. C3, subordinata a punti C2 vicini ai target e all'assenza di un candidato già ammissibile, ha a sua volta zero valutazioni. Non esiste alcuna ricerca oltre C3.
+
+Il candidato C1 più rapido è C113 (`wq=1`, `wi=32`, `rhoU=2`): `Ts=1.026 s`, `OS=40.8714%`, `peakU=25.051 N m = 2.08761 uScale`, deformazione `0.062954 rad = 5.03633 deltaScale`, coppia elastica `3.1477 N m`, `peakXi=0.014761 rad s` e worst settling da disturbo `0.950 s`. È classificato “molto aggressivo” in senso diagnostico, non come violazione di un limite hardware.
+
+Il minimo overshoot è C161 (`wq=16`, `wi=2`, `rhoU=2`): `OS=9.61367%`, ma il primo giunto non entra nella banda del 2% entro 3 s e il worst settling è `Inf`. Ha `peakU/uScale=3.0526` e `peakDelta/deltaScale=6.2095`. Il punto con settling finito più vicino a `0.8 s` è ancora C113; il suo overshoot resta 40.8714%.
+
+## 25. Frontiera di Pareto
+
+La frontiera settling/overshoot dei punti con settling finito rende visibile il conflitto:
+
+| Candidato | `wq` | `wi` | `rhoU` | Ts [s] | OS [%] | `peakU/uScale` | `peakDelta/deltaScale` |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| C113 | 1 | 32 | 2 | 1.026 | 40.871 | 2.088 | 5.036 |
+| C128 | 2 | 32 | 2 | 1.086 | 38.226 | 2.245 | 5.291 |
+| C110 | 1 | 16 | 2 | 1.218 | 37.073 | 1.738 | 4.255 |
+| C143 | 4 | 32 | 2 | 1.260 | 34.245 | 2.519 | 5.735 |
+| C125 | 2 | 16 | 2 | 1.352 | 33.804 | 1.916 | 4.562 |
+| C158 | 8 | 32 | 2 | 1.490 | 29.128 | 2.972 | 6.441 |
+| C173 | 16 | 32 | 2 | 1.720 | 23.583 | 3.681 | 7.504 |
+| C170 | 16 | 16 | 2 | 2.084 | 19.038 | 3.437 | 7.009 |
+| C167 | 16 | 8 | 2 | 2.480 | 15.192 | 3.263 | 6.651 |
+| C164 | 16 | 4 | 2 | 2.874 | 12.067 | 3.140 | 6.393 |
+
+Ridurre l'overshoot porta lontano dal target di settling e, in questa famiglia, non riduce comando o deformazione. `Jdiag=max(Ts/0.8,OS/10)` è stato usato soltanto per il gate diagnostico, mai come sostituto dei requisiti.
+
+## 26. Confronto obbligatorio con i checkpoint
+
+| Progetto | Ts [s] | OS [%] | peak control [N m] | peak deformazione [rad] | offset disturbo [rad] | settling disturbo [s] |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| M6 senza integratore | 0.776 | 0.265 | 4.690 | 0.023646 | 0.160232 | 0.752 |
+| M7 I25 1-DoF | 1.964 | 0 | 0.821 | 0.016419 | 0 | 2.190 |
+| M7 E16 2-DoF | 1.020 | 40.645 | 35.170 | 0.062403 | 0 | 0.946 |
+| M7 finale | non disponibile | non disponibile | non disponibile | non disponibile | non disponibile | non disponibile |
+
+I25 mostra rigetto e basso comando ma è troppo lento. E16 e C113 accelerano la risposta al prezzo di overshoot, comando e deformazione elevati. M6 rispetta il transitorio ma, senza internal model, conserva l'offset. Nessuno di questi fatti autorizza la promozione di un punto M7 non ammissibile.
+
+## 27. Stop di feasibility
+
+Con l'architettura LQI/LQG-I studiata e l'ensemble di costi fisicamente normalizzati analizzato, la coppia di requisiti `Ts<=0.8 s` e `OS<=10%` non è risultata simultaneamente raggiungibile.
+
+Questa era l'ultima espansione autorizzata prima di una revisione formale della specifica M5. Non sono stati modificati M5, modello, uncertainty set, Kalman o architettura; non sono stati introdotti prefilter dinamici, pole placement, saturazioni o limiti hardware inventati. Non sono stati costruiti controller LQG-I finale, confronto measured/estimated o analisi rumore, perché questi passi erano condizionati all'esistenza di un candidato ammissibile. M8 non è iniziata.
+
+## 28. Artifact e riproducibilità
+
+Il dataset `m7_augmented_cost_feasibility.mat` conserva tabelle C1/C2/C3, seed, frontiere di Pareto, punti diagnostici, confronto M6/I25/E16/finale, costi e guadagni di tutti i 75 candidati. Le figure `m7_augmented_cost_pareto.png` e `m7_augmented_cost_tradeoff.png` sono generate dalla stessa validazione. La suite M7 estesa verifica scale, costo, sequenza C1–C3, assenza di preselezione, M5 invariata, target, offset e assenza del dataset finale dopo il fail.

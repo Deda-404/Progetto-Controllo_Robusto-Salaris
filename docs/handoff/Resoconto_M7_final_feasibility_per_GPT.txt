@@ -1,0 +1,245 @@
+RESOCONTO M7 PER GPT — ULTIMA FEASIBILITY DEL COSTO AUGMENTATO
+================================================================
+
+Data: 2026-08-24
+Responsabile: Alessio
+Milestone: M7 — LQG nominale con azione integrale
+Stato: PARTIAL per fallimento prestazionale; software e artifact validati
+
+SINTESI
+-------
+
+È stata eseguita l'unica ulteriore fase di feasibility autorizzata:
+co-tuning strutturato delle priorità adimensionali del costo LQI augmentato.
+I checkpoint precedenti sono stati preservati:
+
+- I25 1-DoF: Ts=1.964 s, OS=0%, offset nullo;
+- E16 Stage B 2-DoF: Ts=1.020 s, OS=40.6448%, offset nullo.
+
+La nuova Stage C1 ha valutato 75/75 punti stabili, ma ha prodotto:
+
+- candidati ammissibili: 0/75;
+- candidati “promettenti” secondo il gate autorizzato: 0/75.
+
+Di conseguenza C2 non ha ricevuto seed e non è stata eseguita. C3 non era
+necessaria né autorizzata. Non è stata eseguita alcuna ricerca oltre C3.
+Nessun controllore M7 finale è stato selezionato o pubblicato.
+
+ARCHITETTURA E INVARIANTI
+-------------------------
+
+Architettura studiata:
+
+xi_dot = r - q
+u = -Kx*x - Ki*xi + Nff*r
+
+Per ogni candidato:
+
+- Kx e Ki provengono dallo stesso LQR augmentato;
+- Nff è derivato dal Kx dello stesso candidato;
+- Nr M6 non è usato;
+- non sono applicate correzioni manuali di segno.
+
+Il costo è costruito come:
+
+z = [
+  sqrt(wq)        q/qScale
+  sqrt(wqdot)     qdot/qdotScale
+  sqrt(wdelta)    (theta-q)/deltaScale
+  sqrt(wthetaDot) thetaDot/thetaDotScale
+  sqrt(wi)        xi/xiScale
+]
+
+Qaug = CaugCost' * CaugCost
+R = rhoU/uScale^2 * I2
+
+Sono rimasti identici ai dataset approvati:
+
+- qScale, qdotScale, deltaScale, thetaDotScale di M6;
+- xiScale = referenceAmplitude*settlingTimeTarget
+          = 0.0698131701 rad s;
+- reference = 5 deg;
+- disturbance = 0.5 N m;
+- uScale = 12 N m;
+- modello M3, M5, KF03 e uncertainty set.
+
+STAGE C1
+--------
+
+Griglia completa:
+
+- wq = [1 2 4 8 16]
+- wi = [2 4 8 16 32]
+- rhoU = [2 4 8]
+- wqdot = 0.5
+- wthetaDot = 0.5
+- wdelta = 0.1
+- totale = 75 candidati
+
+Risultati:
+
+- stabili: 75/75;
+- Nff ben condizionati: 75/75;
+- massimo cond(Gdc_x): 1.66908;
+- massimo residuo ||Gdc_x*Nff-I||F: 3.140e-16;
+- entrambi gli offset d1/d2 entro 1e-4 rad: 75/75;
+- massimo offset osservato: 2.241e-18 rad;
+- ammissibili: 0/75;
+- promettenti: 0/75.
+
+Miglior settling C1 — C113:
+
+- wq=1, wqdot=0.5, wdelta=0.1, wthetaDot=0.5;
+- wi=32, rhoU=2;
+- settling r1=1.026 s, r2=0.816 s, worst=1.026 s;
+- overshoot r1=40.871%, r2=25.314%, worst=40.8714%;
+- errore statico tracking=0;
+- worst cross-coupling=19.637%;
+- peakU=25.051 N m, peakU/uScale=2.08761;
+- classificazione comando: molto aggressivo, solo diagnostica;
+- peakDelta=0.062954 rad, peakDelta/deltaScale=5.03633;
+- peak elastic torque=3.1477 N m;
+- peakXi=0.014761 rad s;
+- ||Kx||F=1113.4, ||Ki||F=972.34, ||Nff||F=350.86;
+- polo dominante=-4.5346 +/- 4.4734j;
+- damping ratio dominante=0.71190;
+- offset d1=0 rad, offset d2=0 rad;
+- settling disturbo d1=0.950 s, d2=0.758 s.
+
+Minimo overshoot C1 — C161:
+
+- wq=16, wqdot=0.5, wdelta=0.1, wthetaDot=0.5;
+- wi=2, rhoU=2;
+- worst overshoot=9.61367%;
+- worst settling=Inf: il primo giunto non entra nella banda del 2%
+  entro l'orizzonte di 3 s;
+- peakU/uScale=3.0526;
+- peakDelta/deltaScale=6.2095;
+- classificazione comando: molto aggressivo, solo diagnostica.
+
+Il punto con settling finito più vicino al target di 0.8 s è C113. Non
+esiste un punto con OS<=10% e settling finito; C161 è il miglior Ts nel
+sottoinsieme OS<=10%, ma tale Ts vale Inf.
+
+STAGE C2
+--------
+
+Gate C1 -> C2:
+
+stable e almeno una delle condizioni:
+
+- worst Ts <= 1.0 s;
+- oppure worst OS <= 15% e worst Ts <= 1.2 s.
+
+Esito: 0 candidati C1 promettenti. C2 non eseguita, 0 seed, 0 candidati.
+Non sono stati selezionati arbitrariamente i cinque punti meno lontani.
+
+STAGE C3
+--------
+
+C3 era autorizzata solo in assenza di candidati già ammissibili e in
+presenza di punti C2 promettenti. Poiché C2 non è stata eseguita, C3 non è
+necessaria né autorizzata: 0 seed, 0 candidati.
+
+FRONTIERA DI PARETO FINITA Ts/OS
+-------------------------------
+
+Candidate  Ts[s]   OS[%]    peakU/uScale  peakDelta/deltaScale
+C113       1.026   40.871   2.0876        5.0363
+C128       1.086   38.226   2.2452        5.2907
+C110       1.218   37.073   1.7377        4.2550
+C143       1.260   34.245   2.5195        5.7347
+C125       1.352   33.804   1.9155        4.5616
+C158       1.490   29.128   2.9717        6.4410
+C173       1.720   23.583   3.6806        7.5040
+C170       2.084   19.038   3.4367        7.0085
+C167       2.480   15.192   3.2631        6.6505
+C164       2.874   12.067   3.1399        6.3933
+
+Jdiag=max(Ts/0.8,OS/10) è stato usato soltanto come metrica diagnostica
+per l'eventuale accesso allo stadio successivo. Non sostituisce i target.
+
+CONFRONTO OBBLIGATORIO
+----------------------
+
+Progetto                 Ts[s]  OS[%]   peakU[Nm]  peakDelta[rad]  offset[rad]  Td[s]
+M6 no integrator         0.776   0.265   4.690      0.023646        0.160232     0.752
+M7 I25 1-DoF             1.964   0       0.821      0.016419        0            2.190
+M7 E16 2-DoF             1.020  40.645  35.170      0.062403        0            0.946
+M7 finale                N/A     N/A     N/A         N/A             N/A          N/A
+
+I25 non è stato promosso perché troppo lento. E16 non è stato promosso
+perché viola sia settling sia overshoot ed è molto aggressivo. C113 non è
+stato promosso per gli stessi motivi prestazionali. M6 resta il benchmark
+che soddisfa il tracking ma conserva offset senza internal model.
+
+SELEZIONE E GUADAGNI FINALI
+---------------------------
+
+Candidati ammissibili: 0.
+Candidato selezionato: nessuno.
+Kx finale: non costruito.
+Ki finale: non costruito.
+Nff finale: non costruito.
+Controller LQG-I ordine 16: non costruito.
+
+La regola di ranking finale non è stata applicata perché l'insieme
+ammissibile è vuoto. Nessun candidato era preselezionato nel codice.
+
+DISTURBO, MEASURED/ESTIMATED E RUMORE
+------------------------------------
+
+Tutti i 75 candidati C1 eliminano entrambi gli offset entro 1e-4 rad; il
+massimo valore numerico è 2.241e-18 rad. Il fallimento è quindi dovuto alla
+coppia settling/overshoot, non all'internal model o a Nff.
+
+Measured-error contro estimated-error, riuso numerico KF03, separation
+principle e scenario rumore seed 20260826 erano condizionati a un candidato
+finale. Non sono stati eseguiti per non presentare un punto diagnostico come
+controllore approvato.
+
+ARTIFACT
+--------
+
+Generati sempre:
+
+- results/data/m7_augmented_cost_feasibility.mat
+- results/figures/m7_augmented_cost_pareto.png
+- results/figures/m7_augmented_cost_tradeoff.png
+
+Non generato, coerentemente con il FAIL:
+
+- results/data/m7_lqg_integral.mat
+
+TEST E PIPELINE
+---------------
+
+- Code Analyzer sui sette file M7 nuovi/modificati: 0 messaggi.
+- Suite M7 estesa: 29/29 PASS, 0 failed, 0 incomplete.
+- run_all reale: 121/121 test top-level PASS, exit code 0;
+- rigenerazione completa M0-M7: PASS software, esito finale PARTIAL.
+- Gate software/test: PASS.
+- Gate prestazionale M7: FAIL.
+- Stato milestone: PARTIAL.
+
+CONCLUSIONE DI FEASIBILITY
+-------------------------
+
+Con l'architettura LQI/LQG-I studiata e l'ensemble di costi fisicamente
+normalizzati analizzato, la coppia di requisiti Ts<=0.8 s e OS<=10% non è
+risultata simultaneamente raggiungibile.
+
+Questa era l'ULTIMA espansione autorizzata prima di una revisione formale
+della specifica M5. M5 non è stata modificata. Non sono stati introdotti
+prefilter dinamici, pole placement, nuove architetture, rituning Kalman,
+saturazioni o limiti hardware. M8 non è iniziata.
+
+GIT / PR
+--------
+
+- base verificata: main al merge PR #11, commit b28a06a;
+- branch: codex/m7-augmented-cost-retuning;
+- Pull Request dedicata: #12
+  https://github.com/Deda-404/Progetto_CR/pull/12
+- stato PR verificato: open, draft=false, merged=false;
+- merge autonomo: NON eseguito.
