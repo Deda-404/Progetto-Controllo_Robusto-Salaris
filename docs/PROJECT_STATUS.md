@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` in MATLAB R2025b, 92/92 test top-level, regressioni M0–M5, tuning LQR, Kalman, LQG, tracking, disturbo, rumore, dataset e figure PASS
 **Blocking issues:** nessuno per M6; offset da disturbo costante e assenza di limiti hardware restano limiti documentati
 **Next task:** revisione della Pull Request M6; non iniziare M7 senza successivo incarico del gruppo
-**Pull Request:** in preparazione, non unita
-**Last update:** 2026-08-24 20:35 CEST
+**Pull Request:** [#9 — M6: synthesize nominal LQG without integrator](https://github.com/Deda-404/Progetto_CR/pull/9), aperta e non unita
+**Last update:** 2026-08-24 20:50 CEST
 
 ## Quality gate M6
 

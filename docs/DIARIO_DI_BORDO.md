@@ -813,3 +813,27 @@ Completare documentazione, rilanciare T1–T26 e `run_all`, ispezionare gli arti
 ### Prossimo passo
 
 Creare commit piccoli, pubblicare il branch e aprire la Pull Request dedicata senza merge. Non iniziare M7.
+
+---
+
+## 2026-08-24 20:50 — Pubblicazione PR e handoff M6
+
+**Responsabile:** Alessio
+**Milestone:** M6
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `cbb3921` per implementazione, test e artifact e `e016b17` per documentazione e decisioni.
+- Pubblicato `codex/m6-lqg-no-integrator` su `origin` mediante il credential manager configurato.
+- Aperta la Pull Request [#9](https://github.com/Deda-404/Progetto_CR/pull/9) verso `main`.
+- Verificato alla creazione che la PR fosse `open`, `draft=false` e `merged=false`.
+- Completato `docs/handoff/Resoconto_M6_per_GPT.txt` con tentativo fallito, diagnosi modale, tuning, matrici, metriche, test, artifact e limiti.
+
+### Risultato
+
+**SUCCESSO — M6 pubblicata per revisione, PR #9 aperta e nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M7.

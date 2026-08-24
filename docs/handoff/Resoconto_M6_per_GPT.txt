@@ -122,4 +122,9 @@ Offset non nullo atteso senza integratore; benchmark preservato per M7.
 
 16. GIT/PR
 - Branch: codex/m6-lqg-no-integrator.
-- Commit/push/PR: da completare nell'ultimo passaggio; nessun merge eseguito.
+- Commit implementazione/artifact: cbb3921.
+- Commit documentazione/decisioni: e016b17.
+- Branch pubblicato su origin.
+- Pull Request #9: https://github.com/Deda-404/Progetto_CR/pull/9
+- Stato verificato: open, draft=false, merged=false.
+- Nessun merge eseguito.
