@@ -2,18 +2,14 @@
 *.asv
 *.m~
 *.autosave
-
-# MATLAB temporary files
 *.tmp
 *.bak
 
-# MATLAB code generation / caches
+# MATLAB and Simulink generated files
 slprj/
 sccprj/
 codegen/
 *.slxc
-
-# Simulink generated files
 *_grt_rtw/
 *_ert_rtw/
 *_rtw/
@@ -23,14 +19,8 @@ codegen/
 *.prj.user
 *.mlproj.user
 
-# OS files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Editor files
-.vscode/
-.idea/
+# Compiled MEX artifacts
+*.mex*
 
 # LaTeX temporary files
 *.aux
@@ -41,5 +31,12 @@ desktop.ini
 *.fls
 *.fdb_latexmk
 
-# Temporary result files
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary results only; validated result artifacts remain trackable
 results/tmp/
