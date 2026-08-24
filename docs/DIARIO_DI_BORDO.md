@@ -348,3 +348,31 @@ Completare controllo statico e run_all finali, commit, push, Pull Request e hand
 
 Branch: codex/m3-actuator-dynamics
 Commit e Pull Request: da associare alla chiusura M3
+
+---
+
+## 2026-08-24 15:24 — Pubblicazione PR e preparazione handoff M3
+
+**Autore:** Codex
+**Milestone:** M3
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit 3da195f per implementazione, test e artifact, e 5ce3a33 per documentazione e decisioni.
+- Pubblicato codex/m3-actuator-dynamics su origin.
+- Aperta la Pull Request #4 verso main: https://github.com/Deda-404/Progetto_CR/pull/4.
+- Verificato tramite risposta GitHub che la PR fosse open e non merged.
+- Predisposto docs/handoff/Resoconto_M3_per_GPT.txt senza sovrascrivere gli handoff precedenti.
+
+### Problemi e correzioni
+
+Il primo comando locale usato per costruire la richiesta API GitHub conteneva un errore di quoting Python ed è terminato prima dell'invio. Il comando è stato corretto; la PR #4 è stata poi creata correttamente senza stampare o salvare credenziali.
+
+### Risultato
+
+**SUCCESSO** — M3 pubblicata per revisione, PR #4 aperta e nessun merge eseguito.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M4.

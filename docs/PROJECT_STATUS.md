@@ -6,8 +6,8 @@
 **Last validated result:** run_all.m eseguito in MATLAB R2025b Update 4; 29 test top-level su 29 superati, regressioni annidate M0/M1/M2 PASS e validazioni M1/M2/M3 PASS
 **Blocking issues:** nessuno per il completamento di M3
 **Next task:** revisione e merge della Pull Request M3; non iniziare M4 senza il successivo incarico del gruppo
-**Pull Request:** da associare dopo la pubblicazione del branch codex/m3-actuator-dynamics
-**Last update:** 2026-08-24 CEST
+**Pull Request:** [#4 — M3 actuator dynamics and full 14-state plant](https://github.com/Deda-404/Progetto_CR/pull/4), aperta e non unita
+**Last update:** 2026-08-24 15:19 CEST
 
 ## Scelta nominale M3
 
