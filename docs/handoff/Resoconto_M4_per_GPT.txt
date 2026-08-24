@@ -1,0 +1,591 @@
+RESOCONTO M4 PER GPT
+Modellazione delle incertezze e costruzione della pianta incerta
+Data: 2026-08-24
+
+======================================================================
+1. ESITO
+======================================================================
+
+M4 è COMPLETE con quality gate PASS.
+
+Risultati principali:
+
+- screening autonomo di 10 parametri meccanici;
+- parametri selezionati: k2, k1, Jm1;
+- range baseline: k1/k2 ±7%, Jm1 ±9%;
+- famiglia attuatori baseline: 120 modelli con ritardo esatto;
+- WI stabile e propria di ordine minimo 1;
+- worst |E|/|WI| = 0.925925925926;
+- Delta_act1 e Delta_act2 indipendenti;
+- GuncMeas 4x2 e GuncQ 2x2;
+- nominal(Gunc) coerente con M3 entro 6.328e-15 assoluto;
+- usample: 40/40 campioni validi;
+- test top-level: 48/48 PASS;
+- Code Analyzer: 0 messaggi;
+- matlab.exe -batch "run_all": PASS, exit code 0.
+
+M5 non è stata iniziata. Non sono stati progettati controllori,
+specifiche di performance, W1/W2, LQG, H-infinity, mu-synthesis, RAS o
+Monte Carlo finale.
+
+======================================================================
+2. BASE GIT E SCOPE
+======================================================================
+
+Base verificata:
+
+- main e origin/main contenevano il merge M3.1;
+- commit base: a1eca7b;
+- M3 e M3.1 presenti nella cronologia.
+
+Branch:
+
+- codex/m4-uncertainty-model
+
+Commit principali:
+
+- 82cf501 — feat: build and validate M4 uncertain plant
+- cb89427 — docs: record M4 uncertainty decisions and validation
+
+Pull Request:
+
+- PR #6 — M4: uncertainty modeling and uncertain SEA plant
+- https://github.com/Deda-404/Progetto_CR/pull/6
+- base: main
+- head: codex/m4-uncertainty-model
+- stato verificato: open
+- merged: false
+
+Il presente handoff e i metadati finali sono aggiunti in un commit di
+chiusura successivo ai due commit principali.
+
+======================================================================
+3. REFERENCE-LAST
+======================================================================
+
+La prima versione completa è stata progettata, implementata e testata
+usando soltanto traccia e nostro modello M3.1.
+
+Prima del riferimento erano già disponibili e PASS:
+
+- screening e ranking;
+- selezione k2/k1/Jm1;
+- range meccanici e attuatore;
+- famiglia da 120 modelli;
+- WI ordine 1;
+- Gunc e struttura Delta;
+- dataset e figure;
+- 14 test M4 e 34 regressioni M0-M3.1.
+
+Confronto successivo:
+
+Nostro M4:
+- k2, k1, Jm1;
+- rigidezze ±7%, Jm1 ±9%;
+- 120 modelli;
+- WI ordine 1.
+
+Riferimento:
+- m2, k1, k2;
+- m2 ±10%, rigidezze ±5%;
+- 200 campioni indicati;
+- WI ordine 3 indicato.
+
+Il nostro uncertainty set è rimasto invariato. Non sono stati copiati
+codice, formule implementative, range, peso, dataset, figure o risultati.
+
+======================================================================
+4. CANDIDATI E METODO DI SCREENING
+======================================================================
+
+Candidati meccanici:
+
+- m1, m2;
+- l1, l2;
+- Jm1, Jm2;
+- Bm1, Bm2;
+- k1, k2.
+
+g è considerata nota.
+
+Per ogni candidato:
+
+1. perturbazione centrale ±1%;
+2. ricostruzione dei parametri;
+3. ricalcolo dell'equilibrio alla qbar M2;
+4. ricalcolo analitico di A e B dalle equazioni SEA;
+5. ricostruzione della pianta completa con attuatori M3 nominali;
+6. valutazione su 501 punti logaritmici da 0.1 a 300 rad/s.
+
+Metriche dinamiche:
+
+- sensibilità FRF normalizzata verso q;
+- sensibilità dei due poli instabili;
+- sensibilità delle due coppie elastiche;
+- variazione relativa della singular value dominante;
+- frequenza di picco.
+
+DynamicScore =
+  0.30 FRF
+  + 0.25 unstable poles
+  + 0.25 elastic modes
+  + 0.20 dominant sigma
+
+dopo normalizzazione sul massimo fra i candidati.
+
+OverallPriority =
+  0.65 DynamicScore
+  + 0.15 physical variability
+  + 0.10 occurrence/dynamic role
+  + 0.10 interpretability.
+
+Tie-break:
+
+- OverallPriority decrescente;
+- DynamicScore decrescente;
+- ordine fisso dei candidati.
+
+La scelta non è manuale nascosta.
+
+======================================================================
+5. RANKING DI SENSIBILITA
+======================================================================
+
+Rank  Parametro  FRF      Unstable   Elastic    Sigma     Dynamic   Overall
+1     k2         35.327   0.003094   0.35460    18.303    0.74829   0.75889
+2     k1         22.278   0.000255   0.35263    13.427    0.58074   0.64998
+3     Jm1        22.680   0.015041   0.36034    13.749    0.60392   0.59755
+4     Jm2        24.560   0.14590    0.22503    11.530    0.59813   0.59379
+5     m2          3.745   0.33944    0.03201     1.789    0.32355   0.54781
+6     l1         16.425   0.28894    0.14501     7.802    0.53814   0.52229
+7     l2         19.491   0.18885    0.17334     9.676    0.53060   0.51239
+8     m1         14.630   0.13050    0.12824     6.981    0.38560   0.47314
+9     Bm2         0.661   0.04048    0.000105    0.660    0.04271   0.27776
+10    Bm1         0.693   0.00417    0.000120    0.634    0.01597   0.26038
+
+Parametri selezionati:
+
+- k2;
+- k1;
+- Jm1.
+
+Motivazione:
+
+- k2 e k1 dominano spostamenti dei modi elastici e FRF;
+- Jm1 aggiunge un parametro di natura diversa con forte effetto sui modi;
+- la selezione resta limitata a tre blocchi;
+- Jm2 è il primo escluso e non giustifica l'aumento a quattro blocchi;
+- m2, scelto dal riferimento, è soltanto quinto nel nostro ranking.
+
+======================================================================
+6. SCENARI E RANGE MECCANICI
+======================================================================
+
+Parametro  Nominale  MILD   BASELINE  CONSERVATIVE
+k2         40        ±3%    ±7%       ±12%
+k1         50        ±3%    ±7%       ±12%
+Jm1        0.01      ±4%    ±9%       ±15%
+
+Interpretazione:
+
+- rigidezze: variabilità di materiale e assemblaggio SEA;
+- Jm1: inerzia riflessa di motore e trasmissione;
+- tutte le percentuali sono assunzioni progettuali;
+- non sono tolleranze misurate né intervalli identificati;
+- il BASELINE non è stato scelto per favorire un controllore.
+
+Effetto sugli otto corner meccanici:
+
+Scenario       max rel FRF  freq      unstable change  elastic change
+MILD           2.1237       80.700    0.00070624       0.029392
+BASELINE       5.4732       83.326    0.0016109        0.067026
+CONSERVATIVE   7.4353       86.038    0.0027271        0.11227
+
+Le grandi variazioni FRF relative compaiono vicino a
+risonanze/antirisonanze e non sono una metrica robusta closed-loop.
+
+======================================================================
+7. UREAL E MODELLO MECCANICO INCERTO
+======================================================================
+
+Blocchi reali indipendenti:
+
+- k1 = ureal('k1',50,'Percentage',7)
+- k2 = ureal('k2',40,'Percentage',7)
+- Jm1 = ureal('Jm1',0.01,'Percentage',9)
+
+Ogni ureal è creata una sola volta e riutilizzata in tutte le occorrenze
+fisiche. Non sono duplicati Delta per lo stesso parametro.
+
+La linearizzazione incerta deriva dalle nostre equazioni SEA.
+
+Coerenza meccanica nominale:
+
+- errore Frobenius A = 1.2297e-12;
+- errore Frobenius B = 0;
+- errore frequenziale assoluto massimo, misure = 1.75065e-14;
+- errore frequenziale assoluto massimo, q = 6.96804e-15.
+
+======================================================================
+8. SCENARI E RANGE ATTUATORI
+======================================================================
+
+Parametro  Nominale  MILD   BASELINE  CONSERVATIVE
+wn         40 rad/s  ±4%    ±8%       ±15%
+zeta       0.8       ±4%    ±7.5%     ±12.5%
+delay      15 ms     ±8%    ±20%      ±35%
+
+Bounds BASELINE:
+
+- wn = 36.8 ... 43.2 rad/s;
+- zeta = 0.74 ... 0.86;
+- delay = 12 ... 18 ms.
+
+Sono assunzioni ingegneristiche di dispersione della dinamica chiusa e
+latenza/jitter.
+
+Massimo errore moltiplicativo sugli otto corner:
+
+- MILD = 2.0828 a 342.77 rad/s;
+- BASELINE = 2.1697 a 302.00 rad/s;
+- CONSERVATIVE = 2.3314 a 263.03 rad/s.
+
+======================================================================
+9. FAMIGLIA ATTUATORI
+======================================================================
+
+Numero totale: 120.
+
+Composizione:
+
+- nominale con ritardo esatto: 1;
+- variazioni singole min/max: 6;
+- corner combinati: 8;
+- campioni pseudo-casuali uniformi: 105.
+
+Seed:
+
+- rng(20260824,'twister').
+
+Griglia:
+
+- 0.1 ... 1000 rad/s;
+- 801 punti logaritmici.
+
+Ritardo della famiglia:
+
+- esatto exp(-j*w*delay).
+
+Nominale di progetto:
+
+- resta il modello razionale M3 con Padé ordine 1.
+
+Il fit include dispersione wn/zeta/delay e mismatch fra ritardo esatto e
+Padé nominale. Non è stato aumentato l'ordine del Padé.
+
+======================================================================
+10. WI ED ERRORE MOLTIPLICATIVO
+======================================================================
+
+Convenzione:
+
+  Ga_var = Ga_nom * (1 + WI * Delta)
+  ||Delta||inf <= 1
+  Ei = Ga_var/Ga_nom - 1
+
+Ordini provati con ucover:
+
+- 1;
+- 2;
+- 3;
+- 4.
+
+Tutti risultano stabili, propri e coprenti dopo safety factor 1.08.
+È stato scelto il minimo ordine adeguato: 1.
+
+Peso:
+
+  WI(s) = 2.87131986635591
+          * (s + 1.32752948672752)
+          / (s + 207.353298568466)
+
+Proprietà:
+
+- ordine: 1;
+- zero: -1.32752948672752 s^-1;
+- polo: -207.353298568466 s^-1;
+- guadagno zpk: 2.87131986635591;
+- stabile: sì;
+- propria: sì;
+- safety factor: 1.08.
+
+======================================================================
+11. COVERAGE
+======================================================================
+
+Quality gate su tutti i 120 modelli e tutti gli 801 punti:
+
+  |Ei(jw)| <= |WI(jw)|
+
+Risultati:
+
+- worst ratio = 0.925925925926;
+- minimum coverage margin = 0.0130725421998;
+- frequenza critica = 281.838293126 rad/s;
+- campione critico = corner-212;
+- parametri critici = wn 43.2 rad/s, zeta 0.74, delay 18 ms;
+- tolleranza numerica = 1e-9;
+- esito = PASS.
+
+======================================================================
+12. STRUTTURA DELTA
+======================================================================
+
+Nome         Dim   Tipo      Natura               Occorrenze LFT
+Delta_act1   1x1   ultidyn   complesso dinamico   1
+Delta_act2   1x1   ultidyn   complesso dinamico   1
+Jm1          1x1   ureal     reale statico        1
+k1           1x1   ureal     reale statico        1
+k2           1x1   ureal     reale statico        1
+
+Delta_act1 e Delta_act2 sono indipendenti. Un Delta condiviso avrebbe
+imposto una correlazione perfetta non sostenuta da evidenze fisiche.
+
+======================================================================
+13. PIANTA INCERTA
+======================================================================
+
+GuncMeas:
+
+- ingressi: u1, u2;
+- uscite: q1, q2, theta1, theta2;
+- dimensione: 4x2;
+- tipo: uss.
+
+GuncQ:
+
+- ingressi: u1, u2;
+- uscite: q1, q2;
+- dimensione: 2x2;
+- tipo: uss.
+
+Compatibilità verificata con:
+
+- usample;
+- lftdata;
+- futura robuststab/robgain/mussv/musyn.
+
+Nessuna analisi robusta closed-loop è stata eseguita in M4.
+
+======================================================================
+14. NOMINAL CONSISTENCY
+======================================================================
+
+Griglia di confronto:
+
+- 0.1 ... 1000 rad/s;
+- 801 punti.
+
+Confronto                         max abs       max rel
+Meccanica misure vs M2            1.75065e-14   3.35562e-14
+Meccanica q vs M2                 6.96804e-15   6.98744e-12
+GuncMeas.NominalValue vs M3       4.89018e-15   1.18769e-14
+GuncQ.NominalValue vs M3          6.32830e-15   4.68950e-12
+
+Tolleranze assoluta/relativa:
+
+- 1e-8.
+
+Esito:
+
+- PASS;
+- il nominale M3 non è stato modificato.
+
+======================================================================
+15. USAMPLE VALIDATION
+======================================================================
+
+Configurazione:
+
+- seed = 20260825;
+- numero campioni = 40;
+- griglia = 0.1 ... 1000 rad/s, 301 punti.
+
+Per ogni campione sono stati verificati:
+
+- dimensione 4x2;
+- risposta frequenziale finita;
+- assenza NaN/Inf;
+- k1/k2/Jm1 entro i range;
+- campi Delta presenti;
+- poli finiti e classificabili.
+
+Risultati:
+
+- campioni validi = 40/40;
+- poli instabili per campione = sempre 2;
+- massima parte reale minima = 7.2003 s^-1;
+- massima parte reale massima = 7.2196 s^-1;
+- esito = PASS.
+
+L'instabilità open-loop è quella meccanica nota da M2 e non costituisce
+un FAIL. Questa non è la campagna Monte Carlo finale.
+
+======================================================================
+16. TEST
+======================================================================
+
+File:
+
+- tests/test_m4_uncertainty_model.m
+
+Test M4:
+
+T1  screen riproducibile                         PASS
+T2  numero limitato e selezione                  PASS
+T3  range finiti/positivi/nominale incluso       PASS
+T4  nominal value ureal corretta                 PASS
+T5  struttura blocchi reali                      PASS
+T6  famiglia con nominale/singoli/corner/random  PASS
+T7  WI stabile/propria/minimo ordine             PASS
+T8  WI copre tutta la famiglia                   PASS
+T9  due Delta attuatori indipendenti             PASS
+T10 dimensioni Gunc                              PASS
+T11 nominal(Gunc) uguale a M3                    PASS
+T12 struttura lftdata coerente                   PASS
+T13 usample produce campioni validi              PASS
+T14 regressioni M0-M3.1                          PASS
+
+Risultati complessivi:
+
+- test M4: 14/14 PASS;
+- regressioni annidate M0-M3.1: 34/34 PASS;
+- test top-level run_all: 48/48 PASS;
+- Code Analyzer sui file M4 e run_all: 0 messaggi;
+- run_all exit code: 0.
+
+======================================================================
+17. DATASET E FIGURE
+======================================================================
+
+Dataset:
+
+- results/data/m4_uncertain_plant.mat
+
+Contenuto principale:
+
+- parameterSensitivityTable;
+- selectedMechanicalParameters;
+- parameterScreeningRule;
+- uncertaintyScenarios;
+- selectedMechanicalRanges;
+- actuatorUncertaintyScenarios;
+- selectedActuatorRanges;
+- actuatorFamilyMetadata e summary;
+- WI;
+- deltaStructureMetadata;
+- GmechUncMeas, GmechUncQ;
+- GuncMeas, GuncQ;
+- nominalConsistencyMetrics;
+- coverageMetrics;
+- samplingValidationMetrics;
+- scenarioEffects.
+
+Figure originali e rigenerabili:
+
+- results/figures/m4_parameter_sensitivity.png;
+- results/figures/m4_actuator_uncertainty_cover.png;
+- results/figures/m4_uncertain_plant_samples.png.
+
+Le figure sono state ispezionate dopo il run finale; assi, legende,
+inviluppo e WI sono leggibili e correttamente associati.
+
+======================================================================
+18. DOCUMENTAZIONE E DECISIONI
+======================================================================
+
+Documento nuovo:
+
+- docs/MODELLO_INCERTEZZE.md.
+
+Decisioni:
+
+- D-0007: k2/k1/Jm1;
+- D-0008: range meccanici;
+- D-0009: range e famiglia attuatori;
+- D-0010: incertezza input-moltiplicativa;
+- D-0011: WI ordine minimo 1;
+- D-0012: Delta_act1/Delta_act2 indipendenti.
+
+Aggiornati:
+
+- README.md;
+- CHANGELOG.md;
+- docs/ANALISI_PROGETTO_RIFERIMENTO.md;
+- docs/DECISION_LOG.md;
+- docs/DIARIO_DI_BORDO.md;
+- docs/PROJECT_STATUS.md;
+- docs/REQUIREMENTS_CHECKLIST.md.
+
+======================================================================
+19. QUALITY GATE
+======================================================================
+
+[PASS] screening autonomo eseguito
+[PASS] pochi parametri meccanici selezionati
+[PASS] selezione motivata
+[PASS] range meccanici documentati
+[PASS] range attuatori documentati
+[PASS] nessun range copiato automaticamente
+[PASS] ureal costruite correttamente
+[PASS] nominal mechanical consistency
+[PASS] famiglia attuatori riproducibile
+[PASS] corner cases inclusi
+[PASS] ritardo esatto trattato e documentato
+[PASS] errore moltiplicativo calcolato
+[PASS] WI ordine minimo adeguato
+[PASS] WI stabile e propria
+[PASS] WI copre tutti i campioni
+[PASS] due Delta dinamici indipendenti
+[PASS] Gunc costruita
+[PASS] nominal(Gunc) uguale a M3
+[PASS] Delta structure documentata
+[PASS] usample validation
+[PASS] dataset generato
+[PASS] tre figure generate e ispezionate
+[PASS] regressioni M0-M3.1
+[PASS] run_all exit code 0
+[PASS] documentazione aggiornata
+[PASS] diario aggiornato
+[PASS] branch pubblicato
+[PASS] PR #6 aperta e non unita
+
+M4: COMPLETE.
+
+======================================================================
+20. PROBLEMI E LIMITI
+======================================================================
+
+Nessun problema bloccante.
+
+Limiti dichiarati:
+
+- range non identificati sperimentalmente;
+- screening locale al punto M2 e alla griglia 0.1-300 rad/s;
+- Jm2 molto vicino a Jm1 nel ranking, ma primo escluso;
+- punteggi fisici sono criteri ingegneristici dichiarati;
+- nessuna correlazione parametrica modellata;
+- WI copre la famiglia discreta sulla griglia, non ogni combinazione
+  continua possibile;
+- usample M4 non sostituisce mu-analysis o Monte Carlo finale;
+- instabilità open-loop attesa;
+- nessun risultato di controllo disponibile o usato per alterare i range.
+
+======================================================================
+21. ISTRUZIONE PER IL PASSO SUCCESSIVO
+======================================================================
+
+Fermarsi per revisione del gruppo e della PR #6.
+
+NON effettuare il merge autonomamente.
+NON iniziare M5 senza un nuovo incarico esplicito.

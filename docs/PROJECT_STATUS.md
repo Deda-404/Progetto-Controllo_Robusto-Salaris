@@ -1,98 +1,118 @@
 # Project Status
 
-**Current milestone:** M3.1 — Correzione metodologica della selezione attuatore
-**Status:** COMPLETE — selezione da metriche e quality gate M3.1 superati
-**Last validated milestone:** M3.1
-**Last validated result:** run_all.m eseguito in MATLAB R2025b Update 4; 34 test top-level su 34 superati, regressioni annidate M0/M1/M2 PASS, selezione C14 indipendente e validazioni M1/M2/M3 PASS
-**Blocking issues:** nessuno per il completamento di M3.1
-**Next task:** revisione e merge della Pull Request M3.1; non iniziare M4 senza il successivo incarico del gruppo
-**Pull Request:** [#5 — M3.1 metric-based nominal actuator selection](https://github.com/Deda-404/Progetto_CR/pull/5), aperta e non unita
-**Last update:** 2026-08-24 15:43 CEST
+**Current milestone:** M4 — Modellazione delle incertezze e pianta incerta
+**Status:** COMPLETE — quality gate tecnico M4 superato
+**Last validated milestone:** M4
+**Last validated result:** `run_all.m` in MATLAB R2025b, 48/48 test top-level, screening, `WI`, `Gunc`, coerenza nominale e 40/40 campioni PASS
+**Blocking issues:** nessuno
+**Next task:** revisione della Pull Request M4; non iniziare M5 senza il successivo incarico del gruppo
+**Pull Request:** [#6 — M4: uncertainty modeling and uncertain SEA plant](https://github.com/Deda-404/Progetto_CR/pull/6), aperta e non unita
+**Last update:** 2026-08-24 16:46 CEST
 
-## Scelta nominale M3
+## Ensemble baseline M4
 
-| Parametro | Valore | Stato |
-| --- | ---: | --- |
-| \(\omega_n\) | 40 rad/s | assunzione nominale progettuale |
-| \(\zeta\) | 0.8 | assunzione nominale progettuale |
-| \(\tau_d\) | 0.015 s | assunzione nominale progettuale |
-| Ordine Padé | 1 | imposto dalla traccia |
-| Canali | 2 identici e diagonali | simmetria nominale |
+| Componente | Scelta | Stato |
+| --- | --- | --- |
+| Parametri meccanici | `k2`, `k1`, `Jm1` | selezionati dallo screening 3/10 |
+| Range meccanici | `k1/k2` ±7%, `Jm1` ±9% | assunzioni baseline |
+| Attuatori | `wn` ±8%, `zeta` ±7.5%, ritardo ±20% | assunzioni baseline |
+| Famiglia | 120 modelli, inclusi 8 corner | seed 20260824 |
+| Ritardo della famiglia | esatto `exp(-jw*delay)` | nominale M3 ancora Padé 1 |
+| Modello dinamico | input-moltiplicativo | `Ga_nom*(1+WI*Delta)` |
+| `WI` | ordine 1, stabile e proprio | safety factor 1.08 |
+| Delta attuatori | `Delta_act1`, `Delta_act2` | indipendenti, `ultidyn` 1x1 |
+| Pianta | `GuncMeas` 4x2, `GuncQ` 2x2 | compatibili con `lftdata/usample` |
 
-La scelta deriva ora direttamente dalle metriche della griglia deterministica di 27 candidati. `select_nominal_actuator.m` non legge `actuator_params_nominal.m`; il confronto di consistenza avviene soltanto dopo la selezione. Non è un'identificazione sperimentale e non approva alcuna percentuale d'incertezza.
+I range sono assunzioni ingegneristiche, non tolleranze misurate o intervalli identificati. Non sono stati adattati in base a risultati di controllo, che non esistono ancora.
 
-## Criteri e risultato M3.1
+## Screening autonomo
 
-| Criterio | Valore | Origine |
-| --- | ---: | --- |
-| \(\lambda_{u,max}\) | 7.20943 rad/s | massimo modulo dei poli instabili M2 |
-| \(\omega_{el,min}\) | 69.9543 rad/s | minimo modulo dei poli complessi M2 |
-| Banda minima | 28.8377 rad/s | \(4\lambda_{u,max}\) |
-| Banda massima | 41.9726 rad/s | \(0.60\omega_{el,min}\) |
-| Overshoot massimo | 2% | criterio progettuale M3.1 |
-| Errore fase Padé massimo a 80 rad/s | 10° | criterio progettuale M3.1 |
-| Fascia di quasi-parità settling | 10% dal minimo ammissibile | tie-break progettuale M3.1 |
+Lo screening usa perturbazioni centrali ±1%, ricostruzione completa di equilibrio, Jacobiani e pianta M3 su 501 frequenze fra 0.1 e 300 rad/s. La priorità combina:
 
-I coefficienti 4, 0.60 e 10% sono criteri progettuali, non requisiti della traccia. I candidati ammissibili sono C13, C14, C25 e C26. La preferenza per il ritardo maggiore nel gruppo in quasi-parità, seguita dal minor settling, seleziona C14: 40 rad/s, 0.8 e 15 ms. Il modello nominale M3 e D-0006 restano invariati.
+- 65% sensibilità dinamica: FRF 30%, poli instabili 25%, modi elastici 25%, sigma dominante 20%;
+- 15% plausibilità della variabilità fisica;
+- 10% ruolo/numero delle occorrenze;
+- 10% interpretabilità futura.
 
-## Metriche M3 validate
+| Rank | Parametro | Dynamic score | Overall priority |
+| ---: | --- | ---: | ---: |
+| 1 | `k2` | 0.74829 | 0.75889 |
+| 2 | `k1` | 0.58074 | 0.64998 |
+| 3 | `Jm1` | 0.60392 | 0.59755 |
+| 4 | `Jm2` | 0.59813 | 0.59379 |
+| 5 | `m2` | 0.32355 | 0.54781 |
+
+Gli altri candidati sono `l1`, `l2`, `m1`, `Bm2`, `Bm1`. `g` resta nota.
+
+## Fit attuatore e copertura
 
 | Metrica | Valore | Criterio |
 | --- | ---: | --- |
-| Ordine attuatore SISO / blocco MIMO / pianta | 3 / 6 / 14 | esatto, senza cancellazioni |
-| Dimensioni GfullMeas | 4×2, 14 stati | richieste dalla traccia |
-| Guadagno statico attuatore | 1 | errore \(\le10^{-12}\) |
-| Poli attuatore SISO | \(-32\pm24j\), \(-133.3333\) s⁻¹ | tutti stabili |
-| Zero Padé RHP | \(+133.3333\) s⁻¹ | \(+2/\tau_d\) |
-| Rise / settling / overshoot | 0.0626454 s / 0.109362 s / 1.47221% | calcolati |
-| Banda attuatore | 34.7834 rad/s | calcolata |
-| Errore fase Padé a 4.0408 / 7.2094 rad/s | 0.001063° / 0.006028° | calcolato |
-| Errore fase Padé a 70 / 80 rad/s | 4.76162° / 6.82742° | calcolato |
-| Errore massimo modulo del solo ritardo | \(2.220\times10^{-16}\) | \(\le10^{-12}\) |
-| Equivalenza cascata esplicita/indipendente | errore assoluto e relativo 0 | \(\le10^{-9}\) |
-| Poli completi stabili / instabili / marginali | 12 / 2 / 0 | nessun nuovo polo instabile |
-| Controllabilità, tempo scalato | 14/14, cond \(3.594\times10^5\) | PBH all-mode PASS |
-| Stabilizzabilità | PASS sui 2 modi instabili | PBH rango 14/14 |
-| Osservabilità [q;theta], tempo scalato | 14/14, cond \(1.477\times10^2\) | PBH all-mode PASS |
-| Rilevabilità [q;theta] | PASS sui 2 modi instabili | PBH rango 14/14 |
-| Osservabilità informativa q | 14/14, cond \(2.933\times10^4\) | PBH all-mode PASS |
-| Code Analyzer M3.1 | 0 messaggi | 0 |
+| Modelli famiglia | 120 | almeno 100 |
+| Nominale / singoli / corner / random | 1 / 6 / 8 / 105 | corner obbligatori |
+| Intervallo frequenziale | 0.1–1000 rad/s, 801 punti | ritardo esatto |
+| Ordine `WI` | 1 | minimo accettabile fra 1–4 |
+| Polo / zero | -207.3533 / -1.32753 s⁻¹ | entrambi stabili |
+| Guadagno zpk | 2.871319866 | calcolato |
+| Worst `|E|/|WI|` | 0.925925926 | <=1+1e-9 |
+| Margine minimo | 0.0130725422 | >=-1e-9 |
+| Caso critico | `corner-212`, 281.8383 rad/s | 43.2, 0.74, 18 ms |
 
-I ranghi grezzi di ctrb e obsv con tolleranza automatica sono 10/14 per il forte condizionamento (\(1.851\times10^{23}\) e \(2.477\times10^{19}\)). La normalizzazione temporale e i PBH su tutti i poli confermano che non si tratta di una perdita strutturale.
+## Struttura Delta
 
-## Quality gate M3.1
+| Nome | Tipo | Dimensione | Natura | Occorrenze LFT |
+| --- | --- | --- | --- | ---: |
+| `Delta_act1` | `ultidyn` | 1x1 | complesso dinamico | 1 |
+| `Delta_act2` | `ultidyn` | 1x1 | complesso dinamico | 1 |
+| `Jm1` | `ureal` | 1x1 | reale statico | 1 |
+| `k1` | `ureal` | 1x1 | reale statico | 1 |
+| `k2` | `ureal` | 1x1 | reale statico | 1 |
+
+Ogni parametro fisico è creato una volta e riutilizzato nelle sue occorrenze; i due canali dinamici non condividono Delta.
+
+## Coerenza nominale e campioni
+
+| Verifica | Risultato |
+| --- | ---: |
+| Errore Frobenius meccanico `A` | 1.230e-12 |
+| Errore meccanico `B` | 0 |
+| `GuncMeas.NominalValue` vs M3, abs/rel | 4.890e-15 / 1.188e-14 |
+| `GuncQ.NominalValue` vs M3, abs/rel | 6.328e-15 / 4.689e-12 |
+| Campioni `usample` | 40/40 validi, seed 20260825 |
+| Poli instabili per campione | sempre 2, attesi da M2 |
+| Massima parte reale osservata | 7.2003–7.2196 s⁻¹ |
+
+## Quality gate M4
 
 | Requisito | Esito |
 | --- | --- |
-| main contenente il merge M3 verificato | PASS — base c988d06 |
-| 27 candidati nominali analizzati autonomamente | PASS |
-| Selezione indipendente da `actuator_params_nominal.m` | PASS |
-| Criteri derivati dai poli M2 e vincoli documentati | PASS |
-| Ammissibili C13, C14, C25, C26 identificati | PASS |
-| Tie-break deterministico e selezione C14 dalle metriche | PASS |
-| Modello nominale e D-0006 confermati senza modifiche | PASS |
-| Secondo ordine e guadagno statico verificati | PASS |
-| Padé ordine 1, polo stabile e zero RHP verificati | PASS |
-| Confronto ritardo esatto/Padé | PASS |
-| Attuatore SISO ordine 3 e blocco MIMO ordine 6 | PASS |
-| Pianta esplicita ordine 14, 2 ingressi, 4 misure | PASS |
-| Convenzione [x_mech;x_act] e StateName verificati | PASS |
-| Interconnessione indipendente con series | PASS |
-| Poli completi classificati | PASS |
-| Controllabilità/stabilizzabilità SVD e PBH | PASS |
-| Osservabilità/rilevabilità SVD e PBH | PASS |
-| Dataset M3 rigenerato | PASS |
-| Tre figure M3 rigenerate e ispezionate | PASS |
-| Regressioni M0/M1/M2 e 34/34 test top-level | PASS |
-| run_all.m completo con exit code 0 | PASS |
-| Ricostruzione indipendente e confronto reference-last | PASS |
-| Documentazione, decisione e diario aggiornati | PASS |
+| main remoto con merge M3.1 verificato | PASS — base a1eca7b |
+| screening autonomo e multifattore | PASS |
+| tre parametri selezionati e motivati | PASS |
+| scenari e range meccanici documentati | PASS |
+| scenari e range attuatori documentati | PASS |
+| nessun range copiato automaticamente | PASS |
+| tre `ureal` corretti e consistenza meccanica | PASS |
+| famiglia riproducibile con corner | PASS |
+| ritardo esatto e mismatch Padé inclusi | PASS |
+| `WI` minimo, stabile, proprio e coprente | PASS |
+| due Delta dinamici indipendenti | PASS |
+| `GuncMeas/GuncQ` costruite | PASS |
+| nominale `Gunc` uguale a M3 | PASS |
+| struttura `lftdata` documentata | PASS |
+| 40 campioni validi | PASS |
+| dataset e tre figure generati | PASS |
+| 14 test M4 e 34 regressioni pregresse | PASS |
+| confronto reference-last | PASS — soluzione invariata |
+| `run_all.m` exit code 0 | PASS — 48/48 test top-level |
+| documentazione e diario | PASS |
 
 ## Limiti e problemi aperti
 
-- I parametri attuativi non derivano da identificazione sperimentale.
-- Padé ordine 1 sottostima progressivamente la perdita di fase del ritardo esatto verso e oltre 70–80 rad/s.
-- I canali sono identici soltanto nel nominale; dispersione e dinamiche non modellate sono fuori scope M3.
-- Le matrici strutturali grezze sono fortemente condizionate; le sintesi future dovranno mantenere scaling esplicito.
-- Non sono ancora definiti incertezze, specifiche, limiti di coppia, pesi o controllori.
-- M4 non è stata iniziata.
+- Nessun range è sostenuto da identificazione sperimentale.
+- Lo screening è locale all'equilibrio M2 e alla griglia 0.1–300 rad/s.
+- `Jm2` è molto vicino a `Jm1` in priorità e resta il primo parametro escluso.
+- La copertura `WI` è verificata sulla famiglia discreta e sulla griglia 0.1–1000 rad/s.
+- I campioni M4 verificano la costruzione; non sono il Monte Carlo finale.
+- L'instabilità open-loop meccanica resta attesa e non è un FAIL.
+- Specifiche, pesi di prestazione, controllori e analisi robusta closed-loop non sono stati iniziati.
