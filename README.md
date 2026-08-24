@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M1 il comando pulisce e configura l'ambiente, esegue gli smoke test M0, i sette test automatici del modello e la validazione numerica deterministica M1. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Alla milestone M2 il comando pulisce e configura l'ambiente, esegue i test M0/M1/M2, ripete le validazioni M1 e M2 e rigenera dataset nominale e figura dei poli. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M1 — Modello non lineare del manipolatore SEA**.
-- Ultimo risultato validato: dinamica nominale a 8 stati, con 9 test automatici complessivi e quality gate M1 superato in MATLAB R2025b.
+- Milestone corrente: **M2 — Equilibrio, linearizzazione e analisi strutturale**.
+- Ultimo risultato validato: equilibrio verticale superiore, modello incrementale a 8 stati, 18 test top-level e quality gate M2 superato in MATLAB R2025b.
 - Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
-- Prossimo passo: revisione e merge della Pull Request M1; M2 non è iniziata.
+- Prossimo passo: revisione e merge della Pull Request M2; M3 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

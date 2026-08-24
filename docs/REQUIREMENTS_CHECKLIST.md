@@ -22,15 +22,15 @@ La checklist deriva dalla traccia ufficiale. Un requisito tecnico resta non comp
 - [x] Definire lo stato e verificare dimensioni e unità.
 - [x] Testare simmetria e definita positività di \(M(q)\).
 - [x] Testare assenza di `NaN`/`Inf` sui casi deterministici documentati per M1.
-- [ ] Scegliere e approvare il punto di equilibrio.
-- [ ] Calcolare \(\bar q,\bar\theta,\bar\tau,\bar x\).
-- [ ] Verificare numericamente \(f(\bar x,\bar\tau)=0\).
-- [ ] Calcolare Jacobiani e modello incrementale \((A,B,C,D)\).
-- [ ] Confrontare Jacobiani analitici/simbolici con differenze finite.
-- [ ] Analizzare poli e stabilità in anello aperto.
-- [ ] Verificare controllabilità o stabilizzabilità.
-- [ ] Scegliere le misure e verificare osservabilità o rilevabilità.
-- [ ] Confrontare modello lineare e non lineare per piccole perturbazioni.
+- [x] Scegliere e approvare il punto di equilibrio.
+- [x] Calcolare \(\bar q,\bar\theta,\bar\tau,\bar x\).
+- [x] Verificare numericamente \(f(\bar x,\bar\tau)=0\).
+- [x] Calcolare Jacobiani e modello incrementale \((A,B,C,D)\).
+- [x] Confrontare Jacobiani analitici/simbolici con differenze finite.
+- [x] Analizzare poli e stabilità in anello aperto.
+- [x] Verificare controllabilità e stabilizzabilità con SVD/PBH.
+- [x] Scegliere le misure e verificare osservabilità e rilevabilità con SVD/PBH.
+- [x] Confrontare modello lineare e non lineare per piccole perturbazioni.
 
 ## Attuatori e incertezze
 

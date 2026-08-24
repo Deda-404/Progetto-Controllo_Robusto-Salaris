@@ -1,49 +1,57 @@
 # Project Status
 
-**Current milestone:** M1 — Modello non lineare del manipolatore SEA
-**Status:** COMPLETE — quality gate M1 superato
-**Last validated milestone:** M1
-**Last validated result:** `run_all.m` eseguito in MATLAB R2025b Update 4; 9 test su 9 superati e validazione numerica M1 PASS
-**Blocking issues:** nessuno per il completamento di M1
-**Next task:** revisione e merge della Pull Request M1; non iniziare M2 senza il successivo incarico del gruppo
-**Pull Request:** [#2 — M1 nonlinear SEA manipulator model](https://github.com/Deda-404/Progetto_CR/pull/2), aperta e non unita
-**Last update:** 2026-08-24 12:50 CEST
+**Current milestone:** M2 — Equilibrio, linearizzazione e analisi strutturale
+**Status:** COMPLETE — quality gate M2 superato
+**Last validated milestone:** M2
+**Last validated result:** `run_all.m` eseguito in MATLAB R2025b Update 4; 18 test top-level su 18 superati, regressione M1 annidata 7/7 e validazioni M1/M2 PASS
+**Blocking issues:** nessuno per il completamento di M2
+**Next task:** revisione e merge della Pull Request M2; non iniziare M3 senza il successivo incarico del gruppo
+**Pull Request:** da aprire sul branch `codex/m2-equilibrium-linearization`
+**Last update:** 2026-08-24 13:38 CEST
 
-## Metriche M1 validate
+## Metriche M2 validate
 
 | Metrica | Valore | Tolleranza / criterio |
 | --- | ---: | ---: |
-| Configurazioni inerzia | 2001 in \([-\pi,\pi]\) | campionamento deterministico |
-| Minimo autovalore di \(M\) | 0.01904266522239113 a \(q_2=0\) rad | \(>10^{-12}\) |
-| Massimo errore di simmetria di \(M\) | 0 | \(\le10^{-12}\) |
-| Configurazioni Coriolis | 7 | deterministiche |
-| Massimo residuo antisimmetria di \(\dot M-2C\) | \(4.906538933386797\times10^{-18}\) | \(\le10^{-12}\) |
-| Configurazioni gravità / elasticità / RHS | 3 / 3 / 4 | deterministiche |
-| Massimo errore formula gravità / elasticità | 0 / 0 | \(\le10^{-12}\) |
-| Massimo errore cinematico RHS | 0 | \(\le10^{-12}\) |
-| RHS senza `NaN`/`Inf` | 4 su 4 | tutti finiti |
+| Norma residuo equilibrio | \(5.8387489976584098\times10^{-14}\) | \(\le10^{-10}\) |
+| Dimensioni \(A,B\) | 8×8, 8×2 | finite |
+| Errore Jacobiano A massimo / Frobenius | \(4.126\times10^{-8}\) / \(6.124\times10^{-8}\) | \(\le10^{-6}\) |
+| Errore Jacobiano A relativo | \(6.423\times10^{-12}\) | \(\le10^{-9}\) |
+| Errore Jacobiano B | 0 | \(\le10^{-10}\) |
+| Poli stabili / instabili / marginali | 6 / 2 / 0 | instabilità rilevata |
+| Massima parte reale | 7.20942861374 s⁻¹ | calcolata |
+| Rango controllabilità | 8/8 | tolleranza SVD 0.25 |
+| Stabilizzabilità PBH | PASS sui 2 modi instabili | rango 8/8 |
+| Rango osservabilità `Cmeas` | 8/8 | tolleranza SVD 0.0078125 |
+| Rilevabilità `Cmeas` PBH | PASS sui 2 modi instabili | rango 8/8 |
+| Rango osservabilità `Cq` | 8/8 | tolleranza SVD 0.0009765625 |
+| Errore locale LTI/NL | da \(1.109\times10^{-4}\) a \(1.782\times10^{-13}\) | monotono; ordine \(>1.5\) |
+| Code Analyzer | 0 messaggi | 0 |
 
-## Quality gate M1
+## Quality gate M2
 
 | Requisito | Esito |
 | --- | --- |
-| Implementazione derivata dalla traccia | PASS |
-| Nessun codice del riferimento copiato | PASS |
-| Parametri nominali centralizzati | PASS |
-| Convenzione dello stato documentata | PASS |
-| \(M(q)\) implementata, simmetrica e positiva nei test | PASS |
-| Positività di \(M(q)\) giustificata anche analiticamente | PASS |
-| \(C(q,\dot q)\) e proprietà di \(\dot M-2C\) verificate | PASS |
-| \(G(q)\) ed elasticità SEA verificate | PASS |
-| Dinamica completa a 8 stati | PASS |
-| Assenza `NaN`/`Inf` nei casi documentati | PASS |
-| Test indipendenti rispetto alle funzioni | PASS |
-| `run_all.m` eseguito realmente | PASS |
+| `main` contenente M1 verificato | PASS — merge `85075d7` |
+| Equilibrio derivato autonomamente e relazione generale verificata | PASS |
+| \(\bar q=[\pi/2,0]^T\), \(\bar\theta\), \(\bar\tau\) e residuo verificati | PASS |
+| Jacobiani simbolici \(A\) 8×8 e \(B\) 8×2 dal modello M1 | PASS |
+| Confronto indipendente a differenze finite | PASS |
+| Validazione locale LTI/non lineare | PASS |
+| Poli e instabilità open-loop classificati | PASS |
+| Controllabilità SVD e stabilizzabilità PBH | PASS |
+| `Cmeas=[q;theta]` motivata, osservabile e rilevabile | PASS |
+| `Cq=q` definita come uscita prestazionale | PASS |
+| Dataset M2 rigenerato | PASS |
+| Figura poli rigenerata e ispezionata | PASS |
+| Test M0/M1/M2 e `run_all.m` completo | PASS |
+| Ricostruzione indipendente e confronto reference-last | PASS |
 | Documentazione e diario aggiornati | PASS |
 
 ## Limiti e problemi aperti
 
-- Il campionamento numerico di \(M\) valida l'implementazione sul dominio scelto; la positività globale è sostenuta separatamente dalla derivazione analitica documentata.
-- Non è ancora scelto alcun punto di equilibrio e non sono stati calcolati Jacobiani o modelli lineari.
-- Dinamica esterna degli attuatori, ritardo, incertezze, controllori e Simulink restano fuori scope.
-- M2 non è autorizzata da questo avanzamento e non è stata iniziata.
+- Le matrici di controllabilità e osservabilità sono a rango pieno ma hanno condizionamento elevato; lo scaling dovrà essere considerato nelle sintesi.
+- La verifica LTI/non lineare è locale e non costituisce una stima della RAS.
+- La struttura riguarda solo il modello meccanico a otto stati; M3 dovrà aggiungere separatamente gli attuatori esterni dopo approvazione dei parametri.
+- Ritardo, incertezze, specifiche e controllori restano fuori scope.
+- M3 non è autorizzata da questo avanzamento e non è stata iniziata.
