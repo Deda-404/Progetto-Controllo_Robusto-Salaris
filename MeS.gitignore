@@ -1,0 +1,45 @@
+# MATLAB autosave / backup
+*.asv
+*.m~
+*.autosave
+
+# MATLAB temporary files
+*.tmp
+*.bak
+
+# MATLAB code generation / caches
+slprj/
+sccprj/
+codegen/
+*.slxc
+
+# Simulink generated files
+*_grt_rtw/
+*_ert_rtw/
+*_rtw/
+*_sfprj/
+
+# MATLAB project/user-specific files
+*.prj.user
+*.mlproj.user
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Temporary result files
+results/tmp/
