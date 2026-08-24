@@ -11,6 +11,7 @@ addpath(genpath(fullfile(projectRoot, 'src')));
 addpath(genpath(fullfile(projectRoot, 'controllers')));
 addpath(genpath(fullfile(projectRoot, 'analysis')));
 metrics = validate_m7_lqg_integral;
+finalFeasibilityMetrics = validate_m7_augmented_cost_feasibility;
 m3 = load(fullfile(projectRoot, 'results', 'data', ...
     'm3_nominal_actuated_plant.mat'));
 m5 = load(fullfile(projectRoot, 'results', 'data', ...
@@ -19,6 +20,7 @@ m6 = load(fullfile(projectRoot, 'results', 'data', ...
     'm6_lqg_no_integrator.mat'));
 testCase.TestData.projectRoot = projectRoot;
 testCase.TestData.metrics = metrics;
+testCase.TestData.finalFeasibilityMetrics = finalFeasibilityMetrics;
 testCase.TestData.m3 = m3;
 testCase.TestData.m5 = m5;
 testCase.TestData.m6 = m6;
@@ -220,5 +222,144 @@ files = {fullfile(testCase.TestData.projectRoot, 'docs', ...
 for fileIndex = 1:numel(files)
     verifyNotEmpty(testCase, regexp(fileread(files{fileIndex}), ...
         'Responsabile:\s*Alessio', 'once'));
+end
+end
+
+function testT21FinalFeasibilityPreservesAllPhysicalScales(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+m6Scales = testCase.TestData.m6.validationMetrics.cost.scales;
+expectedXiScale = testCase.TestData.m5.spec.referenceAmplitude * ...
+    testCase.TestData.m5.spec.settlingTimeTarget;
+for designIndex = 1:numel(finalMetrics.selection.designs)
+    design = finalMetrics.selection.designs{designIndex};
+    verifyEqual(testCase, design.physicalScales, m6Scales);
+    verifyEqual(testCase, design.xiScale, expectedXiScale);
+end
+end
+
+function testT22CoTuningChangesOnlyDimensionlessPriorities(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+designs = finalMetrics.selection.designs;
+referenceAaug = designs{1}.Aaug;
+referenceBaug = designs{1}.Baug;
+for designIndex = 1:numel(designs)
+    design = designs{designIndex};
+    verifyEqual(testCase, design.Aaug, referenceAaug);
+    verifyEqual(testCase, design.Baug, referenceBaug);
+    verifyEqual(testCase, design.Qaug, ...
+        design.CaugCost.' * design.CaugCost, 'AbsTol', 1e-10);
+end
+verifyTrue(testCase, finalMetrics.validationMetrics. ...
+    onlyDimensionlessPrioritiesTuned);
+end
+
+function testT23StageC1IsCompleteAndNotPreselected(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+config = finalMetrics.config;
+stageC1 = finalMetrics.stageC1CandidateTable;
+verifyEqual(testCase, height(stageC1), 75);
+verifyEqual(testCase, unique(stageC1.Wq), config.stageC1.wq);
+verifyEqual(testCase, unique(stageC1.Wi), config.stageC1.wi);
+verifyEqual(testCase, unique(stageC1.RhoU), config.stageC1.rhoU);
+verifyEqual(testCase, unique(stageC1.Wqdot), config.stageC1.wqdot);
+verifyEqual(testCase, unique(stageC1.Wdelta), config.stageC1.wdelta);
+verifyEqual(testCase, unique(stageC1.WthetaDot), ...
+    config.stageC1.wthetaDot);
+verifyFalse(testCase, any(stageC1.Selected));
+end
+
+function testT24StageC2UsesOnlyPromisingC1Seeds(testCase)
+selection = testCase.TestData.finalFeasibilityMetrics.selection;
+config = testCase.TestData.finalFeasibilityMetrics.config;
+verifyLessThanOrEqual(testCase, height(selection.c1SeedTable), ...
+    config.maximumPromisingSeeds);
+verifyTrue(testCase, all(selection.c1SeedTable.Promising));
+verifyEqual(testCase, height(selection.stageC2.candidateTable), ...
+    height(selection.c1SeedTable) * ...
+    numel(config.stageC2.wVelocity));
+if ~isempty(selection.stageC2.candidateTable)
+    verifyTrue(testCase, all(ismember(selection.stageC2. ...
+        candidateTable.ParentCandidate, selection.c1SeedTable.Candidate)));
+end
+end
+
+function testT25StageC3RunsOnlyWhenNecessaryAndRemainsBounded(testCase)
+selection = testCase.TestData.finalFeasibilityMetrics.selection;
+config = testCase.TestData.finalFeasibilityMetrics.config;
+verifyEqual(testCase, selection.stageC3Executed, ...
+    selection.stageC3Necessary);
+verifyLessThanOrEqual(testCase, height(selection.c2SeedTable), ...
+    config.maximumPromisingSeeds);
+verifyEqual(testCase, height(selection.stageC3.candidateTable), ...
+    height(selection.c2SeedTable) * numel(config.stageC3.wdelta) * ...
+    selection.stageC3Executed);
+verifyTrue(testCase, selection.noSearchBeyondC3);
+verifyEqual(testCase, selection.searchStages, ...
+    ["Stage C1"; "Stage C2"; "Stage C3"]);
+end
+
+function testT26FinalTargetsAndOffsetsAreEvaluatedFromMetrics(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+tableData = finalMetrics.allCandidateTable;
+spec = testCase.TestData.m5.spec;
+config = finalMetrics.config;
+expectedPass = tableData.Stable & ...
+    tableData.WorstSettlingTime <= spec.settlingTimeTarget & ...
+    tableData.WorstOvershoot <= spec.overshootTarget & ...
+    tableData.WorstSteadyStateErrorRelative <= ...
+    spec.steadyStateTrackingTarget & ...
+    tableData.DisturbanceOffsetD1 <= ...
+    config.disturbanceSteadyStateTolerance & ...
+    tableData.DisturbanceOffsetD2 <= ...
+    config.disturbanceSteadyStateTolerance & ...
+    tableData.FeedforwardWellConditioned;
+verifyEqual(testCase, tableData.FundamentalPass, expectedPass);
+verifyTrue(testCase, all(tableData.DisturbanceOffsetD1 <= ...
+    config.disturbanceSteadyStateTolerance));
+verifyTrue(testCase, all(tableData.DisturbanceOffsetD2 <= ...
+    config.disturbanceSteadyStateTolerance));
+end
+
+function testT27M5AndBothM7CheckpointsRemainUnchanged(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+verifyTrue(testCase, finalMetrics.validationMetrics.m5SourceUnchanged);
+verifyTrue(testCase, finalMetrics.validationMetrics. ...
+    checkpoint1DofPreserved);
+verifyTrue(testCase, finalMetrics.validationMetrics. ...
+    checkpoint2DofPreserved);
+end
+
+function testT28NoFinalControllerAfterFailedFeasibility(testCase)
+finalMetrics = testCase.TestData.finalFeasibilityMetrics;
+verifyEqual(testCase, finalMetrics.validationMetrics.status, "PARTIAL");
+verifyEqual(testCase, finalMetrics.validationMetrics.admissibleCount, 0);
+verifyEmpty(testCase, finalMetrics.selection.selectedIndex);
+verifyFalse(testCase, any(finalMetrics.allCandidateTable.Selected));
+verifyFalse(testCase, finalMetrics.validationMetrics.finalControllerBuilt);
+verifyFalse(testCase, isfile(fullfile(testCase.TestData.projectRoot, ...
+    'results', 'data', 'm7_lqg_integral.mat')));
+end
+
+function testT29MandatoryCheckpointComparisonIsComplete(testCase)
+comparison = testCase.TestData.finalFeasibilityMetrics.comparisonTable;
+verifyEqual(testCase, height(comparison), 4);
+verifyEqual(testCase, comparison.Controller, ...
+    ["M6 no integrator"; "M7 checkpoint I25 1-DoF"; ...
+    "M7 Stage B E16 2-DoF"; "M7 final"]);
+verifyEqual(testCase, comparison.Available, [true; true; true; false]);
+verifyTrue(testCase, all(isfinite(comparison.TrackingSettling(1:3))));
+verifyTrue(testCase, all(isfinite(comparison.PeakDeformation(1:3))));
+end
+
+function testT30RequiredFinalFeasibilityArtifactsExist(testCase)
+projectRoot = testCase.TestData.projectRoot;
+files = {fullfile(projectRoot, 'results', 'data', ...
+    'm7_augmented_cost_feasibility.mat'), ...
+    fullfile(projectRoot, 'results', 'figures', ...
+    'm7_augmented_cost_pareto.png'), ...
+    fullfile(projectRoot, 'results', 'figures', ...
+    'm7_augmented_cost_tradeoff.png')};
+for fileIndex = 1:numel(files)
+    verifyTrue(testCase, isfile(files{fileIndex}));
 end
 end
