@@ -16,12 +16,12 @@ addpath(genpath(fullfile(projectRoot, 'analysis')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf(['Milestone implementata: M5 (specifiche, pesi e disturbo ' ...
-    'fisico di coppia ai link; nessuna sintesi controller)\n\n']);
+fprintf(['Milestone implementata: M6 (LQG nominale senza integratore ' ...
+    'sulla pianta completa a 14 stati)\n\n']);
 
 try
     fprintf(['--- Test automatici M0 + M1 + M2 + M3/M3.1 + ' ...
-        'M4/M4.1 + M5 ---\n']);
+        'M4/M4.1 + M5 + M6 ---\n']);
     testResults = runtests(fullfile(projectRoot, 'tests'));
     assertSuccess(testResults);
     fprintf('Test automatici superati: %d/%d.\n', ...
@@ -54,9 +54,14 @@ try
         'figure M5 ---\n']);
     m5Metrics = validate_m5_performance_specs;
 
-    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M4.1 e quality ' ...
-        'gate M5 (governance, specifiche, W1/W2, Bd, disturbance path, ' ...
-        'dataset e figure) superati; nessun controllore sintetizzato.\n']);
+    fprintf(['\n--- Diagnosi baseline, tuning LQR, Kalman, LQG, ' ...
+        'dataset e figure M6 ---\n']);
+    m6Metrics = validate_m6_lqg_no_integrator;
+
+    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M5 e quality ' ...
+        'gate M6 superati; tuning LQR strutturato, Kalman, controllore ' ...
+        'LQG ordine 14, tracking, disturbo, rumore, dataset e figure ' ...
+        'validati senza integratore.\n']);
 catch executionError
     fprintf(2, '\n[FAIL] RUN_ALL interrotto: %s\n', executionError.message);
     rethrow(executionError);
