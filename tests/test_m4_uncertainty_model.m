@@ -208,3 +208,65 @@ priorResults = run(suite);
 verifyEqual(testCase, numel(priorResults), 34);
 verifyTrue(testCase, all([priorResults.Passed]));
 end
+
+function testT15NominalActuatorSingleSourceOfTruth(testCase)
+actuatorNominal = actuator_params_nominal;
+actuatorScenarios = testCase.TestData.uncertainty.actuatorScenarios;
+expectedNominal = [actuatorNominal.wn; actuatorNominal.zeta; ...
+    actuatorNominal.delay];
+verifyEqual(testCase, actuatorScenarios.NominalValue, expectedNominal);
+verifyEqual(testCase, ...
+    testCase.TestData.uncertainty.actuatorNominalSource, ...
+    "actuator_params_nominal");
+
+configurationFile = fullfile(testCase.TestData.projectRoot, 'src', ...
+    'parameters', 'uncertainty_params_m4.m');
+configurationSource = fileread(configurationFile);
+verifyNotEmpty(testCase, regexp(configurationSource, ...
+    'actuatorNominal\s*=\s*actuator_params_nominal', 'once'));
+verifyEmpty(testCase, regexp(configurationSource, ...
+    'actuatorNominalValue\s*=\s*\[\s*40\s*;', 'once'));
+verifyNotEmpty(testCase, regexp(configurationSource, ...
+    'actuatorNominal\.wn', 'once'));
+verifyNotEmpty(testCase, regexp(configurationSource, ...
+    'actuatorNominal\.zeta', 'once'));
+verifyNotEmpty(testCase, regexp(configurationSource, ...
+    'actuatorNominal\.delay', 'once'));
+end
+
+function testT16MechanicalSelectionDependency(testCase)
+verifyError(testCase, @() uncertainty_params_m4, ...
+    'M4Uncertainty:MissingSelection');
+verifyError(testCase, @() uncertainty_params_m4(strings(0, 1)), ...
+    'M4Uncertainty:MissingSelection');
+verifyEqual(testCase, ...
+    testCase.TestData.uncertainty.mechanicalScenarios.Parameter, ...
+    testCase.TestData.screening.selectedMechanicalParameters);
+end
+
+function testT17M4DecisionPreservation(testCase)
+verifyEqual(testCase, ...
+    testCase.TestData.screening.selectedMechanicalParameters, ...
+    ["k2"; "k1"; "Jm1"]);
+ranges = testCase.TestData.uncertainty.selectedMechanicalRanges;
+verifyEqual(testCase, ranges.BaselinePercent, [7; 7; 9]);
+verifyEqual(testCase, testCase.TestData.fit.selectedOrder, 1);
+
+frequencies = logspace(-1, 3, 201);
+measError = freqresp(testCase.TestData.GuncMeas.NominalValue, ...
+    frequencies) - freqresp(testCase.TestData.m3.GfullMeas, frequencies);
+qError = freqresp(testCase.TestData.GuncQ.NominalValue, frequencies) - ...
+    freqresp(testCase.TestData.m3.GfullQ, frequencies);
+verifyLessThan(testCase, max(abs(measError(:))), 1e-8);
+verifyLessThan(testCase, max(abs(qError(:))), 1e-8);
+end
+
+function testT18FullRegression(testCase)
+currentSuite = testsuite(mfilename('fullpath'));
+currentNames = string({currentSuite.Name});
+currentSuite = currentSuite( ...
+    ~contains(currentNames, 'testT18FullRegression'));
+regressionResults = run(currentSuite);
+verifyEqual(testCase, numel(regressionResults), 17);
+verifyTrue(testCase, all([regressionResults.Passed]));
+end

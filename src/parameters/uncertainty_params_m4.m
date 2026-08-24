@@ -1,8 +1,10 @@
 function uncertainty = uncertainty_params_m4(selectedMechanicalParameters)
 %UNCERTAINTY_PARAMS_M4 Engineering uncertainty assumptions for M4.
 
-if nargin < 1
-    selectedMechanicalParameters = ["k2"; "k1"; "Jm1"];
+if nargin < 1 || isempty(selectedMechanicalParameters)
+    error('M4Uncertainty:MissingSelection', ...
+        ['selectedMechanicalParameters is required and must come from ' ...
+        'screen_parameter_sensitivity.']);
 end
 selectedMechanicalParameters = string(selectedMechanicalParameters(:));
 nominal = sea_params_nominal;
@@ -21,8 +23,9 @@ for index = 1:numberSelected
         baselinePercent(index) = 7;
         conservativePercent(index) = 12;
         rationale(index) = ...
-            "SEA stiffness: moderate assembly/material variability; " + ...
-            "7% baseline avoids the unverified 5% reference value";
+            "SEA stiffness: prudent but moderate engineering envelope " + ...
+            "for material, assembly and equivalent-tolerance dispersion; " + ...
+            "not experimentally identified";
     elseif startsWith(name, "Jm")
         mildPercent(index) = 4;
         baselinePercent(index) = 9;
@@ -62,8 +65,10 @@ uncertainty.mechanicalScenarios = table( ...
 uncertainty.selectedMechanicalRanges = uncertainty.mechanicalScenarios(:, ...
     {'Parameter', 'NominalValue', 'BaselinePercent', 'Rationale'});
 
+actuatorNominal = actuator_params_nominal;
 actuatorParameter = ["wn"; "zeta"; "delay"];
-actuatorNominalValue = [40; 0.8; 0.015];
+actuatorNominalValue = [actuatorNominal.wn; ...
+    actuatorNominal.zeta; actuatorNominal.delay];
 actuatorMildPercent = [4; 4; 8];
 actuatorBaselinePercent = [8; 7.5; 20];
 actuatorConservativePercent = [15; 12.5; 35];
@@ -78,6 +83,7 @@ uncertainty.actuatorScenarios = table(actuatorParameter, ...
     'MildPercent', 'BaselinePercent', 'ConservativePercent', 'Rationale'});
 uncertainty.selectedActuatorRanges = uncertainty.actuatorScenarios(:, ...
     {'Parameter', 'NominalValue', 'BaselinePercent', 'Rationale'});
+uncertainty.actuatorNominalSource = "actuator_params_nominal";
 
 uncertainty.actuatorFamilySeed = 20260824;
 uncertainty.actuatorRandomSamples = 105;

@@ -526,12 +526,12 @@ Il comando \(u\) è distinto dalla coppia effettiva \(\tau\) applicata al modell
 
 ### Problema
 
-Ridurre i dieci candidati meccanici a un insieme piccolo, fisicamente interpretabile e adatto alla futura mu-analysis, senza copiare il riferimento.
+Ridurre i dieci candidati meccanici a un insieme piccolo, fisicamente interpretabile e adatto alla futura mu-analysis.
 
 ### Alternative
 
 - rendere incerti tutti i candidati;
-- imporre a priori `m2`, `k1`, `k2`;
+- imporre a priori un insieme fisso senza eseguire lo screening;
 - selezionare tre parametri tramite screening multifattore riproducibile;
 - includere anche il quarto classificato `Jm2`.
 
@@ -543,7 +543,7 @@ Selezionare come blocchi reali indipendenti `k2`, `k1` e `Jm1`. `Jm2` resta il p
 
 ### Motivazione
 
-Le rigidezze dominano lo spostamento dei modi elastici e la risposta frequenziale. `Jm1` completa l'insieme con un parametro di natura diversa e un'elevata sensibilità ai modi elastici. La scelta è emersa prima del confronto con il riferimento, che include invece `m2`.
+Le rigidezze dominano lo spostamento dei modi elastici e la risposta frequenziale. `Jm1` completa l'insieme con un parametro di natura diversa e un'elevata sensibilità ai modi elastici. La funzione di configurazione riceve ora obbligatoriamente questa selezione dallo screening e non possiede un default silenzioso.
 
 ### Conseguenze e limiti
 
@@ -566,7 +566,7 @@ Definire range difendibili senza dati di tolleranza o identificazione e senza ot
 
 ### Alternative
 
-- usare le percentuali del riferimento;
+- usare una percentuale unica e non qualificata per nature fisiche diverse;
 - adottare un unico envelope non qualificato;
 - documentare scenari MILD/BASELINE/CONSERVATIVE per ciascuna natura fisica.
 
@@ -576,7 +576,7 @@ Adottare rigidezze ±3/±7/±12% e `Jm1` ±4/±9/±15% nei tre scenari. Il BASEL
 
 ### Motivazione
 
-Il 7% rappresenta dispersione moderata di materiale/assemblaggio SEA; il 9% rappresenta variabilità moderata dell'inerzia riflessa di motore e trasmissione. I valori non coincidono con il ±5% del riferimento e non sono scelti per rendere fattibile una sintesi.
+Il 7% è un envelope progettuale prudente ma moderato per dispersione di materiale, assemblaggio e tolleranze equivalenti della rigidezza SEA. Il 9% rappresenta variabilità moderata dell'inerzia riflessa di motore e trasmissione. Entrambi sono assunzioni ingegneristiche non identificate sperimentalmente e non sono scelti per rendere fattibile una sintesi.
 
 ### Conseguenze e limiti
 
@@ -614,7 +614,7 @@ Gli envelope baseline sono moderati e interpretabili come dispersione della dina
 
 ### Conseguenze e limiti
 
-La famiglia è una griglia/campionamento riproducibile, non un'identificazione continua garantita. I range non sono quelli del progetto precedente. Il massimo errore moltiplicativo degli otto corner baseline è 2.1697 a circa 302 rad/s.
+La famiglia è una griglia/campionamento riproducibile, non un'identificazione continua garantita. Il massimo errore moltiplicativo degli otto corner baseline è 2.1697 a circa 302 rad/s. I nominali `wn`, `zeta` e ritardo sono letti esclusivamente da `actuator_params_nominal.m`.
 
 ### Stato
 
@@ -660,7 +660,7 @@ La dinamica non modellata viene concentrata in un envelope non strutturato; i co
 
 ### Problema
 
-Scegliere il minimo ordine che copra tutti i 120 modelli senza adottare automaticamente l'ordine 3 del riferimento.
+Scegliere il minimo ordine stabile e proprio che copra tutti i 120 modelli, evitando dinamica aggiuntiva non necessaria.
 
 ### Alternative
 
@@ -720,3 +720,38 @@ L'ensemble può essere più ampio del caso di variazione comune. Una futura corr
 ### Stato
 
 **APPROVATA PER LA STRUTTURA DELTA M4 — completa P-0004**
+
+---
+
+## D-0013 — Dipendenze esplicite e source of truth della configurazione M4
+
+**Data:** 2026-08-24
+**Milestone:** M4.1
+
+### Problema
+
+La prima configurazione M4 duplicava i nominali attuatore e permetteva una chiamata senza screening tramite un default `k2/k1/Jm1`. Entrambi i comportamenti potevano mascherare divergenze future pur lasciando invariati i risultati correnti.
+
+### Alternative
+
+- conservare copie numeriche e default per comodità;
+- leggere i nominali M3 ma mantenere una selezione meccanica predefinita;
+- rendere entrambe le dipendenze esplicite e testate.
+
+### Scelta
+
+`uncertainty_params_m4` legge `wn`, `zeta` e ritardo esclusivamente da `actuator_params_nominal.m` e richiede in input `selectedMechanicalParameters` prodotti dallo screening. Input mancante o vuoto genera `M4Uncertainty:MissingSelection`.
+
+### Evidenze e motivazione
+
+I test T15 e T16 verificano sia la dipendenza dalla source of truth sia l'assenza del default. T17 conferma che il cleanup non cambia selezione, range, ordine di `WI` o coerenza nominale. La catena diventa quindi univoca:
+
+`screen_parameter_sensitivity -> selectedMechanicalParameters -> uncertainty_params_m4`.
+
+### Conseguenze e limiti
+
+Le chiamate future devono passare esplicitamente lo screening. L'uncertainty set resta `k2/k1/Jm1`, ±7/±7/±9%, range attuatore ±8/±7.5/±20%, `WI` ordine 1 e due Delta indipendenti.
+
+### Stato
+
+**APPROVATA — CLEANUP M4.1, NESSUNA MODIFICA NUMERICA DELL'ENSEMBLE**
