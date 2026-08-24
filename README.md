@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M4 il comando pulisce e configura l'ambiente, esegue i 48 test top-level M0–M4, ripete le validazioni M1–M3 e rigenera screening, peso `WI`, pianta incerta, dataset e figure M4. Sono inclusi confronto ritardo esatto/Padé, verifica completa della copertura, coerenza nominale con M3, struttura `lftdata` e 40 campioni `usample`. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Alla milestone M5 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M4.1 e i test M5, ripete le validazioni precedenti e rigenera specifiche, pesi, disturbance path, dataset e figure. Sono inclusi selezione della banda dai dati M2/M3, asintoti di `W1/W2`, verifica indipendente di `Bd` e separazione fra comando attuato e coppia esterna ai link. M5 non sintetizza controllori. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M4 — Modellazione delle incertezze e pianta incerta**.
-- Ultimo risultato validato: screening autonomo con `k2/k1/Jm1`, famiglia attuatori da 120 modelli, `WI` stabile/propria di ordine 1, cinque blocchi incerti, coerenza nominale M3 e 40/40 campioni validi.
+- Milestone corrente: **M5 — Specifiche di prestazione, disturbi e pesi di progetto**.
+- Risultato M5: target centralizzati con `omegaB=12` rad/s, `As=0.05`, `Ms=2`, `uScale=12` N m, `omegaU=30` rad/s e `alpha=6`; disturbo fisico di coppia ai link con `Bd` verificata.
 - Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
-- Prossimo passo: revisione della Pull Request M4; M5 non è iniziata.
+- Prossimo passo: quality gate e revisione della Pull Request M5; M6 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

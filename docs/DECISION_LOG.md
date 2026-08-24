@@ -755,3 +755,234 @@ Le chiamate future devono passare esplicitamente lo screening. L'uncertainty set
 ### Stato
 
 **APPROVATA — CLEANUP M4.1, NESSUNA MODIFICA NUMERICA DELL'ENSEMBLE**
+
+---
+
+## D-0014 — Disturbo esterno come coppia ai link
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Definire il fenomeno fisico principale per le future verifiche di disturbance rejection senza confonderlo con rumore di misura o comando attuatore.
+
+### Alternative
+
+- perturbazione additiva sulla posizione misurata;
+- coppia additiva sul comando motore prima dell'attuatore;
+- coppia esterna (d=[d_1,d_2]^T) applicata direttamente alla dinamica dei link.
+
+### Criterio e scelta
+
+È scelta la coppia esterna ai link, coerente con (M(q)\ddot q+C(q,\dot q)\dot q+G(q)=K_s(\theta-q)+d). Nel modello linearizzato (B_d) ha il solo blocco (M(\bar q)^{-1}) sulle accelerazioni link. Il comando (u) continua invece ad attraversare gli attuatori M3.
+
+### Motivazione
+
+La scelta rappresenta un carico meccanico esterno reale, preserva le unità N m e mantiene separati disturbo, comando e misura. La derivazione analitica di (B_d) coincide con una differenza finita centrata del modello non lineare.
+
+### Conseguenze
+
+La pianta M5 ha ingressi ([u_1,u_2,d_1,d_2]) e uscite ([q_1,q_2,\theta_1,\theta_2]), senza feedthrough additivo del disturbo sulle uscite.
+
+### Stato epistemico
+
+**APPROVATA COME MODELLO FISICO M5; LE AMPIEZZE RESTANO SCENARI DI PROGETTO**
+
+---
+
+## D-0015 — Ampiezze nominali di validazione
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Fissare ampiezze riproducibili per tracking locale e disturbo senza presentarle come limiti hardware o dati sperimentali.
+
+### Alternative
+
+- riferimenti articolari 2°, 5° e 8°;
+- disturbi 0.25, 0.50 e 1.00 N m;
+- valori singoli non accompagnati da uno studio locale.
+
+### Criterio e scelta
+
+Sono conservate tutte le griglie; i casi nominali sono 5° (0.0872665 rad) e 0.50 N m. La consistenza del riferimento viene valutata sull'errore della linearizzazione gravitazionale; il disturbo viene confrontato con la scala gravitazionale locale e con la deformazione statica (K_s^{-1}d).
+
+### Motivazione
+
+A 5° il massimo errore relativo gravitazionale locale è 0.16043%. Il disturbo da 0.50 N m vale circa il 60.9% della massima variazione gravitazionale dello stesso scenario e produce deformazioni SEA di 0.0100/0.0125 rad: è significativo ma non descrive un urto estremo.
+
+### Conseguenze
+
+Le sintesi successive dovranno verificare almeno i tre livelli di entrambe le griglie. Nessun valore costituisce corsa, saturazione o tolleranza certificata.
+
+### Stato epistemico
+
+**APPROVATA COME BASELINE DI VALIDAZIONE M5; ASSUNZIONE NON SPERIMENTALE**
+
+---
+
+## D-0016 — Banda target (\omega_B=12\) rad/s
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Collocare la rapidità desiderata sopra la scala dei poli instabili ma sotto i limiti imposti da attuatore e modi elastici.
+
+### Alternative
+
+- candidati 11, 12 e 13 rad/s;
+- banda scelta senza usare i dataset dinamici;
+- valore continuo al bordo della finestra.
+
+### Criterio e scelta
+
+La finestra è (1.5\lambda_{u,max}\leq\omega_B\leq\min(0.40\omega_{act},0.20\omega_{elastic,min})). Con i dati M2/M3 risulta 10.8141429–13.9133481 rad/s. Il ranking massimizza il minimo dei tre margini, poi usa distanza dal centro, valore di banda e indice come tie-break. È selezionato 12 rad/s.
+
+### Motivazione
+
+Il candidato conserva 1.18586 rad/s dal limite inferiore, 1.91335 rad/s dal limite attuatore e 1.99087 rad/s dal limite elastico, migliorando il margine minimo rispetto a 11 e 13 rad/s.
+
+### Conseguenze
+
+I coefficienti 1.5, 0.40 e 0.20 sono criteri progettuali. La banda è un target da verificare closed-loop e non una prestazione già ottenuta.
+
+### Stato epistemico
+
+**APPROVATA COME BANDA TARGET M5, DERIVATA DAI DATASET VALIDATI**
+
+---
+
+## D-0017 — Target di sensitivity (A_s=0.05), (M_s=2)
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Bilanciare attenuazione a bassa frequenza e picco desiderato di sensitivity nel peso (W_1).
+
+### Alternative
+
+- (A_s\in\{0.03,0.05,0.08\});
+- (M_s\in\{1.7,2.0,2.4\});
+- estremi più aggressivi o più permissivi della griglia locale.
+
+### Criterio e scelta
+
+Per (W_1(s)=(s/M_s+\omega_B)/(s+\omega_BA_s)), la regola deterministica preferisce la severità mediana su (A_s) e poi su (M_s). Sono scelti (A_s=0.05) e (M_s=2).
+
+### Motivazione
+
+Gli asintoti verificati sono (W_1(0)=20) e (W_1(\infty)=0.5). Il target corrisponde a sensitivity a bassa frequenza dell'ordine del 5% e picco desiderato dell'ordine di 6 dB senza adottare gli estremi locali.
+
+### Conseguenze
+
+Il peso è stabile, proprio e di ordine uno. La fattibilità simultanea dei target sarà valutata dalle future sintesi; M5 non dichiara il requisito soddisfatto.
+
+### Stato epistemico
+
+**APPROVATA COME TARGET W1 M5; FATTIBILITÀ CLOSED-LOOP NON ANCORA VERIFICATA**
+
+---
+
+## D-0018 — Scala di normalizzazione dello sforzo (u_{scale}=12\) N m
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Normalizzare lo sforzo di controllo in assenza di una saturazione hardware dichiarata dalla traccia.
+
+### Alternative
+
+- 8, 12 o 16 N m;
+- dichiarare uno dei valori come limite fisico;
+- evitare lo scaling dimensionale del comando.
+
+### Criterio e scelta
+
+È scelto il valore mediano 12 N m dopo confronto con coppie elastiche e scenari di disturbo moderati.
+
+### Motivazione
+
+La scala è superiore alle coppie richieste dagli scenari locali, mantiene margine dinamico e non assume disponibilità di coppie estremamente elevate senza dati hardware.
+
+### Conseguenze
+
+(u_{scale}) è esclusivamente un parametro di normalizzazione/prestazione. Saturazione, slew rate e limiti termici dovranno essere definiti soltanto se saranno disponibili dati fisici.
+
+### Stato epistemico
+
+**APPROVATA COME SCALA PRESTAZIONALE M5; NON È UNA SATURAZIONE CERTIFICATA**
+
+---
+
+## D-0019 — Roll-up del comando con (\omega_U=30\) rad/s e (\alpha=6)
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Aumentare la penalizzazione del comando ad alta frequenza prima di eccitare attuatori e modi elastici.
+
+### Alternative
+
+- (\omega_U\in\{25,30,35\}\) rad/s;
+- (\alpha\in\{4,6\});
+- peso costante senza aumento ad alta frequenza.
+
+### Criterio e scelta
+
+Per (W_2=(1/u_{scale})(s/\omega_U+1)/(s/(\alpha\omega_U)+1)), l'onset deve essere sotto la banda attuatore e non oltre metà del primo modo elastico. Il ranking preferisce (u_{scale}) mediano, l'onset ammissibile più vicino dal basso alla banda attuatore e il maggiore (\alpha). Sono selezionati 30 rad/s e 6.
+
+### Motivazione
+
+L'onset dista 4.78337 rad/s dalla banda attuatore e 39.9543 rad/s dal primo modo elastico. Gli asintoti verificati sono 0.0833333 e 0.5 (N m)(^{-1}), quindi la penalizzazione aumenta di un fattore sei.
+
+### Conseguenze
+
+Il peso è stabile, proprio e di ordine uno. Il roll-up limita la richiesta di comando in frequenza ma non sostituisce una futura saturazione fisica.
+
+### Stato epistemico
+
+**APPROVATA COME TARGET W2 M5; EFFETTO CLOSED-LOOP NON ANCORA VERIFICATO**
+
+---
+
+## D-0020 — Target temporali e cross-coupling preliminare
+
+**Data:** 2026-08-24
+**Milestone:** M5
+
+### Problema
+
+Definire metriche comuni per confrontare i futuri controllori nominali e robusti.
+
+### Alternative
+
+- nessun target fino alla sintesi;
+- target temporali e MIMO estremamente severi;
+- baseline moderata, esplicitamente non ancora soddisfatta.
+
+### Criterio e scelta
+
+Sono adottati settling time ≤0.8 s, overshoot ≤10%, errore di tracking a regime ≤5% senza assumere a priori un integratore, forte attenuazione dei disturbi costanti/bassa frequenza e cross-coupling di picco ≤25% come target preliminare. Per un futuro controllore integrale l'obiettivo su ingressi costanti compatibili sarà errore nullo.
+
+### Motivazione
+
+Le metriche collegano rapidità, precisione e interazione MIMO senza anticipare la struttura del controllore. Il cross-coupling sarà misurato in entrambe le direzioni articolari.
+
+### Conseguenze
+
+Ogni milestone di sintesi dovrà dichiarare separatamente target soddisfatti, violati o non valutati. NS, NP, RS e RP restano distinti; M5 non calcola (\mu).
+
+### Stato epistemico
+
+**APPROVATA COME BASELINE DI CONFRONTO M5; CROSS-COUPLING PRELIMINARE**

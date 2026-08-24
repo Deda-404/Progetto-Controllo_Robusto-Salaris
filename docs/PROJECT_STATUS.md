@@ -1,13 +1,54 @@
 # Project Status
 
-**Current milestone:** M4.1 — Cleanup metodologico e centralizzazione del modello di incertezza
-**Status:** COMPLETE — dipendenze centralizzate, uncertainty set invariato
-**Last validated milestone:** M4.1
-**Last validated result:** `run_all.m` in MATLAB R2025b, 52/52 test top-level; T15–T18, M0–M4, coverage, Delta, coerenza nominale e 40/40 campioni PASS
+**Current milestone:** M5 — Specifiche di prestazione, modello dei disturbi e pesi di progetto
+**Status:** COMPLETE — quality gate M5 superato, nessun controllore sintetizzato
+**Last validated milestone:** M5
+**Last validated result:** `run_all.m` in MATLAB R2025b, 66/66 test top-level, regressioni M0–M4.1, selezione, W1/W2, `Bd`, disturbance path, dataset e figure PASS
 **Blocking issues:** nessuno
-**Next task:** revisione della Pull Request M4.1; non iniziare M5 senza il successivo incarico del gruppo
-**Pull Request:** [#7 — M4.1: centralize uncertainty model dependencies](https://github.com/Deda-404/Progetto_CR/pull/7), aperta e non unita
-**Last update:** 2026-08-24 17:17 CEST
+**Next task:** revisione della Pull Request M5; non iniziare M6 senza il successivo incarico del gruppo
+**Pull Request:** [#8 — M5: define performance specifications and disturbance model](https://github.com/Deda-404/Progetto_CR/pull/8), aperta e non unita
+**Last update:** 2026-08-24 18:00 CEST
+
+## Baseline M5
+
+| Componente | Scelta | Stato epistemico |
+| --- | ---: | --- |
+| Riferimento nominale | 5° = 0.0872665 rad | scenario di progetto |
+| Disturbo nominale | 0.50 N m ai link | scenario di progetto |
+| Finestra `omegaB` | 10.8141–13.9133 rad/s | derivata da M2/M3 |
+| `omegaB` | 12 rad/s | target selezionato |
+| `As`, `Ms` | 0.05, 2.0 | target W1 |
+| `uScale` | 12 N m | normalizzazione, non saturazione |
+| `omegaU`, `alpha` | 30 rad/s, 6 | target W2 |
+| settling / overshoot | ≤0.8 s / ≤10% | target non ancora verificato |
+| cross-coupling | ≤25% | preliminare |
+
+`W1(0)=20`, `W1(inf)=0.5`, `W2(0)=0.0833333 (N m)^-1` e `W2(inf)=0.5 (N m)^-1`. Entrambi i pesi sono stabili, propri, SISO di ordine uno e replicati diagonalmente sui due giunti.
+
+## Disturbance path M5
+
+La coppia esterna entra sul lato link tramite il blocco `M(qbar)^-1` nelle sole righe di accelerazione link di `Bd`. La verifica a differenze finite ha errore nullo alla precisione numerica usata. La pianta a 14 stati usa ingressi `[u1,u2,d1,d2]`: `u` conserva il percorso M3 attraverso gli attuatori, mentre `d` entra direttamente nella meccanica e non nelle uscite.
+
+## Quality gate M5
+
+| Requisito | Esito |
+| --- | --- |
+| governance documentale normalizzata | PASS — 14 voci con `Responsabile: Alessio` |
+| storia tecnica precedente invariata | PASS |
+| obiettivi di controllo distinti | PASS |
+| disturbo fisico di coppia ai link | PASS |
+| `Bd` derivata e verificata | PASS — errore FD nullo |
+| scenari riferimento/disturbo | PASS — 2/5/8° e 0.25/0.50/1.00 N m |
+| banda derivata da M2/M3 | PASS — 12 rad/s nella finestra |
+| W1/W2 autonomi e documentati | PASS |
+| pesi stabili/propri e asintoti | PASS |
+| target temporali e cross-coupling | PASS — definiti, non dichiarati raggiunti |
+| nessun controllore o W3 | PASS |
+| dataset e tre figure | PASS |
+| test M5 | PASS — 14/14 |
+| regressioni M0–M4.1 | PASS — 52/52 dentro T13 |
+| test top-level `run_all` | PASS — 66/66, exit code 0 |
+| Code Analyzer | PASS — 0 messaggi su 8 file |
 
 ## Ensemble baseline M4
 
