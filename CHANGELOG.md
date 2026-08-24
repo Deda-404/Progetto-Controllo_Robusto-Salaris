@@ -34,6 +34,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Fit `ucover` degli ordini 1–4 e selezione del minimo `WI` stabile/proprio coprente, con due `ultidyn` indipendenti.
 - Dataset `m4_uncertain_plant.mat`, tre figure M4 originali, documentazione `MODELLO_INCERTEZZE.md` e handoff dedicato.
 - Quattordici test M4 per screening, range, `ureal`, famiglia, copertura, Delta, coerenza nominale, `lftdata`, `usample` e regressioni.
+- Test M4.1 T15–T18 per source of truth attuatore, dipendenza obbligatoria dallo screening, preservazione delle decisioni e regressione M0–M4.
 
 ### Changed
 
@@ -50,6 +51,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Aggiornate motivazione D-0006 e documentazione per distinguere `candidate comparison` da `candidate selection`.
 - Esteso `run_all.m` al quality gate M4 completo: 48 test top-level, screening, fit, copertura, costruzione `Gunc`, coerenza nominale, 40 campioni, dataset e figure.
 - Aggiornati README, checklist, diario, decision log e project status alla chiusura M4.
+- Centralizzati i nominali attuatore M4 in `actuator_params_nominal.m`; rimossa la copia numerica da `uncertainty_params_m4.m`.
+- Reso obbligatorio l'input `selectedMechanicalParameters` prodotto dallo screening, eliminando la preselezione silenziosa.
+- Riformulate D-0007/D-0008/D-0009/D-0011 e la configurazione dei range con motivazioni esclusivamente tecniche.
 
 ### Fixed
 

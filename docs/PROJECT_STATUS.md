@@ -1,13 +1,13 @@
 # Project Status
 
-**Current milestone:** M4 — Modellazione delle incertezze e pianta incerta
-**Status:** COMPLETE — quality gate tecnico M4 superato
-**Last validated milestone:** M4
-**Last validated result:** `run_all.m` in MATLAB R2025b, 48/48 test top-level, screening, `WI`, `Gunc`, coerenza nominale e 40/40 campioni PASS
+**Current milestone:** M4.1 — Cleanup metodologico e centralizzazione del modello di incertezza
+**Status:** COMPLETE — dipendenze centralizzate, uncertainty set invariato
+**Last validated milestone:** M4.1
+**Last validated result:** `run_all.m` in MATLAB R2025b, 52/52 test top-level; T15–T18, M0–M4, coverage, Delta, coerenza nominale e 40/40 campioni PASS
 **Blocking issues:** nessuno
-**Next task:** revisione della Pull Request M4; non iniziare M5 senza il successivo incarico del gruppo
-**Pull Request:** [#6 — M4: uncertainty modeling and uncertain SEA plant](https://github.com/Deda-404/Progetto_CR/pull/6), aperta e non unita
-**Last update:** 2026-08-24 16:46 CEST
+**Next task:** revisione della Pull Request M4.1; non iniziare M5 senza il successivo incarico del gruppo
+**Pull Request:** da aprire sul branch `codex/m4-uncertainty-cleanup`
+**Last update:** 2026-08-24
 
 ## Ensemble baseline M4
 
@@ -70,6 +70,21 @@ Gli altri candidati sono `l1`, `l2`, `m1`, `Bm2`, `Bm1`. `g` resta nota.
 
 Ogni parametro fisico è creato una volta e riutilizzato nelle sue occorrenze; i due canali dinamici non condividono Delta.
 
+## Cleanup metodologico M4.1
+
+| Verifica | Esito |
+| --- | --- |
+| Source of truth nominali attuatore | `actuator_params_nominal.m` |
+| Copia locale `40/0.8/0.015` | rimossa da `uncertainty_params_m4.m` |
+| Input selezione meccanica | obbligatorio e proveniente dallo screening |
+| Chiamata senza selezione | errore `M4Uncertainty:MissingSelection` |
+| Default silenzioso `k2/k1/Jm1` | rimosso |
+| Motivazione rigidezze | envelope moderato per materiale, assemblaggio e tolleranze equivalenti |
+| Audit frasi improprie | nessuna occorrenza nei sorgenti/documenti tecnici |
+| Test aggiunti | T15–T18, tutti PASS |
+
+Il confronto pre/post cleanup restituisce esattamente gli stessi parametri, percentuali, coefficienti di `WI`, coverage ratio, margine, errori di coerenza nominale e conteggio `usample`.
+
 ## Coerenza nominale e campioni
 
 | Verifica | Risultato |
@@ -102,9 +117,9 @@ Ogni parametro fisico è creato una volta e riutilizzato nelle sue occorrenze; i
 | struttura `lftdata` documentata | PASS |
 | 40 campioni validi | PASS |
 | dataset e tre figure generati | PASS |
-| 14 test M4 e 34 regressioni pregresse | PASS |
+| 18 test M4/M4.1 e 34 regressioni pregresse | PASS |
 | confronto reference-last | PASS — soluzione invariata |
-| `run_all.m` exit code 0 | PASS — 48/48 test top-level |
+| `run_all.m` exit code 0 | PASS — 52/52 test top-level |
 | documentazione e diario | PASS |
 
 ## Limiti e problemi aperti

@@ -11,9 +11,11 @@ Il nominale resta quello approvato in M3.1:
 - due attuatori nominali identici con `wn = 40 rad/s`, `zeta = 0.8`, ritardo `15 ms` e Padé ordine 1;
 - pianta completa a 14 stati, ingressi `[u1;u2]`, misure `[q1;q2;theta1;theta2]` e uscita primaria `[q1;q2]`.
 
+`actuator_params_nominal.m` è l'unica source of truth di `wn`, `zeta`, ritardo e ordine Padé. La configurazione M4 legge da questa funzione i nominali usati nelle tabelle e non ne conserva una copia numerica.
+
 Tutte le percentuali M4 sono **assunzioni ingegneristiche di progetto**. Non sono tolleranze misurate, intervalli di confidenza identificati o dati del costruttore.
 
-## Ricostruzione indipendente e reference-last
+## Audit metodologico reference-last
 
 Screening, selezione, range, famiglia degli attuatori, fit di `WI`, modello `uss`, test e primo quality gate sono stati completati usando soltanto traccia e modello M3.1. Il riferimento è stato consultato solo dopo il PASS tecnico e dei 14 test M4.
 
@@ -26,7 +28,7 @@ Il confronto successivo ha evidenziato:
 | Famiglia attuatori | 120 modelli | 200 campioni indicati |
 | Ordine `WI` | minimo adeguato: 1 | ordine 3 indicato |
 
-Le differenze sono state mantenute. Non sono stati copiati codice, range, peso, realizzazioni, grafici o dataset.
+Questo confronto documenta soltanto il processo reference-last e non costituisce la motivazione dei valori M4. Range e selezione sono sostenuti esclusivamente da screening, ruolo fisico ed envelope ingegneristici. Non sono stati copiati codice, range, peso, realizzazioni, grafici o dataset.
 
 ## Screening di sensibilità
 
@@ -78,7 +80,7 @@ I punteggi non dinamici e le relative motivazioni sono dichiarati nello script. 
 | 9 | `Bm2` | 0.661 | 0.04048 | 0.000105 | 0.660 | 0.04271 | 0.27776 |
 | 10 | `Bm1` | 0.693 | 0.00417 | 0.000120 | 0.634 | 0.01597 | 0.26038 |
 
-Sono selezionati `k2`, `k1` e `Jm1`. `Jm1` precede di poco `Jm2`: il risultato dipende dalla regola esplicita, non da una scelta manuale nascosta. La selezione resta un insieme ridotto e interpretabile per la futura analisi strutturata.
+Sono selezionati `k2`, `k1` e `Jm1`. `Jm1` precede di poco `Jm2`: il risultato dipende dalla regola esplicita, non da una scelta manuale nascosta. La selezione resta un insieme ridotto e interpretabile per la futura analisi strutturata. `uncertainty_params_m4` richiede esplicitamente questo vettore in input; una chiamata senza l'esito dello screening produce l'errore controllato `M4Uncertainty:MissingSelection`.
 
 ## Parametri considerati certi in M4
 
@@ -93,7 +95,7 @@ Sono selezionati `k2`, `k1` e `Jm1`. `Jm1` precede di poco `Jm2`: il risultato d
 
 | Parametro | Nominale | MILD | BASELINE | CONSERVATIVE | Motivazione |
 | --- | ---: | ---: | ---: | ---: | --- |
-| `k2` | 40 Nm/rad | ±3% | **±7%** | ±12% | variabilità di materiale e assemblaggio SEA |
+| `k2` | 40 Nm/rad | ±3% | **±7%** | ±12% | envelope moderato per materiale, assemblaggio e tolleranze equivalenti SEA |
 | `k1` | 50 Nm/rad | ±3% | **±7%** | ±12% | stessa natura fisica, blocco indipendente |
 | `Jm1` | 0.01 kg m² | ±4% | **±9%** | ±15% | inerzia riflessa di motore e trasmissione |
 
@@ -127,7 +129,7 @@ La linearizzazione incerta è ottenuta dal Jacobiano analitico delle nostre equa
 | `zeta` | 0.8 | ±4% | **±7.5%** | ±12.5% |
 | ritardo | 15 ms | ±8% | **±20%** | ±35% |
 
-Il BASELINE copre `wn = 36.8...43.2 rad/s`, `zeta = 0.74...0.86` e ritardo `12...18 ms`. I range descrivono dispersione della dinamica chiusa dell'attuatore e latenza/jitter, non componenti identificati.
+I valori nominali della tabella provengono da `actuator_params_nominal.m`. Il BASELINE copre `wn = 36.8...43.2 rad/s`, `zeta = 0.74...0.86` e ritardo `12...18 ms`. I range descrivono dispersione della dinamica chiusa dell'attuatore e latenza/jitter, non componenti identificati.
 
 L'effetto massimo moltiplicativo sugli otto corner è 2.0828, 2.1697 e 2.3314 rispettivamente per MILD, BASELINE e CONSERVATIVE. Il massimo maggiore di 2 è plausibile alle alte frequenze per la combinazione di fase del ritardo esatto e nominale Padé non minimum-phase.
 
@@ -222,7 +224,7 @@ Ogni campione presenta due poli open-loop instabili, con massima parte reale fra
 - `results/figures/m4_parameter_sensitivity.png`;
 - `results/figures/m4_actuator_uncertainty_cover.png`;
 - `results/figures/m4_uncertain_plant_samples.png`;
-- `tests/test_m4_uncertainty_model.m` contiene i 14 quality gate richiesti;
+- `tests/test_m4_uncertainty_model.m` contiene 18 quality gate, inclusi source of truth, dipendenza dallo screening e preservazione delle decisioni;
 - `run_all.m` rigenera e valida l'intera catena M0–M4.
 
 ## Limiti

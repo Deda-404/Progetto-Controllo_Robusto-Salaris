@@ -547,3 +547,44 @@ Il primo tentativo di apertura PR tramite PowerShell non ha ricevuto dati dall'h
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M5.
+
+---
+
+## 2026-08-24 — Cleanup metodologico M4.1
+
+**Autore:** Codex
+**Milestone:** M4.1
+**Tipo:** Centralizzazione / Dipendenze / Regressioni
+
+### Attività svolta
+
+- Verificato il merge M4 `2adfd25` su `main` e creato `codex/m4-uncertainty-cleanup` da worktree pulita.
+- Rimossa dalla motivazione delle rigidezze la frase basata sul confronto numerico con il riferimento.
+- Riformulato il ±7% come envelope progettuale prudente ma moderato per dispersione di materiale, assemblaggio e tolleranze equivalenti, non identificato sperimentalmente.
+- Rimossi da `uncertainty_params_m4.m` i nominali duplicati `40/0.8/0.015`; la funzione legge ora `actuator_params_nominal.m` e registra la source of truth.
+- Rimosso il default silenzioso `k2/k1/Jm1`; input mancante o vuoto genera `M4Uncertainty:MissingSelection`.
+- Confermata la catena `screen_parameter_sensitivity -> selectedMechanicalParameters -> uncertainty_params_m4`.
+- Eseguito un audit testuale dei sorgenti e documenti tecnici: nessuna formulazione residua indica range scelti per differenziarsi; il confronto reference-last resta soltanto come audit metodologico dichiarato non motivazionale.
+- Riformulate D-0007, D-0008, D-0009 e D-0011 e aggiunta D-0013 sulle dipendenze esplicite.
+- Aggiunti T15 source of truth, T16 dipendenza dallo screening, T17 preservazione decisioni e T18 regressione M0–M4.
+- Salvato nel dataset M4 anche `actuatorNominalSource`.
+
+### Risultati
+
+- Test M4/M4.1 dedicati: 18/18 PASS.
+- Test top-level `run_all`: 52/52 PASS, exit code 0.
+- Code Analyzer: 0 messaggi.
+- Selezione invariata: `k2`, `k1`, `Jm1`.
+- Range invariati: ±7%, ±7%, ±9%; attuatori ±8%, ±7.5%, ±20%.
+- `WI` invariato esattamente: ordine 1, guadagno 2.8713198663559063, zero -1.3275294867275236 e polo -207.35329856846647.
+- Coverage invariato: worst ratio 0.92592592592592582 e margine 0.013072542199752015.
+- Coerenza nominale invariata: errori assoluti `GuncMeas/GuncQ` 4.8901839403574157e-15 / 6.3283000096977494e-15.
+- `usample` invariato: 40/40 campioni validi.
+
+### Risultato
+
+**SUCCESSO — cleanup tecnico M4.1 PASS, nessuna modifica numerica dell'uncertainty set.**
+
+### Prossimo passo
+
+Completare rilancio finale, commit, push, PR dedicata e handoff. Non iniziare M5.
