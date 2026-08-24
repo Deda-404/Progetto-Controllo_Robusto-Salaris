@@ -16,11 +16,11 @@ addpath(genpath(fullfile(projectRoot, 'analysis')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf(['Milestone implementata: M3.1 (selezione attuatore da metriche ' ...
-    'e pianta completa SEA)\n\n']);
+fprintf(['Milestone implementata: M4 (screening, modello incerto, ' ...
+    'copertura attuatori e validazione usample)\n\n']);
 
 try
-    fprintf('--- Test automatici M0 + M1 + M2 + M3 ---\n');
+    fprintf('--- Test automatici M0 + M1 + M2 + M3/M3.1 + M4 ---\n');
     testResults = runtests(fullfile(projectRoot, 'tests'));
     assertSuccess(testResults);
     fprintf('Test automatici superati: %d/%d.\n', ...
@@ -35,8 +35,13 @@ try
     fprintf('\n--- Selezione attuatori, validazione e artifact M3 ---\n');
     m3Metrics = validate_m3_nominal_actuated_plant;
 
-    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M2, test M3/M3.1, ' ...
-        'selezione da metriche, validazioni e artifact M1-M3 superati.\n']);
+    fprintf(['\n--- Screening, fit WI, pianta incerta, dataset e ' ...
+        'figure M4 ---\n']);
+    m4Metrics = validate_m4_uncertainty_model;
+
+    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M3.1 e quality ' ...
+        'gate M4 (screen, WI, Gunc, consistenza nominale e usample) ' ...
+        'superati.\n']);
 catch executionError
     fprintf(2, '\n[FAIL] RUN_ALL interrotto: %s\n', executionError.message);
     rethrow(executionError);
