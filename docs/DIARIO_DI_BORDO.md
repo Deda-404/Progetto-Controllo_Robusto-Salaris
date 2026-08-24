@@ -432,3 +432,27 @@ Nessun blocco per M3.1. La soglia di quasi-parità del 10% è una decisione prog
 ### Prossimo passo
 
 Creare commit, push, Pull Request dedicata e handoff M3.1. Fermarsi senza iniziare M4.
+
+---
+
+## 2026-08-24 15:48 — Pubblicazione PR e handoff M3.1
+
+**Autore:** Codex
+**Milestone:** M3.1
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit a9129c6 per selezione, validazione, test e dataset, e f60a504 per motivazione e documentazione metodologica.
+- Pubblicato codex/m3-actuator-selection-fix su origin.
+- Aperta la Pull Request #5 verso main: https://github.com/Deda-404/Progetto_CR/pull/5.
+- Verificato che la PR fosse open e non merged.
+- Creato docs/handoff/Resoconto_M3_1_per_GPT.txt senza sovrascrivere gli handoff M1–M3.
+
+### Risultato
+
+**SUCCESSO** — M3.1 pubblicata per revisione, PR #5 aperta, handoff predisposto e nessun merge eseguito.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M4.

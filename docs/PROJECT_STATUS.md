@@ -6,7 +6,7 @@
 **Last validated result:** run_all.m eseguito in MATLAB R2025b Update 4; 34 test top-level su 34 superati, regressioni annidate M0/M1/M2 PASS, selezione C14 indipendente e validazioni M1/M2/M3 PASS
 **Blocking issues:** nessuno per il completamento di M3.1
 **Next task:** revisione e merge della Pull Request M3.1; non iniziare M4 senza il successivo incarico del gruppo
-**Pull Request:** da associare dopo la pubblicazione del branch codex/m3-actuator-selection-fix
+**Pull Request:** [#5 — M3.1 metric-based nominal actuator selection](https://github.com/Deda-404/Progetto_CR/pull/5), aperta e non unita
 **Last update:** 2026-08-24 15:43 CEST
 
 ## Scelta nominale M3
