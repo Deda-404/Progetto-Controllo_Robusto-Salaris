@@ -141,7 +141,11 @@ QUALITY GATE
 GIT
 - main di partenza: f702b5b, merge checkpoint PR #10;
 - branch: codex/m7-integral-completion;
-- commit/PR completion: da aggiornare dopo il quality gate finale;
+- commit implementazione/test/artifact: d85e8ce;
+- commit documentazione/decisioni: eb48273;
+- commit rigenerazione baseline: 263bd16;
+- PR completion: #11, https://github.com/Deda-404/Progetto_CR/pull/11;
+- stato PR verificato: open, draft=false, merged=false, base=main;
 - nessun merge autonomo.
 
 PROSSIMO PASSO

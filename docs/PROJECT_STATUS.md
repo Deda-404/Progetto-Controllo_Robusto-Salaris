@@ -6,7 +6,7 @@
 **Last validated result:** `run_all.m` exit 0, 111/111 test PASS; software M7 completion 19/19 isolati PASS, Stage A 0/28 e Stage B 0/25
 **Blocking issues:** neppure il servo 2-DoF candidato-specifico raggiunge insieme settling ≤0.8 s e overshoot ≤10%; nuova decisione del gruppo richiesta
 **Next task:** riesaminare struttura/feasibility M7 senza modificare M5 automaticamente; non iniziare M8
-**Pull Request:** checkpoint precedente #10 già unito; PR completion da aprire sul branch `codex/m7-integral-completion`
+**Pull Request:** [#11 — M7: document 2-DoF integral-servo feasibility](https://github.com/Deda-404/Progetto_CR/pull/11), aperta, non draft e non unita
 **Last update:** 2026-08-24, completamento 2-DoF
 
 ## Quality gate M7 completion 2-DoF — PARTIAL

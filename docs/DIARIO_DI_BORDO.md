@@ -978,3 +978,27 @@ Arrestarsi per revisione del gruppo. Non iniziare M8.
 ### Prossimo passo
 
 Pubblicare il checkpoint completion sul branch dedicato e fermarsi per revisione. Non iniziare M8.
+
+---
+
+## 2026-08-24 — Pubblicazione feasibility M7 2-DoF
+
+**Responsabile:** Alessio
+**Milestone:** M7 completion
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `d85e8ce` per software/test/artifact, `eb48273` per documentazione e `263bd16` per la rigenerazione baseline prodotta da `run_all`.
+- Pubblicato il branch `codex/m7-integral-completion` su `origin`.
+- Aperta la Pull Request [#11](https://github.com/Deda-404/Progetto_CR/pull/11) verso `main`.
+- Verificato che la PR sia `open`, `draft=false`, `merged=false`, con base `main` e head corretti.
+- Aggiornato l’handoff con checkpoint storico, Stage A/B, feasibility, guadagni diagnostici, test e quality gate.
+
+### Risultato
+
+**Feasibility M7 2-DoF pubblicata per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Fermarsi e attendere la decisione del gruppo. Non iniziare M8.
