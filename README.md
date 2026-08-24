@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M3 il comando pulisce e configura l'ambiente, esegue i test M0/M1/M2/M3, ripete le validazioni M1–M3 e rigenera i dataset e le figure nominali. Sono inclusi selezione deterministica degli attuatori, confronto ritardo/Padé e quality gate della pianta completa a 14 stati. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Alla milestone M4 il comando pulisce e configura l'ambiente, esegue i 48 test top-level M0–M4, ripete le validazioni M1–M3 e rigenera screening, peso `WI`, pianta incerta, dataset e figure M4. Sono inclusi confronto ritardo esatto/Padé, verifica completa della copertura, coerenza nominale con M3, struttura `lftdata` e 40 campioni `usample`. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M3 — Dinamica nominale degli attuatori e pianta completa**.
-- Ultimo risultato validato: attuatori nominali di ordine 3 per canale, blocco MIMO di ordine 6, pianta completa a 14 stati, 29 test top-level e quality gate M3 superato in MATLAB R2025b.
+- Milestone corrente: **M4 — Modellazione delle incertezze e pianta incerta**.
+- Ultimo risultato validato: screening autonomo con `k2/k1/Jm1`, famiglia attuatori da 120 modelli, `WI` stabile/propria di ordine 1, cinque blocchi incerti, coerenza nominale M3 e 40/40 campioni validi.
 - Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
-- Prossimo passo: revisione e merge della Pull Request M3; M4 non è iniziata.
+- Prossimo passo: revisione della Pull Request M4; M5 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

@@ -456,3 +456,62 @@ Creare commit, push, Pull Request dedicata e handoff M3.1. Fermarsi senza inizia
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M4.
+
+---
+
+## 2026-08-24 16:31 — Implementazione e primo quality gate M4
+
+**Autore:** Codex
+**Milestone:** M4
+**Tipo:** Screening / Incertezze parametriche / `ucover` / Pianta `uss` / Test / Documentazione
+
+### Attività svolta
+
+- Letto integralmente il prompt M4 e verificati AGENTS.md, roadmap, decisioni, stato e documenti tecnici M1–M3.1.
+- Verificato che `main`/`origin/main` contenessero il merge M3.1 a1eca7b e creato il branch `codex/m4-uncertainty-model`; nessuna attività M5 o di controllo è stata iniziata.
+- Prima di consultare il riferimento, implementato uno screening originale dei dieci candidati con perturbazioni ±1%, ricalcolo di equilibrio/Jacobiani/pianta e quattro metriche dinamiche su 0.1–300 rad/s.
+- Definita una regola di priorità esplicita, composta al 65% da sensibilità dinamica e al 35% da variabilità fisica, ruolo delle occorrenze e interpretabilità.
+- Selezionati autonomamente `k2`, `k1`, `Jm1`; definiti scenari MILD/BASELINE/CONSERVATIVE e baseline ±7%, ±7%, ±9%.
+- Implementata una linearizzazione analitica compatibile con valori numerici e `ureal`; costruite una sola `ureal` per parametro fisico e la meccanica incerta dalla nostre equazioni.
+- Definiti tre scenari attuatore e baseline `wn` ±8%, `zeta` ±7.5%, ritardo ±20%.
+- Costruita una famiglia FRD da 120 modelli con ritardo esatto: 1 nominale, 6 variazioni singole, 8 corner e 105 casuali con seed 20260824.
+- Provati con `ucover` gli ordini 1–4, aggiunto margine 8% e selezionato il minimo peso stabile/proprio che copre la famiglia.
+- Costruite `Delta_act1` e `Delta_act2` indipendenti, `GuncMeas` 4x2 e `GuncQ` 2x2; estratta e tabulata la struttura `lftdata`.
+- Validata la coerenza nominale con M2/M3, eseguiti 40 campioni `usample` con seed 20260825 e generati dataset più tre figure.
+- Creati i 14 test M4, incluso il rilancio delle 34 regressioni M0–M3.1.
+- Ottenuto il primo PASS indipendente prima del riferimento. Soltanto dopo sono stati confrontati parametri/range/campioni/ordine del peso del progetto precedente; l'ensemble nostro è rimasto invariato.
+- Scritti da zero `docs/MODELLO_INCERTEZZE.md` e le decisioni D-0007–D-0012.
+
+### Errori e correzioni
+
+- Il checkout Windows aveva convertito tutti i file versionati in CRLF, facendoli apparire modificati a Git senza differenze di contenuto. Sono stati normalizzati i terminatori e configurato `core.autocrlf=true`; la worktree è tornata a mostrare soltanto i file M4 reali.
+- La prima esecuzione dei test M4 ha superato T1–T13 ma T14 è terminato in errore durante la concatenazione di una `TestSuite.empty`. La suite è stata inizializzata dal primo file di test e il rilancio ha superato 14/14.
+- L'ispezione visiva iniziale ha mostrato assi scuri ereditati dal tema MATLAB e una legenda `WI` associata ai primi tre campioni invece che a campioni/inviluppo/peso. Sono stati fissati esplicitamente colori di assi e legende e sono stati passati gli handle corretti.
+- Il Code Analyzer ha segnalato quattro parentesi superflue, rimosse senza cambiare il calcolo.
+
+### Risultati
+
+- Ranking primi cinque: `k2` 0.75889, `k1` 0.64998, `Jm1` 0.59755, `Jm2` 0.59379, `m2` 0.54781.
+- Famiglia attuatore: 120 modelli su 801 frequenze fra 0.1 e 1000 rad/s.
+- `WI(s)=2.87131986636(s+1.32752948673)/(s+207.353298568)`, ordine 1.
+- Worst `|E|/|WI|=0.925925925926`; margine minimo 0.0130725422; caso `corner-212` a 281.838293 rad/s.
+- Struttura Delta: due `ultidyn` complessi dinamici e tre `ureal` reali statiche, tutti scalari e con una occorrenza LFT.
+- Errore nominale massimo `GuncMeas`/M3: abs 4.890e-15, rel 1.188e-14; `GuncQ`: abs 6.328e-15, rel 4.689e-12.
+- `usample`: 40/40 campioni validi; due poli instabili per campione, coerenti con M2.
+- Test M4: 14/14 PASS; regressioni annidate M0–M3.1: 34/34 PASS.
+
+### Confronto reference-last
+
+Il riferimento seleziona `m2,k1,k2`, usa ±10%/±5%, indica 200 campioni e `WI` ordine 3. Il nostro risultato usa `k2,k1,Jm1`, ±7%/±9%, 120 modelli e ordine 1. La coincidenza sulle rigidezze è parziale; differenze e motivazioni sono state preservate.
+
+### Risultato
+
+**SUCCESSO — primo quality gate tecnico M4 PASS e documentazione sostanziale completata.**
+
+### Problemi aperti
+
+I range non sono identificati sperimentalmente; `Jm2` è vicino a `Jm1` nel ranking; la copertura è discreta sulla griglia; `usample` non è il Monte Carlo finale. Il rilancio finale di `run_all`, i commit, il push, la PR e l'handoff restano da completare.
+
+### Prossimo passo
+
+Eseguire Code Analyzer e `run_all` finali, ispezionare le figure rigenerate, aggiornare gli esiti, creare commit/push/PR e handoff. Fermarsi senza iniziare M5.

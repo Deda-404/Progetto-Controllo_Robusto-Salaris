@@ -37,12 +37,12 @@ La checklist deriva dalla traccia ufficiale. Un requisito tecnico resta non comp
 - [x] Scegliere e motivare \(\omega_n\), \(\zeta\), \(\tau_d\).
 - [x] Implementare secondo ordine e Padé del primo ordine.
 - [x] Validare poli, guadagno statico e risposta degli attuatori.
-- [ ] Distinguere parametri certi, incerti e incertezza dinamica.
-- [ ] Approvare parametri incerti e percentuali.
-- [ ] Motivare fisicamente ogni incertezza.
-- [ ] Costruire e testare la pianta incerta.
-- [ ] Se usato, verificare che \(W_I\) copra i campioni dell'attuatore.
-- [ ] Verificare numero, tipo, dimensione e occorrenze dei blocchi incerti.
+- [x] Distinguere parametri certi, incerti e incertezza dinamica.
+- [x] Approvare parametri incerti e percentuali per il baseline M4.
+- [x] Motivare fisicamente ogni incertezza e dichiararla assunzione progettuale.
+- [x] Costruire e testare `GuncMeas` e `GuncQ` nominalmente coerenti con M3.
+- [x] Verificare che \(W_I\) copra 120 modelli attuatore, inclusi tutti i corner.
+- [x] Verificare con `lftdata` numero, tipo, dimensione e occorrenze dei cinque blocchi incerti.
 
 ## Specifiche
 

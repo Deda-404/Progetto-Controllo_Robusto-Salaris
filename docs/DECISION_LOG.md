@@ -515,3 +515,208 @@ Il comando \(u\) è distinto dalla coppia effettiva \(\tau\) applicata al modell
 ### Stato
 
 **APPROVATA E CONFERMATA DA M3.1 — sostituisce la proposta P-0003**
+
+---
+
+## D-0007 — Parametri meccanici incerti `k2`, `k1`, `Jm1`
+
+**Data:** 2026-08-24
+**Milestone:** M4
+**Decisione precedente collegata:** P-0004
+
+### Problema
+
+Ridurre i dieci candidati meccanici a un insieme piccolo, fisicamente interpretabile e adatto alla futura mu-analysis, senza copiare il riferimento.
+
+### Alternative
+
+- rendere incerti tutti i candidati;
+- imporre a priori `m2`, `k1`, `k2`;
+- selezionare tre parametri tramite screening multifattore riproducibile;
+- includere anche il quarto classificato `Jm2`.
+
+### Evidenze e scelta
+
+Lo screening ±1% ricostruisce equilibrio, Jacobiani e pianta completa su 0.1–300 rad/s. La priorità combina al 65% quattro metriche dinamiche e al 35% plausibilità fisica, ruolo delle occorrenze e interpretabilità. Il ranking autonomo è `k2`, `k1`, `Jm1`, `Jm2`, `m2`, `l1`, `l2`, `m1`, `Bm2`, `Bm1`, con priorità 0.75889, 0.64998 e 0.59755 per i primi tre.
+
+Selezionare come blocchi reali indipendenti `k2`, `k1` e `Jm1`. `Jm2` resta il primo escluso; non vi è evidenza sufficiente per aumentare a quattro blocchi.
+
+### Motivazione
+
+Le rigidezze dominano lo spostamento dei modi elastici e la risposta frequenziale. `Jm1` completa l'insieme con un parametro di natura diversa e un'elevata sensibilità ai modi elastici. La scelta è emersa prima del confronto con il riferimento, che include invece `m2`.
+
+### Conseguenze e limiti
+
+Gli altri parametri restano nominali soltanto nell'ensemble M4. Lo screening è locale al punto M2 e dipende dai pesi espliciti della priorità; nuovi dati sperimentali richiedono una nuova decisione.
+
+### Stato
+
+**APPROVATA PER IL MODELLO M4 — da riesaminare solo con nuove evidenze fisiche**
+
+---
+
+## D-0008 — Scenari e range meccanici baseline
+
+**Data:** 2026-08-24
+**Milestone:** M4
+
+### Problema
+
+Definire range difendibili senza dati di tolleranza o identificazione e senza ottimizzarli per un controllore futuro.
+
+### Alternative
+
+- usare le percentuali del riferimento;
+- adottare un unico envelope non qualificato;
+- documentare scenari MILD/BASELINE/CONSERVATIVE per ciascuna natura fisica.
+
+### Evidenze e scelta
+
+Adottare rigidezze ±3/±7/±12% e `Jm1` ±4/±9/±15% nei tre scenari. Il BASELINE usa quindi `k1,k2` ±7% e `Jm1` ±9%. Sugli otto corner, il BASELINE produce variazione massima dei modi elastici 6.703%, dei poli instabili 0.1611% e FRF relativa massima 5.4732 vicino a 83.326 rad/s.
+
+### Motivazione
+
+Il 7% rappresenta dispersione moderata di materiale/assemblaggio SEA; il 9% rappresenta variabilità moderata dell'inerzia riflessa di motore e trasmissione. I valori non coincidono con il ±5% del riferimento e non sono scelti per rendere fattibile una sintesi.
+
+### Conseguenze e limiti
+
+I range sono assunzioni ingegneristiche, non tolleranze misurate. I tre `ureal` sono indipendenti; nessuna correlazione è modellata. M5 o M13 non potranno riscrivere retroattivamente questi range per ragioni di performance.
+
+### Stato
+
+**APPROVATA PER IL BASELINE M4**
+
+---
+
+## D-0009 — Range e famiglia degli attuatori
+
+**Data:** 2026-08-24
+**Milestone:** M4
+
+### Problema
+
+Costruire una famiglia attuativa attorno al nominale M3 che rappresenti dispersione di banda, damping e ritardo, compreso il mismatch ritardo esatto/Padé.
+
+### Alternative
+
+- soli campioni casuali;
+- soli corner;
+- attuatori parametrici `ureal` senza errore dinamico concentrato;
+- famiglia FRD con nominale, variazioni singole, corner e casuali.
+
+### Evidenze e scelta
+
+Adottare scenari MILD/BASELINE/CONSERVATIVE: `wn` ±4/±8/±15%, `zeta` ±4/±7.5/±12.5%, ritardo ±8/±20/±35%. Il BASELINE genera 120 modelli: 1 nominale esatto, 6 singoli, 8 corner e 105 casuali con seed 20260824. Il ritardo è `exp(-jw*delay)` su 0.1–1000 rad/s; il nominale del progetto resta Padé ordine 1.
+
+### Motivazione
+
+Gli envelope baseline sono moderati e interpretabili come dispersione della dinamica chiusa e latenza/jitter. FRD evita di aumentare artificialmente l'ordine del Padé e include esplicitamente il suo mismatch.
+
+### Conseguenze e limiti
+
+La famiglia è una griglia/campionamento riproducibile, non un'identificazione continua garantita. I range non sono quelli del progetto precedente. Il massimo errore moltiplicativo degli otto corner baseline è 2.1697 a circa 302 rad/s.
+
+### Stato
+
+**APPROVATA PER IL FIT M4**
+
+---
+
+## D-0010 — Incertezza attuatore input-moltiplicativa
+
+**Data:** 2026-08-24
+**Milestone:** M4
+**Decisione precedente collegata:** P-0004
+
+### Problema
+
+Scegliere una rappresentazione razionale, compatibile con LFT e futura analisi robusta, della famiglia con ritardo esatto.
+
+### Alternative
+
+- incertezza additiva;
+- incertezza output-moltiplicativa;
+- parametri attuativi completamente strutturati;
+- incertezza input-moltiplicativa pesata.
+
+### Scelta e motivazione
+
+Adottare `Ga,var = Ga,nom*(1 + WI*Delta)`, `||Delta||inf <= 1`, e calcolare `Ei = Ga,var/Ga,nom - 1`. Per i canali SISO la convenzione input/output è numericamente equivalente, ma quella input-moltiplicativa mantiene esplicita la perturbazione prima della pianta meccanica e coincide con l'interfaccia richiesta per M4.
+
+### Conseguenze e limiti
+
+La dinamica non modellata viene concentrata in un envelope non strutturato; i contributi separati di `wn`, `zeta` e ritardo non saranno identificabili dalla futura mu-analysis. Resta disponibile la tabella della famiglia per diagnostica.
+
+### Stato
+
+**APPROVATA — risolve la rappresentazione dinamica di P-0004**
+
+---
+
+## D-0011 — Peso `WI` stabile e proprio di ordine minimo 1
+
+**Data:** 2026-08-24
+**Milestone:** M4
+
+### Problema
+
+Scegliere il minimo ordine che copra tutti i 120 modelli senza adottare automaticamente l'ordine 3 del riferimento.
+
+### Alternative
+
+- ordini 1, 2, 3 o 4 ottenuti da `ucover`;
+- fit manuale di ordine prefissato;
+- nessun margine di sicurezza.
+
+### Evidenze e scelta
+
+Con fattore 1.08, tutti gli ordini 1–4 risultano stabili, propri e coprenti. Selezionare il primo:
+
+`WI(s) = 2.87131986636 (s+1.32752948673)/(s+207.353298568)`.
+
+Il worst ratio è 0.925925925926, il margine minimo 0.0130725422 e il caso critico è `corner-212` a 281.838293 rad/s. La tolleranza numerica è `1e-9`.
+
+### Motivazione
+
+Ordini superiori non aggiungono necessità di copertura e aumentano la complessità futura. Il polo e lo zero sono stabili e non quasi coincidenti.
+
+### Conseguenze e limiti
+
+Il peso copre la famiglia discreta sulla griglia 0.1–1000 rad/s; non costituisce prova per ogni combinazione continua fuori dalla griglia. Se la famiglia cambia, il fit deve essere rigenerato.
+
+### Stato
+
+**APPROVATA PER M4**
+
+---
+
+## D-0012 — Due blocchi dinamici attuatori indipendenti
+
+**Data:** 2026-08-24
+**Milestone:** M4
+
+### Problema
+
+Decidere se i due attuatori, identici nel nominale, debbano condividere la stessa perturbazione dinamica.
+
+### Alternative
+
+- un solo `Delta_act` condiviso;
+- due blocchi correlati;
+- due `ultidyn` scalari indipendenti.
+
+### Evidenze e scelta
+
+Usare `Delta_act1` e `Delta_act2`, complessi dinamici 1x1 con bound 1. `lftdata` conferma due blocchi distinti, ciascuno con una occorrenza, oltre ai tre `ureal` meccanici.
+
+### Motivazione
+
+Non esiste evidenza fisica di dispersione perfettamente correlata fra i canali. L'indipendenza evita un'ipotesi ottimistica e conserva i nomi necessari alla diagnostica futura.
+
+### Conseguenze e limiti
+
+L'ensemble può essere più ampio del caso di variazione comune. Una futura correlazione richiederebbe dati e una nuova decisione, non una semplificazione automatica.
+
+### Stato
+
+**APPROVATA PER LA STRUTTURA DELTA M4 — completa P-0004**
