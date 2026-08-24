@@ -1,0 +1,205 @@
+RESOCONTO M4.1 PER GPT
+Cleanup metodologico e centralizzazione del modello di incertezza
+Data: 2026-08-24
+
+======================================================================
+1. ESITO E QUALITY GATE
+======================================================================
+
+M4.1 e' COMPLETE con quality gate PASS.
+
+L'aggiustamento e' soltanto metodologico e architetturale:
+
+- i nominali dell'attuatore hanno una sola source of truth;
+- la selezione meccanica deve provenire esplicitamente dallo screening;
+- le motivazioni dei range sono autonome e ingegneristiche;
+- l'uncertainty set e tutti i risultati numerici M4 sono invariati.
+
+MATLAB R2025b:
+
+- test M4/M4.1 dedicati: 18/18 PASS;
+- test top-level run_all: 52/52 PASS;
+- matlab.exe -batch "run_all": PASS, exit code 0;
+- Code Analyzer: 0 messaggi.
+
+M5 non e' stata iniziata.
+
+======================================================================
+2. BASE GIT E PULL REQUEST
+======================================================================
+
+Base:
+
+- main contenente il merge M4 2adfd25;
+- branch: codex/m4-uncertainty-cleanup.
+
+Commit principali:
+
+- 6a715ab - refactor: centralize M4 uncertainty dependencies
+- 9c7297a - docs: clarify autonomous M4 uncertainty rationale
+
+Pull Request:
+
+- PR #7 - M4.1: centralize uncertainty model dependencies
+- https://github.com/Deda-404/Progetto_CR/pull/7
+- base: main
+- head: codex/m4-uncertainty-cleanup
+- stato verificato: open
+- merged: false
+
+Il presente handoff e i metadati finali sono aggiunti in un commit di
+chiusura successivo ai due commit principali.
+
+======================================================================
+3. SOURCE OF TRUTH DELL'ATTUATORE
+======================================================================
+
+Prima del cleanup, uncertainty_params_m4.m duplicava localmente i nominali:
+
+- wn = 40 rad/s;
+- zeta = 0.8;
+- delay = 0.015 s.
+
+Ora uncertainty_params_m4.m chiama actuator_params_nominal.m e costruisce
+la tabella degli scenari dai campi wn, zeta e delay restituiti da quella
+funzione. Nel dataset M4 e' registrato anche:
+
+- actuatorNominalSource = "actuator_params_nominal".
+
+Non esiste piu' una copia locale 40/0.8/0.015 nella configurazione M4.
+
+======================================================================
+4. DIPENDENZA ESPLICITA DALLO SCREENING
+======================================================================
+
+Il precedente default silenzioso k2/k1/Jm1 e' stato rimosso.
+
+Il flusso obbligatorio e' ora:
+
+screen_parameter_sensitivity
+  -> selectedMechanicalParameters
+  -> uncertainty_params_m4(selectedMechanicalParameters)
+
+Una chiamata senza selezione, oppure con una selezione vuota, genera:
+
+- M4Uncertainty:MissingSelection.
+
+La selezione k2/k1/Jm1 continua quindi a essere un risultato dello
+screening e non una conoscenza incorporata nella configurazione.
+
+======================================================================
+5. CORREZIONE DELLE MOTIVAZIONI
+======================================================================
+
+E' stata rimossa la motivazione secondo cui il +/-7% delle rigidezze
+serviva a evitare o differenziarsi dal valore del progetto di riferimento.
+
+La motivazione corrente e' autonoma:
+
+- envelope progettuale prudente ma moderato;
+- dispersione di materiale, assemblaggio e tolleranze equivalenti;
+- assunzione non identificata sperimentalmente;
+- non ottimizzata rispetto a una futura sintesi di controllo.
+
+L'audit testuale non ha trovato formulazioni residue improprie nei
+sorgenti e nei documenti tecnici aggiornati. Il confronto reference-last
+rimane soltanto come audit metodologico e non motiva alcuna scelta.
+
+Decisioni aggiornate:
+
+- D-0007: selezione meccanica derivata dallo screening;
+- D-0008: motivazione autonoma dei range;
+- D-0009: nominali attuatore da source of truth;
+- D-0011: ordine minimo di WI senza dinamiche non necessarie;
+- D-0013: dipendenze esplicite e centralizzazione M4.
+
+======================================================================
+6. PRESERVAZIONE DEL MODELLO M4
+======================================================================
+
+Il confronto pre/post cleanup conferma esattamente:
+
+- selezione meccanica: k2, k1, Jm1;
+- range meccanici baseline: +/-7%, +/-7%, +/-9%;
+- range attuatori baseline: wn +/-8%, zeta +/-7.5%, delay +/-20%;
+- famiglia baseline: 120 modelli;
+- WI: ordine 1;
+- guadagno WI: 2.8713198663559063;
+- zero WI: -1.3275294867275236;
+- polo WI: -207.35329856846647;
+- worst coverage ratio: 0.92592592592592582;
+- margine coverage: 0.013072542199752015;
+- errore nominale assoluto GuncMeas: 4.8901839403574157e-15;
+- errore nominale assoluto GuncQ: 6.3283000096977494e-15;
+- usample: 40/40 campioni validi.
+
+La struttura Delta, i canali incerti, i range e il fit WI non sono stati
+modificati.
+
+======================================================================
+7. TEST AGGIUNTI
+======================================================================
+
+T15 - Nominal actuator single source of truth
+
+- confronta la tabella M4 con actuator_params_nominal.m;
+- verifica il metadato della source of truth;
+- impedisce la reintroduzione della copia locale 40/0.8/0.015.
+
+T16 - Mechanical selection dependency
+
+- verifica l'errore su selezione mancante o vuota;
+- verifica la propagazione esatta del risultato dello screening.
+
+T17 - M4 decision preservation
+
+- verifica k2/k1/Jm1;
+- verifica i range 7/7/9;
+- verifica WI ordine 1;
+- verifica la coerenza nominale con la pianta M3.
+
+T18 - Full regression
+
+- rilancia T1-T17;
+- include tramite T14 le 34 regressioni M0-M3.1;
+- richiede 17/17 risultati PASS.
+
+======================================================================
+8. FILE PRINCIPALI MODIFICATI
+======================================================================
+
+- src/parameters/uncertainty_params_m4.m
+- analysis/uncertainty/validate_m4_uncertainty_model.m
+- tests/test_m4_uncertainty_model.m
+- run_all.m
+- results/data/m4_uncertain_plant.mat
+- docs/MODELLO_INCERTEZZE.md
+- docs/DECISION_LOG.md
+- docs/DIARIO_DI_BORDO.md
+- docs/PROJECT_STATUS.md
+- CHANGELOG.md
+
+======================================================================
+9. QUALITY GATE M4.1
+======================================================================
+
+[PASS] nessun range modificato per differenziarsi dal riferimento
+[PASS] motivazioni dei range tecnicamente autonome
+[PASS] nominale attuatore letto dalla source of truth M3
+[PASS] nessuna duplicazione 40/0.8/0.015 nella configurazione M4
+[PASS] parametri meccanici ricevuti esplicitamente dallo screening
+[PASS] nessuna preselezione silenziosa k2/k1/Jm1
+[PASS] uncertainty set M4 invariato
+[PASS] WI invariato salvo precisione numerica
+[PASS] nominal consistency invariata
+[PASS] regressioni complete PASS
+[PASS] run_all exit code 0
+[PASS] documentazione aggiornata
+
+======================================================================
+10. STATO FINALE
+======================================================================
+
+SUCCESSO - M4.1 pronta per la revisione del gruppo nella PR #7.
+
+La PR non e' stata unita autonomamente. Fermarsi qui e non iniziare M5.

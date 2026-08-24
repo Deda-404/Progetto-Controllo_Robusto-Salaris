@@ -588,3 +588,28 @@ Attendere la revisione del gruppo. Non iniziare M5.
 ### Prossimo passo
 
 Completare rilancio finale, commit, push, PR dedicata e handoff. Non iniziare M5.
+
+---
+
+## 2026-08-24 17:17 — Pubblicazione PR e handoff M4.1
+
+**Autore:** Codex
+**Milestone:** M4.1
+**Tipo:** Quality gate finale / Git / Handoff
+
+### Attivita svolta
+
+- Consolidati i commit `6a715ab` per implementazione, test e dataset e `9c7297a` per documentazione e decisioni.
+- Pubblicato `codex/m4-uncertainty-cleanup` su `origin`.
+- Aperta la Pull Request [#7](https://github.com/Deda-404/Progetto_CR/pull/7) verso `main`.
+- Verificato alla creazione che la PR fosse `open` e `merged=false`.
+- Creato `docs/handoff/Resoconto_M4_1_per_GPT.txt` senza sovrascrivere gli handoff precedenti.
+- Registrati nell'handoff source of truth, flusso di screening, audit delle motivazioni, preservazione numerica, T15-T18 e risultato di `run_all`.
+
+### Risultato
+
+**SUCCESSO — M4.1 pubblicata per revisione, PR #7 aperta, handoff completo e nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M5.

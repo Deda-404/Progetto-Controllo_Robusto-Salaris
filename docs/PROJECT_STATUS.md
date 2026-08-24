@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` in MATLAB R2025b, 52/52 test top-level; T15–T18, M0–M4, coverage, Delta, coerenza nominale e 40/40 campioni PASS
 **Blocking issues:** nessuno
 **Next task:** revisione della Pull Request M4.1; non iniziare M5 senza il successivo incarico del gruppo
-**Pull Request:** da aprire sul branch `codex/m4-uncertainty-cleanup`
-**Last update:** 2026-08-24
+**Pull Request:** [#7 — M4.1: centralize uncertainty model dependencies](https://github.com/Deda-404/Progetto_CR/pull/7), aperta e non unita
+**Last update:** 2026-08-24 17:17 CEST
 
 ## Ensemble baseline M4
 
