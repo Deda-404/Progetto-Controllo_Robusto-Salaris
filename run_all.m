@@ -16,7 +16,8 @@ addpath(genpath(fullfile(projectRoot, 'analysis')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf('Milestone implementata: M3 (attuatori e pianta completa SEA)\n\n');
+fprintf(['Milestone implementata: M3.1 (selezione attuatore da metriche ' ...
+    'e pianta completa SEA)\n\n']);
 
 try
     fprintf('--- Test automatici M0 + M1 + M2 + M3 ---\n');
@@ -34,8 +35,8 @@ try
     fprintf('\n--- Selezione attuatori, validazione e artifact M3 ---\n');
     m3Metrics = validate_m3_nominal_actuated_plant;
 
-    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M2, test M3, ' ...
-        'validazioni e artifact M1-M3 superati.\n']);
+    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M2, test M3/M3.1, ' ...
+        'selezione da metriche, validazioni e artifact M1-M3 superati.\n']);
 catch executionError
     fprintf(2, '\n[FAIL] RUN_ALL interrotto: %s\n', executionError.message);
     rethrow(executionError);

@@ -10,6 +10,7 @@ m2 = load(fullfile(projectRoot, 'results', 'data', ...
 params = actuator_params_nominal;
 [Gactuator, actuatorInfo] = build_nominal_actuator(params);
 [Gactuators, actuatorBankInfo] = build_nominal_actuator_bank(params);
+selection = select_nominal_actuator(m2);
 [GfullMeas, GfullQ, fullInfo] = build_m3_full_plant( ...
     m2.A, m2.B, m2.Cmeas, m2.Dmeas, m2.Cq, m2.Dq, Gactuators);
 
@@ -20,6 +21,7 @@ testCase.TestData.Gactuator = Gactuator;
 testCase.TestData.actuatorInfo = actuatorInfo;
 testCase.TestData.Gactuators = Gactuators;
 testCase.TestData.actuatorBankInfo = actuatorBankInfo;
+testCase.TestData.selection = selection;
 testCase.TestData.GfullMeas = GfullMeas;
 testCase.TestData.GfullQ = GfullQ;
 testCase.TestData.fullInfo = fullInfo;
@@ -186,4 +188,97 @@ allResults = [m0Results(:); m1Results(:); m2Results(:)];
 
 verifyEqual(testCase, numel(allResults), 18);
 verifyTrue(testCase, all([allResults.Passed]));
+end
+
+function testT12SelectionIndependentFromDeclaredNominal(testCase)
+selectionFunctionPath = which('select_nominal_actuator');
+selectionSource = fileread(selectionFunctionPath);
+[requiredFiles, ~] = matlab.codetools.requiredFilesAndProducts( ...
+    selectionFunctionPath);
+declaredNominalPath = string(which('actuator_params_nominal'));
+
+verifyFalse(testCase, contains(selectionSource, ...
+    'actuator_params_nominal'));
+verifyFalse(testCase, any(strcmpi(string(requiredFiles), ...
+    declaredNominalPath)));
+end
+
+function testT13SelectedCandidateBelongsToGrid(testCase)
+selection = testCase.TestData.selection;
+selected = selection.selected;
+selectedMetrics = selection.selectedMetrics;
+
+verifyTrue(testCase, any(selection.candidates.Candidate == ...
+    selectedMetrics.Candidate));
+verifyTrue(testCase, ismember(selected.wn, selection.grid.wn));
+verifyTrue(testCase, ismember(selected.zeta, selection.grid.zeta));
+verifyTrue(testCase, ismember(selected.delay, selection.grid.delay));
+verifyEqual(testCase, selected.padeOrder, 1);
+end
+
+function testT14SelectedCandidateSatisfiesConstraints(testCase)
+selection = testCase.TestData.selection;
+criteria = selection.criteria;
+selected = selection.selectedMetrics;
+m2Poles = testCase.TestData.m2.poles;
+unstablePoles = m2Poles(real(m2Poles) > 1e-8);
+elasticPoles = m2Poles(abs(imag(m2Poles)) > 1e-8);
+
+verifyEqual(testCase, criteria.lambdaUMax, max(abs(unstablePoles)), ...
+    'AbsTol', 1e-12);
+verifyEqual(testCase, criteria.omegaElasticMin, min(abs(elasticPoles)), ...
+    'AbsTol', 1e-12);
+verifyEqual(testCase, criteria.bandwidthMinimum, ...
+    4 * criteria.lambdaUMax, 'AbsTol', 1e-12);
+verifyEqual(testCase, criteria.bandwidthMaximum, ...
+    0.60 * criteria.omegaElasticMin, 'AbsTol', 1e-12);
+verifyGreaterThanOrEqual(testCase, selected.Bandwidth, ...
+    criteria.bandwidthMinimum);
+verifyLessThanOrEqual(testCase, selected.Bandwidth, ...
+    criteria.bandwidthMaximum);
+verifyLessThanOrEqual(testCase, selected.Overshoot, ...
+    criteria.overshootMaximum);
+verifyLessThanOrEqual(testCase, selected.PhaseError80Deg, ...
+    criteria.phaseErrorMaximumDeg);
+verifyTrue(testCase, selected.Admissible);
+end
+
+function testT15InadmissibleCandidatesAreExcluded(testCase)
+selection = testCase.TestData.selection;
+candidates = selection.candidates;
+expectedAdmissibility = ...
+    candidates.Bandwidth >= selection.criteria.bandwidthMinimum & ...
+    candidates.Bandwidth <= selection.criteria.bandwidthMaximum & ...
+    candidates.Overshoot <= selection.criteria.overshootMaximum & ...
+    candidates.PhaseError80Deg <= ...
+        selection.criteria.phaseErrorMaximumDeg;
+
+verifyEqual(testCase, candidates.Admissible, expectedAdmissibility);
+verifyEqual(testCase, candidates.Candidate(candidates.Admissible), ...
+    ["C13"; "C14"; "C25"; "C26"]);
+verifyFalse(testCase, candidates.Admissible(candidates.Candidate == "C04"));
+verifyFalse(testCase, candidates.Admissible(candidates.Candidate == "C10"));
+verifyFalse(testCase, candidates.Admissible(candidates.Candidate == "C15"));
+verifyTrue(testCase, any(~candidates.PassesBandwidthMinimum));
+verifyTrue(testCase, any(~candidates.PassesBandwidthMaximum));
+verifyTrue(testCase, any(~candidates.PassesOvershoot));
+verifyTrue(testCase, any(~candidates.PassesPhaseError));
+end
+
+function testT16SelectionIsDeterministic(testCase)
+firstSelection = testCase.TestData.selection;
+secondSelection = select_nominal_actuator(testCase.TestData.m2);
+
+verifyEqual(testCase, firstSelection.selectedMetrics.Candidate, "C14");
+verifyEqual(testCase, secondSelection.selectedMetrics.Candidate, ...
+    firstSelection.selectedMetrics.Candidate);
+verifyEqual(testCase, secondSelection.selected, firstSelection.selected);
+verifyEqual(testCase, secondSelection.candidates.Admissible, ...
+    firstSelection.candidates.Admissible);
+verifyEqual(testCase, secondSelection.candidates.SelectionRank, ...
+    firstSelection.candidates.SelectionRank);
+verifyEqual(testCase, ...
+    firstSelection.nearOptimalCandidates.Candidate, ...
+    ["C13"; "C14"; "C25"; "C26"]);
+verifyEqual(testCase, firstSelection.selectedMetrics.SelectionRank, 1);
 end

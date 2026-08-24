@@ -376,3 +376,83 @@ Il primo comando locale usato per costruire la richiesta API GitHub conteneva un
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M4.
+
+---
+
+## 2026-08-24 15:43 — Correzione metodologica della selezione attuatore M3.1
+
+**Autore:** Codex
+**Milestone:** M3.1
+**Tipo:** Selezione nominale / Test / Documentazione
+
+### Problema metodologico
+
+La versione M3 calcolava correttamente le metriche dei 27 candidati, ma leggeva prima actuator_params_nominal.m e usava quei valori per etichettare il candidato selezionato. Era quindi una candidate comparison del nominale già fissato, non una candidate selection completa dalla griglia.
+
+### Attività svolta
+
+- Verificato il merge M3 c988d06 su main e creato codex/m3-actuator-selection-fix da una worktree pulita.
+- Rimossa da select_nominal_actuator.m ogni dipendenza da actuator_params_nominal.m.
+- Derivati dai poli M2 lambda_u_max=7.20942861374 rad/s e omega_el_min=69.9543 rad/s.
+- Applicata la finestra progettuale 4*lambda_u_max <= BW <= 0.60*omega_el_min, cioè 28.8377–41.9726 rad/s.
+- Imposti overshoot <=2% ed errore fase Padé a 80 rad/s <=10°.
+- Identificati come ammissibili C13, C14, C25 e C26.
+- Definita la quasi-parità del settling come entro il 10% dal minimo ammissibile; i coefficienti 4, 0.60 e 10% sono criteri progettuali M3.1, non requisiti della traccia.
+- Nel gruppo in quasi-parità, applicata la preferenza per il ritardo maggiore e poi tie-break deterministici su settling, overshoot, distanza dal centro della finestra di banda, frequenza naturale, damping e indice.
+- La regola ha selezionato C14 dalle metriche: 40 rad/s, 0.8 e 15 ms. Il risultato coincide con D-0006, quindi modello nominale e parametri centralizzati non sono stati modificati.
+- Separata nella validazione la selezione da metriche dal successivo controllo di coerenza con i parametri dichiarati; un'eventuale differenza genera un arresto che richiede revisione del gruppo.
+- Esteso il dataset con criteri, candidati ammissibili, regola, ranking e flag di coerenza.
+
+### Test aggiunti
+
+- indipendenza dal file dei parametri nominali, verificata sul sorgente e sulle dipendenze statiche;
+- appartenenza del selezionato alla griglia;
+- derivazione dei criteri dai poli M2 e rispetto di tutti i vincoli;
+- esclusione corretta dei candidati non ammissibili;
+- ripetibilità e determinismo della selezione, incluso C14 con rank 1.
+
+### Risultati
+
+- Test M3 dedicati: 16/16 PASS.
+- Test top-level complessivi: 34/34 PASS.
+- Regressioni annidate M0/M1/M2: PASS.
+- Validazioni M1/M2/M3: PASS.
+- Code Analyzer sui file M3.1 e run_all.m: 0 messaggi.
+- run_all.m reale in MATLAB R2025b Update 4: PASS, exit code 0.
+- Ordine e dinamica del modello finale invariati: SISO 3, MIMO 6, pianta 14 stati.
+
+### Risultato
+
+**SUCCESSO — M3.1 COMPLETE, selezione C14 riproducibile dalle metriche e quality gate PASS.**
+
+### Problemi aperti
+
+Nessun blocco per M3.1. La soglia di quasi-parità del 10% è una decisione progettuale esplicita e potrà essere riesaminata dal gruppo; non sono state introdotte incertezze o attività M4.
+
+### Prossimo passo
+
+Creare commit, push, Pull Request dedicata e handoff M3.1. Fermarsi senza iniziare M4.
+
+---
+
+## 2026-08-24 15:48 — Pubblicazione PR e handoff M3.1
+
+**Autore:** Codex
+**Milestone:** M3.1
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit a9129c6 per selezione, validazione, test e dataset, e f60a504 per motivazione e documentazione metodologica.
+- Pubblicato codex/m3-actuator-selection-fix su origin.
+- Aperta la Pull Request #5 verso main: https://github.com/Deda-404/Progetto_CR/pull/5.
+- Verificato che la PR fosse open e non merged.
+- Creato docs/handoff/Resoconto_M3_1_per_GPT.txt senza sovrascrivere gli handoff M1–M3.
+
+### Risultato
+
+**SUCCESSO** — M3.1 pubblicata per revisione, PR #5 aperta, handoff predisposto e nessun merge eseguito.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M4.

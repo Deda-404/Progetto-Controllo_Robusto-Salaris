@@ -452,7 +452,7 @@ Le future specifiche di tracking/regolazione saranno formulate prioritariamente 
 ## D-0006 — Parametri nominali e simmetria degli attuatori
 
 **Data:** 2026-08-24
-**Milestone:** M3
+**Milestone:** M3, verificata metodologicamente in M3.1
 **Decisione precedente collegata:** P-0003
 
 ### Problema
@@ -464,6 +464,18 @@ Definire \(\omega_n\), \(\zeta\), \(\tau_d\), ordine del Padé e relazione nomin
 - griglia autonoma con \(\omega_n\in\{25,40,60\}\) rad/s, \(\zeta\in\{0.6,0.8,1.0\}\) e \(\tau_d\in\{10,15,25\}\) ms, per 27 candidati;
 - valori del riferimento, 30 rad/s, 0.7 e 20 ms, consultati soltanto dopo il primo PASS;
 - canali nominali diversi, rinviati perché la traccia non fornisce dati per giustificare un'asimmetria.
+
+### Regola di selezione M3.1
+
+La decisione non deriva più dal confronto con parametri precaricati. `select_nominal_actuator.m` ricava dai poli M2 \(\lambda_{u,max}=7.20943\) rad/s e \(\omega_{el,min}=69.9543\) rad/s, quindi impone:
+
+\[
+4\lambda_{u,max}\le BW_{act}\le0.60\omega_{el,min},
+\qquad M_p\le2\%,
+\qquad |\Delta\phi_{Pad\acute e}(80)|\le10^\circ.
+\]
+
+I moltiplicatori 4 e 0.60 e la fascia di quasi-parità del settling del 10% sono criteri progettuali, non requisiti della traccia. Risultano ammissibili C13, C14, C25 e C26. Tutti hanno settling entro il 10% dal minimo ammissibile; viene quindi preferito il ritardo maggiore compatibile, 15 ms, e fra C14/C26 il minor settling seleziona C14. Gli ulteriori tie-break preferiscono, nell'ordine, overshoot minore, distanza minore dal centro della finestra di banda, \(\omega_n\) minore, \(\zeta\) minore e indice minore.
 
 ### Scelta
 
@@ -494,7 +506,7 @@ I parametri sono una **assunzione nominale progettuale**, non valori identificat
 
 ### Motivazione
 
-L'attuatore è più rapido dei modi instabili a 4.0408 e 7.2094 s⁻¹, mantiene basso l'overshoot e introduce roll-off prima dei modi elastici a circa 70–80 rad/s. Il ritardo di 15 ms è significativo senza produrre, con Padé ordine 1, un errore di fase eccessivo nella zona dei modi instabili. La scelta è stata fissata prima del confronto reference-last e non è stata adattata per assomigliare al progetto precedente né per favorire un controllore non ancora progettato.
+L'attuatore è più rapido dei modi instabili a 4.0408 e 7.2094 s⁻¹, mantiene basso l'overshoot e introduce roll-off prima dei modi elastici a circa 70–80 rad/s. Il ritardo di 15 ms è significativo senza superare il limite di errore Padé. M3.1 ha verificato che la stessa scelta emerge dalle metriche della griglia senza leggere `actuator_params_nominal.m`: non è quindi un candidato preselezionato, ma il risultato riproducibile della regola documentata. La scelta non è stata adattata per assomigliare al riferimento né per favorire un controllore non ancora progettato.
 
 ### Conseguenze e limitazioni
 
@@ -502,4 +514,4 @@ Il comando \(u\) è distinto dalla coppia effettiva \(\tau\) applicata al modell
 
 ### Stato
 
-**APPROVATA — sostituisce la proposta P-0003**
+**APPROVATA E CONFERMATA DA M3.1 — sostituisce la proposta P-0003**
