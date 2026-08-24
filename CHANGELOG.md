@@ -35,6 +35,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Dataset `m4_uncertain_plant.mat`, tre figure M4 originali, documentazione `MODELLO_INCERTEZZE.md` e handoff dedicato.
 - Quattordici test M4 per screening, range, `ureal`, famiglia, copertura, Delta, coerenza nominale, `lftdata`, `usample` e regressioni.
 - Test M4.1 T15–T18 per source of truth attuatore, dipendenza obbligatoria dallo screening, preservazione delle decisioni e regressione M0–M4.
+- Source of truth M5 per scenari, banda, target sensitivity, scala di sforzo, pesi e obiettivi temporali.
+- Selezione M5 riproducibile con tabelle candidate per `omegaB`, `W1` e `W2`, derivata dai dataset validati M2/M3.
+- Modello non lineare del disturbo di coppia ai link, matrice `Bd` analitica e pianta nominale a ingressi separati `[u1,u2,d1,d2]`.
+- Pesi `W1/W2` SISO e MIMO, dataset `m5_performance_specs.mat`, tre figure originali e documento `SPECIFICHE_PRESTAZIONE.md`.
+- Suite M5 T1–T14 per centralizzazione, derivazione della banda, pesi, asintoti, disturbance path, regressione M0–M4.1 e governance documentale.
 
 ### Changed
 
@@ -54,6 +59,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Centralizzati i nominali attuatore M4 in `actuator_params_nominal.m`; rimossa la copia numerica da `uncertainty_params_m4.m`.
 - Reso obbligatorio l'input `selectedMechanicalParameters` prodotto dallo screening, eliminando la preselezione silenziosa.
 - Riformulate D-0007/D-0008/D-0009/D-0011 e la configurazione dei range con motivazioni esclusivamente tecniche.
+- Normalizzati i metadati storici del diario in `Responsabile: Alessio` senza modificare attività, risultati, problemi, date o cronologia tecnica.
+- Aggiunta in `AGENTS.md` la regola permanente sulla voce impersonale/plurale della documentazione di progetto.
+- Esteso `run_all.m` al quality gate M5 con selezione delle specifiche, validazione dei pesi, verifica di `Bd`, disturbance path, dataset e figure, senza sintesi di controllori.
 
 ### Fixed
 
@@ -91,3 +99,6 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - M4 con tre parametri meccanici su dieci, range baseline `k1/k2` ±7% e `Jm1` ±9%, più range attuatore ±8%/±7.5%/±20%.
 - `WI` ordine 1 con polo -207.3533, zero -1.32753, worst ratio 0.9259259 e margine minimo 0.0130725 su 120 modelli.
 - Coerenza nominale `Gunc`/M3 con errore assoluto massimo 6.328e-15 e 40/40 campioni `usample` validi con seed 20260825.
+- M5 con finestra di banda 10.8141–13.9133 rad/s, selezione `omegaB=12` rad/s, `W1(0)=20`, `W1(inf)=0.5`, `W2(0)=1/12` e `W2(inf)=0.5`.
+- `Bd` contro differenze finite con errore nullo alla precisione numerica e sottosistema da `u` invariato rispetto a M3.
+- `run_all.m` M5 con 66/66 test top-level, Code Analyzer senza messaggi, dataset e figure rigenerati e nessuna sintesi di controllo.

@@ -60,6 +60,16 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 - Aggiornare documentazione e diario prima del commit pertinente.
 - Non cancellare né riscrivere retroattivamente le vecchie voci del diario; aggiungere una nuova voce quando una decisione cambia.
 
+### Project documentation voice
+
+- La documentazione tecnica deve essere scritta come documentazione del progetto, non come diario di uno strumento software.
+- Non usare formule come “io ho fatto”, “Codex ha fatto”, “l'agente ha deciso” o “ChatGPT ha suggerito”.
+- Preferire la forma impersonale o la prima persona plurale tecnica: “è stato verificato”, “abbiamo scelto”, “si è osservato”.
+- Quando serve un referente personale, usare `Responsabile: Alessio`.
+- Non inserire firme automatiche nei sorgenti MATLAB.
+- Non inserire nomi di strumenti nei commenti del codice se non sono tecnicamente necessari.
+- Eventuali obblighi formali di disclosure previsti dal corso devono comunque essere rispettati separatamente.
+
 ## Git workflow
 
 - `main` deve rimanere ragionevolmente stabile e comprensibile.

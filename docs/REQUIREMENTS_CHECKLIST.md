@@ -46,14 +46,16 @@ La checklist deriva dalla traccia ufficiale. Un requisito tecnico resta non comp
 
 ## Specifiche
 
-- [ ] Definire regolazione/tracking e variabili controllate.
-- [ ] Definire modello fisico e punto di applicazione dei disturbi.
-- [ ] Definire errore statico ammesso.
-- [ ] Definire banda o rapidità desiderata.
+- [x] Definire regolazione/tracking e variabili controllate.
+- [x] Definire modello fisico e punto di applicazione dei disturbi.
+- [x] Definire errore statico ammesso.
+- [x] Definire banda o rapidità desiderata.
 - [ ] Definire attenuazione dei disturbi e rumore.
 - [ ] Definire limiti di coppia e saturazioni reali.
-- [ ] Definire margini di robustezza desiderati.
-- [ ] Tradurre le specifiche in pesi dimensionalmente coerenti.
+- [x] Definire il linguaggio e i criteri futuri dei margini di robustezza.
+- [x] Tradurre le specifiche in pesi dimensionalmente coerenti.
+
+M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la voce combinata disturbi/rumore resta aperta fino alla caratterizzazione dei canali di rumore. `uScale=12 N m` è una scala prestazionale, non una saturazione reale certificata; anche la relativa voce resta aperta.
 
 ## LQG
 

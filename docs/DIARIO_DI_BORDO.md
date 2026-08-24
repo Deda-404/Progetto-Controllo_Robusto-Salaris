@@ -1,10 +1,12 @@
 # Diario di bordo
 
+Il campo “Responsabile” identifica il referente umano che revisiona, approva e mantiene la voce del diario.
+
 Il diario è append-only. Le nuove attività aggiungono voci senza cancellare o riscrivere quelle precedenti.
 
 ## 2026-08-24 12:07 — Inizializzazione M0 del progetto
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M0
 **Tipo:** Setup / Analisi / Test / Documentazione / Git
 
@@ -83,7 +85,7 @@ Messaggio: `chore: initialize robust control project workspace`
 
 ## 2026-08-24 12:39 — Implementazione e validazione M1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M1
 **Tipo:** Modellazione / Test / Documentazione / Git
 
@@ -158,7 +160,7 @@ Commit e Pull Request: da associare alla chiusura della milestone (vedere `git l
 
 ## 2026-08-24 12:50 — Pubblicazione PR e resoconto M1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M1
 **Tipo:** Git / Documentazione
 
@@ -185,7 +187,7 @@ Attendere la revisione del gruppo sulla PR #2. M2 resta non iniziata.
 
 ## 2026-08-24 13:38 — Implementazione e primo quality gate M2
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M2
 **Tipo:** Equilibrio / Linearizzazione / Analisi strutturale / Test / Documentazione
 
@@ -267,7 +269,7 @@ Commit e Pull Request: da associare alla chiusura M2
 
 ## 2026-08-24 13:45 — Pubblicazione PR e handoff M2
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M2
 **Tipo:** Git / Documentazione
 
@@ -290,7 +292,7 @@ Attendere la revisione del gruppo. Non iniziare M3.
 
 ## 2026-08-24 15:19 — Implementazione e quality gate M3
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M3
 **Tipo:** Attuatori / Padé / Pianta completa / Analisi strutturale / Test / Documentazione
 
@@ -353,7 +355,7 @@ Commit e Pull Request: da associare alla chiusura M3
 
 ## 2026-08-24 15:24 — Pubblicazione PR e preparazione handoff M3
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M3
 **Tipo:** Git / Documentazione
 
@@ -381,7 +383,7 @@ Attendere la revisione del gruppo. Non iniziare M4.
 
 ## 2026-08-24 15:43 — Correzione metodologica della selezione attuatore M3.1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M3.1
 **Tipo:** Selezione nominale / Test / Documentazione
 
@@ -437,7 +439,7 @@ Creare commit, push, Pull Request dedicata e handoff M3.1. Fermarsi senza inizia
 
 ## 2026-08-24 15:48 — Pubblicazione PR e handoff M3.1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M3.1
 **Tipo:** Git / Documentazione
 
@@ -461,7 +463,7 @@ Attendere la revisione del gruppo. Non iniziare M4.
 
 ## 2026-08-24 16:31 — Implementazione e primo quality gate M4
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M4
 **Tipo:** Screening / Incertezze parametriche / `ucover` / Pianta `uss` / Test / Documentazione
 
@@ -520,7 +522,7 @@ Eseguire Code Analyzer e `run_all` finali, ispezionare le figure rigenerate, agg
 
 ## 2026-08-24 16:46 — Pubblicazione PR e handoff M4
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M4
 **Tipo:** Quality gate finale / Git / Handoff
 
@@ -552,7 +554,7 @@ Attendere la revisione del gruppo. Non iniziare M5.
 
 ## 2026-08-24 — Cleanup metodologico M4.1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M4.1
 **Tipo:** Centralizzazione / Dipendenze / Regressioni
 
@@ -593,7 +595,7 @@ Completare rilancio finale, commit, push, PR dedicata e handoff. Non iniziare M5
 
 ## 2026-08-24 17:17 — Pubblicazione PR e handoff M4.1
 
-**Autore:** Codex
+**Responsabile:** Alessio
 **Milestone:** M4.1
 **Tipo:** Quality gate finale / Git / Handoff
 
@@ -613,3 +615,51 @@ Completare rilancio finale, commit, push, PR dedicata e handoff. Non iniziare M5
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M5.
+
+---
+
+## 2026-08-24 17:44 — Implementazione e primo quality gate M5
+
+**Responsabile:** Alessio
+**Milestone:** M5
+**Tipo:** Governance / Specifiche / Pesi / Disturbo / Test / Documentazione
+
+### Attività svolta
+
+- Verificato su `main` il merge M4.1 `ba8c197` e creato `codex/m5-performance-specs` da worktree pulita.
+- Normalizzati esclusivamente i metadati storici `Autore` in `Responsabile: Alessio`, aggiunta la nota semantica iniziale e mantenuti invariati attività, risultati, problemi, date e cronologia Git.
+- Aggiunta in `AGENTS.md` la regola permanente sulla voce documentale del progetto.
+- Centralizzati scenari, criteri, pesi e target in `performance_specs_m5.m`, con classificazione fra requisito, assunzione e criterio derivato.
+- Derivata dai dataset M2/M3 la finestra 10.8141429–13.9133481 rad/s e selezionato deterministicamente `omegaB=12` rad/s sui candidati 11/12/13.
+- Selezionati sulla griglia locale `As=0.05`, `Ms=2`, `uScale=12 N m`, `omegaU=30 rad/s` e `alpha=6` con regole esplicite.
+- Costruiti `W1/W2` SISO e MIMO diagonali, stabili e propri; verificati gli asintoti 20/0.5 e 0.0833333/0.5.
+- Derivata `Bd` con `M(qbar)^-1` nelle accelerazioni link e verificata mediante differenze finite del modello non lineare con disturbo.
+- Costruita la pianta nominale a 14 stati con ingressi separati `[u1,u2,d1,d2]`, preservando il percorso attuato M3.
+- Analizzati riferimenti 2°/5°/8° e disturbi 0.25/0.50/1.00 N m; il caso nominale produce deformazioni SEA 0.0100/0.0125 rad.
+- Generati dataset, tre figure M5 e documento `SPECIFICHE_PRESTAZIONE.md`; aggiunte D-0014–D-0020.
+
+### Problemi e correzioni
+
+La prima esecuzione T1–T14 ha prodotto un solo FAIL in T8: il test confrontava direttamente due oggetti `tf` numericamente identici ma con nomi I/O differenti. Le altre 13 verifiche, compresa la regressione M0–M4.1 da 52 test, erano PASS. T8 è stato corretto per confrontare le risposte frequenziali dei canali diagonali ed è stato rieseguito isolatamente con esito PASS.
+
+Un controllo aggiuntivo dei nomi salvati nel dataset si è inizialmente arrestato perché le stringhe della riga `-batch` erano state interpretate senza virgolette. La cell array è stata quotata esplicitamente e il controllo ripetuto ha confermato tutti gli undici campi obbligatori.
+
+### Risultati finali
+
+- Code Analyzer sui sei file core M5, sul test M5 e su `run_all.m`: 0 messaggi.
+- Suite M5 corretta: 14/14 PASS.
+- `matlab.exe -batch "run_all"`: 66/66 test top-level e validazioni M1–M5 PASS, exit code 0.
+- Selezione autonoma: `omegaB=12`, `As=0.05`, `Ms=2`, `uScale=12`, `omegaU=30`, `alpha=6`.
+- Errore `Bd` analitica/differenze finite: 0 assoluto e relativo alla precisione numerica usata.
+- Consistenza locale scenario 5°: errore gravitazionale massimo 0.16043%.
+- Nessun controllore, `W3`, `mixsyn` o calcolo di `mu` introdotto.
+- Ispezionate le tre figure finali; corretta esplicitamente la scala logaritmica W1/W2 e verificata la leggibilità della frequency map.
+- Le rigenerazioni M2–M4 differivano da HEAD soltanto per 3–16 byte di timestamp/metadata e sono state ripristinate per evitare rumore nella milestone M5.
+
+### Risultato
+
+**SUCCESSO — M5 COMPLETE, quality gate PASS e artifact riproducibili.**
+
+### Prossimo passo
+
+Creare commit piccoli, pubblicare il branch, aprire la Pull Request e completare l'handoff. Non iniziare M6.
