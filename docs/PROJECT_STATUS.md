@@ -6,7 +6,8 @@
 **Last validated result:** `run_all.m` eseguito in MATLAB R2025b Update 4; 9 test su 9 superati e validazione numerica M1 PASS
 **Blocking issues:** nessuno per il completamento di M1
 **Next task:** revisione e merge della Pull Request M1; non iniziare M2 senza il successivo incarico del gruppo
-**Last update:** 2026-08-24 12:39 CEST
+**Pull Request:** [#2 — M1 nonlinear SEA manipulator model](https://github.com/Deda-404/Progetto_CR/pull/2), aperta e non unita
+**Last update:** 2026-08-24 12:50 CEST
 
 ## Metriche M1 validate
 

@@ -14,6 +14,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Parametri meccanici nominali centralizzati e funzioni modulari M1 per inerzia, Coriolis, gravità, elasticità SEA e dinamica completa a 8 stati.
 - Suite automatica M1 con sette test matematici e strutturali, inclusa una verifica indipendente delle formule della traccia.
 - Validazione deterministica M1 e documentazione originale del modello non lineare.
+- `Resosconto_per_GPT.txt` con riepilogo autosufficiente di implementazione, test, metriche e stato Git M1.
 
 ### Changed
 

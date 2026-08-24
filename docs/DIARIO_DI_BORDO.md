@@ -153,3 +153,30 @@ Completare commit, push e Pull Request M1, quindi attendere la revisione del gru
 
 Branch: `codex/m1-nonlinear-model`
 Commit e Pull Request: da associare alla chiusura della milestone (vedere `git log` e PR del branch)
+
+---
+
+## 2026-08-24 12:50 — Pubblicazione PR e resoconto M1
+
+**Autore:** Codex
+**Milestone:** M1
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit `f768ff0` per modello/test e `8db01a6` per documentazione/quality gate.
+- Pubblicato `codex/m1-nonlinear-model` su `origin`.
+- Aperta la Pull Request [#2](https://github.com/Deda-404/Progetto_CR/pull/2) verso `main`, lasciandola intenzionalmente non unita.
+- Creato `Resosconto_per_GPT.txt`, riepilogo scaricabile e autosufficiente per trasferire a ChatGPT contesto, implementazione, test, metriche, problemi e stato Git senza schermate della chat.
+
+### Problemi e correzioni
+
+- GitHub CLI e `jq` non erano disponibili; un primo tentativo di pipeline PowerShell con il credential helper non era compatibile con l'eseguibile. La PR è stata aperta tramite API GitHub autenticata usando il credential helper senza stampare o salvare credenziali.
+
+### Risultato
+
+**SUCCESSO** — branch pubblicato, PR #2 aperta, nessun merge eseguito e resoconto finale predisposto.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo sulla PR #2. M2 resta non iniziata.
