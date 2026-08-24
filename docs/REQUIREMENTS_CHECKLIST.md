@@ -59,16 +59,16 @@ M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la 
 
 ## LQG
 
-- [ ] Sintetizzare LQG senza integratore.
+- [x] Sintetizzare LQG senza integratore.
 - [ ] Sintetizzare LQG con integratore sulle uscite approvate.
-- [ ] Motivare e registrare \(Q\) e \(R\).
-- [ ] Motivare e registrare covarianze di processo e misura.
-- [ ] Verificare principio di separazione e poli dell'anello chiuso.
+- [x] Motivare e registrare \(Q\) e \(R\).
+- [x] Motivare e registrare covarianze di processo e misura.
+- [x] Verificare principio di separazione e poli dell'anello chiuso.
 - [ ] Validare stima dello stato, rumore e condizioni iniziali.
-- [ ] Confrontare errore a regime con disturbo costante.
+- [x] Confrontare errore a regime con disturbo costante.
 - [ ] Confrontare sforzo di controllo con e senza integratore.
 - [ ] Implementare entrambe le versioni in Simulink.
-- [ ] Validare entrambe sul modello linearizzato.
+- [x] Validare la versione senza integratore sul modello linearizzato.
 - [ ] Validare entrambe sul modello non lineare.
 - [ ] Stimare e documentare la RAS empirica di entrambe.
 

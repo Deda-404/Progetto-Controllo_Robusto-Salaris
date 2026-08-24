@@ -6,6 +6,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Screening LQR M6 sul modello nominale completo a 14 stati, con costo fisicamente normalizzato, precompensatore statico per ciascun candidato e metriche di tracking/disturbo riproducibili.
+- Coarse grid M6 da 240 costi LQR adimensionali, diagnosi modale del baseline, selezione C193 e tabella dedicata all'effetto di `wdelta`.
+- Griglia Kalman da 27 covarianze fisicamente motivate, controllore LQG nominale di ordine 14, dataset M6 e sette figure riproducibili.
+- Suite M6 T1–T26 per modello, costo, selezioni, prefilter, separazione, rumore, retuning, regressioni e governance.
+
 - Struttura iniziale del repository per modello, controllori, analisi, Simulink, test, risultati e relazione.
 - Documentazione M0: analisi della traccia e del riferimento, inventario Drive, checklist, roadmap, decision log, diario e project status.
 - `AGENTS.md` con le regole permanenti del progetto.
@@ -43,6 +48,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Corretta la classificazione epistemica M5: equilibrio D-0003 come decisione approvata e coppia ai link D-0014 come scelta di modellazione coerente con la traccia, senza variazioni numeriche.
+- Esteso il costo LQR con priorità adimensionali mantenendo inalterate le scale fisiche M5; centralizzati i valori selezionati da metriche.
+- Esteso `run_all.m` al tuning LQR, selezione Kalman, costruzione e quality gate LQG M6.
+
 - Ampliato `README.md` con scopo, governance, struttura, prerequisiti, esecuzione e stato.
 - Completato `.gitignore` per file temporanei MATLAB, Simulink, LaTeX, editor e sistema operativo.
 - Esteso `run_all.m` per eseguire test M0/M1, validazione numerica e segnalazione esplicita PASS/FAIL.
@@ -72,6 +81,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- I cinque candidati LQR M6 sono stabilizzanti e rispettano overshoot, tracking statico e cross-coupling preliminare, ma falliscono tutti il target di settling 0.8 s con worst case 1.222–1.232 s; M6 arrestata come `PARTIAL` prima del Kalman.
+- Il retuning autorizzato produce 139/240 candidati LQR ammissibili; C193 raggiunge settling 0.776 s con picco comando 0.3908 della scala prestazionale.
+- KF03 rispetta il ratio stimatore/regolatore 1.6928; controllore LQG ordine 14, separation error 2.43e-6 e simulazione seeded riproducibile.
+- `run_all.m` M6 con 92/92 test top-level, Code Analyzer senza messaggi, dataset e sette figure rigenerati.
 
 - Accesso in sola lettura alla cartella Google Drive e al progetto CR dei colleghi.
 - Remote GitHub ufficiale e branch di lavoro M0.

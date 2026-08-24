@@ -28,10 +28,14 @@ Le funzioni richieste vengono mantenute distinte:
 
 | Classe | Significato | Esempi M5 |
 | --- | --- | --- |
-| requisito della traccia | vincolo o fenomeno fisico richiesto | equilibrio superiore, disturbo di coppia ai link |
+| requisito della traccia | problema o fenomeno da rappresentare, senza attribuire alla traccia scelte non univoche | scelta di un equilibrio e definizione dei disturbi |
+| decisione approvata del progetto | scelta derivata, validata e registrata | equilibrio verticale superiore D-0003 |
+| scelta di modellazione del progetto | rappresentazione fisica coerente con la traccia, ma non imposta in modo univoco | coppia esterna ai link D-0014 |
 | assunzione di progetto | valore scelto per la futura verifica | ampiezze, (A_s), (M_s), scala di coppia, target temporali |
 | criterio derivato | regola calcolata dai dati validati | finestra e ranking di (\omega_B), ammissibilità di (\omega_U) |
 | criterio futuro | linguaggio di una verifica non ancora eseguita | upper bound di (\mu) per RS/RP |
+
+In particolare, l'equilibrio (\bar q=[\pi/2,0]^T) è una decisione approvata del progetto, derivata e verificata in M2, non un requisito testuale della traccia. Analogamente, la coppia applicata direttamente alla dinamica dei link è la scelta di modellazione D-0014: è fisicamente coerente con il problema assegnato, ma non è l'unica collocazione possibile imposta dalla traccia. Questa correzione epistemica non modifica alcun valore numerico M5.
 
 ## Scenari di riferimento
 

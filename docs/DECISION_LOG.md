@@ -986,3 +986,222 @@ Ogni milestone di sintesi dovrà dichiarare separatamente target soddisfatti, vi
 ### Stato epistemico
 
 **APPROVATA COME BASELINE DI CONFRONTO M5; CROSS-COUPLING PRELIMINARE**
+
+---
+
+## D-0021 — Correzione epistemica di equilibrio e disturbo M5
+
+**Data:** 2026-08-24
+**Milestone:** M6, cleanup preliminare M5
+
+### Problema
+
+I metadati M5 classificavano l'equilibrio verticale superiore e la collocazione del disturbo ai link come requisiti della traccia, mentre le decisioni storiche D-0003 e D-0014 ne documentano la natura progettuale.
+
+### Criterio e scelta
+
+L'equilibrio (\bar q=[\pi/2,0]^T) è riclassificato come decisione approvata del progetto, derivata e validata in M2. La coppia esterna ai link è riclassificata come scelta di modellazione del progetto, fisicamente coerente con la traccia ma non imposta da essa in modo univoco.
+
+### Motivazione
+
+La classificazione epistemica deve distinguere ciò che la traccia richiede dalle scelte tecniche con cui il gruppo rende il problema riproducibile. D-0003 e D-0014 restano le fonti decisionali; non viene riscritta la loro cronologia.
+
+### Conseguenze
+
+Sono aggiornati soltanto metadati e documentazione. Equilibrio, (B_d), ampiezze, pesi e tutti i valori numerici M5 restano invariati.
+
+### Stato epistemico
+
+**APPROVATA COME CORREZIONE DOCUMENTALE PRELIMINARE M6 — NESSUNA MODIFICA NUMERICA M5**
+
+---
+
+## D-0022 — Normalizzazione fisica del costo LQR M6
+
+**Data:** 2026-08-24
+**Milestone:** M6, screening LQR parziale
+
+### Problema
+
+Costruire il costo di stato del primo regolatore nominale senza dipendere da pesi numerici arbitrari o dalla realizzazione interna dei blocchi attuatore.
+
+### Alternative
+
+- pesi diagonali assegnati direttamente ai 14 stati;
+- regola di Bryson sulle sole coordinate meccaniche;
+- costo sulle variabili fisiche normalizzate (q), (\dot q), (\theta-q) e (\dot\theta).
+
+### Criterio e scelta
+
+È adottato (Q=C_{cost}^TC_{cost}) con scale (q_s=5°), (\dot q_s=\omega_Bq_s), (\delta_s=d_{nom}/\min(k_1,k_2)=0.0125) rad e (\dot\theta_s=\omega_Bq_s). I sei stati interni degli attuatori non ricevono penalizzazioni dirette arbitrarie.
+
+### Motivazione
+
+Le scale provengono dalle source of truth M3/M5, conservano unità e significato fisico e rendono il costo indipendente da trasformazioni di similitudine della realizzazione attuativa. La CARE è risultata risolvibile per tutti i candidati analizzati.
+
+### Conseguenze e limiti
+
+La normalizzazione è approvata come base dello screening. Il risultato negativo sul settling richiede revisione prima di cambiare pesi relativi, griglia o target.
+
+### Stato epistemico
+
+**APPROVATA COME NORMALIZZAZIONE M6; SELEZIONE LQR NON COMPLETATA**
+
+---
+
+## D-0023 — Nessun candidato (\rho_U) ammissibile nella griglia M6
+
+**Data:** 2026-08-24
+**Milestone:** M6, quality gate LQR
+
+### Problema
+
+Selezionare il maggiore (\rho_U\in\{0.5,1,2,4,8\}) che soddisfi stabilità, settling non superiore a 0.8 s, overshoot non superiore al 10% ed errore statico di tracking non superiore al 5%.
+
+### Evidenze
+
+Tutti i cinque regolatori sono stabilizzanti, hanno overshoot massimo inferiore a 0.001%, errore statico alla precisione numerica e cross-coupling di picco circa 16.2%. Il worst-case settling è però compreso fra 1.222 s e 1.232 s. `stepinfo` ha confermato indipendentemente 1.22134 s sul giunto 1 per (\rho_U=0.5). Un'estensione diagnostica fino a (\rho_U=0.001) riduce il valore soltanto a 1.21251 s, con crescita marcata del guadagno LQR.
+
+### Criterio e scelta
+
+Nessun candidato viene selezionato. Non vengono modificate silenziosamente specifiche M5, pesi relativi o struttura di controllo.
+
+### Conseguenze e limiti
+
+M6 è `PARTIAL` e la sintesi Kalman/LQG non viene iniziata. Il gruppo deve decidere se autorizzare una revisione della normalizzazione relativa, ampliare l'architettura o riclassificare il target temporale prima di proseguire.
+
+### Stato epistemico
+
+**QUALITY GATE LQR FAIL — REVISIONE DEL GRUPPO RICHIESTA**
+
+---
+
+## D-0024 — Retuning adimensionale e selezione LQR C193
+
+**Data:** 2026-08-24
+**Milestone:** M6
+
+### Problema
+
+Il tuning iniziale sulle sole (R) non modificava il modo dominante e non raggiungeva il settling di 0.8 s. Il gruppo ha autorizzato la revisione esclusiva delle priorità relative del costo, preservando scale fisiche e specifiche M5.
+
+### Alternative
+
+- modificare il target M5 o (\omega_B), non autorizzato;
+- continuare a ridurre (\rho_U), già smentito dalla diagnostica;
+- esplorare coefficienti adimensionali su posizione, velocità e deformazione SEA.
+
+### Metriche, criterio e scelta
+
+La coarse grid da 240 candidati ha prodotto 139 candidati fondamentali ammissibili; non è stata eseguita la extended grid. Il ranking minimizza picco comando normalizzato, deformazione normalizzata e norma di (K), poi preferisce il maggiore (\rho_U). È selezionato C193 con (w_q=1), (w_{\dot q}=w_{\dot\theta}=0.5), (w_\delta=0.1) e (\rho_U=8).
+
+### Motivazione
+
+A parametri restanti fissi, ridurre (w_\delta) da 1 a 0.1 diminuisce il worst settling da 1.220 a 0.776 s e sposta la parte reale dominante da -4.3377 a -5.5051, mentre il comando scende da 0.5939 a 0.3908 della scala prestazionale. I dati confermano che il costo Bryson-like iniziale sovrapenalizzava la variabile interna (\theta-q) rispetto all'obiettivo di tracking.
+
+### Conseguenze e limiti
+
+Il tracking soddisfa settling, overshoot, errore statico e cross-coupling preliminare. Il picco deformazione è 1.8917 volte (\delta_s), valore diagnostico e non violazione di un limite fisico inesistente. Le scale M5 restano invariate.
+
+### Stato epistemico
+
+**APPROVATA COME SELEZIONE LQR M6 DA METRICHE — SOSTITUISCE LO STOP D-0023 SENZA CANCELLARNE L'EVIDENZA**
+
+---
+
+## D-0025 — Modello di process noise (G_w=[B_d\ B])
+
+**Data:** 2026-08-24
+**Milestone:** M6
+
+### Problema
+
+Rappresentare perturbazioni dinamiche per lo stimatore senza usare covarianze opache o la pianta incerta M4.
+
+### Alternative
+
+- rumore di processo applicato direttamente a tutti i 14 stati;
+- soli disturbi ai link;
+- due disturbi di coppia ai link e due mismatch equivalenti del comando attuatore.
+
+### Criterio e scelta
+
+È scelto (G_w=[B_d\ B]) con (w=[w_{d1},w_{d2},w_{u1},w_{u2}]^T). I primi due canali conservano il modello M5; gli ultimi due rappresentano perturbazioni equivalenti del comando nominale.
+
+### Motivazione
+
+La struttura mantiene unità di coppia, separa carico esterno e mismatch attuativo ed evita rumore artificiale indipendente su coordinate di stato dipendenti dalla realizzazione.
+
+### Conseguenze e limiti
+
+Il modello è nominale e non sostituisce l'ensemble strutturato M4. Correlazioni e spettri reali richiederebbero dati sperimentali.
+
+### Stato epistemico
+
+**APPROVATA COME MODELLO DI PROCESS NOISE M6**
+
+---
+
+## D-0026 — Covarianze e selezione Kalman KF03
+
+**Data:** 2026-08-24
+**Milestone:** M6
+
+### Problema
+
+Selezionare uno stimatore abbastanza rapido rispetto al regolatore senza privilegiare poli arbitrariamente veloci e rumorosi.
+
+### Alternative
+
+- (W=V=\epsilon I) senza interpretazione;
+- 27 combinazioni di standard deviation fisiche definite in M6;
+- selezione basata soltanto sul massimo decay.
+
+### Metriche, criterio e scelta
+
+Per ogni combinazione sono calcolati stabilità, decay, ratio stimatore/regolatore, (\|L\|_F) e norma (H_2) dal rumore encoder alle variabili normalizzate dell'errore. Tre candidati rispettano il ratio 1.5–5. È scelto KF03 con (\sigma_D=0.10) N m, (\sigma_U=0.10) N m e (\sigma_Y=0.05°): ratio 1.6928, (H_2=539.32) e (\|L\|_F=7040.6).
+
+### Motivazione
+
+KF03 minimizza la metrica (H_2) fra i candidati ammissibili e poi la norma del guadagno, secondo un ranking deterministico indipendente dal progetto di riferimento.
+
+### Conseguenze e limiti
+
+Lo stimatore è stabile e consente il controllore dinamico di ordine 14. Le standard deviation sono scenari di progetto, non specifiche certificate dei sensori.
+
+### Stato epistemico
+
+**APPROVATA COME SELEZIONE KALMAN NOMINALE M6**
+
+---
+
+## D-0027 — Precompensatore statico MIMO (N_r)
+
+**Data:** 2026-08-24
+**Milestone:** M6
+
+### Problema
+
+Ridurre l'errore statico nominale di tracking in assenza di stati integrali.
+
+### Alternative
+
+- nessun precompensatore;
+- inversione esplicita non condizionata;
+- soluzione lineare del guadagno DC MIMO da feedforward a (q).
+
+### Metriche, criterio e scelta
+
+È adottata la soluzione (G_{dc}N_r=I_2), con condition number 1.1144 e residuo (1.39\times10^{-17}). Numericamente (N_r=[[53.73943,-0.79651];[4.30445,49.39156]]).
+
+### Motivazione
+
+La soluzione è ben condizionata, finita e porta il guadagno DC nominale riferimento-posizione all'identità senza usare `inv`.
+
+### Conseguenze e limiti
+
+(N_r) non costituisce un internal model. Gli offset LQG misurati per disturbi costanti, 0.07959 e 0.16023 rad nei due casi, restano intenzionalmente visibili come baseline per M7.
+
+### Stato epistemico
+
+**APPROVATA PER IL TRACKING NOMINALE M6 SENZA INTEGRATORE**

@@ -1,13 +1,58 @@
 # Project Status
 
-**Current milestone:** M5 — Specifiche di prestazione, modello dei disturbi e pesi di progetto
-**Status:** COMPLETE — quality gate M5 superato, nessun controllore sintetizzato
-**Last validated milestone:** M5
-**Last validated result:** `run_all.m` in MATLAB R2025b, 66/66 test top-level, regressioni M0–M4.1, selezione, W1/W2, `Bd`, disturbance path, dataset e figure PASS
-**Blocking issues:** nessuno
-**Next task:** revisione della Pull Request M5; non iniziare M6 senza il successivo incarico del gruppo
-**Pull Request:** [#8 — M5: define performance specifications and disturbance model](https://github.com/Deda-404/Progetto_CR/pull/8), aperta e non unita
-**Last update:** 2026-08-24 18:00 CEST
+**Current milestone:** M6 — LQG nominale senza integratore
+**Status:** COMPLETE — quality gate M6 superato, LQG nominale senza integratore validato
+**Last validated milestone:** M6
+**Last validated result:** `run_all.m` in MATLAB R2025b, 92/92 test top-level, regressioni M0–M5, tuning LQR, Kalman, LQG, tracking, disturbo, rumore, dataset e figure PASS
+**Blocking issues:** nessuno per M6; offset da disturbo costante e assenza di limiti hardware restano limiti documentati
+**Next task:** revisione della Pull Request M6; non iniziare M7 senza successivo incarico del gruppo
+**Pull Request:** in preparazione, non unita
+**Last update:** 2026-08-24 20:35 CEST
+
+## Quality gate M6
+
+| Requisito | Esito |
+| --- | --- |
+| cleanup epistemico M5 | PASS — nessun numero M5 modificato |
+| modello nominale completo | PASS — 14 stati, 2 ingressi, 4 misure encoder |
+| diagnosi baseline | PASS — modo dominante e rapporto pesi quantificati |
+| coarse grid LQR | PASS — 240 candidati, 139 ammissibili |
+| extended grid | NOT RUN — coarse grid già ammissibile |
+| LQR selezionato | PASS — C193, `1/0.5/0.1/0.5`, `rhoU=8` |
+| tracking fondamentale | PASS — worst settling 0.776 s |
+| comando | PASS diagnostico — 4.6897 N m, 0.3908 di `uScale` |
+| precompensatore | PASS — cond 1.1144, residuo 1.39e-17 |
+| griglia Kalman | PASS — 27 candidati, 3 ammissibili, KF03 selezionato |
+| stimatore | PASS — ratio 1.6928, H2 finita |
+| principio di separazione | PASS — errore 2.43e-6 |
+| controllore | PASS — ordine 14, nessun integratore |
+| disturbo costante | PASS — offset quantificato 0.07959/0.16023 rad |
+| rumore seeded | PASS — seed 20260826, rilancio identico |
+| test M6 | PASS — T1–T26 |
+| test top-level | PASS — 92/92, exit code 0 |
+| Code Analyzer | PASS — 0 messaggi su 11 file |
+| dataset e figure | PASS — un dataset e sette figure M6 |
+| M7 | NOT STARTED |
+
+## Storico del gate iniziale M6
+
+La seguente tabella conserva lo stop PARTIAL precedente al retuning autorizzato; non descrive lo stato finale della milestone.
+
+| Verifica | Esito |
+| --- | --- |
+| cleanup epistemico M5 | PASS — nessun numero modificato |
+| modello M3 completo | PASS — 14 stati, 2 ingressi, 4 misure di posizione |
+| costo LQR fisico | PASS — (Q=C_{cost}^TC_{cost}), nessun peso diretto sugli stati interni attuatore |
+| griglia (\rho_U=[0.5,1,2,4,8]) | PASS — cinque candidati analizzati |
+| stabilità nominale | PASS — 5/5 stabilizzanti |
+| overshoot / errore statico | PASS — <0.001% / precisione numerica |
+| cross-coupling preliminare | PASS diagnostico — circa 16.2% |
+| settling ≤0.8 s | **FAIL — 1.222–1.232 s** |
+| selezione (\rho_U) | FAIL — nessun candidato ammissibile |
+| Kalman, LQG, rumore, separation principle | NOT RUN — arresto richiesto dal gate |
+| regressioni M0–M5 | PASS — 66/66, exit code 0 |
+| Code Analyzer M6 parziale | PASS — 0 messaggi |
+| M7 | NOT STARTED |
 
 ## Baseline M5
 
@@ -20,7 +65,7 @@
 | `As`, `Ms` | 0.05, 2.0 | target W1 |
 | `uScale` | 12 N m | normalizzazione, non saturazione |
 | `omegaU`, `alpha` | 30 rad/s, 6 | target W2 |
-| settling / overshoot | ≤0.8 s / ≤10% | target non ancora verificato |
+| settling / overshoot | ≤0.8 s / ≤10% | verificato sul tracking nominale M6 |
 | cross-coupling | ≤25% | preliminare |
 
 `W1(0)=20`, `W1(inf)=0.5`, `W2(0)=0.0833333 (N m)^-1` e `W2(inf)=0.5 (N m)^-1`. Entrambi i pesi sono stabili, propri, SISO di ordine uno e replicati diagonalmente sui due giunti.

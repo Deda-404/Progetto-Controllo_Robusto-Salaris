@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M5 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M4.1 e i test M5, ripete le validazioni precedenti e rigenera specifiche, pesi, disturbance path, dataset e figure. Sono inclusi selezione della banda dai dati M2/M3, asintoti di `W1/W2`, verifica indipendente di `Bd` e separazione fra comando attuato e coppia esterna ai link. M5 non sintetizza controllori. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Alla milestone M6 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M5 e i test M6, ripete le validazioni precedenti e rigenera tuning LQR, selezione Kalman, controllore LQG, dataset e figure. Sono inclusi la coarse grid da 240 costi adimensionali, i 27 candidati Kalman, principio di separazione, tracking, disturbi e diagnostica seeded del rumore. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M5 — Specifiche di prestazione, disturbi e pesi di progetto**.
-- Risultato M5: target centralizzati con `omegaB=12` rad/s, `As=0.05`, `Ms=2`, `uScale=12` N m, `omegaU=30` rad/s e `alpha=6`; disturbo fisico di coppia ai link con `Bd` verificata.
-- Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
-- Prossimo passo: quality gate e revisione della Pull Request M5; M6 non è iniziata.
+- Milestone corrente: **M6 — LQG nominale senza integratore**.
+- Risultato LQR: candidato C193 con `wq=1`, `wdelta=0.1`, `wqdot=wthetaDot=0.5`, `rhoU=8`; worst settling 0.776 s e picco comando 4.6897 N m.
+- Risultato Kalman/LQG: KF03, ratio di decay 1.6928, controllore dinamico ordine 14 senza integratori e principio di separazione verificato.
+- Prossimo passo: revisione della Pull Request M6. M7, Simulink, nonlinear simulation e analisi robusta non sono iniziati.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.
