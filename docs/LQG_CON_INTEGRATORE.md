@@ -1,6 +1,12 @@
-# LQG nominale con azione integrale — checkpoint M7
+# LQG nominale con azione integrale — M7 e completamento 2-DoF
 
-## Stato della milestone
+## Stato corrente dopo il completamento autorizzato
+
+M7 resta `PARTIAL`. Dopo il merge del checkpoint 1-DoF, il gruppo ha autorizzato un servo 2-DoF con feedforward di riferimento calcolato separatamente per ogni `Kx`. Stage A ha riesaminato gli stessi 28 candidati e Stage B ha eseguito una sola estensione da 25 candidati. Entrambe restituiscono zero progetti fondamentali ammissibili. M5 è invariata e nessun candidato estremo è stato promosso.
+
+Gli artifact correnti sono `results/data/m7_lqi_2dof_feasibility.mat`, `results/figures/m7_lqi_candidate_comparison.png` e `results/figures/m7_lqi_feedforward_effect.png`. Il precedente `m7_lqi_grid_partial.mat` resta conservato senza riscrittura.
+
+## Stato del checkpoint 1-DoF preservato
 
 M7 è `PARTIAL`. La ricostruzione indipendente dell’augmentazione e l’intera griglia prescritta sono state completate, ma nessuno dei 28 candidati soddisfa simultaneamente il target di tracking M5 e il rigetto del disturbo costante. In accordo con il gate della milestone, M5 non è stato modificato e non sono stati costruiti né pubblicati un controllore LQG-I finale o il dataset finale `m7_lqg_integral.mat`.
 
@@ -118,3 +124,97 @@ Non sono state introdotte saturazioni, perché `uScale=12 N m` è una normalizza
 Il confronto completo richiesto non è producibile senza selezionare un controllore M7. Il risultato validato al checkpoint è più circoscritto: M6 soddisfa il tracking con worst settling 0.776 s ma conserva gli offset 0.079585/0.160232 rad; la griglia integrale annulla gli offset, mentre il miglior settling è 1.964 s. La tabella controller order, rumore e separation principle resta intenzionalmente assente fino alla revisione del gruppo.
 
 Il prossimo passo deve essere autorizzato esplicitamente: per esempio ampliare `wi`, introdurre un confronto feedforward secondario oppure rivedere la struttura del costo. Non è autorizzata una modifica automatica di M5.
+
+## 16. Autorizzazione del servo 2-DoF
+
+Il gruppo ha mantenuto target, scale e costo M6 e ha separato le due funzioni che nel checkpoint erano entrambe affidate all’integratore:
+
+\[
+\dot\xi=r-C_qx,\qquad
+u=-K_xx-K_i\xi+N_{ff}r.
+\]
+
+`Ki/xi` conserva l’internal model e il rigetto dei disturbi costanti. `Nff` agisce soltanto sul percorso nominale del riferimento. Non sostituisce l’integratore e non viene accreditato dell’offset nullo.
+
+## 17. Calcolo candidato-specifico di Nff
+
+Per ogni `Kx` è stato costruito
+
+\[
+A_{cl,x}=A-BK_x,\qquad
+G_{dc,x}=\operatorname{dcgain}(A_{cl,x},B,C_q,0),\qquad
+N_{ff}=G_{dc,x}\backslash I_2.
+\]
+
+Non è usato `Nr` M6 e non è usato `inv`. Sui 53 candidati complessivi il massimo condition number di `Gdc_x` è 1.75379 e il massimo residuo Frobenius `||Gdc_x*Nff-I||` è `2.483e-16`: tutti i problemi sono ben condizionati.
+
+Con riferimento nullo il termine `B*Nff*r` scompare. Le simulazioni con `Nff=0` e con `Nff` candidato-specifico restituiscono esattamente gli stessi offset da disturbo; la massima differenza numerica è 0 rad. L’errore statico nullo deriva quindi dall’integratore.
+
+## 18. Stage A — griglia originale con feedforward
+
+Stage A ha ripetuto prima di ogni estensione `wi=[0.05,0.10,0.25,0.50,1,2,4]` e `rhoU=[4,8,12,16]`. Tutti i 28 candidati sono stabili, ben condizionati e rigettano i due disturbi entro `1e-4 rad`; nessuno soddisfa simultaneamente settling e overshoot.
+
+Il punto con settling minimo resta la coppia I25 (`wi=4`, `rhoU=4`), ma non viene selezionato:
+
+| Metrica I25 | 1-DoF, `Nff=0` | 2-DoF |
+| --- | ---: | ---: |
+| worst settling | 1.964 s | 1.880 s |
+| worst overshoot | 0% | 28.824% |
+| peak control | 0.821 N m | 10.972 N m |
+| peak `xi` complessivo | valore nel dataset checkpoint | 0.039899 rad s |
+| worst offset disturbo | 0 rad | 0 rad |
+
+Per I25,
+
+\[
+N_{ff}=\begin{bmatrix}
+125.7326 & 6.23275\\
+17.6025 & 95.8478
+\end{bmatrix}.
+\]
+
+Il feedforward anticipa il riferimento e riduce lievemente il settling, ma introduce un overshoot incompatibile con il limite del 10%. Sui candidati a `wi` minore l’overshoot può restare sotto il limite, mentre la coda integrale non raggiunge il settling di 0.8 s.
+
+## 19. Confronto 1-DoF contro 2-DoF
+
+La tabella `feedforwardComparison` conserva per tutti i 28 punti Stage A settling, overshoot, picco comando, picco integrale e offset con e senza feedforward. L’effetto non è uniformemente favorevole: la crescita del comando accelera la salita, ma l’interazione con i poli del servo integrale genera sovraelongazione e coda lenta.
+
+Le risposte al disturbo delle due architetture si sovrappongono campione per campione perché `r=0`: questa è la verifica quantitativa che `Nff` non partecipa al rigetto statico.
+
+## 20. Stage B — unica estensione autorizzata
+
+Poiché Stage A ha prodotto 0/28 candidati ammissibili, è stata eseguita una sola griglia estesa con `wi=[4,8,16,32,64]` e `rhoU=[1,2,4,8,12]`. Tutti i 25 candidati sono stabili e annullano gli offset, ma nessuno soddisfa il gate.
+
+Il minimo settling appartiene a E16 (`wi=32`, `rhoU=1`):
+
+| Metrica diagnostica E16 | Valore |
+| --- | ---: |
+| worst settling | 1.020 s |
+| worst overshoot | 40.6448% |
+| peak control | 35.170 N m = 2.93083 `uScale` |
+| peak deformazione | 0.062403 rad = 4.9922 `deltaScale` |
+| `||Kx||F`, `||Ki||F`, `||Nff||F` | 1568.6, 1375.1, 492.56 |
+| peak `xi` | 0.014549 rad s |
+| worst picco disturbo | 0.047616 rad |
+| worst settling disturbo | 0.946 s |
+| worst offset disturbo | 0 rad |
+| polo dominante | -4.5617 ± 4.4982j |
+
+Il secondo giunto di E16 raggiunge 0.812 s, ma il primo richiede 1.020 s e sovraelonga del 40.6%. Il candidato non è ragionevole né ammissibile; non viene approvato.
+
+## 21. Feasibility table e secondo stop
+
+`feasibilityTable` ordina Stage B per settling e conserva `wi`, `rhoU`, comando, deformazione, norme dei tre guadagni, elementi di `Nff` e polo dominante. Il risultato mostra che aumentare `wi` fino a 64 non porta la coppia settling/overshoot nell’area richiesta. I punti più rapidi richiedono inoltre comandi e deformazioni nettamente maggiori.
+
+Il gate autorizzato prescrive lo stop se anche Stage B fallisce. Di conseguenza non sono stati costruiti il Kalman augmentato, il controller di ordine 16, la diagnostica measured/estimated, il rumore M7, il confronto finale M6/M7 o il dataset `m7_lqg_integral.mat`. KF03 e M6 restano invariati; non esiste un guadagno LQI approvato a cui associarli.
+
+## 22. Stato finale e limiti
+
+- software, griglie, test DC e artifact di feasibility: validabili indipendentemente;
+- sintesi controller M7: `FAIL` prestazionale, non errore numerico;
+- performance M7: `FAIL`, 0/28 Stage A e 0/25 Stage B;
+- stato milestone: `PARTIAL`;
+- M5, saturazioni e anti-windup: invariati;
+- M8: non iniziata.
+
+Ogni ulteriore modifica della struttura del servo o dei target richiede una nuova decisione del gruppo.

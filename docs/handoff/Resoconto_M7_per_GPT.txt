@@ -1,3 +1,157 @@
+RESOCONTO M7 PER GPT — UPDATE COMPLETAMENTO 2-DoF
+Data: 2026-08-24
+Responsabile: Alessio
+
+STATO CORRENTE
+M7 resta PARTIAL. Il checkpoint precedente è stato mergiato con PR #10 e
+rimane conservato integralmente. Il gruppo ha autorizzato un servo 2-DoF
+con feedforward candidato-specifico, ma sia Stage A sia l’unica Stage B
+autorizzata hanno prodotto zero candidati ammissibili. M5 non è stata
+modificata, nessun candidato estremo è stato promosso e M8 non è iniziata.
+
+MOTIVAZIONE 2-DoF
+Checkpoint 1-DoF:
+  xi_dot = r-q
+  u = -Kx*x-Ki*xi
+
+Completion autorizzata:
+  xi_dot = r-q
+  u = -Kx*x-Ki*xi+Nff*r
+
+Ki/xi resta l’internal model che annulla l’offset. Nff serve soltanto al
+transitorio nominale del riferimento e non sostituisce l’integratore.
+
+CALCOLO Nff
+Per ciascuna Kx:
+  Acl_x = A-B*Kx
+  Gdc_x = dcgain(ss(Acl_x,B,Cq,0))
+  Nff = Gdc_x\I2
+
+Non è usato inv. Non è usato automaticamente Nr M6. Su tutti i 53 punti:
+- max cond(Gdc_x) = 1.75379;
+- max ||Gdc_x*Nff-I||F = 2.483e-16;
+- tutti i feedforward sono ben condizionati;
+- max differenza offset disturbo fra Nff candidato e Nff=0 = 0 rad.
+
+Conclusione verificata: Nff modifica il tracking nominale; il rigetto del
+disturbo costante deriva da Ki/xi.
+
+STAGE A
+Griglia eseguita prima di ogni estensione:
+- wi=[0.05 0.10 0.25 0.50 1 2 4];
+- rhoU=[4 8 12 16];
+- 28/28 stabili;
+- 28/28 offset entro 1e-4 rad;
+- 0/28 ammissibili.
+
+Miglior settling Stage A: I25, che resta non selezionato.
+- wi=4, rhoU=4;
+- 1-DoF settling=1.964 s;
+- 2-DoF settling=1.880 s;
+- 2-DoF overshoot=28.824%;
+- peakU=10.972 N m=0.91435 uScale;
+- peakDelta/deltaScale=3.1972;
+- peakXi=0.039899 rad*s;
+- worst disturbance peak=0.064648 rad;
+- worst disturbance settling=2.19 s;
+- offset disturbo=0 rad;
+- Nff=[125.7326258 6.23274707;17.60252331 95.84776385].
+
+Il feedforward riduce lievemente il settling, ma l’overshoot supera il
+limite del 10%. I candidati con overshoot minore conservano code troppo
+lente e non raggiungono 0.8 s.
+
+STAGE B
+Stage B è stata eseguita soltanto dopo il fallimento Stage A:
+- wi=[4 8 16 32 64];
+- rhoU=[1 2 4 8 12];
+- 25/25 stabili;
+- 25/25 offset entro 1e-4 rad;
+- 0/25 ammissibili.
+
+Punto col miglior settling: E16, diagnostico e NON selezionato.
+- wi=32, rhoU=1;
+- worst settling=1.020 s;
+- worst overshoot=40.6448%;
+- tracking joint 1: 1.020 s, 40.6448%;
+- tracking joint 2: 0.812 s, 24.835%;
+- peakU=35.170 N m=2.93083 uScale;
+- peakDelta=0.062403 rad=4.9922 deltaScale;
+- peakXi=0.014549 rad*s;
+- norm(Kx)=1568.6;
+- norm(Ki)=1375.1;
+- norm(Nff)=492.56;
+- worst disturbance peak=0.047616 rad;
+- worst disturbance settling=0.946 s;
+- offset d1/d2=0/0 rad;
+- polo dominante=-4.5617 +/- 4.4982j.
+
+GUADAGNI E16 — SOLO FEASIBILITY, NON APPROVATI
+Kx = [
+1115.385705 109.8442426 75.73532828 18.34396013 -596.4371311 -56.54621354 1.852592682 -2.51243849 21.88560343 48.73968593 160.6542899 -1.00027158 -3.059549117 -28.23964357;
+115.2072476 746.8291532 23.35015313 21.48473 -19.14651515 -420.3749131 -1.825386377 9.117225768 -1.00027158 -2.924473225 -23.26874153 24.49942553 56.55814751 237.5230726
+]
+
+Ki = [
+-971.0122757 50.82705226;
+-50.82705226 -971.0122757
+]
+
+Nff = [
+403.0184818 34.47108897;
+69.81827191 272.2626336
+]
+
+CANDIDATO SELEZIONATO
+NESSUNO. Non è stato selezionato né I25 né E16. La feasibility table mostra
+che nessun punto raggiunge simultaneamente settling <=0.8 s e overshoot
+<=10%. La regola autorizzata impone quindi il secondo stop.
+
+KALMAN, CONTROLLER, MEASURED/ESTIMATED E RUMORE
+- KF03 M6 resta invariato, ma non viene associato a un LQI non approvato.
+- Controller ordine 16: NOT RUN.
+- Separation principle: NOT RUN.
+- measured-error vs estimated-error: NOT RUN.
+- rumore M7 e confronto finale M6/M7: NOT RUN.
+- saturazione e anti-windup: non introdotti.
+
+ARTIFACT COMPLETION
+- results/data/m7_lqi_2dof_feasibility.mat
+- results/figures/m7_lqi_candidate_comparison.png
+- results/figures/m7_lqi_feedforward_effect.png
+- feasibilityTable completa Stage B
+- feedforwardComparison completa Stage A
+
+TEST
+- Code Analyzer core M7: 0 messaggi.
+- Test M7 completion isolati: 19/19 PASS.
+- Test top-level: 111/111 PASS.
+- matlab.exe -batch "run_all": exit code 0.
+- Messaggio finale run_all: PARTIAL, Stage A 0/28 e Stage B 0/25.
+- Software/test PASS; controller synthesis NOT RUN; performance FAIL.
+
+QUALITY GATE
+- software/griglie/DC feedforward: PASS;
+- Stage A performance: FAIL, 0/28;
+- Stage B performance: FAIL, 0/25;
+- controller synthesis finale: NOT RUN;
+- M5 invariata: PASS;
+- stato M7: PARTIAL.
+
+GIT
+- main di partenza: f702b5b, merge checkpoint PR #10;
+- branch: codex/m7-integral-completion;
+- commit/PR completion: da aggiornare dopo il quality gate finale;
+- nessun merge autonomo.
+
+PROSSIMO PASSO
+Fermarsi e richiedere una nuova decisione del gruppo sulla struttura o
+sulla feasibility. Non modificare automaticamente M5. Non iniziare M8.
+
+=======================================================================
+STORICO PRESERVATO — CHECKPOINT 1-DoF PRECEDENTE
+=======================================================================
+
 RESOCONTO M7 PER GPT — CHECKPOINT PARTIAL
 Data: 2026-08-24
 Responsabile: Alessio

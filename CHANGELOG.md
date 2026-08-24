@@ -6,6 +6,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Servo LQI 2-DoF M7 con `Nff` derivato separatamente da ogni `Kx`, verifica DC, confronto 1-DoF/2-DoF e Stage A completa da 28 candidati.
+- Unica Stage B autorizzata da 25 candidati, feasibility table con guadagni/poli e dataset `m7_lqi_2dof_feasibility.mat`.
+- Figura dell’effetto feedforward e suite M7 completion T1–T20 per sequenza Stage A/B, derivazione `Nff`, indipendenza del rigetto e stop prestazionale.
 - Augmentazione LQI M7 a 16 stati con due integratori di posizione, controlli PBH/Rosenbrock a zero e riuso esatto del costo fisico M6.
 - Griglia M7 completa da 28 combinazioni `wi/rhoU`, metriche riproducibili di tracking e disturbo, dataset di checkpoint PARTIAL e figura originale del trade-off.
 - Test M7 del checkpoint per dimensioni, struttura, costi, determinismo, offset, assenza di selezione impropria e governance.
@@ -52,6 +55,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- M7 resta `PARTIAL` dopo il completamento 2-DoF: Stage A produce 0/28 candidati ammissibili e Stage B 0/25; M5 resta invariata.
 - Stato corrente portato a M7 `PARTIAL`: tutti i candidati annullano l’offset costante, ma il miglior settling è 1.964 s contro il target M5 di 0.8 s; nessuna modifica automatica di M5.
 - Corretta la classificazione epistemica M5: equilibrio D-0003 come decisione approvata e coppia ai link D-0014 come scelta di modellazione coerente con la traccia, senza variazioni numeriche.
 - Esteso il costo LQR con priorità adimensionali mantenendo inalterate le scale fisiche M5; centralizzati i valori selezionati da metriche.
