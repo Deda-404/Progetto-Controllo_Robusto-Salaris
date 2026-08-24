@@ -239,5 +239,7 @@ GIT / PR
 
 - base verificata: main al merge PR #11, commit b28a06a;
 - branch: codex/m7-augmented-cost-retuning;
-- Pull Request dedicata verso main: da aprire dopo il run_all finale;
+- Pull Request dedicata: #12
+  https://github.com/Deda-404/Progetto_CR/pull/12
+- stato PR verificato: open, draft=false, merged=false;
 - merge autonomo: NON eseguito.

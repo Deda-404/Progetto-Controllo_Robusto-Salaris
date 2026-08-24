@@ -6,7 +6,7 @@
 **Last validated result:** `run_all.m` exit 0, 121/121 test PASS; suite M7 estesa 29/29 PASS; C1 0/75 ammissibili e 0/75 promettenti
 **Blocking issues:** con i costi fisicamente normalizzati analizzati, settling ≤0.8 s e overshoot ≤10% non sono simultaneamente raggiunti
 **Next task:** revisione formale della specifica M5; non eseguire altro tuning M7 e non iniziare M8
-**Pull Request:** branch `codex/m7-augmented-cost-retuning`, PR dedicata da aprire verso `main`
+**Pull Request:** [#12 — M7: final augmented-cost feasibility study](https://github.com/Deda-404/Progetto_CR/pull/12), aperta, non draft e non unita
 **Last update:** 2026-08-24, ultima feasibility del costo augmentato
 
 ## Quality gate M7 final feasibility — PARTIAL

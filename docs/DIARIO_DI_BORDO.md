@@ -1064,3 +1064,27 @@ Fermarsi. La prossima attività richiede una revisione formale della specifica M
 ### Prossimo passo
 
 Pubblicare la PR dedicata senza merge e fermarsi. Il passo successivo autorizzabile è una revisione formale M5, non altro tuning e non M8.
+
+---
+
+## 2026-08-24 — Pubblicazione della feasibility finale M7
+
+**Responsabile:** Alessio
+**Milestone:** M7 final feasibility
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `e95fbed` per software, test e artifact e `1c75d9b` per documentazione e handoff.
+- Pubblicato `codex/m7-augmented-cost-retuning` su `origin`.
+- Aperta la Pull Request [#12](https://github.com/Deda-404/Progetto_CR/pull/12) verso `main`.
+- Verificato via API che la PR sia `open`, `draft=false`, `merged=false`, con head e base corretti.
+- Aggiornato l'handoff scaricabile con C1/C2/C3, Pareto, punti diagnostici, confronto checkpoint, test, `run_all` e gate finale.
+
+### Risultato
+
+**Ultima feasibility M7 pubblicata per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Fermarsi. È richiesta una revisione formale della specifica M5; non ampliare le griglie, non eseguire altro tuning M7 e non iniziare M8.
