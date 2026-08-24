@@ -11,8 +11,11 @@ non è stato costruito un controllore LQG-I finale. M8 non è stata iniziata.
 BASE GIT
 - origin/main verificato sul merge M6: 5326567 (merge PR #9).
 - Branch: codex/m7-lqg-integral.
-- Commit: da completare dopo i test finali.
-- PR: da aprire verso main; nessun merge autonomo.
+- Commit implementazione/checkpoint: fde78ff.
+- Commit rigenerazione artifact baseline: 16befa6.
+- PR: #10, https://github.com/Deda-404/Progetto_CR/pull/10
+- Stato PR verificato: open, draft=false, merged=false, base=main.
+- Nessun merge autonomo.
 
 FORMULAZIONE INTEGRALE
 - Pianta fisica: M3 nominale completa, 14 stati, 2 ingressi.

@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` exit 0, 107/107 test PASS; M7 checkpoint con 28/28 candidati stabili e offset DC entro `1e-4 rad`, 0/28 entro il settling M5, minimo 1.964 s
 **Blocking issues:** la griglia integrale prescritta non raggiunge il target di settling 0.8 s senza `Nr`; revisione del gruppo richiesta
 **Next task:** decidere esplicitamente il retuning M7; non modificare M5 e non iniziare M8
-**Pull Request:** da aprire sul branch `codex/m7-lqg-integral`; PR M6 #9 già unita in `main`
-**Last update:** 2026-08-24 23:05 CEST
+**Pull Request:** [#10 — M7: evaluate integral LQG grid checkpoint](https://github.com/Deda-404/Progetto_CR/pull/10), aperta, non draft e non unita
+**Last update:** 2026-08-24 23:50 CEST
 
 ## Quality gate M7 — checkpoint PARTIAL
 

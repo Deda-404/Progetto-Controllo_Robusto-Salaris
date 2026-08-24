@@ -892,3 +892,27 @@ La pipeline è tecnicamente riproducibile e termina con il messaggio esplicito `
 ### Prossimo passo
 
 Pubblicare il checkpoint su PR dedicata senza merge e attendere la decisione del gruppo sul retuning. Non iniziare M8.
+
+---
+
+## 2026-08-24 23:50 — Pubblicazione PR e handoff del checkpoint M7
+
+**Responsabile:** Alessio
+**Milestone:** M7
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `fde78ff` per implementazione, test, documentazione e artifact M7 e `16befa6` per la rigenerazione degli artifact baseline durante `run_all`.
+- Pubblicato `codex/m7-lqg-integral` su `origin`.
+- Aperta la Pull Request [#10](https://github.com/Deda-404/Progetto_CR/pull/10) verso `main`.
+- Verificato via API che la PR sia `open`, `draft=false`, `merged=false`, con head e base corretti.
+- Aggiornato l’handoff scaricabile con formulazione, griglia, guadagni diagnostici, trade-off, test e motivo dello stop.
+
+### Risultato
+
+**Checkpoint M7 PARTIAL pubblicato per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere istruzioni del gruppo sulla strategia di retuning. Non modificare M5 e non iniziare M8.
