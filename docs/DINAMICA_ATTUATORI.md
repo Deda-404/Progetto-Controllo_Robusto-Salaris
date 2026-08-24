@@ -30,7 +30,7 @@ Ne segue un attuatore SISO di ordine 3. Due copie diagonali producono un blocco 
 
 ## Analisi deterministica e scelta nominale
 
-I parametri non sono forniti dalla traccia. Prima di consultare il riferimento sono stati valutati 27 candidati ottenuti dal prodotto cartesiano:
+I parametri non sono forniti dalla traccia. Sono valutati 27 candidati ottenuti dal prodotto cartesiano:
 
 | Parametro | Valori valutati |
 | --- | --- |
@@ -48,7 +48,53 @@ La tabella completa è generata da `analysis/nominal/select_nominal_actuator.m` 
 | Banda | 16.0573 rad/s | 68.8348 rad/s |
 | Errore di fase Padé a 80 rad/s | 2.2338° | 24.5916° |
 
-È selezionato il candidato `C14`:
+### Correzione metodologica M3.1
+
+Una **candidate comparison** calcola e confronta le metriche, ma non costituisce una selezione se il candidato finale è già noto e viene soltanto riconosciuto nella tabella. La prima versione M3 leggeva `actuator_params_nominal.m` prima di costruire la griglia: le metriche erano corrette, ma l'etichetta del candidato selezionato dipendeva da valori già dichiarati.
+
+Una **candidate selection** applica invece una regola completa ai risultati della griglia e restituisce il vincitore senza conoscerlo in anticipo. In M3.1 `select_nominal_actuator.m` non dipende più da `actuator_params_nominal.m`; usa esclusivamente poli M2, metriche calcolate e criteri espliciti.
+
+Dai poli M2 sono ricavati:
+
+\[
+\lambda_{u,max}=\max_{\Re(p)>0}|p|=7.20943\ \mathrm{rad/s},
+\]
+
+\[
+\omega_{el,min}=\min_{\Im(p)\ne0}|p|=69.9543\ \mathrm{rad/s}.
+\]
+
+La finestra di banda adottata è:
+
+\[
+BW_{min}=4\lambda_{u,max}=28.8377\ \mathrm{rad/s},\qquad
+BW_{max}=0.60\omega_{el,min}=41.9726\ \mathrm{rad/s}.
+\]
+
+I coefficienti 4 e 0.60 sono criteri progettuali M3.1, non requisiti imposti dalla traccia. Ogni candidato deve inoltre soddisfare:
+
+\[
+M_p\le2\%,\qquad
+|\Delta\phi_{Pad\acute e}(80)|\le10^\circ.
+\]
+
+I candidati ammissibili sono:
+
+| ID | \(\omega_n\) | \(\zeta\) | Ritardo | Settling | Overshoot | Banda | Errore fase 80 rad/s |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| C13 | 40 rad/s | 0.8 | 10 ms | 0.10405 s | 1.5034% | 34.783 rad/s | 2.2338° |
+| C14 | 40 rad/s | 0.8 | 15 ms | 0.10936 s | 1.4722% | 34.783 rad/s | 6.8274° |
+| C25 | 60 rad/s | 1.0 | 10 ms | 0.10743 s | 0% | 38.537 rad/s | 2.2338° |
+| C26 | 60 rad/s | 1.0 | 15 ms | 0.11293 s | 0% | 38.537 rad/s | 6.8274° |
+
+La regola deterministica è:
+
+1. scartare ogni candidato che viola almeno un vincolo;
+2. trovare il minimo settling ammissibile e considerare in quasi-parità i candidati entro il 10% da tale minimo;
+3. nel gruppo in quasi-parità preferire il ritardo maggiore ancora compatibile col limite di fase;
+4. risolvere ogni ulteriore parità preferendo, nell'ordine, settling minore, overshoot minore, distanza minore dal centro della finestra di banda, \(\omega_n\) minore, \(\zeta\) minore e indice del candidato minore.
+
+La soglia relativa del 10% rende esplicito il significato di dinamica quasi equivalente. Tutti e quattro i candidati ammissibili rientrano nel gruppo; la preferenza per 15 ms restringe la scelta a C14 e C26, quindi il minor settling seleziona `C14`. La selezione ottenuta dalle metriche coincide con i parametri già dichiarati, perciò il modello nominale non cambia:
 
 \[
 \boxed{\omega_n=40\ \mathrm{rad/s},\quad \zeta=0.8,\quad

@@ -26,6 +26,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Analisi deterministica di 27 candidati e diagnostica strutturale SVD/PBH con normalizzazione temporale.
 - Suite M3 con undici test, dataset nominale e tre figure frequenziali originali e rigenerabili.
 - `docs/DINAMICA_ATTUATORI.md` con modello, scelta, Padé, interconnessione, poli, proprietà strutturali e limiti.
+- Cinque test M3.1 per indipendenza della selezione, appartenenza alla griglia, vincoli, esclusione dei non ammissibili e determinismo.
 
 ### Changed
 
@@ -37,6 +38,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Promosse a decisioni approvate equilibrio verticale, misura `[q;theta]` e uscita prestazionale `q` sulla base dei risultati eseguiti.
 - Esteso `run_all.m` alla pipeline M3 completa con selezione attuatori, regressioni M0–M2, validazione, dati e figure.
 - Approvata la decisione D-0006: \(\omega_n=40\) rad/s, \(\zeta=0.8\), \(\tau_d=15\) ms, Padé ordine 1 e canali nominalmente identici.
+- Rifattorizzato `select_nominal_actuator.m`: la funzione seleziona dai 27 candidati usando poli M2, vincoli espliciti e tie-break deterministici, senza leggere i parametri nominali dichiarati.
+- Esteso il dataset M3 con criteri M3.1, candidati ammissibili, regola di selezione e verifica separata di coerenza col nominale.
+- Aggiornate motivazione D-0006 e documentazione per distinguere `candidate comparison` da `candidate selection`.
 
 ### Fixed
 
@@ -68,3 +72,6 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Controllabilità/osservabilità 14/14 sul tempo normalizzato e PBH a rango pieno su tutti i modi.
 - Confronto Padé: errori fase 0.001063°/0.006028° sui modi instabili e 4.76162°/6.82742° a 70/80 rad/s.
 - `run_all.m` M3 con 29/29 test top-level e quality gate M1–M3 PASS.
+- M3.1 con finestra 28.8377–41.9726 rad/s, overshoot massimo 2% ed errore fase Padé massimo 10° a 80 rad/s.
+- Candidati ammissibili C13, C14, C25 e C26; selezione da metriche C14, coincidente con 40 rad/s, 0.8 e 15 ms già dichiarati.
+- `run_all.m` M3.1 con 34/34 test top-level, Code Analyzer senza messaggi e regressioni M0–M3 PASS.
