@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` in MATLAB R2025b, 48/48 test top-level, screening, `WI`, `Gunc`, coerenza nominale e 40/40 campioni PASS
 **Blocking issues:** nessuno
 **Next task:** revisione della Pull Request M4; non iniziare M5 senza il successivo incarico del gruppo
-**Pull Request:** da aprire sul branch `codex/m4-uncertainty-model`
-**Last update:** 2026-08-24 16:31 CEST
+**Pull Request:** [#6 — M4: uncertainty modeling and uncertain SEA plant](https://github.com/Deda-404/Progetto_CR/pull/6), aperta e non unita
+**Last update:** 2026-08-24 16:46 CEST
 
 ## Ensemble baseline M4
 

@@ -515,3 +515,35 @@ I range non sono identificati sperimentalmente; `Jm2` è vicino a `Jm1` nel rank
 ### Prossimo passo
 
 Eseguire Code Analyzer e `run_all` finali, ispezionare le figure rigenerate, aggiornare gli esiti, creare commit/push/PR e handoff. Fermarsi senza iniziare M5.
+
+---
+
+## 2026-08-24 16:46 — Pubblicazione PR e handoff M4
+
+**Autore:** Codex
+**Milestone:** M4
+**Tipo:** Quality gate finale / Git / Handoff
+
+### Attività svolta
+
+- Eseguito `matlab.exe -batch "run_all"`: 48/48 test top-level e validazioni M1–M4 PASS, exit code 0.
+- Eseguito Code Analyzer sui file M4 e `run_all.m`: 0 messaggi.
+- Rigenerate e ispezionate le tre figure M4 con assi chiari e legende corrette.
+- Verificato che il rilancio avesse modificato nei vecchi artifact M2/M3 soltanto timestamp/metadata; ripristinati quei sei file da HEAD per evitare rumore nella PR.
+- Creati i commit 82cf501 per implementazione/test/artifact e cb89427 per documentazione/decisioni.
+- Pubblicato `codex/m4-uncertainty-model` su `origin`.
+- Aperta la Pull Request #6 verso `main`: https://github.com/Deda-404/Progetto_CR/pull/6.
+- Verificato alla creazione che la PR fosse `open` e `merged=false`.
+- Creato `docs/handoff/Resoconto_M4_per_GPT.txt` senza sovrascrivere gli handoff precedenti.
+
+### Problemi e correzioni
+
+Il primo tentativo di apertura PR tramite PowerShell non ha ricevuto dati dall'helper credenziali e si è arrestato prima della richiesta HTTP. È stato riutilizzato in memoria l'helper Git che aveva autenticato il push; la PR è stata creata senza stampare o salvare segreti.
+
+### Risultato
+
+**SUCCESSO — M4 pubblicata per revisione, PR #6 aperta, handoff completo e nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M5.
