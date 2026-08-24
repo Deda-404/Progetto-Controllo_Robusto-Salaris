@@ -6,6 +6,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Modello originale `SEA_LQG_nonlinear.slx` con 14 stati fisici, stimatore M6
+  a 14 stati, coordinate assolute/incrementali esplicite e nessuna dipendenza
+  dal base workspace.
+- Pipeline M8 per equilibrio, tracking 2/5/8°, disturbi lato link, rumore
+  seeded, confronto LTI/non lineare e metriche di sforzo/deformazione.
+- Ricerca RAS empirica deterministica con griglia 5×5, 36 direzioni, bisezione,
+  criterio di coda e seconda sezione a stima iniziale coerente.
+- Dataset `m8_lqg_nonlinear_ras.mat`, cinque figure, documento
+  `SIMULINK_RAS_LQG.md` e suite M8 T1–T18.
+
 - Co-tuning M7 finale delle sole priorità adimensionali del costo augmentato, con Stage C1 completa da 75 candidati e gate vincolanti verso C2/C3.
 - Dataset `m7_augmented_cost_feasibility.mat`, frontiera di Pareto, figura trade-off e confronto M6/I25/E16/finale.
 - Funzioni riusabili per `Nff` candidato-specifico e valutazione del servo 2-DoF, più test M7 estesi per scale, stadi, target, offset e stop.
@@ -59,6 +69,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- M7 è congelata come feasibility terminale `PARTIAL`; M8 usa il solo
+  controllore M6 invariato e porta la milestone corrente a `COMPLETE`.
+- Esteso `run_all.m` alla costruzione e al quality gate M8 completo.
+
 - M7 resta `PARTIAL` dopo l'ultima feasibility: C1 produce 0/75 candidati ammissibili e 0/75 promettenti; C2/C3 non vengono eseguite e il prossimo passo è una revisione formale M5.
 - Il costo LQI può variare coefficienti adimensionali mantenendo esattamente le scale M6/M7 e la costruzione `Qaug=CaugCost'*CaugCost`.
 - M7 resta `PARTIAL` dopo il completamento 2-DoF: Stage A produce 0/28 candidati ammissibili e Stage B 0/25; M5 resta invariata.
@@ -96,6 +110,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- Equilibrio Simulink con errori massimi q/theta/u rispettivamente
+  `4.086e-17`, `3.845e-17` e `1.686e-15`.
+- Sei tracking e sei disturbi non lineari; scarto LTI/NL massimo
+  `6.2015e-4 rad`; rumore seed 20260826 riproducibile.
+- Entrambe le sezioni RAS con 57/57 punti convergenti nel box computazionale
+  ±60°, 36 direzioni e area poligonale 14214 deg²; frontiera search-box
+  limited, non certificato analitico.
+- `run_all.m` M8 con 139/139 test top-level, exit code 0 e Code Analyzer senza
+  messaggi sui nove file MATLAB M8 nuovi o modificati.
 
 - I cinque candidati LQR M6 sono stabilizzanti e rispettano overshoot, tracking statico e cross-coupling preliminare, ma falliscono tutti il target di settling 0.8 s con worst case 1.222–1.232 s; M6 arrestata come `PARTIAL` prima del Kalman.
 - Il retuning autorizzato produce 139/240 candidati LQR ammissibili; C193 raggiunge settling 0.776 s con picco comando 0.3908 della scala prestazionale.

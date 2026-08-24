@@ -64,15 +64,20 @@ M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la 
 - [x] Motivare e registrare \(Q\) e \(R\).
 - [x] Motivare e registrare covarianze di processo e misura.
 - [x] Verificare principio di separazione e poli dell'anello chiuso.
-- [ ] Validare stima dello stato, rumore e condizioni iniziali.
+- [x] Validare stima dello stato, rumore e condizioni iniziali per M6.
 - [x] Confrontare errore a regime con disturbo costante.
 - [ ] Confrontare sforzo di controllo con e senza integratore.
 - [ ] Implementare entrambe le versioni in Simulink.
 - [x] Validare la versione senza integratore sul modello linearizzato.
-- [ ] Validare entrambe sul modello non lineare.
-- [ ] Stimare e documentare la RAS empirica di entrambe.
+- [x] Validare M6 senza integratore sul modello non lineare.
+- [x] Stimare e documentare la RAS empirica M6 su due sezioni.
 
-Il checkpoint M7 ha completato augmentazione, verifica PBH e griglia LQI da 28 candidati; il completamento 2-DoF ha poi valutato `Nff` candidato-specifico sugli stessi punti e una Stage B da 25. L'ultima feasibility autorizzata ha co-tunato le sole priorità adimensionali: C1 ha eseguito 75/75 candidati stabili, ma 0 sono ammissibili e 0 soddisfano il gate “promettente”. C2 e C3 non erano quindi autorizzate. Il miglior settling è 1.026 s con 40.8714% di overshoot; il minimo overshoot è 9.61367% con settling non raggiunto entro 3 s. La voce “LQG con integratore” resta correttamente aperta, nessun controllore finale è stato pubblicato e il prossimo passo richiede una revisione formale M5.
+M7 resta correttamente `PARTIAL`: nessun controllore integrale finale è stato
+pubblicato. M8 ha validato nel modello Simulink non lineare il solo LQG M6,
+inclusi equilibrio, tracking 2/5/8°, disturbi, rumore, confronto LTI/NL e RAS
+empirica. I25 resta un representative integral benchmark lineare e non entra
+nel gate M8; pertanto le voci che richiedono *entrambe* le versioni rimangono
+aperte senza occultare il risultato terminale M7.
 
 ## Controllo \(H_\infty\)
 
@@ -112,8 +117,8 @@ Il checkpoint M7 ha completato augmentazione, verifica PBH e griglia LQI da 28 c
 ## Validazione e confronto
 
 - [ ] Validare \(H_\infty\) e \(\mu\)-synthesis sul modello non lineare.
-- [ ] Definire criteri automatici e riproducibili per la RAS.
-- [ ] Esplorare un dominio e un insieme di stati iniziali documentati.
+- [x] Definire criteri automatici e riproducibili per la RAS LQG M6.
+- [x] Esplorare due sezioni e un dominio di stati iniziali documentati per M6.
 - [ ] Impostare un seed Monte Carlo esplicito.
 - [ ] Campionare indicativamente almeno 10 impianti incerti.
 - [ ] Confrontare stabilità, tempo di assestamento, banda ed errore.

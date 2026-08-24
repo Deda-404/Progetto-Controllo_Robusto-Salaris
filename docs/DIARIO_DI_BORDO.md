@@ -1088,3 +1088,112 @@ Pubblicare la PR dedicata senza merge e fermarsi. Il passo successivo autorizzab
 ### Prossimo passo
 
 Fermarsi. È richiesta una revisione formale della specifica M5; non ampliare le griglie, non eseguire altro tuning M7 e non iniziare M8.
+
+---
+
+## 2026-08-24 — Chiusura governance M7 e autorizzazione M8
+
+**Responsabile:** Alessio
+**Milestone:** chiusura M7 / avvio M8
+**Tipo:** Governance / Git
+
+### Attività svolta
+
+- Verificato il merge della PR #12 in `origin/main` al commit `6339bc2`.
+- Aggiornato lo stato obsoleto che indicava la PR aperta e M8 non autorizzata.
+- Congelato M7 come `PARTIAL — feasibility conclusa e accettata; nessun ulteriore tuning previsto`.
+- Confermato M6 come ultimo controllore validato e M8 come milestone corrente.
+- Creato il branch `codex/m8-simulink-lqg-ras` dall'ultimo `main` remoto.
+
+### Vincoli confermati
+
+M5 e i checkpoint M7 restano invariati. M8 userà esclusivamente `K`, `L`, `Nr` M6 senza rituning; non sono autorizzati M9, sintesi H-infinity o mu-analysis.
+
+---
+
+## 2026-08-24 — Modello Simulink e validazioni non lineari M8
+
+**Responsabile:** Alessio
+**Milestone:** M8
+**Tipo:** Implementazione / Simulink / Validazione
+
+### Attività svolta
+
+- Costruito programmaticamente `SEA_LQG_nonlinear.slx` con controller M6,
+  attuatori nominali M3 e meccanica non lineare M1.
+- Separati plant assoluto, misure/riferimenti incrementali e stato stimatore.
+- Eliminata ogni dipendenza dal base workspace mediante parametri incorporati
+  e `Simulink.SimulationInput`.
+- Confrontati `ode45` e `ode23t`; selezionato `ode23t` con tolleranze motivate.
+- Eseguiti equilibrio, sei tracking, sei disturbi fisici, rumore seeded e
+  confronti LTI/non lineare.
+- Definito il criterio RAS prima della ricerca e implementate griglia
+  grossolana, ricerca radiale e bisezione deterministica.
+
+### Risultati
+
+L'equilibrio non mostra drift. Lo scarto LTI/non lineare massimo sui tracking
+è `6.2015e-4 rad` nel caso 8°. Gli offset da disturbo restano visibili, come
+previsto per M6 senza integratore. Il rumore con seed 20260826 è riproducibile
+con errore di rilancio nullo.
+
+La sezione primaria `xhat0=0` e la sezione con stima iniziale coerente
+producono entrambe 57/57 punti convergenti nel box ±60°. La frontiera è quindi
+search-box limited; area poligonale 14214 deg² e raggi 60–78.3244°.
+
+### Limiti
+
+La RAS è empirica e sezionale, non una certificazione completa. Il box è un
+limite numerico, non fisico. Nessuna saturazione, sintesi robusta, Monte Carlo
+o nuovo tuning è stato introdotto. I25 resta fuori dal gate e viene citato
+solo come representative integral benchmark lineare M7.
+
+### Quality gate
+
+**PASS — M8 COMPLETE; M7 resta PARTIAL e congelata.**
+
+---
+
+## 2026-08-24 — Quality gate software M8
+
+**Responsabile:** Alessio
+**Milestone:** M8
+**Tipo:** Test / Pipeline / Artifact
+
+### Verifiche eseguite
+
+- Code Analyzer sui nove file MATLAB M8 nuovi o modificati: 0 messaggi.
+- Suite M8 isolata: 18/18 test PASS anche dopo la ricostruzione del modello.
+- `matlab.exe -batch "run_all"`: 139/139 test top-level PASS, exit code 0.
+- Rigenerate realmente le validazioni M0–M7 e l'intera pipeline M8, incluse
+  114 simulazioni/punti unici sulle due sezioni RAS.
+- Verificata la presenza di tutti i campi obbligatori del dataset e delle
+  cinque figure.
+- `git diff --check`: PASS; gli artifact storici M2–M7 rigenerati senza
+  modifiche progettuali sono stati ripristinati al contenuto versionato.
+
+### Risultato
+
+**Quality gate M8 completo PASS.** Il prossimo passo indicato è M9, ma non è
+stato iniziato.
+
+---
+
+## 2026-08-24 — Pubblicazione M8
+
+**Responsabile:** Alessio
+**Milestone:** M8
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati tre commit separati per software, artifact e documentazione.
+- Pubblicato `codex/m8-simulink-lqg-ras` su `origin`.
+- Aperta la Pull Request
+  [#13](https://github.com/Deda-404/Progetto_CR/pull/13) verso `main`.
+- Creato l'handoff scaricabile `Resoconto_M8_per_GPT.txt` con architettura,
+  metriche, RAS, test, quality gate e riferimenti Git.
+
+### Risultato
+
+**M8 pubblicata per revisione senza merge autonomo. M9 non iniziata.**

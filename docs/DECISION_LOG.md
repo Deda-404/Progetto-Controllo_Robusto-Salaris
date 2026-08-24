@@ -1412,3 +1412,74 @@ Nessun candidato finale è selezionato. KF03 non viene associato a un servo non 
 ### Stato epistemico
 
 **ULTIMA FEASIBILITY M7 CONCLUSA — PERFORMANCE FAIL, M7 PARTIAL, REVISIONE FORMALE M5 RICHIESTA**
+
+---
+
+## D-0034 — Accettazione terminale della feasibility M7 e autorizzazione M8
+
+**Data:** 2026-08-24
+**Milestone:** chiusura M7 / avvio M8
+
+### Problema
+
+Stabilire se il mancato raggiungimento simultaneo di `Ts<=0.8 s` e `OS<=10%` richieda altro tuning M7 oppure possa essere conservato come risultato progettuale prima della validazione non lineare.
+
+### Decisione
+
+La feasibility M7 è considerata conclusa. Il mancato raggiungimento simultaneo dei target Ts/OS viene mantenuto come risultato progettuale, senza tuning ulteriore. M8 è autorizzata.
+
+### Motivazione
+
+Tre fasi indipendenti hanno verificato struttura integrale, servo 2-DoF e co-tuning del costo fisicamente normalizzato senza produrre un candidato ammissibile. Un'ulteriore ricerca cambierebbe il perimetro approvato senza nuova evidenza. La validazione Simulink/non lineare può invece procedere sul controllore M6 già completo e validato.
+
+### Conseguenze e limiti
+
+M7 resta `PARTIAL`, non `COMPLETE`. I checkpoint M7 e M5 restano invariati. Il controllore primario M8 è esclusivamente M6 (`K`, `L`, `Nr` dal dataset approvato); I25 può comparire soltanto come “representative integral benchmark” diagnostico. M8 non autorizza nuovo tuning LQR/LQI/Kalman e non autorizza M9.
+
+### Stato epistemico
+
+**M7 PARTIAL ACCETTATA COME RISULTATO TERMINALE — M8 AUTORIZZATA**
+
+---
+
+## D-0035 — Sezioni e criterio deterministico della RAS empirica M8
+
+**Data:** 2026-08-24
+**Milestone:** M8
+
+### Problema
+
+Definire una validazione non lineare riproducibile del controllore M6 senza
+confondere una ricerca numerica su sezioni con un certificato della regione di
+attrazione completa.
+
+### Decisione
+
+La sezione primaria usa perturbazioni `dq1/dq2`, velocità nulle, `theta`
+traslata dello stesso `dq`, attuatori all'equilibrio e stimatore incrementale
+nullo. La seconda sezione diagnostica modifica soltanto l'inizializzazione
+dello stimatore, resa coerente con lo stato fisico. Il criterio usa gli ultimi
+10% di 8 s, soglie 0.5°/0.02 rad/s/0.5°/0.05 rad/s, finitezza, limitatezza e
+assenza di crescita; l'estensione a 12 s segue una regola deterministica.
+
+La ricerca combina griglia 5×5 e 36 raggi con bisezione a 1° dentro il box
+±60°. `60°` è esclusivamente un limite computazionale. Nessuna saturazione è
+aggiunta e `uScale=12 N m` resta una normalizzazione M5.
+
+### Risultato e motivazione
+
+Entrambe le sezioni hanno 57/57 punti unici convergenti; tutti gli endpoint
+radiali raggiungono il search box. I raggi campionati sono 60–78.3244° e
+l'area poligonale è 14214 deg². Non essendo stata trovata una divergenza, la
+curva pubblicata è una frontiera della ricerca, non una frontiera dinamica.
+
+### Conseguenze e limiti
+
+Il risultato dimostra convergenza soltanto nei punti esplorati. Non autorizza
+estrapolazioni fuori dal box, certificazioni 14D, saturazioni hardware,
+Monte Carlo o robustezza M4. I25 resta un “representative integral benchmark”
+lineare già documentato e non entra nel gate M8.
+
+### Stato epistemico
+
+**APPROVATA COME STIMA EMPIRICA SU DUE SEZIONI — NON CERTIFICATO ANALITICO**
