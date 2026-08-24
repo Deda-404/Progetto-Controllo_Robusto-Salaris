@@ -78,3 +78,78 @@ Creare il commit M0, tentare il push del branch e attendere la revisione del gru
 Branch: `codex/m0-project-setup`
 Commit: commit M0 associato a questa voce (vedere `git log`)
 Messaggio: `chore: initialize robust control project workspace`
+
+---
+
+## 2026-08-24 12:39 — Implementazione e validazione M1
+
+**Autore:** Codex
+**Milestone:** M1
+**Tipo:** Modellazione / Test / Documentazione / Git
+
+### Attività svolta
+
+- Verificata l'approvazione M0 tramite merge remoto della PR #1, aggiornato `main` e creato il branch `codex/m1-nonlinear-model`.
+- Aggiunta in `AGENTS.md`, prima del codice M1, la regola permanente di ricostruzione indipendente e consultazione reference-last.
+- Derivate dalla traccia le funzioni per parametri nominali, \(M(q)\), \(C(q,\dot q)\), \(G(q)\), deformazione/coppia SEA e RHS non lineare completo a otto stati.
+- Fissata nel Decision Log la convenzione unica \(x=[q;\dot q;\theta;\dot\theta]\) e l'ingresso di coppia motore \(\tau\).
+- Creati sette test M1 deterministici, inclusa una verifica che ricalcola direttamente le formule della traccia senza riusare le funzioni sotto test.
+- Creata una validazione numerica dedicata e integrati test M0, test M1 e quality gate in `run_all.m`.
+- Eseguita una prima versione funzionante in MATLAB prima di consultare l'inventario del riferimento; effettuato poi soltanto un confronto metodologico ad alto livello.
+- Documentati equazioni, unità, API, prova analitica della positività, risultati numerici, confronto e limiti in `docs/MODELLO_NON_LINEARE.md`.
+
+### File creati
+
+- `src/parameters/sea_params_nominal.m`
+- `src/model/sea_link_inertia.m`
+- `src/model/sea_coriolis.m`
+- `src/model/sea_gravity.m`
+- `src/model/sea_elastic_torque.m`
+- `src/model/sea_nonlinear_rhs.m`
+- `tests/test_m1_nonlinear_model.m`
+- `analysis/nominal/validate_m1_nonlinear_model.m`
+- `docs/MODELLO_NON_LINEARE.md`
+
+### File modificati
+
+- `AGENTS.md`, `run_all.m`, `README.md`, `CHANGELOG.md`
+- `docs/DECISION_LOG.md`, `docs/REQUIREMENTS_CHECKLIST.md`, `docs/PROJECT_STATUS.md`, `docs/DIARIO_DI_BORDO.md`
+
+### Errori incontrati e correzioni
+
+- Il primo `git fetch` eseguito con il client Linux non ha trovato credenziali interattive per GitHub. Il fetch è stato ripetuto con il runtime Git autenticato fornito dall'ambiente Codex e ha aggiornato correttamente `origin/main`.
+- La prima esecuzione MATLAB del modello e dei test non ha prodotto errori; non sono stati nascosti test falliti.
+- Un primo comando opzionale di analisi statica ha costruito in modo errato la lista dei file e MATLAB lo ha respinto prima di analizzare il codice. Il comando è stato corretto; sono state poi rimosse due direttive di soppressione obsolete segnalate da Code Analyzer.
+
+### Verifiche e risultati
+
+- `run_all.m` eseguito realmente con MATLAB R2025b Update 4: 9 test su 9 superati (2 M0 e 7 M1).
+- Campionate 2001 configurazioni di \(q_2\) in \([-\pi,\pi]\): minimo autovalore di \(M\) pari a 0.01904266522239113 a \(q_2=0\) rad.
+- Massimo errore di simmetria di \(M\): 0, con tolleranza \(10^{-12}\).
+- Massimo residuo antisimmetria di \(\dot M-2C\): \(4.906538933386797\times10^{-18}\), con tolleranza \(10^{-12}\), su 7 casi deterministici.
+- Errori massimi delle verifiche dirette di gravità, elasticità e coerenza cinematica: 0, con tolleranza \(10^{-12}\).
+- RHS 8×1 finito in 4 casi su 4, inclusi velocità, deformazioni e coppie non nulle.
+- Totale valutazioni deterministiche riportate dalla validazione: 2018.
+- Code Analyzer eseguito sui file MATLAB di `src`, `analysis`, `tests` e su `run_all.m`: 0 messaggi dopo la correzione.
+- `run_all.m` rieseguito dalla radice dopo le correzioni finali: PASS con codice di uscita 0.
+
+### Confronto finale con il riferimento
+
+Il riferimento conferma ad alto livello la stessa catena fisica imposta dalla traccia e l'uso di una dinamica a otto stati. La nostra organizzazione è modulare, numerica, senza dataset e accompagnata da test strutturali indipendenti; simbolico, equilibrio e linearizzazione sono stati deliberatamente rinviati. Non sono emersi termini meccanici mancanti e non sono stati copiati codice, commenti, test, dataset o risultati.
+
+### Risultato
+
+**SUCCESSO — M1 COMPLETE, quality gate PASS.**
+
+### Problemi aperti
+
+Nessun blocco per M1. Equilibrio, linearizzazione, attuatori esterni, incertezze e controllori restano fuori scope.
+
+### Prossimo passo
+
+Completare commit, push e Pull Request M1, quindi attendere la revisione del gruppo senza iniziare M2.
+
+### Git
+
+Branch: `codex/m1-nonlinear-model`
+Commit e Pull Request: da associare alla chiusura della milestone (vedere `git log` e PR del branch)

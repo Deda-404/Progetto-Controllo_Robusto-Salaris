@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M0 il comando configura i path, imposta il seed riproducibile ed esegue esclusivamente gli smoke test della struttura. Le pipeline tecniche saranno aggiunte nelle milestone successive senza dipendere da variabili residue nel workspace.
+Alla milestone M1 il comando pulisce e configura l'ambiente, esegue gli smoke test M0, i sette test automatici del modello e la validazione numerica deterministica M1. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
 
 ## Stato corrente
 
-- Milestone corrente: **M0 — Setup, fonti e repository**.
-- Ultimo risultato validato: accessi, ambiente MATLAB e struttura minima della workspace.
-- Risultati di controllo validati: **nessuno; M1 non è iniziata**.
-- Prossimo passo: revisione del gruppo e approvazione delle proposte iniziali prima di M1.
+- Milestone corrente: **M1 — Modello non lineare del manipolatore SEA**.
+- Ultimo risultato validato: dinamica nominale a 8 stati, con 9 test automatici complessivi e quality gate M1 superato in MATLAB R2025b.
+- Risultati di controllo validati: nessuno; le attività di sintesi restano fuori scope.
+- Prossimo passo: revisione e merge della Pull Request M1; M2 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

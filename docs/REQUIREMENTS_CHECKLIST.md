@@ -14,14 +14,14 @@ La checklist deriva dalla traccia ufficiale. Un requisito tecnico resta non comp
 - [x] Robust Control Toolbox verificato.
 - [x] Symbolic Math Toolbox verificato.
 - [x] Struttura iniziale e documentazione di governo create.
-- [ ] Revisione e approvazione M0 da parte del gruppo.
+- [x] Revisione e approvazione M0 da parte del gruppo.
 
 ## Modello e linearizzazione
 
-- [ ] Implementare fedelmente \(M(q)\), \(C(q,\dot q)\), \(G(q)\) e le dinamiche SEA.
-- [ ] Definire lo stato e verificare dimensioni e unità.
-- [ ] Testare simmetria e definita positività di \(M(q)\).
-- [ ] Testare assenza di `NaN`/`Inf` in un dominio documentato.
+- [x] Implementare fedelmente \(M(q)\), \(C(q,\dot q)\), \(G(q)\) e le dinamiche SEA.
+- [x] Definire lo stato e verificare dimensioni e unità.
+- [x] Testare simmetria e definita positività di \(M(q)\).
+- [x] Testare assenza di `NaN`/`Inf` sui casi deterministici documentati per M1.
 - [ ] Scegliere e approvare il punto di equilibrio.
 - [ ] Calcolare \(\bar q,\bar\theta,\bar\tau,\bar x\).
 - [ ] Verificare numericamente \(f(\bar x,\bar\tau)=0\).
