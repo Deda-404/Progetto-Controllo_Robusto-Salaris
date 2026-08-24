@@ -1,13 +1,41 @@
 # Project Status
 
 **Current milestone:** M7 — LQG nominale con azione integrale
-**Status:** PARTIAL — griglia LQI completa, nessun candidato soddisfa il tracking M5
+**Status:** PARTIAL — completamento 2-DoF eseguito, Stage A e Stage B senza candidati ammissibili
 **Last validated milestone:** M6
-**Last validated result:** `run_all.m` exit 0, 107/107 test PASS; M7 checkpoint con 28/28 candidati stabili e offset DC entro `1e-4 rad`, 0/28 entro il settling M5, minimo 1.964 s
-**Blocking issues:** la griglia integrale prescritta non raggiunge il target di settling 0.8 s senza `Nr`; revisione del gruppo richiesta
-**Next task:** decidere esplicitamente il retuning M7; non modificare M5 e non iniziare M8
-**Pull Request:** [#10 — M7: evaluate integral LQG grid checkpoint](https://github.com/Deda-404/Progetto_CR/pull/10), aperta, non draft e non unita
-**Last update:** 2026-08-24 23:50 CEST
+**Last validated result:** `run_all.m` exit 0, 111/111 test PASS; software M7 completion 19/19 isolati PASS, Stage A 0/28 e Stage B 0/25
+**Blocking issues:** neppure il servo 2-DoF candidato-specifico raggiunge insieme settling ≤0.8 s e overshoot ≤10%; nuova decisione del gruppo richiesta
+**Next task:** riesaminare struttura/feasibility M7 senza modificare M5 automaticamente; non iniziare M8
+**Pull Request:** [#11 — M7: document 2-DoF integral-servo feasibility](https://github.com/Deda-404/Progetto_CR/pull/11), aperta, non draft e non unita
+**Last update:** 2026-08-24, completamento 2-DoF
+
+## Quality gate M7 completion 2-DoF — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| checkpoint precedente preservato | PASS — merge `f702b5b`, dataset e decisioni invariati |
+| architettura 2-DoF | PASS — integratore più `Nff*r` |
+| `Nff` candidato-specifico | PASS — nessun riuso di `Nr` M6 |
+| condizionamento `Gdc_x` | PASS — massimo 1.75379 |
+| residuo `Gdc_x*Nff-I` | PASS — massimo `2.483e-16` |
+| indipendenza rigetto disturbo da `Nff` | PASS — differenza massima 0 rad |
+| Stage A | PASS software — 28/28 eseguiti prima di Stage B |
+| ammissibili Stage A | **FAIL performance — 0/28** |
+| Stage B condizionale | PASS software — eseguita una volta, 25/25 |
+| ammissibili Stage B | **FAIL performance — 0/25** |
+| miglior Stage B | E16: 1.020 s, 40.6448%, 35.170 N m |
+| M5 / Qx / `xiScale` | PASS — invariati |
+| offset costante | PASS — 53/53 entro `1e-4 rad` |
+| candidato finale | NOT RUN — insieme ammissibile vuoto |
+| LQG-I ordine 16 / KF03 / separation | NOT RUN — secondo stop |
+| measured-vs-estimated / rumore | NOT RUN — nessun controller finale |
+| saturazione / anti-windup | PASS — non introdotti |
+| dataset/figure feasibility | PASS |
+| test M7 completion | PASS — 19/19 |
+| test top-level / `run_all` | PASS software — 111/111, exit 0, esito finale PARTIAL |
+| stato | **PARTIAL — revisione richiesta** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M7 — checkpoint PARTIAL
 

@@ -916,3 +916,89 @@ Pubblicare il checkpoint su PR dedicata senza merge e attendere la decisione del
 ### Prossimo passo
 
 Attendere istruzioni del gruppo sulla strategia di retuning. Non modificare M5 e non iniziare M8.
+
+---
+
+## 2026-08-24 — Completamento autorizzato M7 con servo 2-DoF
+
+**Responsabile:** Alessio
+**Milestone:** M7 completion
+**Tipo:** Architettura / Tuning / Feasibility
+
+### Attività svolta
+
+- Verificato il merge della PR #10 su `origin/main` al commit `f702b5b` e creato `codex/m7-integral-completion` senza riscrivere il checkpoint precedente.
+- Implementata la legge `u=-Kx*x-Ki*xi+Nff*r`, mantenendo `xi_dot=r-Cq*x` e il costo M6 sui 14 stati.
+- Calcolato per ogni candidato `Nff=Gdc_x\I2` dalla relativa `Kx`, senza usare `Nr` M6 o `inv`.
+- Ripetuta Stage A sugli stessi 28 candidati e conservato per ogni punto il confronto 1-DoF/2-DoF.
+- Verificato con `Nff=0` che il rigetto del disturbo è invariato: differenza massima degli offset 0 rad.
+- Poiché Stage A ha fallito, eseguita una sola Stage B sulle 25 combinazioni autorizzate.
+
+### Risultati Stage A
+
+Tutti i 28 candidati sono stabili, ben condizionati e con offset entro `1e-4 rad`; nessuno è ammissibile. I25 passa da 1.964 a 1.880 s, ma introduce 28.824% di overshoot e 10.972 N m di picco comando. Il feedforward non risolve quindi il trade-off della griglia originale.
+
+### Risultati Stage B
+
+Tutti i 25 candidati sono stabili e rigettano il disturbo; nessuno soddisfa settling e overshoot. E16 (`wi=32`, `rhoU=1`) minimizza il settling a 1.020 s, ma ha 40.6448% di overshoot, 35.170 N m di comando e deformazione normalizzata 4.9922. Il massimo condition number di `Gdc_x` sui 53 candidati è 1.75379 e il massimo residuo feedforward è `2.483e-16`: il fallimento non dipende da inversione DC mal condizionata.
+
+### Quality gate
+
+**PARTIAL — Stage A 0/28, Stage B 0/25.**
+
+Come richiesto, E16 non è stato promosso, M5 non è stata modificata e non sono stati costruiti controller LQG-I ordine 16, diagnostica Kalman/rumore o artifact finali. Sono stati generati soltanto dataset e figure di feasibility.
+
+### Prossimo passo
+
+Arrestarsi per revisione del gruppo. Non iniziare M8.
+
+---
+
+## 2026-08-24 — Quality gate software del completamento M7
+
+**Responsabile:** Alessio
+**Milestone:** M7 completion
+**Tipo:** Test / Pipeline / Artifact
+
+### Verifiche eseguite
+
+- Code Analyzer sui file core e test M7: 0 messaggi.
+- Test M7 completion isolati: 19/19 PASS, 0 failed, 0 incomplete.
+- `matlab.exe -batch "run_all"`: 111/111 test top-level PASS, rigenerazione M0–M6 e delle due Stage M7, exit code 0.
+- Ispezionate le figure di feasibility e dell’effetto feedforward.
+- Verificato che il dataset finale `m7_lqg_integral.mat` non venga creato in assenza di candidato ammissibile.
+
+### Distinzione dei gate
+
+- software/test: **PASS**;
+- controller synthesis finale: **NOT RUN** per insieme ammissibile vuoto;
+- performance: **FAIL**;
+- stato M7: **PARTIAL**.
+
+### Prossimo passo
+
+Pubblicare il checkpoint completion sul branch dedicato e fermarsi per revisione. Non iniziare M8.
+
+---
+
+## 2026-08-24 — Pubblicazione feasibility M7 2-DoF
+
+**Responsabile:** Alessio
+**Milestone:** M7 completion
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `d85e8ce` per software/test/artifact, `eb48273` per documentazione e `263bd16` per la rigenerazione baseline prodotta da `run_all`.
+- Pubblicato il branch `codex/m7-integral-completion` su `origin`.
+- Aperta la Pull Request [#11](https://github.com/Deda-404/Progetto_CR/pull/11) verso `main`.
+- Verificato che la PR sia `open`, `draft=false`, `merged=false`, con base `main` e head corretti.
+- Aggiornato l’handoff con checkpoint storico, Stage A/B, feasibility, guadagni diagnostici, test e quality gate.
+
+### Risultato
+
+**Feasibility M7 2-DoF pubblicata per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Fermarsi e attendere la decisione del gruppo. Non iniziare M8.

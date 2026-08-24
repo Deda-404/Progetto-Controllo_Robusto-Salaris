@@ -1308,3 +1308,71 @@ Le scelte sono vincoli per la ripresa, non evidenza di un controllore validato. 
 ### Stato epistemico
 
 **ARCHITETTURA BASELINE CONFERMATA; IMPLEMENTAZIONE FINALE NOT RUN PER STOP D-0029**
+
+---
+
+## D-0031 — Servo integrale 2-DoF con feedforward candidato-specifico
+
+**Data:** 2026-08-24
+**Milestone:** M7 completion
+
+### Problema
+
+Migliorare il tracking del riferimento senza modificare M5 e senza perdere l’internal model che annulla gli offset da disturbo.
+
+### Alternative
+
+- ampliare immediatamente `wi` senza cambiare architettura;
+- riusare automaticamente `Nr` M6;
+- eliminare l’integratore e affidare lo statico al feedforward;
+- separare tracking e regolazione con `u=-Kx*x-Ki*xi+Nff*r`.
+
+### Metriche, criterio e scelta
+
+Il gruppo ha autorizzato l’ultima alternativa. Per ogni candidato si calcola autonomamente `Gdc_x` dalla relativa `Kx` e si risolve `Gdc_x*Nff=I2` senza `inv`. Sui 53 candidati Stage A/B il massimo condition number è 1.75379 e il massimo residuo è `2.483e-16`.
+
+### Motivazione
+
+Il percorso `Nff*r` può modellare il transitorio nominale senza cambiare il servo feedback. Con `r=0` scompare, mentre `Ki/xi` resta attivo: le simulazioni con e senza feedforward hanno differenza nulla nell’offset da disturbo.
+
+### Conseguenze e limiti
+
+`Nff` non viene interpretato come fonte del rigetto statico e non coincide con `Nr` M6. La sua efficacia transitoria deve comunque rispettare settling, overshoot e comando; il buon condizionamento DC non garantisce tali prestazioni.
+
+### Stato epistemico
+
+**APPROVATA COME ARCHITETTURA DI FEASIBILITY M7 2-DoF**
+
+---
+
+## D-0032 — Stage A e Stage B senza candidati ammissibili
+
+**Data:** 2026-08-24
+**Milestone:** M7 completion, quality gate
+
+### Problema
+
+Determinare se il feedforward candidato-specifico e, solo se necessario, una maggiore priorità integrale rendano raggiungibili i target M5 invariati.
+
+### Alternative
+
+- selezionare il candidato col solo settling minimo;
+- accettare un overshoot o comando estremo;
+- modificare M5 automaticamente;
+- conservare la feasibility table e fermarsi.
+
+### Metriche, criterio e scelta
+
+Stage A ripete prima i 28 punti originali: 28 stabili, 28 con offset entro `1e-4 rad`, 0 ammissibili. I25 passa da 1.964 a 1.880 s ma l’overshoot cresce a 28.824%. Stage B esegue una sola griglia da 25 punti: 25 stabili, 25 con offset entro tolleranza, 0 ammissibili. E16 ha il minimo settling, 1.020 s, ma overshoot 40.6448%, peak control 35.170 N m e deformazione normalizzata 4.9922.
+
+### Motivazione
+
+Né il punto più rapido né quelli meno aggressivi raggiungono simultaneamente settling ≤0.8 s e overshoot ≤10%. Promuovere E16 violerebbe due requisiti e la regola che vieta l’adozione automatica di un estremo.
+
+### Conseguenze e limiti
+
+Nessun candidato è selezionato. Non vengono costruiti LQG-I finale, controller ordine 16, diagnostica Kalman/rumore o confronto finale M6/M7. M5, KF03, saturazioni e anti-windup restano invariati. La feasibility table è pubblicata per la decisione successiva del gruppo.
+
+### Stato epistemico
+
+**QUALITY GATE PERFORMANCE FAIL — M7 RESTA PARTIAL, SECONDO STOP RICHIESTO**

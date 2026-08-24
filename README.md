@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Al checkpoint M7 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M6, rigenera la griglia LQI prescritta e registra esplicitamente lo stato `PARTIAL`. La pipeline M6 completa resta validata; M7 non pubblica un controllore finale perché nessuno dei 28 candidati raggiunge il target temporale M5. Un errore strutturale genera un codice di uscita non nullo, mentre l’esito tecnico atteso del checkpoint è segnalato come `PARTIAL`, non come PASS M7.
+Al completamento M7 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M6, rigenera il checkpoint 1-DoF, Stage A con feedforward candidato-specifico e la Stage B condizionale. La pipeline M6 completa resta validata; M7 non pubblica un controllore finale perché nessuno dei 53 candidati raggiunge insieme settling e overshoot M5. Un errore software genera un codice di uscita non nullo, mentre l’esito prestazionale atteso è segnalato come `PARTIAL`, non come PASS M7.
 
 ## Stato corrente
 
 - Milestone corrente: **M7 — LQG nominale con integratore, stato PARTIAL**.
 - Risultato strutturale: augmentazione 16×16 stabilizzabile, due integratori sulle posizioni e nessuna ostruzione a zero.
-- Risultato griglia: 28/28 candidati annullano gli offset costanti, ma il miglior settling è 1.964 s contro il target 0.8 s; nessun candidato è selezionato.
-- Prossimo passo: revisione esplicita del retuning M7. M5 resta invariata e M8 non è iniziata.
+- Risultato completion: Stage A 0/28 e Stage B 0/25 ammissibili; E16 raggiunge 1.020 s ma con overshoot 40.6448% e comando 35.170 N m.
+- Prossimo passo: nuova revisione della feasibility M7. M5 resta invariata, nessun controller finale è selezionato e M8 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

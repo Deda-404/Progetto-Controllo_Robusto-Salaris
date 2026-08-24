@@ -1,8 +1,8 @@
 function selection = select_lqi_integral(m3Data, m5Data, m6Data, config)
-%SELECT_LQI_INTEGRAL Evaluate and rank the complete 28-candidate M7 grid.
-%   No candidate is known in advance. Fundamental feasibility combines
-%   nominal stability, all M5 tracking targets and explicit constant-
-%   disturbance rejection at both links.
+%SELECT_LQI_INTEGRAL Tune the M7 two-degree-of-freedom LQI servo.
+%   Stage A always evaluates the approved 7-by-4 checkpoint grid first.
+%   For every candidate Nff is derived from that candidate's Kx. Stage B
+%   is evaluated only if Stage A contains no fundamental-admissible design.
 
 arguments
     m3Data (1, 1) struct
@@ -11,29 +11,109 @@ arguments
     config (1, 1) struct = lqg_specs_m7
 end
 
-wiGrid = config.wiCandidates(:);
-rhoGrid = config.rhoUCandidates(:);
+stageA = localEvaluateGrid(m3Data, m5Data, m6Data, config, ...
+    config.wiCandidates, config.rhoUCandidates, "Stage A", "I", 0);
+stageBExecuted = isempty(stageA.selectedLocalIndex);
+stageB = struct;
+if stageBExecuted
+    stageB = localEvaluateGrid(m3Data, m5Data, m6Data, config, ...
+        config.stageBWiCandidates, config.stageBRhoUCandidates, ...
+        "Stage B", "E", height(stageA.candidateTable));
+    activeStage = stageB;
+    allCandidateTable = [stageA.candidateTable; stageB.candidateTable];
+    allDesigns = [stageA.designs; stageB.designs];
+    allEvaluations = [stageA.evaluations; stageB.evaluations];
+    allOneDofEvaluations = [stageA.oneDofEvaluations; ...
+        stageB.oneDofEvaluations];
+else
+    activeStage = stageA;
+    allCandidateTable = stageA.candidateTable;
+    allDesigns = stageA.designs;
+    allEvaluations = stageA.evaluations;
+    allOneDofEvaluations = stageA.oneDofEvaluations;
+end
+
+selectedIndex = [];
+if ~isempty(activeStage.selectedLocalIndex)
+    selectedIndex = find(allCandidateTable.Selected, 1);
+end
+
+selection.grid.wi = config.wiCandidates(:);
+selection.grid.rhoU = config.rhoUCandidates(:);
+selection.stageA = stageA;
+selection.stageBExecuted = stageBExecuted;
+selection.stageB = stageB;
+selection.selectedStage = activeStage.name;
+selection.lqiCandidateTable = allCandidateTable;
+selection.selectedIndex = selectedIndex;
+selection.designs = allDesigns;
+selection.evaluations = allEvaluations;
+selection.oneDofEvaluations = allOneDofEvaluations;
+selection.admissibleIndices = find(allCandidateTable.FundamentalPass);
+
+if ~isempty(selectedIndex)
+    selectedDesign = allDesigns{selectedIndex};
+    selectedEvaluation = allEvaluations{selectedIndex};
+    selectedOneDofEvaluation = allOneDofEvaluations{selectedIndex};
+    selection.selectedRow = allCandidateTable(selectedIndex, :);
+    selection.Aaug = selectedDesign.Aaug;
+    selection.Baug = selectedDesign.Baug;
+    selection.Qaug = selectedDesign.Qaug;
+    selection.R = selectedDesign.R;
+    selection.Kaug = selectedDesign.Kaug;
+    selection.Kx = selectedDesign.Kx;
+    selection.Ki = selectedDesign.Ki;
+    selection.Nff = activeStage.nff{activeStage.selectedLocalIndex};
+    selection.servoPoles = selectedDesign.servoPoles;
+    selection.xiScale = selectedDesign.xiScale;
+    selection.structural = selectedDesign.structural;
+    selection.selectedEvaluation = selectedEvaluation;
+    selection.selectedOneDofEvaluation = selectedOneDofEvaluation;
+end
+end
+
+function gridResult = localEvaluateGrid(m3Data, m5Data, m6Data, ...
+    config, wiGrid, rhoGrid, stageName, prefix, indexOffset)
+wiGrid = wiGrid(:);
+rhoGrid = rhoGrid(:);
 candidateCount = numel(wiGrid) * numel(rhoGrid);
 rows = repmat(localEmptyRow, candidateCount, 1);
 evaluations = cell(candidateCount, 1);
+oneDofEvaluations = cell(candidateCount, 1);
 designs = cell(candidateCount, 1);
+nffValues = cell(candidateCount, 1);
 
-candidateIndex = 0;
+localIndex = 0;
 for wiIndex = 1:numel(wiGrid)
     for rhoIndex = 1:numel(rhoGrid)
-        candidateIndex = candidateIndex + 1;
+        localIndex = localIndex + 1;
         design = build_lqi_augmented_cost(m3Data, m5Data, m6Data, ...
             wiGrid(wiIndex), rhoGrid(rhoIndex));
+        [Nff, feedforward] = localBuildFeedforward( ...
+            m3Data, design.Kx, config);
+        oneDofEvaluation = localEvaluateCandidate( ...
+            m3Data, m5Data, design, zeros(2), config);
         evaluation = localEvaluateCandidate( ...
-            m3Data, m5Data, design, config);
-        designs{candidateIndex} = design;
-        evaluations{candidateIndex} = evaluation;
+            m3Data, m5Data, design, Nff, config);
+
+        designs{localIndex} = design;
+        nffValues{localIndex} = Nff;
+        evaluations{localIndex} = evaluation;
+        oneDofEvaluations{localIndex} = oneDofEvaluation;
 
         row = localEmptyRow;
-        row.CandidateIndex = candidateIndex;
-        row.Candidate = sprintf('I%02d', candidateIndex);
+        row.CandidateIndex = indexOffset + localIndex;
+        row.Candidate = sprintf('%s%02d', prefix, localIndex);
+        row.Stage = stageName;
         row.Wi = design.wi;
         row.RhoU = design.rhoU;
+        row.Nff11 = Nff(1, 1);
+        row.Nff12 = Nff(1, 2);
+        row.Nff21 = Nff(2, 1);
+        row.Nff22 = Nff(2, 2);
+        row.GdcCondition = feedforward.condition;
+        row.FeedforwardResidual = feedforward.residual;
+        row.FeedforwardWellConditioned = feedforward.wellConditioned;
         row.Stable = evaluation.summary.stable;
         row.WorstSettlingTime = evaluation.summary.worstSettlingTime;
         row.WorstOvershoot = evaluation.summary.worstOvershoot;
@@ -48,8 +128,14 @@ for wiIndex = 1:numel(wiGrid)
             evaluation.summary.peakDeformationNormalized;
         row.PeakElasticTorque = ...
             evaluation.summary.worstPeakElasticTorque;
+        row.PeakXi = evaluation.summary.worstPeakXi;
         row.NormKx = norm(design.Kx, 'fro');
         row.NormKi = norm(design.Ki, 'fro');
+        row.NormNff = norm(Nff, 'fro');
+        [~, dominantPoleIndex] = max(real(design.servoPoles));
+        row.DominantRealPart = real(design.servoPoles(dominantPoleIndex));
+        row.DominantImaginaryMagnitude = abs(imag( ...
+            design.servoPoles(dominantPoleIndex)));
         row.WorstDisturbancePeakQ = ...
             evaluation.summary.worstDisturbancePeakQ;
         row.WorstDisturbanceSettlingTime = ...
@@ -59,74 +145,100 @@ for wiIndex = 1:numel(wiGrid)
         row.WorstDisturbanceCrossCouplingPeakRatio = ...
             evaluation.summary.worstDisturbanceCrossCouplingPeakRatio;
         row.WindupIndicator = evaluation.summary.windupIndicator;
+        row.OneDofWorstSettlingTime = ...
+            oneDofEvaluation.summary.worstSettlingTime;
+        row.OneDofWorstOvershoot = ...
+            oneDofEvaluation.summary.worstOvershoot;
+        row.OneDofPeakU = oneDofEvaluation.summary.worstPeakControl;
+        row.OneDofPeakXi = oneDofEvaluation.summary.worstPeakXi;
+        row.OneDofDisturbanceOffset = ...
+            oneDofEvaluation.summary.worstDisturbanceSteadyStateOffset;
+        row.DisturbanceOffsetNffDifference = max(abs( ...
+            evaluation.disturbanceMetrics.SteadyStateOffset - ...
+            oneDofEvaluation.disturbanceMetrics.SteadyStateOffset));
         row.TrackingPass = evaluation.summary.trackingPass;
         row.DisturbancePass = evaluation.summary.disturbancePass;
-        row.FundamentalPass = evaluation.summary.fundamentalPass;
-        rows(candidateIndex) = row;
+        row.FundamentalPass = evaluation.summary.fundamentalPass && ...
+            feedforward.wellConditioned;
+        rows(localIndex) = row;
     end
 end
 
-lqiCandidateTable = struct2table(rows);
-lqiCandidateTable.Selected = false(candidateCount, 1);
-lqiCandidateTable.Ranking = NaN(candidateCount, 1);
-admissibleIndices = find(lqiCandidateTable.FundamentalPass);
-selectedIndex = [];
-if ~isempty(admissibleIndices)
-    ranked = sortrows(lqiCandidateTable(admissibleIndices, :), ...
+candidateTable = struct2table(rows);
+candidateTable.Selected = false(candidateCount, 1);
+candidateTable.Ranking = NaN(candidateCount, 1);
+admissibleLocalIndices = find(candidateTable.FundamentalPass);
+selectedLocalIndex = [];
+if ~isempty(admissibleLocalIndices)
+    ranked = sortrows(candidateTable(admissibleLocalIndices, :), ...
         {'PeakUNormalized', 'PeakDeltaNormalized', ...
-        'WorstDisturbanceSettlingTime', 'NormKi', 'RhoU', ...
-        'CandidateIndex'}, ...
-        {'ascend', 'ascend', 'ascend', 'ascend', 'descend', 'ascend'});
+        'WorstDisturbanceSettlingTime', 'NormKi', 'NormNff', ...
+        'RhoU', 'CandidateIndex'}, ...
+        {'ascend', 'ascend', 'ascend', 'ascend', 'ascend', ...
+        'descend', 'ascend'});
     ranked.Ranking = (1:height(ranked)).';
     for rankIndex = 1:height(ranked)
-        originalIndex = ranked.CandidateIndex(rankIndex);
-        lqiCandidateTable.Ranking(originalIndex) = rankIndex;
+        originalIndex = find(candidateTable.CandidateIndex == ...
+            ranked.CandidateIndex(rankIndex), 1);
+        candidateTable.Ranking(originalIndex) = rankIndex;
     end
-    selectedIndex = ranked.CandidateIndex(1);
-    lqiCandidateTable.Selected(selectedIndex) = true;
+    selectedLocalIndex = find(candidateTable.CandidateIndex == ...
+        ranked.CandidateIndex(1), 1);
+    candidateTable.Selected(selectedLocalIndex) = true;
 end
 
-selection.grid.wi = wiGrid;
-selection.grid.rhoU = rhoGrid;
-selection.lqiCandidateTable = lqiCandidateTable;
-selection.selectedIndex = selectedIndex;
-selection.admissibleIndices = admissibleIndices;
-selection.designs = designs;
-selection.evaluations = evaluations;
-if ~isempty(selectedIndex)
-    selectedDesign = designs{selectedIndex};
-    selectedEvaluation = evaluations{selectedIndex};
-    selection.selectedRow = lqiCandidateTable(selectedIndex, :);
-    selection.Aaug = selectedDesign.Aaug;
-    selection.Baug = selectedDesign.Baug;
-    selection.Qaug = selectedDesign.Qaug;
-    selection.R = selectedDesign.R;
-    selection.Kaug = selectedDesign.Kaug;
-    selection.Kx = selectedDesign.Kx;
-    selection.Ki = selectedDesign.Ki;
-    selection.servoPoles = selectedDesign.servoPoles;
-    selection.xiScale = selectedDesign.xiScale;
-    selection.structural = selectedDesign.structural;
-    selection.selectedEvaluation = selectedEvaluation;
+gridResult.name = stageName;
+gridResult.grid.wi = wiGrid;
+gridResult.grid.rhoU = rhoGrid;
+gridResult.candidateTable = candidateTable;
+gridResult.selectedLocalIndex = selectedLocalIndex;
+gridResult.admissibleLocalIndices = admissibleLocalIndices;
+gridResult.designs = designs;
+gridResult.nff = nffValues;
+gridResult.evaluations = evaluations;
+gridResult.oneDofEvaluations = oneDofEvaluations;
 end
+
+function [Nff, info] = localBuildFeedforward(m3Data, Kx, config)
+A = m3Data.Afull;
+B = m3Data.Bfull;
+Cq = m3Data.CfullQ;
+AclX = A - B * Kx;
+GdcX = dcgain(ss(AclX, B, Cq, zeros(2)));
+Nff = GdcX \ eye(2);
+info.GdcX = GdcX;
+info.condition = cond(GdcX);
+info.residual = norm(GdcX * Nff - eye(2), 'fro');
+info.wellConditioned = all(isfinite(Nff), 'all') && ...
+    info.condition <= config.feedforwardConditionWarning && ...
+    info.residual <= config.feedforwardResidualTolerance;
 end
 
 function row = localEmptyRow
-row = struct('CandidateIndex', 0, 'Candidate', '', 'Wi', NaN, ...
-    'RhoU', NaN, 'Stable', false, 'WorstSettlingTime', NaN, ...
+row = struct('CandidateIndex', 0, 'Candidate', '', 'Stage', "", ...
+    'Wi', NaN, 'RhoU', NaN, 'Nff11', NaN, 'Nff12', NaN, ...
+    'Nff21', NaN, 'Nff22', NaN, 'GdcCondition', NaN, ...
+    'FeedforwardResidual', NaN, 'FeedforwardWellConditioned', false, ...
+    'Stable', false, 'WorstSettlingTime', NaN, ...
     'WorstOvershoot', NaN, 'WorstSteadyStateErrorRelative', NaN, ...
     'WorstCrossCouplingPeakRatio', NaN, 'PeakU', NaN, ...
     'PeakUNormalized', NaN, 'PeakDelta', NaN, ...
     'PeakDeltaNormalized', NaN, 'PeakElasticTorque', NaN, ...
-    'NormKx', NaN, 'NormKi', NaN, 'WorstDisturbancePeakQ', NaN, ...
+    'PeakXi', NaN, 'NormKx', NaN, 'NormKi', NaN, 'NormNff', NaN, ...
+    'DominantRealPart', NaN, 'DominantImaginaryMagnitude', NaN, ...
+    'WorstDisturbancePeakQ', NaN, ...
     'WorstDisturbanceSettlingTime', NaN, ...
     'WorstDisturbanceSteadyStateOffset', NaN, ...
     'WorstDisturbanceCrossCouplingPeakRatio', NaN, ...
-    'WindupIndicator', NaN, 'TrackingPass', false, ...
+    'WindupIndicator', NaN, 'OneDofWorstSettlingTime', NaN, ...
+    'OneDofWorstOvershoot', NaN, 'OneDofPeakU', NaN, ...
+    'OneDofPeakXi', NaN, 'OneDofDisturbanceOffset', NaN, ...
+    'DisturbanceOffsetNffDifference', NaN, 'TrackingPass', false, ...
     'DisturbancePass', false, 'FundamentalPass', false);
 end
 
-function evaluation = localEvaluateCandidate(m3Data, m5Data, design, config)
+function evaluation = localEvaluateCandidate( ...
+    m3Data, m5Data, design, Nff, config)
 A = m3Data.Afull;
 B = m3Data.Bfull;
 Cq = m3Data.CfullQ;
@@ -138,10 +250,11 @@ Kx = design.Kx;
 Ki = design.Ki;
 
 Acl = [A - B * Kx, -B * Ki; -Cq, zeros(2)];
-Bcl = [zeros(n, 2), Bd; eye(2), zeros(2)];
+Bcl = [B * Nff, Bd; eye(2), zeros(2)];
 Ccl = [Cq, zeros(2); Ctheta, zeros(2); ...
     -Kx, -Ki; zeros(2, n), eye(2)];
-closedLoop = ss(Acl, Bcl, Ccl, zeros(8, 4), ...
+Dcl = [zeros(4, 4); Nff, zeros(2); zeros(2, 4)];
+closedLoop = ss(Acl, Bcl, Ccl, Dcl, ...
     'InputName', {'r1', 'r2', 'd1', 'd2'}, ...
     'OutputName', {'q1', 'q2', 'theta1', 'theta2', ...
     'u1', 'u2', 'xi1', 'xi2'});
@@ -151,12 +264,11 @@ referenceTime = (0:config.simulationTimeStep:config.referenceHorizon).';
 disturbanceTime = ...
     (0:config.simulationTimeStep:config.disturbanceHorizon).';
 tracking = zeros(2, 6);
-disturbance = zeros(2, 5);
+disturbance = zeros(2, 6);
 referenceOutput = cell(2, 1);
 disturbanceOutput = cell(2, 1);
 peakDelta = zeros(2, 1);
 peakElasticTorque = zeros(2, 1);
-peakXi = zeros(2, 1);
 trackingDc = dcgain(closedLoop(1:2, 1:2));
 disturbanceDc = dcgain(closedLoop(1:2, 3:4));
 
@@ -188,13 +300,13 @@ for jointIndex = 1:2
     peakDelta(jointIndex) = max(abs(deformation), [], 'all');
     peakElasticTorque(jointIndex) = max(abs( ...
         deformation * Ks.'), [], 'all');
-    peakXi(jointIndex) = max(abs(xi), [], 'all');
 
     input = zeros(numel(disturbanceTime), 4);
     input(:, jointIndex + 2) = spec.disturbanceTorqueAmplitude;
     output = lsim(closedLoop, input, disturbanceTime);
     disturbanceOutput{jointIndex} = output;
     q = output(:, 1:2);
+    u = output(:, 5:6);
     xi = output(:, 7:8);
     finalQ = disturbanceDc(:, jointIndex) * ...
         spec.disturbanceTorqueAmplitude;
@@ -207,7 +319,8 @@ for jointIndex = 1:2
     otherJoint = 3 - jointIndex;
     disturbance(jointIndex, 4) = max(abs(q(:, otherJoint))) / ...
         max(affectedPeak, eps);
-    disturbance(jointIndex, 5) = max(abs(xi), [], 'all');
+    disturbance(jointIndex, 5) = max(abs(u), [], 'all');
+    disturbance(jointIndex, 6) = max(abs(xi), [], 'all');
 end
 
 trackingMetrics = array2table([(1:2).', tracking], ...
@@ -217,7 +330,7 @@ trackingMetrics = array2table([(1:2).', tracking], ...
 disturbanceMetrics = array2table([(1:2).', disturbance], ...
     'VariableNames', {'DisturbanceJoint', 'PeakQ', ...
     'SteadyStateOffset', 'SettlingTime', ...
-    'CrossCouplingPeakRatio', 'PeakXi'});
+    'CrossCouplingPeakRatio', 'PeakControl', 'PeakXi'});
 
 stable = all(real(eig(Acl)) < -config.numericStabilityTolerance);
 trackingPass = stable && all( ...
@@ -229,7 +342,9 @@ disturbancePass = stable && all(abs( ...
     disturbanceMetrics.SteadyStateOffset) <= ...
     config.disturbanceSteadyStateTolerance);
 deformationScale = spec.disturbanceTorqueAmplitude / min(diag(Ks));
+worstPeakXi = max([trackingMetrics.PeakXi; disturbanceMetrics.PeakXi]);
 
+evaluation.Nff = Nff;
 evaluation.closedLoop = closedLoop;
 evaluation.trackingMetrics = trackingMetrics;
 evaluation.disturbanceMetrics = disturbanceMetrics;
@@ -254,6 +369,7 @@ evaluation.summary.worstPeakDeformation = max(peakDelta);
 evaluation.summary.peakDeformationNormalized = ...
     max(peakDelta) / deformationScale;
 evaluation.summary.worstPeakElasticTorque = max(peakElasticTorque);
+evaluation.summary.worstPeakXi = worstPeakXi;
 evaluation.summary.worstDisturbancePeakQ = ...
     max(disturbanceMetrics.PeakQ);
 evaluation.summary.worstDisturbanceSettlingTime = ...
@@ -262,8 +378,9 @@ evaluation.summary.worstDisturbanceSteadyStateOffset = ...
     max(abs(disturbanceMetrics.SteadyStateOffset));
 evaluation.summary.worstDisturbanceCrossCouplingPeakRatio = ...
     max(disturbanceMetrics.CrossCouplingPeakRatio);
-evaluation.summary.windupIndicator = max([peakXi; disturbance(:, 5)]) / ...
-    design.xiScale;
+evaluation.summary.worstDisturbancePeakControl = ...
+    max(disturbanceMetrics.PeakControl);
+evaluation.summary.windupIndicator = worstPeakXi / design.xiScale;
 end
 
 function settlingTime = localSettlingTime(signal, finalValue, time, threshold)
