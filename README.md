@@ -52,13 +52,13 @@ Dalla radice del repository:
 run_all
 ```
 
-Alla milestone M6 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M5 e i test M6, ripete le validazioni precedenti e rigenera tuning LQR, selezione Kalman, controllore LQG, dataset e figure. Sono inclusi la coarse grid da 240 costi adimensionali, i 27 candidati Kalman, principio di separazione, tracking, disturbi e diagnostica seeded del rumore. Un fallimento critico genera un errore MATLAB e un codice di uscita non nullo.
+Al checkpoint M7 il comando pulisce e configura l'ambiente, esegue le regressioni M0–M6, rigenera la griglia LQI prescritta e registra esplicitamente lo stato `PARTIAL`. La pipeline M6 completa resta validata; M7 non pubblica un controllore finale perché nessuno dei 28 candidati raggiunge il target temporale M5. Un errore strutturale genera un codice di uscita non nullo, mentre l’esito tecnico atteso del checkpoint è segnalato come `PARTIAL`, non come PASS M7.
 
 ## Stato corrente
 
-- Milestone corrente: **M6 — LQG nominale senza integratore**.
-- Risultato LQR: candidato C193 con `wq=1`, `wdelta=0.1`, `wqdot=wthetaDot=0.5`, `rhoU=8`; worst settling 0.776 s e picco comando 4.6897 N m.
-- Risultato Kalman/LQG: KF03, ratio di decay 1.6928, controllore dinamico ordine 14 senza integratori e principio di separazione verificato.
-- Prossimo passo: revisione della Pull Request M6. M7, Simulink, nonlinear simulation e analisi robusta non sono iniziati.
+- Milestone corrente: **M7 — LQG nominale con integratore, stato PARTIAL**.
+- Risultato strutturale: augmentazione 16×16 stabilizzabile, due integratori sulle posizioni e nessuna ostruzione a zero.
+- Risultato griglia: 28/28 candidati annullano gli offset costanti, ma il miglior settling è 1.964 s contro il target 0.8 s; nessun candidato è selezionato.
+- Prossimo passo: revisione esplicita del retuning M7. M5 resta invariata e M8 non è iniziata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

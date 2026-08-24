@@ -16,12 +16,12 @@ addpath(genpath(fullfile(projectRoot, 'analysis')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf(['Milestone implementata: M6 (LQG nominale senza integratore ' ...
-    'sulla pianta completa a 14 stati)\n\n']);
+fprintf(['Milestone corrente: M7 checkpoint PARTIAL (griglia LQI con ' ...
+    'due integratori; nessun candidato finale selezionato)\n\n']);
 
 try
     fprintf(['--- Test automatici M0 + M1 + M2 + M3/M3.1 + ' ...
-        'M4/M4.1 + M5 + M6 ---\n']);
+        'M4/M4.1 + M5 + M6 + checkpoint M7 ---\n']);
     testResults = runtests(fullfile(projectRoot, 'tests'));
     assertSuccess(testResults);
     fprintf('Test automatici superati: %d/%d.\n', ...
@@ -58,10 +58,13 @@ try
         'dataset e figure M6 ---\n']);
     m6Metrics = validate_m6_lqg_no_integrator;
 
-    fprintf(['\n[PASS] RUN_ALL completato: regressioni M0-M5 e quality ' ...
-        'gate M6 superati; tuning LQR strutturato, Kalman, controllore ' ...
-        'LQG ordine 14, tracking, disturbo, rumore, dataset e figure ' ...
-        'validati senza integratore.\n']);
+    fprintf('\n--- Augmentazione, griglia e checkpoint M7 ---\n');
+    m7Metrics = validate_m7_lqg_integral;
+
+    fprintf(['\n[PARTIAL] RUN_ALL completato senza errori: regressioni ' ...
+        'M0-M6 e checkpoint strutturale M7 superati, ma 0/28 candidati ' ...
+        'LQI rispettano il settling M5. Nessun controllore M7 finale ' ...
+        'e'' stato selezionato; revisione del gruppo richiesta.\n']);
 catch executionError
     fprintf(2, '\n[FAIL] RUN_ALL interrotto: %s\n', executionError.message);
     rethrow(executionError);

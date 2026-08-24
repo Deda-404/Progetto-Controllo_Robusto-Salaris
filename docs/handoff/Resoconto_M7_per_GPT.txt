@@ -1,0 +1,148 @@
+RESOCONTO M7 PER GPT — CHECKPOINT PARTIAL
+Data: 2026-08-24
+Responsabile: Alessio
+
+STATO
+M7 è PARTIAL. La griglia LQI prescritta è stata ricostruita ed eseguita
+integralmente, ma nessun candidato soddisfa simultaneamente tracking M5 e
+rigetto del disturbo. In conformità al prompt, M5 non è stata modificata e
+non è stato costruito un controllore LQG-I finale. M8 non è stata iniziata.
+
+BASE GIT
+- origin/main verificato sul merge M6: 5326567 (merge PR #9).
+- Branch: codex/m7-lqg-integral.
+- Commit: da completare dopo i test finali.
+- PR: da aprire verso main; nessun merge autonomo.
+
+FORMULAZIONE INTEGRALE
+- Pianta fisica: M3 nominale completa, 14 stati, 2 ingressi.
+- Uscite integrate: q1 e q2 soltanto.
+- Numero integratori: 2.
+- Servo ideale: xi_dot = r - Cq*x.
+- Regolazione: Aaug=[A 0;-Cq 0], Baug=[B;0].
+- Legge LQR: u=-Kx*x-Ki*xi, senza modifica manuale del segno.
+- Nr M6 non è usato.
+
+VERIFICHE STRUTTURALI
+- Aaug: 16x16; Baug: 16x2.
+- PBH su tutti i 16 modi: rango 16, controllabile.
+- Stabilizzabile: sì.
+- PBH sui modi a zero: rango 16.
+- Rosenbrock [A B;Cq 0] a s=0: rango 16.
+- Ostruzione da zero invariante a s=0: assente.
+- Rango numerico della ctrb non scalata: 8 per forte condizionamento; il
+  controllo modale PBH è a rango pieno ed è coerente con l’analisi M3.
+
+COSTO E SCALA
+- Qx coincide esattamente con Q del dataset M6.
+- Priorità preservate: wq=1, wqdot=0.5, wdelta=0.1,
+  wthetaDot=0.5.
+- xiScale = referenceAmplitude*settlingTimeTarget, letto da M5.
+- xiScale = 0.0698131700798 rad*s.
+- Qi = wi/xiScale^2 uguale sui due integratori.
+- R = rhoU/uScale^2 I2; uScale resta una normalizzazione, non saturazione.
+
+GRIGLIA
+- wi=[0.05 0.10 0.25 0.50 1 2 4].
+- rhoU=[4 8 12 16].
+- Totale: 28 candidati realmente sintetizzati e simulati.
+- Casi per candidato: r1/r2=5 deg, d1/d2=0.5 N m.
+- 28/28 stabili.
+- 28/28 con offset statico da disturbo entro 1e-4 rad.
+- 0/28 con tracking settling entro 0.8 s.
+- Candidati fondamentali ammissibili: nessuno.
+- Candidato selezionato: NESSUNO.
+
+TRADE-OFF
+Il punto con settling minimo è I25 (solo diagnostico, non selezionato):
+- wi=4, rhoU=4;
+- worst settling tracking=1.964 s;
+- target M5=0.8 s; gap=1.164 s;
+- overshoot=0%;
+- peakU/uScale=0.0684212, quindi peakU circa 0.821054 N m;
+- peak deformation normalized=1.3135;
+- worst disturbance settling=2.19 s;
+- norm(Ki)=243.09.
+
+Per wi<=1 il tracking non si assesta al 2% entro 3 s. Per wi=2 il
+worst settling è 2.704–2.776 s. Per wi=4 è 1.964–2.014 s. L’aumento di
+rhoU riduce marginalmente il comando ma rallenta ulteriormente il tracking.
+
+GUADAGNI DEL SOLO PUNTO DIAGNOSTICO I25
+Questi guadagni NON sono selezionati e NON costituiscono il controllore M7.
+
+Kx = [
+459.9665583 37.28876785 32.7913769 7.394300131 -278.2164898 -22.39867567 -0.6932817611 -1.21825593 15.03550104 30.26915297 73.36926914 -0.8917503176 -2.354566146 -16.06856236;
+37.73569522 347.4627839 9.338621169 10.69457408 -7.976237635 -224.597947 -0.8196559738 2.855750226 -0.8917503176 -2.211640809 -12.65857531 17.55915583 36.73033936 118.4503389
+]
+
+Ki = [
+-171.6614998 8.808328407;
+-8.808328407 -171.6614998
+]
+
+DISTURBO M6 VS CHECKPOINT M7
+- M6 d1 offset q1: 0.0795850051 rad.
+- M6 d2 offset q2: 0.160231966 rad.
+- I25 guadagno DC d->q: matrice nulla alla precisione numerica.
+- I25 q1 a t=8 s sotto d1: 3.23068e-10 rad.
+- I25 q2 a t=8 s sotto d2: 2.23544e-10 rad.
+Il requisito di rigetto è quindi raggiunto, ma il tracking non lo è.
+
+CONTROLLER, KALMAN, RUMORE E SEPARAZIONE
+- Architettura primaria pianificata: xi_dot=r-Sq*y, measured q error.
+- Variante secondaria pianificata: xi_dot=r-Cq*xhat.
+- Kalman pianificato: riuso esatto KF03 M6 (L/Qn/Rn).
+- Controller order atteso: 16.
+- Controller order realizzato: NOT RUN.
+- LQG-I, separation principle augmentato: NOT RUN.
+- Rumore con seed 20260826 e measured-vs-estimated: NOT RUN.
+Motivo: eseguire questi passi su I25 avrebbe promosso implicitamente un
+candidato non ammissibile, in contrasto con lo stop richiesto.
+
+WINDUP E LIMITI
+- Saturazione inventata: no.
+- Anti-windup: no.
+- uScale non è interpretata come saturazione.
+- Peak xi e windup indicator lineare sono registrati per tutti i candidati
+  nel dataset parziale; la decisione anti-windup resta futura.
+
+ARTIFACT
+- results/data/m7_lqi_grid_partial.mat
+- results/figures/m7_lqi_candidate_comparison.png
+- docs/LQG_CON_INTEGRATORE.md
+- src/parameters/lqg_specs_m7.m
+- controllers/lqg/build_lqi_augmented_cost.m
+- controllers/lqg/select_lqi_integral.m
+- analysis/nominal/validate_m7_lqg_integral.m
+- tests/test_m7_lqg_integral.m (test del gate parziale)
+
+TEST E RUN_ALL
+- Code Analyzer: 0 messaggi su sei file core/test/pipeline.
+- Test M7 isolati: 15/15 PASS, 0 failed, 0 incomplete.
+- Test top-level: 107/107 PASS.
+- matlab.exe -batch "run_all": exit code 0.
+- Messaggio finale della pipeline: [PARTIAL], coerente con il gate fallito.
+- Le regressioni e il software del checkpoint sono PASS; M7 non è COMPLETE.
+
+NON GENERATI, INTENZIONALMENTE
+- results/data/m7_lqg_integral.mat
+- build_lqg_integral.m
+- compare_m6_m7.m
+- sei figure finali tracking/disturbo/integratori/confronto/poli
+- tabella finale controller M6/M7
+Questi artifact richiedono un candidato ammissibile.
+
+QUALITY GATE
+PASS: main con M6, due integratori q, augmentazione, PBH, zero obstruction,
+Q M6 preservata, xiScale da M5, griglia autonoma completa, stabilità,
+offset d1/d2, nessuna saturazione/anti-windup, M5 invariata.
+FAIL: tracking settling (minimo 1.964 s > 0.8 s).
+NOT RUN: selezione, LQG-I, ordine 16, separation, rumore, confronto finale,
+dataset e figure finali.
+Stato finale: PARTIAL — revisione del gruppo richiesta.
+
+PROBLEMA DA DECIDERE
+Serve autorizzazione esplicita prima di ampliare wi, introdurre un
+feedforward transitorio secondario o cambiare struttura del costo. Il prompt
+vieta di modificare automaticamente M5. Non iniziare M8.

@@ -1,13 +1,41 @@
 # Project Status
 
-**Current milestone:** M6 — LQG nominale senza integratore
-**Status:** COMPLETE — quality gate M6 superato, LQG nominale senza integratore validato
+**Current milestone:** M7 — LQG nominale con azione integrale
+**Status:** PARTIAL — griglia LQI completa, nessun candidato soddisfa il tracking M5
 **Last validated milestone:** M6
-**Last validated result:** `run_all.m` in MATLAB R2025b, 92/92 test top-level, regressioni M0–M5, tuning LQR, Kalman, LQG, tracking, disturbo, rumore, dataset e figure PASS
-**Blocking issues:** nessuno per M6; offset da disturbo costante e assenza di limiti hardware restano limiti documentati
-**Next task:** revisione della Pull Request M6; non iniziare M7 senza successivo incarico del gruppo
-**Pull Request:** [#9 — M6: synthesize nominal LQG without integrator](https://github.com/Deda-404/Progetto_CR/pull/9), aperta e non unita
-**Last update:** 2026-08-24 20:50 CEST
+**Last validated result:** `run_all.m` exit 0, 107/107 test PASS; M7 checkpoint con 28/28 candidati stabili e offset DC entro `1e-4 rad`, 0/28 entro il settling M5, minimo 1.964 s
+**Blocking issues:** la griglia integrale prescritta non raggiunge il target di settling 0.8 s senza `Nr`; revisione del gruppo richiesta
+**Next task:** decidere esplicitamente il retuning M7; non modificare M5 e non iniziare M8
+**Pull Request:** da aprire sul branch `codex/m7-lqg-integral`; PR M6 #9 già unita in `main`
+**Last update:** 2026-08-24 23:05 CEST
+
+## Quality gate M7 — checkpoint PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| main contiene M6 | PASS — merge `5326567` verificato |
+| due integratori sulle sole `q` | PASS |
+| augmented plant | PASS — 16×16, PBH controllabile e stabilizzabile |
+| zero obstruction | PASS — PBH/Rosenbrock a zero rango 16 |
+| priorità M6 | PASS — blocco `Qx` riusato esattamente |
+| `xiScale` | PASS — 0.0698131701 rad s derivata da M5 |
+| griglia autonoma | PASS — 28/28 candidati |
+| stabilità | PASS — 28/28 |
+| offset `d1/d2` | PASS — 28/28 entro `1e-4 rad` via guadagno DC |
+| tracking M5 | **FAIL — 0/28; minimo 1.964 s > 0.8 s** |
+| candidato selezionato | NOT RUN — insieme ammissibile vuoto |
+| Kalman KF03 / controller ordine 16 | NOT RUN — stop dopo il gate LQI |
+| separation / rumore / measured-vs-estimated | NOT RUN — nessun controllore finale |
+| saturazione / anti-windup | PASS — non introdotti |
+| dataset finale e sette figure | NOT RUN — non pubblicati artifact finali impropri |
+| dataset e figura checkpoint | PASS |
+| test M7 checkpoint | PASS — 15/15 |
+| test top-level / `run_all` | PASS tecnico — 107/107, exit 0, messaggio finale PARTIAL |
+| Code Analyzer | PASS — 0 messaggi su sei file M7/pipeline |
+| M5 modificata | NO |
+| stato | **PARTIAL — revisione richiesta** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M6
 

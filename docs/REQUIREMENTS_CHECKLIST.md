@@ -72,6 +72,8 @@ M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la 
 - [ ] Validare entrambe sul modello non lineare.
 - [ ] Stimare e documentare la RAS empirica di entrambe.
 
+Il checkpoint M7 ha completato augmentazione, verifica PBH e griglia LQI da 28 candidati: tutti annullano l’offset da disturbo costante, ma nessuno rispetta il settling M5 di 0.8 s (minimo 1.964 s). La voce “LQG con integratore” resta quindi correttamente aperta; non è stato pubblicato un controllore finale e serve revisione del gruppo.
+
 ## Controllo \(H_\infty\)
 
 - [ ] Definire impianto generalizzato e segnali \(w,z,y,u\).

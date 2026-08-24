@@ -1205,3 +1205,106 @@ La soluzione è ben condizionata, finita e porta il guadagno DC nominale riferim
 ### Stato epistemico
 
 **APPROVATA PER IL TRACKING NOMINALE M6 SENZA INTEGRATORE**
+
+---
+
+## D-0028 — Due integratori sulle sole posizioni articolari e scala fisica di xi
+
+**Data:** 2026-08-24
+**Milestone:** M7
+
+### Problema
+
+Definire l’internal model M7 e una normalizzazione confrontabile con il costo M6, senza introdurre stati o pesi arbitrari.
+
+### Alternative
+
+- integrare le sole posizioni articolari misurate;
+- integrare anche le coordinate motore `theta`;
+- usare una scala adimensionale fissata numericamente;
+- derivare la scala dall’ampiezza e dal target temporale M5.
+
+### Metriche, criterio e scelta
+
+Si adottano esattamente due stati con `xi_dot=r-q` nel servo ideale. La scala è `xiScale=referenceAmplitude*settlingTimeTarget=0.0698131701 rad s`, letta da M5; `Qi=wi/xiScale^2` è uguale sui due giunti. L’augmentazione ha dimensione 16, PBH a zero di rango 16 e Rosenbrock a zero di rango 16.
+
+### Motivazione
+
+Le uscite regolate sono `q1,q2`; integrare `theta` introdurrebbe due internal model non richiesti. La scala scelta lega l’accumulo d’errore allo scenario nominale e al target già approvati, isolando `wi` come coefficiente adimensionale.
+
+### Conseguenze e limiti
+
+Il costo sui primi 14 stati resta esattamente quello M6. La scelta non determina ancora un guadagno finale e non affronta saturazione o windup.
+
+### Stato epistemico
+
+**APPROVATA COME FORMULAZIONE E NORMALIZZAZIONE DEL CHECKPOINT M7**
+
+---
+
+## D-0029 — Nessun candidato ammissibile nella griglia LQI M7
+
+**Data:** 2026-08-24
+**Milestone:** M7, quality gate LQI
+
+### Problema
+
+Selezionare autonomamente un candidato fra 28 combinazioni di `wi` e `rhoU` che mantenga i target M5 e annulli gli offset da disturbo costante.
+
+### Alternative
+
+- promuovere il candidato con minimo settling anche se fuori specifica;
+- modificare automaticamente il target M5;
+- ampliare la griglia senza autorizzazione;
+- registrare il trade-off e fermare la milestone.
+
+### Metriche, criterio e scelta
+
+Tutti i 28 candidati sono stabili e hanno offset DC sui due disturbi entro `1e-4 rad`; nessuno rispetta il settling di 0.8 s. Il minimo è 1.964 s per I25 (`wi=4`, `rhoU=4`), con gap 1.164 s. Per `wi=2` il settling è 2.704–2.776 s; per `wi<=1` non entra nella banda del 2% entro 3 s. L’insieme fondamentale-ammissibile è vuoto e nessun candidato viene selezionato.
+
+### Motivazione
+
+La regola M7 vieta di scegliere un controllore soltanto perché annulla l’offset quando il tracking degrada gravemente. Promuovere I25 renderebbe il confronto metodologicamente scorretto.
+
+### Conseguenze e limiti
+
+M7 è `PARTIAL`; il dataset finale, il controllore LQG-I, la diagnostica rumore, la separazione augmentata e il confronto finale M6/M7 non vengono prodotti. M5 resta invariato. Il dataset parziale conserva l’intera griglia e I25 esclusivamente come punto diagnostico.
+
+### Stato epistemico
+
+**QUALITY GATE LQI FAIL — REVISIONE DEL GRUPPO RICHIESTA**
+
+---
+
+## D-0030 — Architettura measured-error, riuso KF03 e anti-windup rinviati al progetto ammissibile
+
+**Data:** 2026-08-24
+**Milestone:** M7
+
+### Problema
+
+Definire le scelte di implementazione successive senza trasformare un candidato non ammissibile in un controllore finale.
+
+### Alternative
+
+- integrare `r-Sq*y`, quindi l’uscita realmente misurata;
+- integrare `r-Cq*xhat`;
+- ritunare simultaneamente il Kalman;
+- riusare `L/Qn/Rn` di KF03;
+- introdurre saturazione e anti-windup in assenza di limiti hardware.
+
+### Metriche, criterio e scelta
+
+La baseline prevista resta `xi_dot=r-Sq*y`; la variante estimated-error dovrà essere una sola diagnostica secondaria. Il Kalman previsto resta KF03 per isolare l’effetto integrale. Saturazione e anti-windup restano disabilitati. Poiché la griglia LQI non produce una selezione, il confronto measured/estimated, il riuso numerico di `L` nella realizzazione e le metriche seeded non sono stati eseguiti.
+
+### Motivazione
+
+L’uscita `q` è misurata direttamente e l’integrazione measured-error realizza l’internal model dell’errore regolato. Cambiare contemporaneamente stimatore e servo impedirebbe un confronto leggibile con M6. `uScale` non è un limite certificato e non giustifica una saturazione artificiale.
+
+### Conseguenze e limiti
+
+Le scelte sono vincoli per la ripresa, non evidenza di un controllore validato. Il rumore encoder entrerà nel canale integrale e dovrà essere quantificato soltanto dopo una nuova selezione autorizzata. Il rischio di windup resta aperto per la futura validazione non lineare con limiti motivati.
+
+### Stato epistemico
+
+**ARCHITETTURA BASELINE CONFERMATA; IMPLEMENTAZIONE FINALE NOT RUN PER STOP D-0029**
