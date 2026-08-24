@@ -21,6 +21,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Dataset nominale M2 e figura originale dei poli open-loop, entrambi rigenerabili.
 - `docs/EQUILIBRIO_LINEARIZZAZIONE.md` con derivazioni, matrici, metriche e limiti M2.
 - `docs/handoff/Resoconto_M2_per_GPT.txt` con handoff autosufficiente M2 e riferimenti Git/PR.
+- Parametri nominali attuatori centralizzati, modello SISO secondo ordine più Padé e blocco MIMO diagonale a sei stati.
+- Costruzione esplicita della pianta completa M3 a 14 stati e verifica indipendente mediante `series`.
+- Analisi deterministica di 27 candidati e diagnostica strutturale SVD/PBH con normalizzazione temporale.
+- Suite M3 con undici test, dataset nominale e tre figure frequenziali originali e rigenerabili.
+- `docs/DINAMICA_ATTUATORI.md` con modello, scelta, Padé, interconnessione, poli, proprietà strutturali e limiti.
 
 ### Changed
 
@@ -30,6 +35,8 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Aggiornati README, decision log, checklist, diario e project status alla chiusura di M1.
 - Esteso `run_all.m` alla pipeline M2 completa con dataset, figura e quality gate.
 - Promosse a decisioni approvate equilibrio verticale, misura `[q;theta]` e uscita prestazionale `q` sulla base dei risultati eseguiti.
+- Esteso `run_all.m` alla pipeline M3 completa con selezione attuatori, regressioni M0–M2, validazione, dati e figure.
+- Approvata la decisione D-0006: \(\omega_n=40\) rad/s, \(\zeta=0.8\), \(\tau_d=15\) ms, Padé ordine 1 e canali nominalmente identici.
 
 ### Fixed
 
@@ -54,3 +61,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Due poli open-loop instabili, controllabilità 8/8 e stabilizzabilità PBH positiva.
 - Osservabilità 8/8 e rilevabilità PBH positiva sia per `[q;theta]` sia, a titolo informativo, per `q`.
 - Riduzione monotona dell'errore locale LTI/non lineare su quattro ampiezze.
+- Attuatore SISO ordine 3, DC gain 1, poli stabili e zero Padé RHP a 133.3333 s⁻¹.
+- Blocco attuatori ordine 6 e pianta completa ordine 14 con dimensioni 4×2 per `[q;theta]`.
+- Equivalenza frequenziale esatta fra augmentation esplicita e cascata indipendente sulla griglia 0.01–1000 rad/s.
+- Pianta completa con 12 poli stabili, 2 instabili e nessun marginale o nuovo polo attuativo instabile.
+- Controllabilità/osservabilità 14/14 sul tempo normalizzato e PBH a rango pieno su tutti i modi.
+- Confronto Padé: errori fase 0.001063°/0.006028° sui modi instabili e 4.76162°/6.82742° a 70/80 rad/s.
+- `run_all.m` M3 con 29/29 test top-level e quality gate M1–M3 PASS.

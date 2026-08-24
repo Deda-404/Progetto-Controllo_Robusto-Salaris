@@ -446,3 +446,60 @@ Le future specifiche di tracking/regolazione saranno formulate prioritariamente 
 ### Stato
 
 **APPROVATA — risolve la parte uscite di P-0002**
+
+---
+
+## D-0006 — Parametri nominali e simmetria degli attuatori
+
+**Data:** 2026-08-24
+**Milestone:** M3
+**Decisione precedente collegata:** P-0003
+
+### Problema
+
+Definire \(\omega_n\), \(\zeta\), \(\tau_d\), ordine del Padé e relazione nominale fra i due attuatori senza dati sperimentali forniti dalla traccia.
+
+### Alternative
+
+- griglia autonoma con \(\omega_n\in\{25,40,60\}\) rad/s, \(\zeta\in\{0.6,0.8,1.0\}\) e \(\tau_d\in\{10,15,25\}\) ms, per 27 candidati;
+- valori del riferimento, 30 rad/s, 0.7 e 20 ms, consultati soltanto dopo il primo PASS;
+- canali nominali diversi, rinviati perché la traccia non fornisce dati per giustificare un'asimmetria.
+
+### Scelta
+
+Adottare per entrambi i canali:
+
+\[
+\omega_n=40\ \mathrm{rad/s},\qquad
+\zeta=0.8,\qquad
+\tau_d=0.015\ \mathrm{s},
+\]
+
+con Padé del primo ordine e blocco nominale
+
+\[
+G_A(s)=\operatorname{diag}(G_a(s),G_a(s)).
+\]
+
+I parametri sono una **assunzione nominale progettuale**, non valori identificati.
+
+### Metriche
+
+- attuatore SISO di ordine 3, guadagno statico 1;
+- poli \(-32\pm24j\) e \(-133.3333\) s⁻¹, tutti stabili;
+- zero Padé RHP \(+133.3333\) s⁻¹;
+- rise time 0.0626454 s, settling time 0.109362 s, overshoot 1.47221% e banda 34.7834 rad/s;
+- errori di fase Padé pari a 0.001063° e 0.006028° sui modi instabili M2, 4.76162° a 70 rad/s e 6.82742° a 80 rad/s;
+- due canali di ordine complessivo 6 e pianta completa di ordine 14.
+
+### Motivazione
+
+L'attuatore è più rapido dei modi instabili a 4.0408 e 7.2094 s⁻¹, mantiene basso l'overshoot e introduce roll-off prima dei modi elastici a circa 70–80 rad/s. Il ritardo di 15 ms è significativo senza produrre, con Padé ordine 1, un errore di fase eccessivo nella zona dei modi instabili. La scelta è stata fissata prima del confronto reference-last e non è stata adattata per assomigliare al progetto precedente né per favorire un controllore non ancora progettato.
+
+### Conseguenze e limitazioni
+
+Il comando \(u\) è distinto dalla coppia effettiva \(\tau\) applicata al modello meccanico. I due attuatori sono identici soltanto nel nominale. Padé introduce uno zero RHP ma nessun polo instabile. In M4 dovranno essere decisi e approvati separatamente dispersioni parametriche, differenze fra canali e dinamiche non modellate; questa decisione non approva percentuali d'incertezza, ureal, ultidyn o \(W_I\).
+
+### Stato
+
+**APPROVATA — sostituisce la proposta P-0003**
