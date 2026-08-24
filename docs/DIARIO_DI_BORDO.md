@@ -1176,3 +1176,24 @@ solo come representative integral benchmark lineare M7.
 
 **Quality gate M8 completo PASS.** Il prossimo passo indicato è M9, ma non è
 stato iniziato.
+
+---
+
+## 2026-08-24 — Pubblicazione M8
+
+**Responsabile:** Alessio
+**Milestone:** M8
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati tre commit separati per software, artifact e documentazione.
+- Pubblicato `codex/m8-simulink-lqg-ras` su `origin`.
+- Aperta la Pull Request
+  [#13](https://github.com/Deda-404/Progetto_CR/pull/13) verso `main`.
+- Creato l'handoff scaricabile `Resoconto_M8_per_GPT.txt` con architettura,
+  metriche, RAS, test, quality gate e riferimenti Git.
+
+### Risultato
+
+**M8 pubblicata per revisione senza merge autonomo. M9 non iniziata.**

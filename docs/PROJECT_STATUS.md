@@ -7,7 +7,7 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Blocking issues:** nessuno
 **Next milestone:** M9 — H-infinity `mixsyn` (NON INIZIATA)
-**Pull Request:** branch `codex/m8-simulink-lqg-ras`; PR M8 da aprire verso `main`, senza merge autonomo
+**Pull Request:** [PR #13](https://github.com/Deda-404/Progetto_CR/pull/13) aperta verso `main`, non mergiata
 **Last update:** 2026-08-24, quality gate M8 superato
 
 ## Quality gate M8 — COMPLETE

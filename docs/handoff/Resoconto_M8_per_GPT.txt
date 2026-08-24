@@ -1,0 +1,245 @@
+RESOCONTO M8 PER GPT
+====================
+
+Data: 2026-08-24
+Milestone: M8 — Simulink, validazione non lineare e RAS LQG
+Esito: COMPLETE
+Responsabile: Alessio
+
+1. STATO GIT INIZIALE E GOVERNANCE
+----------------------------------
+
+- Base iniziale: ultimo origin/main, commit 6339bc2, merge della PR #12.
+- Branch creato: codex/m8-simulink-lqg-ras.
+- PROJECT_STATUS corretto prima del lavoro tecnico: PR #12 risulta mergiata;
+  M7 resta PARTIAL terminale e accettata; nessun tuning ulteriore.
+- Ultimo controllore validato: M6 LQG nominale senza integratore.
+- M5 e tutti i checkpoint/dataset M7 sono rimasti numericamente invariati.
+- Decisione D-0034 registrata: la feasibility M7 è conclusa, il mancato
+  raggiungimento simultaneo Ts/OS è un risultato progettuale e M8 è
+  autorizzata.
+
+2. ARCHITETTURA SIMULINK
+------------------------
+
+Modello: simulink/SEA_LQG_nonlinear.slx
+
+Catena:
+
+M6 LQG -> attuatori nominali M3 -> meccanica SEA non lineare M1.
+
+- Meccanica: 8 stati, equazioni M(q), C(q,qdot), G(q), elasticità SEA e
+  disturbo fisico lato link realmente valutati dalle funzioni M1.
+- Attuatori: 6 stati, secondo ordine + Padé ordine 1 M3.
+- Plant fisico: 14 stati.
+- Stimatore/controller M6: 14 stati.
+- Totale stati continui Simulink: 28.
+- Plant in coordinate assolute; controller, riferimento, misure e stimatore
+  in coordinate incrementali.
+- Gli ingressi, le condizioni iniziali e il solver passano tramite
+  Simulink.SimulationInput.
+- Simulink.findVars restituisce zero dipendenze dal base workspace.
+- Nessuna saturazione è stata introdotta; uScale=12 N m resta una
+  normalizzazione prestazionale M5.
+
+3. CONTROLLER E BENCHMARK M7
+----------------------------
+
+Il controller primario usa K, L e Nr caricati dal dataset
+results/data/m6_lqg_no_integrator.mat e verificati identici senza alcun
+retuning.
+
+I25 non è stato ricostruito in Simulink. Rimane soltanto il confronto lineare
+già validato in M7, etichettato “representative integral benchmark”, fuori
+dal quality gate M8. M7 resta PARTIAL indipendentemente da M8.
+
+4. SOLVER
+---------
+
+- Confronto: ode45 contro ode23t sul gradino da 2°.
+- Differenza massima q: 5.5565e-6 rad.
+- Runtime osservati nella validazione documentata: 2.1604 s contro 0.4780 s.
+- Selezionato: ode23t.
+- RelTol: 1e-5.
+- AbsTol: 1e-7.
+- MaxStep: 0.005 s.
+
+5. EQUILIBRIO
+-------------
+
+Simulazione di 4 s con x=xbar, attuatori all'equilibrio, xhat=0, r=d=v=0:
+
+- max abs(q-qbar) = 4.086e-17 rad;
+- max abs(theta-thetabar) = 3.845e-17 rad;
+- max abs(u-taubar) = 1.686e-15 N m.
+
+Gate superato senza drift.
+
+6. TRACKING 2/5/8 GRADI E LTI VS NON LINEARE
+--------------------------------------------
+
+Sono stati simulati entrambi i giunti separatamente, sei casi totali.
+
+2°:
+- j1: Ts 0.77696 s, OS 0.24099%, errore rel. 0.0002796,
+  cross 0.17267, peak u 1.8759 N m;
+- j2: Ts 0.51484 s, OS 0.01228%, errore rel. 0.0001269,
+  cross 0.17392, peak u 1.7241 N m.
+
+5°:
+- j1: Ts 0.77110 s, OS 0.11301%, errore rel. 0.0017391,
+  cross 0.17286, peak u 4.6897 N m;
+- j2: Ts 0.51478 s, OS 0%, errore rel. 0.0007909,
+  cross 0.17398, peak u 4.3102 N m.
+
+8°:
+- j1: Ts 0.76704 s, OS 0%, errore rel. 0.0044128,
+  cross 0.17319, peak u 7.5034 N m;
+- j2: Ts 0.51015 s, OS 0%, errore rel. 0.0020130,
+  cross 0.17409, peak u 6.8964 N m.
+
+Scarti massimi LTI/NL sulle q:
+- 2°: 9.8193e-6 rad (j1), 4.5017e-6 rad (j2);
+- 5°: 1.5269e-4 rad (j1), 7.0184e-5 rad (j2);
+- 8°: 6.2015e-4 rad (j1), 2.8583e-4 rad (j2).
+
+Il massimo RMS LTI/NL è 3.0836e-4 rad. Nei casi eseguiti l'accordo diminuisce
+regolarmente con l'ampiezza; la conclusione deriva dai dati, non è stata
+forzata.
+
+7. DISTURBI
+-----------
+
+Applicati realmente al lato link: d1 e d2, separatamente, a 0.25, 0.50 e
+1.00 N m. Tutti i casi sono finiti e assestati. A 0.50 N m gli offset sono:
+
+- d1: 0.079485 rad;
+- d2: 0.15998 rad.
+
+L'offset M6 senza integratore è quindi chiaramente visibile e non nascosto.
+Il massimo scarto LTI/NL sui sei casi è 0.0020058 rad (d2=1 N m).
+
+8. RUMORE
+---------
+
+- Seed: 20260826.
+- Sigma encoder: 8.7266e-4 rad, dalla selezione Kalman M6.
+- RMS tracking NL: 0.0158 rad (lineare M6: 0.0150 rad).
+- RMS errore stima q NL: 2.2627e-4 rad (lineare: 2.3377e-4 rad).
+- RMS variazione comando NL: 0.0753 N m (lineare: 0.0803 N m).
+- Errore massimo fra due rilanci con lo stesso rumore: 0.
+
+9. DEFINIZIONE EMPIRICA RAS
+---------------------------
+
+Sezione primaria:
+- delta q0=[dq1;dq2];
+- qdot0=0;
+- theta0=thetabar+delta q0;
+- thetadot0=0;
+- attuatori all'equilibrio;
+- xhat0=0 in coordinate incrementali.
+
+La deformazione SEA iniziale resta quella di equilibrio.
+
+Un punto converge se la simulazione completa senza errori, tutti i segnali
+sono finiti e limitati e, nell'ultimo 10% di 8 s:
+
+- max abs(q-qbar) <= 0.5°;
+- max abs(qdot) <= 0.02 rad/s;
+- max abs(theta-thetabar) <= 0.5°;
+- max abs(thetadot) <= 0.05 rad/s;
+- il trend finale non cresce oltre il margine deterministico del 5%.
+
+I casi stabili ma lenti possono essere estesi deterministicamente a 12 s;
+nessun punto ha richiesto l'estensione.
+
+Ricerca:
+- griglia grossolana [-60,-30,0,30,60]^2;
+- 36 direzioni a passo 10°;
+- bisezione radiale con tolleranza 1°;
+- budget massimo 400 simulazioni per sezione.
+
+60° è il limite della ricerca numerica, non una saturazione o un limite
+fisico del manipolatore.
+
+10. RISULTATI E FRONTIERA RAS
+-----------------------------
+
+Sezione primaria xhat0=0:
+- simulazioni/punti unici: 57;
+- convergenti: 57;
+- divergenti: 0;
+- raggio minimo: 60°;
+- raggio massimo campionato: 78.3244°;
+- area poligonale: 14214 deg^2;
+- direzione critica deterministica: 0°;
+- direzione favorevole deterministica: 320°.
+
+Seconda sezione scelta: stesso piano dq1/dq2 con xhat0 coerente con lo stato
+fisico incrementale. Risultato identico: 57/57 convergenti, area 14214 deg^2.
+
+Tutti gli endpoint raggiungono il box: la frontiera prodotta è search-box
+limited e non è una frontiera dinamica localizzata. Le direzioni critica e
+favorevole sono i primi indici scelti dal tie-break fra simmetrie equivalenti.
+
+La RAS riportata è una stima empirica su sezioni del dominio delle condizioni
+iniziali e non un certificato analitico della regione di attrazione completa.
+
+11. ARTIFACT
+------------
+
+- Modello: simulink/SEA_LQG_nonlinear.slx
+- Dataset: results/data/m8_lqg_nonlinear_ras.mat
+- Documento: docs/SIMULINK_RAS_LQG.md
+- Figure:
+  * m8_lqg_nonlinear_tracking.png
+  * m8_lqg_lti_vs_nonlinear.png
+  * m8_lqg_nonlinear_disturbance.png
+  * m8_lqg_ras_q_plane.png
+  * m8_lqg_ras_secondary_section.png
+- Test: tests/test_m8_simulink_ras.m, T1-T18.
+
+12. TEST, RUN_ALL E QUALITY GATE
+--------------------------------
+
+- Suite M8 isolata: 18/18 PASS.
+- Suite top-level: 139/139 PASS.
+- matlab.exe -batch "run_all": exit code 0.
+- Code Analyzer sui nove file MATLAB M8: 0 messaggi.
+- git diff --check: PASS.
+- Campi obbligatori dataset: PASS.
+- Quality gate M8: COMPLETE.
+
+13. PROBLEMI E LIMITI
+---------------------
+
+- Nessun FAIL tecnico aperto.
+- La ricerca non ha trovato divergenze entro il box: non si può inferire il
+  confine reale della RAS fuori dal dominio esplorato.
+- Non sono modellate saturazioni hardware certificate.
+- Non sono state eseguite robustezza M4, mu-analysis, sintesi H-infinity,
+  D-K o Monte Carlo: appartengono a milestone successive.
+- Il warning di ricostruzione dovuto al nome del modello presente sul path è
+  stato eliminato ricostruendo in-place il file esistente; modello e risultati
+  sono invariati e i 18 test M8 sono stati ripetuti dopo la correzione.
+
+14. GIT E PR
+------------
+
+- Branch: codex/m8-simulink-lqg-ras
+- Commit software: fa84c1c
+- Commit dataset/figure: 2eec4a2
+- Commit documentazione: 7955e1c
+- Pull Request: #13
+- URL: https://github.com/Deda-404/Progetto_CR/pull/13
+- Base: main
+- Stato alla pubblicazione: OPEN, non draft, non mergiata.
+- Merge autonomo: NON eseguito.
+
+15. PROSSIMO PASSO
+------------------
+
+M9 — H-infinity mixsyn, indicata come prossima milestone ma NON iniziata.
+
+FINE RESOCONTO M8
