@@ -1,0 +1,398 @@
+RESOCONTO M5 PER GPT
+Specifiche di prestazione, modello dei disturbi e pesi di progetto
+Data: 2026-08-24
+
+======================================================================
+1. ESITO
+======================================================================
+
+M5 e' COMPLETE con quality gate PASS.
+
+Risultati sintetici:
+
+- governance documentale normalizzata;
+- obiettivi di regulation, tracking, disturbance rejection, control
+  effort e attenuazione in alta frequenza definiti separatamente;
+- disturbo fisico di coppia applicato ai link;
+- Bd derivata analiticamente e verificata indipendentemente;
+- banda target selezionata dai dati M2/M3: omegaB = 12 rad/s;
+- W1: As = 0.05, Ms = 2;
+- W2: uScale = 12 N m, omegaU = 30 rad/s, alpha = 6;
+- pesi stabili, propri, MIMO 2x2 e diagonali;
+- dataset e tre figure M5 generati;
+- test M5: 14/14 PASS;
+- test top-level run_all: 66/66 PASS;
+- Code Analyzer: 0 messaggi su 8 file;
+- matlab.exe -batch "run_all": PASS, exit code 0;
+- nessun controllore sintetizzato.
+
+M6 non e' stata iniziata.
+
+======================================================================
+2. GOVERNANCE DOCUMENTALE
+======================================================================
+
+Nel diario sono stati modificati esclusivamente i metadati storici:
+
+- tutti i campi Autore sono diventati Responsabile;
+- ogni voce usa Responsabile: Alessio;
+- sono rimasti invariati attivita', risultati, errori, date, decisioni e
+  cronologia Git;
+- all'inizio del diario e' stata aggiunta la spiegazione semantica del
+  campo Responsabile.
+
+AGENTS.md contiene ora la regola permanente Project documentation voice:
+
+- forma impersonale o prima persona plurale tecnica;
+- nessuna voce da diario di uno strumento software;
+- Responsabile: Alessio quando serve un referente umano;
+- nessuna firma automatica nei sorgenti MATLAB;
+- gli eventuali obblighi formali di disclosure restano separati.
+
+Il test T14 conferma l'assenza di campi storici Autore e la presenza della
+nuova convenzione.
+
+======================================================================
+3. BASE GIT E PULL REQUEST
+======================================================================
+
+Base:
+
+- main remoto contenente il merge M4.1 ba8c197;
+- branch: codex/m5-performance-specs.
+
+Commit principali:
+
+- f7002ac - feat: define and validate M5 performance targets
+- 2e4dd34 - docs: record M5 specifications and governance
+
+Pull Request:
+
+- PR #8 - M5: define performance specifications and disturbance model
+- https://github.com/Deda-404/Progetto_CR/pull/8
+- base: main
+- head: codex/m5-performance-specs
+- stato verificato: open
+- merged: false
+
+Il presente handoff e i metadati finali sono aggiunti in un commit di
+chiusura successivo ai due commit principali.
+
+======================================================================
+4. SOURCE OF TRUTH M5
+======================================================================
+
+File:
+
+- src/parameters/performance_specs_m5.m
+
+Campi principali:
+
+- referenceAmplitude = 5 deg = 0.0872665 rad;
+- disturbanceTorqueAmplitude = 0.50 N m;
+- omegaB = 12 rad/s;
+- As = 0.05;
+- Ms = 2.0;
+- uScale = 12 N m;
+- omegaU = 30 rad/s;
+- controlWeightAlpha = 6;
+- settlingTimeTarget = 0.8 s;
+- overshootTarget = 10 percent;
+- steadyStateTrackingTarget = 5 percent;
+- crossCouplingTarget = 25 percent, preliminare.
+
+La struttura contiene anche tutte le griglie candidate e metadati che
+distinguono requisito della traccia, assunzione di progetto, criterio
+derivato e criterio futuro.
+
+======================================================================
+5. SCENARI DI VALIDAZIONE
+======================================================================
+
+Riferimento articolare:
+
+- 2 deg = 0.034907 rad;
+- 5 deg = 0.087266 rad, scenario nominale;
+- 8 deg = 0.139626 rad.
+
+Massimo errore relativo della linearizzazione gravitazionale:
+
+- 2 deg: 0.02565 percent;
+- 5 deg: 0.16043 percent;
+- 8 deg: 0.41128 percent.
+
+Il caso 5 deg e' quindi coerente con una verifica locale statica.
+
+Disturbo di coppia:
+
+- 0.25 N m;
+- 0.50 N m, scenario nominale;
+- 1.00 N m.
+
+La coppia nominale produce deformazioni statiche SEA:
+
+- giunto 1: 0.0100 rad;
+- giunto 2: 0.0125 rad.
+
+Vale circa il 60.9 percento della massima variazione gravitazionale
+osservata nello scenario articolare da 5 deg. Le ampiezze sono scenari di
+progetto, non misure sperimentali o limiti certificati.
+
+======================================================================
+6. DISTURBO FISICO E Bd
+======================================================================
+
+Equazione adottata:
+
+M(q) qddot + C(q,qdot) qdot + G(q) = Ks(theta-q) + d.
+
+d = [d1; d2] e' una coppia esterna ai link in N m.
+
+Per lo stato meccanico [q; qdot; theta; thetadot]:
+
+Bd = [
+   0          0
+   0          0
+   6.25     -14.5833333
+ -14.5833333  47.9166667
+   0          0
+   0          0
+   0          0
+   0          0
+].
+
+Il blocco non nullo e' M(qbar)^-1 nelle accelerazioni link.
+
+Verifica indipendente:
+
+- differenza finita centrata del modello non lineare con disturbo;
+- passo 1e-6 N m;
+- massimo errore assoluto: 0 alla precisione numerica usata;
+- errore relativo: 0 alla precisione numerica usata.
+
+La pianta disturbancePlant ha:
+
+- 14 stati;
+- ingressi [u1,u2,d1,d2];
+- uscite [q1,q2,theta1,theta2];
+- u invariato rispetto a M3 e passante attraverso gli attuatori;
+- d diretto sulla dinamica link;
+- feedthrough d->uscite nullo.
+
+======================================================================
+7. SELEZIONE DELLA BANDA
+======================================================================
+
+Dati letti automaticamente:
+
+- lambda_u,max = 7.20942861 s^-1 da M2;
+- omega_elastic,min = 69.9543360 rad/s da M2;
+- omega_actuator = 34.7833702 rad/s da M3.
+
+Criteri progettuali:
+
+- omegaB,min = 1.5 lambda_u,max = 10.8141429 rad/s;
+- ceiling attuatore = 0.40 omega_actuator = 13.9133481 rad/s;
+- ceiling elastico = 0.20 omega_elastic,min = 13.9908672 rad/s;
+- omegaB,max = 13.9133481 rad/s.
+
+I coefficienti 1.5, 0.40 e 0.20 non sono requisiti della traccia.
+
+Candidati:
+
+- 11 rad/s: margine minimo 0.18586, rank 3;
+- 12 rad/s: margine minimo 1.18586, rank 1;
+- 13 rad/s: margine minimo 0.91335, rank 2.
+
+Regola:
+
+1. conservare soltanto i candidati dentro tutti i limiti;
+2. massimizzare il margine minimo assoluto;
+3. tie-break su distanza dal centro, omegaB minore e indice.
+
+Selezione: omegaB = 12 rad/s.
+
+======================================================================
+8. PESO W1
+======================================================================
+
+Formula:
+
+W1(s) = (s/Ms + omegaB) / (s + omegaB As).
+
+Griglia:
+
+- As = 0.03, 0.05, 0.08;
+- Ms = 1.7, 2.0, 2.4.
+
+Regola: preferire deterministicamente la severita' mediana su As e Ms.
+
+Baseline:
+
+- omegaB = 12 rad/s;
+- As = 0.05;
+- Ms = 2.0;
+- W1(0) = 20;
+- W1(infinito) = 0.5;
+- stabile, proprio, ordine SISO 1.
+
+Interpretazione:
+
+- sensitivity a bassa frequenza target dell'ordine del 5 percento;
+- picco desiderato dell'ordine di 6 dB;
+- target non ancora dichiarato fattibile o soddisfatto.
+
+======================================================================
+9. SCALA DI SFORZO E PESO W2
+======================================================================
+
+uScale analizzati: 8, 12 e 16 N m.
+
+Baseline: uScale = 12 N m, valore mediano.
+
+uScale e' un parametro di normalizzazione/prestazione e NON una
+saturazione certificata dell'attuatore.
+
+Formula:
+
+W2(s) = (1/uScale) (s/omegaU + 1) /
+        (s/(alpha omegaU) + 1).
+
+Griglia:
+
+- omegaU = 25, 30, 35 rad/s;
+- alpha = 4, 6.
+
+Ammissibilita' e ranking:
+
+- onset inferiore alla banda attuatore;
+- onset non oltre meta' del primo modo elastico;
+- preferenza per uScale mediano;
+- omegaU ammissibile piu' vicino dal basso alla banda attuatore;
+- alpha maggiore come tie-break dinamico.
+
+Baseline:
+
+- omegaU = 30 rad/s;
+- alpha = 6;
+- distanza banda attuatore = 4.78337 rad/s;
+- distanza primo modo elastico = 39.9543 rad/s;
+- W2(0) = 1/12 = 0.0833333 (N m)^-1;
+- W2(infinito) = 6/12 = 0.5 (N m)^-1;
+- stabile, proprio, ordine SISO 1.
+
+W1 e W2 MIMO sono diagonali 2x2 con pesi identici sui due giunti.
+W3 non e' stato introdotto.
+
+======================================================================
+10. TARGET TEMPORALI, MIMO E ROBUSTEZZA
+======================================================================
+
+Target futuri:
+
+- settling time tracking/regulation <= 0.8 s;
+- overshoot <= 10 percent;
+- errore tracking a regime <= 5 percent senza assumere un integratore;
+- forte attenuazione del disturbo costante/bassa frequenza;
+- errore nullo con futuro integratore per ingressi costanti compatibili;
+- cross-coupling peak <= 25 percent, preliminare.
+
+Cross-coupling futuro:
+
+- eccitazione giunto 1: max|q2| / max|q1|;
+- eccitazione giunto 2: max|q1| / max|q2|.
+
+Linguaggio futuro mantenuto distinto:
+
+- Nominal Stability;
+- Nominal Performance;
+- Robust Stability;
+- Robust Performance.
+
+RS richiedera' upper bound mu < 1. RP richiedera' upper bound mu < 1 sul
+problema augmentato. M5 non ha calcolato mu o margini robusti.
+
+======================================================================
+11. ARTIFACT
+======================================================================
+
+Dataset:
+
+- results/data/m5_performance_specs.mat
+
+Contiene tutti gli undici campi obbligatori e inoltre tabelle scenario,
+selezione completa, BdFull e metadati della derivazione.
+
+Figure:
+
+- results/figures/m5_weight_W1.png;
+- results/figures/m5_weight_W2.png;
+- results/figures/m5_spec_frequency_map.png.
+
+Le figure usano scala logaritmica, mostrano le alternative locali e sono
+state ispezionate dopo la rigenerazione finale.
+
+======================================================================
+12. TEST E PROBLEMI RISOLTI
+======================================================================
+
+T1  - specifiche centralizzate: PASS
+T2  - banda derivata da M2/M3: PASS
+T3  - omegaB nella finestra: PASS
+T4  - W1 stabile e proprio: PASS
+T5  - asintoti W1: PASS
+T6  - W2 stabile e proprio: PASS
+T7  - asintoti W2: PASS
+T8  - pesi MIMO 2x2 diagonali: PASS
+T9  - d e' coppia sui link: PASS
+T10 - Bd verificata indipendentemente: PASS
+T11 - scenari documentati: PASS
+T12 - nessuna sintesi controller: PASS
+T13 - regressione M0-M4.1: PASS, 52/52
+T14 - governance documentale: PASS
+
+Problemi registrati:
+
+1. La prima T8 confrontava oggetti tf numericamente identici ma con nomi
+   I/O diversi e ha prodotto un FAIL. Il test e' stato corretto per
+   confrontare le risposte frequenziali; suite finale 14/14 PASS.
+2. Un controllo extra dei nomi nel MAT si e' inizialmente arrestato per
+   quoting della riga batch. Ripetuto con cell array esplicita: PASS.
+3. La prima esportazione preservava una scala lineare nei grafici W1/W2
+   a causa di hold. XScale e' stata impostata esplicitamente a log e il
+   run_all finale e' stato rieseguito.
+4. I vecchi artifact M2-M4 rigenerati differivano solo per 3-16 byte di
+   timestamp/metadata e sono stati ripristinati per evitare rumore Git.
+
+======================================================================
+13. QUALITY GATE M5
+======================================================================
+
+[PASS] governance documentale normalizzata
+[PASS] Responsabile Alessio usato correttamente
+[PASS] nessuna modifica della storia tecnica precedente
+[PASS] obiettivi di controllo definiti
+[PASS] disturbo fisico di coppia ai link
+[PASS] Bd derivata e verificata
+[PASS] scenari reference/disturbance definiti
+[PASS] banda derivata da M2/M3
+[PASS] W1 autonomo e documentato
+[PASS] W2 autonomo e documentato
+[PASS] pesi stabili e propri
+[PASS] asintoti verificati
+[PASS] target temporali documentati
+[PASS] nessun controllore sintetizzato
+[PASS] dataset generato
+[PASS] figure generate
+[PASS] regressioni M0-M4.1 PASS
+[PASS] run_all exit code 0
+[PASS] documentazione aggiornata
+[PASS] diario aggiornato
+
+======================================================================
+14. STATO FINALE
+======================================================================
+
+SUCCESSO - M5 pronta per la revisione del gruppo nella PR #8.
+
+La PR non e' stata unita autonomamente. Fermarsi qui e non iniziare M6.

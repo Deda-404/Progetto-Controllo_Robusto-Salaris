@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` in MATLAB R2025b, 66/66 test top-level, regressioni M0–M4.1, selezione, W1/W2, `Bd`, disturbance path, dataset e figure PASS
 **Blocking issues:** nessuno
 **Next task:** revisione della Pull Request M5; non iniziare M6 senza il successivo incarico del gruppo
-**Pull Request:** da aprire sul branch `codex/m5-performance-specs`
-**Last update:** 2026-08-24 17:55 CEST
+**Pull Request:** [#8 — M5: define performance specifications and disturbance model](https://github.com/Deda-404/Progetto_CR/pull/8), aperta e non unita
+**Last update:** 2026-08-24 18:00 CEST
 
 ## Baseline M5
 

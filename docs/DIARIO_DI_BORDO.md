@@ -663,3 +663,27 @@ Un controllo aggiuntivo dei nomi salvati nel dataset si è inizialmente arrestat
 ### Prossimo passo
 
 Creare commit piccoli, pubblicare il branch, aprire la Pull Request e completare l'handoff. Non iniziare M6.
+
+---
+
+## 2026-08-24 18:00 — Pubblicazione PR e handoff M5
+
+**Responsabile:** Alessio
+**Milestone:** M5
+**Tipo:** Git / Quality gate finale / Handoff
+
+### Attività svolta
+
+- Creati i commit `f7002ac` per codice, test e artifact e `2e4dd34` per governance, specifiche e decisioni.
+- Pubblicato `codex/m5-performance-specs` su `origin`.
+- Aperta la Pull Request [#8](https://github.com/Deda-404/Progetto_CR/pull/8) verso `main`.
+- Verificato alla creazione che la PR fosse `open` e `merged=false`.
+- Creato `docs/handoff/Resoconto_M5_per_GPT.txt` con cleanup documentale, specifiche, formule, `Bd`, artifact, test, problemi e quality gate.
+
+### Risultato
+
+**SUCCESSO — M5 pubblicata per revisione, PR #8 aperta, handoff completo e nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M6.
