@@ -6,6 +6,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Augmentazione LQI M7 a 16 stati con due integratori di posizione, controlli PBH/Rosenbrock a zero e riuso esatto del costo fisico M6.
+- Griglia M7 completa da 28 combinazioni `wi/rhoU`, metriche riproducibili di tracking e disturbo, dataset di checkpoint PARTIAL e figura originale del trade-off.
+- Test M7 del checkpoint per dimensioni, struttura, costi, determinismo, offset, assenza di selezione impropria e governance.
+- Documento `LQG_CON_INTEGRATORE.md` e handoff M7 che registrano lo stop prima della costruzione del controllore finale.
 - Screening LQR M6 sul modello nominale completo a 14 stati, con costo fisicamente normalizzato, precompensatore statico per ciascun candidato e metriche di tracking/disturbo riproducibili.
 - Coarse grid M6 da 240 costi LQR adimensionali, diagnosi modale del baseline, selezione C193 e tabella dedicata all'effetto di `wdelta`.
 - Griglia Kalman da 27 covarianze fisicamente motivate, controllore LQG nominale di ordine 14, dataset M6 e sette figure riproducibili.
@@ -48,6 +52,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Stato corrente portato a M7 `PARTIAL`: tutti i candidati annullano l’offset costante, ma il miglior settling è 1.964 s contro il target M5 di 0.8 s; nessuna modifica automatica di M5.
 - Corretta la classificazione epistemica M5: equilibrio D-0003 come decisione approvata e coppia ai link D-0014 come scelta di modellazione coerente con la traccia, senza variazioni numeriche.
 - Esteso il costo LQR con priorità adimensionali mantenendo inalterate le scale fisiche M5; centralizzati i valori selezionati da metriche.
 - Esteso `run_all.m` al tuning LQR, selezione Kalman, costruzione e quality gate LQG M6.

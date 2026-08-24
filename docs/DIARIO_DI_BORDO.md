@@ -837,3 +837,82 @@ Creare commit piccoli, pubblicare il branch e aprire la Pull Request dedicata se
 ### Prossimo passo
 
 Attendere la revisione del gruppo. Non iniziare M7.
+
+---
+
+## 2026-08-24 23:05 — Augmentazione, griglia LQI e stop PARTIAL M7
+
+**Responsabile:** Alessio
+**Milestone:** M7
+**Tipo:** Modellazione / Tuning LQI / Quality gate
+
+### Attività svolta
+
+- Verificato il merge M6 su `origin/main` tramite il commit `5326567` e creato `codex/m7-lqg-integral` da quel punto.
+- Costruita autonomamente l’augmentazione 16×16 con due soli integratori sulle posizioni articolari e verificati PBH, stabilizzabilità e rango Rosenbrock in `s=0`.
+- Riutilizzato esattamente il blocco `Q` M6 sui 14 stati fisici; derivata da M5 la scala `xiScale=0.0698131701 rad s`.
+- Eseguite tutte le 28 combinazioni `wi=[0.05,0.10,0.25,0.50,1,2,4]` e `rhoU=[4,8,12,16]`, senza preselezione e senza `Nr`.
+- Simulati per ogni candidato i due step da 5° e i due disturbi costanti da 0.5 N m, registrando stabilità, tracking, comando, deformazione, guadagni, disturbo e stato integrale.
+- Verificata numericamente l’eliminazione degli offset DC: 28/28 candidati entro `1e-4 rad`.
+
+### Risultato inatteso e controllo incrociato
+
+Nessun candidato rispetta il target M5 di settling pari a 0.8 s. Il punto più rapido è I25 (`wi=4`, `rhoU=4`) con 1.964 s, overshoot nullo e picco comando pari a 0.0684212 di `uScale`. Il guadagno statico disturbo-posizione di I25 è nullo; dopo 8 s le componenti interessate sono `3.23e-10` e `2.24e-10 rad`. La convenzione di segno, il riuso esatto di `Q_M6`, le dimensioni, i poli e i ranghi PBH sono stati ricontrollati separatamente.
+
+### Quality gate
+
+**PARTIAL — 0/28 candidati fondamentali ammissibili.**
+
+Come prescritto, M5 non è stato modificato, I25 non è stato selezionato e non sono stati costruiti controllore LQG-I finale, analisi di rumore, confronto measured/estimated o dataset finale. Sono stati prodotti soltanto il dataset di checkpoint, la figura della griglia, i test del percorso parziale e l’handoff per la revisione.
+
+### Prossimo passo
+
+Richiedere al gruppo una decisione esplicita sul retuning; non ampliare `wi`, non introdurre feedforward e non modificare M5 automaticamente. Non iniziare M8.
+
+---
+
+## 2026-08-24 23:35 — Verifica riproducibile del checkpoint M7
+
+**Responsabile:** Alessio
+**Milestone:** M7
+**Tipo:** Test / Artifact / Handoff
+
+### Verifiche eseguite
+
+- Code Analyzer sui sei file M7 e pipeline: 0 messaggi.
+- Suite M7 isolata: 15/15 test PASS, 0 failed, 0 incomplete.
+- `matlab.exe -batch "run_all"`: 107/107 test top-level PASS, rigenerazione completa M0–M6 e checkpoint M7, codice di uscita 0.
+- Ispezionata la figura della griglia dopo aver rappresentato esplicitamente come clipped i casi non assestati entro 3 s.
+- Verificati `git diff --check`, dataset parziale, documentazione tecnica e handoff.
+
+### Risultato
+
+La pipeline è tecnicamente riproducibile e termina con il messaggio esplicito `[PARTIAL]`. Non viene dichiarato un quality gate M7 PASS: la suite verifica la correttezza dello stop, non sostituisce il requisito di settling fallito.
+
+### Prossimo passo
+
+Pubblicare il checkpoint su PR dedicata senza merge e attendere la decisione del gruppo sul retuning. Non iniziare M8.
+
+---
+
+## 2026-08-24 23:50 — Pubblicazione PR e handoff del checkpoint M7
+
+**Responsabile:** Alessio
+**Milestone:** M7
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `fde78ff` per implementazione, test, documentazione e artifact M7 e `16befa6` per la rigenerazione degli artifact baseline durante `run_all`.
+- Pubblicato `codex/m7-lqg-integral` su `origin`.
+- Aperta la Pull Request [#10](https://github.com/Deda-404/Progetto_CR/pull/10) verso `main`.
+- Verificato via API che la PR sia `open`, `draft=false`, `merged=false`, con head e base corretti.
+- Aggiornato l’handoff scaricabile con formulazione, griglia, guadagni diagnostici, trade-off, test e motivo dello stop.
+
+### Risultato
+
+**Checkpoint M7 PARTIAL pubblicato per revisione; nessun merge eseguito.**
+
+### Prossimo passo
+
+Attendere istruzioni del gruppo sulla strategia di retuning. Non modificare M5 e non iniziare M8.
