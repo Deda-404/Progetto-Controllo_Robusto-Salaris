@@ -20,6 +20,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Suite M2 con nove test, validazione locale LTI/non lineare e regressione integrale M1.
 - Dataset nominale M2 e figura originale dei poli open-loop, entrambi rigenerabili.
 - `docs/EQUILIBRIO_LINEARIZZAZIONE.md` con derivazioni, matrici, metriche e limiti M2.
+- `docs/handoff/Resoconto_M2_per_GPT.txt` con handoff autosufficiente M2 e riferimenti Git/PR.
 
 ### Changed
 

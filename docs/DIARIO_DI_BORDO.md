@@ -262,3 +262,26 @@ Eseguire il controllo finale del diff e `run_all`, completare commit/push/PR e c
 
 Branch: `codex/m2-equilibrium-linearization`
 Commit e Pull Request: da associare alla chiusura M2
+
+---
+
+## 2026-08-24 13:45 — Pubblicazione PR e handoff M2
+
+**Autore:** Codex
+**Milestone:** M2
+**Tipo:** Git / Documentazione
+
+### Attività svolta
+
+- Creati i commit `3dcbec8` per implementazione/test/artifact e `0d60428` per documentazione e decisioni.
+- Pubblicato `codex/m2-equilibrium-linearization` su `origin`.
+- Aperta la Pull Request [#3](https://github.com/Deda-404/Progetto_CR/pull/3) verso `main`, senza eseguire il merge.
+- Creato `docs/handoff/Resoconto_M2_per_GPT.txt`, mantenendo intatto il precedente resoconto M1.
+
+### Risultato
+
+**SUCCESSO** — M2 pubblicata per revisione, PR #3 aperta e handoff autosufficiente predisposto.
+
+### Prossimo passo
+
+Attendere la revisione del gruppo. Non iniziare M3.

@@ -6,8 +6,8 @@
 **Last validated result:** `run_all.m` eseguito in MATLAB R2025b Update 4; 18 test top-level su 18 superati, regressione M1 annidata 7/7 e validazioni M1/M2 PASS
 **Blocking issues:** nessuno per il completamento di M2
 **Next task:** revisione e merge della Pull Request M2; non iniziare M3 senza il successivo incarico del gruppo
-**Pull Request:** da aprire sul branch `codex/m2-equilibrium-linearization`
-**Last update:** 2026-08-24 13:38 CEST
+**Pull Request:** [#3 — M2 equilibrium and linear analysis](https://github.com/Deda-404/Progetto_CR/pull/3), aperta e non unita
+**Last update:** 2026-08-24 13:45 CEST
 
 ## Metriche M2 validate
 
