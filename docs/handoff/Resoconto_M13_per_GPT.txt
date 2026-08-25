@@ -1,0 +1,158 @@
+RESOCONTO M13 PER GPT — D–K ITERATION / MU-SYNTHESIS
+Responsabile: Alessio
+Data: 2026-08-25
+
+A. GIT
+Branch: codex/m13-musyn-dk
+Base: 9b69caa02c7f8dbca9cc2b936067f67c25904f1a
+Commit software/artifact M13: e1cdc382309fc7257566dffe3a6785922ce3d884
+Commit documentazione: 7b12dd2a0bebf8c87c8afabbd0611245cd755c89
+PR M13 verso main: #18, https://github.com/Deda-404/Progetto_CR/pull/18
+Stato PR verificato: open, non draft, base main, head codex/m13-musyn-dk.
+Main non modificata direttamente; nessun merge eseguito.
+
+B. HOUSEKEEPING
+PR #17 verificata merged.
+Merge commit M12: 9b69caa02c7f8dbca9cc2b936067f67c25904f1a.
+M12 resta PARTIAL: NS PASS, NP FAIL, RS/RP FAIL_CERTIFIED.
+M13 è la milestone corrente; M8 resta l'ultima milestone non lineare
+COMPLETE e M6 il controllore nominale con tracking conforme.
+
+C. DECISIONE
+D-0040 autorizza M13 come D–K feasibility study sul problema M4/M5
+congelato, non come revisione delle specifiche. A5 è nominalmente stabile,
+M12 certifica RS FAIL e M10 ha già mostrato l'optimum nominale circa 10.207
+maggiore di uno. Nessun rilassamento M5 è stato introdotto.
+
+D. FROZEN PROBLEM
+Source Punc: results/data/m12_mu_analysis_a5.mat.
+Dimensione Punc: 6 x 4; nmeas=2; ncont=2.
+Formula: [W1,-W1*GuncQ;0,W2;I,-GuncQ].
+Gate Punc M13/M12: PASS; errore nominale e LFT = 0.
+Input/output names e BlkStruct/lftdata: identici.
+Uncertainty source: results/data/m4_uncertain_plant.mat.
+Blocchi: Delta_act1, Delta_act2, Jm1, k1, k2.
+Delta_act1/2: ultidyn Bound=1; Jm1 +/-9%; k1/k2 +/-7%.
+Weight source: results/data/m5_performance_specs.mat.
+W1/W2: identici alla rigenerazione M5, errori 0; W3=[]; nessun retuning.
+
+E. MUSYN CONFIGURATION
+Firma R2025b: [Kmu,CLperf,info] = musyn(Punc,2,2,opts).
+Display='short'; MaxIter=5; TargetPerf=0; TolPerf=0.01;
+MixedMU='on'; FullDG=[true true]; FitOrder=[5 2];
+FrequencyGrid=M12, 1201 punti; AutoScale/Regularize/LimitGain='on';
+RandomStart=0; UseParallel=false; MinDecay=1e-7; MaxFrequency=Inf.
+Tempo campagna valida: 47.2128421 s. Warning: nessuno.
+Il secondo output è CLperf scalare; CLmu è ricostruita con lft(Punc,Kmu).
+
+Technical aborted attempt
+Attempt 0: Display='full', ABORTED_TECHNICAL. R2025b ha richiesto input
+interattivo dopo la prima iterazione; MATLAB batch ha terminato senza
+restituire Kmu, CLperf o info. Nessun output parziale è stato usato.
+Valid M13 campaign: Display='short', prima e unica campagna valida. Tutte le
+opzioni matematiche sono rimaste identiche; il cambio non è retuning.
+
+F. D–K HISTORY
+Iter | K-step gamma | PeakMu | PeakMuFit | fit gap* | K order | D/G fit
+1 | 58.2086569179 | 46.3781410097 | 46.4603203537 | 0.0821793440 | 20 | 14/6
+2 | 10.7642115144 | 10.6964379339 | 10.7906552130 | 0.0942172791 | 40 | 24/8
+3 | 10.4439634184 | 10.4032233618 | 10.4568540041 | 0.0536306423 | 52 | 28/10
+4 | 10.4469254036 | 10.4059698071 | 10.4553986438 | 0.0494288367 | 58 | 24/10
+5 | 10.4147388534 | 10.4071710189 | 10.4181480840 | 0.0109770651 | 54 | 24/8
+
+* gap assoluto derivato PeakMuFit-PeakMu; R2025b non restituisce un fit
+error esplicito. PeakMu è scalare, quindi lower bound e critical frequency
+non sono disponibili. Raw DG/dr/dc/PSI/FitOrder sono salvati integralmente.
+Best iteration: 3. Iterazioni: 5/5.
+Termination: MAX_ITER_REACHED, interpretazione del progetto; l'API non
+restituisce uno status formale.
+
+G. CONTROLLER
+Kmu dimensioni: 2 output x 2 input.
+Ordine: 52. Matrici: finite. Stabilità isolata: true.
+Nessuna riduzione d'ordine.
+Poli Kmu (re +/- j im, rad/s):
+-12184.41152; -12218.3649028; -1600.80678223; -2203.40461051;
+-2204.81350915; -207.35351895; -207.353282602;
+-57.2655297707 +/- j139.597742108;
+-57.1384013181 +/- j139.644810079; -153.983373894;
+-133.342639216; -133.292090463;
+-32.0542826232 +/- j87.4507068856;
+-6.26872474494 +/- j80.452289916;
+-62.8123048374; -23.7804637364 +/- j71.8724423981;
+-2.03528686493 +/- j69.5176175978;
+-3.83612123639 +/- j70.7456011874;
+-45.5811536131 +/- j38.4901248884;
+-12.8293627063 +/- j64.2215651206;
+-4.91488563743 +/- j61.4853170103;
+-6.35062521872 +/- j61.8676998954;
+-12.6418704576 +/- j58.6972250346;
+-39.2255521092 +/- j19.6529277249;
+-26.5992254211 +/- j35.0136696332;
+-5.01680909523 +/- j35.8018097974;
+-16.5445340196 +/- j22.3580048666; -26.3533293255;
+-15.985707796; -8.24524687278; -9.14795564628; -4.56133789726;
+-1.28801329994; -1.10388815436; -0.6; -0.600000000001.
+
+H. NOMINAL STABILITY
+Pianta nominale M3: ordine 14.
+Stati interni espliciti plant-controller: 66.
+Massima parte reale: -0.731994726169.
+S, T, KS e stack pesato: stabili.
+Outcome Nominal Stability: PASS.
+
+I. NOMINAL WEIGHTED PERFORMANCE
+||W1*S||inf = 10.2412656867, peak 0 rad/s.
+||W2*Kmu*S||inf = 10.3788582451, peak 93.1402569484 rad/s.
+||[W1*S;W2*Kmu*S]||inf = 10.3917314574.
+Peak stack = 93.1402569484 rad/s.
+Errore stack indipendente vs CLmu nominale = 4.082796175e-12.
+
+J. COMPARISON
+Controller | order | nominal weighted norm | max Re | nominal stability
+M10 Hinf full-order | 18 | 10.2071033931 | -0.683828559887 | PASS
+M11 A5 | 6 | 10.2476411502 | -0.736157095561 | PASS
+M13 Kmu | 52 | 10.3917314574 | -0.731994726169 | PASS
+M10 lower-bound sanity: PASS; Kmu non batte inspiegabilmente M10.
+
+K. MUSYN OBJECTIVE
+Objective finale restituito: 10.4032233617655.
+Interpretazione: objective/peak mu reported by synthesis, non certified
+robust performance. Il valore >1 è un risultato valido e non ha attivato
+retuning. La verifica formale indipendente appartiene a M14.
+
+L. TEST E RIPRODUCIBILITA
+Suite M13: 52/52 PASS.
+Suite completa/regressione M0-M13: 362/362 PASS.
+run_all: PASS, exit code 0; l'artifact M13 è ricaricato senza seconda musyn.
+MATLAB Code Analyzer: 0 messaggi su 8 file M13.
+git diff --check: PASS.
+Artifact: results/data/m13_musyn_dk.mat.
+Figure: 6/6 presenti.
+
+M. QUALITY GATE
+Frozen generalized plant: PASS.
+Frozen uncertainty: PASS.
+Frozen weights: PASS.
+D-K execution: PASS.
+D-K history: PASS.
+Controller extraction: PASS.
+Nominal internal stability: PASS.
+Nominal weighted reconstruction: PASS.
+M10 lower-bound sanity: PASS.
+Robust synthesis objective: QUANTIFIED.
+Controller order: QUANTIFIED.
+Software correctness: PASS.
+
+N. OVERALL STATUS
+M13 = COMPLETE. L'objective >1 non impedisce il completamento della
+milestone di sintesi; Kmu non è ancora dichiarato robusto certificato.
+
+O. LIMITI
+Nessun retuning M5/M4, W3, 2-DoF, prefilter, Monte Carlo, Simulink NL,
+tracking esteso, riduzione d'ordine, seconda campagna valida o M14.
+Il tentativo tecnico abortito è distinto dalla singola campagna valida.
+
+P. RACCOMANDAZIONE
+Dopo review e merge separato di M13, M14 può sottoporre Kmu alla stessa
+pipeline formale NS/NP/RS/RP di M12. Non iniziare M14 senza autorizzazione.

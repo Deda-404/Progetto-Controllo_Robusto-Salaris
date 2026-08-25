@@ -1,14 +1,41 @@
 # Project Status
 
-**Current milestone:** M12 — μ-analysis NS/NP/RS/RP del controllore A5
-**Status:** `PARTIAL` — software `PASS`; NS `PASS`, NP `FAIL`, RS/RP `FAIL_CERTIFIED`
-**Last validated milestone:** M12 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
-**Last validated controller:** M6 — LQG nominale senza integratore
+**Current milestone:** M13 — D–K iteration / μ-synthesis sul problema M4/M5 congelato
+**Status:** `COMPLETE` — sintesi software `PASS`, Kmu nominalmente stabile, objective `10.4032233618`
+**Last validated milestone:** M13 `COMPLETE`; M8 resta l'ultima milestone non lineare `COMPLETE`
+**Last tracking-conforming controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Blocking issues:** A5 non soddisfa NP e perde RS prima del livello M4 unitario; nessun difetto metodologico/software
-**Next task:** revisione tecnica del gruppo sull'opportunità di autorizzare M13; M13 non iniziata
-**Pull Request:** [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) aperta verso `main`, non mergiata
-**Last update:** 2026-08-25, M12 pubblicata per revisione
+**Open technical issue:** l'objective M13 resta >1; RS/RP del nuovo Kmu non sono ancora verificate e appartengono a M14
+**Next task:** revisione tecnica della PR M13; non iniziare M14 senza autorizzazione
+**Pull Request:** [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18) aperta verso `main`, non mergiata; [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) `merged` al commit `9b69caa02c7f8dbca9cc2b936067f67c25904f1a`
+**Last update:** 2026-08-25, M13 pubblicata per revisione tecnica
+
+## Quality gate M13 — COMPLETE
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #17 mergiata al commit `9b69caa02c7f8dbca9cc2b936067f67c25904f1a` |
+| technical aborted attempt | RECORDED — `Display='full'`, pausa interattiva batch, nessun output utilizzato |
+| problema congelato | PASS — Punc M12 6×4, nmeas/ncont 2/2, identità nominale/LFT con errore `0` |
+| incertezza congelata | PASS — cinque blocchi M4 e range invariati |
+| pesi congelati | PASS — W1/W2 M5 invariati, `W3=[]`, nessun retuning |
+| campagna valida | PASS — una chiamata non interattiva con `Display='short'`, MaxIter 5 e opzioni matematiche congelate |
+| storico D–K | PASS — 5/5 iterazioni complete, classificazione diagnostica `MAX_ITER_REACHED` |
+| objective musyn | QUANTIFIED — `10.4032233618`, best iteration 3, non certificazione RP |
+| controller | PASS — Kmu 2×2, ordine 52, matrici finite, nessuna riduzione |
+| stabilità nominale | PASS — 66 stati interni, max Re `-0.731994726169` |
+| ricostruzione nominale | PASS — errore stack/Punc `4.083e-12` |
+| norma nominale | QUANTIFIED — `10.3917314574` a `93.1402569484 rad/s` |
+| confronto M10 | PASS metodologico — nessuna violazione del lower bound nominale |
+| warning MATLAB | nessuno nel run valido |
+| artifact | PASS — dataset raw/completo e sei figure |
+| test M13 | PASS — 52/52 |
+| suite completa / `run_all` | PASS — 362/362, exit code 0 |
+| Code Analyzer M13 | PASS — zero messaggi su otto file |
+| analisi formale RS/RP Kmu | NOT RUN corretto — riservata a M14 |
+| stato | **COMPLETE — correttezza software e stabilità nominale PASS, objective >1 accettato** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M12 — PARTIAL
 

@@ -1670,3 +1670,105 @@ Simulink non lineare, `musyn`, D-K iteration, retuning o M13.
 **M12 PARTIAL pubblicata per revisione senza merge autonomo.** Il risultato
 giustifica una discussione separata sull'eventuale M13, che non è stata
 iniziata.
+
+---
+
+## 2026-08-25 — Avvio M13 e incidente tecnico `Display='full'`
+
+**Responsabile:** Alessio
+**Milestone:** M13
+**Tipo:** Governance / Audit API / Errore registrato
+
+### Attività svolta
+
+- Verificata la PR #17 come `merged` al commit
+  `9b69caa02c7f8dbca9cc2b936067f67c25904f1a` e creato il branch
+  `codex/m13-musyn-dk` dalla baseline esatta.
+- Verificata su R2025b la firma full-order di `musyn`, i campi documentati
+  dell'`info` e la semantica di `MaxIter`.
+- Superati i gate di identità Punc M12, incertezze M4 e pesi M5.
+- Avviata la configurazione iniziale con `Display='full'`.
+
+### Incidente
+
+Dopo la prima K/DG-step, `musynEngine` ha richiesto input interattivo per
+continuare. MATLAB batch ha terminato senza restituire Kmu, CLperf o info.
+Il tentativo è stato registrato `ABORTED_TECHNICAL`; nessun output parziale è
+stato usato e non è stato effettuato un rilancio senza autorizzazione.
+
+---
+
+## 2026-08-25 — Ripresa autorizzata e singola campagna D–K valida
+
+**Responsabile:** Alessio
+**Milestone:** M13
+**Tipo:** Sintesi robusta / Artifact / Audit nominale
+
+### Attività svolta
+
+- Modificato esclusivamente Display da `full` a `short`, mantenendo MaxIter,
+  TargetPerf, TolPerf, MixedMU, FullDG, FitOrder, griglia e opzioni K-step.
+- Ripetuti con esito `PASS` tutti i gate frozen prima della chiamata.
+- Eseguita la prima e unica campagna M13 valida, completando 5/5 iterazioni.
+- Conservati raw `info`, D/G scales, fit orders, history non filtrata,
+  controller e chiusura incerta.
+- Ricostruiti esplicitamente poli interni nominali, S, T, KS e stack pesato.
+
+### Risultato
+
+La migliore iterazione è la 3, con objective `10.4032233618`; Kmu è 2×2 di
+ordine 52. La chiusura nominale ha 66 stati e max Re
+`-0.731994726169`, quindi NS `PASS`. La norma nominale stacked è
+`10.3917314574` a `93.1402569484 rad/s`; il lower-bound sanity rispetto a
+M10 è `PASS`. L'objective resta >1 ed è conservato senza retuning.
+
+Nessuna analisi RS/RP indipendente, riduzione d'ordine, seconda campagna,
+Monte Carlo, Simulink non lineare o M14 è stata eseguita.
+
+---
+
+## 2026-08-25 — Test, run_all e quality gate M13
+
+**Responsabile:** Alessio
+**Milestone:** M13
+**Tipo:** Test / Riproducibilità / Quality gate
+
+### Attività svolta
+
+- Creata la suite M13 T01–T52: 52/52 `PASS`.
+- Eseguito MATLAB Code Analyzer su otto file M13: zero messaggi.
+- Eseguito `run_all` M0–M13: 362/362 test e exit code 0.
+- Verificato che `run_all` ricarichi l'artifact congelato M13 senza una
+  seconda chiamata di sintesi.
+- Prodotti `m13_musyn_dk.mat` e sei grafici tecnici.
+
+### Quality gate
+
+Frozen plant/uncertainty/weights, D–K execution/history, controller,
+stabilità nominale, ricostruzione pesata, lower-bound sanity e software sono
+`PASS`; objective e ordine sono `QUANTIFIED`. **M13 è COMPLETE.** M14 non è
+iniziata e richiede autorizzazione separata.
+
+---
+
+## 2026-08-25 — Pubblicazione M13
+
+**Responsabile:** Alessio
+**Milestone:** M13
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `e1cdc382309fc7257566dffe3a6785922ce3d884`
+  per software/artifact e `7b12dd2a0bebf8c87c8afabbd0611245cd755c89`
+  per documentazione e handoff.
+- Pubblicato `codex/m13-musyn-dk` su `origin`.
+- Aperta la [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18)
+  verso `main`, non draft e non mergiata.
+- Aggiornato `Resoconto_M13_per_GPT.txt` con configurazione, history,
+  controller, gate, test e distinzione del tentativo tecnico abortito.
+
+### Risultato
+
+**M13 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** Non
+è stata iniziata M14.

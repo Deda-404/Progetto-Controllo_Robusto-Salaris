@@ -128,14 +128,20 @@ gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 
 ## \(\mu\)-synthesis
 
-- [ ] Eseguire D–K iteration su pianta e specifiche approvate.
-- [ ] Conservare e analizzare lo storico delle iterazioni.
-- [ ] Verificare ordine e stabilità interna del controllore.
+- [x] Eseguire D–K iteration su pianta e specifiche approvate.
+- [x] Conservare e analizzare lo storico delle iterazioni.
+- [x] Verificare ordine e stabilità interna del controllore.
 - [ ] Ripetere NS, NP, RS e RP a posteriori.
 - [ ] Diagnosticare eventuali specifiche irrealizzabili.
 - [ ] Ottenere approvazione prima di rilassamenti sostanziali.
 - [ ] Registrare ogni rilassamento nel Decision Log.
 - [ ] Se si riduce l'ordine, ripetere tutte le verifiche sul controllore ridotto.
+
+M13 ha eseguito la singola campagna valida con `Display='short'`, cinque
+iterazioni e problema M4/M5 congelato. Il controller restituito è 2×2 di
+ordine 52 ed è nominalmente stabile; l'objective `10.4032233618` resta
+maggiore di uno. Non è stata eseguita riduzione d'ordine né la verifica
+formale NS/NP/RS/RP a posteriori, che resta correttamente aperta per M14.
 
 ## Validazione e confronto
 
