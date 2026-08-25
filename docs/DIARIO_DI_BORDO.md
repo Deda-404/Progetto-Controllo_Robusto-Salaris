@@ -1536,3 +1536,26 @@ software correctness sono `PASS`. La stabilità di tutti gli start è `FAIL`
 `FAIL`. Disturbo, comando e variabilità sono quantificati. M11 è classificata
 `PARTIAL` e A3/A4/A5 sono trasmessi al gruppo per revisione; nessuna M12 è
 stata avviata.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M11
+
+**Responsabile:** Alessio
+**Milestone:** M11
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m11-hinfstruct-structured` su `origin`.
+- Aperta la Pull Request
+  [#16](https://github.com/Deda-404/Progetto_CR/pull/16) verso `main`.
+- Verificata la PR aperta, non draft e non mergiata, con base `main` al
+  commit `47ea295aef28a941f2f443033c03f10c5a6caa4d`.
+- Creato l'handoff autosufficiente `Resoconto_M11_per_GPT.txt`.
+
+### Risultato
+
+**M11 PARTIAL pubblicata per revisione senza merge autonomo.** A3/A4/A5
+restano candidati Pareto e non è stata iniziata M12.

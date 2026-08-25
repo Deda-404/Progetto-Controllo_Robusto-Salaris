@@ -7,7 +7,7 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Blocking issues:** scelta tra A3/A4/A5 soggetta a revisione del gruppo; nessuna M12 autorizzata
 **Next task:** revisione tecnica della frontiera Pareto M11; non avviare M12
-**Pull Request:** PR #15 mergiata in `main` al commit `47ea295aef28a941f2f443033c03f10c5a6caa4d`; PR M11 da aprire
+**Pull Request:** [PR #16](https://github.com/Deda-404/Progetto_CR/pull/16) aperta da `codex/m11-hinfstruct-structured` verso `main`; non mergiata
 **Last update:** 2026-08-25, validazione M11
 
 ## Quality gate M11 — PARTIAL
