@@ -1,0 +1,418 @@
+RESOCONTO M12 PER GPT
+Mu-analysis del controllore H-infinity strutturato A5
+Responsabile: Alessio
+Data: 2026-08-25
+
+======================================================================
+A. GIT
+======================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m12-mu-analysis-a5
+Base commit: c5b14e5332279e8e98b89d4c5b7a180102646fde
+
+Commit pubblicati prima dell'handoff:
+- 3e27edc  feat(m12): add frozen A5 mu-analysis pipeline
+- d927939  data(m12): add mu-analysis artifacts
+- 58024ad  docs(m12): record NS NP RS RP outcome
+
+Pull Request: #17, OPEN verso main
+Link: https://github.com/Deda-404/Progetto_CR/pull/17
+Draft: NO
+Merge autonomo: NO
+
+File principale di handoff:
+docs/handoff/Resoconto_M12_per_GPT.txt
+
+======================================================================
+B. HOUSEKEEPING
+======================================================================
+
+PR #16 verificata realmente mergiata.
+Merge commit M11 su main:
+c5b14e5332279e8e98b89d4c5b7a180102646fde
+
+Stato corretto:
+- M0-M6 COMPLETE;
+- M7 PARTIAL terminale;
+- M8 ultima milestone COMPLETE;
+- M9 PARTIAL;
+- M10 PARTIAL;
+- M11 PARTIAL validata e accettata come studio strutturato concluso;
+- M12 milestone corrente, PARTIAL;
+- M6 resta il controllore nominale con tracking conforme.
+
+Il branch M12 è stato creato esattamente dal merge commit M11. Main non è
+stato modificato direttamente. M13 non è stata iniziata.
+
+======================================================================
+C. CONTROLLER SELECTION
+======================================================================
+
+Controller: M11 A5, Full MIMO tunableSS order 6
+Source artifact: results/data/m11_hinfstruct_structured.mat
+Architecture verificata: A5
+Representative start verificato: 5
+Ordine reale verificato: 6
+Objective solver M11: 10.2477452425173
+Weighted norm ricostruita M11: 10.2476411501788
+Internal stability M11: PASS
+Massima parte reale closed loop M11: -0.736157095561127
+
+Il controller è stato caricato dall'artifact senza nuova sintesi
+hinfstruct. A5 appartiene alla frontiera Pareto M11, riduce l'ordine da 18
+di M10 a 6 e mantiene una norma pesata vicina al full-order M10. È il
+trade-off ordine/prestazione scelto dal gruppo per l'analisi robusta.
+
+A5 NON è selezionato perché soddisfa M5: weighted objective e tracking
+restano falliti. A3/A4 restano alternative congelate ma fuori dal perimetro
+primario M12. M10 resta il riferimento full-order nominale.
+
+======================================================================
+D. UNCERTAINTY MODEL
+======================================================================
+
+Source artifact: results/data/m4_uncertain_plant.mat
+Modello usato: GuncQ, u -> q, 2 ingressi e 2 uscite
+
+Blocco       Tipo      Nominale   Range / bound
+------------ --------- ---------- ---------------------------
+Delta_act1   ultidyn   --         ||Delta||inf <= 1
+Delta_act2   ultidyn   --         ||Delta||inf <= 1
+Jm1          ureal     0.01       [0.0091,0.0109], +/-9%
+k1           ureal     50         [46.5,53.5], +/-7%
+k2           ureal     40         [37.2,42.8], +/-7%
+
+I due blocchi attuatore sono indipendenti. Convenzione M4:
+Ga_unc = Ga_nom * (1 + WI*Delta_act)
+
+WI congelato M4, ordine 1:
+WI(s) = (2.87131986635591*s + 3.811761788414) /
+        (s + 207.353298568466)
+zero = -1.3275 rad/s circa; polo = -207.3533 rad/s circa.
+
+Consistenza nominale:
+- ordine GuncQ.NominalValue raw: 16;
+- ordine G M3: 14;
+- tutti i 14 poli M3 inclusi entro 1e-8;
+- due poli addizionali WI stabili;
+- massimo errore frequenziale GuncQ nominale vs M3: 4.219e-15;
+- blocchi inattesi: nessuno.
+
+======================================================================
+E. UNCERTAIN GENERALIZED PLANT
+======================================================================
+
+Punc = [ W1   -W1*GuncQ
+          0       W2
+          I    -GuncQ ]
+
+Ingressi: [r(1), r(2), u(1), u(2)]
+Uscite: [z1(1), z1(2), z2(1), z2(2), e(1), e(2)]
+Punc: 6 x 4
+Tzw_unc = lft(Punc,K_A5): 4 x 2
+
+La costruzione usa connect/sumblk e una sola istanza condivisa di GuncQ.
+Una concatenazione analitica che duplichi GuncQ non è usata nel gate.
+
+Uncertainty names:
+Delta_act1, Delta_act2, Jm1, k1, k2
+
+Audit nominale:
+- Punc.NominalValue vs P M10: errore max 8.174e-14;
+- Tzw_unc.NominalValue riproduce lo stack A5 M11;
+- S/T/KS/stack/norma/poli coincidono entro le tolleranze M12;
+- nessun minreal.
+
+======================================================================
+F. N-DELTA
+======================================================================
+
+API eseguita:
+[M,Delta,BlkStruct,normunc] = lftdata(Tzw_unc)
+
+Dimensioni:
+- M: 9 x 7, ordine 26;
+- Delta: 5 x 5;
+- M11mu: 5 x 5;
+- numero blocchi: 5;
+- numero occorrenze normalizzate: 5.
+
+BlkStruct reale, letto dall'API:
+Name         Size   Type      Occurrences
+------------ ------ --------- -----------
+Delta_act1   1x1    ultidyn   1
+Delta_act2   1x1    ultidyn   1
+Jm1          1x1    ureal     1
+k1           1x1    ureal     1
+k2           1x1    ureal     1
+
+Normalizzazione:
+- Delta_act1Normalized, Delta_act2Normalized: bound 1;
+- Jm1Normalized, k1Normalized, k2Normalized: range [-1,1].
+
+Reconstruction audit:
+- lft(Delta,M) conserva esattamente i cinque blocchi;
+- errore nominale entro 1e-9;
+- errore su perturbazione deterministica non nominale: 0.000e+00;
+- N-Delta quality gate: PASS;
+- minreal: NO.
+
+======================================================================
+G. NOMINAL STABILITY — NS
+======================================================================
+
+Stati plant: 14
+Stati controller: 6
+Stati interni fisici: 20
+
+Poli interni nominali:
+-133.862632944
+-133.333675245
+-0.736157095561 +/- 80.2007367293i
+-0.922009666011 +/- 70.0799695530i
+-49.0496064253 +/- 27.7710159359i
+-28.8905008421 +/- 27.9114330217i
+-23.4770147002 +/- 10.1193912874i
+-2.76389080250 +/- 12.8721917334i
+-3.71777867134 +/- 0.862145188807i
+-4.78332573997 +/- 3.97080022598i
+-2.55365294766 +/- 7.37529646745i
+
+Massima parte reale: -0.736157095561
+S stabile: SI
+T stabile: SI
+KS stabile: SI
+Stack pesato stabile: SI
+Coerenza poli con M11: PASS
+
+NS OUTCOME: PASS
+
+======================================================================
+H. NOMINAL PERFORMANCE — NP
+======================================================================
+
+Target M5: gamma < 1
+Norma weighted nominale: 10.2476411502
+Peak frequency: 6.21670809748 rad/s
+Coerenza con A5 M11: PASS
+
+NP OUTCOME: FAIL
+
+I pesi non sono stati modificati per cambiare l'esito.
+
+======================================================================
+I. ROBSTAB — ROBUST STABILITY
+======================================================================
+
+Opzioni: Display off, Sensitivity on, MussvOptions default.
+Una sola configurazione; nessuna campagna per stringere i bound.
+
+Robust stability margin LowerBound: 0.875899252687
+Robust stability margin UpperBound: 0.882789198079
+CriticalFrequency: 81.9862784922 rad/s
+RS OUTCOME: FAIL_CERTIFIED, perché UpperBound < 1
+
+Sensitivity RS esposta dall'API:
+- Delta_act1: 16%
+- Delta_act2: 80%
+- Jm1: 1%
+- k1: 0%
+- k2: 1%
+
+wcuRS:
+- Delta_act1: peak gain 0.882789198079;
+  modulo alla frequenza critica 0.882789198079, fase -143.39 deg;
+- Delta_act2: peak gain 0.882789198079;
+  modulo alla frequenza critica 0.882789198079, fase -165.92 deg;
+- Jm1 = 0.0104463633, deviazione +0.0004463633,
+  magnitudine normalizzata 0.49596;
+- k1 = 51.69920565, deviazione +1.69920565,
+  magnitudine normalizzata 0.48549;
+- k2 = 42.47175915, deviazione +2.47175915,
+  magnitudine normalizzata 0.88277.
+
+Sostituzione wcuRS:
+- max Re poli T_RS_wc = 1.07737819e-9;
+- max Re poli interni fisici = 1.07726272e-9.
+
+La perturbazione porta il sistema al limite numerico di stabilità. Non è
+stato imposto un assert su zero esatto.
+
+======================================================================
+J. MUSSV MANUALE
+======================================================================
+
+Griglia congelata prima dell'esecuzione:
+omegaMu = logspace(-3,4,1201) rad/s
+Opzione mussv: 's'
+
+Massimo mu upper: 1.13738190499286
+Frequenza critica upper: 81.595586168949 rad/s
+Massimo mu lower: 1.13205751126772
+Frequenza critica lower: 81.595586168949 rad/s
+
+Margini convertiti:
+- margin lower ~= 1/max(muUpper) = 0.879212158739481;
+- margin upper ~= 1/max(muLower) = 0.883347347680387.
+
+Confronto robstab:
+- robstab margin [0.875899252687,0.882789198079];
+- frequenza robstab 81.9862784922 rad/s;
+- classificazione identica rispetto a 1;
+- errori relativi dentro le tolleranze predefinite.
+
+MANUAL MU RS CONSISTENCY: PASS
+
+======================================================================
+K. ROBGAIN — ROBUST PERFORMANCE
+======================================================================
+
+Target: gamma = 1, esattamente M5.
+Performance margin LowerBound: 0
+Performance margin UpperBound: 0
+CriticalFrequency: NaN / non applicabile
+wcuRP: valori nominali restituiti dall'API
+Sensitivity RP: NaN / non disponibile perché il nominale fallisce già
+
+Logica applicata:
+NP FAIL => RP non può essere PASS, perché Delta=0 appartiene all'insieme M4.
+
+RP OUTCOME: FAIL_CERTIFIED
+
+Il margin nullo è un risultato corretto di robgain, non un errore software.
+Gamma non è stato rilassato.
+
+======================================================================
+L. WCGAIN
+======================================================================
+
+Uncertainty level: 1
+Worst-case gain LowerBound: Inf
+Worst-case gain UpperBound: Inf
+CriticalFrequency: 11.6337064663 rad/s
+Substituted actual numerical gain: 4.45231081353e14
+Max Re del polo sostituito: 7.10542736e-15
+
+wcuGain normalizzato:
+- Delta_act1: 0.95902;
+- Delta_act2: 0.95902;
+- Jm1 = 0.00913687912, magnitudine 0.95902;
+- k1 = 46.72939583, magnitudine 0.93446;
+- k2 = 37.31473504, magnitudine 0.95902.
+
+Il gain non è limitato perché l'insieme M4 include perturbazioni che portano
+la chiusura al limite di stabilità. La sostituzione è coerente con wcgain.
+wcgain è una diagnostica diversa dal performance margin robgain.
+
+======================================================================
+M. CRITICAL BLOCKS
+======================================================================
+
+Block       Type      Occ.  RS sens.  wcuRS norm.  wcuGain norm.
+------------ --------- ----- --------- ------------ -------------
+Delta_act1   ultidyn   1     16%       0.88279      0.95902
+Delta_act2   ultidyn   1     80%       0.88279      0.95902
+Jm1          ureal     1      1%       0.49596      0.95902
+k1           ureal     1      0%       0.48549      0.93446
+k2           ureal     1      1%       0.88277      0.95902
+
+La sensitivity RS indica Delta_act2 come contributo locale dominante. Le
+sensitivity RP/wcgain non sono finite nell'info restituito dall'API e sono
+salvate NaN; nessun valore è stato inventato.
+
+======================================================================
+N. NS / NP / RS / RP SUMMARY
+======================================================================
+
+Property | Metric                    | Lower     | Upper     | Crit. rad/s | Outcome
+---------|---------------------------|-----------|-----------|-------------|----------------
+NS       | max Re pole = -0.7361571  | --        | --        | --          | PASS
+NP       | weighted norm = 10.247641 | --        | --        | 6.216708    | FAIL
+RS       | robust stability margin   | 0.8758993 | 0.8827892 | 81.986278   | FAIL_CERTIFIED
+RP       | perf. margin at gamma=1   | 0         | 0         | --          | FAIL_CERTIFIED
+
+NS e RS sono proprietà distinte. NP è necessaria per RP. Lower e upper
+bound sono intervalli di certificazione, non una falsa misura esatta.
+
+======================================================================
+O. TEST
+======================================================================
+
+Suite M12: 54/54 PASS
+Regressione M9-M12: 171/171 PASS
+Suite completa: 310/310 PASS
+run_all: PASS, exit code 0, validazioni M1-M12 completate
+MATLAB Code Analyzer M12/run_all: 0 messaggi
+git diff --check: PASS
+Figure ispezionate: 6/6
+Artifact storici rigenerati ma invariati: ripristinati
+Autosave/cache/temp introdotti: nessuno
+
+Artifact M12:
+- results/data/m12_mu_analysis_a5.mat
+- results/figures/m12_mu_rs_bounds.png
+- results/figures/m12_weighted_nominal_vs_worst.png
+- results/figures/m12_robust_stability_margin.png
+- results/figures/m12_worst_case_weighted_performance.png
+- results/figures/m12_uncertainty_block_diagnostics.png
+- results/figures/m12_ns_np_rs_rp_summary.png
+
+======================================================================
+P. QUALITY GATE
+======================================================================
+
+Frozen controller correctness: PASS
+Frozen uncertainty correctness: PASS
+Frozen performance weights: PASS
+N-Delta decomposition: PASS
+Nominal Stability: PASS
+Nominal Performance: FAIL
+Robust Stability: FAIL_CERTIFIED
+Manual mu RS consistency: PASS
+Robust Performance: FAIL_CERTIFIED
+Worst-case gain: QUANTIFIED
+Critical uncertainty blocks: QUANTIFIED
+Software correctness: PASS
+
+OVERALL M12: PARTIAL
+
+La milestone non è COMPLETE perché NP e RP falliscono; inoltre RS fallisce
+in modo certificato. Non esiste un blocker metodologico o software.
+
+======================================================================
+Q. LIMITI E SCOPE CONTROLS
+======================================================================
+
+- Monte Carlo/usample M12: NO
+- Simulink non lineare M12: NO
+- nuovo hinfstruct: NO
+- mixsyn/hinfsyn M12: NO
+- retuning M5/W1/W2: NO
+- W3: NO
+- modifica M4: NO
+- minreal nel quality gate: NO
+- musyn: NO
+- D-K iteration: NO
+- M13: NON INIZIATA
+- merge PR: NO
+
+Sono stati usati usubs soltanto sulle perturbazioni deterministiche di audit
+e sulle perturbazioni worst-case calcolate dalle API robuste.
+
+======================================================================
+R. RACCOMANDAZIONE
+======================================================================
+
+Il risultato giustifica una revisione del gruppo sull'eventuale futura M13:
+A5 perde Robust Stability prima del livello M4 unitario e fallisce Robust
+Performance. Una M13 separatamente autorizzata potrebbe studiare una sintesi
+robusta sulla pianta e sui pesi congelati.
+
+La raccomandazione non equivale ad avviare M13. Poiché A5 fallisce già NP al
+nominale, il gruppo deve decidere esplicitamente se M13 debba essere usata
+come studio di fattibilità con M5 invariata o se serva prima una revisione
+formale delle specifiche. Nessun rilassamento o musyn è stato eseguito.
+
+STOP M12: attendere revisione tecnica della PR #17. Non fare merge e non
+iniziare M13.

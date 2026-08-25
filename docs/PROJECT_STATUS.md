@@ -7,8 +7,8 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Blocking issues:** A5 non soddisfa NP e perde RS prima del livello M4 unitario; nessun difetto metodologico/software
 **Next task:** revisione tecnica del gruppo sull'opportunità di autorizzare M13; M13 non iniziata
-**Pull Request:** PR #16 mergiata in `main` al commit `c5b14e5332279e8e98b89d4c5b7a180102646fde`; PR M12 da aprire
-**Last update:** 2026-08-25, quality gate M12
+**Pull Request:** [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) aperta verso `main`, non mergiata
+**Last update:** 2026-08-25, M12 pubblicata per revisione
 
 ## Quality gate M12 — PARTIAL
 

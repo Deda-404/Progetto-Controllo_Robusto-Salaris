@@ -1646,3 +1646,27 @@ correttezza software sono `PASS`. NS è `PASS`; NP è `FAIL`; RS e RP sono
 `FAIL_CERTIFIED`; worst-case gain e blocchi critici sono `QUANTIFIED`.
 Lo stato complessivo è **M12 PARTIAL**. Non sono stati eseguiti Monte Carlo,
 Simulink non lineare, `musyn`, D-K iteration, retuning o M13.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M12
+
+**Responsabile:** Alessio
+**Milestone:** M12
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m12-mu-analysis-a5` su `origin`.
+- Aperta la Pull Request
+  [#17](https://github.com/Deda-404/Progetto_CR/pull/17) verso `main`.
+- Verificata la PR aperta, non draft e non mergiata, con base `main` al
+  commit `c5b14e5332279e8e98b89d4c5b7a180102646fde`.
+- Creato l'handoff autosufficiente `Resoconto_M12_per_GPT.txt`.
+
+### Risultato
+
+**M12 PARTIAL pubblicata per revisione senza merge autonomo.** Il risultato
+giustifica una discussione separata sull'eventuale M13, che non è stata
+iniziata.
