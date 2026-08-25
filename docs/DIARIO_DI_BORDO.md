@@ -1420,3 +1420,26 @@ rimasta invariata e non è stata iniziata alcuna attività M11 o robusta.
 - disturbo e sforzo: **QUANTIFIED** senza soglie o saturazioni inventate;
 - M9/M10 consistency: **PASS**, quasi-equivalenti;
 - stato complessivo M10: **PARTIAL**.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M10
+
+**Responsabile:** Alessio
+**Milestone:** M10
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m10-hinfsyn-generalized-plant` su `origin`.
+- Aperta la Pull Request
+  [#15](https://github.com/Deda-404/Progetto_CR/pull/15) verso `main`.
+- Verificato che la PR sia aperta, non draft e non mergiata, con base `main`
+  al commit `8a4a3f423210464f9a46a21daa8806722e7a7506`.
+- Creato l'handoff autosufficiente `Resoconto_M10_per_GPT.txt`.
+
+### Risultato
+
+**M10 PARTIAL pubblicata per revisione senza merge autonomo.** Non è stata
+iniziata alcuna attività M11.

@@ -7,8 +7,8 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Blocking issues:** revisione tecnica richiesta prima di iniziare M11 o modificare M5
 **Next task:** revisione del checkpoint M10; nessun M11 autorizzato
-**Pull Request:** PR #14 mergiata in `main` al commit `8a4a3f423210464f9a46a21daa8806722e7a7506`; PR M10 da aprire
-**Last update:** 2026-08-25, quality gate M10
+**Pull Request:** [PR #15](https://github.com/Deda-404/Progetto_CR/pull/15) aperta verso `main`, non mergiata
+**Last update:** 2026-08-25, pubblicazione M10 per revisione
 
 ## Quality gate M10 — PARTIAL
 
