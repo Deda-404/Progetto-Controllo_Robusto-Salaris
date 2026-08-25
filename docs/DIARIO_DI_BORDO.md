@@ -1772,3 +1772,119 @@ iniziata e richiede autorizzazione separata.
 
 **M13 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** Non
 è stata iniziata M14.
+
+---
+
+## 2026-08-25 — Avvio M14 e gate delle fonti congelate
+
+**Responsabile:** Alessio
+**Milestone:** M14
+**Tipo:** Governance / Audit / Housekeeping
+
+### Attività svolta
+
+- Verificata realmente la PR #18 come `merged` al commit
+  `49f37c6e027aaa37db65f27530901965f897f11f` e creato il branch
+  `codex/m14-final-mu-analysis-kmu` dalla baseline esatta.
+- Verificate in MATLAB R2025b le API M12 `lftdata`, `mussv`, `robstab`,
+  `robgain`, `wcgain`, `usubs`, `actual2normalized`, `robOptions` e
+  `wcOptions`.
+- Caricato Kmu dall'artifact M13 e verificata l'identità esatta con
+  `rawInfo(bestIteration).K`: best iteration 3, controller 2×2 ordine 52.
+- Ripetuti i gate Punc M12/M13, M4 e M5 senza modifica di blocchi, range,
+  pesi o opzioni robuste.
+
+### Nota tecnica
+
+Una prima prova read-only avviata con PTY è rimasta nel livello terminale su
+una richiesta ANSI, senza uso CPU e senza risultati. Il processo è stato
+terminato e la stessa prova è stata rilanciata in modalità batch non
+interattiva. Non è stata eseguita sintesi e nessun dato parziale è stato
+usato.
+
+---
+
+## 2026-08-25 — μ-analysis finale Kmu e confronto con A5
+
+**Responsabile:** Alessio
+**Milestone:** M14
+**Tipo:** Analisi robusta / Artifact / Figure
+
+### Attività svolta
+
+- Derivata la configurazione M14 da M12, mantenendo identiche griglie,
+  opzioni, target gamma e tolleranze.
+- Ricostruiti senza `minreal` S, T, KS, stack pesato e 66 poli interni;
+  verificata la coincidenza con M13.
+- Riutilizzate le funzioni M12 per N–Δ, μ manuale, `robstab`, `robgain` e
+  `wcgain`, incluse le sostituzioni reali delle perturbazioni worst-case.
+- Costruiti confronto centrale A5/Kmu, tabella dei blocchi critici,
+  classificazione RS deterministica e riepilogo NS/NP/RS/RP.
+- Generati l'artifact `m14_final_mu_analysis_kmu.mat` e sei grafici tecnici.
+
+### Risultato
+
+NS è `PASS`, con max Re `-0.731994726169`; NP è `FAIL`, con norma
+`10.3917314574`. `robstab` restituisce
+`[1.25003698645,1.25257264120]` a `17.3621393164 rad/s`, quindi RS è
+`PASS_CERTIFIED`. La μ manuale restituisce
+`[1.25245798190,1.25258325878]` e la coerenza è `PASS`.
+
+RP è `FAIL_CERTIFIED` con margin `[0,0]`; `wcgain` è
+`[25.9514560605,26.1151353973]` e la sostituzione è coerente. Rispetto ad A5,
+i bound RS aumentano di `0.374137733765` e `0.369783443123`, con transizione
+`FAIL_CERTIFIED -> PASS_CERTIFIED`: `CLEAR_IMPROVEMENT`. `Delta_act2` resta
+il blocco dominante per sensitivity RS.
+
+---
+
+## 2026-08-25 — Test e quality gate M14
+
+**Responsabile:** Alessio
+**Milestone:** M14
+**Tipo:** Test / Riproducibilità / Quality gate
+
+### Attività svolta
+
+- Creati 56 test M14 per baseline, fonti congelate, identità nominale, N–Δ,
+  bound, worst-case, confronto A5/Kmu, divieti di scope e stato complessivo.
+- Il primo avvio della suite ha rilevato un errore di setup nella
+  concatenazione dei percorsi sorgente: 0/56 eseguiti, 56 incompleti. La
+  lista è stata corretta da matrice di caratteri a cell array.
+- Il secondo avvio ha superato 56/56 test, senza imporre RS `PASS` come
+  aspettativa hardcoded.
+- Eseguito `run_all` M0–M14: 418/418 test, tutte le validazioni completate
+  ed exit code 0; M13 è stata ricaricata dall'artifact senza nuova `musyn`.
+- MATLAB Code Analyzer ha restituito zero messaggi sugli otto file M14 e su
+  `run_all.m`.
+
+### Quality gate
+
+Frozen Kmu/M4/M5/Punc, ricostruzione nominale, N–Δ, coerenza μ/robstab e
+software sono `PASS`; RS è `PASS_CERTIFIED`, mentre NP e RP falliscono. Il
+risultato complessivo è **M14 PARTIAL**. Nessuna nuova sintesi, riduzione,
+retuning, simulazione non lineare, Monte Carlo o M15 è stata eseguita.
+
+---
+
+## 2026-08-25 — Pubblicazione M14
+
+**Responsabile:** Alessio
+**Milestone:** M14
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico
+  `544077374f67d4c65f6c466c55e7e8b83d888109` con pipeline, test, artifact,
+  figure, documento tecnico e integrazione `run_all`.
+- Pubblicato `codex/m14-final-mu-analysis-kmu` su `origin`.
+- Aperta la [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19)
+  verso `main`, non draft e non mergiata.
+- Creato l'handoff autosufficiente `Resoconto_M14_per_GPT.txt` con sezioni
+  A–U e link reale della PR.
+
+### Risultato
+
+**M14 PARTIAL pubblicata per revisione tecnica senza merge autonomo.** M15
+non è stata iniziata.

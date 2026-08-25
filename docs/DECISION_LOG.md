@@ -1751,3 +1751,56 @@ NS/NP/RS/RP del nuovo controller è fuori scope e richiede una M14 separata.
 ### Stato epistemico
 
 **M13 COMPLETE COME SINTESI D–K — OBJECTIVE QUANTIFICATO, NESSUNA CERTIFICAZIONE RS/RP**
+
+---
+
+## D-0041 — Kmu recupera Robust Stability ma non Robust Performance
+
+**Data:** 2026-08-25
+**Milestone:** M14
+
+### Problema
+
+Stabilire con una verifica indipendente se il Kmu full-order M13 migliori la
+robustezza rispetto ad A5 M12, senza interpretare l'objective `musyn` come
+certificazione e senza modificare il problema M4/M5.
+
+### Alternative
+
+- usare il midpoint dei bound per dichiarare un miglioramento;
+- confondere l'objective M13 con il margine `robgain` o con `wcgain`;
+- ritunare pesi, incertezze o controllore dopo avere osservato NP/RP;
+- riusare integralmente la pipeline M12 e classificare separatamente NS, NP,
+  RS e RP dai rispettivi criteri.
+
+### Decisione e criterio
+
+Si adotta la quarta alternativa. Il confronto RS usa entrambi i bound e la
+transizione di classificazione: `CLEAR_IMPROVEMENT` richiede bound Kmu
+chiaramente superiori e una classe migliore. Kmu resta congelato a ordine 52;
+non viene promosso a controllore conforme a M5 quando NP o RP falliscono.
+
+### Risultato e motivazione
+
+La stessa pipeline M12 restituisce per Kmu RS
+`PASS_CERTIFIED`, margin `[1.25003698645,1.25257264120]`, mentre A5 era
+`FAIL_CERTIFIED`, margin `[0.875899252687,0.882789198079]`. I delta sono
+`+0.374137733765` e `+0.369783443123`; la transizione è quindi
+`CLEAR_IMPROVEMENT` e certifica il recupero della Robust Stability.
+
+La norma nominale Kmu è però `10.3917314574 > 1`; NP e RP restano
+rispettivamente `FAIL` e `FAIL_CERTIFIED`. L'objective `musyn`
+`10.4032233618` resta una metrica di sintesi, non una certificazione
+alternativa.
+
+### Conseguenze e limiti
+
+M14 è `PARTIAL`: software e RS sono validati, ma la performance M5 non è
+soddisfatta. Non vengono autorizzati retuning, seconda sintesi, riduzione del
+controllore o M15. Kmu è conservato come candidato con stabilità robusta
+certificata; ogni futura validazione non lineare richiede revisione e
+milestone separate.
+
+### Stato epistemico
+
+**RS RECUPERATA E CERTIFICATA — NP/RP NON CONFORMI, M14 PARTIAL**
