@@ -1,14 +1,42 @@
 # Project Status
 
-**Current milestone:** M11 — campagna strutturata nominale `hinfstruct`
-**Status:** `PARTIAL` — campagna corretta; stabilità globale e target prestazionali falliti
-**Last validated milestone:** M10 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
+**Current milestone:** M12 — μ-analysis NS/NP/RS/RP del controllore A5
+**Status:** `PARTIAL` — software `PASS`; NS `PASS`, NP `FAIL`, RS/RP `FAIL_CERTIFIED`
+**Last validated milestone:** M12 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
 **Last validated controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Blocking issues:** scelta tra A3/A4/A5 soggetta a revisione del gruppo; nessuna M12 autorizzata
-**Next task:** revisione tecnica della frontiera Pareto M11; non avviare M12
-**Pull Request:** [PR #16](https://github.com/Deda-404/Progetto_CR/pull/16) aperta da `codex/m11-hinfstruct-structured` verso `main`; non mergiata
-**Last update:** 2026-08-25, validazione M11
+**Blocking issues:** A5 non soddisfa NP e perde RS prima del livello M4 unitario; nessun difetto metodologico/software
+**Next task:** revisione tecnica del gruppo sull'opportunità di autorizzare M13; M13 non iniziata
+**Pull Request:** PR #16 mergiata in `main` al commit `c5b14e5332279e8e98b89d4c5b7a180102646fde`; PR M12 da aprire
+**Last update:** 2026-08-25, quality gate M12
+
+## Quality gate M12 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #16 mergiata al commit `c5b14e5332279e8e98b89d4c5b7a180102646fde` |
+| controllore congelato | PASS — A5 M11, start 5, ordine 6, caricato dall'artifact |
+| incertezza congelata | PASS — `GuncQ` M4, cinque blocchi e range invariati |
+| pesi | PASS — W1/W2 M5 invariati, `W3=[]`, nessun retuning |
+| pianta generalizzata incerta | PASS — `Punc` 6×4, `Tzw_unc` 4×2, una sola istanza condivisa di GuncQ |
+| consistenza nominale | PASS — M4/M3 `4.219e-15`, Punc/M10 `8.174e-14`, chiusura A5/M11 coerente |
+| N–Δ | PASS — M 9×7, Delta 5×5, cinque blocchi normalizzati, ricostruzione non nominale `0` |
+| Nominal Stability | **PASS — 20 stati interni, max Re `-0.736157095561`** |
+| Nominal Performance | **FAIL — norma `10.2476411502` > 1** |
+| Robust Stability | **FAIL_CERTIFIED — margin `[0.875899252687, 0.882789198079]`** |
+| μ manuale RS | PASS coerenza — margin `[0.879212158739, 0.883347347680]` |
+| Robust Performance | **FAIL_CERTIFIED — NP FAIL, performance margin `[0,0]`** |
+| worst-case gain | QUANTIFIED — `[Inf,Inf]`, sostituzione `4.4523e14` vicino al limite di stabilità |
+| blocchi critici | QUANTIFIED — sensitivity RS massima su `Delta_act2` (80%) |
+| artifact | PASS — dataset e sei figure |
+| test M12 | PASS — 54/54 |
+| regressione M9–M12 | PASS — 171/171 |
+| suite completa / `run_all` | PASS software — 310/310, exit code 0 |
+| Code Analyzer M12 | PASS — 0 messaggi su 11 file |
+| sintesi / Monte Carlo / non lineare / M13 | NOT RUN corretto |
+| stato | **PARTIAL — software corretto, NP/RS/RP non conformi** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M11 — PARTIAL
 

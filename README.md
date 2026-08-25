@@ -52,14 +52,14 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M11,
-ricostruisce gli artifact precedenti e conclude con la campagna strutturata
-`hinfstruct` A0–A5. I risultati prestazionali negativi M9–M11 sono
-conservati come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M12,
+ricostruisce gli artifact precedenti e conclude con la μ-analysis NS/NP/RS/RP
+del controllore A5 congelato. I risultati negativi M9–M12 sono conservati
+come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
 
 ## Stato corrente
 
-- Milestone corrente: **M11 — sintesi strutturata nominale `hinfstruct`, PARTIAL**.
+- Milestone corrente: **M12 — μ-analysis del controllore A5, PARTIAL**.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -74,7 +74,10 @@ conservati come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
   weighted e tracking FAIL, senza retuning o analisi robusta.
 - Risultato M11: 30/30 start conservati, 15 stabili; A0–A2 senza
   rappresentante stabile e frontiera Pareto A3/A4/A5 con ordine 2/4/6 e
-  gamma 16.6419/11.6555/10.2477. Correttezza software PASS, performance e
-  tracking FAIL; nessun candidato è stato imposto per M12.
+  gamma 16.6419/11.6555/10.2477. M11 `PARTIAL` è accettata come studio
+  strutturato concluso; il gruppo ha selezionato A5 per la sola analisi M12.
+- Risultato M12: N–Δ e software `PASS`; NS `PASS`, NP `FAIL`, RS
+  `FAIL_CERTIFIED` con margin `[0.875899,0.882789]` e RP `FAIL_CERTIFIED`.
+  Nessun retuning, Monte Carlo, `musyn`, D–K iteration o M13 è stato eseguito.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.
