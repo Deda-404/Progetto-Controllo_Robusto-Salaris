@@ -1443,3 +1443,119 @@ rimasta invariata e non è stata iniziata alcuna attività M11 o robusta.
 
 **M10 PARTIAL pubblicata per revisione senza merge autonomo.** Non è stata
 iniziata alcuna attività M11.
+
+---
+
+## 2026-08-25 — Avvio M11 e audit della baseline strutturata
+
+**Responsabile:** Alessio
+**Milestone:** M11
+**Tipo:** Governance / Git / Audit API
+
+### Attività svolta
+
+- Sincronizzato `main` e verificato il merge della PR #15 al commit
+  `47ea295aef28a941f2f443033c03f10c5a6caa4d`.
+- Verificato che `codex/m11-hinfstruct-structured` sia pulito e abbia
+  merge-base esattamente uguale al commit di baseline.
+- Confermati M7 terminale `PARTIAL`, M8 `COMPLETE`, M9/M10 `PARTIAL` e M5
+  invariata.
+- Letti generalized plant, artifact, codice, test e handoff M9/M10.
+- Verificate localmente in MATLAB R2025b le API `hinfstruct`,
+  `hinfstructOptions`, `tunableGain`, `tunablePID`, `tunableSS`,
+  `getBlockValue` e `rsampleBlock`.
+- Verificato con un problema tunabile minimo che `RandomStart=4` produce
+  cinque record `info` quando il target non è raggiunto: uno nominale e
+  quattro randomizzati, ciascuno con objective, iterazioni e blocchi tuned.
+
+### Perimetro congelato
+
+La campagna usa esclusivamente P M10, W1/W2 M5 e struttura 1-DoF. Sono
+predefinite A0 gain MIMO statico, A1 PI decentralizzato, A2 PIDF
+decentralizzato e A3–A5 `tunableSS` full MIMO di ordine 2/4/6. Ogni famiglia
+ha cinque start deterministici. Non sono autorizzati altri ordini, nuovi
+pesi, W3, prefilter, 2-DoF, pianta M4, mu-analysis o attività M12.
+
+---
+
+## 2026-08-25 — Campagna `hinfstruct` strutturata M11
+
+**Responsabile:** Alessio
+**Milestone:** M11
+**Tipo:** Implementazione / Sintesi / Audit
+
+### Attività svolta
+
+- Definite prima della sintesi le architetture A0–A5, con ordine massimo sei
+  e numero di parametri tunabili esplicito.
+- Eseguite sei chiamate di campagna con seed base `20260827` e seed di
+  famiglia deterministici, senza parallelizzazione o variazioni successive.
+- Conservati e classificati tutti i 30 record, inclusi objective infiniti e
+  controllori instabili; nessuno start è stato rimosso silenziosamente.
+- Ricostruite per ogni controllore numerico le mappe `S/T/KS`, lo stack
+  pesato, la dinamica interna plant-controller e il lower bound M10, senza
+  `minreal`.
+
+### Risultato
+
+A0 e A1 hanno 0/5 objective finiti e 0/5 soluzioni stabili. A2 ha quattro
+objective finiti ma 0/5 chiusure stabili. A3, A4 e A5 hanno 5/5 start stabili
+ciascuna; i rispettivi rappresentanti sono start 4/2/5, ordine 2/4/6 e gamma
+16.6418540/11.6555347/10.2477452. Nessuna soluzione viola il lower bound
+`gamma_M10=10.2071036477`.
+
+A3/A4/A5 formano tutte la frontiera Pareto: a un ordine maggiore corrisponde
+un gamma minore. Non emerge un controllore dominante e non è stata imposta
+una scelta mediante tracking o score arbitrario.
+
+---
+
+## 2026-08-25 — Validazione, artifact e quality gate M11
+
+**Responsabile:** Alessio
+**Milestone:** M11
+**Tipo:** Test / Artifact / Quality gate
+
+### Attività svolta
+
+- Valutati per A3/A4/A5 i 18 tracking 2°/5°/8° e i 18 disturbi lato link
+  0.25/0.50/1.00 N m, con le metriche congelate M9/M10.
+- Generati `m11_hinfstruct_structured.mat` e sei figure per ordine/gamma,
+  dispersione multistart, Pareto, risposta pesata, tracking e sforzo/disturbo.
+- Aggiunti 48 test M11: 48/48 `PASS`; regressione M9/M10/M11 117/117
+  `PASS`; Code Analyzer 0 messaggi sui 12 file M11.
+- Esteso ed eseguito `run_all`: 256/256 test, tutte le validazioni M0–M11 e
+  exit code 0. Gli artifact storici rigenerati ma fuori scope sono stati
+  ripristinati.
+
+### Quality gate
+
+Structured campaign correctness, reconstruction, lower-bound sanity e
+software correctness sono `PASS`. La stabilità di tutti gli start è `FAIL`
+(15/30); weighted performance, tracking e cross-coupling globale sono
+`FAIL`. Disturbo, comando e variabilità sono quantificati. M11 è classificata
+`PARTIAL` e A3/A4/A5 sono trasmessi al gruppo per revisione; nessuna M12 è
+stata avviata.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M11
+
+**Responsabile:** Alessio
+**Milestone:** M11
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m11-hinfstruct-structured` su `origin`.
+- Aperta la Pull Request
+  [#16](https://github.com/Deda-404/Progetto_CR/pull/16) verso `main`.
+- Verificata la PR aperta, non draft e non mergiata, con base `main` al
+  commit `47ea295aef28a941f2f443033c03f10c5a6caa4d`.
+- Creato l'handoff autosufficiente `Resoconto_M11_per_GPT.txt`.
+
+### Risultato
+
+**M11 PARTIAL pubblicata per revisione senza merge autonomo.** A3/A4/A5
+restano candidati Pareto e non è stata iniziata M12.

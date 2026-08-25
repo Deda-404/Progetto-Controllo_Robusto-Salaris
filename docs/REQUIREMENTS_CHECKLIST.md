@@ -86,7 +86,7 @@ aperte senza occultare il risultato terminale M7.
 - [x] Eseguire `mixsyn` e validarne l'interconnessione.
 - [x] Eseguire `hinfsyn` e validarne l'interconnessione.
 - [x] Confrontare `mixsyn` e `hinfsyn` con le stesse specifiche.
-- [ ] Esplorare `hinfstruct` con struttura e ordine motivati.
+- [x] Esplorare `hinfstruct` con struttura e ordine motivati.
 - [x] Valutare \(\gamma\), \(S\), \(T\), \(KS\), tracking, disturbi e comando.
 - [ ] Implementare i controllori selezionati in Simulink.
 - [ ] Validare modello lineare e non lineare.
@@ -99,8 +99,12 @@ target: M9 resta quindi `PARTIAL`, senza retuning. M10 ha definito e validato
 la pianta generalizzata nominale esplicita 1-DoF, eseguito una sintesi
 `hinfsyn` di default e confrontato a parità di problema le mappe M9/M10. Il
 risultato è quasi equivalente a M9 (`gamma=10.2071036477`) e conserva gli
-stessi fallimenti prestazionali: anche M10 è `PARTIAL`. Non sono state
-eseguite analisi robuste.
+stessi fallimenti prestazionali: anche M10 è `PARTIAL`. M11 ha completato la
+campagna finita A0–A5 con cinque start per famiglia e ordine massimo sei:
+A0–A2 non hanno rappresentanti stabili, mentre A3/A4/A5 formano la frontiera
+Pareto con gamma 16.6419/11.6555/10.2477. M11 resta `PARTIAL` perché stabilità
+globale, gamma<1 e tracking falliscono; non è stata forzata una selezione e
+non sono state eseguite analisi robuste.
 
 ## \(\mu\)-analysis
 

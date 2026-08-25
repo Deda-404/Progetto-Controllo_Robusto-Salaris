@@ -52,15 +52,14 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M10,
-ricostruisce gli artifact precedenti e conclude con la generalized plant
-esplicita e la sintesi `hinfsyn` M10. I risultati prestazionali negativi M9
-e M10 sono conservati come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL`
-terminale.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M11,
+ricostruisce gli artifact precedenti e conclude con la campagna strutturata
+`hinfstruct` A0–A5. I risultati prestazionali negativi M9–M11 sono
+conservati come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
 
 ## Stato corrente
 
-- Milestone corrente: **M10 — generalized plant esplicita e sintesi nominale `hinfsyn`, PARTIAL**.
+- Milestone corrente: **M11 — sintesi strutturata nominale `hinfstruct`, PARTIAL**.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -73,5 +72,9 @@ terminale.
 - Risultato M10: generalized plant corretta, `gammaHinf=10.2071036477` e
   controller ordine 18 quasi equivalenti a M9; stabilità PASS, obiettivi
   weighted e tracking FAIL, senza retuning o analisi robusta.
+- Risultato M11: 30/30 start conservati, 15 stabili; A0–A2 senza
+  rappresentante stabile e frontiera Pareto A3/A4/A5 con ordine 2/4/6 e
+  gamma 16.6419/11.6555/10.2477. Correttezza software PASS, performance e
+  tracking FAIL; nessun candidato è stato imposto per M12.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

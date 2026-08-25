@@ -1600,3 +1600,62 @@ separata.
 ### Stato epistemico
 
 **INTERCONNESSIONE E SINTESI NOMINALI VALIDATE — M9/M10 QUASI EQUIVALENTI, PERFORMANCE FAIL**
+
+---
+
+## D-0038 — Campagna strutturata M11 finita e frontiera Pareto senza selezione forzata
+
+**Data:** 2026-08-25
+**Milestone:** M11
+
+### Problema
+
+Determinare quanto della prestazione full-order M10 sia riproducibile con
+controllori implementabili di ordine non superiore a sei, mantenendo
+identici pianta generalizzata, pesi e canali prestazionali.
+
+### Alternative
+
+- cambiare W1/W2 o aggiungere W3 per cercare artificialmente `gamma<1`;
+- ampliare ordini, seed o numero di partenze dopo avere osservato i risultati;
+- scegliere un controllore mediante uno score arbitrario che mescoli gamma,
+  ordine e tracking;
+- eseguire una campagna finita A0–A5 e conservare la frontiera ordine/gamma.
+
+### Decisione e criterio
+
+La campagna è congelata a sei famiglie: guadagno statico full, PI e PIDF
+decentralizzati, quindi `tunableSS` full MIMO di ordine 2, 4 e 6. Sono usati
+cinque start per famiglia, seed base `20260827`, e ogni record viene
+classificato senza rimuovere fallimenti o instabilità.
+
+Il rappresentante di famiglia è la soluzione stabile a objective finito con
+objective minimo e tie-break sull'indice di start. Il confronto tra famiglie
+usa la dominanza Pareto su solo ordine reale e norma pesata. Tracking e
+disturbo restano diagnostiche esterne alla selezione `hinfstruct`.
+
+### Risultato e motivazione
+
+A0 e A1 non producono objective finiti; A2 produce quattro objective finiti
+ma nessuna chiusura internamente stabile. A3, A4 e A5 hanno cinque start
+stabili ciascuna. I rappresentanti sono A3 start 4, ordine 2,
+`gamma=16.6418540`; A4 start 2, ordine 4, `gamma=11.6555347`; A5 start 5,
+ordine 6, `gamma=10.2477452`.
+
+Le tre soluzioni sono non dominate: ogni aumento d'ordine riduce gamma. A5
+si avvicina al full-order M10 entro circa 0.40%, ma non domina A3/A4 in
+ordine. Tutte le norme restano maggiori di uno e i target di tracking
+falliscono. Non esiste quindi una base tecnica per imporre un singolo
+controllore M11 o alterare retroattivamente M5.
+
+### Conseguenze e limiti
+
+M11 è `PARTIAL`: correttezza della campagna, ricostruzione e lower-bound
+sanity sono `PASS`, mentre stabilità di tutti gli start, weighted performance,
+tracking e cross-coupling globale sono `FAIL`. A3/A4/A5 sono trasmessi al
+gruppo come frontiera Pareto. Non vengono eseguiti nuova campagna, retuning,
+pianta incerta M4, mu-analysis o M12.
+
+### Stato epistemico
+
+**CAMPAGNA M11 VALIDATA — FRONTIERA A3/A4/A5, NESSUNA SELEZIONE AUTOMATICA, M11 PARTIAL**

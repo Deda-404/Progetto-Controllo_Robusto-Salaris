@@ -1,0 +1,396 @@
+RESOCONTO M11 PER GPT
+Structured H-infinity synthesis con hinfstruct
+Responsabile: Alessio
+Data: 2026-08-25
+
+======================================================================
+A. GIT
+======================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m11-hinfstruct-structured
+Base commit: 47ea295aef28a941f2f443033c03f10c5a6caa4d
+
+Commit tecnici pubblicati prima dell'handoff:
+- df6b874  feat(m11): add structured hinfstruct campaign
+- c809d08  data(m11): add structured synthesis artifacts
+- a0b16c7  docs(m11): record Pareto structured outcome
+
+Pull Request: #16, OPEN verso main
+Link: https://github.com/Deda-404/Progetto_CR/pull/16
+Merge autonomo: NO
+
+File principale di handoff:
+docs/handoff/Resoconto_M11_per_GPT.txt
+
+File M11 principali:
+- src/parameters/hinfstruct_specs_m11.m
+- controllers/hinf/build_m11_structured_controller.m
+- controllers/hinf/build_m11_tunable_closed_loop.m
+- controllers/hinf/extract_m11_tuned_controller.m
+- controllers/hinf/run_m11_hinfstruct_campaign.m
+- analysis/nominal/evaluate_m11_candidate.m
+- analysis/nominal/evaluate_m11_representatives.m
+- analysis/nominal/select_m11_pareto_candidates.m
+- analysis/nominal/build_m11_comparison.m
+- analysis/nominal/plot_m11_results.m
+- analysis/nominal/validate_m11_hinfstruct.m
+- tests/test_m11_hinfstruct.m
+
+======================================================================
+B. BASELINE
+======================================================================
+
+PR #15 è stata verificata come realmente mergiata.
+Merge commit M10 su main:
+47ea295aef28a941f2f443033c03f10c5a6caa4d
+
+Housekeeping eseguito:
+- docs/PROJECT_STATUS.md non indica più PR #15 come aperta;
+- M10 resta PARTIAL validata;
+- M11 è la milestone corrente ed è classificata PARTIAL;
+- M7 resta PARTIAL terminale, M8 COMPLETE, M9/M10 PARTIAL;
+- nessuna attività M12 è stata iniziata.
+
+Il branch M11 è stato verificato prima del lavoro con:
+- git branch --show-current;
+- git status;
+- git merge-base HEAD main.
+
+Il merge-base iniziale coincideva esattamente col commit richiesto e il
+working tree era pulito.
+
+======================================================================
+C. PROBLEMA CONGELATO
+======================================================================
+
+Source of truth P:
+results/data/m10_hinfsyn_nominal.mat
+
+Generalized plant:
+P = [ W1  -W1*G
+      0      W2
+      I      -G ]
+
+Dimensioni P: 6 x 4
+Ordine P: 18
+Ingressi: [r(1), r(2), u(1), u(2)]
+Uscite: [z1(1), z1(2), z2(1), z2(2), e(1), e(2)]
+nmeas = 2
+ncont = 2
+Errore frequenziale massimo P M11 vs artifact M10: 0.000e+00
+
+Pianta fisica G: nominale M3, 2 x 2, ordine 14, attuatori inclusi.
+
+Pesi M5 congelati:
+- omegaB = 12 rad/s
+- As = 0.05
+- Ms = 2
+- uScale = 12 N m
+- omegaU = 30 rad/s
+- alpha = 6
+- W3 = []
+
+Errori di rigenerazione W1/W2: 0 alla tolleranza usata.
+Retuning M5: NO.
+
+Gamma full-order M10 letto dall'artifact:
+gamma_full = 10.2071036477417
+
+======================================================================
+D. CAMPAGNA
+======================================================================
+
+Seed base: 20260827
+Seed famiglie: 20260827, 20260828, 20260829, 20260830, 20260831,
+                20260832
+Start per famiglia: 5 totali = 1 nominale + 4 RandomStart
+UseParallel: false
+Ordine massimo autorizzato: 6
+
+ID | Tipo                              | Ordine nom. | Parametri | Start | Stato
+---|-----------------------------------|-------------|-----------|-------|-----------------
+A0 | Full MIMO static gain             | 0           | 4         | 5     | NO_VALID_STABLE
+A1 | Decentralized PI                  | 2 max       | 4         | 5     | NO_VALID_STABLE
+A2 | Decentralized PIDF                | 4 max       | 8         | 5     | NO_VALID_STABLE
+A3 | Full MIMO tunableSS order 2       | 2           | 16        | 5     | ALL_VALID_STABLE
+A4 | Full MIMO tunableSS order 4       | 4           | 36        | 5     | ALL_VALID_STABLE
+A5 | Full MIMO tunableSS order 6       | 6           | 64        | 5     | ALL_VALID_STABLE
+
+A0 è costruita con tunableGain 2x2. A1 e A2 sono blocchi diagonali di due
+tunablePID SISO indipendenti. A3-A5 sono tunableSS full MIMO 2x2.
+
+======================================================================
+E. MULTI-START
+======================================================================
+
+Definizione di converged usata in tabella: objective hinfstruct finito e
+controller numerico estratto. Tutti i 30 record info sono comunque salvati.
+
+ID | Total | Converged | Stable | Best       | Median     | Worst      | Std      | Best start
+---|-------|-----------|--------|------------|------------|------------|----------|-----------
+A0 | 5     | 0         | 0      | --         | --         | --         | --       | --
+A1 | 5     | 0         | 0      | --         | --         | --         | --       | --
+A2 | 5     | 4         | 0      | 31.7501673 | 53.0114321 | 70.8567541 | 21.618   | 2
+A3 | 5     | 5         | 5      | 16.6418540 | 17.2772244 | 18.2496694 | 0.68779  | 4
+A4 | 5     | 5         | 5      | 11.6555347 | 11.9112494 | 13.8284213 | 1.0274   | 2
+A5 | 5     | 5         | 5      | 10.2477452 | 10.2976930 | 10.9260196 | 0.28908  | 5
+
+A0/A1 hanno objective infinito per tutti i record. A2 conserva quattro
+objective finiti ma tutte le chiusure sono INVALID_UNSTABLE. A3-A5 hanno
+cinque record VALID_STABLE ciascuna. Nessun fallimento o start instabile è
+stato eliminato.
+
+======================================================================
+F. LOWER-BOUND CHECK
+======================================================================
+
+Tolleranza relativa: 1e-4
+Confronto eseguito sulla norma stacked ricostruita indipendentemente.
+
+ID | gamma_struct | gamma_M10     | Diff. assoluta | Diff. relativa | Esito
+---|--------------|---------------|----------------|----------------|------
+A3 | 16.641538682 | 10.207103648  | 6.434435034    | 0.630388       | PASS
+A4 | 11.655058803 | 10.207103648  | 1.447955156    | 0.141858       | PASS
+A5 | 10.247641150 | 10.207103648  | 0.040537502    | 0.0039715      | PASS
+
+Nessuna soluzione strutturata stabile batte l'optimum full-order in modo
+inatteso. Non è scattato lo stop metodologico.
+
+======================================================================
+G. CONTROLLORI RAPPRESENTATIVI
+======================================================================
+
+Regola: minimo objective tra gli start VALID_STABLE; tie-break mediante
+indice di start. Tracking non usato nella selezione.
+
+A3:
+- struttura: full MIMO tunableSS
+- ordine reale: 2
+- start: 4
+- stabile: sì; massima parte reale closed-loop = -0.6271703648
+- poli controller: -15.2780 + 19.4261i; -15.2780 - 19.4261i
+
+A4:
+- struttura: full MIMO tunableSS
+- ordine reale: 4
+- start: 2
+- stabile: sì; massima parte reale closed-loop = -0.8653448157
+- poli controller: -0.6106; -14.4552 + 22.3669i;
+  -14.4552 - 22.3669i; -55.1772
+
+A5:
+- struttura: full MIMO tunableSS
+- ordine reale: 6
+- start: 5
+- stabile: sì; massima parte reale closed-loop = -0.7361570956
+- poli controller: -42.6762; -16.1711 + 22.5468i;
+  -16.1711 - 22.5468i; -21.4780; -0.6008; -5.2204
+
+Coefficienti PID representative: non applicabile. A1/A2 non hanno prodotto
+un representative VALID_STABLE; non sono stati promossi coefficienti
+instabili o falliti.
+
+======================================================================
+H. RICOSTRUZIONE INDIPENDENTE
+======================================================================
+
+ID | ||W1S||inf  | ||W2KS||inf | Stack norm   | Objective     | Err. relativo
+---|--------------|-------------|--------------|---------------|--------------
+A3 | 16.619308163 | 16.634025661| 16.641538682 | 16.641854033  | 1.895e-5
+A4 | 11.650159261 | 11.643376243| 11.655058803 | 11.655534749  | 4.083e-5
+A5 | 10.198611356 | 10.234954185| 10.247641150 | 10.247745243  | 1.016e-5
+
+Per tutti i representative:
+- S = feedback(I,G*K) ricostruito;
+- T = I-S;
+- KS = K*S;
+- stack = [W1*S; W2*KS];
+- lft(P,K) coincide con lo stack entro la tolleranza M10;
+- stabilità interna controllata sulla matrice plant-controller completa;
+- minreal non usato nel gate.
+
+======================================================================
+I. PARETO
+======================================================================
+
+Candidati validi non dominati: A3, A4, A5.
+Candidati validi dominati: nessuno.
+A0/A1/A2 sono esclusi dalla frontiera perché privi di representative stabile.
+
+Motivazione:
+- A3 ha ordine 2 e gamma 16.6415;
+- A4 aumenta l'ordine a 4 e riduce gamma a 11.6551;
+- A5 aumenta l'ordine a 6 e riduce gamma a 10.2476;
+- nessuno ha contemporaneamente ordine minore o uguale e gamma minore o
+  uguale di un altro candidato.
+
+Esito: PARETO_CANDIDATES_FOR_REVIEW. Nessuno score arbitrario e nessuna
+selezione forzata.
+
+======================================================================
+J. TRACKING COMPLETO DEI REPRESENTATIVE
+======================================================================
+
+Configurazione: e=r-q, u=K*e, nessun prefilter.
+Ts in s; OS in %; errore assoluto in rad; U in N m.
+
+ID | deg | J | Ts    | OS      | Err abs  | Err rel | Cross   | Peak U | U/12
+---|-----|---|-------|---------|----------|---------|---------|--------|-------
+A3 | 2   | 1 | 3.260 | 225.75  | 0.027523 | 0.78849 | 0.65516 | 1.9278 | 0.16065
+A3 | 2   | 2 | 3.102 | 223.65  | 0.027593 | 0.79048 | 0.26099 | 0.79597| 0.06633
+A3 | 5   | 1 | 3.260 | 225.75  | 0.068809 | 0.78849 | 0.65516 | 4.8195 | 0.40162
+A3 | 5   | 2 | 3.102 | 223.65  | 0.068982 | 0.79048 | 0.26099 | 1.9899 | 0.16583
+A3 | 8   | 1 | 3.260 | 225.75  | 0.110090 | 0.78849 | 0.65516 | 7.7111 | 0.64259
+A3 | 8   | 2 | 3.102 | 223.65  | 0.110370 | 0.79048 | 0.26099 | 3.1839 | 0.26532
+A4 | 2   | 1 | 2.140 | 184.28  | 0.019245 | 0.55132 | 0.49878 | 1.9944 | 0.16620
+A4 | 2   | 2 | 2.846 | 227.24  | 0.019353 | 0.55443 | 0.16299 | 0.80911| 0.06743
+A4 | 5   | 1 | 2.140 | 184.28  | 0.048112 | 0.55132 | 0.49878 | 4.9859 | 0.41549
+A4 | 5   | 2 | 2.846 | 227.24  | 0.048383 | 0.55443 | 0.16299 | 2.0228 | 0.16856
+A4 | 8   | 1 | 2.140 | 184.28  | 0.076979 | 0.55132 | 0.49878 | 7.9775 | 0.66479
+A4 | 8   | 2 | 2.846 | 227.24  | 0.077413 | 0.55443 | 0.16299 | 3.2364 | 0.26970
+A5 | 2   | 1 | 1.490 | 163.16  | 0.017732 | 0.50798 | 0.23911 | 2.0128 | 0.16773
+A5 | 2   | 2 | 1.924 | 233.51  | 0.017775 | 0.50922 | 0.20951 | 0.68801| 0.05734
+A5 | 5   | 1 | 1.490 | 163.16  | 0.044329 | 0.50798 | 0.23911 | 5.0319 | 0.41933
+A5 | 5   | 2 | 1.924 | 233.51  | 0.044438 | 0.50922 | 0.20951 | 1.7200 | 0.14334
+A5 | 8   | 1 | 1.490 | 163.16  | 0.070927 | 0.50798 | 0.23911 | 8.0511 | 0.67092
+A5 | 8   | 2 | 1.924 | 233.51  | 0.071101 | 0.50922 | 0.20951 | 2.7521 | 0.22934
+
+Target M5: Ts<=0.8 s, OS<=10%, errore relativo<=5%, cross<=25%
+diagnostico. Nessun representative passa il tracking completo. A5 passa il
+solo limite diagnostico di cross-coupling.
+
+======================================================================
+K. DISTURBI COMPLETI DEI REPRESENTATIVE
+======================================================================
+
+Disturbo fisico lato link, riferimento nullo. q in rad; U in N m.
+
+ID | Nm   | J | Peak q  | Offset   | Ts    | Cross   | Peak U | U/12
+---|------|---|---------|----------|-------|---------|--------|-------
+A3 | 0.25 | 1 | 0.033478| 0.018901 | 2.304 | 1.8550  | 0.58814| 0.04901
+A3 | 0.25 | 2 | 0.191030| 0.120980 | 1.934 | 0.23418 | 0.99643| 0.08304
+A3 | 0.50 | 1 | 0.066956| 0.037803 | 2.304 | 1.8550  | 1.1763 | 0.09802
+A3 | 0.50 | 2 | 0.382060| 0.241950 | 1.934 | 0.23418 | 1.9929 | 0.16607
+A3 | 1.00 | 1 | 0.133910| 0.075606 | 2.304 | 1.8550  | 2.3526 | 0.19605
+A3 | 1.00 | 2 | 0.764120| 0.483900 | 1.934 | 0.23418 | 3.9857 | 0.33214
+A4 | 0.25 | 1 | 0.042017| 0.013250 | 1.526 | 1.2308  | 0.82339| 0.06862
+A4 | 0.25 | 2 | 0.169070| 0.084817 | 1.882 | 0.31169 | 0.83606| 0.06967
+A4 | 0.50 | 1 | 0.084035| 0.026500 | 1.526 | 1.2308  | 1.6468 | 0.13723
+A4 | 0.50 | 2 | 0.338130| 0.169630 | 1.882 | 0.31169 | 1.6721 | 0.13934
+A4 | 1.00 | 1 | 0.168070| 0.053000 | 1.526 | 1.2308  | 3.2936 | 0.27446
+A4 | 1.00 | 2 | 0.676270| 0.339270 | 1.882 | 0.31169 | 3.3442 | 0.27869
+A5 | 0.25 | 1 | 0.033338| 0.017440 | 1.880 | 1.5047  | 0.63854| 0.05321
+A5 | 0.25 | 2 | 0.175260| 0.072697 | 1.592 | 0.28158 | 0.81698| 0.06808
+A5 | 0.50 | 1 | 0.066677| 0.034879 | 1.880 | 1.5047  | 1.2771 | 0.10642
+A5 | 0.50 | 2 | 0.350520| 0.145390 | 1.592 | 0.28158 | 1.6340 | 0.13616
+A5 | 1.00 | 1 | 0.133350| 0.069758 | 1.880 | 1.5047  | 2.5541 | 0.21285
+A5 | 1.00 | 2 | 0.701040| 0.290790 | 1.592 | 0.28158 | 3.2679 | 0.27233
+
+Esito disturbo: QUANTIFIED. Nessuna soglia nuova è stata inventata.
+
+======================================================================
+L. CONTROL EFFORT
+======================================================================
+
+Worst tracking peak U:
+- A3: 7.7111 N m, normalizzato 0.64259
+- A4: 7.9775 N m, normalizzato 0.66479
+- A5: 8.0511 N m, normalizzato 0.67092
+
+Worst disturbance peak U:
+- A3: 3.9857 N m, normalizzato 0.33214
+- A4: 3.3442 N m, normalizzato 0.27869
+- A5: 3.2679 N m, normalizzato 0.27233
+
+Esito: QUANTIFIED_NO_SATURATION.
+uScale=12 N m è usato solo per normalizzazione. Non è stata introdotta una
+saturazione hardware o un anti-windup.
+
+======================================================================
+M. CONFRONTO M6/M9/M10/M11
+======================================================================
+
+Ctrl       | Ord | Gamma/norm | Stab | Worst Ts | Worst OS | Err rel | Cross  | U track | q dist | Off dist | Cross dist | U dist
+-----------|-----|------------|------|----------|----------|---------|--------|---------|--------|----------|------------|-------
+M6 LQG     | 14  | N/A        | sì   | 0.776    | 0.265    | ~0      | 0.1739 | 7.5034  | 0.3205 | 0.3205   | 0.4635     | 2.5990
+M9 mixsyn  | 18  | 10.2071    | sì   | 1.566    | 261.62   | 0.4907  | 0.2596 | 8.2558  | 0.8717 | 0.1987   | 1.6025     | 3.5506
+M10 hinfsyn| 18  | 10.2071    | sì   | 1.566    | 261.62   | 0.4907  | 0.2596 | 8.2558  | 0.8717 | 0.1987   | 1.6025     | 3.5506
+M11 A3     | 2   | 16.6415    | sì   | 3.260    | 225.75   | 0.7905  | 0.6552 | 7.7111  | 0.7641 | 0.4839   | 1.8550     | 3.9857
+M11 A4     | 4   | 11.6551    | sì   | 2.846    | 227.24   | 0.5544  | 0.4988 | 7.9775  | 0.6763 | 0.3393   | 1.2308     | 3.3442
+M11 A5     | 6   | 10.2476    | sì   | 1.924    | 233.51   | 0.5092  | 0.2391 | 8.0511  | 0.7010 | 0.2908   | 1.5047     | 3.2679
+
+A5 recupera quasi interamente la norma M10 a un terzo dell'ordine, ma non
+migliora i fallimenti fondamentali di tracking. M6 resta il controllore con
+tracking nominale conforme tra quelli confrontati, ma gamma M5 non è
+applicabile al costo LQG.
+
+======================================================================
+N. TEST E CODE QUALITY
+======================================================================
+
+- test M11 isolato: 48/48 PASS
+- regressione H-infinity M9/M10/M11: 117/117 PASS
+- suite completa dentro run_all: 256/256 PASS
+- run_all: PASS, tutte le validazioni M0-M11, exit code 0
+- MATLAB Code Analyzer: 0 messaggi sui 12 file M11
+- git diff --check: PASS
+- artifact storici riscritti da run_all ma fuori scope: ripristinati
+- cache/autosave/temp file committati: NO
+
+Il software test può passare anche con quality gate prestazionali FAIL; non
+esiste un test che imponga artificialmente gamma<1.
+
+======================================================================
+O. QUALITY GATE
+======================================================================
+
+Structured campaign correctness: PASS
+Internal stability all starts: FAIL, 15/30 stabili
+Reconstruction representatives: PASS
+Full-order lower-bound sanity: PASS
+Weighted nominal performance: FAIL, tutti gamma > 1
+Tracking: FAIL
+Cross-coupling: FAIL globale; A5 passa il solo limite tracking diagnostico
+Disturbance: QUANTIFIED
+Control effort: QUANTIFIED_NO_SATURATION
+Start variability: QUANTIFIED
+Software correctness: PASS
+Overall M11: PARTIAL
+
+======================================================================
+P. RACCOMANDAZIONE
+======================================================================
+
+Esito: tre candidati Pareto per revisione del gruppo.
+
+- A3: massima riduzione, ordine 2, costo gamma più alto.
+- A4: compromesso intermedio, ordine 4.
+- A5: ordine 6, norma entro circa 0.40% dal full-order M10.
+
+Non è raccomandato automaticamente un singolo controllore M11. La scelta
+dipende dal valore assegnato dal gruppo a complessità e prestazione nominale.
+M12 non è autorizzata da questo risultato.
+
+======================================================================
+Q. LIMITI E STOP
+======================================================================
+
+Conferme esplicite:
+- nessuna analisi robusta sulla pianta M4;
+- nessuna mu-analysis;
+- nessun mussv, robuststab, robgain o musyn;
+- nessuna D-K iteration;
+- nessuna M12;
+- nessun retuning M5;
+- nessun W3;
+- nessun prefilter;
+- nessuna architettura 2-DoF;
+- nessun ordine >6;
+- nessun seed o numero di start aggiunto dopo i risultati;
+- nessuna dichiarazione di Robust Stability o Robust Performance;
+- nessun merge autonomo.
+
+La campagna A0-A5 è conclusa e deve restare congelata. Il prossimo passo è
+la revisione tecnica della PR #16 e della frontiera A3/A4/A5. Fermarsi qui:
+NON iniziare M12.

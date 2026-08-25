@@ -1,14 +1,49 @@
 # Project Status
 
-**Current milestone:** M10 — generalized plant esplicita e sintesi nominale `hinfsyn`
-**Status:** `PARTIAL` — generalized plant e sintesi valide, obiettivi pesato e tracking falliti
+**Current milestone:** M11 — campagna strutturata nominale `hinfstruct`
+**Status:** `PARTIAL` — campagna corretta; stabilità globale e target prestazionali falliti
 **Last validated milestone:** M10 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
 **Last validated controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Blocking issues:** revisione tecnica richiesta prima di iniziare M11 o modificare M5
-**Next task:** revisione del checkpoint M10; nessun M11 autorizzato
-**Pull Request:** [PR #15](https://github.com/Deda-404/Progetto_CR/pull/15) aperta verso `main`, non mergiata
-**Last update:** 2026-08-25, pubblicazione M10 per revisione
+**Blocking issues:** scelta tra A3/A4/A5 soggetta a revisione del gruppo; nessuna M12 autorizzata
+**Next task:** revisione tecnica della frontiera Pareto M11; non avviare M12
+**Pull Request:** [PR #16](https://github.com/Deda-404/Progetto_CR/pull/16) aperta da `codex/m11-hinfstruct-structured` verso `main`; non mergiata
+**Last update:** 2026-08-25, validazione M11
+
+## Quality gate M11 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — branch M11 da `47ea295aef28a941f2f443033c03f10c5a6caa4d` |
+| housekeeping | PASS — PR #15 registrata come mergiata nel baseline commit |
+| generalized plant | PASS — artifact M10 6×4, ordine 18, errore frequenziale nullo |
+| pesi | PASS — W1/W2 M5 invariati, `W3=[]`, nessun retuning |
+| campagna | PASS — A0–A5 congelate, ordine massimo 6, 30/30 record restituiti |
+| multistart | PASS — cinque start/famiglia, seed base 20260827, no parallel |
+| A0/A1 | FAIL di convergenza — 0/5 objective finiti, 0/5 stabili |
+| A2 | FAIL di stabilità — 4/5 objective finiti, 0/5 stabili |
+| A3 | PASS famiglia — 5/5 stabili; best ordine 2, start 4, gamma 16.6418540 |
+| A4 | PASS famiglia — 5/5 stabili; best ordine 4, start 2, gamma 11.6555347 |
+| A5 | PASS famiglia — 5/5 stabili; best ordine 6, start 5, gamma 10.2477452 |
+| stabilità di tutti gli start | **FAIL — 15/30 stabili** |
+| ricostruzione indipendente | PASS — S/T/KS/stack e objective coerenti per A3/A4/A5 |
+| lower bound M10 | PASS — nessuna violazione rispetto a 10.2071036477 |
+| frontiera Pareto | A3/A4/A5 — trade-off reale ordine/gamma, nessuna scelta forzata |
+| weighted nominal objective | **FAIL — tutte le norme strutturate sono >1** |
+| tracking | **FAIL — target M5 non soddisfatti** |
+| cross-coupling tracking | **FAIL globale — solo A5 passa il limite diagnostico** |
+| disturbo lato link | QUANTIFIED — 18 scenari complessivi sui rappresentanti |
+| comando | QUANTIFIED_NO_SATURATION — `uScale=12 N m` solo normalizzazione |
+| variabilità | QUANTIFIED — best/median/worst/std e best start per famiglia |
+| artifact | PASS — dataset e sei figure |
+| test M11 | PASS — 48/48 |
+| regressione M9/M10/M11 | PASS — 117/117 |
+| test top-level / `run_all` | PASS software — 256/256, exit code 0 |
+| Code Analyzer M11 | PASS — 0 messaggi su 12 file |
+| analisi robusta / M12 | NOT RUN corretto |
+| stato | **PARTIAL — software corretto, performance non conforme** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M10 — PARTIAL
 

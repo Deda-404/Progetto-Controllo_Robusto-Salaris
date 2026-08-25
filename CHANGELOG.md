@@ -6,6 +6,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Campagna M11 `hinfstruct` finita A0–A5 con guadagno statico MIMO, PI/PIDF
+  decentralizzati e `tunableSS` full MIMO di ordine 2/4/6.
+- Audit persistente di 30 partenze deterministiche, classificazione completa,
+  stabilità interna senza `minreal`, ricostruzione `S/T/KS`, lower-bound M10,
+  metriche di variabilità e selezione Pareto ordine/gamma.
+- Dataset `m11_hinfstruct_structured.mat`, sei figure ingegneristiche,
+  documento `HINFSTRUCT_IMPLEMENTABLE_STRUCTURES.md` e suite M11 T01–T48.
+
 - Pianta generalizzata nominale M10 esplicita 1-DoF con ingressi `[r;u]`,
   uscite `[z1;z2;y]`, partizione documentata e audit indipendenti mediante
   forma analitica e `augw`.
@@ -86,6 +94,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Esteso `run_all.m` a M11 mantenendo congelati pianta M10, pesi M5,
+  architettura 1-DoF e scenari M9/M10; nessun retuning, W3, prefilter o M12.
+- Portato lo stato corrente a M11 `PARTIAL`: A3/A4/A5 restano candidati
+  Pareto per revisione del gruppo, senza score o selezione automatica.
+
 - Esteso `run_all.m` a M10 mantenendo congelati pianta M3, pesi M5,
   architettura 1-DoF e scenari M9; M10 è classificata `PARTIAL` per
   `gamma>1` e tracking non conforme, pur con quality gate software `PASS`.
@@ -138,6 +151,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- M11 ha restituito 30/30 record e 15 chiusure stabili: A3/A4/A5 sono tutte
+  stabili su 5/5 start, con best gamma 16.6418540, 11.6555347 e 10.2477452.
+- Ricostruzione e lower-bound sanity `PASS`; target weighted, tracking e
+  cross-coupling globale `FAIL`, quindi M11 resta `PARTIAL` con software
+  correctness `PASS`.
+- Suite M11 48/48, regressione M9/M10/M11 117/117, `run_all` 256/256 con
+  exit code 0 e Code Analyzer senza messaggi sui file M11.
 
 - Sintesi M9 con controllore ordine 18, `gamma=10.2071036477`, norma stacked
   ricostruita `10.2071033931`, errore relativo `2.495e-8`, errore `CLmix`
