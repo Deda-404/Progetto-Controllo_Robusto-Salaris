@@ -1,7 +1,7 @@
 # μ-analysis finale del controllore D–K Kmu
 
-**Responsabile:** Alessio  
-**Milestone:** M14  
+**Responsabile:** Alessio
+**Milestone:** M14
 **Stato:** `PARTIAL` — software corretto e Robust Stability recuperata, ma
 Nominal Performance e Robust Performance non conformi a M5
 
