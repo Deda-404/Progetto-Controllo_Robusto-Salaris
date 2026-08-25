@@ -1290,3 +1290,26 @@ alcun tuning, `hinfsyn` o lavoro di robustezza.
 - weighted nominal objective: **FAIL**;
 - tracking e cross-coupling: **FAIL**;
 - stato complessivo M9: **PARTIAL**.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M9
+
+**Responsabile:** Alessio
+**Milestone:** M9
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m9-hinf-mixsyn` su `origin`.
+- Aperta la Pull Request
+  [#14](https://github.com/Deda-404/Progetto_CR/pull/14) verso `main`.
+- Verificato che la PR sia aperta, non draft, non mergiata e mergeable, con
+  base `main` al commit `57912473c4337270dec14d3f566cf9d763ea759f`.
+- Creato l'handoff autosufficiente `Resoconto_M9_per_GPT.txt`.
+
+### Risultato
+
+**M9 PARTIAL pubblicata per revisione senza merge autonomo.** Non è stata
+iniziata M10.

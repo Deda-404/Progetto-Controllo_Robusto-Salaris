@@ -7,7 +7,7 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Blocking issues:** revisione tecnica richiesta prima di modificare M5 o iniziare M10
 **Next task:** revisione del checkpoint M9; nessun retuning o M10 autorizzato
-**Pull Request:** PR #13 mergiata in `main` al commit `57912473c4337270dec14d3f566cf9d763ea759f`; PR M9 da aprire
+**Pull Request:** [PR #14](https://github.com/Deda-404/Progetto_CR/pull/14) aperta verso `main`, non mergiata
 **Last update:** 2026-08-25, quality gate M9
 
 ## Quality gate M9 — PARTIAL
