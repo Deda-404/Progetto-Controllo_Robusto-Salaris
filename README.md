@@ -52,17 +52,17 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M14,
-ricostruisce gli artifact precedenti e verifica il Kmu congelato con la stessa
-pipeline robusta M12. I risultati negativi M9–M12 e M14 sono conservati come
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M15,
+ricostruisce gli artifact precedenti e valida Khinf/Kmu sul modello non
+lineare nominale. I risultati negativi M9–M12, M14 e M15 sono conservati come
 `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale. La sintesi M13 non
-viene rilanciata automaticamente: il raw output della campagna autorizzata è
-congelato, mentre M14 rigenera analisi, dati e figure senza nuova `musyn`.
+viene rilanciata automaticamente: il raw output autorizzato è congelato,
+M14 ripete l'analisi senza nuova sintesi e M15 non campiona l'incertezza M4.
 
 ## Stato corrente
 
-- Milestone corrente: **M14 — μ-analysis finale Kmu, PARTIAL**; M13 resta
-  `COMPLETE` come sintesi D–K.
+- Milestone corrente: **M15 — validazione non lineare Khinf/Kmu, PARTIAL**;
+  M14 resta `PARTIAL` e M13 `COMPLETE` come sintesi D–K.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -87,6 +87,11 @@ congelato, mentre M14 rigenera analisi, dati e figure senza nuova `musyn`.
 - Risultato M14: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
   `[1.250037,1.252573]` e RP `FAIL_CERTIFIED`. Rispetto ad A5, RS passa da
   `FAIL_CERTIFIED` a `PASS_CERTIFIED`: recupero certificato della stabilità
-  robusta, senza conformità di performance e senza avviare M15.
+  robusta sul modello lineare incerto M4, senza conformità di performance.
+- Risultato M15: equilibrio `PASS` per entrambi; tracking M5 `FAIL` con worst
+  Ts 1.7322/1.7346 s e OS 261.35/228.36% per Khinf/Kmu. La RAS Khinf ha
+  raggio minimo 52.876° con boundary interno; Kmu raggiunge il box con raggio
+  minimo 60°. Le regioni empiriche di accordo LTI/NL hanno raggio minimo
+  4°/4.75°. Software `PASS`, nessuna saturazione, incertezza o M16.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

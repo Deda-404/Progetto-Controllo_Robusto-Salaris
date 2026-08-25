@@ -1,15 +1,47 @@
 # Project Status
 
-**Current milestone:** M14 — μ-analysis finale del Kmu D–K congelato
-**Status:** `PARTIAL` — software e NS `PASS`, RS `PASS_CERTIFIED`, NP/RP non conformi a M5
-**Last validated milestone:** M14 `PARTIAL`; M13 resta `COMPLETE` come sintesi e M8 l'ultima milestone non lineare `COMPLETE`
+**Current milestone:** M15 — validazione non lineare nominale Khinf/Kmu
+**Status:** `PARTIAL` — software/equilibrio/simulazioni `PASS`, tracking M5 `FAIL` per entrambi
+**Last validated milestone:** M15 `PARTIAL`; M14 resta `PARTIAL` e M13 `COMPLETE` come sintesi
 **Last tracking-conforming controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Open technical issue:** D–K recupera RS rispetto ad A5, ma la norma nominale resta >1 e RP fallisce; nessun retuning è autorizzato
-**Next task:** revisione tecnica della PR M14; non iniziare M15 senza autorizzazione
-**Pull Request baseline:** [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18) `merged` al commit `49f37c6e027aaa37db65f27530901965f897f11f`; M14 è sviluppata su branch dedicato
-**Pull Request corrente:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) aperta verso `main`, non mergiata
-**Last update:** 2026-08-25, M14 pubblicata per revisione tecnica
+**Open technical issue:** Khinf/Kmu non rispettano Ts/OS/errore M5 sul nominale non lineare; Kmu conserva RS certificata soltanto sul modello lineare incerto M4
+**Next task:** revisione tecnica M15; non iniziare M16 senza autorizzazione
+**Pull Request baseline:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) `merged` al commit `c51142e624adea610e72d16ddfd764008cb65371`
+**Pull Request corrente:** M15 su `codex/m15-nonlinear-robust-validation`, PR da aprire verso `main`
+**Last update:** 2026-08-25, validazione e artifact M15 completati
+
+## Quality gate M15 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #19 mergiata al commit `c51142e624adea610e72d16ddfd764008cb65371` |
+| controllori congelati | PASS — Khinf M10 2×2 ordine 18; Kmu M13 2×2 ordine 52, best iteration 3 |
+| modello fisico | PASS — M1/M3/equilibrio M8 riusati, modello M8 invariato |
+| architettura | PASS — q-only, `e=r-q`, `u_abs=taubar+K*e`, nessun prefilter/integratore |
+| solver/config | PASS — `ode23t`, `1e-5/1e-7`, max step 5 ms, input 2 ms come M8 |
+| equilibrio | PASS — drift q `2.255e-16/1.634e-16 rad` per Khinf/Kmu |
+| tracking Khinf | **FAIL — worst Ts 1.7322 s, OS 261.347%, errore 49.0679%** |
+| tracking Kmu | **FAIL — worst Ts 1.7346 s, OS 228.364%, errore 50.4416%** |
+| cross-coupling | Khinf FAIL diagnostico 25.913%; Kmu PASS 23.944% |
+| disturbo / rumore | QUANTIFIED; noise repeat error 0 per entrambi |
+| comando | QUANTIFIED_NO_SATURATION — peak tracking 8.2558/8.2599 N m |
+| LTI/NL | QUANTIFIED per tracking e disturbi con mappe del medesimo controller |
+| RAS Khinf | QUANTIFIED_EMPIRICAL — rmin 52.876°, area 12721 deg², boundary interno |
+| RAS Kmu | QUANTIFIED_EMPIRICAL — rmin 60°, area 14213.6 deg², search-box limited |
+| benchmark M6 | caricato dall'artifact M8, non rieseguito; search-box limited |
+| agreement Khinf | QUANTIFIED_EMPIRICAL — rmin 4°, area 99.522 deg² |
+| agreement Kmu | QUANTIFIED_EMPIRICAL — rmin 4.75°, area 111.721 deg² |
+| M14 RS Kmu | `PASS_CERTIFIED` esclusivamente sul modello lineare incerto M4 |
+| incertezza/Monte Carlo/M16 | NOT RUN corretto |
+| artifact / figure | PASS — dataset, modello e otto figure |
+| test M15 | PASS — 60/60 |
+| suite completa / `run_all` | PASS — 478/478, exit code 0; M13 ricaricata senza nuova `musyn` |
+| Code Analyzer M15 | PASS — zero messaggi sui file M15 e `run_all.m` |
+| software | **PASS** |
+| stato | **PARTIAL — validazione completata, tracking M5 non conforme** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M14 — PARTIAL
 
@@ -30,7 +62,7 @@
 | worst-case gain | QUANTIFIED — `[25.9514560605,26.1151353973]`, sostituzione coerente |
 | confronto A5/Kmu | **CLEAR_IMPROVEMENT RS — `FAIL_CERTIFIED -> PASS_CERTIFIED`** |
 | blocco RS dominante | `Delta_act2` — sensitivity 80 su A5, 86 su Kmu |
-| sintesi/riduzione/retuning/M15 | NOT RUN corretto |
+| sintesi/riduzione/retuning in M14 | NOT RUN corretto |
 | artifact | PASS — dataset e sei figure |
 | test M14 | PASS — 56/56 |
 | suite completa / `run_all` | PASS — 418/418, exit code 0; M13 ricaricata senza nuova `musyn` |

@@ -88,9 +88,9 @@ aperte senza occultare il risultato terminale M7.
 - [x] Confrontare `mixsyn` e `hinfsyn` con le stesse specifiche.
 - [x] Esplorare `hinfstruct` con struttura e ordine motivati.
 - [x] Valutare \(\gamma\), \(S\), \(T\), \(KS\), tracking, disturbi e comando.
-- [ ] Implementare i controllori selezionati in Simulink.
-- [ ] Validare modello lineare e non lineare.
-- [ ] Stimare e documentare la RAS empirica.
+- [x] Implementare i controllori selezionati in Simulink.
+- [x] Validare modello lineare e non lineare.
+- [x] Stimare e documentare la RAS empirica.
 
 M9 ha completato la baseline nominale 1-DoF con W1/W2 M5 congelati e
 `W3=[]`. La stabilità interna e la ricostruzione indipendente sono `PASS`, ma
@@ -106,6 +106,12 @@ Pareto con gamma 16.6419/11.6555/10.2477. M11 resta `PARTIAL` perché stabilità
 globale, gamma<1 e tracking falliscono. Il gruppo ha successivamente
 selezionato A5, ordine 6, per la sola analisi M12; questa scelta non promuove
 A5 a controllore conforme a M5.
+
+M15 implementa in un modello Simulink separato Khinf M10 e Kmu M13 senza
+rigenerarli. Equilibrio, scenari M5, rumore, disturbi, confronti LTI/NL e RAS
+empiriche sono stati eseguiti per entrambi. La validazione è completata ma i
+target di tracking falliscono, quindi le caselle indicano esecuzione e
+tracciabilità, non conformità prestazionale.
 
 ## \(\mu\)-analysis
 
@@ -148,7 +154,7 @@ ogni rilassamento restano aperti.
 
 ## Validazione e confronto
 
-- [ ] Validare \(H_\infty\) e \(\mu\)-synthesis sul modello non lineare.
+- [x] Validare \(H_\infty\) e \(\mu\)-synthesis sul modello non lineare.
 - [x] Definire criteri automatici e riproducibili per la RAS LQG M6.
 - [x] Esplorare due sezioni e un dominio di stati iniziali documentati per M6.
 - [ ] Impostare un seed Monte Carlo esplicito.
@@ -164,6 +170,13 @@ M14 confronta l'A5 congelato M12 con Kmu: il margine RS passa da
 `FAIL_CERTIFIED -> PASS_CERTIFIED`. Entrambi falliscono NP/RP sul target M5;
 il confronto distingue quindi recupero della stabilità robusta e mancata
 performance robusta.
+
+M15 aggiunge la validazione nominale non lineare: Khinf e Kmu restano
+all'equilibrio ma falliscono tracking M5. La RAS Khinf localizza un boundary
+interno con raggio minimo 52.876°, mentre Kmu raggiunge il box in tutte le
+direzioni; le regioni di accordo LTI/NL hanno raggio minimo 4° e 4.75°.
+Queste evidenze non campionano M4 e non trasferiscono la RS lineare M14 al
+modello non lineare.
 
 ## Deliverable finali
 
