@@ -52,14 +52,15 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M9,
-ricostruisce gli artifact M1–M8 e conclude con la sintesi nominale `mixsyn`
-M9 a pesi M5 congelati. Il risultato prestazionale negativo M9 è conservato
-come `PARTIAL` senza ritunare M5; M7 resta a sua volta `PARTIAL` terminale.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M10,
+ricostruisce gli artifact precedenti e conclude con la generalized plant
+esplicita e la sintesi `hinfsyn` M10. I risultati prestazionali negativi M9
+e M10 sono conservati come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL`
+terminale.
 
 ## Stato corrente
 
-- Milestone corrente: **M9 — sintesi H-infinity nominale con `mixsyn`, PARTIAL**.
+- Milestone corrente: **M10 — generalized plant esplicita e sintesi nominale `hinfsyn`, PARTIAL**.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -69,5 +70,8 @@ come `PARTIAL` senza ritunare M5; M7 resta a sua volta `PARTIAL` terminale.
 - Risultato M9: interconnessione nominale stabile, controllore ordine 18,
   `gamma=10.2071036477` e norma ricostruita `10.2071033931`; obiettivi
   weighted e tracking falliti senza retuning, `W3` o analisi robusta.
+- Risultato M10: generalized plant corretta, `gammaHinf=10.2071036477` e
+  controller ordine 18 quasi equivalenti a M9; stabilità PASS, obiettivi
+  weighted e tracking FAIL, senza retuning o analisi robusta.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

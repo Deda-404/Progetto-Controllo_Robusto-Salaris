@@ -6,6 +6,17 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pianta generalizzata nominale M10 esplicita 1-DoF con ingressi `[r;u]`,
+  uscite `[z1;z2;y]`, partizione documentata e audit indipendenti mediante
+  forma analitica e `augw`.
+- Gate obbligatorio pre-sintesi che richiude il controllore M9 congelato sulla
+  nuova pianta e verifica mappe pesate, norma e coerenza dell'interconnessione.
+- Pipeline `hinfsyn` nominale con una sola sintesi di default, ricostruzione
+  indipendente di `S/T/KS`, valutazione comune M6/M9/M10 e classificazione
+  esplicita della quasi-equivalenza M9/M10.
+- Dataset `m10_hinfsyn_nominal.mat`, sei figure ingegneristiche, documento
+  `HINF_HINFSYN_GENERALIZED_PLANT.md` e suite M10 T01–T40.
+
 - Pipeline nominale M9 modulare per audit della pianta M3/M5, sintesi
   `mixsyn`, ricostruzione indipendente di `S/T/KS`, stabilità interna e
   valutazione tracking/disturbo/confronto M6.
@@ -74,6 +85,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Suite M5 T1–T14 per centralizzazione, derivazione della banda, pesi, asintoti, disturbance path, regressione M0–M4.1 e governance documentale.
 
 ### Changed
+
+- Esteso `run_all.m` a M10 mantenendo congelati pianta M3, pesi M5,
+  architettura 1-DoF e scenari M9; M10 è classificata `PARTIAL` per
+  `gamma>1` e tracking non conforme, pur con quality gate software `PASS`.
+- Aggiornati stato, checklist e decisioni per distinguere la validazione
+  dell'interconnessione nominale dalla soddisfazione delle prestazioni.
 
 - Esteso `run_all.m` a M9 mantenendo M7 `PARTIAL` terminale e classificando
   separatamente correttezza software e fallimenti prestazionali M9.

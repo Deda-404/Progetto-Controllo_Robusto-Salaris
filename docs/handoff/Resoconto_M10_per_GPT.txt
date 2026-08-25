@@ -1,0 +1,334 @@
+RESOCONTO M10 PER GPT
+Milestone: M10 — Sintesi H-infinity con hinfsyn e generalized plant esplicita
+Responsabile: Alessio
+Data: 2026-08-25
+Stato raccomandato: PARTIAL
+
+Questo file è un handoff autosufficiente. I numeri riportati derivano da
+MATLAB R2025b realmente eseguito e dal dataset
+results/data/m10_hinfsyn_nominal.mat.
+
+==========================================================================
+A. GIT
+==========================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m10-hinfsyn-generalized-plant
+Base commit: 8a4a3f423210464f9a46a21daa8806722e7a7506
+Pull Request: https://github.com/Deda-404/Progetto_CR/pull/15
+Stato PR alla pubblicazione: OPEN, non draft, NON MERGED.
+
+Commit applicativi:
+- b7a6f13 feat(m10): add explicit hinfsyn generalized plant
+- 4e552b9 data(m10): add validated hinfsyn artifacts
+- a17f70a docs(m10): record nominal hinfsyn checkpoint
+
+File creati:
+- src/parameters/hinf_specs_m10.m
+- controllers/hinf/build_m10_generalized_plant.m
+- controllers/hinf/validate_m10_generalized_plant.m
+- controllers/hinf/synthesize_m10_hinfsyn.m
+- controllers/hinf/reconstruct_m10_closed_loop.m
+- analysis/nominal/evaluate_m10_closed_loop.m
+- analysis/nominal/plot_m10_results.m
+- analysis/nominal/validate_m10_hinfsyn.m
+- tests/test_m10_hinfsyn.m
+- docs/HINF_HINFSYN_GENERALIZED_PLANT.md
+- results/data/m10_hinfsyn_nominal.mat
+- sei figure results/figures/m10_*.png
+- docs/handoff/Resoconto_M10_per_GPT.txt
+
+File modificati:
+- run_all.m
+- tests/test_m9_hinf_mixsyn.m
+- README.md
+- CHANGELOG.md
+- docs/DECISION_LOG.md
+- docs/DIARIO_DI_BORDO.md
+- docs/PROJECT_STATUS.md
+- docs/REQUIREMENTS_CHECKLIST.md
+
+La modifica al test M9 T22 limita l'audit di fuori-scope ai file della
+pipeline M9. Prima cercava hinfsyn nell'intera cartella condivisa e falliva
+impropriamente alla presenza dei file M10 autorizzati. Nessun risultato M9 è
+stato modificato.
+
+==========================================================================
+B. BASELINE
+==========================================================================
+
+La PR #14 è stata verificata come realmente mergiata in main al merge commit:
+8a4a3f423210464f9a46a21daa8806722e7a7506.
+
+Baseline confermata:
+- M0–M6 COMPLETE;
+- M7 PARTIAL terminale;
+- M8 COMPLETE, ultima milestone completamente soddisfatta;
+- M9 PARTIAL validata, gamma circa 10.2071 e nessun retuning;
+- M10 non presente prima di questo branch.
+
+PROJECT_STATUS è stato corretto all'avvio per rimuovere l'indicazione
+obsoleta di PR #14 aperta. Dopo la pubblicazione indica M10 PARTIAL e PR #15
+aperta, non mergiata.
+
+==========================================================================
+C. GENERALIZED PLANT
+==========================================================================
+
+Problema congelato: stessa G M3/M9, stessi W1/W2 M5, stesso scaling e stessa
+architettura nominale 1-DoF M9.
+
+Equazioni:
+  q  = G*u
+  e  = r-q
+  z1 = W1*e
+  z2 = W2*u
+  y  = e
+
+Ingressi P, in ordine: [r1; r2; u1; u2].
+Uscite P, in ordine: [z1_1; z1_2; z2_1; z2_2; y1; y2].
+
+Forma analitica:
+      [ W1     -W1*G ]
+  P = [ 0       W2   ]
+      [ I       -G   ]
+
+Dimensione P: 6x4. Ordine dinamico: 18.
+Partizioni: P11 4x2, P12 4x2, P21 2x2, P22 2x2.
+nmeas=2, ncont=2.
+Convenzione: P21=I, P22=-G; lft/hinfsyn usa u=K*y, quindi
+u=K*(r-q), coerente con M9.
+
+Audit transfer-function:
+- connect/sumblk vs forma analitica: errore massimo 1.137e-13;
+- P22 vs -G: errore massimo 0;
+- cross-check successivo con augw: errore massimo 1.097e-14.
+
+augw non è la costruzione primaria; è stato usato soltanto reference-last.
+
+==========================================================================
+D. EQUIVALENCE GATE M9
+==========================================================================
+
+Kmix è stato caricato dall'artifact congelato
+results/data/m9_hinf_mixsyn_nominal.mat e chiuso sulla nuova P prima di ogni
+chiamata a hinfsyn:
+  CL_M9_from_P = lft(P,Kmix)
+
+Risultati:
+- ||CL_M9_from_P||inf = 10.2071033931;
+- errore H∞ verso CLmix M9 = 2.688e-12;
+- errore H∞ verso lo stack [W1*S;W2*KS] M9 = 2.535e-12;
+- errore relativo norma vs gamma M9 = 2.495e-8.
+
+Esito: PASS. Il codice contiene un assert prima della funzione di sintesi;
+hinfsyn non viene eseguito se questo gate fallisce.
+
+==========================================================================
+E. HINFSYN
+==========================================================================
+
+Unico comando eseguito, con opzioni default MATLAB R2025b:
+  [Khinf,CLhinf,gammaHinf,infoHinf] = hinfsyn(P,2,2)
+
+Risultati:
+- Khinf: 2x2, ordine 18;
+- gammaHinf = 10.2071036477;
+- infoHinf.gamma = 10.2072906100;
+- differenza info gamma/gamma = 1.8696e-4;
+- info contiene X e Y 18x18, Ku/Kw 2x18, Lx 18x2, Lu 2x2,
+  Preg 6x4 e AS 4x4;
+- warning message/identifier: vuoti;
+- Khinf stabile isolatamente: sì, registrato solo come diagnostica.
+
+Non sono state provate opzioni o sintesi alternative.
+
+==========================================================================
+F. RICOSTRUZIONE
+==========================================================================
+
+Ricostruzione dalla pianta fisica originale:
+  S10  = (I+G*Khinf)^-1
+  T10  = I-S10
+  KS10 = Khinf*S10
+  Mweighted10 = [W1*S10; W2*KS10]
+
+Norme e picchi:
+- ||W1*S10||inf = 10.1276254519, picco a 0 rad/s;
+- ||W2*KS10||inf = 10.1853081898, picco a 33.4393061624 rad/s;
+- ||Mweighted10||inf = 10.2071033931;
+- picco stack a 4.0408335655 rad/s;
+- errore relativo norma stack/gamma = 2.495e-8;
+- ||CLhinf-Mweighted10||inf = 4.910e-12.
+
+S10, T10, KS10, W1S10, W2KS10 e stack sono salvati nel dataset.
+
+==========================================================================
+G. STABILITÀ
+==========================================================================
+
+- stati pianta: 14;
+- stati controllore: 18;
+- stati interni totali: 32;
+- massima parte reale dei poli: -0.683828559887 s^-1;
+- S10, T10, KS10 e CLhinf stabili: sì;
+- distanza tra i poli della matrice interna esplicita e della realizzazione
+  di S10: 0;
+- minima separazione fra poli: 1.3398e-10;
+- condition number della matrice degli autovettori: 1.2916e5.
+
+I modi quasi ripetuti sono stati conservati. Non è stato usato minreal nel
+quality gate e non sono emerse cancellazioni instabili nascoste.
+
+==========================================================================
+H. TRACKING M10
+==========================================================================
+
+Stessi scenari M9, senza precompensatore o saturazione.
+
+Amp  J  Ts[s]  OS[%]    ErrAbs[rad]  ErrRel[%]  Cross[%]  PeakU[Nm]  U/12
+2    1  1.566  171.88   0.017128     49.068     25.960    2.0639     0.17200
+2    2  1.216  261.62   0.012541     35.927     17.924    0.57173    0.047644
+5    1  1.566  171.88   0.042820     49.068     25.960    5.1599     0.42999
+5    2  1.216  261.62   0.031352     35.927     17.924    1.4293     0.11911
+8    1  1.566  171.88   0.068512     49.068     25.960    8.2558     0.68798
+8    2  1.216  261.62   0.050163     35.927     17.924    2.2869     0.19058
+
+Target M5 Ts<=0.8 s, OS<=10%, errore<=5%: FAIL.
+Cross-coupling diagnostico <=25%: FAIL sul giunto 1.
+
+==========================================================================
+I. DISTURBI M10
+==========================================================================
+
+Disturbo fisico M5 lato link, fuori dall'obiettivo H∞. Riferimento nullo:
+q_d=S10*Gd*d e u_d=-KS10*Gd*d.
+
+d[Nm] J PeakQ[rad] Offset[rad] Rec[s] Cross[%] PeakU[Nm] U/12
+0.25  1 0.039170   0.015186    1.756  160.25   0.66249   0.055208
+0.25  2 0.21793    0.049671    1.098  28.436   0.88765   0.073971
+0.50  1 0.078339   0.030373    1.756  160.25   1.3250    0.11042
+0.50  2 0.43586    0.099341    1.098  28.436   1.7753    0.14794
+1.00  1 0.15668    0.060746    1.756  160.25   2.6500    0.22083
+1.00  2 0.87172    0.19868     1.098  28.436   3.5506    0.29588
+
+Esito: QUANTIFIED. Non è stata inventata una soglia M5 assente.
+
+==========================================================================
+J. CONTROL EFFORT
+==========================================================================
+
+- worst tracking peak U = 8.2558 N m;
+- worst tracking peak U/uScale = 0.68798;
+- worst disturbance peak U = 3.5506 N m;
+- worst disturbance peak U/uScale = 0.29588;
+- uScale = 12 N m è soltanto una normalizzazione prestazionale;
+- nessuna saturazione o anti-windup è stata introdotta.
+
+Esito: QUANTIFIED_NO_SATURATION.
+
+==========================================================================
+K. CONFRONTO M6 / M9 / M10
+==========================================================================
+
+Worst case                  M6 LQG       M9 mixsyn      M10 hinfsyn
+Ordine K                    14           18             18
+Gamma                       N/A          10.2071036477  10.2071036477
+Norma pesata                N/A          10.2071033931  10.2071033931
+Nominalmente stabile        sì           sì             sì
+Tracking Ts [s]             0.776        1.566          1.566
+Tracking OS [%]             0.26545      261.62         261.62
+Errore tracking [%]         1.63e-12     49.068         49.068
+Cross tracking [%]          17.391       25.960         25.960
+Tracking peak U [N m]       7.5034       8.2558         8.2558
+Disturbo peak q [rad]       0.32051      0.87172        0.87172
+Disturbo offset [rad]       0.32046      0.19868        0.19868
+Cross disturbo [%]          46.350       160.25         160.25
+Disturbo peak U [N m]       2.5990       3.5506         3.5506
+
+Gli artifact congelati M6 e M9 sono le sorgenti del confronto. La
+rigenerazione diagnostica degli stessi scenari coincide con le tabelle
+salvate entro 1e-10.
+
+==========================================================================
+L. INTERPRETAZIONE
+==========================================================================
+
+M9 e M10 sono QUASI EQUIVALENTI.
+
+- differenza relativa dei gamma: 2.938e-13;
+- errore H∞ fra mappe weighted: 1.274e-9;
+- errore H∞ S/T: circa 1.540e-7;
+- errore H∞ KS: 1.466e-8;
+- errore H∞ fra i controller come transfer function: 5.576e-11;
+- distanza insiemi dei poli closed-loop: 5.539e-9;
+- tracking e disturbi coincidono nelle tabelle.
+
+La diversa interfaccia di sintesi non migliora la stessa specifica. Questo è
+il risultato metodologico atteso e valido; non è stato cercato un controller
+alternativo.
+
+==========================================================================
+M. TEST
+==========================================================================
+
+- suite M10: 40/40 PASS;
+- regressione congiunta M9+M10: 69/69 PASS;
+- suite top-level in run_all: 208/208 PASS;
+- run_all completo: exit code 0;
+- MATLAB Code Analyzer: 0 messaggi su tutti gli 11 file nuovi/modificati
+  controllati;
+- git diff --check: PASS;
+- artefatti storici M2–M9 e modello Simulink: ripristinati al contenuto
+  versionato dopo la rigenerazione;
+- autosave/cache/file temporanei: non inclusi.
+
+È stato conservato nel diario anche il primo fallimento del run_all causato
+dal perimetro obsoleto del test M9 T22 e la successiva correzione.
+
+==========================================================================
+N. QUALITY GATE
+==========================================================================
+
+- Generalized Plant Correctness: PASS;
+- Nominal Stability: PASS;
+- H-infinity Reconstruction: PASS;
+- Weighted Nominal Performance: FAIL, gammaHinf>=1;
+- Tracking: FAIL;
+- Cross-coupling: FAIL diagnostico;
+- Disturbance: QUANTIFIED;
+- Control effort: QUANTIFIED_NO_SATURATION;
+- M9/M10 consistency: PASS, quasi-equivalenti;
+- correttezza software: PASS;
+- stato complessivo M10: PARTIAL.
+
+==========================================================================
+O. LIMITI
+==========================================================================
+
+Non sono stati eseguiti:
+- retuning di W1/W2 o altre modifiche M5;
+- W3, 2-DoF, prefilter o hinfstruct;
+- uso della pianta incerta M4 nella sintesi;
+- mu-analysis, mussv, musyn o D-K iteration;
+- Robust Stability o Robust Performance;
+- validazione robusta/Monte Carlo;
+- attività M11 o successive.
+
+M10 riguarda soltanto la pianta nominale e non costituisce una garanzia di
+robustezza.
+
+==========================================================================
+P. RACCOMANDAZIONE
+==========================================================================
+
+Raccomandazione: PARTIAL.
+
+Motivazione: la generalized plant esplicita è corretta, riproduce M9 prima
+della sintesi, hinfsyn è stato eseguito correttamente, la ricostruzione e la
+stabilità nominale passano e M9/M10 sono quasi equivalenti. Tuttavia
+gammaHinf=10.2071036477 è maggiore di uno e tracking/cross-coupling non
+soddisfano i target. Il risultato negativo è riproducibile e deve restare
+visibile. Non modificare M5 e non iniziare M11 senza revisione del gruppo.
+
+STOP: attendere revisione tecnica della PR #15. Non effettuare il merge.
