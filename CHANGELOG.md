@@ -6,6 +6,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline M13 per una singola campagna D–K full-order sul problema M4/M5
+  congelato, con gate di identità Punc M12 e opzioni `musyn` persistenti.
+- Estrazione completa della history R2025b, raw D/G scales, fit orders,
+  controller Kmu e audit nominale esplicito di S/T/KS e poli interni.
+- Dataset `m13_musyn_dk.mat`, sei figure tecniche, documento
+  `MU_SYNTHESIS_DK.md` e suite M13 T01–T52.
+
 - Pipeline M12 di sola analisi per il controllore strutturato A5 congelato,
   con audit M4/M5/M11, pianta generalizzata incerta condivisa e gate nominale.
 - Decomposizione N–Δ mediante `lftdata`, verifica LFT nominale e non nominale,
@@ -102,6 +109,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Esteso `run_all.m` a M13 senza rilanciare la campagna congelata; l'artifact
+  autorizzato viene ricaricato e sottoposto ai gate software/nominali.
+- Registrata PR #17 come merged e M13 come milestone `COMPLETE`; M12 resta
+  `PARTIAL` e M6 resta il controllore nominale con tracking conforme.
+
 - Esteso `run_all.m` a M12 dopo M11, mantenendo congelati controllore A5,
   incertezza M4 e pesi M5 e distinguendo NS, NP, RS e RP nel messaggio finale.
 - Aggiornati stato, README e checklist: PR #16 è mergiata, M11 `PARTIAL` è
@@ -164,6 +176,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- M13: 5/5 iterazioni, best iteration 3, objective `10.4032233618`, Kmu
+  ordine 52, 66 stati interni, max Re `-0.731994726169` e norma nominale
+  `10.3917314574`; nessun warning o lower-bound violation.
+- Suite M13 52/52, suite completa e `run_all` 362/362 con exit code 0;
+  Code Analyzer M13 senza messaggi. Nessuna analisi M14 è stata eseguita.
 
 - M12: NS `PASS` con max Re `-0.736157095561`; NP `FAIL` con norma
   `10.2476411502`; RS `FAIL_CERTIFIED` con margin

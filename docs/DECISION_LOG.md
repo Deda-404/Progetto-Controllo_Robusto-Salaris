@@ -1704,3 +1704,50 @@ decisione autorizza sola analisi, non `musyn`, D-K iteration o M13.
 ### Stato epistemico
 
 **APPROVATA DAL GRUPPO COME SELEZIONE DI ANALISI M12 — NON COME CONTROLLER CONFORME A M5**
+
+---
+
+## D-0040 — M13 come D–K feasibility study sul problema M4/M5 congelato
+
+**Data:** 2026-08-25
+**Milestone:** M13
+
+### Problema
+
+A5 M11 è nominalmente stabile, ma M12 certifica il fallimento di Robust
+Stability prima del livello unitario M4. Occorre verificare se una sintesi
+D–K può produrre un nuovo candidato senza trasformare il fallimento di A5 in
+una giustificazione implicita per cambiare pesi o incertezze.
+
+### Decisione
+
+M13 viene autorizzata come D–K feasibility study sul problema M4/M5
+congelato, non come revisione delle specifiche. Sono mantenuti invariati
+`Punc` M12, i cinque blocchi M4, W1/W2 M5, `W3=[]`, l'architettura 1-DoF e la
+partizione 2/2. È autorizzata una sola campagna valida full-order con cinque
+iterazioni massime e history completa.
+
+### Motivazione
+
+A5 fornisce un punto di partenza nominalmente stabile e M12 dà una reale
+motivazione per la sintesi robusta. Tuttavia M10 ha già stabilito un optimum
+nominale full-order circa `10.207 > 1`; non è quindi lecito richiedere
+objective <1 o usare un fallimento RP per ritunare M5 dentro M13.
+
+Il tentativo iniziale con `Display='full'` è classificato
+`ABORTED_TECHNICAL`: R2025b richiede input interattivo dopo ogni iterazione e
+non ha restituito output. La ripresa con `Display='short'` è stata autorizzata
+come prima e unica campagna M13 valida, lasciando identiche tutte le opzioni
+matematiche.
+
+### Risultato e conseguenze
+
+La campagna valida completa 5/5 iterazioni e restituisce Kmu 2×2 di ordine
+52, nominalmente stabile, con objective `10.4032233618`. Il risultato resta
+maggiore di uno e viene conservato senza retuning o seconda campagna. M13 è
+`COMPLETE` come sintesi e audit nominale; la certificazione indipendente
+NS/NP/RS/RP del nuovo controller è fuori scope e richiede una M14 separata.
+
+### Stato epistemico
+
+**M13 COMPLETE COME SINTESI D–K — OBJECTIVE QUANTIFICATO, NESSUNA CERTIFICAZIONE RS/RP**

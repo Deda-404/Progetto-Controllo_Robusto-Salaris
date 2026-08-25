@@ -52,14 +52,16 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M12,
-ricostruisce gli artifact precedenti e conclude con la μ-analysis NS/NP/RS/RP
-del controllore A5 congelato. I risultati negativi M9–M12 sono conservati
-come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M13,
+ricostruisce gli artifact precedenti e verifica l'artifact della singola
+campagna D–K M13. I risultati negativi M9–M12 sono conservati come `PARTIAL`
+senza ritunare M5; M7 resta `PARTIAL` terminale. La sintesi M13 non viene
+rilanciata automaticamente: il raw output della campagna autorizzata è
+congelato per impedire selezioni adattive tra run.
 
 ## Stato corrente
 
-- Milestone corrente: **M12 — μ-analysis del controllore A5, PARTIAL**.
+- Milestone corrente: **M13 — D–K iteration sul problema M4/M5, COMPLETE**.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -78,6 +80,9 @@ come `PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale.
   strutturato concluso; il gruppo ha selezionato A5 per la sola analisi M12.
 - Risultato M12: N–Δ e software `PASS`; NS `PASS`, NP `FAIL`, RS
   `FAIL_CERTIFIED` con margin `[0.875899,0.882789]` e RP `FAIL_CERTIFIED`.
-  Nessun retuning, Monte Carlo, `musyn`, D–K iteration o M13 è stato eseguito.
+- Risultato M13: cinque iterazioni D–K, objective `10.4032233618`, Kmu 2×2
+  di ordine 52 e stabilità nominale `PASS` con max Re `-0.731994726169`.
+  L'objective >1 è conservato senza retuning; RS/RP del nuovo controllore
+  non sono dichiarate e richiedono una futura M14 autorizzata.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.
