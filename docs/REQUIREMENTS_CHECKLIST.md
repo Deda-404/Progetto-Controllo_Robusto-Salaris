@@ -103,19 +103,28 @@ stessi fallimenti prestazionali: anche M10 è `PARTIAL`. M11 ha completato la
 campagna finita A0–A5 con cinque start per famiglia e ordine massimo sei:
 A0–A2 non hanno rappresentanti stabili, mentre A3/A4/A5 formano la frontiera
 Pareto con gamma 16.6419/11.6555/10.2477. M11 resta `PARTIAL` perché stabilità
-globale, gamma<1 e tracking falliscono; non è stata forzata una selezione e
-non sono state eseguite analisi robuste.
+globale, gamma<1 e tracking falliscono. Il gruppo ha successivamente
+selezionato A5, ordine 6, per la sola analisi M12; questa scelta non promuove
+A5 a controllore conforme a M5.
 
 ## \(\mu\)-analysis
 
-- [ ] Costruire e testare la struttura \(N\)-\(\Delta\).
-- [ ] Verificare Nominal Stability.
-- [ ] Verificare Nominal Performance.
-- [ ] Verificare Robust Stability.
-- [ ] Verificare Robust Performance.
-- [ ] Confrontare `mussv` con `robstab` e `robgain` su scaling coerente.
-- [ ] Identificare frequenze, blocchi e direzioni critiche.
-- [ ] Conservare lower/upper bound e dichiarare eventuali esiti inconclusivi.
+- [x] Costruire e testare la struttura \(N\)-\(\Delta\).
+- [x] Verificare Nominal Stability.
+- [x] Verificare Nominal Performance.
+- [x] Verificare Robust Stability.
+- [x] Verificare Robust Performance.
+- [x] Confrontare `mussv` con `robstab` e `robgain` su scaling coerente.
+- [x] Identificare frequenze, blocchi e direzioni critiche.
+- [x] Conservare lower/upper bound e dichiarare eventuali esiti inconclusivi.
+
+M12 ha analizzato il controllore A5 congelato con `GuncQ` M4 e pesi M5.
+La decomposizione N–Δ è coerente e la μ manuale conferma `robstab`. Gli esiti
+sono distinti: NS `PASS`, NP `FAIL`, RS `FAIL_CERTIFIED` con margin
+`[0.875899,0.882789]`, RP `FAIL_CERTIFIED` con margin `[0,0]`. Le caselle
+indicano che le verifiche richieste sono state eseguite e documentate, non
+che le proprietà prestazionali siano state soddisfatte. `wcgain` restituisce
+gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 
 ## \(\mu\)-synthesis
 

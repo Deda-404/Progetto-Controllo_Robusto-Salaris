@@ -6,6 +6,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline M12 di sola analisi per il controllore strutturato A5 congelato,
+  con audit M4/M5/M11, pianta generalizzata incerta condivisa e gate nominale.
+- Decomposizione N–Δ mediante `lftdata`, verifica LFT nominale e non nominale,
+  μ manuale su griglia fissa, `robstab`, `robgain` e `wcgain` con sostituzioni
+  worst-case e diagnostica dei cinque blocchi M4.
+- Dataset `m12_mu_analysis_a5.mat`, sei figure ingegneristiche, documento
+  `MU_ANALYSIS_HINF_A5.md` e suite M12 T01–T54.
+
 - Campagna M11 `hinfstruct` finita A0–A5 con guadagno statico MIMO, PI/PIDF
   decentralizzati e `tunableSS` full MIMO di ordine 2/4/6.
 - Audit persistente di 30 partenze deterministiche, classificazione completa,
@@ -94,6 +102,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Esteso `run_all.m` a M12 dopo M11, mantenendo congelati controllore A5,
+  incertezza M4 e pesi M5 e distinguendo NS, NP, RS e RP nel messaggio finale.
+- Aggiornati stato, README e checklist: PR #16 è mergiata, M11 `PARTIAL` è
+  accettata e M12 resta `PARTIAL` per NP/RS/RP non conformi, senza M13.
+
 - Esteso `run_all.m` a M11 mantenendo congelati pianta M10, pesi M5,
   architettura 1-DoF e scenari M9/M10; nessun retuning, W3, prefilter o M12.
 - Portato lo stato corrente a M11 `PARTIAL`: A3/A4/A5 restano candidati
@@ -151,6 +164,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- M12: NS `PASS` con max Re `-0.736157095561`; NP `FAIL` con norma
+  `10.2476411502`; RS `FAIL_CERTIFIED` con margin
+  `[0.875899252687,0.882789198079]`; RP `FAIL_CERTIFIED` con margin `[0,0]`.
+- μ manuale e `robstab` coerenti: margin manuale
+  `[0.879212158739,0.883347347680]` e frequenze critiche 81.596/81.986 rad/s.
+  `wcgain` è `[Inf,Inf]` e la sostituzione worst-case è vicina al limite di
+  stabilità, con norma numerica `4.45231081353e14`.
+- Suite M12 54/54, regressione M9–M12 171/171, suite completa e `run_all`
+  310/310 con exit code 0; Code Analyzer M12 senza messaggi.
 
 - M11 ha restituito 30/30 record e 15 chiusure stabili: A3/A4/A5 sono tutte
   stabili su 5/5 start, con best gamma 16.6418540, 11.6555347 e 10.2477452.

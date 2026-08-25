@@ -1559,3 +1559,114 @@ stata avviata.
 
 **M11 PARTIAL pubblicata per revisione senza merge autonomo.** A3/A4/A5
 restano candidati Pareto e non è stata iniziata M12.
+
+---
+
+## 2026-08-25 — Avvio M12 e housekeeping della baseline
+
+**Responsabile:** Alessio
+**Milestone:** M12
+**Tipo:** Governance / Git / Audit
+
+### Attività svolta
+
+- Sincronizzato `main` e verificato il merge reale della PR #16 al commit
+  `c5b14e5332279e8e98b89d4c5b7a180102646fde`.
+- Creato `codex/m12-mu-analysis-a5` esattamente dal merge commit M11.
+- Registrato M11 come checkpoint `PARTIAL` validato e accettato; M8 resta
+  l'ultima milestone `COMPLETE` e M6 il controllore nominale con tracking
+  conforme.
+- Congelato il perimetro M12 come sola analisi robusta del rappresentante A5
+  caricato dall'artifact M11, con modello incerto M4 e pesi M5 invariati.
+
+### Vincoli confermati
+
+Nessun nuovo tuning M11, retuning M5, Monte Carlo, Simulink non lineare,
+`musyn`, D-K iteration o attività M13 è autorizzato.
+
+---
+
+## 2026-08-25 — Implementazione e validazione della μ-analysis M12
+
+**Responsabile:** Alessio
+**Milestone:** M12
+**Tipo:** Implementazione / Analisi robusta / Artifact
+
+### Attività svolta
+
+- Caricato il rappresentante A5, start 5 e ordine 6, direttamente
+  dall'artifact M11 senza nuove chiamate `hinfstruct`.
+- Verificati il nominale `GuncQ` rispetto a M3, i cinque blocchi M4 e i pesi
+  W1/W2 M5 congelati; `W3=[]` e nessun retuning.
+- Costruita `Punc` con una sola istanza condivisa della pianta incerta e
+  verificata la chiusura nominale contro M10 e A5 M11.
+- Estratta e verificata la forma N–Δ; eseguiti `mussv` su griglia fissa,
+  `robstab`, `robgain` a gamma 1 e `wcgain` a uncertainty level 1.
+- Sostituite le perturbazioni worst-case e conservati poli, gain, sensitivity
+  e valori actual/normalizzati disponibili dall'API.
+
+### Risultato
+
+La dinamica nominale a 20 stati è internamente stabile, con massima parte
+reale `-0.736157095561`: NS `PASS`. La norma nominale è `10.2476411502` a
+`6.21670809748 rad/s`: NP `FAIL`.
+
+`robstab` restituisce margin `[0.875899252687,0.882789198079]` a
+`81.9862784922 rad/s`, quindi RS `FAIL_CERTIFIED`. La μ manuale produce
+margin `[0.879212158739,0.883347347680]` a `81.5955861689 rad/s` e conferma
+classificazione e frequenza. `robgain` restituisce `[0,0]`; NP fallita implica
+RP `FAIL_CERTIFIED`. `wcgain` è `[Inf,Inf]` e la perturbazione sostituita porta
+la chiusura vicino al limite di stabilità. M12 è `PARTIAL`, senza modifica
+del controllore o dell'insieme incerto.
+
+---
+
+## 2026-08-25 — Test, regressioni e quality gate M12
+
+**Responsabile:** Alessio
+**Milestone:** M12
+**Tipo:** Test / Quality gate / Riproducibilità
+
+### Attività svolta
+
+- Creati 54 test M12 per fonti congelate, identità A5, interconnessione,
+  N–Δ, bound μ, `robstab`, `robgain`, `wcgain`, artifact e divieti di scope.
+- Eseguita la suite M12: 54/54 `PASS`.
+- Eseguita la regressione M9–M12: 171/171 `PASS`.
+- Eseguita la suite completa tramite `run_all`: 310/310 test, validazioni
+  M1–M12 e exit code 0.
+- Eseguito MATLAB Code Analyzer sui file M12: zero messaggi.
+- Ispezionate le sei figure; il riepilogo rappresenta separatamente NS, NP,
+  RS e RP. Ripristinati gli artifact storici riscritti ma fuori scope.
+
+### Quality gate
+
+Frozen controller, frozen uncertainty, N–Δ, consistenza μ manuale e
+correttezza software sono `PASS`. NS è `PASS`; NP è `FAIL`; RS e RP sono
+`FAIL_CERTIFIED`; worst-case gain e blocchi critici sono `QUANTIFIED`.
+Lo stato complessivo è **M12 PARTIAL**. Non sono stati eseguiti Monte Carlo,
+Simulink non lineare, `musyn`, D-K iteration, retuning o M13.
+
+---
+
+## 2026-08-25 — Pubblicazione del checkpoint M12
+
+**Responsabile:** Alessio
+**Milestone:** M12
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati commit separati per software/test, artifact e documentazione.
+- Pubblicato `codex/m12-mu-analysis-a5` su `origin`.
+- Aperta la Pull Request
+  [#17](https://github.com/Deda-404/Progetto_CR/pull/17) verso `main`.
+- Verificata la PR aperta, non draft e non mergiata, con base `main` al
+  commit `c5b14e5332279e8e98b89d4c5b7a180102646fde`.
+- Creato l'handoff autosufficiente `Resoconto_M12_per_GPT.txt`.
+
+### Risultato
+
+**M12 PARTIAL pubblicata per revisione senza merge autonomo.** Il risultato
+giustifica una discussione separata sull'eventuale M13, che non è stata
+iniziata.

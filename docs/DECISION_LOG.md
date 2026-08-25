@@ -1659,3 +1659,48 @@ pianta incerta M4, mu-analysis o M12.
 ### Stato epistemico
 
 **CAMPAGNA M11 VALIDATA — FRONTIERA A3/A4/A5, NESSUNA SELEZIONE AUTOMATICA, M11 PARTIAL**
+
+---
+
+## D-0039 — Selezione del controllore strutturato A5 per la mu-analysis M12
+
+**Data:** 2026-08-25
+**Milestone:** M12
+
+### Problema
+
+Selezionare, tra i candidati Pareto M11 congelati, il controllore da
+sottoporre all'analisi formale NS/NP/RS/RP senza avviare una nuova sintesi.
+
+### Decisione
+
+Il gruppo seleziona `A5 — Full MIMO tunableSS order 6`. Il controllore deve
+essere caricato esclusivamente da
+`results/data/m11_hinfstruct_structured.mat`, usando il representative e lo
+start già salvati. Non è autorizzato alcun nuovo run `hinfstruct`.
+
+### Motivazione
+
+A5 appartiene alla frontiera Pareto M11, riduce l'ordine da 18 di M10 a 6 e
+mantiene la norma pesata molto vicina al riferimento full-order. Costituisce
+quindi il trade-off ordine/prestazione scelto per l'analisi robusta. La
+selezione non implica conformità a M5: weighted objective e tracking A5
+restano falliti.
+
+### Verifica sul controller congelato
+
+L'artifact M11 conferma architecture A5, representative start 5, ordine
+reale 6, stabilità interna `PASS`, objective solver `10.2477452425` e norma
+pesata ricostruita `10.2476411502`. Questi valori sono letti dal dataset e
+verificati dalla pipeline M12, non ricostruiti mediante nuova sintesi.
+
+### Conseguenze e limiti
+
+A3 e A4 restano alternative M11 congelate ma sono fuori dal perimetro
+primario M12. M10 resta il riferimento nominale full-order. Controller,
+uncertainty set M4 e pesi M5 non possono essere modificati durante M12. La
+decisione autorizza sola analisi, non `musyn`, D-K iteration o M13.
+
+### Stato epistemico
+
+**APPROVATA DAL GRUPPO COME SELEZIONE DI ANALISI M12 — NON COME CONTROLLER CONFORME A M5**
