@@ -1,0 +1,243 @@
+RESOCONTO M14 PER GPT — MU-ANALYSIS FINALE DEL CONTROLLER D-K KMU
+Responsabile: Alessio
+Data: 2026-08-25
+
+======================================================================
+A. GIT
+======================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m14-final-mu-analysis-kmu
+Baseline: 49f37c6e027aaa37db65f27530901965f897f11f
+Commit tecnico M14: 544077374f67d4c65f6c466c55e7e8b83d888109
+PR M14: #19, https://github.com/Deda-404/Progetto_CR/pull/19
+Stato PR: OPEN, non draft, base main, nessun merge eseguito.
+
+======================================================================
+B. HOUSEKEEPING PR18
+======================================================================
+
+PR #18 verificata realmente merged.
+Merge commit M13 su main:
+49f37c6e027aaa37db65f27530901965f897f11f.
+M13 resta COMPLETE; Kmu ordine 52 è il candidato D-K congelato.
+M14 è la milestone corrente, PARTIAL. M8 resta l'ultima milestone non
+lineare COMPLETE e M6 il controller con tracking nominale conforme.
+
+======================================================================
+C. KMU SOURCE
+======================================================================
+
+Source: results/data/m13_musyn_dk.mat.
+Kmu: 2 output x 2 input, ordine 52.
+Best iteration: 3 su 5.
+Identità con rawInfo(3).K: esatta; matrix/frequency error = 0.
+Objective musyn letto dall'artifact: 10.4032233617655.
+Norma pesata nominale M13: 10.3917314574251.
+Max Re nominale M13: -0.731994726169314.
+Nessuna nuova sintesi e nessuna riduzione del controller.
+
+======================================================================
+D. FROZEN M4/M5 PROBLEM
+======================================================================
+
+Uncertainty source: results/data/m4_uncertain_plant.mat, modello GuncQ.
+Blocchi preservati: Delta_act1, Delta_act2, Jm1, k1, k2.
+Tipi, range/bound e singole occorrenze sono invariati.
+Weight source: results/data/m5_performance_specs.mat.
+W1/W2 invariati; W3=[]; uScale resta normalizzazione prestazionale.
+Punc = [W1,-W1*GuncQ;0,W2;I,-GuncQ], dimensione 6x4.
+Punc coincide con M12 e con l'audit M13 per dimensioni, nomi, nominale e
+struttura lftdata. Nessun retuning o nuovo scaling.
+
+======================================================================
+E. NOMINAL RECONSTRUCTION
+======================================================================
+
+Tzw_mu_unc = lft(Punc,Kmu), dimensione 4x2.
+Ricostruiti senza minreal: S, T, KS, W1*S, W2*Kmu*S e stack 4x2.
+Mappe, norma e poli coincidono con l'artifact M13 entro le tolleranze.
+Plant states: 14; controller states: 52; internal states: 66.
+Max Re: -0.731994726169314.
+Norma nominale: 10.3917314574251 a 93.1402569483926 rad/s.
+
+======================================================================
+F. N-DELTA
+======================================================================
+
+Eseguito [M,Delta,BlkStruct,normunc] = lftdata(Tzw_mu_unc).
+Delta: 5x5; M11mu: 5x5; blocchi/occorrenze: 5/5.
+Le ureal sono normalizzate in [-1,1]; le ultidyn hanno bound 1.
+lft(Delta,M) ricostruisce la chiusura nominalmente e sulla probe
+deterministica M12. N-Delta gate: PASS; nessun minreal.
+
+======================================================================
+G. NOMINAL STABILITY — NS
+======================================================================
+
+S, T, KS e stack pesato sono stabili.
+Max Re poli interni: -0.731994726169314.
+Outcome: PASS.
+
+======================================================================
+H. NOMINAL PERFORMANCE — NP
+======================================================================
+
+Target M5: gamma < 1.
+Gamma nominale: 10.3917314574251.
+Peak: 93.1402569483926 rad/s.
+Outcome: FAIL.
+Il risultato è conservato senza modificare M5.
+
+======================================================================
+I. MANUAL MU
+======================================================================
+
+Pipeline e griglia M12: logspace(-3,4,1201); mussv option 's'.
+Maximum mu upper: 0.798429978849128.
+Maximum mu lower: 0.798350124023533.
+Critical frequency upper/lower: 17.4113855854721 rad/s.
+Margin approximation: [1.25245798190271, 1.25258325878399].
+
+======================================================================
+J. ROBSTAB
+======================================================================
+
+Margin: [1.25003698645192, 1.25257264120199].
+Critical frequency: 17.3621393163606 rad/s.
+Outcome: PASS_CERTIFIED.
+Manual mu / robstab consistency: PASS.
+Worst-case substituted max Re: weighted -2.205e-13, physical 3.284e-13;
+la frontiera non è forzata a zero esatto.
+
+======================================================================
+K. ROBGAIN
+======================================================================
+
+Eseguito robgain(Tzw_mu_unc,1,options), non con objective musyn.
+Performance margin: [0,0]; critical frequency NaN.
+NP FAIL implica RP FAIL; outcome: FAIL_CERTIFIED.
+La sensitivity RP non disponibile è conservata come NaN.
+
+======================================================================
+L. WCGAIN
+======================================================================
+
+Uncertainty level: 1, stesse opzioni M12.
+Worst-case gain bounds: [25.9514560605175, 26.1151353973034].
+Critical frequency: 16.1320063634525 rad/s.
+Gain della perturbazione realmente sostituita: 25.951446589423.
+Substitution coherence: PASS.
+
+======================================================================
+M. CRITICAL BLOCKS
+======================================================================
+
+Dominant RS sensitivity block A5: Delta_act2, 80.
+Dominant RS sensitivity block Kmu: Delta_act2, 86.
+Kmu RS sensitivity: Delta_act1=11, Delta_act2=86, Jm1=1, k1=0, k2=2.
+Artifact contiene anche RP/wcgain sensitivity e magnitudini normalizzate
+wcuRS/wcuRP/wcuGain. I valori non disponibili sono NaN, non inventati.
+
+======================================================================
+N. A5 VS KMU ROBUST COMPARISON
+======================================================================
+
+Metric                         A5 M12                 Kmu M14
+Controller order               6                      52
+Nominal weighted norm          10.2476411502          10.3917314574
+NS max real pole              -0.736157095561        -0.731994726169
+NS outcome                     PASS                   PASS
+RS LowerBound                  0.875899252687         1.25003698645
+RS UpperBound                  0.882789198079         1.25257264120
+RS critical frequency          81.9862784922          17.3621393164
+RS outcome                     FAIL_CERTIFIED         PASS_CERTIFIED
+RP margin                      [0,0]                  [0,0]
+RP outcome                     FAIL_CERTIFIED         FAIL_CERTIFIED
+wcgain                         [Inf,Inf]              [25.9514561,26.1151354]
+Dominant RS block              Delta_act2             Delta_act2
+
+======================================================================
+O. RS IMPROVEMENT CLASSIFICATION
+======================================================================
+
+Delta LowerBound: +0.374137733765.
+Delta UpperBound: +0.369783443123.
+Relative delta lower/upper: +42.7146995% / +41.8880797%.
+Transition: FAIL_CERTIFIED -> PASS_CERTIFIED.
+Classification: CLEAR_IMPROVEMENT.
+Il midpoint non è usato: entrambi i bound aumentano e la classe migliora.
+La D-K recupera Robust Stability, non Robust Performance.
+
+======================================================================
+P. NS/NP/RS/RP SUMMARY
+======================================================================
+
+NS: PASS.
+NP: FAIL.
+RS: PASS_CERTIFIED.
+RP: FAIL_CERTIFIED.
+
+======================================================================
+Q. TESTS
+======================================================================
+
+Suite dedicata M14: 56/56 PASS.
+Primo avvio: errore setup della lista percorsi, 0/56 eseguiti e 56
+incompleti; corretto con cell array e registrato nel diario.
+Suite completa run_all M0-M14: 418/418 PASS, exit code 0.
+M13 ricaricata dall'artifact senza nuova musyn.
+MATLAB Code Analyzer: 0 messaggi su 8 file M14 e run_all.m.
+git diff --check: PASS.
+I test non impongono RS PASS.
+
+======================================================================
+R. QUALITY GATE
+======================================================================
+
+Frozen Kmu correctness: PASS.
+Frozen uncertainty correctness: PASS.
+Frozen weights correctness: PASS.
+Punc identity: PASS.
+Nominal reconstruction: PASS.
+N-Delta decomposition: PASS.
+NS: PASS.
+NP: FAIL.
+RS: PASS_CERTIFIED.
+Manual mu consistency: PASS.
+RP: FAIL_CERTIFIED.
+wcgain: QUANTIFIED.
+A5/Kmu robust comparison: QUANTIFIED.
+Critical blocks: QUANTIFIED.
+Software correctness: PASS.
+
+======================================================================
+S. OVERALL STATUS
+======================================================================
+
+M13 = COMPLETE come sintesi D-K congelata.
+M14 = PARTIAL: software e RS sono PASS, ma NP/RP non soddisfano M5.
+
+======================================================================
+T. LIMITS
+======================================================================
+
+Nessuna musyn/hinfsyn/mixsyn/hinfstruct, nuova D-K, seconda campagna,
+riduzione, retuning, W3, prefilter, 2-DoF, Monte Carlo o Simulink NL.
+L'objective musyn non è equiparato a robgain o wcgain.
+I range M4 restano assunzioni ingegneristiche; Kmu resta ordine 52.
+M15 non è stata iniziata. Nessun merge autonomo.
+
+Artifact: results/data/m14_final_mu_analysis_kmu.mat
+Documento: docs/MU_ANALYSIS_FINAL_KMU.md
+Figure: 6/6 in results/figures con prefisso m14_.
+
+======================================================================
+U. RECOMMENDATION FOR M15 — WITHOUT STARTING IT
+======================================================================
+
+Dopo revisione tecnica e merge separato di M14, il gruppo può decidere se
+autorizzare M15 per confrontare Kmu e i controller di riferimento sul modello
+non lineare, con particolare attenzione a stabilità, segnali di controllo e
+limiti fisici. La RS certificata non elimina il fallimento NP/RP e non
+autorizza retuning o riduzione. Nessuna attività M15 è stata eseguita.

@@ -52,16 +52,17 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M13,
-ricostruisce gli artifact precedenti e verifica l'artifact della singola
-campagna D–K M13. I risultati negativi M9–M12 sono conservati come `PARTIAL`
-senza ritunare M5; M7 resta `PARTIAL` terminale. La sintesi M13 non viene
-rilanciata automaticamente: il raw output della campagna autorizzata è
-congelato per impedire selezioni adattive tra run.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M14,
+ricostruisce gli artifact precedenti e verifica il Kmu congelato con la stessa
+pipeline robusta M12. I risultati negativi M9–M12 e M14 sono conservati come
+`PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale. La sintesi M13 non
+viene rilanciata automaticamente: il raw output della campagna autorizzata è
+congelato, mentre M14 rigenera analisi, dati e figure senza nuova `musyn`.
 
 ## Stato corrente
 
-- Milestone corrente: **M13 — D–K iteration sul problema M4/M5, COMPLETE**.
+- Milestone corrente: **M14 — μ-analysis finale Kmu, PARTIAL**; M13 resta
+  `COMPLETE` come sintesi D–K.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -82,7 +83,10 @@ congelato per impedire selezioni adattive tra run.
   `FAIL_CERTIFIED` con margin `[0.875899,0.882789]` e RP `FAIL_CERTIFIED`.
 - Risultato M13: cinque iterazioni D–K, objective `10.4032233618`, Kmu 2×2
   di ordine 52 e stabilità nominale `PASS` con max Re `-0.731994726169`.
-  L'objective >1 è conservato senza retuning; RS/RP del nuovo controllore
-  non sono dichiarate e richiedono una futura M14 autorizzata.
+  L'objective >1 è conservato senza retuning.
+- Risultato M14: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
+  `[1.250037,1.252573]` e RP `FAIL_CERTIFIED`. Rispetto ad A5, RS passa da
+  `FAIL_CERTIFIED` a `PASS_CERTIFIED`: recupero certificato della stabilità
+  robusta, senza conformità di performance e senza avviare M15.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

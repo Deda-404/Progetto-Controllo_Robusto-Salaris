@@ -131,7 +131,7 @@ gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 - [x] Eseguire D–K iteration su pianta e specifiche approvate.
 - [x] Conservare e analizzare lo storico delle iterazioni.
 - [x] Verificare ordine e stabilità interna del controllore.
-- [ ] Ripetere NS, NP, RS e RP a posteriori.
+- [x] Ripetere NS, NP, RS e RP a posteriori.
 - [ ] Diagnosticare eventuali specifiche irrealizzabili.
 - [ ] Ottenere approvazione prima di rilassamenti sostanziali.
 - [ ] Registrare ogni rilassamento nel Decision Log.
@@ -140,8 +140,11 @@ gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 M13 ha eseguito la singola campagna valida con `Display='short'`, cinque
 iterazioni e problema M4/M5 congelato. Il controller restituito è 2×2 di
 ordine 52 ed è nominalmente stabile; l'objective `10.4032233618` resta
-maggiore di uno. Non è stata eseguita riduzione d'ordine né la verifica
-formale NS/NP/RS/RP a posteriori, che resta correttamente aperta per M14.
+maggiore di uno. M14 ha ripetuto la pipeline formale M12 sul Kmu senza
+riduzione: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
+`[1.250037,1.252573]` e RP `FAIL_CERTIFIED`. La verifica a posteriori è
+quindi completata, mentre l'eventuale diagnosi globale di irrealizzabilità e
+ogni rilassamento restano aperti.
 
 ## Validazione e confronto
 
@@ -154,7 +157,13 @@ formale NS/NP/RS/RP a posteriori, che resta correttamente aperta per M14.
 - [ ] Confrontare disturbi, comando e cross-coupling.
 - [ ] Distinguere evidenza Monte Carlo e garanzia \(\mu\).
 - [ ] Confrontare LQG, \(H_\infty\) e \(\mu\)-synthesis.
-- [ ] Confrontare formalmente \(H_\infty\) e D–K in RS, RP e margini.
+- [x] Confrontare formalmente \(H_\infty\) e D–K in RS, RP e margini.
+
+M14 confronta l'A5 congelato M12 con Kmu: il margine RS passa da
+`[0.875899,0.882789]` a `[1.250037,1.252573]`, con transizione certificata
+`FAIL_CERTIFIED -> PASS_CERTIFIED`. Entrambi falliscono NP/RP sul target M5;
+il confronto distingue quindi recupero della stabilità robusta e mancata
+performance robusta.
 
 ## Deliverable finali
 

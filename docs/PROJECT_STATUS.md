@@ -1,14 +1,44 @@
 # Project Status
 
-**Current milestone:** M13 — D–K iteration / μ-synthesis sul problema M4/M5 congelato
-**Status:** `COMPLETE` — sintesi software `PASS`, Kmu nominalmente stabile, objective `10.4032233618`
-**Last validated milestone:** M13 `COMPLETE`; M8 resta l'ultima milestone non lineare `COMPLETE`
+**Current milestone:** M14 — μ-analysis finale del Kmu D–K congelato
+**Status:** `PARTIAL` — software e NS `PASS`, RS `PASS_CERTIFIED`, NP/RP non conformi a M5
+**Last validated milestone:** M14 `PARTIAL`; M13 resta `COMPLETE` come sintesi e M8 l'ultima milestone non lineare `COMPLETE`
 **Last tracking-conforming controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Open technical issue:** l'objective M13 resta >1; RS/RP del nuovo Kmu non sono ancora verificate e appartengono a M14
-**Next task:** revisione tecnica della PR M13; non iniziare M14 senza autorizzazione
-**Pull Request:** [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18) aperta verso `main`, non mergiata; [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) `merged` al commit `9b69caa02c7f8dbca9cc2b936067f67c25904f1a`
-**Last update:** 2026-08-25, M13 pubblicata per revisione tecnica
+**Open technical issue:** D–K recupera RS rispetto ad A5, ma la norma nominale resta >1 e RP fallisce; nessun retuning è autorizzato
+**Next task:** revisione tecnica della PR M14; non iniziare M15 senza autorizzazione
+**Pull Request baseline:** [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18) `merged` al commit `49f37c6e027aaa37db65f27530901965f897f11f`; M14 è sviluppata su branch dedicato
+**Pull Request corrente:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) aperta verso `main`, non mergiata
+**Last update:** 2026-08-25, M14 pubblicata per revisione tecnica
+
+## Quality gate M14 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #18 mergiata al commit `49f37c6e027aaa37db65f27530901965f897f11f` |
+| Kmu congelato | PASS — artifact M13, best iteration 3, 2×2, ordine 52, identico a `rawInfo(3).K` |
+| incertezza congelata | PASS — cinque blocchi M4 e range invariati |
+| pesi congelati | PASS — W1/W2 M5 invariati, `W3=[]`, nessun retuning |
+| identità Punc | PASS — 6×4, nomi/nominale/LFT identici a M12 e all'audit M13 |
+| ricostruzione nominale | PASS — S/T/KS/stack/norma/poli coerenti con M13, nessun `minreal` |
+| N–Δ | PASS — Delta e M11mu 5×5, cinque blocchi normalizzati, probe ricostruita |
+| Nominal Stability | **PASS — 66 stati interni, max Re `-0.731994726169`** |
+| Nominal Performance | **FAIL — norma `10.3917314574` > 1** |
+| Robust Stability | **PASS_CERTIFIED — margin `[1.25003698645,1.25257264120]`** |
+| μ manuale RS | PASS coerenza — margin `[1.25245798190,1.25258325878]` |
+| Robust Performance | **FAIL_CERTIFIED — NP FAIL, performance margin `[0,0]`** |
+| worst-case gain | QUANTIFIED — `[25.9514560605,26.1151353973]`, sostituzione coerente |
+| confronto A5/Kmu | **CLEAR_IMPROVEMENT RS — `FAIL_CERTIFIED -> PASS_CERTIFIED`** |
+| blocco RS dominante | `Delta_act2` — sensitivity 80 su A5, 86 su Kmu |
+| sintesi/riduzione/retuning/M15 | NOT RUN corretto |
+| artifact | PASS — dataset e sei figure |
+| test M14 | PASS — 56/56 |
+| suite completa / `run_all` | PASS — 418/418, exit code 0; M13 ricaricata senza nuova `musyn` |
+| Code Analyzer M14 | PASS — zero messaggi su otto file M14 e `run_all.m` |
+| software | **PASS** |
+| stato | **PARTIAL — RS recuperata, NP/RP non conformi** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M13 — COMPLETE
 

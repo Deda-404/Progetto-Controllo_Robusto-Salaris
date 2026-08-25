@@ -6,6 +6,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline M14 di sola analisi per Kmu M13 congelato, derivata senza cambi di
+  griglie/opzioni dalla pipeline M12 e con gate di identità Kmu/Punc/M4/M5.
+- Verifica indipendente NS/NP/RS/RP, sostituzioni worst-case, confronto
+  numerico A5/Kmu e classificazione deterministica del miglioramento RS senza
+  uso del midpoint.
+- Dataset `m14_final_mu_analysis_kmu.mat`, sei figure ingegneristiche,
+  documento `MU_ANALYSIS_FINAL_KMU.md` e suite M14 T01–T56.
+
 - Pipeline M13 per una singola campagna D–K full-order sul problema M4/M5
   congelato, con gate di identità Punc M12 e opzioni `musyn` persistenti.
 - Estrazione completa della history R2025b, raw D/G scales, fit orders,
@@ -108,6 +116,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Suite M5 T1–T14 per centralizzazione, derivazione della banda, pesi, asintoti, disturbance path, regressione M0–M4.1 e governance documentale.
 
 ### Changed
+
+- Esteso `run_all.m` fino a M14 mantenendo M13 artifact-only: Kmu recupera
+  Robust Stability (`PASS_CERTIFIED`) rispetto ad A5, mentre NP/RP restano
+  fallite e M14 è `PARTIAL` senza retuning o avvio M15.
+- Aggiornato lo stato Git per registrare PR #18 mergiata al commit
+  `49f37c6e027aaa37db65f27530901965f897f11f`.
 
 - Esteso `run_all.m` a M13 senza rilanciare la campagna congelata; l'artifact
   autorizzato viene ricaricato e sottoposto ai gate software/nominali.
