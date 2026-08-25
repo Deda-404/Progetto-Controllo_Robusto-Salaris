@@ -6,6 +6,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline nominale M9 modulare per audit della pianta M3/M5, sintesi
+  `mixsyn`, ricostruzione indipendente di `S/T/KS`, stabilità interna e
+  valutazione tracking/disturbo/confronto M6.
+- Dataset `m9_hinf_mixsyn_nominal.mat`, sei figure ingegneristiche, documento
+  `HINF_MIXSYN_NOMINALE.md` e suite M9 T01–T29.
+
 - Modello originale `SEA_LQG_nonlinear.slx` con 14 stati fisici, stimatore M6
   a 14 stati, coordinate assolute/incrementali esplicite e nessuna dipendenza
   dal base workspace.
@@ -69,6 +75,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Esteso `run_all.m` a M9 mantenendo M7 `PARTIAL` terminale e classificando
+  separatamente correttezza software e fallimenti prestazionali M9.
+- Corretto lo stato della PR #13 come mergiata; M8 resta `COMPLETE` e M9
+  diventa il checkpoint corrente `PARTIAL` senza modifiche a M5.
+
 - M7 è congelata come feasibility terminale `PARTIAL`; M8 usa il solo
   controllore M6 invariato e porta la milestone corrente a `COMPLETE`.
 - Esteso `run_all.m` alla costruzione e al quality gate M8 completo.
@@ -110,6 +121,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- Sintesi M9 con controllore ordine 18, `gamma=10.2071036477`, norma stacked
+  ricostruita `10.2071033931`, errore relativo `2.495e-8`, errore `CLmix`
+  `4.313e-12` e massima parte reale dei poli interni `-0.683828559884`.
+- `||W1*S||inf=10.1276254519` e `||W2*KS||inf=10.1853081898`; target
+  weighted, tracking e cross-coupling non soddisfatti, senza retuning o W3.
+- `run_all.m` M9 con 168/168 test top-level ed exit code 0; suite M9
+  29/29, Code Analyzer senza messaggi su otto file e `git diff --check` PASS.
 
 - Equilibrio Simulink con errori massimi q/theta/u rispettivamente
   `4.086e-17`, `3.845e-17` e `1.686e-15`.

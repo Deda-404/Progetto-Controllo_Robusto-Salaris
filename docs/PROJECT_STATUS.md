@@ -1,14 +1,45 @@
 # Project Status
 
-**Current milestone:** M8 — Simulink, validazione non lineare e RAS LQG
-**Status:** COMPLETE — quality gate tecnico M8 superato
-**Last validated milestone:** M8
+**Current milestone:** M9 — sintesi H-infinity nominale con `mixsyn`
+**Status:** `PARTIAL` — baseline tecnicamente valida, target pesato e tracking falliti
+**Last validated milestone:** M9 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
 **Last validated controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Blocking issues:** nessuno
-**Next milestone:** M9 — H-infinity `mixsyn` (NON INIZIATA)
-**Pull Request:** [PR #13](https://github.com/Deda-404/Progetto_CR/pull/13) aperta verso `main`, non mergiata
-**Last update:** 2026-08-24, quality gate M8 superato
+**Blocking issues:** revisione tecnica richiesta prima di modificare M5 o iniziare M10
+**Next task:** revisione del checkpoint M9; nessun retuning o M10 autorizzato
+**Pull Request:** [PR #14](https://github.com/Deda-404/Progetto_CR/pull/14) aperta verso `main`, non mergiata
+**Last update:** 2026-08-25, quality gate M9
+
+## Quality gate M9 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #13 mergiata al commit richiesto |
+| pianta nominale | PASS — `G:u->q` 2×2, ordine 14, M3/M5 coerenti |
+| attuatori/equilibrio | PASS — 40 rad/s, 0.8, 15 ms, Padé 1; `qbar=[pi/2;0]` |
+| pesi | PASS — W1/W2 M5 congelati, errori di rigenerazione nulli, `W3=[]` |
+| sintesi | PASS software — `mixsyn(G,W1,W2,[])`, K ordine 18, nessun warning |
+| stabilità nominale | PASS — 32 poli interni, max real part `-0.683828559884` |
+| norma ricostruita | PASS software — `10.2071033931`, errore relativo `2.495e-8` |
+| `CLmix` ricostruito | PASS — errore H∞ `4.313e-12` |
+| `||W1*S||inf` | `10.1276254519` |
+| `||W2*KS||inf` | `10.1853081898` |
+| weighted nominal objective | **FAIL — `gamma=10.2071036477 >= 1`** |
+| tracking | **FAIL — worst Ts 1.566 s, OS 261.619%, errore 49.068%** |
+| cross-coupling tracking | **FAIL diagnostico — worst 25.960% > 25%** |
+| disturbo lato link | QUANTIFIED — worst peak/offset `0.87172/0.19868 rad` |
+| comando | QUANTIFIED — worst 8.2558 N m = 0.68798 di `uScale` |
+| saturazione | PASS metodologico — nessuna inventata |
+| confronto M6 | PASS diagnostico — artifact M6 invariato |
+| robustezza/μ-analysis | NOT RUN corretto — fuori scope M9 |
+| artifact | PASS — dataset e sei figure |
+| test M9 | PASS — 29/29 |
+| test top-level / `run_all` | PASS software — 168/168, exit code 0 |
+| Code Analyzer M9 | PASS — 0 messaggi su otto file |
+| `git diff --check` | PASS |
+| stato | **PARTIAL — nessun retuning automatico M5** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M8 — COMPLETE
 
