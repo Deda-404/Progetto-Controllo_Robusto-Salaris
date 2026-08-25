@@ -1804,3 +1804,38 @@ milestone separate.
 ### Stato epistemico
 
 **RS RECUPERATA E CERTIFICATA — NP/RP NON CONFORMI, M14 PARTIAL**
+
+---
+
+## D-0042 — Realizzazione LTI del disturbo M15 con stato fisico condiviso
+
+**Data:** 2026-08-25
+**Milestone:** M15
+
+### Problema
+
+Le formule richieste `q_d=S*Gd*d` e `u_d=-KS*Gd*d` sono stabili come mappe
+closed-loop. Una cascata diretta di due oggetti `ss`, tuttavia, duplica la
+realizzazione della pianta instabile contenuta in S e Gd. La simulazione nel
+tempo dipenderebbe così da cancellazioni numeriche di modi instabili e può
+produrre transitori spurii enormi.
+
+### Decisione
+
+Le mappe LTI del disturbo vengono realizzate con un unico stato fisico G/Gd
+e gli stati del controllore. Le matrici interne sono quelle della chiusura
+esplicita già usata in M9/M10; le uscite sono q e u. La realizzazione è
+verificata stabile e conserva esattamente il significato delle formule
+`S*Gd` e `-KS*Gd` senza ridurre il controllore.
+
+### Motivazione e conseguenze
+
+La scelta elimina un artefatto di rappresentazione, non modifica plant,
+controller, pesi o risultati non lineari. Gli scarti LTI/NL del disturbo
+diventano finiti e fisicamente interpretabili: massimi q 0.14209 rad per
+Khinf e 0.08718 rad per Kmu. Non è usato `minreal` e non è eseguita alcuna
+riduzione d'ordine.
+
+### Stato epistemico
+
+**APPROVATA COME CORREZIONE DI REALIZZAZIONE NUMERICA — NESSUNA MODIFICA DEL PROBLEMA M15**

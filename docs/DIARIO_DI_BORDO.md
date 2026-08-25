@@ -1888,3 +1888,125 @@ retuning, simulazione non lineare, Monte Carlo o M15 è stata eseguita.
 
 **M14 PARTIAL pubblicata per revisione tecnica senza merge autonomo.** M15
 non è stata iniziata.
+
+---
+
+## 2026-08-25 — Avvio M15 e audit delle fonti congelate
+
+**Responsabile:** Alessio
+**Milestone:** M15
+**Tipo:** Governance / Audit / Simulink
+
+### Attività svolta
+
+- Verificata PR #19 mergiata e baseline esatta
+  `c51142e624adea610e72d16ddfd764008cb65371`; creato il branch
+  `codex/m15-nonlinear-robust-validation`.
+- Auditati modello M8, equazioni M1, attuatori/equilibrio M3, configurazione
+  solver/RAS, artifact M10/M13/M14 e pipeline `run_all`.
+- Caricati Khinf ordine 18 e Kmu ordine 52 direttamente dagli artifact,
+  verificando identità delle matrici e best iteration Kmu.
+- Costruito `SEA_ROBUST_nonlinear.slx` separato dal modello M8, con feedback
+  q-only, coordinate assolute/incrementali e soli ingressi SimulationInput.
+
+### Esito
+
+Frozen controllers, frozen nonlinear plant, configurazione solver ed
+equilibri sono `PASS`. Nessuna sintesi, riduzione, saturazione, incertezza o
+M16 è stata avviata.
+
+---
+
+## 2026-08-25 — Campagna non lineare M15
+
+**Responsabile:** Alessio
+**Milestone:** M15
+**Tipo:** Simulazioni / RAS / Artifact
+
+### Attività svolta
+
+- Eseguiti per entrambi i controller equilibrio, sei tracking, sei disturbi,
+  noisy/repeat/noise-free, confronti LTI/NL, RAS empirica e regione di
+  accordo su 36 direzioni.
+- Conservate configurazioni M8: `ode23t`, tolleranze, orizzonti, griglia RAS,
+  criterio di coda, seed `20260826` e assenza di saturazione.
+- Il primo completamento numerico si è arrestato nella tabella riepilogativa
+  per orientamento riga/colonna; nessun risultato è stato inventato. È stato
+  aggiunto un checkpoint prima delle elaborazioni finali.
+- Il gate plant inizialmente risultava `FAIL` per una negazione booleana
+  errata su `m8ModelModified=false`; corretta la logica, tutti gli audit
+  fisici risultano `PASS`.
+- Diagnosticata e corretta la duplicazione degli stati instabili nella
+  cascata LTI diretta del disturbo, adottando la realizzazione D-0042 a stato
+  fisico condiviso. Sono stati rieseguiti soltanto i 12 disturbi.
+
+### Risultati
+
+- Tracking Khinf/Kmu `FAIL`: worst Ts 1.7322/1.7346 s, OS
+  261.347/228.364%, errore 49.0679/50.4416%.
+- Cross-coupling diagnostico: Khinf `FAIL` 25.913%, Kmu `PASS` 23.944%.
+- RAS Khinf: 282 simulazioni, rmin 52.876°, area 12721 deg², boundary
+  interno. RAS Kmu: 107 simulazioni, rmin 60°, area 14213.6 deg²,
+  search-box limited.
+- Agreement region: rmin 4° Khinf e 4.75° Kmu; aree 99.522 e
+  111.721 deg².
+- Noise repeat error nullo per entrambi; comando quantificato senza
+  saturazione.
+
+### Quality gate
+
+Software, modello, equilibri e simulazioni richieste sono `PASS`; tracking
+M5 fallisce. M15 è **PARTIAL**. La RS `PASS_CERTIFIED` di Kmu resta riferita
+esclusivamente al modello lineare incerto M4.
+
+---
+
+## 2026-08-25 — Test dedicati M15
+
+**Responsabile:** Alessio
+**Milestone:** M15
+**Tipo:** Test / Riproducibilità
+
+### Attività svolta
+
+- Creata la suite T01–T60 per baseline, controller, architettura, scenari,
+  rumore, RAS, agreement regions, artifact e divieti metodologici.
+- Eseguita realmente la suite M15: **60/60 PASS**.
+- Corretti tre avvisi stilistici del Code Analyzer nei file M15.
+- Generati dataset da 13 MB, modello Simulink e otto figure tecniche.
+
+### Stato
+
+- Eseguito realmente `run_all` M0–M15: **478/478 test PASS**, tutte le
+  validazioni terminate, exit code 0.
+- M13 è stata ricaricata dall'artifact senza nuova `musyn`; M14 ha confermato
+  RS `PASS_CERTIFIED` sul modello lineare incerto e stato `PARTIAL`.
+- M15 ha rigenerato RAS/agreement e confermato software `PASS`, tracking
+  Khinf/Kmu `FAIL`, stato `PARTIAL`.
+- Code Analyzer: zero messaggi sui file M15 e `run_all.m`.
+
+Resta da pubblicare la PR dedicata. Non è stata iniziata M16.
+
+---
+
+## 2026-08-25 — Pubblicazione M15
+
+**Responsabile:** Alessio
+**Milestone:** M15
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `1a3867b82e80e00f9ebc76d326a7377051c0ef37`.
+- Pubblicato `codex/m15-nonlinear-robust-validation` su `origin`.
+- Aperta la [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20)
+  verso `main`, non draft, mergeable e non mergiata.
+- Aggiornato `Resoconto_M15_per_GPT.txt` con branch, commit, PR, risultati,
+  478/478 test e limiti metodologici.
+
+### Risultato
+
+**M15 PARTIAL pubblicata per revisione tecnica senza merge autonomo.** Kmu
+resta RS `PASS_CERTIFIED` soltanto sul modello lineare incerto M4; M16 non è
+stata iniziata.

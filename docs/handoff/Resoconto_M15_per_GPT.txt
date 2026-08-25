@@ -1,0 +1,372 @@
+RESOCONTO M15 PER GPT
+====================
+
+Data: 2026-08-25
+Milestone: M15 — validazione non lineare H-infinity / D-K
+Esito: PARTIAL
+Responsabile: Alessio
+
+A. GIT
+------
+
+Baseline main verificata:
+c51142e624adea610e72d16ddfd764008cb65371
+
+Branch:
+codex/m15-nonlinear-robust-validation
+
+M15 non modifica main e non esegue merge. Il commit tecnico pubblicato è
+1a3867b82e80e00f9ebc76d326a7377051c0ef37.
+
+B. HOUSEKEEPING PR19
+--------------------
+
+PR #19 verificata merged. Il merge commit coincide con la baseline M15:
+c51142e624adea610e72d16ddfd764008cb65371.
+
+PROJECT_STATUS registra M14 PARTIAL con:
+- NS Kmu PASS;
+- NP Kmu FAIL;
+- RS Kmu PASS_CERTIFIED;
+- RP Kmu FAIL_CERTIFIED.
+
+C. FROZEN CONTROLLERS
+---------------------
+
+Khinf:
+- source results/data/m10_hinfsyn_nominal.mat;
+- 2 ingressi, 2 uscite, ordine 18;
+- matrici A/B/C/D identiche all'artifact;
+- norma nominale pesata 10.2071033931;
+- stabilità nominale PASS;
+- RS M10 non disponibile e non inventata.
+
+Kmu:
+- source results/data/m13_musyn_dk.mat;
+- 2 ingressi, 2 uscite, ordine 52;
+- best iteration 3, identico a rawInfo(3).K;
+- norma nominale pesata 10.3917314574;
+- stabilità nominale PASS;
+- M14 RS PASS_CERTIFIED sul modello lineare incerto M4.
+
+Nessuna API di sintesi, riduzione o tuning è stata eseguita.
+
+D. SIMULINK ARCHITECTURE
+------------------------
+
+Nuovo modello:
+simulink/SEA_ROBUST_nonlinear.slx
+
+SEA_LQG_nonlinear.slx M8 non è stato modificato.
+
+Catena:
+controller robusto congelato -> attuatori M3 -> meccanica SEA M1.
+
+Feedback:
+q_delta = q_abs-qbar
+measurement = q_delta+noise_q
+e = r_delta-measurement
+u_delta = K*e
+u_abs = taubar+u_delta
+
+Misure q-only. Nessun theta feedback, Kalman, prefilter, integratore,
+feedforward, 2-DoF o saturazione. Ingressi e condizioni iniziali passano
+soltanto con Simulink.SimulationInput; zero dipendenze dal base workspace.
+
+Stati continui:
+- fisici 14 = meccanica 8 + attuatori 6;
+- controller 18 Khinf oppure 52 Kmu;
+- totale 32 oppure 66.
+
+E. SOLVER
+---------
+
+Identico a M8:
+- ode23t;
+- RelTol 1e-5;
+- AbsTol 1e-7;
+- MaxStep 0.005 s;
+- input time step 0.002 s.
+
+Nessuna solver campaign aggiuntiva.
+
+F. EQUILIBRIUM
+--------------
+
+Horizon 4 s, stato fisico/attuatori all'equilibrio, xK=0, r=d=v=0.
+
+Khinf:
+- max q drift 2.25502565858e-16 rad;
+- max theta drift 1.79721680240e-16 rad;
+- max delta u 3.44455206852e-15 N m;
+- max norma xK 3.20621465590e-15;
+- PASS.
+
+Kmu:
+- max q drift 1.63397204499e-16 rad;
+- max theta drift 1.21904721303e-16 rad;
+- max delta u 2.83421575509e-15 N m;
+- max norma xK 3.26230520651e-15;
+- PASS.
+
+G. TRACKING KHINF
+-----------------
+
+Sei scenari 2/5/8 gradi, entrambi i giunti, 4 s.
+
+Worst:
+- Ts 1.7322 s;
+- OS 261.347%;
+- errore statico relativo 49.0679%;
+- cross-coupling 25.913%;
+- peak delta/absolute U 8.2558 N m;
+- peak U/uScale 0.68798;
+- peak deformazione 0.181343 rad;
+- peak coppia elastica 9.06714 N m.
+
+Tracking FAIL. Cross-coupling diagnostico FAIL.
+
+H. TRACKING KMU
+---------------
+
+Sei scenari 2/5/8 gradi, entrambi i giunti, 4 s.
+
+Worst:
+- Ts 1.73459 s;
+- OS 228.364%;
+- errore statico relativo 50.4416%;
+- cross-coupling 23.944%;
+- peak delta/absolute U 8.25985 N m;
+- peak U/uScale 0.68832;
+- peak deformazione 0.181538 rad;
+- peak coppia elastica 9.07692 N m.
+
+Tracking FAIL. Cross-coupling diagnostico PASS.
+
+I. LTI/NL TRACKING
+-------------------
+
+Ogni controller usa la propria T e KS.
+
+Khinf worst:
+- max q 0.0387725 rad;
+- RMS q 0.00825960 rad;
+- max u 0.486983 N m;
+- RMS u 0.0671793 N m.
+
+Kmu worst:
+- max q 0.0246307 rad;
+- RMS q 0.00602792 rad;
+- max u 0.846783 N m;
+- RMS u 0.0844642 N m.
+
+J. DISTURBANCES
+---------------
+
+Sei scenari/controller: 0.25/0.50/1.00 N m separati sui link, r=v=0,
+horizon 8 s. Esito QUANTIFIED, senza nuova soglia.
+
+Khinf worst:
+- peak q 0.861627 rad;
+- offset 0.198683 rad;
+- peak delta U 3.34665 N m.
+
+Kmu worst:
+- peak q 0.841819 rad;
+- offset 0.246571 rad;
+- peak delta U 3.06716 N m.
+
+K. LTI/NL DISTURBANCES
+----------------------
+
+Le mappe equivalenti S*Gd e -KS*Gd sono realizzate con un solo stato
+fisico condiviso, evitando cancellazioni numeriche di copie duplicate dei
+modi instabili. Decisione D-0042; nessun minreal o controller reduction.
+
+Khinf worst:
+- max/RMS q difference 0.142094 / 0.0248949 rad;
+- max/RMS u difference 0.714565 / 0.138069 N m.
+
+Kmu worst:
+- max/RMS q difference 0.0871800 / 0.0167113 rad;
+- max/RMS u difference 0.466586 / 0.109811 N m.
+
+L. NOISE
+--------
+
+Seed 20260826. Generata la stessa matrice M8 a quattro canali; usati gli
+stessi primi due canali per entrambi. Scenario 5 gradi giunto 1, 4 s.
+
+Khinf:
+- RMS tracking 0.0484950 rad;
+- RMS control variation 0.0150400 N m;
+- RMS q variation 2.91137e-4 rad;
+- repeat error 0.
+
+Kmu:
+- RMS tracking 0.0490293 rad;
+- RMS control variation 0.0158662 N m;
+- RMS q variation 2.73381e-4 rad;
+- repeat error 0.
+
+Nessun estimation error. Il confronto con M6 non è perfettamente
+equivalente: M6 usa quattro encoder rumorosi, Khinf/Kmu soltanto q1/q2.
+
+M. CONTROL EFFORT
+-----------------
+
+QUANTIFIED_NO_SATURATION. uScale=12 N m è soltanto normalizzazione M5.
+Nessun clipping o limite hardware inventato.
+
+N. RAS KHINF
+------------
+
+Sezione q1/q2 M8, controller state zero, cache deterministica, budget 400.
+
+- simulations 282;
+- unique points 143;
+- convergent/divergent 101/42;
+- extended horizon count 139;
+- min/max radius 52.8763/78.3244 deg;
+- approximate area 12721 deg2;
+- critical direction 250 deg;
+- EMPIRICAL BOUNDARY LOCATED.
+
+O. RAS KMU
+----------
+
+- simulations 107;
+- unique points 57;
+- convergent/divergent 57/0;
+- extended horizon count 50;
+- min/max radius 60/78.3244 deg;
+- approximate area 14213.6 deg2;
+- critical direction 0 deg;
+- SEARCH-BOX LIMITED.
+
+P. M6 RAS COMPARISON
+---------------------
+
+Caricata senza rerun da results/data/m8_lqg_nonlinear_ras.mat:
+- simulations/points 57;
+- convergent/divergent 57/0;
+- min/max radius 60/78.3244 deg;
+- area 14213.6 deg2;
+- SEARCH-BOX LIMITED.
+
+M6 e Kmu non sono dichiarati stabili oltre il box esplorato. Nessuna delle
+RAS è una ROA certificata.
+
+Q. LTI/NL AGREEMENT KHINF
+-------------------------
+
+EMPIRICAL LTI/NL AGREEMENT REGION, non RAS/robust/certified:
+- 36 directions, 206 simulations;
+- min/max radius 4/8 deg;
+- area 99.5221 deg2;
+- 2 directions reach 8 deg;
+- critical direction 100 deg.
+
+R. LTI/NL AGREEMENT KMU
+-----------------------
+
+- 36 directions, 216 simulations;
+- min/max radius 4.75/7.75 deg;
+- area 111.721 deg2;
+- 0 directions reach 8 deg;
+- critical direction 100 deg.
+
+S. CONTROLLER COMPARISON
+------------------------
+
+Kmu ha RAS search-box limited e area/raggio di agreement maggiori nei
+risultati osservati; Khinf ha un boundary RAS interno. Questi dati non
+costituiscono un ranking robusto né impongono che Kmu sia migliore.
+
+Kmu è RS PASS_CERTIFIED rispetto all'insieme lineare M4 e mostra il
+comportamento non lineare nominale sopra riportato. Non è stata dimostrata
+robustezza sul modello non lineare.
+
+T. TESTS
+--------
+
+Suite dedicata M15: T01-T60, 60/60 PASS.
+I test non impongono superiorità Kmu e verificano divieti di sintesi,
+campionamento, riduzione e M16.
+
+Run_all M0-M15 eseguito realmente:
+- 478/478 test top-level PASS;
+- exit code 0;
+- M13 ricaricata dall'artifact senza nuova musyn;
+- M14 software PASS, RS PASS_CERTIFIED, stato PARTIAL;
+- M15 software PASS, stato PARTIAL.
+
+Code Analyzer M15 + run_all: zero messaggi.
+
+U. QUALITY GATE
+---------------
+
+- frozen controllers PASS;
+- frozen nonlinear plant PASS;
+- solver/config identity M8 PASS;
+- equilibrium Khinf/Kmu PASS/PASS;
+- required nonlinear simulations PASS;
+- tracking Khinf/Kmu FAIL/FAIL;
+- cross-coupling Khinf/Kmu FAIL/PASS diagnostico;
+- disturbance/noise QUANTIFIED;
+- control effort QUANTIFIED_NO_SATURATION;
+- LTI/NL tracking/disturbance QUANTIFIED;
+- RAS e agreement regions QUANTIFIED_EMPIRICAL;
+- software correctness PASS.
+
+V. OVERALL STATUS
+-----------------
+
+M15 PARTIAL. Il risultato prestazionale negativo è conservato; non sono
+stati modificati controller, pesi o architettura.
+
+W. LIMITS
+---------
+
+- modello non lineare nominale, senza sampling M4;
+- nessuna saturazione hardware disponibile;
+- RAS su una sola sezione bidimensionale e dominio finito;
+- agreement region diagnostica;
+- M14 RS lineare non è una garanzia robusta non lineare;
+- noise M6/robusti non perfettamente equivalente;
+- nessun Monte Carlo o M16.
+
+X. RECOMMENDATION M16 WITHOUT STARTING IT
+-----------------------------------------
+
+Dopo revisione e autorizzazione, M16 potrà campionare deterministicamente
+l'insieme M4 e confrontare i controller sui criteri già congelati. Non si
+raccomanda di modificare M5 o ritunare i controller dentro M15. M16 NON è
+stata iniziata.
+
+ARTIFACT
+--------
+
+- results/data/m15_nonlinear_robust_validation.mat
+- simulink/SEA_ROBUST_nonlinear.slx
+- docs/NONLINEAR_VALIDATION_HINF_MU.md
+- results/figures/m15_*.png (8 figure)
+- tests/test_m15_nonlinear_robust.m
+
+PUBBLICAZIONE
+-------------
+
+Commit tecnico M15:
+1a3867b82e80e00f9ebc76d326a7377051c0ef37
+
+PR M15:
+https://github.com/Deda-404/Progetto_CR/pull/20
+
+Verifica GitHub:
+- branch codex/m15-nonlinear-robust-validation esistente;
+- commit M15 esistente;
+- PR #20 open, non draft, base main, head M15, mergeable;
+- base SHA c51142e624adea610e72d16ddfd764008cb65371;
+- head SHA al momento dell'apertura 1a3867b82e80e00f9ebc76d326a7377051c0ef37.
+
+Merge: NON eseguito.

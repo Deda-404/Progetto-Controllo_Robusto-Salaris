@@ -6,6 +6,26 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Modello dedicato `SEA_ROBUST_nonlinear.slx` per Khinf M10 e Kmu M13
+  congelati, feedback q-only, attuatori M3 e meccanica non lineare M1.
+- Pipeline M15 modulare per equilibrio, 12 tracking, 12 disturbi, rumore
+  comune seeded, confronti LTI/NL, due RAS empiriche e due regioni di accordo.
+- Dataset `m15_nonlinear_robust_validation.mat`, otto figure ingegneristiche,
+  documento `NONLINEAR_VALIDATION_HINF_MU.md` e suite M15 T01–T60.
+
+### Changed
+
+- Esteso `run_all.m` fino a M15, mantenendo M13 come artifact congelato e
+  separando la RS lineare-incerta M14 dalla validazione nominale non lineare.
+- Aggiornati status, checklist e README: M15 è `PARTIAL` perché entrambi i
+  controllori falliscono i target tracking M5 senza retuning.
+
+### Fixed
+
+- La risposta LTI al disturbo usa una realizzazione a stato fisico condiviso,
+  equivalente a `S*Gd`/`-KS*Gd`, evitando cancellazioni numeriche di copie
+  duplicate dei modi instabili della pianta.
+
 - Pipeline M14 di sola analisi per Kmu M13 congelato, derivata senza cambi di
   griglie/opzioni dalla pipeline M12 e con gate di identità Kmu/Punc/M4/M5.
 - Verifica indipendente NS/NP/RS/RP, sostituzioni worst-case, confronto
