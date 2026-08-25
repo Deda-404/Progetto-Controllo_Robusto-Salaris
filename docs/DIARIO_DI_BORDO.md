@@ -1313,3 +1313,110 @@ alcun tuning, `hinfsyn` o lavoro di robustezza.
 
 **M9 PARTIAL pubblicata per revisione senza merge autonomo.** Non è stata
 iniziata M10.
+
+---
+
+## 2026-08-25 — Avvio M10 e housekeeping della baseline
+
+**Responsabile:** Alessio
+**Milestone:** M10
+**Tipo:** Governance / Git / Audit
+
+### Attività svolta
+
+- Sincronizzato `main` con `origin/main` e verificato il merge della PR #14
+  al commit `8a4a3f423210464f9a46a21daa8806722e7a7506`.
+- Verificata la baseline: M0–M6 COMPLETE, M7 PARTIAL terminale, M8 COMPLETE,
+  M9 PARTIAL validata e M10 non iniziata.
+- Creato `codex/m10-hinfsyn-generalized-plant` dall'ultimo `main` remoto.
+- Corretto lo stato documentale obsoleto della PR #14 senza alterare il
+  risultato tecnico negativo M9.
+
+### Vincoli confermati
+
+M10 userà la stessa pianta nominale, gli stessi pesi e lo stesso scaling di
+M9. Prima di `hinfsyn`, la generalized plant dovrà riprodurre il closed loop
+M9 con `Kmix`. Non saranno eseguiti retuning, `hinfstruct`, mu-analysis,
+validazione robusta M4 o attività M11+.
+
+---
+
+## 2026-08-25 — Generalized plant, sintesi e confronto nominale M10
+
+**Responsabile:** Alessio
+**Milestone:** M10
+**Tipo:** Implementazione / Validazione / Artifact
+
+### Attività svolta
+
+- Costruita autonomamente la pianta generalizzata mediante `connect` e
+  `sumblk`, con ingressi `[r;u]`, uscite `[z1;z2;y]` e partizione compatibile
+  con `hinfsyn(P,2,2)`.
+- Verificate forma analitica, convenzione `P22=-G`, dimensioni e coerenza
+  frequenziale; `augw` è stato usato soltanto come cross-check successivo.
+- Richiuso il controllore M9 congelato sulla nuova P prima della sintesi:
+  mappe, norma e scaling M9 sono stati riprodotti entro `2.688e-12`.
+- Eseguita una sola sintesi `hinfsyn` con opzioni di default, senza retuning,
+  W3, precompensatore o modifica degli scenari.
+- Ricostruite indipendentemente `S10`, `T10`, `KS10`, interconnessione pesata
+  e matrice interna a 32 stati; simulati gli stessi tracking e disturbi M9.
+- Generati dataset M10, sei figure, documento tecnico e 40 test dedicati.
+
+### Risultati
+
+P è 6×4, di ordine 18; le partizioni sono P11/P12 4×2 e P21/P22 2×2.
+L'errore massimo rispetto alla forma analitica è `1.137e-13` e quello
+rispetto ad `augw` è `1.097e-14`.
+
+Il controllore `Khinf` è 2×2, di ordine 18. `gammaHinf=10.2071036477` e la
+norma pesata ricostruita è `10.2071033931`, con errore relativo `2.495e-8`.
+La massima parte reale dei poli interni è `-0.683828559887`; stabilità e
+ricostruzione sono `PASS`.
+
+Le mappe M9/M10 sono quasi equivalenti: differenza relativa dei gamma
+`2.938e-13` ed errore H∞ delle mappe pesate `1.274e-9`. Restano però
+`gamma>1`, worst settling 1.566 s, overshoot 261.619%, errore statico
+49.068% e cross-coupling 25.960%.
+
+### Esito
+
+**M10 PARTIAL:** generalized plant, sintesi, stabilità e confronto sono
+validati; weighted performance, tracking e cross-coupling falliscono. M5 è
+rimasta invariata e non è stata iniziata alcuna attività M11 o robusta.
+
+---
+
+## 2026-08-25 — Quality gate software M10
+
+**Responsabile:** Alessio
+**Milestone:** M10
+**Tipo:** Test / Pipeline / Artifact
+
+### Verifiche eseguite
+
+- Suite M10 isolata: 40/40 test `PASS`.
+- Il primo `run_all` ha rilevato un unico fallimento nel test storico M9
+  T22: il test cercava `hinfsyn` in tutta la cartella condivisa
+  `controllers/hinf/`, includendo impropriamente i nuovi file M10.
+- Corretto T22 limitandone l'audit ai sei file appartenenti alla pipeline M9;
+  nessun criterio tecnico M9 e nessun risultato numerico sono stati cambiati.
+- Regressione congiunta M9+M10: 69/69 test `PASS`.
+- `matlab.exe -batch "run_all"`: 208/208 test top-level `PASS`, tutte le
+  validazioni M1–M10 eseguite, exit code 0.
+- Code Analyzer sui file M10 e sul test M9 modificato: 0 messaggi.
+- `git diff --check`: `PASS`.
+- Ripristinati al contenuto versionato dataset, figure e modello Simulink
+  storici M2–M9 riscritti dalla rigenerazione; conservati soltanto gli
+  artifact nuovi M10.
+
+### Distinzione dei gate
+
+- software/test: **PASS**;
+- Generalized Plant Correctness: **PASS**;
+- Nominal Stability: **PASS**;
+- H∞ Reconstruction: **PASS**;
+- Weighted Nominal Performance: **FAIL**;
+- tracking e cross-coupling: **FAIL**;
+- disturbo e sforzo: **QUANTIFIED** senza soglie o saturazioni inventate;
+- M9/M10 consistency: **PASS**, quasi-equivalenti;
+- stato complessivo M10: **PARTIAL**.

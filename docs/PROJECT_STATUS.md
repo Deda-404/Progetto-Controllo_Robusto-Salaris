@@ -1,14 +1,46 @@
 # Project Status
 
-**Current milestone:** M9 — sintesi H-infinity nominale con `mixsyn`
-**Status:** `PARTIAL` — baseline tecnicamente valida, target pesato e tracking falliti
-**Last validated milestone:** M9 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
+**Current milestone:** M10 — generalized plant esplicita e sintesi nominale `hinfsyn`
+**Status:** `PARTIAL` — generalized plant e sintesi valide, obiettivi pesato e tracking falliti
+**Last validated milestone:** M10 come checkpoint `PARTIAL`; M8 resta l'ultima milestone `COMPLETE`
 **Last validated controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Blocking issues:** revisione tecnica richiesta prima di modificare M5 o iniziare M10
-**Next task:** revisione del checkpoint M9; nessun retuning o M10 autorizzato
-**Pull Request:** [PR #14](https://github.com/Deda-404/Progetto_CR/pull/14) aperta verso `main`, non mergiata
-**Last update:** 2026-08-25, quality gate M9
+**Blocking issues:** revisione tecnica richiesta prima di iniziare M11 o modificare M5
+**Next task:** revisione del checkpoint M10; nessun M11 autorizzato
+**Pull Request:** PR #14 mergiata in `main` al commit `8a4a3f423210464f9a46a21daa8806722e7a7506`; PR M10 da aprire
+**Last update:** 2026-08-25, quality gate M10
+
+## Quality gate M10 — PARTIAL
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #14 mergiata al commit richiesto |
+| generalized plant | PASS — 6×4, ordine 18, `connect/sumblk` |
+| partizione | PASS — P11/P12 4×2, P21/P22 2×2, `nmeas=ncont=2` |
+| convenzione | PASS — `e=r-q`, `P21=I`, `P22=-G` |
+| equivalenza analitica | PASS — massimo errore frequenziale `1.137e-13` |
+| cross-check `augw` | PASS diagnostico — errore `1.097e-14`, reference-last |
+| gate M9 prima di `hinfsyn` | PASS — errori CLmix/stack `2.688e-12/2.535e-12` |
+| sintesi | PASS software — `hinfsyn(P,2,2)` default, K ordine 18, nessun warning |
+| stabilità nominale | PASS — 32 poli interni, max real part `-0.683828559887` |
+| ricostruzione H∞ | PASS — norma `10.2071033931`, errore relativo `2.495e-8` |
+| `CLhinf` ricostruito | PASS — errore H∞ `4.910e-12` |
+| weighted nominal objective | **FAIL — `gammaHinf=10.2071036477 >= 1`** |
+| tracking | **FAIL — worst Ts 1.566 s, OS 261.619%, errore 49.068%** |
+| cross-coupling tracking | **FAIL diagnostico — worst 25.960% > 25%** |
+| disturbo lato link | QUANTIFIED — worst peak/offset `0.87172/0.19868 rad` |
+| comando | QUANTIFIED — worst 8.2558 N m = 0.68798 di `uScale` |
+| M9/M10 consistency | PASS — delta gamma relativo `2.938e-13`, quasi-equivalenti |
+| robustezza/M11+ | NOT RUN corretto — fuori scope M10 |
+| artifact | PASS — dataset e sei figure |
+| test M10 | PASS — 40/40 |
+| test M9+M10 | PASS — 69/69 dopo aggiornamento del perimetro T22 M9 |
+| test top-level / `run_all` | PASS software — 208/208, exit code 0 |
+| Code Analyzer M10 / regressione M9 | PASS — 0 messaggi |
+| `git diff --check` | PASS |
+| stato | **PARTIAL — nessun retuning automatico M5** |
+
+**Responsabile:** Alessio
 
 ## Quality gate M9 — PARTIAL
 

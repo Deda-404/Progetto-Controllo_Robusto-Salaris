@@ -1536,3 +1536,67 @@ di qualsiasi variazione delle specifiche.
 ### Stato epistemico
 
 **BASELINE M9 VALIDATA — PERFORMANCE FAIL, M9 PARTIAL, NESSUN RETUNING**
+
+---
+
+## D-0037 — Pianta generalizzata M10 esplicita e confronto a specifiche congelate
+
+**Data:** 2026-08-25
+**Milestone:** M10
+
+### Problema
+
+Costruire l'interconnessione nominale richiesta da `hinfsyn` senza cambiare
+il problema M9 e stabilire come interpretare un controllore numericamente
+diverso ma con mappe chiuse e prestazioni coincidenti entro le tolleranze.
+
+### Alternative
+
+- usare direttamente `augw` come unica definizione della pianta;
+- modificare pesi o architettura per ottenere `gamma<1`;
+- costruire la pianta esplicita, validarla contro M9 prima della sintesi e
+  usare `augw` soltanto come controllo incrociato;
+- trattare ogni differenza nei coefficienti del controllore come una nuova
+  soluzione sostanziale, indipendentemente dalle mappe ingresso-uscita.
+
+### Decisione e criterio
+
+Si adotta la pianta generalizzata 1-DoF con ingressi `[r;u]`, uscite
+`[z1;z2;y]`, `e=r-q`, `z1=W1*e`, `z2=W2*u`, `y=e`, quindi
+`P=[W1,-W1*G;0,W2;I,-G]`, `nmeas=2` e `ncont=2`. La costruzione mediante
+interconnessione nominata è primaria; la forma analitica e `augw` sono audit
+indipendenti.
+
+Prima di chiamare `hinfsyn`, `lft(P,Kmix)` deve riprodurre la chiusura pesata
+M9. Superato questo gate, è autorizzata una sola sintesi `hinfsyn` con opzioni
+di default. Pesi M5, pianta M3, scaling, architettura e scenari rimangono
+congelati.
+
+Il risultato M10 è considerato quasi equivalente a M9 quando norma pesata,
+mappe `S/T/KS`, mappe chiuse e poli coincidono entro le tolleranze numeriche
+documentate, anche se le realizzazioni interne dei controllori differiscono.
+
+### Risultato e motivazione
+
+Il gate pre-sintesi è `PASS`: errore massimo sulla chiusura M9
+`2.688e-12` e norma stacked `10.2071033931`. La sintesi produce
+`gammaHinf=10.2071036477`; la norma ricostruita è `10.2071033931`, con
+errore relativo `2.495e-8`. La differenza relativa tra i gamma M9/M10 è
+`2.938e-13` e l'errore massimo delle mappe pesate è `1.274e-9`.
+
+La stabilità interna e la coerenza dell'interconnessione sono confermate,
+ma `gamma>1` e i target di tracking restano falliti esattamente come in M9.
+Non emerge quindi alcuna giustificazione per modificare retroattivamente M5
+o avviare retuning nella stessa milestone.
+
+### Conseguenze e limiti
+
+M10 è un checkpoint nominale `PARTIAL`: completa e valida la formulazione
+esplicita `hinfsyn`, ma non soddisfa la performance pesata o temporale. Non
+sono state introdotte `W3`, azioni 2-DoF, `hinfstruct`, incertezze M4,
+mu-analysis o sintesi robusta. Ogni passo successivo richiede autorizzazione
+separata.
+
+### Stato epistemico
+
+**INTERCONNESSIONE E SINTESI NOMINALI VALIDATE — M9/M10 QUASI EQUIVALENTI, PERFORMANCE FAIL**

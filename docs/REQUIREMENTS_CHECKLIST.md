@@ -81,11 +81,11 @@ aperte senza occultare il risultato terminale M7.
 
 ## Controllo \(H_\infty\)
 
-- [ ] Definire impianto generalizzato e segnali \(w,z,y,u\).
+- [x] Definire impianto generalizzato e segnali \(w,z,y,u\).
 - [x] Approvare e registrare \(W_1,W_2\) ed eventuali altri pesi.
 - [x] Eseguire `mixsyn` e validarne l'interconnessione.
-- [ ] Eseguire `hinfsyn` e validarne l'interconnessione.
-- [ ] Confrontare `mixsyn` e `hinfsyn` con le stesse specifiche.
+- [x] Eseguire `hinfsyn` e validarne l'interconnessione.
+- [x] Confrontare `mixsyn` e `hinfsyn` con le stesse specifiche.
 - [ ] Esplorare `hinfstruct` con struttura e ordine motivati.
 - [x] Valutare \(\gamma\), \(S\), \(T\), \(KS\), tracking, disturbi e comando.
 - [ ] Implementare i controllori selezionati in Simulink.
@@ -95,8 +95,11 @@ aperte senza occultare il risultato terminale M7.
 M9 ha completato la baseline nominale 1-DoF con W1/W2 M5 congelati e
 `W3=[]`. La stabilità interna e la ricostruzione indipendente sono `PASS`, ma
 `gamma=10.2071036477`, tracking e cross-coupling falliscono i rispettivi
-target: M9 resta quindi `PARTIAL`, senza retuning. La voce sull'impianto
-generalizzato esplicito resta aperta per M10 `hinfsyn`; non sono state
+target: M9 resta quindi `PARTIAL`, senza retuning. M10 ha definito e validato
+la pianta generalizzata nominale esplicita 1-DoF, eseguito una sintesi
+`hinfsyn` di default e confrontato a parità di problema le mappe M9/M10. Il
+risultato è quasi equivalente a M9 (`gamma=10.2071036477`) e conserva gli
+stessi fallimenti prestazionali: anche M10 è `PARTIAL`. Non sono state
 eseguite analisi robuste.
 
 ## \(\mu\)-analysis
