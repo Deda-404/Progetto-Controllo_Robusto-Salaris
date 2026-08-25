@@ -1986,3 +1986,27 @@ esclusivamente al modello lineare incerto M4.
 - Code Analyzer: zero messaggi sui file M15 e `run_all.m`.
 
 Resta da pubblicare la PR dedicata. Non è stata iniziata M16.
+
+---
+
+## 2026-08-25 — Pubblicazione M15
+
+**Responsabile:** Alessio
+**Milestone:** M15
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `1a3867b82e80e00f9ebc76d326a7377051c0ef37`.
+- Pubblicato `codex/m15-nonlinear-robust-validation` su `origin`.
+- Aperta la [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20)
+  verso `main`, non draft, mergeable e non mergiata.
+- Aggiornato `Resoconto_M15_per_GPT.txt` con branch, commit, PR, risultati,
+  478/478 test e limiti metodologici.
+
+### Risultato
+
+**M15 PARTIAL pubblicata per revisione tecnica senza merge autonomo.** Kmu
+resta RS `PASS_CERTIFIED` soltanto sul modello lineare incerto M4; M16 non è
+stata iniziata.

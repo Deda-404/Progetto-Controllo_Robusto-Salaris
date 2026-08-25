@@ -8,8 +8,8 @@
 **Open technical issue:** Khinf/Kmu non rispettano Ts/OS/errore M5 sul nominale non lineare; Kmu conserva RS certificata soltanto sul modello lineare incerto M4
 **Next task:** revisione tecnica M15; non iniziare M16 senza autorizzazione
 **Pull Request baseline:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) `merged` al commit `c51142e624adea610e72d16ddfd764008cb65371`
-**Pull Request corrente:** M15 su `codex/m15-nonlinear-robust-validation`, PR da aprire verso `main`
-**Last update:** 2026-08-25, validazione e artifact M15 completati
+**Pull Request corrente:** [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20) aperta da `codex/m15-nonlinear-robust-validation` verso `main`, non mergiata
+**Last update:** 2026-08-25, M15 pubblicata per revisione tecnica
 
 ## Quality gate M15 — PARTIAL
 

@@ -15,8 +15,8 @@ c51142e624adea610e72d16ddfd764008cb65371
 Branch:
 codex/m15-nonlinear-robust-validation
 
-M15 non modifica main e non esegue merge. Commit HEAD e PR sono riportati
-nella sezione finale dopo la pubblicazione.
+M15 non modifica main e non esegue merge. Il commit tecnico pubblicato è
+1a3867b82e80e00f9ebc76d326a7377051c0ef37.
 
 B. HOUSEKEEPING PR19
 --------------------
@@ -356,6 +356,17 @@ ARTIFACT
 PUBBLICAZIONE
 -------------
 
-Commit HEAD: da aggiornare dopo commit finale.
-PR M15: da aggiornare dopo apertura verso main.
+Commit tecnico M15:
+1a3867b82e80e00f9ebc76d326a7377051c0ef37
+
+PR M15:
+https://github.com/Deda-404/Progetto_CR/pull/20
+
+Verifica GitHub:
+- branch codex/m15-nonlinear-robust-validation esistente;
+- commit M15 esistente;
+- PR #20 open, non draft, base main, head M15, mergeable;
+- base SHA c51142e624adea610e72d16ddfd764008cb65371;
+- head SHA al momento dell'apertura 1a3867b82e80e00f9ebc76d326a7377051c0ef37.
+
 Merge: NON eseguito.
