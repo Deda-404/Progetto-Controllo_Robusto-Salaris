@@ -7,8 +7,8 @@
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Open technical issue:** l'objective M13 resta >1; RS/RP del nuovo Kmu non sono ancora verificate e appartengono a M14
 **Next task:** revisione tecnica della PR M13; non iniziare M14 senza autorizzazione
-**Pull Request:** PR M13 da aprire verso `main`; [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) `merged` al commit `9b69caa02c7f8dbca9cc2b936067f67c25904f1a`
-**Last update:** 2026-08-25, quality gate M13 completato
+**Pull Request:** [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18) aperta verso `main`, non mergiata; [PR #17](https://github.com/Deda-404/Progetto_CR/pull/17) `merged` al commit `9b69caa02c7f8dbca9cc2b936067f67c25904f1a`
+**Last update:** 2026-08-25, M13 pubblicata per revisione tecnica
 
 ## Quality gate M13 — COMPLETE
 

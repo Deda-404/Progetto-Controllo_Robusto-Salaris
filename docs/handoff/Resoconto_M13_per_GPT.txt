@@ -6,8 +6,9 @@ A. GIT
 Branch: codex/m13-musyn-dk
 Base: 9b69caa02c7f8dbca9cc2b936067f67c25904f1a
 Commit software/artifact M13: e1cdc382309fc7257566dffe3a6785922ce3d884
-Commit documentazione/PR: PENDING_FINALIZATION
-PR M13 verso main: PENDING_FINALIZATION
+Commit documentazione: 7b12dd2a0bebf8c87c8afabbd0611245cd755c89
+PR M13 verso main: #18, https://github.com/Deda-404/Progetto_CR/pull/18
+Stato PR verificato: open, non draft, base main, head codex/m13-musyn-dk.
 Main non modificata direttamente; nessun merge eseguito.
 
 B. HOUSEKEEPING

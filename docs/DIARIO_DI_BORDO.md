@@ -1748,3 +1748,27 @@ Frozen plant/uncertainty/weights, D–K execution/history, controller,
 stabilità nominale, ricostruzione pesata, lower-bound sanity e software sono
 `PASS`; objective e ordine sono `QUANTIFIED`. **M13 è COMPLETE.** M14 non è
 iniziata e richiede autorizzazione separata.
+
+---
+
+## 2026-08-25 — Pubblicazione M13
+
+**Responsabile:** Alessio
+**Milestone:** M13
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creati i commit `e1cdc382309fc7257566dffe3a6785922ce3d884`
+  per software/artifact e `7b12dd2a0bebf8c87c8afabbd0611245cd755c89`
+  per documentazione e handoff.
+- Pubblicato `codex/m13-musyn-dk` su `origin`.
+- Aperta la [PR #18](https://github.com/Deda-404/Progetto_CR/pull/18)
+  verso `main`, non draft e non mergiata.
+- Aggiornato `Resoconto_M13_per_GPT.txt` con configurazione, history,
+  controller, gate, test e distinzione del tentativo tecnico abortito.
+
+### Risultato
+
+**M13 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** Non
+è stata iniziata M14.
