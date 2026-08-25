@@ -52,21 +52,22 @@ Dalla radice del repository:
 run_all
 ```
 
-Al completamento M8 il comando pulisce e configura l'ambiente, esegue le
-regressioni M0–M7, ricostruisce e valida il modello Simulink non lineare con
-il controllore M6 invariato, rigenera tracking, disturbi, rumore, confronti
-LTI/NL e le due sezioni RAS empiriche. M7 resta il risultato terminale
-`PARTIAL`; non viene eseguito altro tuning.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M9,
+ricostruisce gli artifact M1–M8 e conclude con la sintesi nominale `mixsyn`
+M9 a pesi M5 congelati. Il risultato prestazionale negativo M9 è conservato
+come `PARTIAL` senza ritunare M5; M7 resta a sua volta `PARTIAL` terminale.
 
 ## Stato corrente
 
-- Milestone corrente: **M8 — Simulink e RAS LQG, COMPLETE**.
+- Milestone corrente: **M9 — sintesi H-infinity nominale con `mixsyn`, PARTIAL**.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
   rumore seeded completati; scarto LTI/NL massimo 0.0006201 rad.
 - RAS empirica: 57/57 punti convergenti in entrambe le sezioni entro il box
   computazionale ±60°; la frontiera è quindi search-box limited.
-- Prossimo passo: **M9 — sintesi nominale `H_infinity mixsyn`**, non iniziata.
+- Risultato M9: interconnessione nominale stabile, controllore ordine 18,
+  `gamma=10.2071036477` e norma ricostruita `10.2071033931`; obiettivi
+  weighted e tracking falliti senza retuning, `W3` o analisi robusta.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.

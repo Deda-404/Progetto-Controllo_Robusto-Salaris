@@ -82,15 +82,22 @@ aperte senza occultare il risultato terminale M7.
 ## Controllo \(H_\infty\)
 
 - [ ] Definire impianto generalizzato e segnali \(w,z,y,u\).
-- [ ] Approvare e registrare \(W_1,W_2\) ed eventuali altri pesi.
-- [ ] Eseguire `mixsyn` e validarne l'interconnessione.
+- [x] Approvare e registrare \(W_1,W_2\) ed eventuali altri pesi.
+- [x] Eseguire `mixsyn` e validarne l'interconnessione.
 - [ ] Eseguire `hinfsyn` e validarne l'interconnessione.
 - [ ] Confrontare `mixsyn` e `hinfsyn` con le stesse specifiche.
 - [ ] Esplorare `hinfstruct` con struttura e ordine motivati.
-- [ ] Valutare \(\gamma\), \(S\), \(T\), \(KS\), tracking, disturbi e comando.
+- [x] Valutare \(\gamma\), \(S\), \(T\), \(KS\), tracking, disturbi e comando.
 - [ ] Implementare i controllori selezionati in Simulink.
 - [ ] Validare modello lineare e non lineare.
 - [ ] Stimare e documentare la RAS empirica.
+
+M9 ha completato la baseline nominale 1-DoF con W1/W2 M5 congelati e
+`W3=[]`. La stabilità interna e la ricostruzione indipendente sono `PASS`, ma
+`gamma=10.2071036477`, tracking e cross-coupling falliscono i rispettivi
+target: M9 resta quindi `PARTIAL`, senza retuning. La voce sull'impianto
+generalizzato esplicito resta aperta per M10 `hinfsyn`; non sono state
+eseguite analisi robuste.
 
 ## \(\mu\)-analysis
 

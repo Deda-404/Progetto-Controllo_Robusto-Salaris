@@ -1483,3 +1483,56 @@ lineare già documentato e non entra nel gate M8.
 ### Stato epistemico
 
 **APPROVATA COME STIMA EMPIRICA SU DUE SEZIONI — NON CERTIFICATO ANALITICO**
+
+---
+
+## D-0036 — Baseline M9 1-DoF a pesi M5 congelati e stop senza retuning
+
+**Data:** 2026-08-25
+**Milestone:** M9
+
+### Problema
+
+Stabilire come interpretare il risultato della sintesi nominale `mixsyn`
+quando i pesi M5 approvati non producono `gamma<1`, senza alterare
+retroattivamente le specifiche o anticipare M10 e l'analisi robusta.
+
+### Alternative
+
+- modificare `W1/W2` finché il target pesato risulta soddisfatto;
+- introdurre `W3` o passare a `hinfsyn` nella stessa milestone;
+- selezionare una diversa architettura o un precompensatore per migliorare il
+  tracking;
+- conservare la baseline 1-DoF richiesta, diagnosticarla e fermare il tuning.
+
+### Decisione e criterio
+
+Si adotta come unico risultato M9 la struttura `e=r-q`, `u=Kmix*e` ottenuta
+con `mixsyn(G,W1,W2,[])`, pianta nominale M3 a 14 stati e pesi W1/W2 caricati
+dall'artifact M5; `W3` resta assente. La norma stacked ricostruita
+`10.2071033931` coincide con `gamma=10.2071036477` entro errore relativo
+`2.495e-8`, ma supera uno. Anche i target di tracking risultano falliti.
+
+La sintesi e la stabilità interna sono accettate come checkpoint tecnico;
+M9 è classificata `PARTIAL`. Non si esegue alcun retuning automatico di M5 e
+non si introduce una sintesi diversa senza nuova autorizzazione.
+
+### Motivazione
+
+Cambiare i pesi dopo aver osservato il risultato renderebbe M9 una campagna
+di tuning non approvata e romperebbe la tracciabilità M5. Il fallimento
+quantificato è informazione progettuale: `W1*S` resta elevato a bassa
+frequenza e `W2*KS` ha il proprio picco a 33.4393 rad/s. Lo zero RHP Padé è
+registrato a 133.3333 rad/s, ma la sola posizione dei picchi non consente di
+attribuirgli l'intero fallimento.
+
+### Conseguenze e limiti
+
+M5, M6, M7, M8 e la pianta incerta M4 restano invariati. Non sono autorizzati
+`hinfsyn`, mu-analysis, D-K iteration o dichiarazioni di Robust Stability e
+Robust Performance. Il checkpoint richiede revisione tecnica prima di M10 o
+di qualsiasi variazione delle specifiche.
+
+### Stato epistemico
+
+**BASELINE M9 VALIDATA — PERFORMANCE FAIL, M9 PARTIAL, NESSUN RETUNING**

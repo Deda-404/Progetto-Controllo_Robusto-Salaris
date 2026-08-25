@@ -1197,3 +1197,96 @@ stato iniziato.
 ### Risultato
 
 **M8 pubblicata per revisione senza merge autonomo. M9 non iniziata.**
+
+---
+
+## 2026-08-25 — Avvio M9 e housekeeping della baseline
+
+**Responsabile:** Alessio
+**Milestone:** M9
+**Tipo:** Governance / Git / Audit
+
+### Attività svolta
+
+- Sincronizzato `main` con `origin/main` e verificato il merge della PR #13
+  al commit `57912473c4337270dec14d3f566cf9d763ea759f`.
+- Verificata la baseline: M0–M6 COMPLETE, M7 PARTIAL terminale, M8 COMPLETE,
+  M9 non ancora implementata.
+- Creato `codex/m9-hinf-mixsyn` dall'ultimo `main` remoto.
+- Corretto lo stato documentale obsoleto che indicava la PR #13 ancora
+  aperta; M8 e la relativa storia tecnica restano invariati.
+
+### Vincoli confermati
+
+M9 userà la pianta nominale completa M3 e i pesi M5 congelati, con `W3=[]`.
+Non saranno modificati M5, M7 o M8 e non saranno eseguiti `hinfsyn`,
+mu-analysis, D-K iteration o tuning automatico dei pesi.
+
+---
+
+## 2026-08-25 — Sintesi, ricostruzione e quality gate M9
+
+**Responsabile:** Alessio
+**Milestone:** M9
+**Tipo:** Implementazione / Validazione / Artifact
+
+### Attività svolta
+
+- Ricavata `G:u->q` 2×2 di ordine 14 dall'artifact M3 e verificati entrambi
+  i percorsi `u` e `d` contro l'artifact M5.
+- Caricati W1/W2 da M5, confrontati con la rigenerazione centralizzata e
+  preservati `controllerSynthesisAllowed=false`, `W3=[]` e `uScale` come
+  normalizzazione senza saturazione.
+- Eseguita una sola sintesi `mixsyn(G,W1,W2,[])`, senza retuning.
+- Ricostruiti indipendentemente `S`, `T`, `KS` e il closed loop pesato;
+  verificata la stabilità interna mediante la matrice completa a 32 stati,
+  senza `minreal`.
+- Simulati sei tracking, sei disturbi lato link e il confronto diagnostico
+  con M6 sugli stessi scenari.
+- Generati un dataset M9, sei figure e 29 test automatici dedicati.
+
+### Risultati
+
+Il controllore ha ordine 18. `gamma=10.2071036477` e la norma ricostruita è
+`10.2071033931`, con errore relativo `2.495e-8`; l'errore rispetto a `CLmix`
+è `4.313e-12`. La massima parte reale dei poli interni è
+`-0.683828559884`, quindi Nominal Stability è `PASS`.
+
+Il target pesato è `FAIL`. Il tracking ha worst settling 1.566 s, overshoot
+261.619%, errore statico relativo 49.068% e cross-coupling 25.960%; anche i
+relativi gate falliscono. Il massimo comando è 8.2558 N m, pari a 0.68798
+di `uScale`. Il disturbo produce worst peak/offset 0.87172/0.19868 rad; non è
+stata inventata una soglia M5 assente.
+
+### Esito
+
+**M9 PARTIAL:** sintesi e correttezza software valide, obiettivi fondamentali
+non soddisfatti. I pesi M5 non sono stati modificati e non è stato iniziato
+alcun tuning, `hinfsyn` o lavoro di robustezza.
+
+---
+
+## 2026-08-25 — Quality gate software M9
+
+**Responsabile:** Alessio
+**Milestone:** M9
+**Tipo:** Test / Pipeline / Artifact
+
+### Verifiche eseguite
+
+- Suite M9 isolata: 29/29 test PASS, 0 failed, 0 incomplete.
+- `matlab.exe -batch "run_all"`: 168/168 test top-level PASS, exit code 0.
+- Rigenerate realmente le validazioni M1–M9; M7 è rimasta `PARTIAL`
+  terminale e M8 `COMPLETE`.
+- Code Analyzer sugli otto file MATLAB M9 nuovi o modificati: 0 messaggi.
+- `git diff --check`: PASS.
+- Ripristinati al contenuto versionato gli artifact storici M2–M8 riscritti
+  dalla rigenerazione, preservando soltanto dataset e figure M9 nuovi.
+
+### Distinzione dei gate
+
+- software/test: **PASS**;
+- Nominal Stability: **PASS**;
+- weighted nominal objective: **FAIL**;
+- tracking e cross-coupling: **FAIL**;
+- stato complessivo M9: **PARTIAL**.
