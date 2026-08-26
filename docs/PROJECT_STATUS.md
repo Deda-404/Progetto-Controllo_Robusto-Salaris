@@ -9,7 +9,8 @@
 **Next task:** revisione tecnica M16; M17 non è iniziata e richiede autorizzazione separata
 **Pull Request baseline:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) `merged` al commit `c51142e624adea610e72d16ddfd764008cb65371`
 **Pull Request M15:** [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20) `MERGED` al commit `8e1c8437c786a252a380ce6b4452d32bebf9c2c6`
-**Last update:** 2026-08-26, M16 completata sul percorso A senza retuning
+**Pull Request corrente:** [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21) `OPEN` da `codex/m16-monte-carlo-m4` verso `main`, non draft e non mergiata
+**Last update:** 2026-08-26, M16 pubblicata per revisione tecnica sul percorso A senza retuning
 
 ## Quality gate M16 — COMPLETE
 

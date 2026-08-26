@@ -2127,3 +2127,27 @@ M6/Khinf/Kmu e prestazioni sono correttamente `QUANTIFIED`.
 
 **M16 COMPLETE e pronta per pubblicazione in PR senza merge autonomo.** M17
 non è stata iniziata.
+
+---
+
+## 2026-08-26 — Pubblicazione M16
+
+**Responsabile:** Alessio
+**Milestone:** M16
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `fb41f7710cd7ce82d8f878214b75fcd5b1ba7326`.
+- Pubblicato `codex/m16-monte-carlo-m4` su `origin`.
+- Aperta la [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21)
+  verso `main`, non draft, aperta e non mergiata.
+- Creato l'handoff autosufficiente `Resoconto_M16_per_GPT.txt` con sezioni
+  A–U, risultati, test, limiti e riferimenti Git reali.
+
+### Risultato
+
+**M16 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** La
+Monte Carlo resta evidenza empirica lineare e non sostituisce la
+certificazione mu M14. M17 non è stata iniziata.

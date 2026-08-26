@@ -142,8 +142,8 @@ congelato di 4 s e resta incluso nelle statistiche/pass rate.
 | Controller | Ts median [s] | OS median [%] | Errore median [%] | Cross median [%] | Peak U median [N m] |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | M6 | 0.846 | 1.519 | 1.797 | 20.825 | 4.6897 |
-| Khinf | 2.082 | 273.16 | 48.991 | 40.919 | 5.1599 |
-| Kmu | 1.927 | 239.88 | 50.363 | 36.275 | 5.1615 |
+| Khinf | 2.105 | 273.16 | 48.991 | 40.919 | 5.1599 |
+| Kmu | 1.968 | 239.88 | 50.363 | 36.275 | 5.1615 |
 
 Pass rate per campione, con entrambi i giunti conformi:
 
