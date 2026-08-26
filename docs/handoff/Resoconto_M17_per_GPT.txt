@@ -1,0 +1,336 @@
+RESOCONTO M17 PER GPT
+CONTROLLO ROBUSTO — TRACCIA 2, MANIPOLATORE PLANARE 2-DOF CON SEA
+Responsabile: Alessio
+Data: 2026-08-27
+Stato: M17 COMPLETE; PR aperta, non mergiata
+
+======================================================================
+A. GIT
+======================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m17-final-comparison
+Baseline main: 392ad170dc6665c87b769e314edb8380a4b1c8bc
+Commit tecnico/documentale M17:
+b80af4230ea4a1337cd8ad164cc984b986b4bd76
+PR: #22
+URL: https://github.com/Deda-404/Progetto_CR/pull/22
+Titolo: M17: final controller comparison and role-based selection
+Stato PR al momento dell'handoff: OPEN, non draft, non mergiata.
+Non eseguire merge autonomo: attendere revisione tecnica.
+
+======================================================================
+B. HOUSEKEEPING
+======================================================================
+
+PR #21 M16 verificata realmente MERGED su GitHub.
+Merge commit M16/main verificato:
+392ad170dc6665c87b769e314edb8380a4b1c8bc
+PROJECT_STATUS aggiornato: M16 COMPLETE, M17 milestone corrente COMPLETE,
+PR #22 OPEN.
+
+======================================================================
+C. SOURCES
+======================================================================
+
+M5  results/data/m5_performance_specs.mat
+M6  results/data/m6_lqg_no_integrator.mat
+M8  results/data/m8_lqg_nonlinear_ras.mat
+M10 results/data/m10_hinfsyn_nominal.mat
+M12 results/data/m12_mu_analysis_a5.mat
+M13 results/data/m13_musyn_dk.mat
+M14 results/data/m14_final_mu_analysis_kmu.mat
+M15 results/data/m15_nonlinear_robust_validation.mat
+M16 results/data/m16_monte_carlo_uncertain_linear.mat
+
+Artifact M17 prodotto:
+results/data/m17_final_controller_comparison.mat
+
+M17 carica esclusivamente gli artifact congelati. Non esegue nuova sintesi,
+tuning, Monte Carlo, usample, simulazione dinamica, Simulink, riduzione,
+prefilter, revisione M4/M5, score globale o attività M18.
+
+======================================================================
+D. CONTROLLER AUDIT
+======================================================================
+
+Controller | Order | Inputs | Outputs | Role
+M6 Klqg    | 14    | 6      | 2       | NOMINAL PERFORMANCE REFERENCE
+Khinf M10  | 18    | 2      | 2       | H-INFINITY REFERENCE / COMPARATOR
+Kmu M13    | 52    | 2      | 2       | FINAL ROBUST CONTROLLER
+
+M6 inputs: r1,r2,q1,q2,theta1,theta2.
+Khinf/Kmu inputs: e1,e2 = r-q.
+Le matrici M6/M8/M16, M10/M15/M16 e M13/M14/M15/M16 coincidono.
+Tutti gli ordini attesi e i gate di identità sono PASS.
+
+======================================================================
+E. NOMINAL LINEAR
+======================================================================
+
+Controller | NS | max Re | worst Ts | worst OS | worst error | weighted
+M6    | PASS | -5.5051  | 0.776 s | 0.26545% | 1.6221e-14 | N/A
+Khinf | PASS | -0.68383 | 1.566 s | 261.62%  | 0.49068    | FAIL 10.2071034
+Kmu   | PASS | -0.73199 | N/A M13 | N/A      | N/A        | FAIL 10.3917315
+
+Il tracking temporale Kmu non viene inventato dentro la classe M13: il
+confronto disponibile è riportato separatamente nella classe nominale non
+lineare M15.
+
+======================================================================
+F. NOMINAL NONLINEAR
+======================================================================
+
+M6 usa M8; Khinf/Kmu usano M15.
+
+Controller | tracking | worst Ts | worst OS | worst err rel | worst cross
+M6    | PASS | 0.77696 s | 0.24099% | 0.0044128 | 0.17409 PASS
+Khinf | FAIL | 1.7322 s  | 261.35%  | 0.49068   | 0.25913 FAIL
+Kmu   | FAIL | 1.7346 s  | 228.36%  | 0.50442   | 0.23944 PASS diagnostico
+
+Questi sono risultati nominali non lineari, non Monte Carlo e non garanzie
+robuste.
+
+======================================================================
+G. MONTE CARLO M16
+======================================================================
+
+Seed 20260826, twister, 40 campioni comuni M4; nessun nuovo campione M17.
+
+Controller | stable | unstable sample | core tracking pass rate total
+M6    | 39/40 | 5    | 0.30
+Khinf | 40/40 | none | 0
+Kmu   | 40/40 | none | 0
+
+Sample 5 M6 conserva due poli RHP, max Re +1.80447 s^-1.
+Mediane worst tracking (Ts, errore rel, cross, peak U):
+M6    = (0.846 s, 0.017972, 0.20825, 4.6897 N m)
+Khinf = (2.105 s, 0.48991, 0.40919, 5.1599 N m)
+Kmu   = (1.968 s, 0.50363, 0.36275, 5.1615 N m)
+
+M16 è evidenza empirica lineare e non una certificazione o una probabilità
+fisica. Kmu 40/40 è coerente con M14, non sostituisce M14.
+
+======================================================================
+H. FORMAL ROBUSTNESS
+======================================================================
+
+Controller | Formal RS | margin RS | NP | Formal RP
+M6    | N/A            | N/A                         | N/A  | N/A
+Khinf | N/A            | N/A                         | N/A  | N/A
+Kmu   | PASS_CERTIFIED | [1.25003698645,1.25257264120] | FAIL | FAIL_CERTIFIED
+
+Kmu RP margin = [0,0]. Non dichiarare robust performance compliance.
+M12 riguarda A5 M11: RS FAIL_CERTIFIED
+[0.875899252687,0.882789198079], RP FAIL_CERTIFIED. Non attribuire questi
+risultati a Khinf M10. A5 non è candidato primario M17.
+
+======================================================================
+I. RAS
+======================================================================
+
+Controller | rmin deg | rmax deg | area deg2 | classification
+M6    | 60      | 78.3244 | 14214 | SEARCH-BOX LIMITED
+Khinf | 52.8763 | 78.3244 | 12721 | EMPIRICAL BOUNDARY LOCATED
+Kmu   | 60      | 78.3244 | 14214 | SEARCH-BOX LIMITED
+
+Agreement LTI/NL M15:
+Khinf rmin 4 deg, area 99.522 deg2.
+Kmu rmin 4.75 deg, area 111.721 deg2.
+
+Tutte le RAS sono empiriche e non certificate analiticamente. Per M6/Kmu,
+60 deg è il limite del box e non una frontiera dinamica.
+
+======================================================================
+J. TRACKING
+======================================================================
+
+Matrice M5 nominale non lineare:
+
+Controller | Tracking | OS | Error | Cross | Weighted Performance
+M6    | PASS | PASS | PASS | PASS | N/A
+Khinf | FAIL | FAIL | FAIL | FAIL | FAIL
+Kmu   | FAIL | FAIL | FAIL | PASS | FAIL
+
+Nessun robust controller soddisfa M5. Nessun controller è dichiarato
+conforme a tutte le specifiche disponibili.
+
+======================================================================
+K. DISTURBANCE / CROSS-COUPLING
+======================================================================
+
+Worst nominal nonlinear disturbance over 0.25/0.5/1 N m:
+
+Controller | peak q rad | offset rad | cross ratio | peak U N m
+M6    | 0.31850 | 0.31849 | 0.46506 | 2.5979
+Khinf | 0.86163 | 0.19868 | 1.6011  | 3.3466
+Kmu   | 0.84182 | 0.24657 | 1.4511  | 3.0672
+
+Il disturbo è QUANTIFIED, non promosso a PASS senza un target finale.
+
+======================================================================
+L. CONTROL EFFORT
+======================================================================
+
+Controller | peak tracking linear | peak tracking NL | MC median tracking
+M6    | 4.6897 N m | 7.5034 N m | 4.6897 N m
+Khinf | 8.2558 N m | 8.2558 N m | 5.1599 N m
+Kmu   | N/A        | 8.2599 N m | 5.1615 N m
+
+uScale=12 N m è solo normalizzazione prestazionale. Nessun limite hardware
+o modello di saturazione è certificato; non dichiarare saturation PASS.
+
+======================================================================
+M. COMPLEXITY
+======================================================================
+
+Controller | Type | Order | Robust certificate | Note
+M6    | LQG observer-based | 14 | N/A | no integral states
+Khinf | H-infinity full-order | 18 | N/A | methodological comparator
+Kmu   | D-K/mu-synthesis full-order | 52 | RS M14 | no reduction authorized
+
+Non sono stati inventati costi hardware o tempi CPU. Una futura riduzione
+Kmu richiede autorizzazione e rivalidazione completa.
+
+======================================================================
+N. MASTER COMPARISON TABLE
+======================================================================
+
+M6: NS PASS; NL tracking PASS; RAS search-box limited; MC 39/40; MC core
+tracking 0.30; formal RS/RP N/A; strength = tracking nominale; weakness =
+Sample 5 instabile; final role = NOMINAL PERFORMANCE REFERENCE.
+
+Khinf: NS PASS; NL tracking FAIL; RAS boundary interno; MC 40/40; MC core
+tracking 0; formal RS/RP N/A; strength = baseline H-infinity; weakness =
+tracking/weighted FAIL; final role = H-INFINITY REFERENCE / COMPARATOR.
+
+Kmu: NS PASS; NL tracking FAIL; RAS search-box limited; MC 40/40; MC core
+tracking 0; RS PASS_CERTIFIED; RP FAIL_CERTIFIED; strength = unica RS
+certificata; weakness = tracking/NP/RP FAIL e ordine 52; final role = FINAL
+ROBUST CONTROLLER.
+
+La tabella completa è nell'artifact M17 e in
+docs/FINAL_CONTROLLER_COMPARISON.md. Nessuno score globale è presente.
+
+======================================================================
+O. STRENGTHS / WEAKNESSES
+======================================================================
+
+M6 strength: migliori prestazioni nominali di tracking e target M8 PASS.
+M6 weakness: Sample 5 M16 instabile, RS/RP N/A.
+
+Khinf strength: comparatore H-infinity full-order, 40/40 stabile M16.
+Khinf weakness: tracking nominale non lineare e weighted performance FAIL.
+
+Kmu strength: unica RS M14 PASS_CERTIFIED, coerente con 40/40 M16.
+Kmu weakness: tracking, NP e RP FAIL; ordine 52.
+
+======================================================================
+P. FINAL ROLE SELECTION
+======================================================================
+
+Regola: HIERARCHICAL_ROLE_BASED_NO_GLOBAL_SCORE.
+
+1. FINAL ROBUST CONTROLLER = Kmu.
+   Motivo: unica RS formale M4 e nessuna contraddizione nei campioni M16.
+2. NOMINAL PERFORMANCE REFERENCE = M6 Klqg.
+   Motivo: unico candidato con tutti i criteri tracking nominali PASS.
+3. H-INFINITY REFERENCE / COMPARATOR = Khinf.
+   Motivo: unica architettura H-infinity full-order congelata.
+
+Non significa che Kmu soddisfi M5/RP, che M6 sia robustamente stabile o che
+un controller domini gli altri.
+
+======================================================================
+Q. DECISION LOG
+======================================================================
+
+D-0044 registrata in docs/DECISION_LOG.md.
+Decisione: selezione gerarchica per ruolo con conservazione esplicita di
+tutti i risultati negativi; nessuna riduzione o nuova sintesi autorizzata.
+
+======================================================================
+R. TEST
+======================================================================
+
+Suite dedicata M17 T01-T42: 42/42 PASS.
+Regressione M16-M17: 111/111 PASS.
+Suite completa standalone: 589/589 PASS.
+run_all M0-M17: 589/589 PASS, exit code 0.
+M13 nel run_all: artifact congelato ricaricato, nessuna nuova musyn.
+MATLAB Code Analyzer: zero messaggi sui file M17, test e run_all.m.
+git diff --check: PASS.
+Post-ripristino artifact storici: M17 42/42 PASS.
+
+======================================================================
+S. QUALITY GATE
+======================================================================
+
+Baseline/Git: PASS
+Frozen evidence: PASS
+Controller identity: PASS
+Evidence separation: PASS
+Nominal comparison: PASS
+Nonlinear comparison: PASS
+Monte Carlo comparison: PASS
+Formal robustness comparison: PASS
+RAS comparison: PASS
+Control effort: PASS
+Complexity: PASS
+Decision methodology: PASS
+Final role selection: PASS
+Software correctness: PASS
+Overall: COMPLETE
+
+======================================================================
+T. OVERALL STATUS
+======================================================================
+
+M17 COMPLETE. PR #22 OPEN e non mergiata. Il branch è pronto per revisione
+tecnica. M18 non è iniziata.
+
+======================================================================
+U. LIMITS
+======================================================================
+
+- Nessun candidato soddisfa tutte le specifiche M5.
+- Kmu ha RS certificata ma NP/RP e tracking falliti.
+- M6/Khinf non hanno una certificazione RS equivalente sul medesimo M4.
+- M16 è empirica lineare, non certificazione né probabilità fisica.
+- M8/M15 sono nominali non lineari, non campionano M4.
+- RAS e regioni di accordo sono empiriche; il box non è una frontiera.
+- uScale non è un limite hardware.
+- Nessuna riduzione, retuning, nuova sintesi, nuova MC o M18 è autorizzata.
+
+======================================================================
+V. M18 INPUT
+======================================================================
+
+Portare esattamente nella relazione finale:
+
+1. tabella master M17 completa con ruoli, strengths e weaknesses;
+2. tabella audit controller 14/18/52 e segnali di misura;
+3. matrice M5 PASS/FAIL/N/A senza reinterpretare QUANTIFIED;
+4. tabella stabilità nominale / MC / formal RS-RP;
+5. margine RS Kmu [1.25003698645,1.25257264120] e RP [0,0];
+6. nota M12 A5 distinta da Khinf M10;
+7. M16 39/40,40/40,40/40 e Sample 5 M6 max Re +1.80447;
+8. tracking M8/M15 e core pass rate M16 0.30/0/0 separati;
+9. disturbo, cross-coupling e comando con caveat uScale;
+10. RAS M6/Khinf/Kmu, classificazioni e regioni di accordo M15;
+11. complessità ordine 14/18/52 e divieto di riduzione non validata;
+12. decisione D-0044 e assenza di vincitore assoluto;
+13. artifact results/data/m17_final_controller_comparison.mat;
+14. le sette figure:
+    - m17_stability_evidence_summary.png
+    - m17_nominal_nonlinear_tracking.png
+    - m17_m16_stability_tracking.png
+    - m17_ras_comparison.png
+    - m17_control_effort_comparison.png
+    - m17_controller_complexity.png
+    - m17_final_tradeoff_summary.png
+15. limiti epistemici: M14 formale, M16 empirica lineare, M8/M15 nominali
+    non lineari; nessuna media fra le classi.
+
+Non cambiare numeri, controller, M4/M5 o ruoli senza una nuova decisione
+tracciata e relativa rivalidazione.

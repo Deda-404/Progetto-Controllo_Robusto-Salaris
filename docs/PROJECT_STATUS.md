@@ -10,8 +10,8 @@
 **Open technical issue:** nessun controller soddisfa tutte le specifiche M5; M6 è instabile nel Sample 5, Khinf/Kmu falliscono tracking e Kmu fallisce RP
 **Next task:** revisione tecnica M17; M18 non è iniziata
 **Pull Request baseline:** [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21) `MERGED` al commit `392ad170dc6665c87b769e314edb8380a4b1c8bc`
-**Pull Request corrente:** da aprire da `codex/m17-final-comparison` verso `main`; non mergiare autonomamente
-**Last update:** 2026-08-27, M17 completata artifact-only senza retuning, nuova sintesi o nuove simulazioni
+**Pull Request corrente:** [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22) `OPEN`, non draft e non mergiata, da `codex/m17-final-comparison` verso `main`
+**Last update:** 2026-08-27, M17 pubblicata per revisione tecnica senza merge autonomo
 
 ## Quality gate M17 — COMPLETE
 

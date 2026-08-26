@@ -2222,3 +2222,27 @@ come certificazione.
 
 **M17 COMPLETE e riproducibile; pronta per pubblicazione in PR senza merge
 autonomo.**
+
+---
+
+## 2026-08-27 — Pubblicazione M17
+
+**Responsabile:** Alessio
+
+**Milestone:** M17
+
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `b80af4230ea4a1337cd8ad164cc984b986b4bd76`.
+- Pubblicato `codex/m17-final-comparison` su `origin`.
+- Aperta la [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22)
+  verso `main`, non draft, `OPEN` e non mergiata.
+- Preparato l'handoff autosufficiente `Resoconto_M17_per_GPT.txt` con
+  sezioni A–V, fonti, decisione, test, limiti e input esatti per M18.
+
+### Risultato
+
+**M17 COMPLETE pubblicata per revisione tecnica senza merge autonomo.**
