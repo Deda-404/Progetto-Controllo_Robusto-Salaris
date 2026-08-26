@@ -6,6 +6,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline M17 artifact-only per audit identità M6/Khinf/Kmu, separazione
+  delle quattro classi di evidenza, tabelle di stabilità/performance/RAS/
+  comando/complessità e selezione gerarchica per ruolo senza score globale.
+- Dataset `m17_final_controller_comparison.mat`, sette figure per la
+  relazione, documento `FINAL_CONTROLLER_COMPARISON.md` e suite class-based
+  M17 T01–T42.
+
 - Pipeline modulare M16 per una singola sequenza comune di 40 campioni M4,
   ricostruzione fisica a stato condiviso, chiusure M6/Khinf/Kmu, metriche
   temporali/frequenziali, statistiche, pass rate e confronti paired.
@@ -20,6 +27,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
   documento `NONLINEAR_VALIDATION_HINF_MU.md` e suite M15 T01–T60.
 
 ### Changed
+
+- Esteso `run_all.m` fino a M17: M17 carica gli artifact congelati e non
+  esegue nuova sintesi, tuning, Monte Carlo, Simulink o riduzione.
+- Registrata D-0044: Kmu final robust controller, M6 nominal performance
+  reference e Khinf H-infinity comparator; nessuna conformità globale M5 o
+  Robust Performance Kmu dichiarata.
 
 - Esteso `run_all.m` fino a M16 senza rilanciare `musyn`, ritunare M5,
   ridurre controllori o avviare M17; aggiornati status, checklist e README.

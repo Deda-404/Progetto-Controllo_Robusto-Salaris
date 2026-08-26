@@ -1894,3 +1894,70 @@ conservato senza sostituzione.
 
 **APPROVATA DAL GRUPPO — M16 COMPLETE COME VALUTAZIONE EMPIRICA LINEARE,
 NESSUNA SELEZIONE FINALE DEL CONTROLLORE**
+
+---
+
+## D-0044 — Selezione finale gerarchica e per ruolo
+
+**Data:** 2026-08-27
+**Milestone:** M17
+
+### Problema
+
+Trasformare le evidenze congelate M6–M16 in una scelta finale trasparente
+senza inventare un controllore conforme a tutte le specifiche M5 e senza
+combinare certificazione μ, Monte Carlo, RAS, tracking e ordine in uno score
+arbitrario.
+
+### Alternative
+
+- imporre un vincitore assoluto mediante somma pesata di grandezze
+  semanticamente incompatibili;
+- scegliere una tecnica in base al nome senza verificare gli artifact;
+- riaprire sintesi, tuning o riduzione per nascondere gli esiti negativi;
+- applicare una gerarchia distinta per robustezza formale, prestazione
+  nominale e ruolo metodologico H∞.
+
+### Decisione e criterio
+
+Si adotta la quarta alternativa. Il ruolo **FINAL ROBUST CONTROLLER**
+richiede prima una certificazione RS sullo stesso insieme M4 e poi assenza di
+contraddizioni empiriche M16. Il ruolo **NOMINAL PERFORMANCE REFERENCE**
+richiede conformità del tracking M5 nominale non lineare e conserva come
+limite la stabilità Monte Carlo. Il ruolo **H-INFINITY REFERENCE** identifica
+l'architettura full-order H∞ congelata come comparatore metodologico.
+
+La regola, applicata agli artifact, assegna:
+
+- M13 `Kmu` a **FINAL ROBUST CONTROLLER**;
+- M6 `Klqg` a **NOMINAL PERFORMANCE REFERENCE**;
+- M10 `Khinf` a **H-INFINITY REFERENCE / COMPARATOR**.
+
+### Evidenze determinanti
+
+Kmu è l'unico candidato primario con RS M14 `PASS_CERTIFIED`, margine
+`[1.25003698645,1.25257264120]`, ed è stabile 40/40 nella campagna M16.
+Restano però NP `FAIL`, RP `FAIL_CERTIFIED`, tracking M15 `FAIL` e ordine 52.
+
+M6 è l'unico candidato che supera tracking, overshoot, errore e
+cross-coupling M5 nel nominale non lineare M8; nella campagna M16 è stabile
+39/40 e il Sample 5 instabile è preservato. Non gli è attribuita alcuna
+certificazione RS o RP.
+
+Khinf è stabile 40/40 in M16 ma fallisce tracking e weighted performance.
+M12 certifica A5 M11, non Khinf M10: perciò RS e RP del candidato Khinf
+restano N/A.
+
+### Conseguenze e limiti
+
+Nessun controller è dichiarato conforme a tutte le specifiche M5. La RS
+Kmu non viene promossa a Robust Performance; M16 resta evidenza empirica e
+le RAS restano stime non certificate. `uScale=12 N m` resta una
+normalizzazione e non una saturazione hardware. Nessuna riduzione di Kmu,
+nuova sintesi, retuning, revisione M4/M5 o attività M18 è autorizzata in
+M17.
+
+### Stato epistemico
+
+**APPROVATA DAI DATI M6–M16 — SELEZIONE PER RUOLO, NESSUN VINCITORE
+ASSOLUTO E NESSUNA CONFORMITÀ GLOBALE M5 DICHIARATA**

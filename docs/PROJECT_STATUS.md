@@ -1,16 +1,50 @@
 # Project Status
 
-**Current milestone:** M16 — Monte Carlo lineare sull'insieme incerto M4
-**Status:** `COMPLETE` — campagna comune 40/40 valida, software e gate metodologici `PASS`
-**Last validated milestone:** M16 `COMPLETE`; M15/M14 restano `PARTIAL` e M13 `COMPLETE` come sintesi
-**Last tracking-conforming controller:** M6 — LQG nominale senza integratore
+**Current milestone:** M17 — confronto finale e selezione motivata per ruolo
+**Status:** `COMPLETE` — evidenze congelate separate, identità e decisione gerarchica `PASS`
+**Last validated milestone:** M17 `COMPLETE`; M16/M13 restano `COMPLETE`, M15/M14 `PARTIAL`
+**Final robust controller:** M13 `Kmu` — RS M14 `PASS_CERTIFIED`, RP e tracking `FAIL`
+**Nominal performance reference:** M6 — LQG nominale senza integratore
+**H-infinity reference:** M10 `Khinf` — comparatore metodologico full-order
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Open technical issue:** M6 è instabile nel Sample 5 M4; Khinf/Kmu restano prestazionalmente non conformi a M5 pur essendo stabili 40/40
-**Next task:** revisione tecnica M16; M17 non è iniziata e richiede autorizzazione separata
-**Pull Request baseline:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) `merged` al commit `c51142e624adea610e72d16ddfd764008cb65371`
-**Pull Request M15:** [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20) `MERGED` al commit `8e1c8437c786a252a380ce6b4452d32bebf9c2c6`
-**Pull Request corrente:** [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21) `OPEN` da `codex/m16-monte-carlo-m4` verso `main`, non draft e non mergiata
-**Last update:** 2026-08-26, M16 pubblicata per revisione tecnica sul percorso A senza retuning
+**Open technical issue:** nessun controller soddisfa tutte le specifiche M5; M6 è instabile nel Sample 5, Khinf/Kmu falliscono tracking e Kmu fallisce RP
+**Next task:** revisione tecnica M17; M18 non è iniziata
+**Pull Request baseline:** [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21) `MERGED` al commit `392ad170dc6665c87b769e314edb8380a4b1c8bc`
+**Pull Request corrente:** da aprire da `codex/m17-final-comparison` verso `main`; non mergiare autonomamente
+**Last update:** 2026-08-27, M17 completata artifact-only senza retuning, nuova sintesi o nuove simulazioni
+
+## Quality gate M17 — COMPLETE
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #21 mergiata al commit `392ad170dc6665c87b769e314edb8380a4b1c8bc` |
+| evidenze congelate | PASS — artifact M5/M6/M8/M10/M12/M13/M14/M15/M16 caricati |
+| identità controller | PASS — M6/Khinf/Kmu identici, ordini 14/18/52 |
+| separazione epistemica | PASS — nominale lineare, nominale non lineare, MC M16 e robustezza formale non aggregate |
+| nominale | PASS confronto — M6 tracking conforme; Khinf/Kmu non conformi |
+| Monte Carlo | PASS confronto — M6 39/40, Khinf/Kmu 40/40; Sample 5 preservato |
+| robustezza formale | PASS confronto — RS Kmu `PASS_CERTIFIED`, RP `FAIL_CERTIFIED`; M6/Khinf N/A |
+| RAS | PASS confronto — tutte empiriche; M6/Kmu search-box limited |
+| comando | PASS confronto — `uScale=12 N m` solo normalizzazione, nessuna saturazione dichiarata |
+| complessità | PASS — ordini e segnali documentati, nessuna riduzione |
+| metodologia | PASS — decisione gerarchica per ruolo, nessuno score globale |
+| ruoli | Kmu final robust; M6 nominal performance reference; Khinf H∞ comparator |
+| artifact / figure | PASS — dataset M17 e sette figure |
+| test M17 | PASS — 42/42 dopo aggiornamento documentale |
+| regressione M16–M17 | PASS — 111/111 |
+| suite completa | PASS — 589/589 |
+| `run_all` M0–M17 | PASS — 589/589, exit code 0; M13 ricaricata senza nuova `musyn` |
+| Code Analyzer | PASS — zero messaggi sui file M17, test e `run_all.m` |
+| `git diff --check` | PASS |
+| nuova sintesi/tuning/MC/Simulink/M18 | NOT RUN corretto |
+| software | **PASS** |
+| stato | **COMPLETE — decisione tracciabile anche con risultati negativi** |
+
+M17 non promuove Kmu a robust performance compliant, non attribuisce una
+certificazione RS a M6/Khinf e non interpreta M16 come certificazione. La
+motivazione completa è in `docs/FINAL_CONTROLLER_COMPARISON.md`.
+
+**Responsabile:** Alessio
 
 ## Quality gate M16 — COMPLETE
 

@@ -188,13 +188,20 @@ conformità ai target. Kmu 40/40 è coerente con la RS M14, ma la Monte Carlo
 non è una certificazione e non fornisce probabilità fisiche. Il confronto è
 paired e privo di score globale; la selezione finale resta fuori da M16.
 
+M17 completa il confronto finale senza nuove simulazioni. Le quattro classi
+di evidenza restano separate e la regola gerarchica assegna Kmu a final
+robust controller per la RS M14 certificata e coerente con M16, M6 a nominal
+performance reference per il tracking M8 e Khinf a H-infinity comparator.
+Nessun controllore è dichiarato conforme a tutte le specifiche M5; RP Kmu,
+Sample 5 M6 e assenza di certificazione RS M6/Khinf restano limiti espliciti.
+
 ## Deliverable finali
 
-- [ ] `run_all.m` rigenera deterministicamente tutti i risultati finali.
-- [ ] Parametri e specifiche hanno un'unica sorgente.
-- [ ] Test automatici completi e tutti gli esiti documentati.
-- [ ] Dati, figure e tabelle generati automaticamente.
+- [x] `run_all.m` rigenera deterministicamente tutti i risultati finali.
+- [x] Parametri e specifiche hanno un'unica sorgente.
+- [x] Test automatici completi e tutti gli esiti documentati.
+- [x] Dati, figure e tabelle generati automaticamente.
 - [ ] Relazione dettagliata sincronizzata col codice.
-- [ ] Controllori finali salvati e identificati senza ambiguità.
+- [x] Controllori finali salvati e identificati senza ambiguità.
 - [ ] Codice MATLAB e modelli Simulink consegnabili.
 - [ ] Presentazione basata sulla relazione e contenuta in 20 minuti.
