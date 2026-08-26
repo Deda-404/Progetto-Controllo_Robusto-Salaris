@@ -52,18 +52,19 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M16,
-ricostruisce gli artifact precedenti e completa la Monte Carlo lineare M16.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M17,
+ricostruisce gli artifact precedenti e completa il confronto artifact-only M17.
 I risultati negativi M9–M12, M14 e M15 sono conservati senza ritunare M5;
 M7 resta `PARTIAL` terminale. La sintesi M13 non viene rilanciata
 automaticamente: il raw output autorizzato è congelato. M14 resta la fonte
-della certificazione mu, M15 la validazione non lineare nominale e M16
-l'evidenza empirica sui campioni lineari M4.
+della certificazione mu, M15 la validazione non lineare nominale, M16
+l'evidenza empirica sui campioni lineari M4 e M17 la decisione per ruolo.
 
 ## Stato corrente
 
-- Milestone corrente: **M16 — Monte Carlo lineare M4, COMPLETE**; M15/M14
-  restano `PARTIAL` e M13 `COMPLETE` come sintesi D–K.
+- Milestone corrente: **M17 — confronto finale dei controllori, COMPLETE**;
+  M16/M13 restano `COMPLETE`, mentre M15/M14 restano `PARTIAL` per i
+  risultati prestazionali negativi documentati.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -99,7 +100,14 @@ l'evidenza empirica sui campioni lineari M4.
   max Re `+1.80447`. I core tracking pass rate sono `30%/0%/0%`; Kmu 40/40
   è coerente con la RS certificata M14, ma la Monte Carlo non è un
   certificato né una probabilità fisica. Nessun retuning o score globale.
+- Risultato M17: identità e ordini M6/Khinf/Kmu `14/18/52` verificati,
+  evidenze nominali/non lineari/Monte Carlo/formali mantenute separate e
+  nessuno score globale. La selezione finale è `Kmu` come final robust
+  controller, M6 come nominal performance reference e `Khinf` come
+  H-infinity reference/comparator. Kmu conserva tracking, NP e RP falliti;
+  M6 conserva il Sample 5 instabile e M6/Khinf restano senza certificato RS.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`,
+`docs/FINAL_CONTROLLER_COMPARISON.md`,
 `docs/MONTE_CARLO_UNCERTAIN_PLANTS.md`, `docs/ROADMAP.md` e
 `docs/REQUIREMENTS_CHECKLIST.md`.

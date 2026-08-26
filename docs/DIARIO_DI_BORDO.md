@@ -2151,3 +2151,98 @@ non è stata iniziata.
 **M16 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** La
 Monte Carlo resta evidenza empirica lineare e non sostituisce la
 certificazione mu M14. M17 non è stata iniziata.
+
+---
+
+## 2026-08-27 — Confronto finale artifact-only M17
+
+**Responsabile:** Alessio
+
+**Milestone:** M17
+
+**Tipo:** Analisi / Decisione / Artifact / Figure
+
+### Attività svolta
+
+- Verificata su GitHub la PR #21 `MERGED` e sincronizzato `main` al commit
+  `392ad170dc6665c87b769e314edb8380a4b1c8bc`; creato il branch
+  `codex/m17-final-comparison` da working tree pulita.
+- Caricati senza rigenerazione gli artifact M5/M6/M8/M10/M12/M13/M14/M15/
+  M16 e verificata l'identità dei controllori M6, Khinf e Kmu fra tutte le
+  milestone che li riusano. Gli ordini risultano 14/18/52.
+- Costruiti confronti separati per nominale lineare, nominale non lineare,
+  Monte Carlo lineare incerta e robustezza formale. A5 M12 è conservato come
+  evidenza storica e non confuso con Khinf M10.
+- Prodotti tabella master, matrice M5, confronti di stabilità, RAS, comando e
+  complessità, strengths/weaknesses e sette figure tracciabili.
+- Salvato `m17_final_controller_comparison.mat`; nessuna sintesi, tuning,
+  nuova sequenza `usample`, simulazione dinamica, Simulink, riduzione,
+  prefilter, score globale o M18 è stata eseguita.
+
+### Decisione
+
+La regola gerarchica derivata dagli artifact assegna Kmu al ruolo **FINAL
+ROBUST CONTROLLER**, M6 al ruolo **NOMINAL PERFORMANCE REFERENCE** e Khinf
+al ruolo **H-INFINITY REFERENCE / COMPARATOR**. La motivazione non cancella
+gli esiti negativi: Kmu fallisce tracking, NP e RP; M6 conserva il Sample 5
+instabile; Khinf fallisce tracking e weighted performance.
+
+### Stato
+
+M17 è `COMPLETE` come confronto e decisione. Nessun controller è dichiarato
+conforme a tutte le specifiche M5 e la Monte Carlo M16 non è interpretata
+come certificazione.
+
+---
+
+## 2026-08-27 — Verifica integrale M17
+
+**Responsabile:** Alessio
+
+**Milestone:** M17
+
+**Tipo:** Test / Riproducibilità / Qualità
+
+### Risultati
+
+- Suite class-based M17 T01–T42: **42/42 PASS**.
+- Regressione aggregata M16–M17: **111/111 PASS**.
+- Suite completa standalone: **589/589 PASS**.
+- `run_all` reale M0–M17: **589/589 PASS**, exit code 0. M13 è stato
+  ricaricato dall'artifact senza nuova `musyn`; M17 ha caricato gli artifact
+  M6–M16 senza nuova sintesi, campionamento o Simulink.
+- MATLAB Code Analyzer: **zero messaggi** sui cinque moduli M17, parametri,
+  suite dedicata e `run_all.m`.
+- Gli artifact/figure M2–M16 e i modelli Simulink riscritti deterministicamente
+  da `run_all` sono stati ripristinati perché fuori scope. Un rerun M17 dopo
+  il ripristino ha superato nuovamente **42/42**.
+- `git diff --check`: **PASS**.
+
+### Stato
+
+**M17 COMPLETE e riproducibile; pronta per pubblicazione in PR senza merge
+autonomo.**
+
+---
+
+## 2026-08-27 — Pubblicazione M17
+
+**Responsabile:** Alessio
+
+**Milestone:** M17
+
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `b80af4230ea4a1337cd8ad164cc984b986b4bd76`.
+- Pubblicato `codex/m17-final-comparison` su `origin`.
+- Aperta la [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22)
+  verso `main`, non draft, `OPEN` e non mergiata.
+- Preparato l'handoff autosufficiente `Resoconto_M17_per_GPT.txt` con
+  sezioni A–V, fonti, decisione, test, limiti e input esatti per M18.
+
+### Risultato
+
+**M17 COMPLETE pubblicata per revisione tecnica senza merge autonomo.**
