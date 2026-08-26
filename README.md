@@ -52,17 +52,18 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M15,
-ricostruisce gli artifact precedenti e valida Khinf/Kmu sul modello non
-lineare nominale. I risultati negativi M9–M12, M14 e M15 sono conservati come
-`PARTIAL` senza ritunare M5; M7 resta `PARTIAL` terminale. La sintesi M13 non
-viene rilanciata automaticamente: il raw output autorizzato è congelato,
-M14 ripete l'analisi senza nuova sintesi e M15 non campiona l'incertezza M4.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M16,
+ricostruisce gli artifact precedenti e completa la Monte Carlo lineare M16.
+I risultati negativi M9–M12, M14 e M15 sono conservati senza ritunare M5;
+M7 resta `PARTIAL` terminale. La sintesi M13 non viene rilanciata
+automaticamente: il raw output autorizzato è congelato. M14 resta la fonte
+della certificazione mu, M15 la validazione non lineare nominale e M16
+l'evidenza empirica sui campioni lineari M4.
 
 ## Stato corrente
 
-- Milestone corrente: **M15 — validazione non lineare Khinf/Kmu, PARTIAL**;
-  M14 resta `PARTIAL` e M13 `COMPLETE` come sintesi D–K.
+- Milestone corrente: **M16 — Monte Carlo lineare M4, COMPLETE**; M15/M14
+  restano `PARTIAL` e M13 `COMPLETE` come sintesi D–K.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
   invariati; M7 resta `PARTIAL` e congelata.
 - Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
@@ -92,6 +93,13 @@ M14 ripete l'analisi senza nuova sintesi e M15 non campiona l'incertezza M4.
   Ts 1.7322/1.7346 s e OS 261.35/228.36% per Khinf/Kmu. La RAS Khinf ha
   raggio minimo 52.876° con boundary interno; Kmu raggiunge il box con raggio
   minimo 60°. Le regioni empiriche di accordo LTI/NL hanno raggio minimo
-  4°/4.75°. Software `PASS`, nessuna saturazione, incertezza o M16.
+  4°/4.75°. Software `PASS`, nessuna saturazione o incertezza non lineare.
+- Risultato M16: 40 campioni M4 comuni, seed `20260826`; stabilità
+  M6/Khinf/Kmu `39/40`, `40/40`, `40/40`. Il Sample 5 M6 ha due poli RHP e
+  max Re `+1.80447`. I core tracking pass rate sono `30%/0%/0%`; Kmu 40/40
+  è coerente con la RS certificata M14, ma la Monte Carlo non è un
+  certificato né una probabilità fisica. Nessun retuning o score globale.
 
-Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`, `docs/ROADMAP.md` e `docs/REQUIREMENTS_CHECKLIST.md`.
+Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`,
+`docs/MONTE_CARLO_UNCERTAIN_PLANTS.md`, `docs/ROADMAP.md` e
+`docs/REQUIREMENTS_CHECKLIST.md`.

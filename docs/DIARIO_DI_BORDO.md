@@ -2010,3 +2010,144 @@ Resta da pubblicare la PR dedicata. Non è stata iniziata M16.
 **M15 PARTIAL pubblicata per revisione tecnica senza merge autonomo.** Kmu
 resta RS `PASS_CERTIFIED` soltanto sul modello lineare incerto M4; M16 non è
 stata iniziata.
+
+---
+
+## 2026-08-26 — Avvio M16 e audit del percorso A
+
+**Responsabile:** Alessio
+**Milestone:** M16
+**Tipo:** Governance / Audit / Monte Carlo lineare
+
+### Attività svolta
+
+- Verificata PR #20 `MERGED` e baseline esatta
+  `8e1c8437c786a252a380ce6b4452d32bebf9c2c6`; creato il branch
+  `codex/m16-monte-carlo-m4` senza lavorare su `main`.
+- Registrata la decisione D-0043: percorso A, M4/M5/M6/Khinf/Kmu congelati,
+  nessuna nuova sintesi, riduzione, retuning, saturazione, simulazione non
+  lineare incerta o M17.
+- Auditati gli artifact M4, M5, M6, M10, M13, M14 e M15. Confermati i cinque
+  blocchi `Jm1`, `k1`, `k2`, `Delta_act1`, `Delta_act2`; controller identici
+  agli artifact, di ordine 14, 18 e 52.
+- Congelati prima della campagna seed `20260826`, generatore `twister`, 40
+  campioni e griglie temporali M5. È stata usata una sola sequenza effettiva
+  `usample`; il secondo replay del seed è servito esclusivamente all'audit e
+  non è entrato nelle simulazioni.
+
+### Note tecniche
+
+- Due errori iniziali di preallocazione di struct sono avvenuti prima della
+  campagna effettiva e sono stati corretti senza produrre o sostituire
+  campioni.
+- Il primo gate nominale M6 ha evidenziato una distanza fra insiemi di poli
+  `8.3803e-7`, a fronte di mappe coincidenti a `2.0704e-12` assoluto e
+  `2.2899e-13` relativo. La tolleranza poli, distinta da quella delle mappe,
+  è stata motivatamente posta a `1e-5` per i modi ripetuti/condizionati M6;
+  nessun controller o modello è stato modificato.
+
+### Esito audit
+
+Baseline, incertezza congelata, controller congelati, replay e gate nominali
+M6/Khinf/Kmu sono `PASS`. Sample 0 riproduce 28/32/66 stati interni ed è
+escluso dalle statistiche Monte Carlo.
+
+---
+
+## 2026-08-26 — Campagna Monte Carlo M16
+
+**Responsabile:** Alessio
+**Milestone:** M16
+**Tipo:** Analisi / Artifact / Figure
+
+### Attività svolta
+
+- Generati una sola volta 40 campioni comuni M4 e conservati i
+  `sampledValues` raw, i valori `ureal`, le deviazioni percentuali e gli
+  oggetti LTI campionati `Delta_act1/2` con diagnostica di norma, ordine,
+  stabilità e finitezza.
+- Costruita per ogni sample una pianta fisica lineare a stato condiviso con
+  ingressi `[u1 u2 d1 d2]`, uscite `[q1 q2 theta1 theta2]` e disturbo lato
+  link. Gli errori massimi verso gli oggetti `usubs` sono `5.2736e-16`
+  assoluto, `4.5213e-15` relativo sulle misure e `2.8949e-12` relativo su q.
+- Valutati M6, Khinf e Kmu congelati sugli stessi SampleID: stabilità,
+  banda diagonale, tracking 5 deg, disturbo 0.50 N m, cross-coupling e
+  comando senza clipping.
+- Salvati dataset `m16_monte_carlo_uncertain_linear.mat`, nove figure e il
+  documento tecnico `MONTE_CARLO_UNCERTAIN_PLANTS.md`.
+
+### Risultati
+
+- Tutti i 40 campioni sono validi. Stabilità empirica: M6 `39/40`, Khinf
+  `40/40`, Kmu `40/40`. Il Sample 5 M6 ha due poli RHP e max Re
+  `+1.80447`; è conservato e non sostituito.
+- Mediane di banda diagonale `(BW1,BW2)` [rad/s]: M6 `(4.6729,10.376)`,
+  Khinf `(13.412,28.445)`, Kmu `(12.033,29.155)`.
+- Core tracking pass rate rispetto ai 40 sample: M6 `30%`, Khinf `0%`, Kmu
+  `0%`. I fallimenti prestazionali sono documentati come risultati, senza
+  retuning.
+- Kmu `40/40` è coerente con M14 RS `PASS_CERTIFIED`, margine
+  `[1.25003698645,1.25257264120]`; la Monte Carlo non è una certificazione
+  né una probabilità fisica.
+- Il confronto paired non produce score globale né seleziona un vincitore;
+  la decisione resta rinviata a M17.
+
+### Quality gate
+
+M16 è **COMPLETE**: campagna finita e riproducibile, validità, ricostruzione
+fisica, gate nominali, coerenza M14 e correttezza software `PASS`. Stabilità
+M6/Khinf/Kmu e prestazioni sono correttamente `QUANTIFIED`.
+
+---
+
+## 2026-08-26 — Verifica integrale M16
+
+**Responsabile:** Alessio
+**Milestone:** M16
+**Tipo:** Test / Riproducibilità / Qualità
+
+### Attività svolta
+
+- Suite class-based dedicata M16 T01–T69: **69/69 PASS**.
+- Regressione aggregata M14–M16: **185/185 PASS**. Il primo comando di
+  aggregazione non ha avviato test perché i `TestSuite` avevano orientamenti
+  incompatibili; corretto soltanto il comando di esecuzione con `a(:)`.
+- Suite completa standalone: **547/547 PASS**.
+- Eseguito realmente `run_all` M0–M16: **547/547 PASS**, tutte le
+  validazioni concluse ed exit code 0. M13 è stato ricaricato dall'artifact,
+  senza nuova `musyn`.
+- MATLAB Code Analyzer: zero messaggi sui file M16, sulla suite dedicata e
+  su `run_all.m`.
+- Il replay integrale ha riscritto deterministicamente artifact/figure
+  storici M2–M15 e i due modelli Simulink; tali modifiche binarie, estranee
+  allo scope congelato, sono state ripristinate. Restano nel diff soltanto
+  codice, documenti e artifact nuovi M16.
+
+### Stato
+
+**M16 COMPLETE e pronta per pubblicazione in PR senza merge autonomo.** M17
+non è stata iniziata.
+
+---
+
+## 2026-08-26 — Pubblicazione M16
+
+**Responsabile:** Alessio
+**Milestone:** M16
+**Tipo:** Git / Pull Request / Handoff
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `fb41f7710cd7ce82d8f878214b75fcd5b1ba7326`.
+- Pubblicato `codex/m16-monte-carlo-m4` su `origin`.
+- Aperta la [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21)
+  verso `main`, non draft, aperta e non mergiata.
+- Creato l'handoff autosufficiente `Resoconto_M16_per_GPT.txt` con sezioni
+  A–U, risultati, test, limiti e riferimenti Git reali.
+
+### Risultato
+
+**M16 COMPLETE pubblicata per revisione tecnica senza merge autonomo.** La
+Monte Carlo resta evidenza empirica lineare e non sostituisce la
+certificazione mu M14. M17 non è stata iniziata.

@@ -1839,3 +1839,58 @@ riduzione d'ordine.
 ### Stato epistemico
 
 **APPROVATA COME CORREZIONE DI REALIZZAZIONE NUMERICA — NESSUNA MODIFICA DEL PROBLEMA M15**
+
+---
+
+## D-0043 — Percorso A e campagna Monte Carlo M16 congelata
+
+**Data:** 2026-08-26
+**Milestone:** M16
+
+### Problema
+
+Dopo M14/M15 occorre decidere se modificare specifiche e sintesi oppure
+conservare i risultati negativi e completare la valutazione statistica
+richiesta dalla traccia sull'insieme incerto M4.
+
+### Alternative
+
+- riaprire M5 e ritunare pesi o controllori;
+- modificare M4 o aumentare i campioni dopo avere osservato i risultati;
+- mantenere congelati M4/M5 e i controllori, usando M16 come sola evidenza
+  empirica lineare comune.
+
+### Decisione
+
+Il gruppo approva il percorso A: M4, M5, M6 `Klqg`, M10 `Khinf` e M13
+`Kmu` restano congelati. M16 usa 40 campioni prodotti da una sola sequenza
+`usample` con seed `20260826` e generatore `twister`; gli stessi
+`sampledValues(i)` sono applicati ai tre controllori. Sample 0 è soltanto un
+benchmark nominale ed è escluso dalle statistiche.
+
+Non sono autorizzati sintesi, retuning, riduzione, saturazione, prefilter,
+2-DoF, modello non lineare incerto o M17 dentro M16. Il replay del seed è
+ammesso esclusivamente come audit e non alimenta le simulazioni.
+
+### Motivazione
+
+Il fallimento prestazionale M5 è già informazione progettuale verificata.
+Cambiare il problema dopo avere osservato M10–M15 romperebbe la
+tracciabilità. La campagna comune permette invece un confronto paired equo e
+riproducibile, preservando la distinzione fra certificazione mu M14,
+simulazione non lineare nominale M15 ed evidenza empirica lineare M16.
+
+### Conseguenze e limiti
+
+M16 può essere `COMPLETE` anche in presenza di campioni instabili o target
+falliti, purché campagna, ricostruzioni e software siano corretti. Il Monte
+Carlo non costituisce una garanzia robusta né una stima di probabilità
+fisica. Un campione Kmu instabile avrebbe invece bloccato metodologicamente
+M16 per contraddizione con M14; la campagna eseguita risulta coerente, con
+Kmu stabile 40/40. M6 è stabile 39/40 e il Sample 5 instabile viene
+conservato senza sostituzione.
+
+### Stato epistemico
+
+**APPROVATA DAL GRUPPO — M16 COMPLETE COME VALUTAZIONE EMPIRICA LINEARE,
+NESSUNA SELEZIONE FINALE DEL CONTROLLORE**

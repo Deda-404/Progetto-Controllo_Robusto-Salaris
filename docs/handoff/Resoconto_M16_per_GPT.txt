@@ -1,0 +1,371 @@
+RESOCONTO M16 PER GPT
+Progetto di Controllo Robusto — Traccia 2, manipolatore SEA 2-DoF
+Data: 2026-08-26
+Responsabile: Alessio
+
+======================================================================
+A. GIT
+======================================================================
+
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/m16-monte-carlo-m4
+Baseline main: 8e1c8437c786a252a380ce6b4452d32bebf9c2c6
+Commit tecnico M16: fb41f7710cd7ce82d8f878214b75fcd5b1ba7326
+Commit di handoff/status: il commit che contiene questo documento.
+PR: https://github.com/Deda-404/Progetto_CR/pull/21
+Titolo PR: M16: Monte Carlo comparison on frozen M4 uncertainty
+Stato PR al momento dell'handoff: OPEN, non draft, non mergiata.
+Nessun merge autonomo è stato eseguito.
+
+======================================================================
+B. HOUSEKEEPING
+======================================================================
+
+La PR #20 è stata verificata come MERGED.
+Merge commit M15/main:
+8e1c8437c786a252a380ce6b4452d32bebf9c2c6
+
+PROJECT_STATUS è stato corretto: M15 resta PARTIAL validata; M16 è la
+milestone corrente ed è COMPLETE come valutazione Monte Carlo. Il gruppo ha
+approvato il percorso A, registrato in D-0043.
+
+======================================================================
+C. CAMPAIGN
+======================================================================
+
+Seed: 20260826
+Generatore: twister
+Numero campioni: 40
+API effettiva: un'unica chiamata usample su GuncMeas M4 con secondo output
+sampledValues; gli altri oggetti sono ricavati con usubs dai medesimi valori.
+
+Audit generazione:
+- effectiveCampaignCalls = 1;
+- auditReplayCalls = 1;
+- sameSequenceForAllControllers = true;
+- simulationUsesReplay = false;
+- replay maximumScalarError = 0;
+- replay maximumDynamicFrequencyError = 0;
+- replay tolerance = 1e-12.
+
+Il replay dopo reset del seed serve solo a verificare la riproducibilità e
+non alimenta le simulazioni. Sample 0 è il benchmark nominale ed è escluso
+dalle statistiche.
+
+======================================================================
+D. UNCERTAINTY
+======================================================================
+
+Artifact congelato: results/data/m4_uncertain_plant.mat
+Oggetti usati: GuncMeas, GuncQ, GmechUncMeas, GmechUncQ e metadata M4.
+
+Blocchi M4 verificati:
+- Jm1: nominale 0.01, range +/-9%;
+- k1: nominale 50, range +/-7%;
+- k2: nominale 40, range +/-7%;
+- Delta_act1: ultidyn indipendente, bound 1;
+- Delta_act2: ultidyn indipendente, bound 1.
+
+Esito validità: 40/40 campioni validi. Tutti i valori ureal sono nei range;
+i due Delta campionati sono stabili, finiti e rispettano il bound entro la
+tolleranza numerica. Sono salvati gli oggetti LTI completi e non una
+riduzione scalare. Nessun sample è stato scartato o sostituito.
+
+======================================================================
+E. SAMPLE RECONSTRUCTION
+======================================================================
+
+Gli attuatori sono ricavati da
+uncertainPlantInfo.GactuatorsUncertain usando Delta_act1/2 del sample.
+La meccanica è ricavata da GmechUncMeas/GmechUncQ con gli stessi Jm1/k1/k2.
+
+Per ogni sample è costruita una sola pianta fisica lineare a stato condiviso:
+- ingressi [u1 u2 d1 d2];
+- uscite [q1 q2 theta1 theta2];
+- u attraversa gli attuatori M4 campionati;
+- d entra come coppia lato link nella meccanica condivisa;
+- nessun minreal nel gate di stabilità.
+
+Massimi errori di equivalenza sulla griglia congelata:
+- u -> [q theta], assoluto: 5.2736e-16;
+- u -> [q theta], relativo: 4.5213e-15;
+- u -> q, assoluto: 5.2736e-16;
+- u -> q, relativo: 2.8949e-12.
+
+Physical sampled realization gate: PASS.
+
+======================================================================
+F. CONTROLLERS
+======================================================================
+
+M6:
+- source: results/data/m6_lqg_no_integrator.mat;
+- oggetto: Klqg;
+- dimensioni 2x6, ordine 14;
+- ingressi reali [r1 r2 q1 q2 theta1 theta2];
+- controller dinamico congelato, non trasformato in q-only.
+
+Khinf:
+- source: results/data/m10_hinfsyn_nominal.mat;
+- oggetto: Khinf;
+- dimensioni 2x2, ordine 18;
+- convenzione e = r-q.
+
+Kmu:
+- source: results/data/m13_musyn_dk.mat;
+- oggetto: Kmu, best iteration 3 congelata;
+- dimensioni 2x2, ordine 52;
+- convenzione e = r-q.
+
+Le matrici e le firme numeriche corrispondono agli artifact sorgente.
+Nessuna sintesi, riduzione o modifica dei controller è stata eseguita.
+
+======================================================================
+G. NOMINAL GATES
+======================================================================
+
+Sample 0 usa il nominale M4 con attuatori nominali minimi M3 e non entra
+nelle statistiche.
+
+Controller | map abs err | map rel err | pole-set distance | states | gate
+M6         | 2.0704e-12  | 2.2899e-13 | 8.3803e-7        | 28     | PASS
+Khinf      | 3.6909e-12  | 8.6130e-14 | 4.1234e-10       | 32     | PASS
+Kmu        | 3.2640e-11  | 6.5478e-13 | 1.3307e-10       | 66     | PASS
+
+La tolleranza separata 1e-5 sui poli M6 è motivata da modi ripetuti e
+numericamente condizionati; le mappe restano coincidenti alle tolleranze
+riportate. q/r, q/d, u/r, u/d e poli interni sono verificati.
+
+======================================================================
+H. STABILITY
+======================================================================
+
+Controller | Stable/40 | Rate  | WorstMaxRe [1/s] | MedianMaxRe [1/s]
+M6         | 39/40     | 0.975 | +1.80447         | -0.34308
+Khinf      | 40/40     | 1.000 | -0.0303583       | -0.32014
+Kmu        | 40/40     | 1.000 | -0.0304222       | -0.33125
+
+Percentili 5/95 di max-real-pole, includendo esplicitamente tutti i record
+di stabilità: M6 [-2.2636,-0.099720], Khinf [-0.51300,-0.14590],
+Kmu [-0.69247,-0.14584].
+
+Il Sample 5 M6 è UNSTABLE, ha 2 poli RHP e max Re +1.80447. Le metriche di
+performance del sample non sono considerate valide; il campione resta nel
+dataset e nel denominatore totale.
+
+======================================================================
+I. M14 CONSISTENCY
+======================================================================
+
+M14 Kmu: RS PASS_CERTIFIED, margin
+[1.25003698645, 1.25257264120].
+M16 Kmu: 40/40 campioni validi internamente stabili.
+Gate: PASS.
+
+Formulazione epistemica: il Monte Carlo M16 è coerente con la certificazione
+M14. Non dimostra la robust stability e non sostituisce robstab/mu. Per M6 e
+Khinf il certificato RS salvato è N/A.
+
+======================================================================
+J. BANDWIDTH
+======================================================================
+
+La metrica è DIAGONAL CLOSED-LOOP BANDWIDTH, calcolata separatamente con
+bandwidth(T11) e bandwidth(T22); non è una banda MIMO certificata.
+
+Controller | BW1 median [rad/s] | BW1 P05-P95 | BW2 median | BW2 P05-P95
+M6         | 4.6729             | 3.9867-5.8592 | 10.376  | 8.053-29.353
+Khinf      | 13.412             | 7.0634-20.242 | 28.445  | 23.581-31.237
+Kmu        | 12.033             | 7.1696-17.341 | 29.155  | 22.942-32.996
+
+Le bande sono finite per tutti i sample stabili. Il Sample 5 M6 ha NaN con
+reason NOT_ELIGIBLE_UNSTABLE.
+
+======================================================================
+K. TRACKING
+======================================================================
+
+Scenari: step 5 deg su joint 1 e joint 2, orizzonte 4 s, dt 0.002 s.
+Le righe seguenti usano il peggiore dei due joint per sample stabile.
+
+Controller | Ts med [s] | OS med [%] | err med [%] | cross med [%] | U med [Nm]
+M6         | 0.846      | 1.519      | 1.797       | 20.825        | 4.6897
+Khinf      | 2.105      | 273.16     | 48.991      | 40.919        | 5.1599
+Kmu        | 1.968      | 239.88     | 50.363      | 36.275        | 5.1615
+
+Ts può essere Inf quando il segnale non si assesta entro 4 s; tali casi
+restano nelle statistiche e falliscono il target, non sono eliminati.
+
+Pass rate total/stable con entrambi i giunti conformi:
+- M6: Ts 30.0%/30.77%; OS 97.5%/100%; errore 97.5%/100%;
+  core Ts+OS+errore 30.0%/30.77%; core+cross 25.0%/25.641%;
+- Khinf: Ts/OS/errore/core/core+cross 0%/0%;
+- Kmu: Ts/OS/errore/core/core+cross 0%/0%.
+
+I target M5 restano Ts <=0.8 s, OS <=10%, errore relativo <=5%; non sono
+stati modificati dopo i risultati.
+
+======================================================================
+L. DISTURBANCE
+======================================================================
+
+Scenari: 0.50 N m lato link su joint 1 e joint 2, orizzonte 8 s,
+dt 0.002 s. Non è introdotto un nuovo target M5: esito QUANTIFIED.
+
+Controller | peak q med [rad] | abs offset med [rad] | cross med [%] | U med [Nm]
+M6         | 0.16070          | 0.15907              | 47.813        | 1.3080
+Khinf      | 0.44270          | 0.099055             | 161.93        | 1.7871
+Kmu        | 0.42295          | 0.12293              | 146.62        | 1.6323
+
+P05-P95 del peak q: M6 0.15471-0.16625, Khinf 0.38686-0.54389,
+Kmu 0.38050-0.51881 rad.
+
+======================================================================
+M. CROSS-COUPLING
+======================================================================
+
+Tracking cross median: M6 20.825%, Khinf 40.919%, Kmu 36.275%.
+Pass rate tracking cross total/stable rispetto al limite diagnostico 25%:
+- M6: 82.5% / 84.615%;
+- Khinf: 10.0% / 10.0%;
+- Kmu: 17.5% / 17.5%.
+
+Disturbance cross median: M6 47.813%, Khinf 161.93%, Kmu 146.62%.
+Non è creato un target prestazionale nuovo per il disturbo.
+
+======================================================================
+N. CONTROL EFFORT
+======================================================================
+
+uScale = 12 N m è solo una normalizzazione; nessun saturation clipping e
+nessuna dichiarazione di actuator saturation PASS.
+
+Tracking peak U median/P95/max [N m] e median/uScale:
+- M6: 4.6897 / 4.6897 / 4.6897; 0.3908;
+- Khinf: 5.1599 / 5.1603 / 5.1604; 0.4300;
+- Kmu: 5.1615 / 5.1621 / 5.1621; 0.4301.
+
+Disturbance peak U median/P95/max [N m] e median/uScale:
+- M6: 1.3080 / 1.4858 / 1.5027; 0.1090;
+- Khinf: 1.7871 / 2.1748 / 2.1958; 0.1489;
+- Kmu: 1.6323 / 2.0053 / 2.0231; 0.1360.
+
+Gate: QUANTIFIED_NO_SATURATION.
+
+======================================================================
+O. PAIRED COMPARISON
+======================================================================
+
+I confronti usano SampleID identici e i soli sample stabili comuni. Non è
+creato alcuno score globale.
+
+Kmu - Khinf, 40 comuni:
+- max-real-pole: Kmu migliore 28, Khinf 12, delta mediano -6.1617e-5;
+- tracking Ts: Kmu migliore 22, Khinf 17, 1 tie;
+- steady error: Khinf migliore 40/40, delta mediano Kmu-Khinf +0.01380;
+- tracking cross: Kmu migliore 36/40, delta mediano -0.044814;
+- tracking peak U: Khinf migliore 40/40, delta mediano +0.0016627 N m;
+- disturbance peak q: Kmu migliore 38/40, delta mediano -0.019271 rad.
+
+Contro M6, su 39 sample stabili comuni, M6 è migliore in steady error,
+tracking peak U e disturbance peak q 39/39; è migliore nel tracking Ts in
+36/39 contro Kmu e 37/39 contro Khinf. Tuttavia M6 perde la stabilità nel
+Sample 5. Questi trade-off non determinano automaticamente un vincitore.
+
+======================================================================
+P. M15 CONTEXT
+======================================================================
+
+M15 è NOMINAL NONLINEAR; M16 è UNCERTAIN LINEAR M4 MONTE CARLO.
+L'artifact M15 è stato caricato solo come benchmark e Simulink non è stato
+rieseguito dalla pipeline M16.
+
+M15 nominale non lineare:
+- Khinf: worst tracking Ts 1.7322 s, OS 261.35%, errore 49.068%,
+  disturbance peak q 0.86163 rad, peak U 3.3466 N m;
+- Kmu: worst tracking Ts 1.7346 s, OS 228.36%, errore 50.442%,
+  disturbance peak q 0.84182 rad, peak U 3.0672 N m.
+
+I risultati M15 e M16 non sono aggregati né trattati come equivalenti.
+
+======================================================================
+Q. TEST
+======================================================================
+
+- Suite M16 T01-T69: 69/69 PASS.
+- Regressione aggregata M14-M16: 185/185 PASS.
+- Suite completa standalone: 547/547 PASS.
+- run_all M0-M16: 547/547 PASS, tutte le validazioni concluse, exit code 0.
+- MATLAB Code Analyzer: 0 messaggi sui file M16, test e run_all.m.
+- git diff --check: PASS.
+
+Nota di audit: il primo comando di aggregazione M14-M16 non avviò test per
+orientamenti incompatibili dei TestSuite; il comando fu corretto con a(:).
+Il replay run_all riscrisse deterministicamente artifact/figure storici e i
+due modelli Simulink; tali modifiche fuori scope sono state ripristinate.
+
+======================================================================
+R. QUALITY GATE
+======================================================================
+
+Baseline/Git: PASS
+Frozen uncertainty: PASS
+Frozen controllers: PASS
+Random campaign: PASS
+Sample validity: PASS
+Physical sampled realization: PASS
+Nominal reconstruction: PASS
+Kmu/M14 consistency: PASS
+Monte Carlo stability: QUANTIFIED
+Bandwidth: QUANTIFIED_DIAGONAL_CLOSED_LOOP
+Tracking: QUANTIFIED_WITH_EMPIRICAL_PASS_RATES
+Disturbance: QUANTIFIED
+Cross-coupling: QUANTIFIED
+Control effort: QUANTIFIED_NO_SATURATION
+Pairwise comparison: QUANTIFIED_NO_GLOBAL_SCORE
+Software correctness: PASS
+
+======================================================================
+S. OVERALL STATUS
+======================================================================
+
+M16 = COMPLETE.
+
+La campagna è finita, riproducibile e comune ai tre controller; tutti i
+campioni sono validi; le interconnessioni e i gate nominali sono corretti;
+Kmu non contraddice M14; tutte le metriche richieste sono state prodotte.
+L'instabilità M6 e i fallimenti tracking sono risultati di valutazione e non
+errori software. Nessun retuning è stato effettuato.
+
+======================================================================
+T. LIMITS
+======================================================================
+
+- I 40 campioni non identificano una distribuzione fisica e le frequenze
+  empiriche non sono probabilità di successo.
+- Non è stato costruito né simulato un modello non lineare incerto.
+- La Monte Carlo non produce un certificato robusto e non sostituisce M14.
+- Sample 0 non appartiene alle statistiche.
+- Nessun prefilter, 2-DoF, saturazione, weighted norm opzionale, riduzione o
+  score globale è stato introdotto.
+- M17 non è iniziata.
+
+======================================================================
+U. RECOMMENDATION
+======================================================================
+
+Portare in M17, senza selezionare automaticamente un vincitore:
+
+1. l'instabilità M6 nel Sample 5 a fronte del tracking empiricamente migliore
+   sui restanti sample stabili;
+2. la stabilità 40/40 di Khinf e Kmu e la sola certificazione RS M14 di Kmu;
+3. i fallimenti core tracking 0/40 di Khinf/Kmu con M5 congelata;
+4. il confronto paired Kmu/Khinf su cross-coupling, disturbo, errore e comando;
+5. la distinzione fra robustezza lineare M14, nominale non lineare M15 e
+   dispersione lineare incerta M16;
+6. l'assenza di un limite hardware certificato per trasformare il comando in
+   una verifica di saturazione.
+
+La selezione finale richiede una decisione esplicita M17 sui trade-off fra
+stabilità robusta certificata, prestazioni, complessità del controller e
+validità non lineare. Questo handoff non sceglie il controllore finale.

@@ -157,12 +157,12 @@ ogni rilassamento restano aperti.
 - [x] Validare \(H_\infty\) e \(\mu\)-synthesis sul modello non lineare.
 - [x] Definire criteri automatici e riproducibili per la RAS LQG M6.
 - [x] Esplorare due sezioni e un dominio di stati iniziali documentati per M6.
-- [ ] Impostare un seed Monte Carlo esplicito.
-- [ ] Campionare indicativamente almeno 10 impianti incerti.
-- [ ] Confrontare stabilità, tempo di assestamento, banda ed errore.
-- [ ] Confrontare disturbi, comando e cross-coupling.
-- [ ] Distinguere evidenza Monte Carlo e garanzia \(\mu\).
-- [ ] Confrontare LQG, \(H_\infty\) e \(\mu\)-synthesis.
+- [x] Impostare un seed Monte Carlo esplicito.
+- [x] Campionare indicativamente almeno 10 impianti incerti.
+- [x] Confrontare stabilità, tempo di assestamento, banda ed errore.
+- [x] Confrontare disturbi, comando e cross-coupling.
+- [x] Distinguere evidenza Monte Carlo e garanzia \(\mu\).
+- [x] Confrontare LQG, \(H_\infty\) e \(\mu\)-synthesis.
 - [x] Confrontare formalmente \(H_\infty\) e D–K in RS, RP e margini.
 
 M14 confronta l'A5 congelato M12 con Kmu: il margine RS passa da
@@ -177,6 +177,16 @@ interno con raggio minimo 52.876°, mentre Kmu raggiunge il box in tutte le
 direzioni; le regioni di accordo LTI/NL hanno raggio minimo 4° e 4.75°.
 Queste evidenze non campionano M4 e non trasferiscono la RS lineare M14 al
 modello non lineare.
+
+M16 usa seed `20260826`, generatore `twister` e una sola sequenza comune di
+40 campioni lineari M4 per M6, Khinf e Kmu. Tutti i campioni sono validi;
+M6 è stabile 39/40, mentre Khinf e Kmu sono stabili 40/40. Il Sample 5 M6
+instabile resta nel dataset e non riceve metriche prestazionali. Tracking,
+banda diagonale, errore, disturbo, cross-coupling e comando sono quantificati
+con pass rate espliciti: le caselle indicano esecuzione e tracciabilità, non
+conformità ai target. Kmu 40/40 è coerente con la RS M14, ma la Monte Carlo
+non è una certificazione e non fornisce probabilità fisiche. Il confronto è
+paired e privo di score globale; la selezione finale resta fuori da M16.
 
 ## Deliverable finali
 

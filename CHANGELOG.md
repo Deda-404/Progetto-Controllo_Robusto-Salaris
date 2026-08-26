@@ -6,6 +6,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline modulare M16 per una singola sequenza comune di 40 campioni M4,
+  ricostruzione fisica a stato condiviso, chiusure M6/Khinf/Kmu, metriche
+  temporali/frequenziali, statistiche, pass rate e confronti paired.
+- Dataset `m16_monte_carlo_uncertain_linear.mat`, nove figure ingegneristiche,
+  documento `MONTE_CARLO_UNCERTAIN_PLANTS.md` e suite class-based T01–T69.
+
 - Modello dedicato `SEA_ROBUST_nonlinear.slx` per Khinf M10 e Kmu M13
   congelati, feedback q-only, attuatori M3 e meccanica non lineare M1.
 - Pipeline M15 modulare per equilibrio, 12 tracking, 12 disturbi, rumore
@@ -14,6 +20,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
   documento `NONLINEAR_VALIDATION_HINF_MU.md` e suite M15 T01–T60.
 
 ### Changed
+
+- Esteso `run_all.m` fino a M16 senza rilanciare `musyn`, ritunare M5,
+  ridurre controllori o avviare M17; aggiornati status, checklist e README.
+- Registrato il percorso A D-0043: specifiche e controllori congelati,
+  risultati negativi conservati e Monte Carlo distinta dalla garanzia mu.
 
 - Esteso `run_all.m` fino a M15, mantenendo M13 come artifact congelato e
   separando la RS lineare-incerta M14 dalla validazione nominale non lineare.
@@ -210,6 +221,18 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Rimossi i placeholder `.gitkeep` dalle cartelle ora popolate `src/model`, `src/parameters` e `analysis/nominal`.
 
 ### Validated
+
+- M16: 40/40 campioni M4 validi e riproducibili con seed `20260826`; errori
+  massimi della pianta fisica condivisa `5.274e-16` assoluto e `2.895e-12`
+  relativo verso q; gate nominali M6/Khinf/Kmu `PASS`.
+- Stabilità empirica M6/Khinf/Kmu `39/40`, `40/40`, `40/40`; il Sample 5 M6
+  è conservato come instabile con max Re `+1.80447`. Kmu è coerente con la
+  RS M14 senza attribuire valore certificante alla Monte Carlo.
+- Tracking core pass rate totale M6/Khinf/Kmu `30%/0%/0%`; banda, disturbi,
+  cross-coupling e comando quantificati senza saturazione o score globale.
+- Suite dedicata M16 69/69 `PASS`, regressione M14–M16 185/185 `PASS`, suite
+  completa standalone e `run_all` 547/547 `PASS`; Code Analyzer senza
+  messaggi sui file M16 e `run_all.m`.
 
 - M13: 5/5 iterazioni, best iteration 3, objective `10.4032233618`, Kmu
   ordine 52, 66 stati interni, max Re `-0.731994726169` e norma nominale
