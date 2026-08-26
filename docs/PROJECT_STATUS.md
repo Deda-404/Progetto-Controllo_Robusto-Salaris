@@ -1,15 +1,49 @@
 # Project Status
 
-**Current milestone:** M15 — validazione non lineare nominale Khinf/Kmu
-**Status:** `PARTIAL` — software/equilibrio/simulazioni `PASS`, tracking M5 `FAIL` per entrambi
-**Last validated milestone:** M15 `PARTIAL`; M14 resta `PARTIAL` e M13 `COMPLETE` come sintesi
+**Current milestone:** M16 — Monte Carlo lineare sull'insieme incerto M4
+**Status:** `COMPLETE` — campagna comune 40/40 valida, software e gate metodologici `PASS`
+**Last validated milestone:** M16 `COMPLETE`; M15/M14 restano `PARTIAL` e M13 `COMPLETE` come sintesi
 **Last tracking-conforming controller:** M6 — LQG nominale senza integratore
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
-**Open technical issue:** Khinf/Kmu non rispettano Ts/OS/errore M5 sul nominale non lineare; Kmu conserva RS certificata soltanto sul modello lineare incerto M4
-**Next task:** revisione tecnica M15; non iniziare M16 senza autorizzazione
+**Open technical issue:** M6 è instabile nel Sample 5 M4; Khinf/Kmu restano prestazionalmente non conformi a M5 pur essendo stabili 40/40
+**Next task:** revisione tecnica M16; M17 non è iniziata e richiede autorizzazione separata
 **Pull Request baseline:** [PR #19](https://github.com/Deda-404/Progetto_CR/pull/19) `merged` al commit `c51142e624adea610e72d16ddfd764008cb65371`
-**Pull Request corrente:** [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20) aperta da `codex/m15-nonlinear-robust-validation` verso `main`, non mergiata
-**Last update:** 2026-08-25, M15 pubblicata per revisione tecnica
+**Pull Request M15:** [PR #20](https://github.com/Deda-404/Progetto_CR/pull/20) `MERGED` al commit `8e1c8437c786a252a380ce6b4452d32bebf9c2c6`
+**Last update:** 2026-08-26, M16 completata sul percorso A senza retuning
+
+## Quality gate M16 — COMPLETE
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #20 mergiata al commit `8e1c8437c786a252a380ce6b4452d32bebf9c2c6` |
+| M4/M5 congelati | PASS — cinque blocchi e range/pesi invariati |
+| controllori congelati | PASS — M6 ordine 14, Khinf ordine 18, Kmu ordine 52 |
+| campagna | PASS — seed `20260826`, `twister`, 40 campioni, una sequenza comune |
+| replay | PASS — reset seed, errore campioni entro `1e-12`, replay non simulato |
+| sample validity | PASS — 40/40 dentro M4, `Delta_act1/2` stabili e bound unitario |
+| plant fisico condiviso | PASS — max errore abs `5.274e-16`, rel `2.895e-12` verso q |
+| Sample 0 | PASS — gate nominali M6/Khinf/Kmu, escluso dalle statistiche |
+| stabilità M6 | QUANTIFIED — 39/40; Sample 5 instabile, max Re `+1.80447` |
+| stabilità Khinf | QUANTIFIED — 40/40, worst max Re `-0.0303583` |
+| stabilità Kmu | QUANTIFIED — 40/40, worst max Re `-0.0304222` |
+| coerenza M14 | PASS — Monte Carlo coerente con RS Kmu `PASS_CERTIFIED`, non certificante |
+| banda | QUANTIFIED_DIAGONAL_CLOSED_LOOP per T11/T22 |
+| tracking | QUANTIFIED — core pass rate M6/Khinf/Kmu `30%/0%/0%` sui 40 campioni |
+| disturbo / cross-coupling | QUANTIFIED senza nuovi target |
+| comando | QUANTIFIED_NO_SATURATION — `uScale=12 N m` solo normalizzazione |
+| confronto paired | QUANTIFIED_NO_GLOBAL_SCORE sugli stessi SampleID |
+| artifact / figure | PASS — dataset e nove figure |
+| test M16 | PASS — 69/69 |
+| sintesi/retuning/riduzione/Simulink/M17 | NOT RUN corretto |
+| software | **PASS** |
+| stato | **COMPLETE — valutazione finita; risultati negativi conservati** |
+
+La Monte Carlo M16 è evidenza empirica sull'insieme lineare M4. La sola
+certificazione di Robust Stability di Kmu resta quella M14; M15 resta la
+validazione non lineare nominale. Nessuna frequenza empirica è interpretata
+come probabilità fisica.
+
+**Responsabile:** Alessio
 
 ## Quality gate M15 — PARTIAL
 
