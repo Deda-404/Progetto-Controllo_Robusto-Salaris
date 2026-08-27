@@ -13,8 +13,8 @@
 **Dati da completare:** matricole degli autori e data di consegna
 **Baseline della revisione:** [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23) `MERGED` al commit `6486bb240cdbcf4517ed1e893d83e6b1a34168e1`
 **Ramo della revisione:** `codex/final-human-editorial-review`
-**Pull Request finale:** da aprire dopo i commit conclusivi
-**Ultimo aggiornamento:** 2026-08-27, quality gate editoriale completato
+**Pull Request finale:** [PR #24](https://github.com/Deda-404/Progetto_CR/pull/24) `OPEN`, non draft e non mergiata
+**Ultimo aggiornamento:** 2026-08-27, revisione pubblicata nella PR #24
 
 ## Revisione editoriale finale — COMPLETE
 

@@ -2400,3 +2400,27 @@ rimangono quelli validati in M1--M18.
 **Revisione editoriale COMPLETE e pronta per la pull request.** Restano da
 inserire manualmente le matricole e la data di consegna. Nessun merge viene
 eseguito automaticamente.
+
+---
+
+## 2026-08-27 — Pubblicazione della revisione editoriale finale
+
+**Responsabili:** Alessio de Dato, Valerio Rebechi
+
+**Tipo:** Git / Pull Request / Consegna
+
+### Attività svolta
+
+- Creati commit logici separati per pulizia operativa, deliverable finali,
+  audit del repository e registrazione della pubblicazione.
+- Pubblicato `codex/final-human-editorial-review` su `origin`.
+- Aperta la [PR #24](https://github.com/Deda-404/Progetto_CR/pull/24),
+  intitolata “Final editorial review: report, presentation and repository
+  cleanup”, verso `main`.
+- Verificato che la PR sia `OPEN`, non draft e non mergiata.
+
+### Risultato
+
+**Revisione editoriale finale pubblicata per revisione umana.** I PDF sono
+pronti; prima della consegna devono essere inserite soltanto le matricole e la
+data. Nessun merge è stato eseguito.
