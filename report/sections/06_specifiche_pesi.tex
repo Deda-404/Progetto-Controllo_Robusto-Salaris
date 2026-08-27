@@ -1,0 +1,11 @@
+\chapter{Specifiche e pesi di prestazione}
+M5 congela target quantitativi per tracking e cross-coupling. Le specifiche sono tradotte nel peso di sensibilità $W_1$ e nel peso sul comando $W_2$; non è usato $W_3$. Il problema mixed-sensitivity considera
+\[
+z=\begin{bmatrix}W_1S\\W_2KS\end{bmatrix},\qquad S=(I+GK)^{-1}.
+\]
+\input{tables/specifications_m5.tex}
+Il valore $u_{scale}=\UScaleNm$ N m è una normalizzazione di prestazione. Non deriva da un limite hardware verificato, non introduce clipping e non è una saturazione certificata.
+\begin{figure}[H]\centering
+\includegraphics[width=0.79\textwidth]{figures/m5_spec_frequency_map.png}
+\caption{Mappa frequenziale delle specifiche e dei pesi M5.}\label{fig:m5-map}
+\end{figure}

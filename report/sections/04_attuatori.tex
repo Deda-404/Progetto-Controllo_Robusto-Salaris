@@ -1,0 +1,11 @@
+\chapter{Attuatori e pianta completa}
+Ogni attuatore nominale è descritto da
+\[
+\bar G_m(s)=\frac{\bar\omega_n^2}{s^2+2\bar\zeta\bar\omega_n s+\bar\omega_n^2}e^{-\bar\tau_ds},
+\]
+con $\bar\omega_n=\ActuatorWn$ rad/s, $\bar\zeta=\ActuatorZeta$ e $\bar\tau_d=\ActuatorDelayMs$ ms. Il ritardo è approssimato mediante Padé del primo ordine. La scelta conserva la fase nella banda di interesse, ma introduce uno zero non a fase minima e non rappresenta esattamente il ritardo alle alte frequenze.
+\begin{figure}[H]\centering
+\includegraphics[width=0.76\textwidth]{figures/m3_delay_pade_comparison.png}
+\caption{Confronto fra ritardo esatto e Padé del primo ordine (M3).}\label{fig:m3-pade}
+\end{figure}
+L'interconnessione dei due attuatori con la meccanica produce una pianta nominale di ordine \FullPlantOrder. I disturbi di coppia entrano direttamente lato link, mentre il comando attraversa la dinamica attuatore.

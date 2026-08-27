@@ -1,0 +1,14 @@
+\chapter{$\mu$-analysis e $\mu$-synthesis}
+\section{Analisi robusta del candidato A5}
+M12 costruisce l'interconnessione $N$--$\Delta$ sullo stesso insieme M4 e mantiene distinte Nominal Stability (NS), Nominal Performance (NP), Robust Stability (RS) e Robust Performance (RP). A5 è nominalmente stabile, ma fallisce NP. Il margine RS [\AFiveRSLower,\AFiveRSUpper] è inferiore a uno: RS e RP sono \status{FAIL\_CERTIFIED}.
+
+\section{D--K iteration e controllore $K_\mu$}
+M13 esegue un'unica campagna autorizzata di D--K iteration sul problema congelato M4/M5. La best iteration è \BestDKIteration, l'objective è \MusynObjective e il controllore estratto ha ordine \KmuOrder. L'ordine elevato è conservato senza riduzione: qualunque riduzione futura richiederebbe una nuova validazione completa.
+
+\section{Post-analisi indipendente M14}
+M14 ricostruisce indipendentemente $S$, $T$, $KS$ e l'interconnessione incerta. Per $K_\mu$, NS è PASS, NP è \status{\KmuNPStatus}, RS è \status{\KmuRSStatus} con margine [\KmuRSLower,\KmuRSUpper], mentre RP è \status{\KmuRPStatus}. La frase ``$K_\mu$ è robusto'' sarebbe ambigua: il risultato positivo riguarda esclusivamente la Robust Stability nel modello M4.
+\begin{figure}[H]\centering
+\includegraphics[width=0.77\textwidth]{figures/m14_ns_np_rs_rp_summary.png}
+\caption{Esiti NS/NP/RS/RP del controllore $K_\mu$ (M14).}\label{fig:m14-summary}
+\end{figure}
+\input{tables/mu_summary.tex}

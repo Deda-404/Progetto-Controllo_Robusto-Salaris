@@ -6,6 +6,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Pipeline M18 artifact-only per caricare gli artifact congelati M1–M17,
+  riconciliare 59 valori e generare macro, 11 tabelle, manifest di 15 figure,
+  13 asset di presentazione e audit finale.
+- Relazione finale modulare in LaTeX (13 capitoli, 3 appendici, PDF di 27
+  pagine) e presentazione Beamer 16:9 (17 slide, timing stimato 17:30), con
+  note oratore, manifest, matrice di tracciabilità e suite M18 T01–T60.
+
 - Pipeline M17 artifact-only per audit identità M6/Khinf/Kmu, separazione
   delle quattro classi di evidenza, tabelle di stabilità/performance/RAS/
   comando/complessità e selezione gerarchica per ruolo senza score globale.
@@ -27,6 +34,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
   documento `NONLINEAR_VALIDATION_HINF_MU.md` e suite M15 T01–T60.
 
 ### Changed
+
+- Esteso run_all.m fino a M18. La fase M18 genera e verifica soltanto i
+  deliverable, mantenendo congelati M4, M5 e i controllori M6/Khinf/Kmu.
+- Documentati senza promozione gli esiti PARTIAL/FAIL: M7 senza controllore
+  finale, NP/RP e tracking falliti, Sample 5 M6 instabile, RAS/Monte Carlo
+  empiriche e assenza di saturazioni hardware certificate.
 
 - Esteso `run_all.m` fino a M17: M17 carica gli artifact congelati e non
   esegue nuova sintesi, tuning, Monte Carlo, Simulink o riduzione.

@@ -1,0 +1,11 @@
+\chapter{Introduzione e obiettivi}
+Il sistema assegnato è un manipolatore planare 2R con attuazione elastica in serie. Ogni motore aziona il link attraverso una molla torsionale: le coordinate dei link $q=[q_1,q_2]^T$ e quelle dei rotori $\theta=[\theta_1,\theta_2]^T$ sono quindi distinte. L'obiettivo è mantenere e variare la configurazione attorno a un equilibrio, limitando errore, overshoot, cross-coupling e comando, e valutando separatamente stabilità e prestazione nominali e robuste.
+
+Il flusso procede dal modello non lineare alla linearizzazione, aggiunge attuatori e incertezze, congela specifiche e pesi, quindi confronta tre famiglie di controllo. Le evidenze sono mantenute separate:
+\begin{itemize}
+\item la validazione lineare nominale misura le prestazioni sul modello di progetto;
+\item le simulazioni non lineari M8 e M15 verificano il modello fisico nominale e forniscono stime empiriche della RAS;
+\item la Monte Carlo M16 osserva una famiglia finita di impianti lineari M4;
+\item la $\mu$-analysis M12/M14 produce i certificati formali rispetto all'insieme incerto modellato.
+\end{itemize}
+Questa distinzione evita di trasformare frequenze empiriche in probabilità o certificati. M18 non introduce sintesi, retuning, riduzione o nuove simulazioni: organizza risultati congelati e tracciati delle milestone M1--M17.

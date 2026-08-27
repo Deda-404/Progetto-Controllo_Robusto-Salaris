@@ -1,0 +1,21 @@
+\chapter{Modello dinamico del manipolatore SEA}
+La deformazione elastica è $\delta=\theta-q$. Con $K_s=\operatorname{diag}(k_1,k_2)$, la dinamica assegnata si scrive
+\begin{align}
+M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q),\\
+J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).
+\end{align}
+L'ingresso $\tau=[\tau_1,\tau_2]^T$ è la coppia motore. Lo stato meccanico è ordinato come $x=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T$; le misure adottate includono le posizioni dei link e dei rotori.
+
+La matrice di inerzia della traccia è
+\[
+M(q)=\begin{bmatrix}
+(m_1+m_2)l_1^2+m_2l_2^2+2m_2l_1l_2\cos q_2&m_2l_2^2+m_2l_1l_2\cos q_2\\
+m_2l_2^2+m_2l_1l_2\cos q_2&m_2l_2^2
+\end{bmatrix}.
+\]
+Con $h=m_2l_1l_2\sin q_2$, i termini restanti sono
+\[
+C(q,\dot q)=\begin{bmatrix}-h\dot q_2&-h(\dot q_1+\dot q_2)\\h\dot q_1&0\end{bmatrix},\quad
+G(q)=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
+\]
+Le funzioni M1 implementano separatamente inerzia, Coriolis, gravità, coppia elastica ed equazioni differenziali, consentendo test di simmetria/positività di $M$, equilibrio e coerenza dimensionale.

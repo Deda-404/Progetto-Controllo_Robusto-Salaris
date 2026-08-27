@@ -1,0 +1,9 @@
+\chapter{Equilibrio e linearizzazione}
+L'equilibrio congelato è $\bar q=[\EquilibriumQOneDeg^\circ,\EquilibriumQTwoDeg^\circ]^T$, con velocità nulle. La coppia di equilibrio compensa la gravità e la deformazione statica delle molle; la linearizzazione usa coordinate incrementali $\tilde x=x-\bar x$ e $\tilde\tau=\tau-\bar\tau$. Le matrici Jacobiane sono ricavate dall'implementazione e verificate con differenze finite.
+
+Il modello meccanico ha otto stati. In anello aperto presenta massima parte reale \OpenLoopMaxRealPole\,s$^{-1}$: la configurazione richiede controllo attivo. I test PBH registrano stabilizzabilità e rilevabilità rispetto alle misure selezionate.
+\begin{figure}[H]\centering
+\includegraphics[width=0.72\textwidth]{figures/m2_open_loop_poles.png}
+\caption{Poli del modello meccanico linearizzato in anello aperto (M2).}\label{fig:m2-poles}
+\end{figure}
+Il confronto LTI/non lineare per piccole perturbazioni è eseguito nelle milestone di validazione; la linearizzazione resta locale e non attribuisce validità globale alle stime RAS.

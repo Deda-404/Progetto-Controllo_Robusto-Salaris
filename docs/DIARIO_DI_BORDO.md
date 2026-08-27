@@ -2246,3 +2246,69 @@ autonomo.**
 ### Risultato
 
 **M17 COMPLETE pubblicata per revisione tecnica senza merge autonomo.**
+
+---
+
+## 2026-08-27 — Finalizzazione artifact-only M18
+
+**Responsabile:** Alessio
+
+**Milestone:** M18
+
+**Tipo:** Relazione / Presentazione / Tracciabilità / Riproducibilità
+
+### Attività svolta
+
+- Verificata su GitHub la PR #22 `MERGED` e sincronizzato `main` al commit
+  `75d194d49a96b67309b1853f154bdd22a168ca4f`; creato il branch
+  `codex/m18-final-deliverables` da working tree pulita.
+- Caricati gli artifact congelati M1–M17 senza nuova sintesi, retuning,
+  riduzione, Monte Carlo, simulazione dinamica o Simulink.
+- Generato un audit di 59 valori, 11 tabelle, il manifest di 15 figure e 13
+  asset di presentazione; i 19 controlli di riconciliazione sono `PASS`.
+- Prodotta la relazione modulare in italiano con 13 capitoli e 3 appendici.
+  Il PDF è di 27 pagine e conserva esplicitamente gli esiti negativi.
+- Prodotta una presentazione Beamer 16:9 di 17 slide, con timing stimato
+  17:30, note oratore e distinzione esplicita fra Monte Carlo M16 e
+  certificazione mu M14.
+- Compilati entrambi i PDF con zero errori, riferimenti irrisolti, overflow
+  o destinazioni duplicate. I dati anagrafici restano marcati
+  `USER INPUT REQUIRED BEFORE SUBMISSION`.
+
+### Stato
+
+M18 è `COMPLETE` come finalizzazione dei deliverable. Questo stato non
+modifica i risultati tecnici: Kmu conserva RS certificata ma NP/RP e tracking
+falliti; M6 conserva il Sample 5 instabile; RAS e Monte Carlo restano
+empiriche; saturazioni e limiti hardware reali restano non verificati.
+
+---
+
+## 2026-08-27 — Verifica integrale M18
+
+**Responsabile:** Alessio
+
+**Milestone:** M18
+
+**Tipo:** Test / Build / Ispezione visiva / Qualità
+
+### Risultati
+
+- Suite class-based M18 T01–T60: **60/60 PASS**.
+- Suite completa standalone: **649/649 PASS**.
+- `run_all` reale M0–M18: **649/649 PASS**, exit code 0; M13 ricaricata
+  dall'artifact senza nuova `musyn`.
+- Audit LaTeX relazione/presentazione: zero errori, riferimenti irrisolti,
+  overflow e destinazioni duplicate; PDF rispettivamente di 27/17 pagine.
+- Ispezione visiva completata su tutte le 27 pagine e tutte le 17 slide;
+  nessun elemento tagliato, sovrapposto o illeggibile.
+- MATLAB Code Analyzer: zero messaggi sui moduli M18, test e `run_all.m`.
+- Gli artifact, le figure M2–M17 e i modelli Simulink riscritti
+  deterministicamente da `run_all` sono stati ripristinati perché fuori
+  scope; l'audit M18 è stato rigenerato sugli artifact congelati.
+- `git diff --check`: PASS.
+
+### Stato
+
+**M18 COMPLETE e riproducibile; pronta per pubblicazione in PR senza merge
+autonomo.**

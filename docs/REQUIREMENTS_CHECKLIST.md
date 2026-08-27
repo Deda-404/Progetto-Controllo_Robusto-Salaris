@@ -201,7 +201,12 @@ Sample 5 M6 e assenza di certificazione RS M6/Khinf restano limiti espliciti.
 - [x] Parametri e specifiche hanno un'unica sorgente.
 - [x] Test automatici completi e tutti gli esiti documentati.
 - [x] Dati, figure e tabelle generati automaticamente.
-- [ ] Relazione dettagliata sincronizzata col codice.
+- [x] Relazione dettagliata sincronizzata col codice.
 - [x] Controllori finali salvati e identificati senza ambiguità.
-- [ ] Codice MATLAB e modelli Simulink consegnabili.
-- [ ] Presentazione basata sulla relazione e contenuta in 20 minuti.
+- [x] Codice MATLAB e modelli Simulink consegnabili.
+- [x] Presentazione basata sulla relazione e contenuta in 20 minuti.
+
+M18 chiude i deliverable con relazione di 27 pagine, presentazione di 17
+slide e timing stimato 17:30. Le caselle aperte nelle sezioni tecniche
+rimangono intenzionalmente aperte: la finalizzazione documentale non
+trasforma risultati falliti, parziali o non eseguiti in requisiti soddisfatti.
