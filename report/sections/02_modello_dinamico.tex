@@ -1,21 +1,60 @@
 \chapter{Modello dinamico del manipolatore SEA}
-La deformazione elastica è $\delta=\theta-q$. Con $K_s=\operatorname{diag}(k_1,k_2)$, la dinamica assegnata si scrive
+\section{Coordinate e struttura meccanica}
+Il manipolatore è costituito da due link planari con giunti rotoidali. La coordinata $q_1$ individua l'orientamento del primo link, mentre $q_2$ è relativa al primo e determina quindi l'orientamento assoluto del secondo attraverso $q_1+q_2$. Le masse sono concentrate secondo il modello fornito dalla traccia. La matrice di inerzia dipende da $q_2$, perciò il movimento di un giunto modifica l'energia cinetica associata all'altro.
+
+Ogni giunto è azionato da un motore con inerzia $J_{mi}$ e smorzamento viscoso $B_{mi}$. Fra rotore e link è interposta una molla torsionale di rigidezza $k_i$. Definiamo
+\[
+\delta=\theta-q,\qquad \tau_{el}=K_s\delta,\qquad
+K_s=\operatorname{diag}(k_1,k_2).
+\]
+Il segno di $\delta$ è scelto in modo che una coordinata motore maggiore della corrispondente coordinata link produca una coppia positiva sul link. La stessa coppia compare con segno opposto nell'equazione del motore, rispettando il principio di azione e reazione.
+
+\section{Equazioni del lato link e del lato motore}
+La dinamica assegnata si scrive
 \begin{align}
 M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q),\\
 J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).
 \end{align}
-L'ingresso $\tau=[\tau_1,\tau_2]^T$ è la coppia motore. Lo stato meccanico è ordinato come $x=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T$; le misure adottate includono le posizioni dei link e dei rotori.
+La prima equazione raccoglie inerzia, termini di Coriolis e centrifughi e gravità del braccio. La seconda descrive la dinamica dei rotori: la coppia comandata $\tau=[\tau_1,\tau_2]^T$ viene impiegata sia per accelerare i motori sia per deformare le molle. Non viene introdotto uno smorzamento viscoso lato link perché non compare nella traccia; $B_m$ agisce esclusivamente sulle velocità dei rotori.
 
-La matrice di inerzia della traccia è
+La matrice di inerzia è
 \[
 M(q)=\begin{bmatrix}
 (m_1+m_2)l_1^2+m_2l_2^2+2m_2l_1l_2\cos q_2&m_2l_2^2+m_2l_1l_2\cos q_2\\
 m_2l_2^2+m_2l_1l_2\cos q_2&m_2l_2^2
 \end{bmatrix}.
 \]
-Con $h=m_2l_1l_2\sin q_2$, i termini restanti sono
+La simmetria di $M(q)$ deriva dall'energia cinetica. Per parametri fisici positivi il determinante si riduce a
+\[
+\det M(q)=m_2l_1^2l_2^2\left(m_1+m_2\sin^2 q_2\right)>0,
+\]
+e $m_{11}$ è positivo; il criterio di Sylvester garantisce pertanto che $M(q)$ sia definita positiva per ogni configurazione. Questa proprietà consente di ottenere le accelerazioni risolvendo sistemi lineari, senza ricorrere all'inversa esplicita.
+
+Con $h=m_2l_1l_2\sin q_2$, i termini rimanenti sono
 \[
 C(q,\dot q)=\begin{bmatrix}-h\dot q_2&-h(\dot q_1+\dot q_2)\\h\dot q_1&0\end{bmatrix},\quad
 G(q)=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
 \]
-Le funzioni M1 implementano separatamente inerzia, Coriolis, gravità, coppia elastica ed equazioni differenziali, consentendo test di simmetria/positività di $M$, equilibrio e coerenza dimensionale.
+La struttura di $C$ è coerente con la proprietà di passività del manipolatore: la parte simmetrica di $\dot M-2C$ è nulla. Il vettore $G(q)$ usa la convenzione angolare della traccia, nella quale i contributi gravitazionali sono proporzionali ai coseni degli angoli assoluti dei link.
+
+\section{Stato, ingressi e uscite}
+Lo stato meccanico a otto componenti è ordinato come
+\[
+x=\begin{bmatrix}q^T&\dot q^T&\theta^T&\dot\theta^T\end{bmatrix}^T.
+\]
+Con questa convenzione le equazioni del primo ordine sono
+\begin{align}
+\dot q&=\dot q,\\
+\ddot q&=M(q)\backslash\left[K_s(\theta-q)-C(q,\dot q)\dot q-G(q)\right],\\
+\dot\theta&=\dot\theta,\\
+\ddot\theta&=J_m\backslash\left[\tau-B_m\dot\theta-K_s(\theta-q)\right].
+\end{align}
+L'uscita primaria di prestazione è $q$, perché la consegna richiede la regolazione delle articolazioni. Per l'osservatore sono disponibili le quattro posizioni $[q^T,\theta^T]^T$, ottenibili con encoder lato link e lato motore; non assumiamo misure dirette delle velocità. La disponibilità di entrambe le posizioni consente inoltre di ricavare direttamente la deformazione elastica.
+
+\section{Implementazione e verifiche}
+Abbiamo separato inerzia, Coriolis, gravità, coppia elastica ed equazioni differenziali in funzioni numeriche indipendenti. Questa scomposizione permette di verificare le proprietà fisiche prima di utilizzare il modello nelle sintesi. I parametri nominali sono centralizzati e riportati nell'Appendice~\ref{app:parametri}.
+
+La validazione ha controllato la simmetria e la positività di $M(q)$ su 2001 configurazioni, la proprietà di skew-symmetry associata a $\dot M-2C$, le formule di gravità e coppia elastica e la finitezza del campo vettoriale. Il minimo autovalore di $M$ osservato è $0.01904$ kg m$^2$ e il massimo residuo della proprietà energetica è dell'ordine di $10^{-18}$. Il campionamento numerico non sostituisce la dimostrazione analitica di positività, ma verifica che l'implementazione rispetti le equazioni.
+
+\section{Assunzioni e limiti del modello}
+Il modello meccanico non include attrito secco, giochi, flessibilità distribuita dei link, backlash, saturazioni o limiti di corsa. Le molle sono lineari e le inerzie dei motori sono riferite direttamente alle coordinate $\theta$. Queste semplificazioni sono coerenti con la traccia e rendono interpretabile il confronto fra controllori; i loro effetti devono però essere ricordati quando si interpretano le simulazioni non lineari e i margini robusti.

@@ -25,8 +25,9 @@
 \newcommand{\bad}[1]{\textcolor{warn}{\textbf{#1}}}
 \input{../report/generated/m18_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
-\author{USER INPUT REQUIRED BEFORE SUBMISSION}
-\date{USER INPUT REQUIRED BEFORE SUBMISSION}
+\subtitle{Modellazione, sintesi e validazione}
+\author{Alessio de Dato \and Valerio Rebechi}
+\date{Data di consegna: da completare}
 \begin{document}
 
 \begin{frame}[plain]\titlepage\end{frame}
@@ -137,16 +138,18 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \end{columns}
 \end{frame}
 
-\begin{frame}{La D--K iteration recupera la stabilità robusta}
+\begin{frame}{La D--K iteration produce $K_\mu$}
 \begin{itemize}
 \item M12 analizza A5: NS PASS, NP FAIL, RS/RP FAIL certificati.
-\item M13 esegue una campagna D--K congelata.
+\item M13 esegue una campagna D--K sul problema M4/M5 invariato.
 \item Best iteration: \BestDKIteration; objective: \MusynObjective.
 \item $K_\mu$ è full-order, ordine \KmuOrder, senza riduzione.
 \end{itemize}
+\vfill
+\bad{L'objective di sintesi non è un certificato RS o RP.}
 \end{frame}
 
-\begin{frame}{$K_\mu$ certifica RS, non la Robust Performance}
+\begin{frame}{M14 certifica RS, non la Robust Performance}
 \begin{columns}[T]
 \column{0.41\textwidth}
 \good{RS: \KmuRSStatus}
@@ -217,11 +220,11 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \begin{frame}{La decisione finale è per ruolo}
 \begin{columns}[T]
 \column{0.39\textwidth}
-\good{$K_\mu$: final robust controller}
+\good{$K_\mu$: controllore robusto finale}
 
-M6: nominal performance reference
+M6: riferimento di prestazione nominale
 
-$K_{\infty}$: H-infinity comparator
+$K_{\infty}$: comparatore $H_\infty$
 
 \bad{Nessun vincitore assoluto.}
 \column{0.59\textwidth}

@@ -1,9 +1,34 @@
 \chapter{Conclusioni e limiti}
-Il progetto ha costruito una catena riproducibile dal modello non lineare ai controllori e alle verifiche nominali, non lineari, empiriche e formali. M6 offre il miglior tracking nominale fra i candidati finali, ma M16 osserva una perdita di stabilità nel Sample 5. $K_{\infty}$ e $K_\mu$ sono stabili sui 40 campioni M16; soltanto $K_\mu$ possiede la Robust Stability formalmente certificata su M4.
+\section{Risultati principali}
+Il lavoro ha costruito una catena coerente dalla meccanica non lineare alla valutazione robusta. Il manipolatore SEA è stato descritto mantenendo separate coordinate dei link e dei rotori, quindi linearizzato attorno all'equilibrio verticale superiore. La dinamica degli attuatori e il ritardo hanno portato la pianta nominale a 14 stati. L'insieme M4 combina variazioni parametriche reali e dinamica moltiplicativa non modellata, mentre M5 traduce i requisiti temporali in pesi frequenziali e scale fisiche.
 
-La conclusione positiva è circoscritta: $K_\mu$ non soddisfa Nominal Performance né Robust Performance e non raggiunge i target di tracking M5. M7 non produce un controllore LQG-I finale. Il risultato finale è quindi una selezione per ruolo e non una conformità complessiva.
+La progettazione nominale mostra che M6 LQG, senza integratore, è il riferimento più efficace per il tracking: raggiunge il target di settling e mantiene overshoot e cross-coupling entro i limiti adottati. L'offset da disturbo costante rimane però non nullo. M7 dimostra che l'introduzione dell'internal model elimina tale offset, ma nella famiglia LQI/LQG-I studiata non consente di soddisfare simultaneamente rapidità e sovraelongazione. La conclusione negativa è mantenuta come risultato di feasibility, senza selezionare un candidato non ammissibile.
+
+Le sintesi $H_\infty$ M9 e M10 verificano l'equivalenza fra \texttt{mixsyn} e una generalized plant costruita esplicitamente. Entrambe restituiscono una norma pesata circa \HinfsynGamma, superiore a uno. M11 mostra come l'aumento dell'ordine delle strutture MIMO da A3 ad A5 riduca il divario dalla soluzione full-order; nessuna architettura soddisfa tuttavia l'obiettivo pesato. A5 viene usato per la successiva analisi robusta, non confuso con $K_{\infty}$.
+
+La D--K iteration M13 produce $K_\mu$ di ordine \KmuOrder. La post-analisi M14, separata dalla sintesi, costituisce il risultato formale centrale: Robust Stability è \status{\KmuRSStatus} con margine [\KmuRSLower,\KmuRSUpper] sull'insieme lineare incerto M4. Nominal Performance e Robust Performance restano \status{FAIL} e \status{FAIL\_CERTIFIED}. Il risultato positivo è quindi circoscritto alla stabilità robusta.
+
+Le campagne non lineari e Monte Carlo completano la lettura. M6 conserva il miglior tracking nominale, ma M16 osserva una perdita di stabilità nel Sample 5. $K_{\infty}$ e $K_\mu$ sono stabili in 40/40 campioni, pur fallendo il tracking M5. La stabilità 40/40 di $K_\mu$ è coerente con M14, ma non sostituisce la certificazione. Sul modello non lineare nominale tutte le architetture mostrano regioni empiriche di convergenza significative; le stime search-box limited non sono trasformate in frontiere certificate.
+
+\section{Decisione ingegneristica}
+Non emerge un controllore che domini tutte le metriche. La selezione finale è pertanto per ruolo:
+\begin{itemize}
+\item $K_\mu$ è il controllore robusto finale, per la RS certificata;
+\item M6 è il riferimento di prestazione nominale, per il tracking conforme;
+\item $K_{\infty}$ è il comparatore metodologico full-order della famiglia $H_\infty$.
+\end{itemize}
+Questa assegnazione evita due semplificazioni scorrette: dichiarare $K_\mu$ prestazionalmente robusto perché è robustamente stabile, oppure dichiarare M6 robusto perché supera quasi tutti i campioni. La conclusione documenta quale evidenza sostiene ogni ruolo e quale evidenza manca.
+
 \section{Limiti noti}
 \input{tables/limitations.tex}
-Mancano limiti hardware di coppia verificati e un modello di saturazione; i range M4 non sono identificati sperimentalmente; le RAS M8/M15 sono stime empiriche; la Monte Carlo non è un certificato; $K_\mu$ resta di ordine 52. Questi elementi non sono stati chiusi artificialmente in M18.
+
+I limiti hanno conseguenze dirette. Senza dati di saturazione e rate limit, i picchi di comando non bastano a dimostrare l'implementabilità sull'hardware. Senza identificazione sperimentale, i range M4 restano scelte ingegneristiche motivate ma non intervalli statistici. Senza un modello non lineare incerto, la certificazione lineare e la simulazione non lineare rimangono complementari, non unificate. La Monte Carlo usa soltanto 40 campioni e non autorizza inferenze probabilistiche.
+
+L'ordine 52 di $K_\mu$ aumenta memoria, costo computazionale e sensibilità numerica di un'eventuale implementazione discreta. Nessuna riduzione è stata applicata nella fase conclusiva, perché preservare approssimativamente la risposta nominale non garantirebbe la conservazione del margine RS. Infine, le regioni empiriche di attrazione dipendono da box, griglia, orizzonte e criterio di convergenza; per M6 e $K_\mu$ la vera frontiera non è stata localizzata.
+
 \section{Sviluppi futuri}
-Sviluppi plausibili, non eseguiti, includono identificazione sperimentale delle incertezze, definizione dei limiti di attuazione, revisione motivata dei pesi, riduzione di $K_\mu$ con rivalidazione, architetture 2-DoF e validazione non lineare incerta. Ognuno richiederebbe una nuova fase tecnica e non cambia gli esiti qui documentati.
+Un seguito sperimentale dovrebbe partire dalla caratterizzazione degli attuatori: limiti di coppia e velocità, saturazioni, rate limit, attriti e ritardi misurati. Questi dati consentirebbero di sostituire le sole scale prestazionali con vincoli verificabili e di aggiornare l'incertezza dinamica. Una campagna di identificazione su più configurazioni potrebbe inoltre valutare se le variazioni di rigidezza e inerzia adottate in M4 descrivano correttamente l'impianto.
+
+Sul piano del controllo, una revisione motivata dei pesi potrebbe affrontare il fallimento NP/RP, ma costituirebbe una nuova iterazione di progetto e dovrebbe essere valutata senza cancellare gli esiti presenti. Architetture 2-DoF potrebbero separare tracking e reiezione dei disturbi; l'anti-windup diventerebbe necessario una volta definiti i limiti di attuazione. Una riduzione di $K_\mu$ dovrebbe essere accompagnata da una post-analisi M14 completa, dalle simulazioni non lineari e da una nuova Monte Carlo sugli stessi criteri.
+
+Infine, l'estensione più rilevante sarebbe una validazione non lineare incerta, possibilmente abbinata a prove hardware-in-the-loop. Tale fase collegherebbe la robustezza formale locale alle dinamiche fisiche oltre l'equilibrio. Fino ad allora, il risultato raggiunto resta deliberatamente preciso: il progetto dispone di un controllore con stabilità robusta certificata sul modello M4, di un riferimento nominale con tracking conforme e di una documentazione esplicita delle prestazioni non soddisfatte.

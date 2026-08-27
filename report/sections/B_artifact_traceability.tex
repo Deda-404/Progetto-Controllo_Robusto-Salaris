@@ -1,6 +1,22 @@
-\chapter{Mappa degli artifact e tracciabilità}
-I principali valori sono generati in \artifact{report/generated/m18\_values.tex}; la tabella completa Label, Value, Unit, SourceMilestone, SourceArtifact, SourceField e destinazione è salvata in \artifact{results/data/m18\_final\_deliverable\_audit.mat}.
+\chapter{Tracciabilità dei risultati}
+I valori riportati nella relazione non sono trascritti manualmente dai grafici. La generazione M18 carica i risultati validati delle milestone M1--M17, verifica la presenza dei campi richiesti e produce le macro in \artifact{report/generated/m18\_values.tex}. Ogni macro conserva l'associazione con milestone, file dati e campo MATLAB da cui proviene.
 
-Le figure usate sono elencate nel manifest seguente. Ogni file è copiato deterministicamente da un output storico validato, senza alterare i PNG originali.
+Le tabelle sono costruite dallo stesso insieme di evidenze mediante il
+generatore MATLAB della fase M18, collocato nella cartella
+\path{analysis/finalization}. Questo meccanismo riduce il rischio che relazione,
+presentazione e dataset mostrino numeri differenti. La revisione editoriale può
+modificare formulazioni, ordine degli argomenti e didascalie, ma le quantità
+tecniche restano legate ai risultati numerici verificati.
+
+Le figure usate nei deliverable sono elencate nel manifest seguente. Ogni file è copiato in modo deterministico da un risultato validato e ne conserva hash, milestone e destinazione.
 \input{generated/figure_manifest.tex}
-La matrice completa requisito--milestone--artifact--sezione è mantenuta in \path{docs/M18_REQUIREMENTS_TRACEABILITY.md}. Gli esiti prestazionali FAIL/PARTIAL restano distinti dal completamento dei deliverable.
+
+La matrice completa requisito--milestone--risultato--sezione è mantenuta nel
+documento \artifact{M18\_REQUIREMENTS\_TRACEABILITY.md} della cartella
+\path{docs}. L'audit serializzato è \artifact{m18\_final\_deliverable\_audit.mat}
+in \path{results/data}. Gli stati \status{FAIL}, \status{PARTIAL} e
+\status{NOT RUN} non vengono alterati dal completamento documentale: indicano
+rispettivamente una prestazione non raggiunta, una fase conclusa con obiettivi
+tecnici non soddisfatti o un'attività deliberatamente non eseguita.
+
+Questa tracciabilità non sostituisce il giudizio ingegneristico. Serve a rendere verificabile dove nasce ogni affermazione quantitativa e a impedire che una correzione editoriale diventi involontariamente una modifica dei risultati.

@@ -1,14 +1,33 @@
 \chapter{Riproducibilità}
-Dalla radice del repository, MATLAB R2025b esegue l'intera pipeline con:
+\section{Ambiente e sequenza di esecuzione}
+La pipeline è stata validata con MATLAB R2025b, Control System Toolbox, Robust Control Toolbox, Simulink e Symbolic Math Toolbox. Dalla radice del repository l'intera sequenza si avvia con:
 \begin{verbatim}
 run_all
 \end{verbatim}
-Il comando pulisce il workspace, imposta il seed, aggiunge i percorsi del progetto e percorre M1--M18. M13 ricarica il checkpoint D--K congelato senza nuova chiamata a \texttt{musyn}. La generazione M18 si ripete con:
+Il comando configura i percorsi, azzera lo stato della sessione, imposta i seed richiesti e percorre le milestone M1--M18 nell'ordine delle dipendenze. I test automatici vengono eseguiti sulla stessa copia di lavoro.
+
+La fase M13 costituisce un'eccezione importante: la costosa campagna D--K non viene rilanciata dalla regressione ordinaria. La pipeline ricarica il checkpoint validato e ne controlla identità, iterazione selezionata e campi necessari. In questo modo la riproducibilità della consegna non dipende da una nuova ottimizzazione potenzialmente sensibile a opzioni o tempi di calcolo.
+
+\section{Rigenerazione di tabelle e figure}
+La sola finalizzazione documentale può essere ripetuta con:
 \begin{verbatim}
 validate_m18_deliverables(true,true)
 \end{verbatim}
+La funzione verifica i dataset delle milestone precedenti, genera macro e tabelle LaTeX, aggiorna il manifest delle figure e prepara gli asset della presentazione. Non richiama sintesi, Monte Carlo o simulazioni dinamiche. Le tabelle generate riportano le stesse convenzioni della relazione, inclusa la distinzione fra frazione empirica M16 e certificazione M14.
+
+\section{Compilazione dei PDF}
 Relazione e presentazione sono compilate con:
 \begin{verbatim}
 powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
 \end{verbatim}
-I PDF finali hanno nomi stabili; file aux, log, toc, cache e altri intermedi non sono tracciati.
+Lo script esegue il numero di passaggi necessario per indice, riferimenti e sommari, quindi controlla errori, riferimenti irrisolti, box oltre margine e destinazioni PDF duplicate. I file conclusivi hanno nomi stabili:
+\begin{itemize}
+\item \path{report/Progetto_CR_Relazione_finale.pdf};
+\item \path{presentation/Progetto_CR_Presentazione.pdf}.
+\end{itemize}
+I file ausiliari LaTeX, le cache e gli altri intermedi di compilazione non fanno parte della consegna.
+
+\section{Verifiche indipendenti}
+La suite M18 controlla identità dei controllori, assenza di nuove sintesi nella finalizzazione, corrispondenza dei valori riportati, presenza dei documenti, audit LaTeX e coerenza del repository. La regressione completa verifica inoltre che la revisione editoriale non abbia modificato le milestone tecniche. Per i file MATLAB interessati viene eseguito il Code Analyzer e, per la consegna, i PDF vengono renderizzati pagina per pagina per un controllo visivo.
+
+La riproducibilità resta subordinata alla disponibilità delle versioni software indicate. Piccole differenze di rendering tipografico possono dipendere dalla distribuzione LaTeX; i valori numerici e le conclusioni sono invece controllati direttamente contro i dataset.

@@ -1,11 +1,25 @@
 \chapter{Introduzione e obiettivi}
-Il sistema assegnato è un manipolatore planare 2R con attuazione elastica in serie. Ogni motore aziona il link attraverso una molla torsionale: le coordinate dei link $q=[q_1,q_2]^T$ e quelle dei rotori $\theta=[\theta_1,\theta_2]^T$ sono quindi distinte. L'obiettivo è mantenere e variare la configurazione attorno a un equilibrio, limitando errore, overshoot, cross-coupling e comando, e valutando separatamente stabilità e prestazione nominali e robuste.
+\section{Problema fisico}
+Il sistema considerato è un manipolatore planare 2R nel quale ciascun motore trasmette coppia al link attraverso un elemento elastico torsionale. Nei robot rigidamente attuati si assume spesso una corrispondenza diretta fra posizione del rotore e configurazione articolare; con un Series Elastic Actuator (SEA) questa equivalenza non è più valida. Le coordinate dei link $q=[q_1,q_2]^T$ descrivono la configurazione del braccio, mentre $\theta=[\theta_1,\theta_2]^T$ descrive la posizione dei rotori. La differenza $\theta-q$ genera la coppia elastica trasmessa.
 
-Il flusso procede dal modello non lineare alla linearizzazione, aggiunge attuatori e incertezze, congela specifiche e pesi, quindi confronta tre famiglie di controllo. Le evidenze sono mantenute separate:
+L'elasticità è utile per la misura indiretta della coppia e per la sicurezza dell'interazione, ma introduce dinamiche interne e risonanze. Una variazione di comando non agisce istantaneamente sul link: attraversa la dinamica dell'attuatore, accelera il rotore, deforma la molla e solo successivamente produce coppia sul lato meccanico. La configurazione verticale superiore scelta nel progetto è inoltre instabile in anello aperto. Il problema non consiste quindi soltanto nell'inseguire un riferimento, ma nel coordinare stabilizzazione, rapidità, interazione fra giunti e contenimento del comando in presenza di incertezze.
+
+\section{Obiettivi di controllo}
+La traccia richiede di partire dal modello non lineare, scegliere e verificare un punto di equilibrio, introdurre gli attuatori con ritardo e costruire un insieme incerto di dimensione contenuta. Su questa base devono essere confrontati un controllo LQG, sintesi $H_\infty$ nominali, strutture di ordine ridotto, $\mu$-analysis e $\mu$-synthesis. Le prestazioni di interesse comprendono tracking di piccoli riferimenti articolari, reiezione di coppie esterne lato link, attenuazione del rumore, interazione MIMO e sforzo di controllo.
+
+Nel progetto abbiamo adottato due principi metodologici. Il primo consiste nel fissare modello incerto, specifiche e pesi prima di osservare l'esito delle sintesi: in questo modo un fallimento prestazionale non viene rimosso modificando retroattivamente il problema. Il secondo consiste nel separare quattro domande differenti: stabilità nominale, prestazione nominale, stabilità robusta e prestazione robusta. Un controllore può rispondere positivamente a una di esse e negativamente alle altre.
+
+\section{Metodo di lavoro e classi di verifica}
+Il percorso progettuale procede dalle equazioni fisiche alla loro implementazione modulare. Dopo la verifica dell'equilibrio e dei Jacobiani, il modello viene esteso con gli attuatori nominali e con le incertezze parametriche e dinamiche. Le specifiche temporali vengono quindi collegate ai pesi frequenziali, consentendo di confrontare controllori con strutture diverse sullo stesso problema.
+
+Le verifiche finali appartengono a classi che non possono essere aggregate indiscriminatamente:
 \begin{itemize}
-\item la validazione lineare nominale misura le prestazioni sul modello di progetto;
-\item le simulazioni non lineari M8 e M15 verificano il modello fisico nominale e forniscono stime empiriche della RAS;
-\item la Monte Carlo M16 osserva una famiglia finita di impianti lineari M4;
-\item la $\mu$-analysis M12/M14 produce i certificati formali rispetto all'insieme incerto modellato.
+\item l'analisi lineare nominale misura stabilità, norme pesate e risposte temporali sul modello usato per la sintesi;
+\item le simulazioni non lineari verificano che i controllori conservino il comportamento previsto quando vengono reinserite le equazioni meccaniche complete e forniscono stime empiriche della regione di attrazione;
+\item la campagna Monte Carlo confronta i controllori sulle stesse realizzazioni finite dell'insieme incerto lineare;
+\item la $\mu$-analysis valuta formalmente Robust Stability e Robust Performance rispetto alla struttura di incertezza adottata.
 \end{itemize}
-Questa distinzione evita di trasformare frequenze empiriche in probabilità o certificati. M18 non introduce sintesi, retuning, riduzione o nuove simulazioni: organizza risultati congelati e tracciati delle milestone M1--M17.
+La distinzione evita, per esempio, di interpretare la frazione di campioni stabili come probabilità fisica o di usare una simulazione non lineare nominale come certificato robusto.
+
+\section{Organizzazione della relazione}
+I capitoli successivi seguono il ragionamento ingegneristico. I Capitoli 2--5 costruiscono il modello nominale e incerto; il Capitolo 6 definisce obiettivi e pesi. I Capitoli 7--9 descrivono le sintesi LQG, $H_\infty$ e $\mu$. I Capitoli 10 e 11 discutono validazione non lineare, RAS e Monte Carlo. Il Capitolo 12 confronta i tre controllori principali e ne assegna i ruoli; il Capitolo 13 raccoglie conclusioni, limiti e possibili sviluppi. Le milestone rimangono indicate per tracciabilità, ma la narrazione segue le scelte e i risultati del progetto.

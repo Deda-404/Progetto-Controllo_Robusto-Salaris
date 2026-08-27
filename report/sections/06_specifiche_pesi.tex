@@ -1,11 +1,54 @@
 \chapter{Specifiche e pesi di prestazione}
-M5 congela target quantitativi per tracking e cross-coupling. Le specifiche sono tradotte nel peso di sensibilità $W_1$ e nel peso sul comando $W_2$; non è usato $W_3$. Il problema mixed-sensitivity considera
+\section{Scenari e grandezze di interesse}
+Le specifiche trasformano gli obiettivi qualitativi della traccia in criteri comuni alle diverse sintesi. Abbiamo considerato gradini articolari separati di $2^\circ$, $5^\circ$ e $8^\circ$ attorno all'equilibrio. Il caso da $5^\circ$ è il riferimento nominale: la variazione gravitazionale resta sufficientemente ben descritta dalla linearizzazione locale, mentre l'ampiezza è abbastanza grande da produrre risposte misurabili. Per i disturbi sono usate coppie lato link di 0.25, 0.50 e 1.00 N m.
+
+Il tempo di assestamento misura la rapidità con cui la posizione entra e rimane nella banda del 2\%; l'overshoot quantifica la sovraelongazione rispetto al gradino. L'errore a regime valuta la capacità di raggiungere il riferimento, mentre il cross-coupling confronta il picco del giunto non comandato con quello del giunto eccitato. I target adottati sono raccolti nella Tabella~\ref{tab:specifications}.
 \[
-z=\begin{bmatrix}W_1S\\W_2KS\end{bmatrix},\qquad S=(I+GK)^{-1}.
+T_s\leq \SettlingTarget\ \mathrm{s},\qquad
+M_p\leq\OvershootTarget\%,\qquad
+e_{ss}\leq\ErrorTargetPct\%,\qquad
+c_{cross}\leq\CrossTargetPct\%.
 \]
 \input{tables/specifications_m5.tex}
-Il valore $u_{scale}=\UScaleNm$ N m è una normalizzazione di prestazione. Non deriva da un limite hardware verificato, non introduce clipping e non è una saturazione certificata.
+
+\section{Scelta della banda}
+La banda di progetto deve essere maggiore della dinamica instabile che il controllore deve dominare, ma inferiore alla banda degli attuatori e ai modi elastici. Dai modelli validati risultano una massima dinamica instabile di $7.2094$ s$^{-1}$, una banda attuatore di $34.783$ rad/s e il primo modo elastico a $69.954$ rad/s. La finestra progettuale è stata costruita imponendo margini rispetto a tutte e tre le scale; fra i candidati 11, 12 e 13 rad/s, il valore $\omega_B=12$ rad/s massimizza il margine minimo dai limiti scelti.
+
+\section{Peso sulla sensibilità}
+Per un feedback negativo con $e=r-q$ definiamo
+\[
+S=(I+GK)^{-1},\qquad T=GK(I+GK)^{-1}=I-S,
+\qquad KS=K(I+GK)^{-1}.
+\]
+$S$ descrive il trasferimento da riferimento o disturbo equivalente all'errore, $T$ la risposta complementare e $KS$ il comando necessario a chiudere l'anello. Il peso di sensibilità è
+\[
+W_1(s)=\frac{s/M_s+\omega_B}{s+\omega_B A_s},
+\qquad A_s=0.05,\quad M_s=2.
+\]
+A bassa frequenza $W_1(0)=20$: imporre $\|W_1S\|_\infty<1$ richiede quindi una sensibilità dell'ordine del 5\%. Ad alta frequenza il peso tende a $0.5$, lasciando spazio al roll-off e alle limitazioni della pianta. Il valore $M_s=2$ corrisponde a un picco desiderato della sensibilità dell'ordine di 6 dB.
+
+\section{Peso sul comando}
+In assenza di limiti hardware verificati, il valore
+\[
+u_{scale}=\UScaleNm\ \mathrm{N\,m}
+\]
+è una scala di normalizzazione della prestazione. Non introduce clipping, non rappresenta una corrente massima e non consente di dichiarare il superamento o il rispetto di una saturazione fisica. Il peso
+\[
+W_2(s)=\frac{1}{u_{scale}}
+\frac{s/\omega_U+1}{s/(\alpha\omega_U)+1},
+\qquad \omega_U=30\ \mathrm{rad/s},\quad \alpha=6,
+\]
+vale $1/12$ a bassa frequenza e cresce fino a $0.5$ ad alta frequenza. La penalizzazione inizia prima della banda attuatore e dei modi elastici, scoraggiando comandi aggressivi proprio nella regione in cui ritardo e flessibilità rendono il modello più delicato.
+
+\section{Problema mixed-sensitivity}
+I due pesi sono applicati simmetricamente ai giunti e non viene introdotto un peso $W_3$. La prestazione nominale pesata è
+\[
+\left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_\infty<1.
+\]
+Questa disuguaglianza richiede simultaneamente errore contenuto alle basse frequenze e comando compatibile con il roll-up di $W_2$. Il valore restituito dalla sintesi, indicato con $\gamma$, misura la migliore norma ottenuta per il problema impostato. Se $\gamma>1$, almeno una combinazione frequenziale di errore e comando viola il profilo definito dai pesi; non è quindi sufficiente che l'anello sia stabile per dichiarare soddisfatta la Nominal Performance.
 \begin{figure}[H]\centering
 \includegraphics[width=0.79\textwidth]{figures/m5_spec_frequency_map.png}
 \caption{Mappa frequenziale delle specifiche e dei pesi M5.}\label{fig:m5-map}
 \end{figure}
+
+Le specifiche sono assunzioni progettuali e non requisiti hardware misurati. La loro fattibilità viene verificata dalle sintesi successive senza modificarle retroattivamente. In particolare, i risultati $\gamma>1$ dei controllori $H_\infty$ restano un esito tecnico del problema così definito.
