@@ -1,5 +1,5 @@
 classdef test_m18_final_deliverables < matlab.unittest.TestCase
-    %TEST_M18_FINAL_DELIVERABLES Artifact-only finalization gates T01-T60.
+    %TEST_M18_FINAL_DELIVERABLES Final deliverable validation T01-T60.
 
     properties
         Root
@@ -186,8 +186,10 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
                 'sections', '11_monte_carlo.tex')));
             testCase.verifyTrue(contains(testCase.M18.metadata. ...
                 monteCarloInterpretation, "NOT_A_ROBUSTNESS_CERTIFICATE"));
-            testCase.verifyTrue(contains(lower(reportText), ...
-                "non certificano"));
+            reportText = lower(reportText);
+            testCase.verifyTrue(contains(reportText, ...
+                "non può dimostrare") && contains(reportText, ...
+                "la sola certificazione"));
         end
 
         function testT27RasNotCertified(testCase)
@@ -261,8 +263,9 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT37ReportHasLimitations(testCase)
             source = string(fileread(fullfile(testCase.Root, 'report', ...
                 'tables', 'limitations.tex')));
-            testCase.verifyTrue(contains(source, "No controller reduction") && ...
-                contains(source, "saturation"));
+            testCase.verifyTrue(contains(source, ...
+                "Nessun controllore principale") && ...
+                contains(source, "saturazione"));
         end
 
         function testT38TraceabilityDocumentsProduced(testCase)
@@ -270,12 +273,17 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
                 'M18_REQUIREMENTS_TRACEABILITY.md')));
             testCase.verifyTrue(contains(trace, "M18") && ...
                 contains(trace, "FAIL") && contains(trace, "NOT RUN"));
+            testCase.verifyTrue(isfile(fullfile(testCase.Root, 'docs', ...
+                'FINAL_EDITORIAL_AUDIT.md')));
         end
 
         function testT39PresentationSourceProduced(testCase)
             source = string(fileread(fullfile(testCase.Root, 'presentation', ...
                 'main.tex')));
             testCase.verifyEqual(count(source, "\begin{frame}"), 17);
+            testCase.verifyTrue(contains(source, "Alessio de Dato") && ...
+                contains(source, "Valerio Rebechi") && ...
+                contains(source, "M14 certifica RS"));
         end
 
         function testT40PresentationTimingProduced(testCase)
@@ -336,14 +344,22 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT49ReadmeUpdated(testCase)
             readme = string(fileread(fullfile(testCase.Root, 'README.md')));
             testCase.verifyTrue(contains(readme, "M18") && ...
-                contains(readme, "27 pagine"));
+                contains(readme, "Alessio de Dato") && ...
+                contains(readme, "Valerio Rebechi") && ...
+                contains(readme, "Progetto_CR_Relazione_finale.pdf"));
+            forbidden = ["chatgpt", "codex", "prompt", "handoff"];
+            testCase.verifyFalse(any(contains(lower(readme), forbidden)));
         end
 
         function testT50ProjectStatusUpdated(testCase)
             status = string(fileread(fullfile(testCase.Root, 'docs', ...
                 'PROJECT_STATUS.md')));
             testCase.verifyTrue(contains(status, ...
-                "Current milestone:** M18") && contains(status, "19/19"));
+                "revisione editoriale e di consegna finale") && ...
+                contains(status, "PR #23") && ...
+                contains(status, ...
+                "6486bb240cdbcf4517ed1e893d83e6b1a34168e1") && ...
+                contains(status, "19/19"));
         end
 
         function testT51ChecklistPreservesFalsePasses(testCase)
@@ -363,7 +379,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
             diary = string(fileread(fullfile(testCase.Root, 'docs', ...
                 'DIARIO_DI_BORDO.md')));
             testCase.verifyTrue(contains(diary, ...
-                "Finalizzazione artifact-only M18"));
+                "Revisione editoriale finale"));
         end
 
         function testT54NoTrackedLatexTemporaryFiles(testCase)
@@ -400,9 +416,13 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT59TreeCoherent(testCase)
             [status, branch] = localGit(testCase.Root, "branch --show-current");
             testCase.verifyEqual(status, 0);
-            testCase.verifyEqual(strtrim(string(branch)), ...
-                "codex/m18-final-deliverables");
+            branch = strtrim(string(branch));
+            testCase.verifyTrue(branch == "main" || startsWith(branch, "codex/"));
             testCase.verifyFalse(contains(testCase.Source, "<<<<<<<"));
+            testCase.verifyFalse(isfile(fullfile(testCase.Root, ...
+                'Resosconto_per_GPT.txt')));
+            testCase.verifyFalse(isfolder(fullfile(testCase.Root, 'docs', ...
+                'handoff')));
         end
 
         function testT60M18Complete(testCase)

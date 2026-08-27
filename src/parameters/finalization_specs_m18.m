@@ -1,5 +1,5 @@
 function config = finalization_specs_m18
-%FINALIZATION_SPECS_M18 Frozen settings for final deliverable generation.
+%FINALIZATION_SPECS_M18 Validated settings for final document generation.
 
 config.milestone = "M18";
 config.responsible = "Alessio";

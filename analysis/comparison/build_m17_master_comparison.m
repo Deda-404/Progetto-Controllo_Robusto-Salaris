@@ -1,5 +1,5 @@
 function comparison = build_m17_master_comparison(evidence, config)
-%BUILD_M17_MASTER_COMPARISON Traceable comparison of frozen evidence.
+%BUILD_M17_MASTER_COMPARISON Traceable comparison of validated results.
 
 arguments
     evidence (1, 1) struct

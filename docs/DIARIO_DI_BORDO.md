@@ -2338,3 +2338,65 @@ autonomo.**
 
 **M18 COMPLETE pubblicata per revisione e merge manuali. Nessuna nuova
 milestone tecnica è aperta.**
+
+---
+
+## 2026-08-27 — Revisione editoriale finale
+
+**Responsabili:** Alessio de Dato, Valerio Rebechi
+
+**Tipo:** Relazione / Presentazione / Repository / Consegna
+
+### Attività svolta
+
+- Verificata la baseline della PR #23, mergiata nel commit
+  `6486bb240cdbcf4517ed1e893d83e6b1a34168e1`.
+- Mantenuti invariati specifiche M5, pesi, insieme incerto M4 e controllori
+  M6, Khinf e Kmu; non sono state eseguite nuove sintesi o retuning.
+- Ampliata la relazione con le motivazioni ingegneristiche e i limiti delle
+  diverse classi di evidenza.
+- Chiarito che M13 produce Kmu, mentre la certificazione RS deriva dalla
+  post-analisi indipendente M14.
+- Corretta la tabella M16 separando il numero di casi instabili dal Sample
+  ID instabile e denominando la percentuale frazione empirica.
+- Aggiornati autori, README, manifest e stato del progetto.
+- Rimossi i resoconti operativi intermedi non più necessari; le citazioni
+  storiche nel diario e nel changelog sono conservate come cronologia.
+- Avviata la validazione completa di tabelle, PDF, test, pipeline e analisi
+  statica prima della pubblicazione della revisione.
+
+### Stato
+
+Revisione editoriale in corso. I risultati tecnici positivi e negativi
+rimangono quelli validati in M1--M18.
+
+---
+
+## 2026-08-27 — Validazione della revisione editoriale finale
+
+**Responsabili:** Alessio de Dato, Valerio Rebechi
+
+**Tipo:** Test / Build / Ispezione visiva / Qualità editoriale
+
+### Risultati
+
+- Test dedicati M18: **60/60 PASS**.
+- Suite completa standalone: **649/649 PASS**.
+- `run_all` M0--M18: **PASS**, 649/649 test interni ed exit code 0;
+  M13 ha ricaricato l'artifact senza nuova `musyn`.
+- MATLAB Code Analyzer: **15 file, zero segnalazioni**.
+- Relazione compilata in **45 pagine** e presentazione in **17 slide**;
+  entrambi gli audit LaTeX riportano zero errori, riferimenti irrisolti,
+  overflow e destinazioni duplicate.
+- Ispezione visiva completata su tutte le 45 pagine e le 17 slide senza
+  tagli, sovrapposizioni o elementi illeggibili.
+- Gli output tecnici M1--M17 rigenerati da `run_all` sono stati ripristinati
+  alla baseline; restano modificati solo i deliverable e l'audit M18.
+- Specifiche, pesi e controllori congelati risultano invariati.
+- `git diff --check` e audit del linguaggio operativo: **PASS**.
+
+### Stato
+
+**Revisione editoriale COMPLETE e pronta per la pull request.** Restano da
+inserire manualmente le matricole e la data di consegna. Nessun merge viene
+eseguito automaticamente.

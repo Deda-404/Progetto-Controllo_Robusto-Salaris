@@ -1,9 +1,12 @@
 # Manifest dei deliverable finali
 
+**Autori:** Alessio de Dato, Valerio Rebechi
+**Progetto:** Controllo robusto di un manipolatore planare 2-DoF con SEA
+
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf`.
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (45 pagine A4).
 - Macro: `report/generated/m18_values.tex`.
 - Tabelle: 11 file generati in `report/tables/`.
 - Figure: 15 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
@@ -12,7 +15,7 @@
 ## Presentazione
 
 - Source: `presentation/main.tex` (Beamer 16:9).
-- PDF: `presentation/Progetto_CR_Presentazione.pdf`.
+- PDF: `presentation/Progetto_CR_Presentazione.pdf` (17 slide 16:9).
 - Timing: `presentation/OUTLINE_AND_TIMING.md`, stima totale 17:30.
 - Note: `presentation/SPEAKER_NOTES.md`, incluse domande probabili.
 - Compilazione: stesso comando PowerShell della relazione.
@@ -33,7 +36,7 @@
 - Generazione M18: `validate_m18_deliverables(true,true)`.
 - Regressione completa: `run_all`.
 
-## Known limitations
+## Limiti noti
 
 - M7 non produce un controllore integrale finale.
 - Kmu ha RS certificata ma NP/RP e tracking falliti.
@@ -44,6 +47,8 @@
 - Le incertezze non sono identificate sperimentalmente.
 - Kmu resta di ordine 52.
 
-## User input required
+## Dati da completare prima della consegna
 
-- `USER INPUT REQUIRED BEFORE SUBMISSION`: autori, matricole, eventuale logo, data d'esame e anno accademico.
+- matricole di Alessio de Dato e Valerio Rebechi;
+- data di consegna;
+- eventuale logo e anno accademico, se richiesti dal formato del corso.

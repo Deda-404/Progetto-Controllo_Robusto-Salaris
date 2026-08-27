@@ -1,5 +1,5 @@
 function evidence = load_m18_validated_artifacts
-%LOAD_M18_VALIDATED_ARTIFACTS Load the frozen M1-M17 evidence for M18.
+%LOAD_M18_VALIDATED_ARTIFACTS Load the validated M1-M17 results for M18.
 
 root = string(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 dataRoot = fullfile(root, "results", "data");
@@ -25,7 +25,7 @@ sourcePaths = [ ...
     fullfile(dataRoot, "m17_final_controller_comparison.mat")];
 exists = isfile(sourcePaths);
 assert(all(exists), "M18:MissingFrozenEvidence", ...
-    "Missing frozen evidence: %s", strjoin(sourcePaths(~exists), ", "));
+    "Missing validated result: %s", strjoin(sourcePaths(~exists), ", "));
 evidence = struct;
 evidence.root = root;
 evidence.config = finalization_specs_m18;
