@@ -1,0 +1,12 @@
+\chapter{Controllo $H_\infty$}
+M9 usa \texttt{mixsyn}, mentre M10 ricostruisce esplicitamente la pianta generalizzata e applica \texttt{hinfsyn}. Le due sintesi full-order sono coerenti e producono objective circa \HinfsynGamma. Poiché il target pesato è uno, $\gamma>1$ viene conservato come risultato negativo, non come PASS.
+\begin{figure}[H]\centering
+\includegraphics[width=0.80\textwidth]{figures/m10_weighted_comparison_m9.png}
+\caption{Prestazione pesata M9/M10 sul problema nominale congelato.}\label{fig:m10-weighted}
+\end{figure}
+M11 esplora sei architetture \texttt{hinfstruct}. Le famiglie A0--A2 non forniscono un candidato stabile valido in tutti i gate; A3, A4 e A5 formano una frontiera ordine/objective. A5, di ordine 6, raggiunge objective \AFiveGamma, ancora maggiore di uno. A5 viene selezionato per la successiva $\mu$-analysis, ma non coincide con il controllore full-order $K_{\infty}$ di M10, che ha ordine \KhinfOrder.
+\begin{figure}[H]\centering
+\includegraphics[width=0.74\textwidth]{figures/m11_gamma_vs_order.png}
+\caption{Trade-off fra ordine e objective nella campagna M11.}\label{fig:m11-order}
+\end{figure}
+\input{tables/hinf_summary.tex}

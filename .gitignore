@@ -30,6 +30,12 @@ codegen/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+*.xdv
 
 # Editor and OS files
 .vscode/
@@ -40,3 +46,4 @@ desktop.ini
 
 # Temporary results only; validated result artifacts remain trackable
 results/tmp/
+tmp/

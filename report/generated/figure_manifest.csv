@@ -1,0 +1,16 @@
+FileName,Milestone,SourcePath,ReportPath,Caption,ReportSection,PresentationUse
+m2_open_loop_poles.png,M2,results\figures\m2_open_loop_poles.png,report\figures\m2_open_loop_poles.png,"Poli del modello meccanico linearizzato in anello aperto.",3,1
+m3_delay_pade_comparison.png,M3,results\figures\m3_delay_pade_comparison.png,report\figures\m3_delay_pade_comparison.png,"Confronto fra ritardo esatto e approssimazione di Pade del primo ordine.",4,1
+m4_actuator_uncertainty_cover.png,M4,results\figures\m4_actuator_uncertainty_cover.png,report\figures\m4_actuator_uncertainty_cover.png,"Copertura dell'incertezza dinamica degli attuatori mediante W_I.",5,1
+m5_spec_frequency_map.png,M5,results\figures\m5_spec_frequency_map.png,report\figures\m5_spec_frequency_map.png,"Mappa frequenziale delle specifiche e dei pesi M5.",6,1
+m6_lqg_reference_tracking.png,M6,results\figures\m6_lqg_reference_tracking.png,report\figures\m6_lqg_reference_tracking.png,"Tracking nominale lineare del controllore LQG M6.",7,1
+m7_augmented_cost_tradeoff.png,M7,results\figures\m7_augmented_cost_tradeoff.png,report\figures\m7_augmented_cost_tradeoff.png,"Trade-off della feasibility LQG-I M7 senza candidato finale ammissibile.",7,0
+m8_lqg_ras_q_plane.png,M8,results\figures\m8_lqg_ras_q_plane.png,report\figures\m8_lqg_ras_q_plane.png,"Stima empirica della RAS M6 nel piano delle coordinate articolari.",7,1
+m10_weighted_comparison_m9.png,M10,results\figures\m10_weighted_comparison_m9.png,report\figures\m10_weighted_comparison_m9.png,"Confronto della prestazione pesata M9/M10 sul problema nominale congelato.",8,1
+m11_gamma_vs_order.png,M11,results\figures\m11_gamma_vs_order.png,report\figures\m11_gamma_vs_order.png,"Trade-off fra ordine e objective nella campagna hinfstruct M11.",8,0
+m14_ns_np_rs_rp_summary.png,M14,results\figures\m14_ns_np_rs_rp_summary.png,report\figures\m14_ns_np_rs_rp_summary.png,"Esiti NS, NP, RS e RP della post-analisi Kmu M14.",9,1
+m15_tracking_khinf_vs_kmu.png,M15,results\figures\m15_tracking_khinf_vs_kmu.png,report\figures\m15_tracking_khinf_vs_kmu.png,"Tracking non lineare nominale dei controllori Khinf e Kmu.",10,1
+m15_ras_m6_khinf_kmu.png,M15,results\figures\m15_ras_m6_khinf_kmu.png,report\figures\m15_ras_m6_khinf_kmu.png,"Confronto delle stime empiriche RAS M6, Khinf e Kmu.",10,1
+m16_empirical_stability_summary.png,M16,results\figures\m16_empirical_stability_summary.png,report\figures\m16_empirical_stability_summary.png,"Stabilita empirica dei tre controllori sui 40 campioni lineari M4.",11,1
+m17_m16_stability_tracking.png,M17,results\figures\m17_m16_stability_tracking.png,report\figures\m17_m16_stability_tracking.png,"Stabilita e core tracking M16 riportati nel confronto finale M17.",12,1
+m17_final_tradeoff_summary.png,M17,results\figures\m17_final_tradeoff_summary.png,report\figures\m17_final_tradeoff_summary.png,"Sintesi del trade-off e assegnazione finale per ruolo M17.",12,1

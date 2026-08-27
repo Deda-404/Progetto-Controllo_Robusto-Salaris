@@ -1,0 +1,10 @@
+\chapter{Monte Carlo sull'insieme incerto lineare}
+M16 usa seed \MonteCarloSeed\ e una singola sequenza comune di \MonteCarloSamples\ campioni M4. Ogni campione conserva la stessa realizzazione fisica per M6, $K_{\infty}$ e $K_\mu$; il benchmark nominale Sample 0 è escluso dalle statistiche. Tutti i campioni rispettano i range reali e i bound dei blocchi dinamici.
+
+M6 è stabile in \MControllerStableSamples/\MonteCarloSamples\ casi. Il Sample 5 è conservato come instabile, con massima parte reale $+\MControllerSampleFivePole$ s$^{-1}$. $K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ casi. I core tracking pass rate sono rispettivamente \MControllerTrackingPassPct\%, \KhinfTrackingPassPct\% e \KmuTrackingPassPct\%.
+\begin{figure}[H]\centering
+\includegraphics[width=0.78\textwidth]{figures/m16_empirical_stability_summary.png}
+\caption{Stabilità empirica sui 40 campioni lineari M4 (M16).}\label{fig:m16-stability}
+\end{figure}
+\input{tables/monte_carlo_m16.tex}
+Queste frequenze descrivono soltanto l'insieme finito campionato. Non sono probabilità fisiche, non certificano RS/RP e non sostituiscono M14. La coerenza fra 40/40 stabilità $K_\mu$ e RS M14 è una verifica incrociata, non un secondo certificato.

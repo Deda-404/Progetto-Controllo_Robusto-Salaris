@@ -1,0 +1,244 @@
+\documentclass[aspectratio=169,12pt]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usetheme{default}
+\definecolor{deepblue}{RGB}{20,52,92}
+\definecolor{accent}{RGB}{0,132,140}
+\definecolor{warn}{RGB}{173,56,38}
+\setbeamercolor{structure}{fg=deepblue}
+\setbeamercolor{frametitle}{fg=white,bg=deepblue}
+\setbeamercolor{title}{fg=deepblue}
+\setbeamerfont{title}{size=\Huge,series=\bfseries}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{normal text}{size=\large}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{%
+\leavevmode\hbox to \paperwidth{\hfill%
+\insertframenumber/\inserttotalframenumber\hspace{1em}}%
+\vskip0.5em}
+\newcommand{\good}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\bad}[1]{\textcolor{warn}{\textbf{#1}}}
+\input{../report/generated/m18_values.tex}
+\title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
+\author{USER INPUT REQUIRED BEFORE SUBMISSION}
+\date{USER INPUT REQUIRED BEFORE SUBMISSION}
+\begin{document}
+
+\begin{frame}[plain]\titlepage\end{frame}
+
+\begin{frame}{La domanda di progetto richiede evidenze diverse}
+\begin{itemize}
+\item Modellare un manipolatore SEA non lineare e linearizzarlo.
+\item Confrontare LQG, $H_\infty$ e $\mu$-synthesis.
+\item Separare prestazione nominale, validazione non lineare, campionamento incerto e certificazione $\mu$.
+\end{itemize}
+\vfill
+\good{Obiettivo finale: scegliere per ruolo, senza nascondere i risultati negativi.}
+\end{frame}
+
+\begin{frame}{L'elasticità separa link e rotori}
+\[
+M(q)\ddot q+C(q,\dot q)\dot q+G(q)=K_s(\theta-q)
+\]
+\[
+J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
+\]
+\begin{itemize}
+\item Stato meccanico: $[q,\dot q,\theta,\dot\theta]$.
+\item Equilibrio: $\bar q=[\EquilibriumQOneDeg^\circ,\EquilibriumQTwoDeg^\circ]^T$.
+\item Il modello open-loop richiede controllo attivo.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Attuatori e linearizzazione portano a 14 stati}
+\begin{columns}[T]
+\column{0.42\textwidth}
+\begin{itemize}
+\item $\omega_n=\ActuatorWn$ rad/s
+\item $\zeta=\ActuatorZeta$
+\item ritardo $\ActuatorDelayMs$ ms
+\item Padé del primo ordine
+\end{itemize}
+\column{0.56\textwidth}
+\includegraphics[width=\linewidth]{assets/m3_delay_pade_comparison.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{M4 combina parametri reali e dinamica non modellata}
+\begin{columns}[T]
+\column{0.40\textwidth}
+\begin{itemize}
+\item $J_{m1}$: $\pm\JmOneUncertaintyPct\%$
+\item $k_1,k_2$: $\pm\KOneUncertaintyPct\%$
+\item due blocchi $\Delta_{act}$ indipendenti
+\item range ingegneristici, non probabilità
+\end{itemize}
+\column{0.58\textwidth}
+\includegraphics[width=\linewidth]{assets/m4_actuator_uncertainty_cover.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{M5 fissa target e pesi prima del confronto}
+\begin{columns}[T]
+\column{0.40\textwidth}
+\begin{itemize}
+\item $T_s\leq\SettlingTarget$ s
+\item overshoot $\leq\OvershootTarget\%$
+\item errore $\leq\ErrorTargetPct\%$
+\item cross-coupling $\leq\CrossTargetPct\%$
+\end{itemize}
+\bad{$u_{scale}=\UScaleNm$ N m non è una saturazione hardware.}
+\column{0.58\textwidth}
+\includegraphics[width=\linewidth]{assets/m5_spec_frequency_map.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{M6 è il riferimento di tracking nominale}
+\begin{columns}[T]
+\column{0.36\textwidth}
+\begin{itemize}
+\item LQG senza integratore
+\item ordine \MControllerOrder
+\item $T_s$ peggiore \MControllerWorstTs\ s
+\item target nominali superati
+\end{itemize}
+\column{0.62\textwidth}
+\includegraphics[width=\linewidth]{assets/m6_lqg_reference_tracking.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{M7 chiude con un risultato negativo utile}
+\begin{itemize}
+\item Studiata un'architettura LQI/LQG-I con costi fisicamente normalizzati.
+\item Candidati finali ammissibili: \MSevenAdmissible.
+\item Nessun candidato soddisfa insieme settling time e overshoot M5.
+\end{itemize}
+\vfill
+\bad{Stato M7: \MSevenStatus. Non esiste un controllore integrale finale.}
+\end{frame}
+
+\begin{frame}{Le sintesi $H_\infty$ restano sopra il target pesato}
+\begin{columns}[T]
+\column{0.37\textwidth}
+\begin{itemize}
+\item M9 \texttt{mixsyn}
+\item M10 \texttt{hinfsyn}
+\item $\gamma\approx\HinfsynGamma>1$
+\item M11 A3/A4/A5: trade-off ordine/objective
+\end{itemize}
+\bad{$\gamma>1$ è conservato, non promosso a PASS.}
+\column{0.61\textwidth}
+\includegraphics[width=\linewidth]{assets/m10_weighted_comparison_m9.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{La D--K iteration recupera la stabilità robusta}
+\begin{itemize}
+\item M12 analizza A5: NS PASS, NP FAIL, RS/RP FAIL certificati.
+\item M13 esegue una campagna D--K congelata.
+\item Best iteration: \BestDKIteration; objective: \MusynObjective.
+\item $K_\mu$ è full-order, ordine \KmuOrder, senza riduzione.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{$K_\mu$ certifica RS, non la Robust Performance}
+\begin{columns}[T]
+\column{0.41\textwidth}
+\good{RS: \KmuRSStatus}
+
+Margine: [\KmuRSLower,\KmuRSUpper]
+
+\bad{NP: \KmuNPStatus}
+
+\bad{RP: \KmuRPStatus}
+\column{0.57\textwidth}
+\includegraphics[width=\linewidth]{assets/m14_ns_np_rs_rp_summary.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Sul non lineare nominale i robusti falliscono il tracking}
+\begin{columns}[T]
+\column{0.38\textwidth}
+\begin{itemize}
+\item $K_{\infty}$ e $K_\mu$: equilibrio e simulazioni finite.
+\item Settling time circa 1.73 s.
+\item Overshoot oltre 200\%.
+\item Errore a regime circa 50\%.
+\end{itemize}
+\column{0.60\textwidth}
+\includegraphics[width=\linewidth]{assets/m15_tracking_khinf_vs_kmu.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Le RAS sono stime empiriche, non certificati}
+\begin{columns}[T]
+\column{0.37\textwidth}
+\begin{itemize}
+\item M6: search-box limited
+\item $K_{\infty}$: frontiera empirica interna
+\item $K_\mu$: search-box limited
+\end{itemize}
+\bad{Il limite di ricerca non è una frontiera dinamica.}
+\column{0.61\textwidth}
+\includegraphics[width=\linewidth]{assets/m15_ras_m6_khinf_kmu.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{M16 confronta gli stessi 40 campioni M4}
+\begin{columns}[T]
+\column{0.39\textwidth}
+\begin{itemize}
+\item seed \MonteCarloSeed
+\item M6: \MControllerStableSamples/\MonteCarloSamples
+\item $K_{\infty}$: \KhinfStableSamples/\MonteCarloSamples
+\item $K_\mu$: \KmuStableSamples/\MonteCarloSamples
+\end{itemize}
+\bad{Sample 5 M6: polo $+\MControllerSampleFivePole$ s$^{-1}$.}
+\column{0.59\textwidth}
+\includegraphics[width=\linewidth]{assets/m16_empirical_stability_summary.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Monte Carlo osserva; la $\mu$-analysis certifica}
+\begin{itemize}
+\item Core tracking pass rate: M6 \MControllerTrackingPassPct\%, $K_{\infty}$ \KhinfTrackingPassPct\%, $K_\mu$ \KmuTrackingPassPct\%.
+\item 40/40 per $K_\mu$ è coerente con RS M14.
+\item I campioni non definiscono una probabilità fisica.
+\end{itemize}
+\vfill
+\good{M14 resta l'unica fonte del certificato RS di $K_\mu$.}
+\end{frame}
+
+\begin{frame}{La decisione finale è per ruolo}
+\begin{columns}[T]
+\column{0.39\textwidth}
+\good{$K_\mu$: final robust controller}
+
+M6: nominal performance reference
+
+$K_{\infty}$: H-infinity comparator
+
+\bad{Nessun vincitore assoluto.}
+\column{0.59\textwidth}
+\includegraphics[width=\linewidth]{assets/m17_final_tradeoff_summary.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Il progetto è chiuso con limiti espliciti}
+\begin{itemize}
+\item RS $K_\mu$ certificata; NP/RP e tracking non conformi.
+\item M7 senza controllore integrale finale.
+\item Nessuna saturazione hardware certificata.
+\item Incertezze non identificate sperimentalmente.
+\item RAS e Monte Carlo con semantica empirica.
+\item $K_\mu$ resta di ordine \KmuOrder.
+\end{itemize}
+\vfill
+\good{Deliverable completo non significa specifiche tutte soddisfatte.}
+\end{frame}
+\end{document}

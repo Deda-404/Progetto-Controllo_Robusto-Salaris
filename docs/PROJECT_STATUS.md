@@ -1,17 +1,45 @@
 # Project Status
 
-**Current milestone:** M17 — confronto finale e selezione motivata per ruolo
-**Status:** `COMPLETE` — evidenze congelate separate, identità e decisione gerarchica `PASS`
-**Last validated milestone:** M17 `COMPLETE`; M16/M13 restano `COMPLETE`, M15/M14 `PARTIAL`
+**Current milestone:** M18 — relazione, presentazione, audit e chiusura del progetto
+**Status:** `COMPLETE` — deliverable compilati e tracciabilità artifact-only `PASS`
+**Last validated milestone:** M18 `COMPLETE`; M17/M16/M13 restano `COMPLETE`, M15/M14 `PARTIAL`
+**Project state:** `FINAL DELIVERABLE SET COMPLETE`
 **Final robust controller:** M13 `Kmu` — RS M14 `PASS_CERTIFIED`, RP e tracking `FAIL`
 **Nominal performance reference:** M6 — LQG nominale senza integratore
 **H-infinity reference:** M10 `Khinf` — comparatore metodologico full-order
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Open technical issue:** nessun controller soddisfa tutte le specifiche M5; M6 è instabile nel Sample 5, Khinf/Kmu falliscono tracking e Kmu fallisce RP
-**Next task:** revisione tecnica M17; M18 non è iniziata
-**Pull Request baseline:** [PR #21](https://github.com/Deda-404/Progetto_CR/pull/21) `MERGED` al commit `392ad170dc6665c87b769e314edb8380a4b1c8bc`
-**Pull Request corrente:** [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22) `OPEN`, non draft e non mergiata, da `codex/m17-final-comparison` verso `main`
-**Last update:** 2026-08-27, M17 pubblicata per revisione tecnica senza merge autonomo
+**Next task:** revisione finale, compilazione dei dati anagrafici e consegna; nessun retuning autorizzato
+**Pull Request baseline:** [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22) `MERGED` al commit `75d194d49a96b67309b1853f154bdd22a168ca4f`
+**Pull Request corrente:** [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23) `OPEN`, non draft e non mergiata, dal branch `codex/m18-final-deliverables` verso `main`
+**Last update:** 2026-08-27, M18 validata, pubblicata nella PR #23 e in attesa di revisione/merge manuale
+
+## Quality gate M18 — COMPLETE
+
+| Requisito | Esito |
+| --- | --- |
+| baseline Git | PASS — PR #22 mergiata al commit `75d194d49a96b67309b1853f154bdd22a168ca4f` |
+| evidenze tecniche | PASS — artifact M1–M17 caricati senza rigenerare sintesi o simulazioni |
+| audit numerico | PASS — 59 righe con milestone, artifact, campo sorgente e macro/tabella |
+| riconciliazione | PASS — 19/19 confronti con gli artifact congelati |
+| relazione | PASS — 13 capitoli, 3 appendici, 15 figure e 11 tabelle |
+| PDF relazione | PASS — 27 pagine, zero errori, riferimenti irrisolti, overflow o destinazioni duplicate |
+| presentazione | PASS — 17 slide 16:9, timing stimato 17:30 e note oratore |
+| PDF presentazione | PASS — zero errori, riferimenti irrisolti, overflow o destinazioni duplicate |
+| test M18 | PASS — 60/60 |
+| suite completa | PASS — 649/649 |
+| `run_all` M0–M18 | PASS — 649/649, exit code 0; M13 ricaricata senza nuova `musyn` |
+| Code Analyzer | PASS — zero messaggi sui file M18, test e `run_all.m` |
+| semantica Monte Carlo | PASS — evidenza empirica M16, non certificazione e non sostituzione di M14 |
+| esiti negativi | PASS — FAIL/PARTIAL e requisiti NOT RUN conservati esplicitamente |
+| input utente | REQUIRED — autori, matricole, data/anno accademico ed eventuale logo |
+| nuova sintesi/tuning/MC/Simulink/riduzione | NOT RUN corretto |
+| stato | **COMPLETE — deliverable conclusivi prodotti senza alterare i risultati tecnici** |
+
+La relazione e la presentazione sono artefatti finali sincronizzati con il
+codice. `COMPLETE` descrive il completamento della milestone M18, non una
+conformità prestazionale globale: Robust Performance, tracking robusto,
+LQG-I e limiti hardware restano rispettivamente `FAIL`, `PARTIAL` o `NOT RUN`.
 
 ## Quality gate M17 — COMPLETE
 

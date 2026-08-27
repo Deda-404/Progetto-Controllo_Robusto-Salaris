@@ -1,0 +1,14 @@
+\chapter{Validazione non lineare nominale}
+M8 valida M6; M15 valida $K_{\infty}$ e $K_\mu$ sul modello non lineare nominale. Le tre architetture mantengono le proprie convenzioni di ingresso e stato; per i controllori robusti il comando incrementale è applicato come $u_{abs}=\bar\tau+K(r-q)$, senza prefiltri o integratori aggiuntivi.
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{figures/m15_tracking_khinf_vs_kmu.png}
+\caption{Tracking non lineare nominale di $K_{\infty}$ e $K_\mu$ (M15).}\label{fig:m15-tracking}
+\end{figure}
+Entrambi i controllori robusti risultano stabili nelle simulazioni richieste, ma falliscono i target di tracking M5: i peggiori settling time sono circa 1.73 s, con overshoot superiori al 200\% ed errore a regime prossimo al 50\%. Il comando viene quantificato, senza confronto con una saturazione hardware inesistente.
+
+Le stime RAS sono empiriche. $K_{\infty}$ individua una frontiera interna con raggio minimo \KhinfRasMin$^\circ$; $K_\mu$ raggiunge il limite di ricerca con raggio minimo \KmuRasMin$^\circ$. Quest'ultimo risultato è search-box limited, non una frontiera certificata.
+\begin{figure}[H]\centering
+\includegraphics[width=0.79\textwidth]{figures/m15_ras_m6_khinf_kmu.png}
+\caption{Confronto delle stime empiriche RAS; M6 e $K_\mu$ sono search-box limited.}\label{fig:m15-ras}
+\end{figure}
+\input{tables/nonlinear_validation.tex}

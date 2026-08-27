@@ -1,0 +1,14 @@
+\chapter{Riproducibilità}
+Dalla radice del repository, MATLAB R2025b esegue l'intera pipeline con:
+\begin{verbatim}
+run_all
+\end{verbatim}
+Il comando pulisce il workspace, imposta il seed, aggiunge i percorsi del progetto e percorre M1--M18. M13 ricarica il checkpoint D--K congelato senza nuova chiamata a \texttt{musyn}. La generazione M18 si ripete con:
+\begin{verbatim}
+validate_m18_deliverables(true,true)
+\end{verbatim}
+Relazione e presentazione sono compilate con:
+\begin{verbatim}
+powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
+\end{verbatim}
+I PDF finali hanno nomi stabili; file aux, log, toc, cache e altri intermedi non sono tracciati.

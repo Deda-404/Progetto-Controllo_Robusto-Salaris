@@ -31,7 +31,9 @@ Progetto_CR/
 ├── simulink/             modelli Simulink del progetto
 ├── tests/                test automatici
 ├── results/              dati, figure e controllori generati
-└── report/               sorgenti della relazione
+├── report/               relazione finale e sorgenti LaTeX
+├── presentation/         presentazione finale, timing e note
+└── tools/                compilazione e audit dei deliverable
 ```
 
 ## Prerequisiti verificati
@@ -52,17 +54,28 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M17,
-ricostruisce gli artifact precedenti e completa il confronto artifact-only M17.
+Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M18,
+ricostruisce gli artifact precedenti e completa la finalizzazione artifact-only M18.
 I risultati negativi M9–M12, M14 e M15 sono conservati senza ritunare M5;
 M7 resta `PARTIAL` terminale. La sintesi M13 non viene rilanciata
 automaticamente: il raw output autorizzato è congelato. M14 resta la fonte
 della certificazione mu, M15 la validazione non lineare nominale, M16
-l'evidenza empirica sui campioni lineari M4 e M17 la decisione per ruolo.
+l'evidenza empirica sui campioni lineari M4, M17 la decisione per ruolo e
+M18 la generazione tracciabile dei deliverable, senza nuova attività tecnica.
+
+Per rigenerare e auditare relazione e presentazione dopo la generazione M18:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
+```
+
+Gli output stabili sono `report/Progetto_CR_Relazione_finale.pdf` e
+`presentation/Progetto_CR_Presentazione.pdf`. Prima della consegna devono
+essere sostituiti i placeholder anagrafici dichiarati nei frontespizi.
 
 ## Stato corrente
 
-- Milestone corrente: **M17 — confronto finale dei controllori, COMPLETE**;
+- Milestone corrente: **M18 — deliverable finali, COMPLETE**;
   M16/M13 restano `COMPLETE`, mentre M15/M14 restano `PARTIAL` per i
   risultati prestazionali negativi documentati.
 - Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
@@ -106,6 +119,10 @@ l'evidenza empirica sui campioni lineari M4 e M17 la decisione per ruolo.
   controller, M6 come nominal performance reference e `Khinf` come
   H-infinity reference/comparator. Kmu conserva tracking, NP e RP falliti;
   M6 conserva il Sample 5 instabile e M6/Khinf restano senza certificato RS.
+- Risultato M18: relazione tecnica di 27 pagine e presentazione di 17 slide
+  con timing stimato 17:30, entrambe compilate con audit LaTeX PASS.
+  L'audit finale riconcilia 59 valori, 11 tabelle, 15 figure, 13 asset di
+  presentazione e 19 controlli di tracciabilità, senza sintesi o retuning.
 
 Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`,
 `docs/FINAL_CONTROLLER_COMPARISON.md`,

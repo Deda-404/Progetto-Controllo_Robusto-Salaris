@@ -1,0 +1,8 @@
+\chapter{Modello delle incertezze}
+Lo screening M4 seleziona $J_{m1}$ con variazione $\pm\JmOneUncertaintyPct\%$ e $k_1,k_2$ con variazione $\pm\KOneUncertaintyPct\%$. La famiglia attuatori varia inoltre frequenza naturale, smorzamento e ritardo; l'errore moltiplicativo è coperto da un peso $W_I$ e da due blocchi dinamici indipendenti $\Delta_{act1},\Delta_{act2}$ con norma limitata a uno.
+\input{tables/uncertainties_m4.tex}
+La struttura finale contiene \MFourBlockCount\ blocchi normalizzati. I range sono engineering envelopes motivati da sensibilità e plausibilità fisica; non provengono da identificazione sperimentale e non definiscono densità di probabilità.
+\begin{figure}[H]\centering
+\includegraphics[width=0.78\textwidth]{figures/m4_actuator_uncertainty_cover.png}
+\caption{Copertura dell'incertezza dinamica degli attuatori mediante $W_I$ (M4).}\label{fig:m4-wi}
+\end{figure}

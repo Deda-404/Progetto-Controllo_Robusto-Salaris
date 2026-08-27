@@ -1,0 +1,9 @@
+\chapter{Conclusioni e limiti}
+Il progetto ha costruito una catena riproducibile dal modello non lineare ai controllori e alle verifiche nominali, non lineari, empiriche e formali. M6 offre il miglior tracking nominale fra i candidati finali, ma M16 osserva una perdita di stabilità nel Sample 5. $K_{\infty}$ e $K_\mu$ sono stabili sui 40 campioni M16; soltanto $K_\mu$ possiede la Robust Stability formalmente certificata su M4.
+
+La conclusione positiva è circoscritta: $K_\mu$ non soddisfa Nominal Performance né Robust Performance e non raggiunge i target di tracking M5. M7 non produce un controllore LQG-I finale. Il risultato finale è quindi una selezione per ruolo e non una conformità complessiva.
+\section{Limiti noti}
+\input{tables/limitations.tex}
+Mancano limiti hardware di coppia verificati e un modello di saturazione; i range M4 non sono identificati sperimentalmente; le RAS M8/M15 sono stime empiriche; la Monte Carlo non è un certificato; $K_\mu$ resta di ordine 52. Questi elementi non sono stati chiusi artificialmente in M18.
+\section{Sviluppi futuri}
+Sviluppi plausibili, non eseguiti, includono identificazione sperimentale delle incertezze, definizione dei limiti di attuazione, revisione motivata dei pesi, riduzione di $K_\mu$ con rivalidazione, architetture 2-DoF e validazione non lineare incerta. Ognuno richiederebbe una nuova fase tecnica e non cambia gli esiti qui documentati.
