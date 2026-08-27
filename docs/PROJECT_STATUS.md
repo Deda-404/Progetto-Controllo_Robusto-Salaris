@@ -11,8 +11,8 @@
 **Open technical issue:** nessun controller soddisfa tutte le specifiche M5; M6 è instabile nel Sample 5, Khinf/Kmu falliscono tracking e Kmu fallisce RP
 **Next task:** revisione finale, compilazione dei dati anagrafici e consegna; nessun retuning autorizzato
 **Pull Request baseline:** [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22) `MERGED` al commit `75d194d49a96b67309b1853f154bdd22a168ca4f`
-**Pull Request corrente:** da aprire dal branch `codex/m18-final-deliverables` verso `main`
-**Last update:** 2026-08-27, M18 finalizzata localmente e pronta per regressione/pubblicazione
+**Pull Request corrente:** [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23) `OPEN`, non draft e non mergiata, dal branch `codex/m18-final-deliverables` verso `main`
+**Last update:** 2026-08-27, M18 validata, pubblicata nella PR #23 e in attesa di revisione/merge manuale
 
 ## Quality gate M18 — COMPLETE
 

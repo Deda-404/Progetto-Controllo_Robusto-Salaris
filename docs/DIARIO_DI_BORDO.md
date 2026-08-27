@@ -2312,3 +2312,29 @@ empiriche; saturazioni e limiti hardware reali restano non verificati.
 
 **M18 COMPLETE e riproducibile; pronta per pubblicazione in PR senza merge
 autonomo.**
+
+---
+
+## 2026-08-27 — Pubblicazione M18
+
+**Responsabile:** Alessio
+
+**Milestone:** M18
+
+**Tipo:** Git / Pull Request / Handoff finale
+
+### Attività svolta
+
+- Creato il commit tecnico/documentale
+  `0db991dcb78dee23c4bf47ecd755ca0968c47ee6`.
+- Pubblicato `codex/m18-final-deliverables` su `origin`.
+- Aperta la [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23)
+  verso `main`, non draft, `OPEN` e non mergiata.
+- Preparato l'handoff conclusivo `Resoconto_M18_per_GPT.txt` con le sezioni
+  A--U, i riferimenti ai deliverable, gli esiti tecnici conservati e la
+  checklist manuale pre-consegna.
+
+### Risultato
+
+**M18 COMPLETE pubblicata per revisione e merge manuali. Nessuna nuova
+milestone tecnica è aperta.**
