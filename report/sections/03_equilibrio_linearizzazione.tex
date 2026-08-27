@@ -1,9 +1,51 @@
 \chapter{Equilibrio e linearizzazione}
-L'equilibrio congelato è $\bar q=[\EquilibriumQOneDeg^\circ,\EquilibriumQTwoDeg^\circ]^T$, con velocità nulle. La coppia di equilibrio compensa la gravità e la deformazione statica delle molle; la linearizzazione usa coordinate incrementali $\tilde x=x-\bar x$ e $\tilde\tau=\tau-\bar\tau$. Le matrici Jacobiane sono ricavate dall'implementazione e verificate con differenze finite.
+\section{Scelta del punto di lavoro}
+Abbiamo scelto la configurazione
+\[
+\bar q=\begin{bmatrix}\EquilibriumQOneDeg^\circ&\EquilibriumQTwoDeg^\circ\end{bmatrix}^T
+=\begin{bmatrix}\pi/2&0\end{bmatrix}^T.
+\]
+Essa rappresenta il braccio disteso nella configurazione verticale superiore secondo la convenzione angolare adottata. La scelta è interessante dal punto di vista del controllo perché il campo gravitazionale rende il punto di lavoro instabile in anello aperto: il controllore deve quindi svolgere una reale funzione di stabilizzazione, non soltanto modificare lo smorzamento di un equilibrio già stabile.
 
-Il modello meccanico ha otto stati. In anello aperto presenta massima parte reale \OpenLoopMaxRealPole\,s$^{-1}$: la configurazione richiede controllo attivo. I test PBH registrano stabilizzabilità e rilevabilità rispetto alle misure selezionate.
+All'equilibrio le velocità e le accelerazioni sono nulle. Dalle equazioni statiche segue
+\[
+G(\bar q)=K_s(\bar\theta-\bar q),\qquad
+\bar\tau=K_s(\bar\theta-\bar q),
+\]
+e quindi
+\[
+\bar\theta=\bar q+K_s^{-1}G(\bar q),\qquad \bar\tau=G(\bar q).
+\]
+Per la configurazione scelta i contributi gravitazionali sono nulli entro la precisione floating-point; anche la deformazione elastica e la coppia di equilibrio risultano quindi praticamente nulle. La condizione
+\[
+f(\bar x,\bar\tau)=0
+\]
+è stata verificata richiamando il modello non lineare completo. La norma del residuo è $5.84\times10^{-14}$, ampiamente inferiore alla tolleranza $10^{-10}$.
+
+\section{Coordinate incrementali e Jacobiani}
+Per descrivere piccole variazioni attorno al punto di lavoro introduciamo
+\[
+\widetilde x=x-\bar x,\qquad
+\widetilde\tau=\tau-\bar\tau.
+\]
+Lo sviluppo di Taylor al primo ordine fornisce
+\[
+\dot{\widetilde x}=A\widetilde x+B\widetilde\tau,qquad
+A=\left.\frac{\partial f}{\partial x}\right|_{\bar x,\bar\tau},\quad
+B=\left.\frac{\partial f}{\partial\tau}\right|_{\bar x,\bar\tau}.
+\]
+Le matrici sono ottenute mediante derivazione simbolica delle stesse funzioni usate nel modello numerico. Una seconda costruzione a differenze finite centrate, con passo $3\times10^{-6}$, fornisce un controllo indipendente: l'errore relativo di Frobenius su $A$ è $6.42\times10^{-12}$ e quello su $B$ è nullo alla precisione utilizzata.
+
+La linearizzazione è locale. Essa descrive correttamente il termine dominante per perturbazioni sufficientemente piccole, ma non incorpora i termini di ordine superiore che diventano rilevanti all'aumentare dell'ampiezza. Una verifica lungo direzioni deterministiche mostra la prevista riduzione dell'errore fra modello non lineare e approssimazione lineare quando l'ampiezza viene diminuita da $10^{-2}$ a $10^{-5}$. Tale test non viene interpretato come stima della regione di attrazione.
+
+\section{Poli e proprietà strutturali}
+
+Il modello meccanico ha otto stati. In anello aperto possiede due poli reali instabili, circa $+7.2094$ e $+4.0408$ s$^{-1}$; la massima parte reale è \OpenLoopMaxRealPole\,s$^{-1}$. Sono inoltre presenti due coppie elastiche complesse prossime a 70 e 79.4 rad/s e quattro modi stabili più lenti. Questa separazione di scale guiderà sia la scelta della banda degli attuatori sia le normalizzazioni dei costi di controllo.
 \begin{figure}[H]\centering
 \includegraphics[width=0.72\textwidth]{figures/m2_open_loop_poles.png}
 \caption{Poli del modello meccanico linearizzato in anello aperto (M2).}\label{fig:m2-poles}
 \end{figure}
-Il confronto LTI/non lineare per piccole perturbazioni è eseguito nelle milestone di validazione; la linearizzazione resta locale e non attribuisce validità globale alle stime RAS.
+
+Le matrici classiche di controllabilità e osservabilità sono fortemente condizionate, perché contengono potenze di $A$ e variabili con scale fisiche diverse. Per evitare conclusioni dipendenti da una soglia numerica implicita, abbiamo impiegato la SVD con tolleranza dichiarata e il test PBH sui modi critici. La coppia $(A,B)$ risulta controllabile; in particolare entrambi i modi instabili sono controllabili e il modello è stabilizzabile.
+
+Per le misure $y=[q^T,\theta^T]^T$ la coppia $(A,C_{meas})$ è osservabile e rilevabile. Anche la sola misura $q$ supera il PBH, ma la scelta principale conserva gli encoder motore: la deformazione $\theta-q$ è così direttamente accessibile e le velocità possono essere ricostruite dallo stimatore senza ipotizzare sensori aggiuntivi. Le uscite di prestazione restano invece le sole posizioni articolari.

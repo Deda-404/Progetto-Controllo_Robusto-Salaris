@@ -150,7 +150,7 @@ handle = localFigure([100, 100, 850, 600]);
 cleanup = onCleanup(@() close(handle));
 bar(categorical(data.Controller, data.Controller), data.Order);
 ylabel('Dynamic controller order'); grid on;
-title('M17 controller complexity from frozen artifacts');
+title('M17 controller complexity from validated results');
 localExport(handle, path);
 end
 

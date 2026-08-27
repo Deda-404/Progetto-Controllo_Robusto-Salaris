@@ -17,9 +17,9 @@ addpath(genpath(fullfile(projectRoot, 'simulink')));
 
 fprintf('Progetto CR - esecuzione riproducibile\n');
 fprintf('Root: %s\n', projectRoot);
-fprintf(['Milestone corrente: M18 - finalizzazione artifact-only della ' ...
+fprintf(['Milestone corrente: M18 - generazione verificabile della ' ...
     'relazione, presentazione e tracciabilita; specifiche, pesi e ' ...
-    'controllori M6/Khinf/Kmu restano congelati\n\n']);
+    'controllori M6/Khinf/Kmu restano invariati\n\n']);
 
 try
     fprintf(['--- Test automatici M0 + M1 + M2 + M3/M3.1 + ' ...
@@ -108,12 +108,12 @@ try
     m16Stability = m16Metrics.summary.stabilitySummaryTable;
     m16PassRates = m16Metrics.summary.empiricalPassRatesTable;
 
-    fprintf(['\n--- M17: confronto artifact-only M6/Khinf/Kmu, ' ...
+    fprintf(['\n--- M17: confronto dei risultati M6/Khinf/Kmu, ' ...
         'trade-off e selezione finale per ruolo ---\n']);
     m17Metrics = validate_m17_final_comparison(true);
     m17Roles = m17Metrics.decision.finalRoleAssignment;
 
-    fprintf(['\n--- M18: generazione artifact-only, audit numerico, ' ...
+    fprintf(['\n--- M18: generazione documentale, audit numerico, ' ...
         'tracciabilita e verifica dei deliverable compilati ---\n']);
     m18Metrics = validate_m18_deliverables(true, true);
 

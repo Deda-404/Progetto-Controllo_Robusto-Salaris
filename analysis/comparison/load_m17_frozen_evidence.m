@@ -1,5 +1,5 @@
 function evidence = load_m17_frozen_evidence(projectRoot, config)
-%LOAD_M17_FROZEN_EVIDENCE Load and audit the frozen M5-M16 artifacts.
+%LOAD_M17_FROZEN_EVIDENCE Load and audit the validated M5-M16 results.
 
 arguments
     projectRoot (1, 1) string

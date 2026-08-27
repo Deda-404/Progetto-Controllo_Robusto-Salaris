@@ -1,10 +1,44 @@
 \chapter{Monte Carlo sull'insieme incerto lineare}
-M16 usa seed \MonteCarloSeed\ e una singola sequenza comune di \MonteCarloSamples\ campioni M4. Ogni campione conserva la stessa realizzazione fisica per M6, $K_{\infty}$ e $K_\mu$; il benchmark nominale Sample 0 è escluso dalle statistiche. Tutti i campioni rispettano i range reali e i bound dei blocchi dinamici.
+\section{Obiettivo della campagna}
+M16 aggiunge una valutazione empirica sui controllori finali senza modificare la certificazione M14. Il suo scopo è osservare, su realizzazioni fisiche comuni, stabilità, tracking, interazione e comando. La campagna può rivelare esempi critici e mostrare la distribuzione delle metriche nel campione; non può dimostrare proprietà per tutti i valori continui dell'insieme M4.
 
-M6 è stabile in \MControllerStableSamples/\MonteCarloSamples\ casi. Il Sample 5 è conservato come instabile, con massima parte reale $+\MControllerSampleFivePole$ s$^{-1}$. $K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ casi. I core tracking pass rate sono rispettivamente \MControllerTrackingPassPct\%, \KhinfTrackingPassPct\% e \KmuTrackingPassPct\%.
-\begin{figure}[H]\centering
+L'incertezza è trattata come insieme di variazioni ammissibili, non come distribuzione fisica identificata. L'estrazione uniforme implicita nel campionamento software è una regola computazionale per esplorare il dominio; le frequenze ottenute non sono quindi stime della probabilità reale di guasto del manipolatore.
+
+\section{Disegno sperimentale e riproducibilità}
+La campagna usa seed \MonteCarloSeed, generatore \texttt{twister} e \MonteCarloSamples\ campioni. La sequenza è generata una sola volta dalla pianta incerta M4. Ogni Sample ID rappresenta la stessa realizzazione fisica per M6, $K_{\infty}$ e $K_\mu$: parametri meccanici e blocchi dinamici degli attuatori non vengono riestratti passando da un controllore all'altro. Questo accoppiamento rende i confronti paired e impedisce che una differenza fra controllori dipenda da insiemi casuali diversi.
+
+Il Sample 0 nominale è usato come controllo di implementazione e non entra nelle statistiche. Per ciascuno dei 40 campioni effettivi vengono verificati:
+\begin{itemize}
+\item appartenenza dei parametri reali ai range M4;
+\item stabilità e bound unitario dei due blocchi dinamici campionati;
+\item identità della pianta fisica usata dalle tre chiusure;
+\item stabilità interna senza cancellazioni di modi;
+\item metriche di tracking sugli scenari M5, cross-coupling e picco di comando.
+\end{itemize}
+Il replay con lo stesso seed riproduce i campioni entro la tolleranza numerica prevista.
+
+\section{Stabilità empirica}
+M6 è stabile in \MControllerStableSamples/\MonteCarloSamples\ realizzazioni. L'unico campione instabile è il Sample ID 5, che presenta due poli nel semipiano destro e massima parte reale $+\MControllerSampleFivePole$ s$^{-1}$. Il caso viene conservato nel dataset e nella tabella; non è scartato come outlier, perché appartiene all'insieme di campionamento valido.
+
+$K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ campioni. La tabella distingue volutamente il numero di casi instabili dall'identificativo del campione: per M6 i valori sono rispettivamente 1 e 5, mentre per i due controllori robusti sono 0 e nessun ID.
+
+\begin{figure}[H]
+\centering
 \includegraphics[width=0.78\textwidth]{figures/m16_empirical_stability_summary.png}
-\caption{Stabilità empirica sui 40 campioni lineari M4 (M16).}\label{fig:m16-stability}
+\caption{Stabilità osservata sui 40 campioni lineari M4. Il risultato descrive il campione finito e non l'intero insieme incerto.}
+\label{fig:m16-stability}
 \end{figure}
+
 \input{tables/monte_carlo_m16.tex}
-Queste frequenze descrivono soltanto l'insieme finito campionato. Non sono probabilità fisiche, non certificano RS/RP e non sostituiscono M14. La coerenza fra 40/40 stabilità $K_\mu$ e RS M14 è una verifica incrociata, non un secondo certificato.
+
+La colonna percentuale è indicata come \emph{frazione empirica}: vale $39/40=97.5\%$ per M6 e $40/40=100\%$ per gli altri due controllori. Non è denominata probabilità di stabilità, perché mancano una distribuzione delle incertezze identificata e un'argomentazione statistica che leghi il campione alla popolazione fisica.
+
+\section{Prestazione sui campioni stabili}
+La stabilità non coincide con il rispetto del tracking. Il core tracking pass rate calcolato sul totale dei 40 campioni è \MControllerTrackingPassPct$\%$ per M6, \KhinfTrackingPassPct$\%$ per $K_{\infty}$ e \KmuTrackingPassPct$\%$ per $K_\mu$. M6 conserva quindi una parte dei casi conformi alle specifiche temporali, ma mostra sensibilità sufficiente a destabilizzare una realizzazione. I due controllori robusti mantengono la stabilità su tutti i campioni e tuttavia non soddisfano il nucleo dei target di tracking in nessuno di essi.
+
+Il picco di comando è riportato come distribuzione e mediana, sempre senza confronto con una saturazione hardware. Cross-coupling e risposta al disturbo sono quantificati con le convenzioni già adottate, senza aggiungere nuove soglie dopo aver osservato i dati. L'uso degli stessi Sample ID permette di interpretare le differenze caso per caso e non mediante uno score globale.
+
+\section{Relazione con la certificazione M14}
+La stabilità 40/40 di $K_\mu$ è coerente con il margine RS M14 maggiore di uno. Questa coerenza è un controllo incrociato utile: non è emersa una contraddizione fra campionamento e analisi formale. Tuttavia M16 non sostituisce M14, perché un insieme finito di campioni non esclude una perturbazione non estratta. Simmetricamente, il Sample 5 rende concreta la vulnerabilità di M6 ma non misura la probabilità con cui essa si presenterebbe nell'impianto reale.
+
+La conclusione M16 rimane dunque empirica: nel campione comune considerato M6 è stabile 39 volte, mentre $K_{\infty}$ e $K_\mu$ lo sono 40 volte. La sola certificazione di Robust Stability di $K_\mu$ resta la $\mu$-analysis indipendente M14; Robust Performance continua a essere fallita.

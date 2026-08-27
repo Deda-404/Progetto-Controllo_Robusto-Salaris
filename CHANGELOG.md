@@ -6,6 +6,15 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Added
 
+- Audit editoriale conclusivo in `docs/FINAL_EDITORIAL_AUDIT.md`, con
+  classificazione delle occorrenze operative residue e verifica degli
+  invarianti tecnici.
+- Motivazioni ingegneristiche estese nella relazione: modello, equilibrio,
+  attuatori, incertezze, pesi, LQG, esito negativo M7, sintesi H-infinity,
+  analisi mu, validazione non lineare, RAS e Monte Carlo.
+- Relazione editoriale finale di 45 pagine e presentazione di 17 slide,
+  entrambe compilate e ispezionate integralmente.
+
 - Pipeline M18 artifact-only per caricare gli artifact congelati M1–M17,
   riconciliare 59 valori e generare macro, 11 tabelle, manifest di 15 figure,
   13 asset di presentazione e audit finale.
@@ -35,6 +44,20 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Changed
 
+- Inseriti Alessio de Dato e Valerio Rebechi come autori di relazione,
+  presentazione, README e manifest; restano da completare matricole e data.
+- Separati nella presentazione il ruolo di M13, che produce Kmu, e quello
+  di M14, che certifica la Robust Stability.
+- Corretta la tabella Monte Carlo: numero di casi instabili e Sample ID
+  instabile sono ora colonne distinte; la percentuale è denominata frazione
+  empirica.
+- Uniformate in italiano le tabelle di ruoli e limiti e aggiornate le
+  percentuali di incertezza con il segno più/meno.
+- Resi più naturali i commenti MATLAB e i messaggi della pipeline M17/M18,
+  senza modificare logica o dati.
+- Aggiornati i test di governance M7/M18 dopo la rimozione dei resoconti
+  operativi; suite completa 649/649, `run_all` PASS e Code Analyzer pulito.
+
 - Esteso run_all.m fino a M18. La fase M18 genera e verifica soltanto i
   deliverable, mantenendo congelati M4, M5 e i controllori M6/Khinf/Kmu.
 - Documentati senza promozione gli esiti PARTIAL/FAIL: M7 senza controllore
@@ -59,9 +82,17 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ### Fixed
 
+- Rimossa la dipendenza del test M7 dai resoconti intermedi; il controllo
+  usa ora diario, stato del progetto e documento tecnico M7.
+
 - La risposta LTI al disturbo usa una realizzazione a stato fisico condiviso,
   equivalente a `S*Gd`/`-KS*Gd`, evitando cancellazioni numeriche di copie
   duplicate dei modi instabili della pianta.
+
+### Removed
+
+- Rimossi dal ramo corrente i resoconti operativi intermedi non necessari
+  alla riproduzione. La cronologia Git ne conserva l'evoluzione.
 
 - Pipeline M14 di sola analisi per Kmu M13 congelato, derivata senza cambi di
   griglie/opzioni dalla pipeline M12 e con gate di identità Kmu/Punc/M4/M5.

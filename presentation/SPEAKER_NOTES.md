@@ -65,14 +65,14 @@
 
 ## Slide 10 - D-K iteration (1:00)
 
-- Messaggio: Kmu recupera margine di stabilità robusta.
-- Spiegare: campagna congelata, best iteration e ordine 52.
-- Non sovrainterpretare: objective musyn non è il certificato RP.
-- Transizione: mostrare i quattro esiti M14.
+- Messaggio: la D-K iteration produce Kmu, ma non ne certifica ancora la robustezza.
+- Spiegare: problema M4/M5 invariato, best iteration e ordine 52.
+- Non sovrainterpretare: l'objective musyn non è un certificato RS o RP.
+- Transizione: affidare la verifica ai quattro esiti indipendenti M14.
 
 ## Slide 11 - M14 (1:20)
 
-- Messaggio: RS passa, NP e RP falliscono.
+- Messaggio: M14 certifica RS; NP e RP falliscono.
 - Spiegare: intervallo del margine RS e distinzione NS/NP/RS/RP.
 - Non sovrainterpretare: evitare la frase generica "Kmu è robusto".
 - Transizione: verificare il modello non lineare nominale.

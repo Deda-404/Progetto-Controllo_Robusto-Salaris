@@ -1,25 +1,50 @@
 # Project Status
 
-**Current milestone:** M18 — relazione, presentazione, audit e chiusura del progetto
-**Status:** `COMPLETE` — deliverable compilati e tracciabilità artifact-only `PASS`
-**Last validated milestone:** M18 `COMPLETE`; M17/M16/M13 restano `COMPLETE`, M15/M14 `PARTIAL`
-**Project state:** `FINAL DELIVERABLE SET COMPLETE`
+**Fase corrente:** revisione editoriale e di consegna finale, successiva a M18
+**Status:** `COMPLETE` — revisione editoriale validata, in attesa di revisione della pull request
+**Autori:** Alessio de Dato, Valerio Rebechi
+**Ultima milestone tecnica validata:** M18 `COMPLETE`; M17/M16/M13 restano `COMPLETE`, M15/M14 `PARTIAL`
+**Stato tecnico:** risultati, specifiche, pesi e controllori invariati rispetto a M18
 **Final robust controller:** M13 `Kmu` — RS M14 `PASS_CERTIFIED`, RP e tracking `FAIL`
 **Nominal performance reference:** M6 — LQG nominale senza integratore
 **H-infinity reference:** M10 `Khinf` — comparatore metodologico full-order
 **M7:** `PARTIAL` — feasibility conclusa e accettata; nessun ulteriore tuning previsto
 **Open technical issue:** nessun controller soddisfa tutte le specifiche M5; M6 è instabile nel Sample 5, Khinf/Kmu falliscono tracking e Kmu fallisce RP
-**Next task:** revisione finale, compilazione dei dati anagrafici e consegna; nessun retuning autorizzato
-**Pull Request baseline:** [PR #22](https://github.com/Deda-404/Progetto_CR/pull/22) `MERGED` al commit `75d194d49a96b67309b1853f154bdd22a168ca4f`
-**Pull Request corrente:** [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23) `OPEN`, non draft e non mergiata, dal branch `codex/m18-final-deliverables` verso `main`
-**Last update:** 2026-08-27, M18 validata, pubblicata nella PR #23 e in attesa di revisione/merge manuale
+**Dati da completare:** matricole degli autori e data di consegna
+**Baseline della revisione:** [PR #23](https://github.com/Deda-404/Progetto_CR/pull/23) `MERGED` al commit `6486bb240cdbcf4517ed1e893d83e6b1a34168e1`
+**Ramo della revisione:** `codex/final-human-editorial-review`
+**Pull Request finale:** [PR #24](https://github.com/Deda-404/Progetto_CR/pull/24) `OPEN`, non draft e non mergiata
+**Ultimo aggiornamento:** 2026-08-27, revisione pubblicata nella PR #24
+
+## Revisione editoriale finale — COMPLETE
+
+La revisione amplia le motivazioni ingegneristiche della relazione, uniforma la lingua dei deliverable, chiarisce la separazione fra D--K iteration e certificazione M14, corregge la tabella Monte Carlo e aggiorna autori e stato del repository. Non comprende nuove sintesi, retuning, modifiche di M4/M5, riduzione dei controllori o cambiamenti dei risultati tecnici.
+
+| Requisito | Esito |
+| --- | --- |
+| baseline | PASS — PR #23 mergiata al commit `6486bb240cdbcf4517ed1e893d83e6b1a34168e1` |
+| relazione | PASS — 45 pagine, 13 capitoli, 3 appendici, 15 figure e 11 tabelle |
+| presentazione | PASS — 17 slide, timing stimato 17:30 |
+| audit LaTeX e visivo | PASS — zero errori/overflow e ispezione di 45 pagine + 17 slide |
+| test M18 | PASS — 60/60 |
+| suite completa | PASS — 649/649 |
+| `run_all` M0--M18 | PASS — 649/649, exit code 0 |
+| Code Analyzer | PASS — 15 file, zero segnalazioni |
+| Monte Carlo | PASS semantico — frazione empirica, non certificazione; M14 invariata |
+| specifiche e controllori congelati | PASS — M4/M5 e M6/Khinf/Kmu invariati |
+| dati da completare | REQUIRED — matricole e data di consegna |
+| stato | **COMPLETE — pronta per revisione in pull request, senza merge automatico** |
+
+La sezione M18 seguente è lo snapshot storico della milestone originaria al
+momento della PR #23; la consistenza corrente dei deliverable è descritta nel
+quality gate editoriale qui sopra.
 
 ## Quality gate M18 — COMPLETE
 
 | Requisito | Esito |
 | --- | --- |
 | baseline Git | PASS — PR #22 mergiata al commit `75d194d49a96b67309b1853f154bdd22a168ca4f` |
-| evidenze tecniche | PASS — artifact M1–M17 caricati senza rigenerare sintesi o simulazioni |
+| evidenze tecniche | PASS — risultati M1–M17 caricati senza rigenerare sintesi o simulazioni |
 | audit numerico | PASS — 59 righe con milestone, artifact, campo sorgente e macro/tabella |
 | riconciliazione | PASS — 19/19 confronti con gli artifact congelati |
 | relazione | PASS — 13 capitoli, 3 appendici, 15 figure e 11 tabelle |
@@ -32,7 +57,7 @@
 | Code Analyzer | PASS — zero messaggi sui file M18, test e `run_all.m` |
 | semantica Monte Carlo | PASS — evidenza empirica M16, non certificazione e non sostituzione di M14 |
 | esiti negativi | PASS — FAIL/PARTIAL e requisiti NOT RUN conservati esplicitamente |
-| input utente | REQUIRED — autori, matricole, data/anno accademico ed eventuale logo |
+| input utente | REQUIRED — matricole, data/anno accademico ed eventuale logo |
 | nuova sintesi/tuning/MC/Simulink/riduzione | NOT RUN corretto |
 | stato | **COMPLETE — deliverable conclusivi prodotti senza alterare i risultati tecnici** |
 

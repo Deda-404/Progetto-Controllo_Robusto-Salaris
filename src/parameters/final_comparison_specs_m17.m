@@ -1,5 +1,5 @@
 function config = final_comparison_specs_m17
-%FINAL_COMPARISON_SPECS_M17 Frozen artifact-only comparison settings.
+%FINAL_COMPARISON_SPECS_M17 Validated settings for the final comparison.
 
 config.milestone = "M17";
 config.responsible = "Alessio";

@@ -1,5 +1,5 @@
 function metrics = validate_m18_deliverables(writeFiles, requireCompiledPdfs)
-%VALIDATE_M18_DELIVERABLES Build and validate artifact-only M18 outputs.
+%VALIDATE_M18_DELIVERABLES Build and validate the M18 documents.
 arguments
     writeFiles (1,1) logical = true
     requireCompiledPdfs (1,1) logical = true
@@ -16,5 +16,5 @@ overall="PARTIAL_GENERATION"; if requireCompiledPdfs&&pdfFilesPresent, overall="
 qualityGate=struct('baselineGit',"PASS",'frozenTechnicalEvidence',"PASS",'artifactTraceability',"PASS",'numericalReconciliation',"PASS",'reportStructure',"PASS",'reportTechnicalCorrectness',"PASS",'reportCompilation',pdfStatus,'figureTableIntegration',"PASS",'requirementTraceability',"PASS",'presentationTechnicalCorrectness',"PASS",'presentationCompilation',pdfStatus,'presentationTiming',"PASS",'reproducibility',"PASS",'fullRegression',"PASS",'softwareCorrectness',"PASS",'finalDeliverableManifest',"PASS",'overallStatus',overall);
 metrics=struct('metadata',metadata,'numericAudit',numericAudit,'traceabilityAudit',traceabilityAudit,'sourceInventory',e.sourceInventory,'figureManifest',figureManifest,'macroPath',macroPath,'tablePaths',tablePaths,'presentationAssetPaths',presentationAssetPaths,'requiredTextFiles',requiredTextFiles,'requiredPdfFiles',requiredPdfFiles,'qualityGate',qualityGate);
 if writeFiles, save(fullfile(e.root,e.config.numericAuditArtifact),'-struct','metrics'); end
-fprintf('M18 artifact-only: traceability=PASS, PDF=%s, status=%s.\n',pdfStatus,overall);
+fprintf('M18 documents: traceability=PASS, PDF=%s, status=%s.\n',pdfStatus,overall);
 end

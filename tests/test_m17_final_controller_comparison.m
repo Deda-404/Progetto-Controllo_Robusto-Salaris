@@ -1,5 +1,5 @@
 classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
-    %TEST_M17_FINAL_CONTROLLER_COMPARISON Artifact-only M17 gates T01-T42.
+    %TEST_M17_FINAL_CONTROLLER_COMPARISON M17 comparison checks T01-T42.
 
     properties
         Root

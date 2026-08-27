@@ -1,52 +1,46 @@
-# Progetto di Controllo Robusto — Manipolatore SEA 2 DoF
+# Controllo robusto di un manipolatore SEA a 2 DoF
 
-Progetto universitario di Controllo Robusto dedicato a un manipolatore planare 2R con Series Elastic Actuators (SEA). L'obiettivo finale è ottenere una catena di modellazione, sintesi e validazione MATLAB/Simulink completa, originale e riproducibile per controllori LQG, \(H_\infty\) e \(\mu\)-synthesis.
+Progetto universitario di Controllo Robusto sviluppato da **Alessio de Dato** e **Valerio Rebechi**. Il caso di studio è un manipolatore planare 2R azionato mediante Series Elastic Actuators (SEA), modellato e validato in MATLAB/Simulink.
 
-> **Google Drive = reference only (sola lettura).**
-> **GitHub repository = source of truth del progetto.**
+Il repository contiene l'intero percorso di lavoro: modello non lineare, equilibrio e linearizzazione, dinamica degli attuatori, insieme incerto, specifiche, sintesi LQG e $H_\infty$, D--K iteration, $\mu$-analysis, simulazioni non lineari, regione empirica di attrazione e Monte Carlo.
 
-## Ambito
+## Risultato conclusivo
 
-Il progetto comprenderà:
+Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è quindi distinta per ruolo:
 
-- modello non lineare, equilibrio e linearizzazione;
-- dinamiche degli attuatori e incertezze fisicamente motivate;
-- LQG con e senza integratore e filtro di Kalman;
-- sintesi `mixsyn`, `hinfsyn`, `hinfstruct` e relativa \(\mu\)-analysis;
-- \(\mu\)-synthesis mediante D–K iteration;
-- validazioni lineari e non lineari, RAS empirica e Monte Carlo;
-- generazione tracciabile di dati, figure, tabelle e relazione finale.
+- **Kmu** è il controllore robusto finale: M14 certifica la Robust Stability sull'insieme lineare incerto M4, mentre Nominal Performance e Robust Performance restano non conformi;
+- **M6 LQG** è il riferimento di prestazione nominale: rispetta il tracking M5 sul modello nominale, ma perde stabilità nel Sample 5 della campagna M16 e non dispone di un certificato RS;
+- **Khinf** è il comparatore metodologico full-order della sintesi $H_\infty$.
 
-Le scelte numeriche del progetto di riferimento non sono decisioni del presente progetto finché non vengono riprodotte, motivate e approvate.
+La Monte Carlo M16 usa 40 realizzazioni comuni dell'insieme M4: M6 è stabile in 39/40 casi, Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
 
-## Struttura
+## Struttura del repository
 
 ```text
 Progetto_CR/
-├── run_all.m
-├── docs/                 analisi delle fonti e governo del progetto
+├── run_all.m             esecuzione completa M0--M18
 ├── src/                  parametri, modello, attuatori e incertezze
 ├── controllers/          LQG, H-infinity e mu-synthesis
-├── analysis/             analisi nominali, RAS, robustezza e confronti
-├── simulink/             modelli Simulink del progetto
-├── tests/                test automatici
-├── results/              dati, figure e controllori generati
+├── analysis/             analisi nominali, robuste e non lineari
+├── simulink/             modelli Simulink
+├── tests/                regressione automatica
+├── results/              dati, figure e controllori validati
 ├── report/               relazione finale e sorgenti LaTeX
-├── presentation/         presentazione finale, timing e note
-└── tools/                compilazione e audit dei deliverable
+├── presentation/         presentazione, timing e note
+├── docs/                 motivazioni, decisioni e tracciabilità
+└── tools/                compilazione e controlli dei deliverable
 ```
 
-## Prerequisiti verificati
+## Requisiti software
 
-- MATLAB R2025b Update 4;
-- Simulink 25.2;
-- Control System Toolbox 25.2;
-- Robust Control Toolbox 25.2;
-- Symbolic Math Toolbox 25.2.
+- MATLAB R2025b;
+- Simulink;
+- Control System Toolbox;
+- Robust Control Toolbox;
+- Symbolic Math Toolbox;
+- una distribuzione LaTeX compatibile con `latexmk`.
 
-La verifica dell'ambiente è documentata in `docs/PROJECT_STATUS.md` e `docs/DIARIO_DI_BORDO.md`.
-
-## Esecuzione
+## Riproduzione
 
 Dalla radice del repository:
 
@@ -54,77 +48,36 @@ Dalla radice del repository:
 run_all
 ```
 
-Il comando pulisce e configura l'ambiente, esegue le regressioni M0–M18,
-ricostruisce gli artifact precedenti e completa la finalizzazione artifact-only M18.
-I risultati negativi M9–M12, M14 e M15 sono conservati senza ritunare M5;
-M7 resta `PARTIAL` terminale. La sintesi M13 non viene rilanciata
-automaticamente: il raw output autorizzato è congelato. M14 resta la fonte
-della certificazione mu, M15 la validazione non lineare nominale, M16
-l'evidenza empirica sui campioni lineari M4, M17 la decisione per ruolo e
-M18 la generazione tracciabile dei deliverable, senza nuova attività tecnica.
+La pipeline esegue le verifiche M0--M18 e rigenera i risultati riproducibili. La D--K iteration M13 non viene rilanciata automaticamente: viene caricato e verificato il checkpoint approvato, evitando una nuova sintesi.
 
-Per rigenerare e auditare relazione e presentazione dopo la generazione M18:
+Per rigenerare macro, tabelle e asset dei documenti:
+
+```matlab
+validate_m18_deliverables(true,true)
+```
+
+Per compilare relazione e presentazione:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
 ```
 
-Gli output stabili sono `report/Progetto_CR_Relazione_finale.pdf` e
-`presentation/Progetto_CR_Presentazione.pdf`. Prima della consegna devono
-essere sostituiti i placeholder anagrafici dichiarati nei frontespizi.
+## Deliverable
 
-## Stato corrente
+- `report/Progetto_CR_Relazione_finale.pdf`;
+- `presentation/Progetto_CR_Presentazione.pdf`;
+- `docs/FINAL_DELIVERABLE_MANIFEST.md`;
+- `docs/FINAL_EDITORIAL_AUDIT.md`.
 
-- Milestone corrente: **M18 — deliverable finali, COMPLETE**;
-  M16/M13 restano `COMPLETE`, mentre M15/M14 restano `PARTIAL` per i
-  risultati prestazionali negativi documentati.
-- Controllore validato: M6 LQG senza integratore, ordine 14, con `K/L/Nr`
-  invariati; M7 resta `PARTIAL` e congelata.
-- Risultato non lineare: equilibrio senza drift, sei tracking, sei disturbi e
-  rumore seeded completati; scarto LTI/NL massimo 0.0006201 rad.
-- RAS empirica: 57/57 punti convergenti in entrambe le sezioni entro il box
-  computazionale ±60°; la frontiera è quindi search-box limited.
-- Risultato M9: interconnessione nominale stabile, controllore ordine 18,
-  `gamma=10.2071036477` e norma ricostruita `10.2071033931`; obiettivi
-  weighted e tracking falliti senza retuning, `W3` o analisi robusta.
-- Risultato M10: generalized plant corretta, `gammaHinf=10.2071036477` e
-  controller ordine 18 quasi equivalenti a M9; stabilità PASS, obiettivi
-  weighted e tracking FAIL, senza retuning o analisi robusta.
-- Risultato M11: 30/30 start conservati, 15 stabili; A0–A2 senza
-  rappresentante stabile e frontiera Pareto A3/A4/A5 con ordine 2/4/6 e
-  gamma 16.6419/11.6555/10.2477. M11 `PARTIAL` è accettata come studio
-  strutturato concluso; il gruppo ha selezionato A5 per la sola analisi M12.
-- Risultato M12: N–Δ e software `PASS`; NS `PASS`, NP `FAIL`, RS
-  `FAIL_CERTIFIED` con margin `[0.875899,0.882789]` e RP `FAIL_CERTIFIED`.
-- Risultato M13: cinque iterazioni D–K, objective `10.4032233618`, Kmu 2×2
-  di ordine 52 e stabilità nominale `PASS` con max Re `-0.731994726169`.
-  L'objective >1 è conservato senza retuning.
-- Risultato M14: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
-  `[1.250037,1.252573]` e RP `FAIL_CERTIFIED`. Rispetto ad A5, RS passa da
-  `FAIL_CERTIFIED` a `PASS_CERTIFIED`: recupero certificato della stabilità
-  robusta sul modello lineare incerto M4, senza conformità di performance.
-- Risultato M15: equilibrio `PASS` per entrambi; tracking M5 `FAIL` con worst
-  Ts 1.7322/1.7346 s e OS 261.35/228.36% per Khinf/Kmu. La RAS Khinf ha
-  raggio minimo 52.876° con boundary interno; Kmu raggiunge il box con raggio
-  minimo 60°. Le regioni empiriche di accordo LTI/NL hanno raggio minimo
-  4°/4.75°. Software `PASS`, nessuna saturazione o incertezza non lineare.
-- Risultato M16: 40 campioni M4 comuni, seed `20260826`; stabilità
-  M6/Khinf/Kmu `39/40`, `40/40`, `40/40`. Il Sample 5 M6 ha due poli RHP e
-  max Re `+1.80447`. I core tracking pass rate sono `30%/0%/0%`; Kmu 40/40
-  è coerente con la RS certificata M14, ma la Monte Carlo non è un
-  certificato né una probabilità fisica. Nessun retuning o score globale.
-- Risultato M17: identità e ordini M6/Khinf/Kmu `14/18/52` verificati,
-  evidenze nominali/non lineari/Monte Carlo/formali mantenute separate e
-  nessuno score globale. La selezione finale è `Kmu` come final robust
-  controller, M6 come nominal performance reference e `Khinf` come
-  H-infinity reference/comparator. Kmu conserva tracking, NP e RP falliti;
-  M6 conserva il Sample 5 instabile e M6/Khinf restano senza certificato RS.
-- Risultato M18: relazione tecnica di 27 pagine e presentazione di 17 slide
-  con timing stimato 17:30, entrambe compilate con audit LaTeX PASS.
-  L'audit finale riconcilia 59 valori, 11 tabelle, 15 figure, 13 asset di
-  presentazione e 19 controlli di tracciabilità, senza sintesi o retuning.
+## Limiti principali
 
-Per il dettaglio operativo vedere `docs/PROJECT_STATUS.md`,
-`docs/FINAL_CONTROLLER_COMPARISON.md`,
-`docs/MONTE_CARLO_UNCERTAIN_PLANTS.md`, `docs/ROADMAP.md` e
-`docs/REQUIREMENTS_CHECKLIST.md`.
+- M7 non produce un controllore LQG con integratore finale;
+- Kmu possiede RS certificata, ma fallisce NP, RP e tracking M5;
+- Khinf e Kmu non soddisfano il tracking M5;
+- M6 e Khinf non hanno una certificazione RS formale su M4;
+- `uScale=12 N m` è una normalizzazione, non una saturazione hardware;
+- le incertezze non derivano da identificazione sperimentale;
+- RAS e Monte Carlo hanno significato empirico;
+- Kmu resta di ordine 52.
+
+Prima della consegna devono essere completate le matricole degli autori e la data nel frontespizio.

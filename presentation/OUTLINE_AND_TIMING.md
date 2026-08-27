@@ -13,8 +13,8 @@ I tempi sono stime di preparazione, non misure di un'esposizione reale.
 | 7 | Risultato nominale M6 | 1:10 |
 | 8 | Risultato negativo M7 | 0:55 |
 | 9 | Sintesi H-infinity | 1:15 |
-| 10 | D-K iteration | 1:00 |
-| 11 | Certificati M14 | 1:20 |
+| 10 | D-K iteration e produzione di Kmu | 1:00 |
+| 11 | Verifica indipendente e certificazione M14 | 1:20 |
 | 12 | Validazione non lineare | 1:10 |
 | 13 | Semantica delle RAS | 0:55 |
 | 14 | Monte Carlo M16 | 1:15 |

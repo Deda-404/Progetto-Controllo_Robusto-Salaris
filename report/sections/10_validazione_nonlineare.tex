@@ -1,14 +1,50 @@
 \chapter{Validazione non lineare nominale}
-M8 valida M6; M15 valida $K_{\infty}$ e $K_\mu$ sul modello non lineare nominale. Le tre architetture mantengono le proprie convenzioni di ingresso e stato; per i controllori robusti il comando incrementale è applicato come $u_{abs}=\bar\tau+K(r-q)$, senza prefiltri o integratori aggiuntivi.
-\begin{figure}[H]\centering
-\includegraphics[width=0.82\textwidth]{figures/m15_tracking_khinf_vs_kmu.png}
-\caption{Tracking non lineare nominale di $K_{\infty}$ e $K_\mu$ (M15).}\label{fig:m15-tracking}
-\end{figure}
-Entrambi i controllori robusti risultano stabili nelle simulazioni richieste, ma falliscono i target di tracking M5: i peggiori settling time sono circa 1.73 s, con overshoot superiori al 200\% ed errore a regime prossimo al 50\%. Il comando viene quantificato, senza confronto con una saturazione hardware inesistente.
+\section{Perché la verifica non lineare è necessaria}
+Le sintesi sono sviluppate sul modello incrementale attorno all'equilibrio M2. La loro stabilità locale non garantisce che le stesse prestazioni si mantengano quando entrano in gioco la dipendenza configurazionale di $M(q)$, i termini di Coriolis, la gravità completa e la deformazione elastica fuori dal punto di linearizzazione. M8 e M15 verificano quindi i controllori congelati sul modello non lineare nominale. L'obiettivo non è costruire un nuovo progetto, ma controllare se l'implementazione e le conclusioni lineari restino plausibili nel dominio esplorato.
 
-Le stime RAS sono empiriche. $K_{\infty}$ individua una frontiera interna con raggio minimo \KhinfRasMin$^\circ$; $K_\mu$ raggiunge il limite di ricerca con raggio minimo \KmuRasMin$^\circ$. Quest'ultimo risultato è search-box limited, non una frontiera certificata.
-\begin{figure}[H]\centering
-\includegraphics[width=0.79\textwidth]{figures/m15_ras_m6_khinf_kmu.png}
-\caption{Confronto delle stime empiriche RAS; M6 e $K_\mu$ sono search-box limited.}\label{fig:m15-ras}
+La pianta Simulink integra le equazioni meccaniche dei link e dei rotori, la dinamica attuativa e il ritardo nominale. Le coppie assolute sono ricostruite attorno all'equilibrio. Per i controllori robusti si usa
+\[
+e=r-q,\qquad
+\delta u=K e,\qquad
+u_{\mathrm{abs}}=\bar\tau+\delta u.
+\]
+Non vengono aggiunti prefiltri, integratori o saturazioni. M6 mantiene invece la propria realizzazione LQG, con osservatore e prefiltro già validati. Questa disciplina conserva l'identità dei controllori e rende leggibile il confronto.
+
+\section{Scenari e configurazione numerica}
+Ogni campagna comprende equilibrio, tracking su entrambi i giunti e più ampiezze, disturbi di coppia, rumore riproducibile e sweep delle condizioni iniziali. Il solver stiff \texttt{ode23t}, le tolleranze e il passo massimo sono comuni alle simulazioni della stessa fase. Il test all'equilibrio precede gli altri scenari: in assenza di ingressi incrementali, il modello deve rimanere sulla configurazione $\bar q$ senza drift numerico significativo.
+
+Le metriche temporali sono calcolate con le stesse convenzioni M5. Il comando è riportato in N m e normalizzato rispetto a $u_{\mathrm{scale}}$, ma non sottoposto a un limite di saturazione non documentato. La simulazione di rumore usa un seed fissato per verificare la riproducibilità; non viene interpretata come caratterizzazione statistica dell'hardware.
+
+\section{Validazione M6 e regione empirica di attrazione}
+M8 conferma l'equilibrio nominale e il tracking M6 sul modello non lineare. Le differenze rispetto alla risposta LTI sono piccole nel dominio degli step di progetto. La ricerca RAS esplora una griglia di perturbazioni iniziali delle due posizioni, mantenendo espliciti criterio di convergenza, orizzonte e box massimo. Tutti i 57 punti delle due sezioni esaminate convergono fino a $\pm60^\circ$.
+
+Il raggio minimo osservato è \MControllerRasMin$^\circ$, ma non è stata intercettata una frontiera interna. La classificazione è quindi \emph{search-box limited}: si può affermare che i punti testati convergono, non che la regione di attrazione termini o si estenda globalmente a quella distanza. La RAS ottenuta per simulazione resta inoltre una stima empirica dipendente dalla griglia e dal criterio numerico.
+
+\section{Tracking di $K_{\infty}$ e $K_\mu$}
+M15 applica sullo stesso modello nominale i controllori M10 e M13. Entrambe le chiusure rimangono stabili e le simulazioni sono finite, ma i target M5 non sono raggiunti. I peggiori settling time sono rispettivamente circa $1.7322$ s e $1.7346$ s; le sovraelongazioni massime sono circa $261.35\%$ e $228.36\%$, mentre gli errori relativi a regime arrivano a circa $49.07\%$ e $50.44\%$. La mancata conformità non nasce quindi da un singolo indice marginale: coinvolge rapidità, forma del transitorio e accuratezza statica.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{figures/m15_tracking_khinf_vs_kmu.png}
+\caption{Tracking non lineare nominale di $K_{\infty}$ e $K_\mu$. Le risposte restano stabili ma non soddisfano M5.}
+\label{fig:m15-tracking}
 \end{figure}
+
+I picchi di comando sono quantificati e rimangono confrontabili con la scala M5. Non è però possibile dichiarare assenza di saturazione reale, perché il progetto non dispone delle curve coppia--velocità o dei limiti verificati degli attuatori. Analogamente, il superamento dei target di overshoot non viene attenuato usando il fatto che le simulazioni restano finite: stabilità e prestazione rispondono a domande differenti.
+
+\section{RAS dei controllori robusti}
+Per $K_{\infty}$ la ricerca individua una frontiera interna, con raggio minimo empirico \KhinfRasMin$^\circ$. Per $K_\mu$ tutti i punti raggiungono invece il limite del box e il raggio minimo riportato è \KmuRasMin$^\circ$. Anche in questo caso la classificazione è \emph{search-box limited}; il dato non dimostra che $K_\mu$ possieda una regione maggiore in senso globale.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.79\textwidth]{figures/m15_ras_m6_khinf_kmu.png}
+\caption{Confronto delle stime empiriche RAS. M6 e $K_\mu$ raggiungono il limite di ricerca; $K_{\infty}$ mostra una frontiera interna.}
+\label{fig:m15-ras}
+\end{figure}
+
+È stata inoltre misurata una regione locale di accordo fra risposte LTI e non lineari. I raggi minimi osservati, circa $4^\circ$ per $K_{\infty}$ e $4.75^\circ$ per $K_\mu$, descrivono il dominio in cui la discrepanza resta sotto la soglia adottata; non coincidono con la RAS e non sono limiti assoluti della linearizzazione.
+
+\section{Portata e limiti della campagna}
+M8 e M15 usano il modello non lineare nominale. Non introducono l'incertezza M4 nella dinamica non lineare e non certificano Robust Stability. Viceversa, la certificazione M14 appartiene al modello lineare incerto e non garantisce il tracking non lineare. La lettura congiunta è quindi intenzionalmente non sostitutiva: le simulazioni controllano la plausibilità fisica locale e individuano fenomeni prestazionali; la $\mu$-analysis copre formalmente l'insieme lineare strutturato.
+
 \input{tables/nonlinear_validation.tex}
