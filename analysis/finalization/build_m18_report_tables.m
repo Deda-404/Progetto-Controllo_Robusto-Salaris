@@ -30,8 +30,8 @@ end
 
 function text=localUncertainty(e)
 m=e.m4.selectedMechanicalRanges; a=e.m4.selectedActuatorRanges; rows=strings(height(m)+height(a),4);
-for k=1:height(m), rows(k,:)=[m.Parameter(k),num(m.NominalValue(k)),"$\pm$"+num(m.BaselinePercent(k))+"\%","parametrica reale"]; end
-for k=1:height(a), j=height(m)+k; rows(j,:)=[a.Parameter(k),num(a.NominalValue(k)),"$\pm$"+num(a.BaselinePercent(k))+"\%","famiglia coperta da $W_I\Delta$"]; end
+for k=1:height(m), rows(k,:)=[m.Parameter(k),num(m.NominalValue(k)),"$\pm$"+num(m.Percentage(k))+"\%","parametrica reale"]; end
+for k=1:height(a), j=height(m)+k; rows(j,:)=[a.Parameter(k),num(a.NominalValue(k)),"$\pm$"+num(a.Percentage(k))+"\%","famiglia coperta da $W_I\Delta$"]; end
 text=makeTable("Incertezze ingegneristiche M4; i range non sono distribuzioni probabilistiche identificate.","tab:uncertainties",["Parametro","Nominale","Range","Rappresentazione"],rows,true);
 end
 
@@ -47,7 +47,7 @@ end
 function text=localLqg(e)
 m6=e.m6.trackingMetrics.lqg;
 rows=["M6 LQG",string(order(e.m6.Klqg)),num(max(m6.SettlingTime)),num(max(m6.Overshoot)),"PASS nominale","senza integratore"; ...
-    "M7 LQG-I","N/A","N/A","N/A",tex(e.m7.validationMetrics.status),"0 candidati ammissibili"];
+    "M7 LQG-I","N/A","N/A","N/A",tex(e.m7.validationMetrics.status),"3 verifiche manuali; nessuna conforme"];
 text=makeTable("Confronto M6/M7. Il risultato M7 negativo resta esplicito.","tab:lqg",["Studio","Ordine","$T_s$ [s]","$M_p$ [\%]","Stato","Nota"],rows,true);
 end
 

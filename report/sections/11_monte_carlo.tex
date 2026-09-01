@@ -18,9 +18,9 @@ Il Sample 0 nominale è usato come controllo di implementazione e non entra nell
 Il replay con lo stesso seed riproduce i campioni entro la tolleranza numerica prevista.
 
 \section{Stabilità empirica}
-M6 è stabile in \MControllerStableSamples/\MonteCarloSamples\ realizzazioni. L'unico campione instabile è il Sample ID 5, che presenta due poli nel semipiano destro e massima parte reale $+\MControllerSampleFivePole$ s$^{-1}$. Il caso viene conservato nel dataset e nella tabella; non è scartato come outlier, perché appartiene all'insieme di campionamento valido.
+M6 è stabile in \MControllerStableSamples/\MonteCarloSamples\ realizzazioni. I Sample ID instabili sono \MControllerUnstableSampleIds; il peggiore presenta massima parte reale $+\MControllerWorstUnstablePole$ s$^{-1}$. Ogni caso critico viene conservato nel dataset e nella tabella: non è scartato come outlier se appartiene all'insieme di campionamento valido.
 
-$K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ campioni. La tabella distingue volutamente il numero di casi instabili dall'identificativo del campione: per M6 i valori sono rispettivamente 1 e 5, mentre per i due controllori robusti sono 0 e nessun ID.
+$K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ campioni. La tabella distingue volutamente il numero di casi instabili dai relativi identificativi.
 
 \begin{figure}[H]
 \centering
@@ -31,7 +31,7 @@ $K_{\infty}$ e $K_\mu$ sono stabili in \KhinfStableSamples/\MonteCarloSamples\ e
 
 \input{tables/monte_carlo_m16.tex}
 
-La colonna percentuale è indicata come \emph{frazione empirica}: vale $39/40=97.5\%$ per M6 e $40/40=100\%$ per gli altri due controllori. Non è denominata probabilità di stabilità, perché mancano una distribuzione delle incertezze identificata e un'argomentazione statistica che leghi il campione alla popolazione fisica.
+La colonna percentuale è indicata come \emph{frazione empirica} ed è calcolata dai conteggi riportati in tabella. Non è denominata probabilità di stabilità, perché mancano una distribuzione delle incertezze identificata e un'argomentazione statistica che leghi il campione alla popolazione fisica.
 
 \section{Prestazione sui campioni stabili}
 La stabilità non coincide con il rispetto del tracking. Il core tracking pass rate calcolato sul totale dei 40 campioni è \MControllerTrackingPassPct$\%$ per M6, \KhinfTrackingPassPct$\%$ per $K_{\infty}$ e \KmuTrackingPassPct$\%$ per $K_\mu$. M6 conserva quindi una parte dei casi conformi alle specifiche temporali, ma mostra sensibilità sufficiente a destabilizzare una realizzazione. I due controllori robusti mantengono la stabilità su tutti i campioni e tuttavia non soddisfano il nucleo dei target di tracking in nessuno di essi.
@@ -39,6 +39,6 @@ La stabilità non coincide con il rispetto del tracking. Il core tracking pass r
 Il picco di comando è riportato come distribuzione e mediana, sempre senza confronto con una saturazione hardware. Cross-coupling e risposta al disturbo sono quantificati con le convenzioni già adottate, senza aggiungere nuove soglie dopo aver osservato i dati. L'uso degli stessi Sample ID permette di interpretare le differenze caso per caso e non mediante uno score globale.
 
 \section{Relazione con la certificazione M14}
-La stabilità 40/40 di $K_\mu$ è coerente con il margine RS M14 maggiore di uno. Questa coerenza è un controllo incrociato utile: non è emersa una contraddizione fra campionamento e analisi formale. Tuttavia M16 non sostituisce M14, perché un insieme finito di campioni non esclude una perturbazione non estratta. Simmetricamente, il Sample 5 rende concreta la vulnerabilità di M6 ma non misura la probabilità con cui essa si presenterebbe nell'impianto reale.
+La stabilità \KmuStableSamples/\MonteCarloSamples\ di $K_\mu$ è coerente con il margine RS M14 maggiore di uno. Questa coerenza è un controllo incrociato utile: non è emersa una contraddizione fra campionamento e analisi formale. Tuttavia M16 non sostituisce M14, perché un insieme finito di campioni non esclude una perturbazione non estratta. Simmetricamente, i casi critici di M6 rendono concreta una vulnerabilità ma non ne misurano la probabilità nell'impianto reale.
 
-La conclusione M16 rimane dunque empirica: nel campione comune considerato M6 è stabile 39 volte, mentre $K_{\infty}$ e $K_\mu$ lo sono 40 volte. La sola certificazione di Robust Stability di $K_\mu$ resta la $\mu$-analysis indipendente M14; Robust Performance continua a essere fallita.
+La conclusione M16 rimane dunque empirica: nel campione comune considerato M6 è stabile \MControllerStableSamples\ volte, $K_{\infty}$ \KhinfStableSamples\ e $K_\mu$ \KmuStableSamples. La sola certificazione di Robust Stability di $K_\mu$ resta la $\mu$-analysis indipendente M14; Robust Performance continua a essere fallita.

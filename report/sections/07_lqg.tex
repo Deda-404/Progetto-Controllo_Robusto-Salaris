@@ -1,72 +1,70 @@
 \chapter{Controllo LQG}
-\section{Architettura nominale senza integratore}
-Il progetto M6 usa l'intera pianta nominale M3, quindi include gli otto stati meccanici e i sei stati introdotti dalla dinamica attuativa. Le misure disponibili sono le posizioni dei link e dei rotori,
+\section{Obiettivo e architettura}
+M6 usa la pianta nominale completa a 14 stati e le quattro posizioni encoder $y=[q^T,\theta^T]^T$. Le velocità non sono misurate. Il feedback LQR stabilizza e modella il transitorio; il filtro di Kalman ricostruisce lo stato. Il comando è
 \[
-y=\begin{bmatrix}q_1&q_2&\theta_1&\theta_2\end{bmatrix}^{T},
+u=-K\hat x+N_rr.
 \]
-mentre le velocità non sono misurate direttamente. La scelta di un LQG consente perciò di mantenere separati due problemi: il feedback LQR stabilizza e modella il transitorio nominale, mentre il filtro di Kalman ricostruisce gli stati non misurati a partire dagli encoder. Il principio di separazione permette di progettare i due blocchi in modo indipendente, ma la validazione finale è condotta sulla loro interconnessione dinamica completa.
+Il prefiltro $N_r$ garantisce il guadagno statico nominale sul riferimento, ma non introduce un modello interno del disturbo. È quindi previsto un offset sotto coppie costanti.
 
-Il controllore non contiene un integratore. Il tracking del riferimento è ottenuto mediante un prefiltro statico $N_r$, calcolato risolvendo il sistema lineare sulla matrice di guadagno in continua del loop regolato. Il prefiltro migliora l'accuratezza sul modello nominale, ma non costituisce un modello interno del disturbo: in presenza di coppie costanti o di errore di modello può rimanere un offset. Questa distinzione motiva lo studio M7 e impedisce di attribuire a M6 proprietà di reiezione che la sua struttura non possiede.
-
-\section{Costo LQR e normalizzazione fisica}
-Il costo quadratico è formulato su variabili con significato fisico: posizione dei link, velocità, deformazione elastica $\theta-q$ e velocità dei rotori. Le scale provengono dalle ampiezze M5 e dalla dinamica SEA,
+\section{Costo LQR e principio di Bryson}
+Il regolatore minimizza
 \[
-z_x=\begin{bmatrix}
-\sqrt{w_q}\,q/q_s\\
-\sqrt{w_{\dot q}}\,\dot q/\dot q_s\\
-\sqrt{w_\delta}\,(\theta-q)/\delta_s\\
-\sqrt{w_{\dot\theta}}\,\dot\theta/\dot\theta_s
-\end{bmatrix},\qquad
-Q=C_{\mathrm{cost}}^TC_{\mathrm{cost}},\qquad
-R=\frac{\rho_U}{u_{\mathrm{scale}}^2}I_2.
+J=\int_0^\infty(x^TQx+u^TRu)\,dt.
 \]
-La prima esplorazione, basata su priorità unitarie, produceva controllori stabilizzanti ma troppo lenti. L'analisi modale ha mostrato che la deformazione elastica risultava penalizzata molto più della posizione e vincolava il modo dominante. È stato quindi autorizzato un retuning circoscritto dei soli coefficienti adimensionali, senza cambiare scale, specifiche o modello. La griglia di 240 combinazioni ha prodotto 139 candidati compatibili con i requisiti fondamentali.
-
-Il candidato C193, selezionato con $w_q=1$, $w_{\dot q}=w_{\dot\theta}=0.5$, $w_\delta=0.1$ e $\rho_U=8$, rappresenta un compromesso non aggressivo: raggiunge un worst settling time pari a \MControllerWorstTs\ s, una sovraelongazione massima circa $0.265\%$ e un cross-coupling massimo circa $17.39\%$. Il picco di comando è $4.6897$ N m. Quest'ultimo valore viene confrontato con la scala di normalizzazione M5, non con una saturazione hardware non disponibile. Anche il superamento locale della scala di deformazione è mantenuto come indicatore diagnostico e non trasformato in una violazione di un limite inesistente.
-
-\section{Stimatore di Kalman e prefiltro}
-Il rumore di processo comprende perturbazioni di coppia lato link e contributi equivalenti sul comando, mentre il rumore di misura agisce sui quattro encoder. Le covarianze sono costruite da deviazioni standard fisiche. Sono state valutate 27 combinazioni di rumore di disturbo, rumore equivalente di comando e rumore encoder; il candidato KF03 è stato selezionato richiedendo che lo stimatore sia più rapido del regolatore senza diventare inutilmente aggressivo.
-
-La realizzazione risultante è
+Pesi grandi in $Q$ riducono maggiormente gli stati corrispondenti; pesi grandi in $R$ riducono il comando. Per rendere la scelta riproducibile costruiamo $Q=C_{cost}^TC_{cost}$ normalizzando posizione, velocità, deformazione SEA e velocità motore con massimi fisici desiderati:
 \[
-\dot{\hat x}=(A-BK-LC)\hat x+B N_r r+Ly,
-\qquad
-u=-K\hat x+N_r r.
+q_s=5^\circ,\quad \dot q_s=\omega_Bq_s,\quad
+\delta_s=\frac{0.5}{\min(k_1,k_2)},\quad
+\dot\theta_s=\omega_Bq_s.
 \]
-Il controllore ha ordine \MControllerOrder. L'unione dei poli di regolatore e stimatore coincide numericamente con i poli dell'interconnessione augmentata, verificando il principio di separazione nella realizzazione impiegata. Il prefiltro è ottenuto con una soluzione lineare ben condizionata, evitando un'inversione esplicita; esso garantisce guadagno statico unitario soltanto per il modello nominale considerato.
+Questa è la logica di Bryson: prima si rende ogni grandezza adimensionale, poi si applicano poche correzioni leggibili,
+\[
+w_q=1,\quad w_{\dot q}=0.5,\quad w_\delta=0.1,
+\quad w_{\dot\theta}=0.5,
+\qquad R=\frac{8}{u_{scale}^2}I_2.
+\]
+Gli stati interni dell'attuatore non ricevono pesi diretti arbitrari. Il progetto finale usa un solo costo approvato; non esistono griglie coarse/extended o ranking.
 
-\section{Risultati nominali e interpretazione}
-Sul modello lineare nominale i due step articolari da $5^\circ$ rispettano i target M5. Il worst settling time è \MControllerWorstTs\ s e la risposta è sostanzialmente priva di sovraelongazione. Con condizioni iniziali coerenti e in assenza di rumore, LQR full-state e LQG coincidono entro la precisione numerica attesa; questo controllo verifica la corretta interconnessione dello stimatore, ma non estende l'equivalenza ai casi con disturbo o errore iniziale di stima.
+\section{Filtro di Kalman}
+Il modello di processo usa due coppie lato link e due coppie equivalenti all'ingresso. Le deviazioni standard sono dichiarate direttamente:
+\[
+\sigma_d=0.1\ \mathrm{N,m},\qquad
+\sigma_u=0.1\ \mathrm{N,m},\qquad
+\sigma_y=0.05^\circ.
+\]
+Ne seguono $Q_n=0.1^2I_4$ e $R_n=(0.05\pi/180)^2I_4$. Aumentare il rapporto $Q_n/R_n$ rende l'osservatore più rapido e più sensibile al rumore; diminuirlo produce una stima più lenta e filtrata. La scelta fornisce un rapporto fra velocità minima dello stimatore e del regolatore pari a 1.693, senza ricerca combinatoria.
 
-\begin{figure}[H]
-\centering
+La realizzazione è
+\[
+\dot{\hat x}=(A-BK-LC)\hat x+BN_rr+Ly.
+\]
+I poli della chiusura coincidono con l'unione dei poli di $A-BK$ e $A-LC$ entro la tolleranza: è la verifica numerica del principio di separazione.
+
+\section{Risultati M6}
+Il controllore ha ordine \MControllerOrder\ e nessun integratore. Il settling peggiore è \MControllerWorstTs\ s, l'overshoot resta sotto il 10\% e il picco di comando è 4.69 N m, ossia 0.391 della scala prestazionale. Il rumore seeded è riproducibile.
+
+\begin{figure}[H]\centering
 \includegraphics[width=0.82\textwidth]{figures/m6_lqg_reference_tracking.png}
-\caption{Tracking nominale lineare del controllore M6. Le risposte rispettano i target M5 sul modello di progetto.}
-\label{fig:m6-tracking}
+\caption{Tracking nominale del controllore LQG M6.}\label{fig:m6-tracking}
 \end{figure}
 
-I disturbi costanti da $0.5$ N m producono invece offset non nulli, circa $0.0796$ rad e $0.1602$ rad sui due casi principali. Il risultato è coerente con l'assenza dell'integratore e costituisce la motivazione tecnica dell'estensione M7. La simulazione con rumore seeded completa la diagnostica dello stimatore, senza essere usata come prova probabilistica.
+Le coppie costanti producono offset non nulli, coerentemente con l'assenza di integratori. M8 trasferisce esattamente lo stesso controllore sul modello non lineare; la RAS osservata rimane una stima empirica limitata al box esplorato.
 
-M8 trasferisce lo stesso controllore sul modello non lineare nominale. Il raggio minimo RAS osservato è \MControllerRasMin$^\circ$ e tutti gli estremi del box esplorato convergono. La classificazione corretta è \emph{search-box limited}: il valore di $60^\circ$ è il limite della ricerca, non una frontiera dinamica e non una certificazione globale di attrattività.
-
-\section{Feasibility LQG con integratore}
-M7 introduce due stati integrali, uno per ciascun errore articolare,
+\section{Verifica LQI M7}
+Per studiare l'offset introduciamo due integratori
 \[
-\dot\xi=r-q,\qquad
-A_{\mathrm{aug}}=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix},\qquad
-B_{\mathrm{aug}}=\begin{bmatrix}B\\0\end{bmatrix}.
+\dot\xi=r-C_qx,
+\quad A_{aug}=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix}.
 \]
-I test PBH mostrano che l'augmentazione è stabilizzabile e che i modi integrali a zero sono controllabili. Il fallimento della milestone non è dunque strutturale o numerico: nasce dal conflitto prestazionale osservato nelle famiglie di costo ammesse. L'azione integrale annulla l'offset da disturbo costante, ma rallenta il transitorio oppure, quando resa più aggressiva, induce sovraelongazione, comando e deformazione elevati.
+I test PBH mostrano che il sistema augmentato è stabilizzabile e senza ostruzioni a zero. Il blocco $Q$ sui 14 stati fisici resta identico a M6.
 
-La ricerca è stata sviluppata per stadi. La griglia iniziale 1-DoF produce 28 candidati stabili, tutti capaci di reiezione statica ma nessuno con $T_s\leq\SettlingTarget$ s. L'aggiunta di un feedforward candidato-specifico separa l'anticipazione del riferimento dal modello interno del disturbo: accelera alcuni casi, ma introduce overshoot incompatibile con il limite M5. La griglia estesa e l'ultima esplorazione del costo augmentato confermano la stessa frontiera. In particolare, i punti più rapidi rimangono oltre il target di settling e mostrano sovraelongazioni dell'ordine del $40\%$; i punti con overshoot vicino al limite sono troppo lenti.
+Si confrontano soltanto tre costi manuali: azione integrale debole $(w_i,\rho_U)=(0.1,16)$, bilanciata $(1,8)$ e forte $(4,4)$. Tutti stabilizzano e annullano l'offset da disturbo costante. Il primo non si assesta entro 3 s; il secondo ha settling 2.924 s e overshoot 20.4\%; il terzo 1.88 s e 28.8\%. Nessun punto soddisfa simultaneamente i target M5.
 
-\begin{figure}[H]
-\centering
+\begin{figure}[H]\centering
 \includegraphics[width=0.78\textwidth]{figures/m7_augmented_cost_tradeoff.png}
-\caption{Frontiera della feasibility M7. La riduzione del settling richiede, nella famiglia analizzata, un aumento incompatibile della sovraelongazione.}
-\label{fig:m7-tradeoff}
+\caption{Tre verifiche manuali del compromesso LQI.}\label{fig:m7-tradeoff}
 \end{figure}
 
-Nessun candidato soddisfa simultaneamente $T_s\leq\SettlingTarget$ s e $M_p\leq\OvershootTarget\%$; i candidati finali ammissibili sono \MSevenAdmissible. La milestone resta \status{\MSevenStatus} e non produce un controllore integrale finale. Questo esito negativo è informativo: dimostra che, con specifiche, normalizzazioni, osservatore e architettura mantenuti invariati, l'internal model risolve l'offset ma non il compromesso transitorio. Promuovere un punto diagnostico avrebbe alterato il significato dei requisiti.
+M7 resta \status{\MSevenStatus}: soltanto \MSevenAdmissible\ delle tre verifiche soddisfano tutti i criteri. Il risultato negativo è documentato e non viene promosso un punto diagnostico a controllore finale.
 
 \input{tables/lqg_m6_m7.tex}

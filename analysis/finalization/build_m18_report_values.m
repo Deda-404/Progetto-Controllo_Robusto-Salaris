@@ -21,8 +21,16 @@ end
 function rows = localRows(e)
 p = e.nominalParameters; a = e.nominalActuator; m5 = e.m5.spec;
 m16s = e.m16.stabilitySummary; m16p = e.m16.empiricalPassRates;
-sample5 = e.m16.stabilityTable(e.m16.stabilityTable.Controller == "M6" & ...
-    e.m16.stabilityTable.Sample == 5, :);
+m6Unstable = e.m16.stabilityTable( ...
+    e.m16.stabilityTable.Controller == "M6" & ...
+    ~e.m16.stabilityTable.Stable, :);
+if isempty(m6Unstable)
+    m6UnstableIds = "nessuno";
+    m6WorstUnstablePole = 0;
+else
+    m6UnstableIds = strjoin(string(m6Unstable.Sample), ", ");
+    m6WorstUnstablePole = max(m6Unstable.MaxRealPole);
+end
 m15Khinf = e.m15.rasResults(string({e.m15.rasResults.controllerID}) == "Khinf").metrics;
 m15Kmu = e.m15.rasResults(string({e.m15.rasResults.controllerID}) == "Kmu").metrics;
 rows = repmat(localRow("", "", "", "", "", "", ""), 0, 1);
@@ -42,9 +50,9 @@ rows(end+1)=localRow("Frequenza attuatore",a.wn,"rad/s","M3","m3_nominal_actuate
 rows(end+1)=localRow("Smorzamento attuatore",a.zeta,"-","M3","m3_nominal_actuated_plant.mat","actuatorParams.zeta","ActuatorZeta");
 rows(end+1)=localRow("Ritardo attuatore",1000*a.delay,"ms","M3","m3_nominal_actuated_plant.mat","actuatorParams.delay","ActuatorDelayMs");
 rows(end+1)=localRow("Ordine pianta completa",size(e.m3.Afull,1),"states","M3","m3_nominal_actuated_plant.mat","size(Afull,1)","FullPlantOrder");
-rows(end+1)=localRow("Incertezza Jm1",e.m4.selectedMechanicalRanges.BaselinePercent(e.m4.selectedMechanicalRanges.Parameter=="Jm1"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","JmOneUncertaintyPct");
-rows(end+1)=localRow("Incertezza k1",e.m4.selectedMechanicalRanges.BaselinePercent(e.m4.selectedMechanicalRanges.Parameter=="k1"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","KOneUncertaintyPct");
-rows(end+1)=localRow("Incertezza k2",e.m4.selectedMechanicalRanges.BaselinePercent(e.m4.selectedMechanicalRanges.Parameter=="k2"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","KTwoUncertaintyPct");
+rows(end+1)=localRow("Incertezza Jm1",e.m4.selectedMechanicalRanges.Percentage(e.m4.selectedMechanicalRanges.Parameter=="Jm1"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","JmOneUncertaintyPct");
+rows(end+1)=localRow("Incertezza k1",e.m4.selectedMechanicalRanges.Percentage(e.m4.selectedMechanicalRanges.Parameter=="k1"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","KOneUncertaintyPct");
+rows(end+1)=localRow("Incertezza k2",e.m4.selectedMechanicalRanges.Percentage(e.m4.selectedMechanicalRanges.Parameter=="k2"),"%","M4","m4_uncertain_plant.mat","selectedMechanicalRanges","KTwoUncertaintyPct");
 rows(end+1)=localRow("Numero blocchi M4",height(e.m4.deltaStructureMetadata),"blocks","M4","m4_uncertain_plant.mat","deltaStructureMetadata","MFourBlockCount");
 rows(end+1)=localRow("Target Ts",m5.settlingTimeTarget,"s","M5","m5_performance_specs.mat","spec.settlingTimeTarget","SettlingTarget");
 rows(end+1)=localRow("Target overshoot",m5.overshootTarget,"%","M5","m5_performance_specs.mat","spec.overshootTarget","OvershootTarget");
@@ -55,7 +63,7 @@ rows(end+1)=localRow("uScale",m5.uScale,"N m","M5","m5_performance_specs.mat","s
 rows(end+1)=localRow("Ordine M6",order(e.m6.Klqg),"states","M6","m6_lqg_no_integrator.mat","Klqg","MControllerOrder");
 rows(end+1)=localRow("M6 Ts peggiore",max(e.m6.trackingMetrics.lqg.SettlingTime),"s","M6","m6_lqg_no_integrator.mat","trackingMetrics.lqg.SettlingTime","MControllerWorstTs");
 rows(end+1)=localRow("Stato M7",e.m7.validationMetrics.status,"status","M7","m7_augmented_cost_feasibility.mat","validationMetrics.status","MSevenStatus");
-rows(end+1)=localRow("Candidati M7 ammissibili",e.m7.validationMetrics.admissibleCount,"count","M7","m7_augmented_cost_feasibility.mat","validationMetrics.admissibleCount","MSevenAdmissible");
+rows(end+1)=localRow("Verifiche M7 conformi",e.m7.validationMetrics.admissibleCount,"count","M7","m7_augmented_cost_feasibility.mat","validationMetrics.admissibleCount","MSevenAdmissible");
 rows(end+1)=localRow("RAS M6 minima",e.m8.rasMetrics.minimumRadiusDeg,"deg","M8","m8_lqg_nonlinear_ras.mat","rasMetrics.minimumRadiusDeg","MControllerRasMin");
 rows(end+1)=localRow("Gamma mixsyn",e.m9.gamma,"-","M9","m9_hinf_mixsyn_nominal.mat","gamma","MixsynGamma");
 rows(end+1)=localRow("Gamma hinfsyn",e.m10.gammaHinf,"-","M10","m10_hinfsyn_nominal.mat","gammaHinf","HinfsynGamma");
@@ -79,7 +87,8 @@ rows(end+1)=localRow("Campioni M16",e.m16.numberSamples,"samples","M16","m16_mon
 rows(end+1)=localRow("M6 campioni stabili",m16s.NStable(m16s.Controller=="M6"),"samples","M16","m16_monte_carlo_uncertain_linear.mat","stabilitySummary.NStable(M6)","MControllerStableSamples");
 rows(end+1)=localRow("Khinf campioni stabili",m16s.NStable(m16s.Controller=="Khinf"),"samples","M16","m16_monte_carlo_uncertain_linear.mat","stabilitySummary.NStable(Khinf)","KhinfStableSamples");
 rows(end+1)=localRow("Kmu campioni stabili",m16s.NStable(m16s.Controller=="Kmu"),"samples","M16","m16_monte_carlo_uncertain_linear.mat","stabilitySummary.NStable(Kmu)","KmuStableSamples");
-rows(end+1)=localRow("Sample 5 M6 max real pole",sample5.MaxRealPole,"1/s","M16","m16_monte_carlo_uncertain_linear.mat","stabilityTable.Sample=5,Controller=M6","MControllerSampleFivePole");
+rows(end+1)=localRow("Sample M6 instabili",m6UnstableIds,"sample IDs","M16","m16_monte_carlo_uncertain_linear.mat","stabilityTable(M6 & ~Stable)","MControllerUnstableSampleIds");
+rows(end+1)=localRow("Polo peggiore M6 instabile",m6WorstUnstablePole,"1/s","M16","m16_monte_carlo_uncertain_linear.mat","max(stabilityTable.MaxRealPole(M6 & ~Stable))","MControllerWorstUnstablePole");
 rows(end+1)=localRow("M6 tracking pass rate",100*m16p.AllCorePassFractionTotal(m16p.Controller=="M6"),"%","M16","m16_monte_carlo_uncertain_linear.mat","empiricalPassRates.AllCorePassFractionTotal(M6)","MControllerTrackingPassPct");
 rows(end+1)=localRow("Khinf tracking pass rate",100*m16p.AllCorePassFractionTotal(m16p.Controller=="Khinf"),"%","M16","m16_monte_carlo_uncertain_linear.mat","empiricalPassRates.AllCorePassFractionTotal(Khinf)","KhinfTrackingPassPct");
 rows(end+1)=localRow("Kmu tracking pass rate",100*m16p.AllCorePassFractionTotal(m16p.Controller=="Kmu"),"%","M16","m16_monte_carlo_uncertain_linear.mat","empiricalPassRates.AllCorePassFractionTotal(Kmu)","KmuTrackingPassPct");

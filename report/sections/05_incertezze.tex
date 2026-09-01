@@ -1,34 +1,35 @@
 \chapter{Modello delle incertezze}
-\section{Criterio di selezione}
-Un modello robusto deve essere abbastanza ricco da rappresentare le variazioni rilevanti, ma sufficientemente contenuto da mantenere leggibile la struttura $\Delta$. Abbiamo quindi considerato dieci parametri meccanici candidati e ne abbiamo perturbato ciascuno di $\pm1\%$. Per ogni perturbazione sono stati ricalcolati equilibrio, Jacobiani e pianta completa; la sensibilità è stata valutata su 501 frequenze fra 0.1 e 300 rad/s.
+\section{Obiettivo e principio di modellazione}
+Il modello incerto deve mantenere i fenomeni fisici rilevanti senza rendere opaca la struttura $\Delta$. Definiamo quindi un solo insieme di progetto. Non esistono scenari gerarchici: ogni percentuale è un'ipotesi ingegneristica, non una tolleranza misurata o un intervallo di confidenza.
 
-Il ranking combina quattro effetti dinamici: variazione della risposta MIMO, spostamento dei poli instabili, spostamento dei modi elastici e variazione della massima singular value. Il punteggio dinamico è integrato con plausibilità della variabilità fisica, ruolo delle occorrenze e interpretabilità del blocco incerto. Questa procedura evita di scegliere i parametri soltanto sulla base di un singolo picco frequenziale.
+\section{Parametri reali \texttt{ureal}}
+Le due rigidezze SEA sono incluse perché modificano direttamente coppia elastica e modi flessibili; $J_{m1}$ rappresenta l'incertezza sull'inerzia riflessa del primo azionamento. Tutti e tre i parametri usano la variazione semplice $\pm10\%$:
+\begin{verbatim}
+k1  = ureal('k1',  p.Ks(1,1), 'Percentage', 10);
+k2  = ureal('k2',  p.Ks(2,2), 'Percentage', 10);
+Jm1 = ureal('Jm1', p.Jm(1,1), 'Percentage', 10);
+\end{verbatim}
+Ogni oggetto è riutilizzato in tutte le occorrenze delle equazioni e resta un singolo blocco reale scalare. Gli altri parametri sono nominali per mantenere l'ensemble leggibile; ciò non equivale a dichiararli fisicamente certi.
 
-I primi tre parametri sono $k_2$, $k_1$ e $J_{m1}$. Le rigidezze dominano la posizione dei modi elastici e modificano direttamente la coppia trasmessa; l'inerzia del primo motore influenza sia la dinamica del rotore sia l'accoppiamento con il link. $J_{m2}$ risulta molto vicino a $J_{m1}$, ma rimane il primo parametro escluso secondo la regola deterministica. La sua esclusione non significa che sia fisicamente certa: serve a limitare la dimensione dell'ensemble e dovrebbe essere riesaminata in presenza di nuovi dati sperimentali.
+\section{Incertezza dinamica degli attuatori}
+Per ciascun drive assumiamo $\omega_n$ e $\zeta$ in $\pm10\%$ e il ritardo in $\pm20\%$. Il ritardo ha un intervallo più ampio perché include latenza e jitter. La famiglia di verifica contiene il nominale con ritardo esatto, sei variazioni singole, otto corner e 105 campioni riproducibili.
 
-\section{Range parametrici}
-Lo scenario di progetto assegna variazioni simmetriche $\pm7\%$ a $k_1$ e $k_2$ e $\pm9\%$ a $J_{m1}$. Queste percentuali sono inviluppi ingegneristici moderati: descrivono possibili differenze di materiale, assemblaggio e inerzia riflessa, ma non derivano da misure, specifiche di un costruttore o intervalli di confidenza. Ogni parametro è rappresentato da un solo blocco reale scalare \texttt{ureal}, riutilizzato in tutte le sue occorrenze fisiche.
-
-\section{Variabilità degli attuatori}
-Per gli attuatori consideriamo $\omega_n$ in $\pm8\%$, $\zeta$ in $\pm7.5\%$ e il ritardo in $\pm20\%$. Una famiglia di 120 modelli comprende il nominale con ritardo esatto, variazioni singole, otto corner e 105 campioni pseudo-casuali. La famiglia è costruita direttamente in frequenza con il ritardo esatto; il nominale razionale del progetto conserva invece il Padé del primo ordine. In questo modo l'errore comprende sia la dispersione dei parametri sia il mismatch fra ritardo esatto e sua approssimazione.
-
-La convenzione scelta è un'incertezza input-moltiplicativa:
+La convenzione input-moltiplicativa è
 \[
-G_{a,var}(s)=G_{a,nom}(s)\left[1+W_I(s)\Delta_{act}(s)\right],
-\qquad \|\Delta_{act}\|_\infty\leq1.
+G_{a,i}(s)=G_{a,0}(s)[1+W_I(s)\Delta_i(s)],\qquad
+\|\Delta_i\|_\infty\le1.
 \]
-Il peso $W_I$ è ricavato coprendo l'errore relativo di tutti i modelli sulla griglia 0.1--1000 rad/s. Fra gli ordini da uno a quattro viene scelto il minimo che soddisfa la copertura con un margine di sicurezza pari a 1.08. Il risultato è stabile, proprio e di ordine uno; il massimo rapporto $|E|/|W_I|$ è $0.92593$.
+La forma dell'inviluppo presenta una sola transizione principale; viene perciò scelto un peso di ordine uno e \texttt{ucover} ne calcola i coefficienti. Non viene eseguito un ranking di ordini. Il peso finale è stabile, proprio e copre tutta la famiglia con safety factor 1.08 e rapporto massimo $|E|/|W_I|=0.92593$.
 
-I due giunti nominalmente identici ricevono blocchi dinamici indipendenti $\Delta_{act1}$ e $\Delta_{act2}$. Utilizzare un unico blocco avrebbe imposto variazioni perfettamente correlate senza evidenza fisica. La struttura finale contiene tre blocchi reali statici e due blocchi complessi dinamici:
+I due canali usano $\Delta_{act1}$ e $\Delta_{act2}$ indipendenti. Un unico blocco avrebbe imposto una correlazione perfetta non supportata da dati. La struttura finale è:
 \input{tables/uncertainties_m4.tex}
 
-\section{Struttura finale e verifica}
-La struttura $\Delta$ contiene complessivamente \MFourBlockCount\ blocchi normalizzati. La pianta incerta conserva due viste: $G_{unc,meas}$ verso le quattro misure $[q^T,\theta^T]^T$ e $G_{unc,q}$ verso le sole posizioni dei link. Il valore nominale di entrambe coincide con la pianta M3 entro errori relativi dell'ordine di $10^{-12}$ o inferiori; l'introduzione delle incertezze non altera quindi il progetto nominale.
 \begin{figure}[H]\centering
 \includegraphics[width=0.78\textwidth]{figures/m4_actuator_uncertainty_cover.png}
-\caption{Copertura dell'incertezza dinamica degli attuatori mediante $W_I$ (M4).}\label{fig:m4-wi}
+\caption{Errore moltiplicativo della famiglia e copertura mediante $W_I$.}\label{fig:m4-wi}
 \end{figure}
 
-Una campagna preliminare di 40 realizzazioni \texttt{usample} ha verificato range, stabilità dei blocchi dinamici, finitezza delle risposte e presenza dei due poli meccanici instabili attesi in open loop. Tale controllo riguarda la correttezza della costruzione dell'ensemble; non è il Monte Carlo finale e non produce conclusioni sulla stabilità in anello chiuso.
+\section{Verifica e limiti}
+La struttura contiene \MFourBlockCount\ blocchi: tre \texttt{ureal} e due \texttt{ultidyn}. Il valore nominale delle viste verso $[q;\theta]$ e verso $q$ coincide con M3 entro $10^{-8}$. Quaranta campioni \texttt{usample} rispettano i range e producono sistemi finiti delle dimensioni attese.
 
-Il limite principale del modello M4 è l'assenza di identificazione sperimentale. I blocchi descrivono un insieme ingegneristico plausibile, non una distribuzione di probabilità. Inoltre lo screening è locale all'equilibrio scelto e il peso $W_I$ è verificato su una famiglia e una griglia finite. Le successive certificazioni sono quindi valide rispetto a questo modello strutturato, non rispetto a qualunque variazione fisica possibile.
+Questa verifica riguarda la costruzione dell'ensemble, non la robustezza in anello chiuso. Le conclusioni RS/RP appartengono alla $\mu$-analysis. Anche la Monte Carlo successiva resta evidenza empirica: non sostituisce la certificazione strutturata.

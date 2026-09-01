@@ -48,12 +48,12 @@ classdef test_m16_monte_carlo < matlab.unittest.TestCase
                 "8e1c8437c786a252a380ce6b4452d32bebf9c2c6");
         end
 
-        function testT02Pr20RecordedMerged(testCase)
-            status = string(fileread(fullfile(testCase.Root, 'docs', ...
-                'PROJECT_STATUS.md')));
-            testCase.verifyTrue(contains(status, "PR #20") && ...
-                contains(status, "`MERGED`") && ...
-                contains(status, testCase.M16.config.baselineCommit));
+        function testT02CampaignSemanticsAreRecorded(testCase)
+            testCase.verifyEqual(testCase.M16.config.numberSamples, 40);
+            testCase.verifyEqual(testCase.M16.config.seed, 20260826);
+            testCase.verifyTrue(contains( ...
+                testCase.M16.config.monteCarloInterpretation, ...
+                "NOT_A_ROBUSTNESS_CERTIFICATE"));
         end
 
         function testT03GuncMeasFrozen(testCase)

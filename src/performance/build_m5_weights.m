@@ -1,5 +1,14 @@
 function [W1siso, W1, W2siso, W2, info] = build_m5_weights(spec)
-%BUILD_M5_WEIGHTS Construct the centralized M5 performance weights.
+%BUILD_M5_WEIGHTS Construct the two mixed-sensitivity performance weights.
+%   W1 shapes the sensitivity S. At zero frequency W1(0)=1/As, so
+%   ||W1*S||<1 asks for |S(0)|<As. At high frequency W1 tends to 1/Ms,
+%   which allows a sensitivity peak of approximately Ms. OmegaB places the
+%   transition and therefore expresses the desired closed-loop bandwidth.
+%
+%   W2 shapes the control signal. Its low-frequency gain 1/uScale makes
+%   uScale a performance normalization (not a saturation limit). Around
+%   omegaU the penalty rises and tends to alpha/uScale, discouraging fast
+%   commands close to actuator and elastic dynamics.
 
 if nargin < 1 || isempty(spec)
     spec = performance_specs_m5;

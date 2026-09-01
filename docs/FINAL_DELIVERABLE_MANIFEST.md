@@ -6,7 +6,7 @@
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (45 pagine A4).
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (41 pagine A4).
 - Macro: `report/generated/m18_values.tex`.
 - Tabelle: 11 file generati in `report/tables/`.
 - Figure: 15 asset selezionati, registrati in `report/generated/figure_manifest.csv`.

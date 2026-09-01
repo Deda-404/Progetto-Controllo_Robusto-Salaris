@@ -19,22 +19,22 @@ Il margine di Robust Stability di A5 è nell'intervallo [\AFiveRSLower,\AFiveRSU
 \section{M13: D--K iteration}
 La D--K iteration alterna due passi. Nel passo D si stimano scaling frequenziali che maggiorano $\mu$ per il controllore corrente; nel passo K si sintetizza un nuovo controllore $H_\infty$ sul problema scalato. La procedura è euristica: può migliorare l'objective strutturato, ma il controllore che produce deve essere sottoposto a una post-analisi indipendente. L'objective della sintesi non è di per sé un certificato RS o RP.
 
-M13 esegue l'unica campagna prevista sul problema M4/M5 invariato. Sono conservate cinque iterazioni; la migliore è la \BestDKIteration, con objective \MusynObjective. Il controllore estratto, indicato con $K_\mu$, è 2-by-2 e ha ordine \KmuOrder. L'ordine deriva dall'augmentazione con pianta, pesi e scaling D. Non viene applicata una riduzione, perché anche una riduzione bilanciata richiederebbe di ripetere stabilità, prestazioni, simulazioni non lineari e analisi robusta.
+M13 ha eseguito l'unica campagna prevista sul problema allora approvato. Nel refactoring corrente la sintesi non viene rilanciata: sono conservate le cinque iterazioni storiche e, soprattutto, le matrici del controllore della best iteration \BestDKIteration, con objective \MusynObjective. Il controllore estratto, indicato con $K_\mu$, è 2-by-2 e ha ordine \KmuOrder. L'ordine deriva dall'augmentazione con pianta, pesi e scaling D. Non viene applicata una riduzione, perché anche una riduzione bilanciata richiederebbe di ripetere stabilità, prestazioni, simulazioni non lineari e analisi robusta.
 
 La corretta conclusione di M13 è pertanto: la D--K iteration produce $K_\mu$. Non si afferma ancora che $K_\mu$ possieda Robust Stability; tale proprietà appartiene alla verifica M14.
 
 \section{M14: post-analisi indipendente di $K_\mu$}
-M14 ricarica il controllore selezionato e ricostruisce senza riusare le conclusioni di sintesi le mappe nominali e l'interconnessione incerta. L'identità del problema è controllata rispetto a M4/M5/M12/M13 e la stabilità interna viene valutata sulla realizzazione completa, senza cancellazioni mediante \texttt{minreal}. La distinzione fra sintesi e verifica riduce il rischio di interpretare l'objective D--K come prova della proprietà cercata.
+M14 ricarica il controllore selezionato e ricostruisce senza riusare le conclusioni di sintesi le mappe nominali e l'interconnessione incerta. L'identità di $K_\mu$ è controllata rispetto a M13; il problema di verifica è invece ricostruito dall'unico M4 corrente, da M5 e da M12. La stabilità interna viene valutata sulla realizzazione completa, senza cancellazioni mediante \texttt{minreal}. Questa separazione consente di mantenere congelato il controllore e, nello stesso tempo, attribuire il certificato soltanto alla post-analisi sul dominio oggi dichiarato.
 
 Per $K_\mu$, NS è positiva. NP resta \status{\KmuNPStatus}: la norma nominale è ancora maggiore di uno. Il margine RS è [\KmuRSLower,\KmuRSUpper], interamente sopra uno; di conseguenza RS è \status{\KmuRSStatus} sull'insieme lineare incerto M4. RP è invece \status{\KmuRPStatus}, coerentemente con il fallimento nominale. Il confronto con A5 mostra quindi un recupero formalmente verificato della stabilità robusta, non della prestazione robusta.
 
+\input{tables/mu_summary.tex}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.77\textwidth]{figures/m14_ns_np_rs_rp_summary.png}
+\includegraphics[width=0.44\textwidth]{figures/m14_ns_np_rs_rp_summary.png}
 \caption{Esiti distinti di NS, NP, RS e RP per $K_\mu$ nella post-analisi M14.}
 \label{fig:m14-summary}
 \end{figure}
 
 La frase “$K_\mu$ è robusto” sarebbe insufficiente: ometterebbe sia la classe di robustezza sia il modello su cui è verificata. La formulazione corretta è che $K_\mu$ possiede Robust Stability certificata rispetto alla struttura e ai range M4, mentre non soddisfa Nominal Performance e Robust Performance M5. Non segue alcuna garanzia globale sul modello non lineare, sulle saturazioni o su dinamiche escluse dall'insieme incerto.
-
-\input{tables/mu_summary.tex}

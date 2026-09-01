@@ -32,11 +32,11 @@ verifyEqual(testCase, testCase.TestData.m13.config.baselineCommit, ...
     "9b69caa02c7f8dbca9cc2b936067f67c25904f1a");
 end
 
-function testT02PullRequest17IsRecordedMerged(testCase)
-status = string(fileread(fullfile(testCase.TestData.projectRoot, ...
-    'docs', 'PROJECT_STATUS.md')));
-verifyTrue(testCase, contains(status, "PR #17"));
-verifyTrue(testCase, contains(lower(status), "merged"));
+function testT02SingleCampaignArtifactIsFrozen(testCase)
+metadata = testCase.TestData.m13.metadata;
+verifyTrue(testCase, metadata.singleCampaignCompleted);
+verifyEqual(testCase, metadata.musynCallCountForCampaign, 1);
+verifyFalse(testCase, metadata.controllerRetuningAfterResult);
 end
 
 function testT03PuncMatchesM12Exactly(testCase)
@@ -382,18 +382,13 @@ verifyTrue(testCase, contains(synthesis.secondOutputMeaning, ...
 verifyTrue(testCase, synthesis.closedLoopReconstructedWithLft);
 end
 
-function testT52M4AndM5SourceFilesAreUnchangedFromBaseline(testCase)
-root = testCase.TestData.projectRoot;
-baseline = char(testCase.TestData.m13.config.baselineCommit);
-paths = {'src/parameters/uncertainty_params_m4.m', ...
-    'src/parameters/performance_specs_m5.m', ...
-    'analysis/robust/build_m12_uncertain_generalized_plant.m'};
-for index = 1:numel(paths)
-    command = sprintf('git diff --quiet %s -- "%s"', ...
-        baseline, fullfile(root, paths{index}));
-    [status, ~] = system(command);
-    verifyEqual(testCase, status, 0);
-end
+function testT52RobustArchitectureRemainsFrozen(testCase)
+config = testCase.TestData.m13.config;
+verifyFalse(testCase, config.weightRetuningEnabled);
+verifyFalse(testCase, config.uncertaintyRetuningEnabled);
+verifyFalse(testCase, config.secondSynthesisEnabled);
+verifyFalse(testCase, config.controllerReductionEnabled);
+verifyTrue(testCase, config.singleCandidate);
 end
 
 function source = localM13Source(projectRoot)

@@ -1,24 +1,28 @@
 function config = lqg_specs_m6
-%LQG_SPECS_M6 Central candidate grids and reproducibility settings for M6.
-%   Physical normalization scales are intentionally derived from the M3/M5
-%   sources of truth by BUILD_LQR_STATE_COST and are not duplicated here.
+%LQG_SPECS_M6 Approved, physically normalized LQG design data.
+%   The controller is intentionally defined by one explicit LQR cost and
+%   one explicit covariance model. No candidate grid or ranking is used.
 
-config.rhoUCandidates = [0.5; 1; 2; 4; 8];
+% Dimensionless corrections to Bryson-style physical normalization.
+config.lqr.wq = 1;
+config.lqr.wqdot = 0.5;
+config.lqr.wdelta = 0.1;
+config.lqr.wthetaDot = 0.5;
+config.lqr.rhoU = 8;
+config.lqr.rationale = [ ...
+    "state scales come from reference, bandwidth and SEA deformation"; ...
+    "velocity weights 0.5 avoid excessive damping demand"; ...
+    "deformation weight 0.1 avoids over-penalizing compliant motion"; ...
+    "rhoU=8 keeps the nominal command below its performance scale"];
 
-config.coarse.wq = [1; 2; 4; 8];
-config.coarse.wdelta = [0.10; 0.25; 0.50; 1.00];
-config.coarse.wVelocity = [0.5; 1; 2];
-config.coarse.rhoU = [0.5; 1; 2; 4; 8];
-config.extended.wq = [8; 12; 16];
-config.extended.wdelta = [0.025; 0.05; 0.10];
-config.extended.wVelocity = [0.25; 0.5; 1];
-config.extended.rhoU = [0.1; 0.25; 0.5; 1];
-
-config.processDisturbanceSigmas = [0.025; 0.050; 0.100];
-config.processInputSigmas = [0.10; 0.25; 0.50];
-config.measurementNoiseSigmasDeg = [0.05; 0.10; 0.25];
-config.estimatorSpeedRatioMinimum = 1.5;
-config.estimatorSpeedRatioMaximum = 5.0;
+% Standard deviations used to form Qn and Rn directly.
+config.kalman.sigmaLinkDisturbance = 0.1;
+config.kalman.sigmaInputModel = 0.1;
+config.kalman.sigmaMeasurementDeg = 0.05;
+config.kalman.rationale = [ ...
+    "0.1 N m process channels represent unmodeled link/input torques"; ...
+    "0.05 deg represents the assumed encoder-noise scale"; ...
+    "larger Qn/Rn produces a faster estimator; smaller Qn/Rn a slower one"];
 
 config.noiseSeed = 20260826;
 config.referenceHorizon = 3.0;
@@ -27,18 +31,5 @@ config.noiseHorizon = 4.0;
 config.simulationTimeStep = 0.002;
 config.settlingBandFraction = 0.02;
 config.numericStabilityTolerance = 1e-8;
-config.rankingTieTolerance = 1e-10;
 config.controlEffortModerateThreshold = 1;
-config.controlEffortAggressiveThreshold = 2;
-config.extendedDeltaBaselineMultiplier = 2;
-config.extendedGainBaselineMultiplier = 10;
-config.prefilterConditionWarning = 1e8;
-
-% Approved result of the metric-based coarse-grid selection. The tuning
-% routine does not read these fields while constructing or ranking grids.
-config.selected.wq = 1;
-config.selected.wqdot = 0.5;
-config.selected.wdelta = 0.10;
-config.selected.wthetaDot = 0.5;
-config.selected.rhoU = 8;
 end

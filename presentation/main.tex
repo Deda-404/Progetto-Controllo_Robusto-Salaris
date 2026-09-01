@@ -116,8 +116,9 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \begin{frame}{M7 chiude con un risultato negativo utile}
 \begin{itemize}
 \item Studiata un'architettura LQI/LQG-I con costi fisicamente normalizzati.
-\item Candidati finali ammissibili: \MSevenAdmissible.
-\item Nessun candidato soddisfa insieme settling time e overshoot M5.
+\item Tre verifiche manuali: azione integrale debole, bilanciata e forte.
+\item Verifiche conformi a tutti i requisiti: \MSevenAdmissible.
+\item Nessuna verifica soddisfa insieme settling time e overshoot M5.
 \end{itemize}
 \vfill
 \bad{Stato M7: \MSevenStatus. Non esiste un controllore integrale finale.}
@@ -141,7 +142,8 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \begin{frame}{La D--K iteration produce $K_\mu$}
 \begin{itemize}
 \item M12 analizza A5: NS PASS, NP FAIL, RS/RP FAIL certificati.
-\item M13 esegue una campagna D--K sul problema M4/M5 invariato.
+\item M13: unica campagna D--K storica; $K_\mu$ resta congelato.
+\item M14 rivaluta quel controllore sull'unico M4 corrente.
 \item Best iteration: \BestDKIteration; objective: \MusynObjective.
 \item $K_\mu$ è full-order, ordine \KmuOrder, senza riduzione.
 \end{itemize}
@@ -201,7 +203,7 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \item $K_{\infty}$: \KhinfStableSamples/\MonteCarloSamples
 \item $K_\mu$: \KmuStableSamples/\MonteCarloSamples
 \end{itemize}
-\bad{Sample 5 M6: polo $+\MControllerSampleFivePole$ s$^{-1}$.}
+\bad{Sample M6 instabili: \MControllerUnstableSampleIds; polo peggiore $\MControllerWorstUnstablePole$ s$^{-1}$.}
 \column{0.59\textwidth}
 \includegraphics[width=\linewidth]{assets/m16_empirical_stability_summary.png}
 \end{columns}
