@@ -48,14 +48,11 @@ classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
                 "392ad170dc6665c87b769e314edb8380a4b1c8bc");
         end
 
-        function testT02Pr21RecordedMerged(testCase)
-            status = string(fileread(fullfile(testCase.Root, 'docs', ...
-                'PROJECT_STATUS.md')));
+        function testT02FrozenComparisonMetadataIsRecorded(testCase)
             testCase.verifyEqual(testCase.M17.metadata.mergedPullRequest, 21);
             testCase.verifyEqual(testCase.M17.metadata.mergedPullRequestState, ...
                 "MERGED");
-            testCase.verifyTrue(contains(status, "PR #21") && ...
-                contains(status, "MERGED"));
+            testCase.verifyFalse(testCase.M17.metadata.synthesisPerformed);
         end
 
         function testT03KlqgIdentityM6(testCase)

@@ -9,16 +9,18 @@ Il repository contiene l'intero percorso di lavoro: modello non lineare, equilib
 Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è quindi distinta per ruolo:
 
 - **Kmu** è il controllore robusto finale: M14 certifica la Robust Stability sull'insieme lineare incerto M4, mentre Nominal Performance e Robust Performance restano non conformi;
-- **M6 LQG** è il riferimento di prestazione nominale: rispetta il tracking M5 sul modello nominale, ma perde stabilità nel Sample 5 della campagna M16 e non dispone di un certificato RS;
+- **M6 LQG** è il riferimento di prestazione nominale: rispetta il tracking M5 sul modello nominale, ma presenta un caso instabile nella campagna M16 e non dispone di un certificato RS;
 - **Khinf** è il comparatore metodologico full-order della sintesi $H_\infty$.
 
-La Monte Carlo M16 usa 40 realizzazioni comuni dell'insieme M4: M6 è stabile in 39/40 casi, Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
+La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: M6 è stabile in 39/40 casi, Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
 
 ## Struttura del repository
 
 ```text
 Progetto_CR/
 ├── run_all.m             esecuzione completa M0--M18
+├── analysis/modellazione_linearizzazione_controllo.m
+│                         macrofase didattica M0--M5, eseguibile per sezioni
 ├── src/                  parametri, modello, attuatori e incertezze
 ├── controllers/          LQG, H-infinity e mu-synthesis
 ├── analysis/             analisi nominali, robuste e non lineari
@@ -48,7 +50,7 @@ Dalla radice del repository:
 run_all
 ```
 
-La pipeline esegue le verifiche M0--M18 e rigenera i risultati riproducibili. La D--K iteration M13 non viene rilanciata automaticamente: viene caricato e verificato il checkpoint approvato, evitando una nuova sintesi.
+La pipeline esegue le verifiche M0--M18 e rigenera i risultati riproducibili. La D--K iteration M13 non viene rilanciata automaticamente: viene caricato e verificato l'artefatto approvato, evitando una nuova sintesi. Per lo studio didattico della prima macrofase si può aprire `analysis/modellazione_linearizzazione_controllo.m` ed eseguire le sezioni nell'ordine proposto.
 
 Per rigenerare macro, tabelle e asset dei documenti:
 

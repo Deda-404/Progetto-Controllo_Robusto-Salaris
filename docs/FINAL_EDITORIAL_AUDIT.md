@@ -1,127 +1,52 @@
-# Audit editoriale conclusivo
+# Audit editoriale e strutturale conclusivo
 
 ## Perimetro
 
-La revisione è stata eseguita sul ramo `codex/final-human-editorial-review`,
-creato dalla baseline della PR #23, mergiata nel commit
-`6486bb240cdbcf4517ed1e893d83e6b1a34168e1`.
+La revisione è stata eseguita sul ramo `codex/didactic-structural-refactor` per rendere il progetto coerente con una metodologia universitaria leggibile: scelta ingegneristica, motivazione, verifica MATLAB ed eventuale correzione. Sono stati studiati gli esempi Salaris pertinenti e ne è stata adattata la logica al manipolatore SEA.
 
-Autori dei deliverable:
+Specifiche e pesi M5, LQG M6, Khinf M10 e Kmu M13 sono rimasti congelati. Non sono state aperte nuove sintesi, non è stato effettuato retuning e M13 ha ricaricato l'artifact approvato senza chiamare nuovamente `musyn`.
 
-- Alessio de Dato;
-- Valerio Rebechi.
+## Revisione del codice
 
-Restano da completare soltanto matricole e data di consegna. La revisione non
-modifica modello M4, specifiche e pesi M5, controllori M6/Khinf/Kmu, risultati
-numerici o conclusioni NS/NP/RS/RP. Non sono state eseguite nuove sintesi,
-retuning, riduzioni d'ordine o campagne Monte Carlo.
+- M0–M5 sono presentati come una sola macrofase sequenziale, mantenendo separate le funzioni matematiche riutilizzabili.
+- M3 usa la scelta diretta `wn=40 rad/s`, `zeta=0.8`, `delay=0.015 s`, Padé 1 e tre confronti manuali.
+- M4 usa un solo insieme incerto: `k1`, `k2`, `Jm1`, `wn`, `zeta` a ±10% e ritardo a ±20%.
+- M5 espone direttamente un solo set di specifiche e i pesi W1/W2, senza candidati o ranking.
+- M6 costruisce LQR e Kalman da un'unica normalizzazione fisica e da un unico modello di covarianza.
+- M7 è una verifica didattica di tre punti LQI, senza selettore automatico.
+- Sono stati rimossi 11 moduli di screening, griglia, ranking o selezione e 9 artifact che li rappresentavano. I file eliminati restano recuperabili mediante Git.
+- I test M3–M7 sono stati riscritti per verificare proprietà matematiche pubbliche e assenza dell'infrastruttura obsoleta.
 
-## Pulizia dei materiali operativi
+## Propagazione robusta
 
-Sono stati rimossi dal ramo corrente il resoconto operativo in radice e i
-venti resoconti intermedi presenti in `docs/handoff/`. La loro storia resta
-recuperabile mediante Git; nessun dato tecnico necessario alla riproduzione è
-stato cancellato.
+La profondità di Controllo Robusto è stata mantenuta: modello `ureal`, `usample`, mixed sensitivity, H∞, generalized plant, μ-analysis, D–K synthesis congelata, Robust Stability, Robust Performance, validazione non lineare e Monte Carlo.
 
-L'unica dipendenza automatica individuata era il test T20 di M7. Il test è
-stato aggiornato per verificare i due registri di governance effettivamente
-consegnati:
+Gli esiti correnti sono:
 
-- `docs/PROJECT_STATUS.md`;
-- `docs/DIARIO_DI_BORDO.md`.
+- M12 A5: NS PASS, NP FAIL, RS FAIL_CERTIFIED con margine `[0.849720, 0.859945]`, RP FAIL_CERTIFIED;
+- M13 Kmu: artifact congelato, ordine 52, objective storico `10.4032233618`;
+- M14 Kmu: NS PASS, NP FAIL, RS PASS_CERTIFIED con margine `[1.069561, 1.212875]`, RP FAIL_CERTIFIED;
+- M16, seed `20260826`: stabilità empirica M6/Khinf/Kmu `39/40`, `40/40`, `40/40`; Sample 5 M6 instabile;
+- M17: Kmu controllore robusto finale, M6 riferimento nominale, Khinf comparatore H∞.
 
-Non risultano altre dipendenze di codice, pipeline, relazione, presentazione o
-manifest dai resoconti rimossi.
+La Monte Carlo M16 resta evidenza empirica lineare e non è presentata come certificazione né come sostituto della μ-analysis M14.
 
-## Audit del linguaggio operativo
+## Relazione e presentazione
 
-Le occorrenze sono state classificate prima della rimozione:
+La relazione è stata ampliata soprattutto nei capitoli su attuatori, incertezze, specifiche, pesi, LQR/LQI, Kalman/LQG e distinzione fra sintesi M13 e certificazione M14. Gli esiti negativi NP, RP, tracking e M7 restano visibili e interpretati.
 
-1. **Materiale operativo non necessario:** resoconti intermedi e riferimenti
-   di coordinamento nella documentazione destinata alla consegna. Rimossi.
-2. **Cronologia del progetto:** vecchie voci in `CHANGELOG.md` e
-   `docs/DIARIO_DI_BORDO.md`. Conservate perché documentano eventi realmente
-   avvenuti e i file sono cronologici/append-only.
-3. **Decisioni tecniche storiche:** formulazioni in `docs/DECISION_LOG.md` e
-   nei documenti delle singole milestone. Conservate quando necessarie a
-   spiegare una decisione o una dipendenza storica.
-4. **Regole interne del repository:** `AGENTS.md`. Conservato perché è un
-   file di governo dello sviluppo, non un deliverable accademico.
-5. **Controlli automatici:** stringhe nei test che verificano l'assenza dei
-   vecchi file o di termini operativi nel README. Conservate perché hanno
-   funzione negativa e non compaiono nei deliverable.
+La presentazione conserva 17 slide e distingue correttamente il ruolo storico della D–K synthesis M13 dalla post-analisi M14. Tabelle, macro e figure sono state rigenerate dall'insieme M4 corrente.
 
-README, relazione, presentazione e manifest non contengono istruzioni di
-coordinamento o testi rivolti a strumenti conversazionali. Questo audit non
-afferma che nel corso del progetto non siano mai stati usati strumenti di
-assistenza automatica: certifica soltanto che il materiale conclusivo è stato
-reso autosufficiente, tecnico e adatto alla consegna.
+## Quality gate
 
-## Commenti MATLAB
+- suite MATLAB standalone: **590/590 PASS**, 0 failed, 0 incomplete;
+- `run_all` M0–M18: **PASS**, exit code 0;
+- M13: artifact ricaricato, nessuna nuova `musyn`;
+- Code Analyzer: **38 file, 0 segnalazioni**;
+- `git diff --check`: **PASS**;
+- audit lessicale del codice e della documentazione corrente: **PASS**;
+- relazione: **41 pagine**, audit LaTeX con 0 errori, riferimenti irrisolti, overflow e destinazioni duplicate;
+- presentazione: **17 slide**, audit LaTeX con gli stessi conteggi tutti a zero;
+- ispezione visiva completa e successivo controllo mirato delle pagine/slides aggiornate: **PASS**.
 
-I commenti e i messaggi utente delle fasi M17/M18 e di `run_all.m` sono stati
-riscritti in termini ingegneristici: “risultati validati”, “confronto basato
-sulle evidenze” e “generazione documentale”. I nomi di funzioni o campi
-storici contenenti `frozen` non sono stati rinominati, perché una modifica API
-avrebbe introdotto rischio tecnico senza beneficio editoriale. In tali casi
-il termine descrive inoltre correttamente un risultato mantenuto invariato.
-
-## Relazione
-
-La relazione:
-
-- identifica gli autori e mantiene visibili i soli dati anagrafici mancanti;
-- motiva modello, equilibrio, linearizzazione, attuatori e scelta delle
-  incertezze;
-- esplicita la derivazione di specifiche, normalizzazioni e pesi;
-- descrive separatamente LQG M6 e il risultato negativo M7;
-- chiarisce generalized plant, equivalenza M9/M10 e frontiera M11;
-- distingue la produzione di Kmu in M13 dalla certificazione RS in M14;
-- separa validazione non lineare, RAS empirica, Monte Carlo e mu-analysis;
-- conserva tracking, NP e RP falliti e l'instabilità M6 del Sample 5;
-- conclude con una selezione per ruolo e non con un vincitore assoluto.
-
-Le tabelle generate sono state uniformate in italiano. I range M4 riportano
-esplicitamente ±7%, ±9%, ±8%, ±7,5% e ±20% secondo i relativi parametri. La
-tabella Monte Carlo distingue “N. instabili” da “Sample ID instabile”: M6
-riporta 1 e 5; Khinf/Kmu riportano 0 e “--”. La percentuale è denominata
-“Frazione empirica”.
-
-## Presentazione
-
-La presentazione resta composta da 17 slide, con timing stimato di 17:30. La
-slide M13 afferma che la D--K iteration produce Kmu e specifica che
-l'objective non è un certificato. La slide successiva attribuisce
-correttamente a M14 la certificazione RS. Sono stati aggiornati autori, ruoli
-in italiano, note dell'oratore e transizioni.
-
-## Validazione
-
-La validazione conclusiva ha prodotto i seguenti esiti:
-
-- generazione M18 e riconciliazione degli artifact: PASS;
-- relazione: 45 pagine A4, 13 capitoli, 3 appendici, 15 figure e 11
-  tabelle;
-- presentazione: 17 slide 16:9, timing stimato 17:30;
-- audit LaTeX di entrambi i PDF: zero errori, riferimenti irrisolti,
-  overflow e destinazioni duplicate;
-- ispezione visiva di tutte le 45 pagine e di tutte le 17 slide: nessun
-  elemento tagliato, sovrapposto o illeggibile;
-- test dedicati M18: 60/60 PASS;
-- suite completa: 649/649 PASS;
-- `run_all` M0--M18: PASS, 649/649 test interni ed exit code 0;
-- Code Analyzer: 15 file controllati, zero segnalazioni;
-- specifiche M5 verificate byte-per-byte rispetto alla baseline dopo il
-  ripristino di un commento editoriale non ammissibile nel file congelato;
-- `git diff --check`: PASS;
-- audit dei termini operativi nei deliverable finali: PASS.
-
-`run_all` ha ripetuto la campagna deterministica M16 con il seed già
-congelato esclusivamente come verifica di riproducibilità. Non è stata aperta
-una nuova campagna, non sono stati modificati i campioni e gli artifact
-tecnici rigenerati sono stati ripristinati alla baseline. M13 ha ricaricato
-il controllore congelato senza eseguire una nuova `musyn`.
-
-Il quality gate editoriale è pertanto **COMPLETE**. Restano esclusivamente
-gli input manuali indicati nel manifest e la revisione umana della pull
-request; il ramo non viene mergiato automaticamente.
+Il quality gate è **COMPLETE**. Restano da inserire manualmente soltanto le matricole degli autori e la data di consegna. Questa revisione non esegue automaticamente commit, push, merge o apertura di pull request.

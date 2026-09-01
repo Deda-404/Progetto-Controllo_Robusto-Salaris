@@ -17,7 +17,7 @@ M6 è l'unico dei tre controllori finali che rispetta i target di tracking nomin
 $K_{\infty}$ e $K_\mu$ mantengono la stabilità nelle simulazioni nominali, ma falliscono settling, overshoot ed errore a regime. Il fatto che $K_\mu$ sia il controllore robusto finale non modifica tale risultato. La robustezza della stabilità protegge una proprietà diversa dall'accuratezza di tracking pesata.
 
 \section{Stabilità incerta e prestazione robusta}
-M16 osserva M6 stabile in 39/40 campioni e individua il Sample 5 instabile. $K_{\infty}$ e $K_\mu$ sono stabili in 40/40 realizzazioni, ma i loro core tracking pass rate sono nulli. Il campionamento favorisce quindi i controllori robusti sul piano della stabilità osservata e M6 sul piano della prestazione, senza produrre un vincitore assoluto.
+M16 osserva M6 stabile in \MControllerStableSamples/\MonteCarloSamples\ campioni; gli ID instabili sono \MControllerUnstableSampleIds. $K_{\infty}$ e $K_\mu$ sono stabili rispettivamente in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ realizzazioni, ma i loro core tracking pass rate sono nulli. Il campionamento favorisce quindi i controllori robusti sul piano della stabilità osservata e M6 sul piano della prestazione, senza produrre un vincitore assoluto.
 
 Sul piano formale, soltanto $K_\mu$ dispone di una post-analisi completa sull'insieme M4. M14 certifica RS con margine [\KmuRSLower,\KmuRSUpper], ma NP e RP restano negative. M6 e $K_{\infty}$ non ricevono retroattivamente una certificazione dalla Monte Carlo. Questa asimmetria delle evidenze è riportata esplicitamente nella tabella master.
 
@@ -39,7 +39,7 @@ I picchi di comando rimangono dello stesso ordine nelle campagne di tracking con
 La selezione risultante è:
 \input{tables/final_role_selection.tex}
 
-$K_\mu$ è il controllore robusto finale perché è l'unico con RS formalmente certificata e la campagna M16 non mostra contraddizioni. M6 è il riferimento di prestazione nominale perché soddisfa il tracking M5 nel dominio validato, pur conservando l'instabilità del Sample 5 e l'assenza di certificato RS. $K_{\infty}$ rimane il riferimento metodologico $H_\infty$: rappresenta la soluzione full-order ottenuta dalla generalized plant esplicita e consente di misurare cosa cambia passando alla sintesi strutturata e alla D--K iteration.
+$K_\mu$ è il controllore robusto finale perché è l'unico con RS formalmente certificata e la campagna M16 non mostra contraddizioni. M6 è il riferimento di prestazione nominale perché soddisfa il tracking M5 nel dominio validato, pur conservando i casi instabili M16 e l'assenza di certificato RS. $K_{\infty}$ rimane il riferimento metodologico $H_\infty$: rappresenta la soluzione full-order ottenuta dalla generalized plant esplicita e consente di misurare cosa cambia passando alla sintesi strutturata e alla D--K iteration.
 
 \begin{figure}[H]
 \centering

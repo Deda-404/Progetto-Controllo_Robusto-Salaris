@@ -145,7 +145,7 @@ valid = true;
 for index = 1:height(ranges)
     name = char(ranges.Parameter(index));
     nominal = ranges.NominalValue(index);
-    fraction = ranges.BaselinePercent(index) / 100;
+    fraction = ranges.Percentage(index) / 100;
     lower = nominal * (1 - fraction) - tolerance;
     upper = nominal * (1 + fraction) + tolerance;
     valid = valid && values.(name) >= lower && values.(name) <= upper;

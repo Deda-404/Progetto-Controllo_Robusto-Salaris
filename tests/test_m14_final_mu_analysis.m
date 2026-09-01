@@ -103,11 +103,11 @@ verifyTrue(testCase, m14.weightAudit.W3Absent);
 verifyFalse(testCase, m14.metadata.W3Used);
 end
 
-function testT10PuncIsIdenticalToM12AndM13(testCase)
+function testT10PuncMatchesCurrentM12AndRecordsM13History(testCase)
 audit = testCase.TestData.m14.PuncIdentityAudit;
 verifyTrue(testCase, audit.passed);
-verifyTrue(testCase, audit.currentAuditMatchesM13Record);
-verifyTrue(testCase, audit.m13RecordedAuditPassed);
+verifyTrue(testCase, audit.m13SynthesisPlantAuditPassed);
+verifyTrue(testCase, islogical(audit.currentProblemMatchesM13SynthesisRecord));
 verifyLessThanOrEqual(testCase, audit.nominalFrequencyErrorM12, ...
     testCase.TestData.m14.config.identityFrequencyTolerance);
 end

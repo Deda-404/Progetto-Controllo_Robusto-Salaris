@@ -4,7 +4,7 @@ m3_delay_pade_comparison.png,M3,results\figures\m3_delay_pade_comparison.png,rep
 m4_actuator_uncertainty_cover.png,M4,results\figures\m4_actuator_uncertainty_cover.png,report\figures\m4_actuator_uncertainty_cover.png,"Copertura dell'incertezza dinamica degli attuatori mediante W_I.",5,1
 m5_spec_frequency_map.png,M5,results\figures\m5_spec_frequency_map.png,report\figures\m5_spec_frequency_map.png,"Mappa frequenziale delle specifiche e dei pesi M5.",6,1
 m6_lqg_reference_tracking.png,M6,results\figures\m6_lqg_reference_tracking.png,report\figures\m6_lqg_reference_tracking.png,"Tracking nominale lineare del controllore LQG M6.",7,1
-m7_augmented_cost_tradeoff.png,M7,results\figures\m7_augmented_cost_tradeoff.png,report\figures\m7_augmented_cost_tradeoff.png,"Trade-off della feasibility LQG-I M7 senza candidato finale ammissibile.",7,0
+m7_augmented_cost_tradeoff.png,M7,results\figures\m7_augmented_cost_tradeoff.png,report\figures\m7_augmented_cost_tradeoff.png,"Trade-off delle tre verifiche manuali LQG-I M7, senza controllore finale.",7,0
 m8_lqg_ras_q_plane.png,M8,results\figures\m8_lqg_ras_q_plane.png,report\figures\m8_lqg_ras_q_plane.png,"Stima empirica della RAS M6 nel piano delle coordinate articolari.",7,1
 m10_weighted_comparison_m9.png,M10,results\figures\m10_weighted_comparison_m9.png,report\figures\m10_weighted_comparison_m9.png,"Confronto della prestazione pesata M9/M10 sul problema nominale congelato.",8,1
 m11_gamma_vs_order.png,M11,results\figures\m11_gamma_vs_order.png,report\figures\m11_gamma_vs_order.png,"Trade-off fra ordine e objective nella campagna hinfstruct M11.",8,0

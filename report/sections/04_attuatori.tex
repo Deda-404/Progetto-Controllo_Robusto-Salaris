@@ -1,30 +1,35 @@
 \chapter{Attuatori e pianta completa}
-\section{Modello nominale}
-La coppia richiesta dal controllore non viene applicata direttamente alla dinamica SEA. Per rappresentare banda finita e latenza, ogni canale è descritto da un secondo ordine a guadagno statico unitario seguito da un ritardo di trasporto:
+\section{Obiettivo e modello}
+La coppia richiesta dal controllore non agisce istantaneamente sulla meccanica SEA. Ogni canale è rappresentato da un secondo ordine a guadagno statico unitario seguito da un ritardo:
 \[
-\bar G_m(s)=\frac{\bar\omega_n^2}{s^2+2\bar\zeta\bar\omega_n s+\bar\omega_n^2}e^{-\bar\tau_ds},
+G_a(s)=\frac{\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}e^{-\tau_ds}.
 \]
-con $\bar\omega_n=\ActuatorWn$ rad/s, $\bar\zeta=\ActuatorZeta$ e $\bar\tau_d=\ActuatorDelayMs$ ms. Questi valori non sono dati identificati: sono stati selezionati fra 27 combinazioni di frequenza naturale, smorzamento e ritardo. I criteri richiedono una banda sensibilmente maggiore dei modi instabili a bassa frequenza, ma inferiore ai primi modi elastici; impongono inoltre overshoot del singolo attuatore non superiore al 2\% e un errore di fase Padé moderato a 80 rad/s.
+La frequenza naturale $\omega_n$ determina la scala di rapidità e la banda; $\zeta$ controlla smorzamento e sovraelongazione; $\tau_d$ produce una perdita di fase crescente con la frequenza. Le inerzie e gli smorzamenti $J_m,B_m$ appartengono già alle equazioni meccaniche e non vengono duplicati nel blocco attuativo.
 
-La combinazione scelta, $40$ rad/s, $0.8$ e $15$ ms, fornisce una banda di circa $34.78$ rad/s. È quindi abbastanza rapida rispetto ai poli instabili a 4.04 e 7.21 s$^{-1}$, mentre inizia a filtrare il comando prima delle risonanze elastiche a circa 70--79 rad/s. Lo smorzamento $0.8$ limita la sovraelongazione senza imporre una dinamica criticamente smorzata; il ritardo di 15 ms rimane non trascurabile e viene incluso esplicitamente.
-
-\section{Approssimazione del ritardo}
-La traccia richiede un Padé del primo ordine:
+\section{Scelta ingegneristica}
+Adottiamo direttamente
 \[
-e^{-\tau_ds}\simeq \frac{1-\tau_ds/2}{1+\tau_ds/2}.
+\omega_n=\ActuatorWn\ \mathrm{rad/s},\qquad
+\zeta=\ActuatorZeta,\qquad
+\tau_d=\ActuatorDelayMs\ \mathrm{ms}.
 \]
-L'approssimazione aggiunge un polo stabile in $-2/\tau_d$ e uno zero nel semipiano destro in $+2/\tau_d$. Lo zero è conseguenza della rappresentazione razionale del ritardo e rende il canale non minimum-phase, ma non introduce un polo instabile. L'errore di fase è trascurabile in prossimità dei modi instabili meccanici e cresce avvicinandosi ai modi elastici; il modello non deve quindi essere extrapolato indiscriminatamente alle alte frequenze.
+La motivazione nasce dal confronto fra scale fisiche: il polo instabile dominante è a $7.209$ rad/s, il primo modo elastico a $69.95$ rad/s e la banda dell'attuatore scelto è $34.78$ rad/s. Il drive è quindi abbastanza rapido da sostenere la stabilizzazione, ma non viene assunto infinitamente più veloce delle dinamiche elastiche. Lo smorzamento $0.8$ limita l'overshoot senza rallentare il secondo ordine come un caso fortemente sovrasmorzato.
+
+MATLAB non seleziona il punto da un prodotto cartesiano. Sono mostrati soltanto tre casi espliciti, lento, nominale e veloce, per verificare l'effetto di $\omega_n$. Il nominale produce rise time $0.0626$ s, settling $0.109$ s e overshoot $1.47\%$ e soddisfa la finestra di banda derivata dai modi M2.
+
+\section{Ritardo e Padé}
+Per utilizzare gli algoritmi di sintesi serve una realizzazione razionale. Impieghiamo il Padé del primo ordine
+\[
+e^{-\tau_ds}\simeq\frac{1-\tau_ds/2}{1+\tau_ds/2}.
+\]
+La scelta di ordine uno mantiene contenuto l'ordine e rende esplicito il limite del modello. Il polo aggiunto è stabile in $-2/\tau_d$, mentre lo zero è nel semipiano destro. Lo zero non rende instabile l'attuatore, ma ne segnala il carattere non minimum-phase. L'errore di fase è trascurabile presso i poli instabili e vale circa $6.83^\circ$ a 80 rad/s.
+
 \begin{figure}[H]\centering
 \includegraphics[width=0.76\textwidth]{figures/m3_delay_pade_comparison.png}
-\caption{Confronto fra ritardo esatto e Padé del primo ordine (M3).}\label{fig:m3-pade}
+\caption{Ritardo esatto e approssimazione di Padé del primo ordine.}\label{fig:m3-pade}
 \end{figure}
 
-\section{Interconnessione con la meccanica}
-Ogni attuatore razionale ha ordine tre; due copie diagonali aggiungono sei stati agli otto stati meccanici. La pianta nominale completa ha quindi ordine \FullPlantOrder. Indicando con $(A_a,B_a,C_a,D_a)$ la realizzazione dei due attuatori e con $(A_m,B_m,C_m,D_m)$ la meccanica, la cascata è costruita esplicitamente per preservare l'ordine degli stati:
-\[
-A_{full}=\begin{bmatrix}A_m&B_mC_a\\0&A_a\end{bmatrix},\qquad
-B_{full}=\begin{bmatrix}B_mD_a\\B_a\end{bmatrix}.
-\]
-Il comando $u$ attraversa la dinamica attuativa e produce la coppia motore $\tau$. Le coppie di disturbo fisiche introdotte in seguito agiscono invece direttamente sul lato link, evitando di confondere un carico esterno con un errore del comando. La costruzione è stata confrontata in frequenza con una cascata indipendente e coincide entro la precisione numerica.
+\section{Implementazione, verifica e interpretazione}
+Due copie diagonali dell'attuatore aggiungono sei stati agli otto stati SEA. La pianta completa ha ordine \FullPlantOrder, ingressi $u_1,u_2$, misure $[q^T,\theta^T]^T$ e uscita primaria $q$. La cascata è costruita esplicitamente per preservare l'ordine degli stati e confrontata con una seconda interconnessione ottenuta mediante \texttt{series}; le risposte coincidono entro la precisione numerica.
 
-La pianta completa conserva i due poli meccanici instabili e aggiunge soltanto poli attuativi stabili. Dopo un opportuno scaling temporale, i test SVD e PBH confermano controllabilità e osservabilità dei 14 stati. L'ordine completo viene mantenuto nelle sintesi: non sono effettuate cancellazioni dei modi elastici o dello zero Padé.
+La pianta conserva i due poli meccanici instabili e aggiunge soltanto poli attuativi stabili. I test PBH confermano stabilizzabilità e rilevabilità. I valori attuativi sono assunzioni di progetto verificate, non risultati di identificazione sperimentale.

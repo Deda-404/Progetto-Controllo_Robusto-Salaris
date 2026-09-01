@@ -8,11 +8,10 @@ M8 valida esclusivamente il controllore M6 LQG senza integratore. Le matrici
 e confrontate bit per bit con il dataset; non sono stati eseguiti tuning LQR,
 LQI o Kalman. M7 resta `PARTIAL` e congelata.
 
-Il candidato I25 non è stato ricostruito in Simulink: il confronto integrale
-resta quello lineare già validato in M7, etichettato esclusivamente
-**representative integral benchmark**. Questa scelta evita di trasformare un
-candidato di feasibility non approvato in un secondo controllore M8 e non
-influenza il quality gate.
+Le tre verifiche manuali M7 non sono state ricostruite in Simulink: nessuna
+soddisfa insieme settling time e overshoot M5, quindi non esiste un secondo
+controllore finale da validare in M8. Il risultato integrale resta la verifica
+lineare documentata in M7 e non influenza il quality gate M8.
 
 ## Architettura Simulink
 

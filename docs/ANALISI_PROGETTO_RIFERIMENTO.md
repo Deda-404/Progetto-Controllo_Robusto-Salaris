@@ -126,10 +126,10 @@ Il progetto dei colleghi è stato consultato in sola lettura come riferimento me
 
 Queste osservazioni servono a progettare test e architettura originali; non costituiscono una correzione del materiale Drive, che resta immutato.
 
-## Confronto reference-last eseguito in M4
+## Confronto reference-last e configurazione corrente
 
-Il confronto M4 è stato svolto il 2026-08-24 soltanto dopo che screening, range, famiglia, fit, pianta incerta, dataset, figure, 14 test M4 e regressioni M0–M3.1 avevano ottenuto un primo PASS indipendente.
+Il confronto M4 originario è stato svolto il 2026-08-24 soltanto dopo un primo PASS indipendente. Quella fase è conservata nei log come storia del progetto, non come implementazione corrente.
 
-Il nostro screening ha selezionato `k2`, `k1`, `Jm1`; il riferimento usa `m2`, `k1`, `k2`. I nostri range baseline sono ±7% sulle rigidezze e ±9% su `Jm1`, mentre il riferimento indica ±5% sulle rigidezze e ±10% su `m2`. La nostra famiglia usa 120 modelli con corner obbligatori e seed 20260824; l'inventario del riferimento indica 200 campioni. Il minimo peso coprente nostro è di ordine 1; il riferimento riporta ordine 3.
+L'implementazione corrente dichiara direttamente `k2`, `k1` e `Jm1` a ±10%; il riferimento usa `m2`, `k1`, `k2` con percentuali differenti. La nostra famiglia attuatore usa 120 modelli con corner obbligatori e un peso coprente di ordine 1; l'inventario del riferimento indica 200 campioni e un peso di ordine 3.
 
-La coincidenza parziale sulle due rigidezze conferma soltanto che esse sono dinamicamente rilevanti in entrambe le impostazioni. Le differenze su terzo parametro, percentuali, numerosità e ordine del peso sono state mantenute. Il riferimento ha aiutato a controllare completezza metodologica e ordine di grandezza, non ha modificato l'ensemble M4.
+La coincidenza parziale sulle due rigidezze conferma soltanto che esse sono dinamicamente rilevanti in entrambe le impostazioni. Le differenze su terzo parametro, percentuali, numerosità e ordine del peso restano esplicite. Il riferimento ha aiutato a controllare completezza metodologica e ordine di grandezza, ma non determina l'insieme M4 corrente.

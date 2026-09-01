@@ -1,5 +1,5 @@
 function frozen = load_m13_uncertain_generalized_plant(projectRoot, config)
-%LOAD_M13_UNCERTAIN_GENERALIZED_PLANT Rebuild and audit frozen M12 Punc.
+%LOAD_M13_UNCERTAIN_GENERALIZED_PLANT Rebuild and audit the current M12 Punc.
 
 arguments
     projectRoot (1, 1) string

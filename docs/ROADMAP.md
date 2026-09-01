@@ -1,5 +1,10 @@
 # Roadmap tecnica
 
+M0–M5 costituiscono oggi una sola macrofase didattica, percorribile per
+sezioni in `analysis/modellazione_linearizzazione_controllo.m`. Le sigle
+restano come punti di tracciabilità e gate automatici, non come progetti
+separati né come ricerche di tuning.
+
 Ogni milestone termina con test, quality gate e aggiornamento di diario, changelog, decision log e project status. I nomi dei file previsti possono essere raffinati, mantenendo separazione delle responsabilità e riproducibilità.
 
 | Milestone | Obiettivo | Input e file previsti | Implementazione | Test, output e criterio di accettazione | Dipendenze |
@@ -11,8 +16,8 @@ Ogni milestone termina con test, quality gate e aggiornamento di diario, changel
 | **M4 — Incertezze** | Costruire una famiglia incerta fisicamente motivata | M3; `src/uncertainty/` | `ureal`, eventuale `ultidyn`/`ucover`, campioni e pianta `uss` | Blocchi, occorrenze, range, copertura di \(W_I\), nominal value e campioni validi | M3, decisioni sulle incertezze |
 | **M5 — Specifiche e pesi** | Quantificare prestazioni e limiti | M4; `docs/DECISION_LOG.md`, `controllers/hinf/` | Definizione di uscite, disturbi, banda, errore, coppia e pesi | Coerenza dimensionale, fattibilità preliminare e grafici dei pesi; specifiche approvate | M4 |
 | **M6 — LQG senza integratore** | Stabilizzare il modello nominale con stima di stato | M3, misure e covarianze; `controllers/lqg/` | LQR, Kalman e interconnessione esplicita | Stabilità, principio di separazione, rumore, condizioni iniziali e sforzo; controllore salvato | M2–M3, decisioni Q/R/W/V |
-| **M7 — LQG con integratore** | Eliminare offset sulle uscite selezionate | M6; `controllers/lqg/` | Modello aumentato e anti-windup se necessario | Stabilità, errore a regime, confronto con M6, comando e saturazioni; entrambi i LQG validati | M6 |
-| **M8 — Simulink e RAS LQG** | Validare LQG sul modello non lineare | M1, M6–M7; `simulink/`, `analysis/ras/` | Schemi lineare/NL, rumori, disturbi e ricerca automatica RAS | Criterio di convergenza, dominio e sezioni documentati; confronto con/senza integratore | M7 |
+| **M7 — Verifica LQG con integratore** | Studiare eliminazione dell'offset senza aprire un tuning automatico | M6; `controllers/lqg/` | Modello aumentato e tre costi manuali fisicamente normalizzati | Stabilità, offset, tracking e comando; risultato negativo conservato se nessun punto è conforme | M6 |
+| **M8 — Simulink e RAS LQG** | Validare il controllore nominale M6 sul modello non lineare | M1, M6; `simulink/`, `analysis/ras/` | Schemi lineare/NL, rumori, disturbi e ricerca automatica RAS | Criterio di convergenza, dominio e sezioni documentati; M7 non viene promosso a controllore finale | M7 |
 | **M9 — \(H_\infty\) `mixsyn`** | Sintetizzare mixed-sensitivity nominale | M3, M5; `controllers/hinf/` | Interconnessione 1-DoF e sintesi `mixsyn` | Stabilità, norma ricostruita, \(W_1S\), \(W_2KS\), tracking/disturbi/comando | M5 |
 | **M10 — \(H_\infty\) `hinfsyn`** | Sintetizzare e confrontare una pianta generalizzata | M5, M9; `controllers/hinf/` | `connect`/`sumblk`, eventuale 2-DoF, `hinfsyn` | Stessa convenzione/scaling di M9, \(\gamma\), poli, canali e confronto equo | M9 |
 | **M11 — `hinfstruct`** | Esplorare strutture implementabili | M5, M10; `controllers/hinf/` | PID/MIMO o `tunableSS`, ordini e partenze multiple | Stabilità di tutte le soluzioni candidate, specifiche pesate, ordine e variabilità tra start | M10 |

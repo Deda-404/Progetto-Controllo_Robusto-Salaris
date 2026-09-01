@@ -38,7 +38,7 @@ La checklist deriva dalla traccia ufficiale. Un requisito tecnico resta non comp
 - [x] Implementare secondo ordine e Padé del primo ordine.
 - [x] Validare poli, guadagno statico e risposta degli attuatori.
 - [x] Distinguere parametri certi, incerti e incertezza dinamica.
-- [x] Approvare parametri incerti e percentuali per il baseline M4.
+- [x] Approvare parametri incerti e percentuali per l'insieme unico M4.
 - [x] Motivare fisicamente ogni incertezza e dichiararla assunzione progettuale.
 - [x] Costruire e testare `GuncMeas` e `GuncQ` nominalmente coerenti con M3.
 - [x] Verificare che \(W_I\) copra 120 modelli attuatore, inclusi tutti i corner.
@@ -127,7 +127,7 @@ tracciabilità, non conformità prestazionale.
 M12 ha analizzato il controllore A5 congelato con `GuncQ` M4 e pesi M5.
 La decomposizione N–Δ è coerente e la μ manuale conferma `robstab`. Gli esiti
 sono distinti: NS `PASS`, NP `FAIL`, RS `FAIL_CERTIFIED` con margin
-`[0.875899,0.882789]`, RP `FAIL_CERTIFIED` con margin `[0,0]`. Le caselle
+`[0.849720,0.859945]`, RP `FAIL_CERTIFIED` con margin `[0,0]`. Le caselle
 indicano che le verifiche richieste sono state eseguite e documentate, non
 che le proprietà prestazionali siano state soddisfatte. `wcgain` restituisce
 gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
@@ -143,12 +143,12 @@ gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 - [ ] Registrare ogni rilassamento nel Decision Log.
 - [ ] Se si riduce l'ordine, ripetere tutte le verifiche sul controllore ridotto.
 
-M13 ha eseguito la singola campagna valida con `Display='short'`, cinque
-iterazioni e problema M4/M5 congelato. Il controller restituito è 2×2 di
+M13 ha eseguito la singola campagna valida con `Display='short'` e cinque
+iterazioni sul problema allora approvato. Il controller restituito è 2×2 di
 ordine 52 ed è nominalmente stabile; l'objective `10.4032233618` resta
-maggiore di uno. M14 ha ripetuto la pipeline formale M12 sul Kmu senza
+maggiore di uno. Il refactoring non rilancia la sintesi: M14 ripete la pipeline formale M12 sul Kmu congelato e sull'M4 corrente, senza
 riduzione: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
-`[1.250037,1.252573]` e RP `FAIL_CERTIFIED`. La verifica a posteriori è
+`[1.069561,1.212875]` e RP `FAIL_CERTIFIED`. La verifica a posteriori è
 quindi completata, mentre l'eventuale diagnosi globale di irrealizzabilità e
 ogni rilassamento restano aperti.
 
@@ -166,7 +166,7 @@ ogni rilassamento restano aperti.
 - [x] Confrontare formalmente \(H_\infty\) e D–K in RS, RP e margini.
 
 M14 confronta l'A5 congelato M12 con Kmu: il margine RS passa da
-`[0.875899,0.882789]` a `[1.250037,1.252573]`, con transizione certificata
+`[0.849720,0.859945]` a `[1.069561,1.212875]`, con transizione certificata
 `FAIL_CERTIFIED -> PASS_CERTIFIED`. Entrambi falliscono NP/RP sul target M5;
 il confronto distingue quindi recupero della stabilità robusta e mancata
 performance robusta.
@@ -193,7 +193,7 @@ di evidenza restano separate e la regola gerarchica assegna Kmu a final
 robust controller per la RS M14 certificata e coerente con M16, M6 a nominal
 performance reference per il tracking M8 e Khinf a H-infinity comparator.
 Nessun controllore è dichiarato conforme a tutte le specifiche M5; RP Kmu,
-Sample 5 M6 e assenza di certificazione RS M6/Khinf restano limiti espliciti.
+il caso M6 instabile e l'assenza di certificazione RS M6/Khinf restano limiti espliciti.
 
 ## Deliverable finali
 

@@ -51,8 +51,8 @@
 
 ## Slide 8 - LQG-I M7 (0:55)
 
-- Messaggio: nessun candidato finale ammissibile.
-- Spiegare: feasibility e incompatibilità osservata Ts/overshoot.
+- Messaggio: nessuna delle tre verifiche manuali produce un controllore finale.
+- Spiegare: incompatibilità osservata fra settling time e overshoot.
 - Non sovrainterpretare: non presentare un controllore integrale inesistente.
 - Transizione: passare alle sintesi H-infinity.
 
@@ -66,7 +66,7 @@
 ## Slide 10 - D-K iteration (1:00)
 
 - Messaggio: la D-K iteration produce Kmu, ma non ne certifica ancora la robustezza.
-- Spiegare: problema M4/M5 invariato, best iteration e ordine 52.
+- Spiegare: M13 non viene rilanciata; best iteration e ordine 52 restano congelati, mentre M14 usa l'M4 corrente.
 - Non sovrainterpretare: l'objective musyn non è un certificato RS o RP.
 - Transizione: affidare la verifica ai quattro esiti indipendenti M14.
 
@@ -93,9 +93,9 @@
 
 ## Slide 14 - Monte Carlo (1:15)
 
-- Messaggio: stessi 40 campioni, Sample 5 M6 instabile.
-- Spiegare: seed, counts e core tracking pass rate.
-- Non sovrainterpretare: 39/40 non è una probabilità fisica.
+- Messaggio: stessi 40 campioni per tutti i controllori; i casi instabili restano nel dataset.
+- Spiegare: seed, conteggi e core tracking pass rate.
+- Non sovrainterpretare: la frazione stabile non è una probabilità fisica.
 - Transizione: integrare le evidenze senza score globale.
 
 ## Slide 15 - Monte Carlo e mu-analysis (0:30)
@@ -122,7 +122,7 @@
 
 ### Perché M7 non ha un controllore finale?
 
-La ricerca di feasibility sull'architettura LQI/LQG-I non ha trovato candidati che rispettassero simultaneamente settling time e overshoot M5. Il risultato è preservato come PARTIAL, senza inventare un controllore.
+Le tre verifiche manuali sull'architettura LQI/LQG-I non rispettano simultaneamente settling time e overshoot M5. Il risultato è preservato come PARTIAL, senza inventare un controllore.
 
 ### Perché gamma maggiore di uno è stato conservato?
 
@@ -142,7 +142,7 @@ La scelta è per ruolo: Kmu è l'unico candidato con RS formale PASS_CERTIFIED. 
 
 ### Perché M6 non è il controllore robusto finale?
 
-Non ha un certificato RS su M4 e perde stabilità nel Sample 5 della sequenza M16.
+Non ha un certificato RS su M4; gli eventuali campioni instabili M16 restano evidenza empirica, non probabilistica.
 
 ### Perché non ridurre Kmu?
 

@@ -6,9 +6,9 @@ selectedRanges = uncertainty.selectedActuatorRanges;
 wnNominal = localRangeValue(selectedRanges, "wn", "NominalValue");
 zetaNominal = localRangeValue(selectedRanges, "zeta", "NominalValue");
 delayNominal = localRangeValue(selectedRanges, "delay", "NominalValue");
-wnPercent = localRangeValue(selectedRanges, "wn", "BaselinePercent");
-zetaPercent = localRangeValue(selectedRanges, "zeta", "BaselinePercent");
-delayPercent = localRangeValue(selectedRanges, "delay", "BaselinePercent");
+wnPercent = localRangeValue(selectedRanges, "wn", "Percentage");
+zetaPercent = localRangeValue(selectedRanges, "zeta", "Percentage");
+delayPercent = localRangeValue(selectedRanges, "delay", "Percentage");
 
 bounds.wn = wnNominal * [1 - wnPercent / 100, 1 + wnPercent / 100];
 bounds.zeta = zetaNominal * ...

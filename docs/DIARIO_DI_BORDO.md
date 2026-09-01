@@ -2424,3 +2424,52 @@ eseguito automaticamente.
 **Revisione editoriale finale pubblicata per revisione umana.** I PDF sono
 pronti; prima della consegna devono essere inserite soltanto le matricole e la
 data. Nessun merge è stato eseguito.
+
+---
+
+## 2026-09-01 — Refactoring strutturale e didattico
+
+**Tipo:** MATLAB / Controllo robusto / Documentazione / Test
+
+### Attività
+
+- Studiati gli esempi didattici Salaris pertinenti prima delle modifiche.
+- Creata la macrofase eseguibile M0–M5 e riscritte le spiegazioni di
+  attuatori, incertezze, pesi e LQG.
+- Unificato M4 con range meccanici ±10% e famiglia attuatore ±10/±10/±20%.
+- Rimossi selettori, screening, griglie, ranking e artifact obsoleti M3–M7.
+- Conservati invariati M5, M6, Khinf e Kmu; M13 ha ricaricato l'artefatto
+  approvato senza una nuova chiamata a `musyn`.
+- Rieseguite M12, M14, M16 e M17: A5 RS `FAIL_CERTIFIED`, Kmu RS
+  `PASS_CERTIFIED`, Kmu RP `FAIL_CERTIFIED`, Monte Carlo 39/40, 40/40,
+  40/40.
+- Aggiornati report, presentazione, documenti tecnici e test verso il
+  comportamento matematico pubblico.
+
+### Stato
+
+Implementazione tecnica e propagazione concluse; quality gate completo,
+build PDF e ispezione visiva in esecuzione.
+
+---
+
+## 2026-09-01 — Chiusura del refactoring strutturale e didattico
+
+**Tipo:** Test / Pipeline / Documentazione / Consegna
+
+### Risultati
+
+- Suite MATLAB completa: **590/590 PASS**, nessun test fallito o incompleto.
+- `run_all` M0–M18: **PASS** con exit code 0; M13 ha ricaricato l'artifact
+  congelato senza nuova `musyn`.
+- Code Analyzer: **38 file MATLAB, zero segnalazioni**.
+- `git diff --check` e audit dei termini obsoleti nel tree corrente: **PASS**.
+- Relazione compilata in **41 pagine** e presentazione in **17 slide**;
+  audit LaTeX e ispezione visiva entrambi **PASS**.
+- Prodotti il report finale A–P e il resoconto TXT trasferibile.
+
+### Stato
+
+**Refactoring COMPLETE.** Restano da inserire manualmente soltanto matricole
+e data di consegna. Il ramo non è stato committato, pubblicato o mergiato
+automaticamente.

@@ -1961,3 +1961,34 @@ M17.
 
 **APPROVATA DAI DATI M6–M16 — SELEZIONE PER RUOLO, NESSUN VINCITORE
 ASSOLUTO E NESSUNA CONFORMITÀ GLOBALE M5 DICHIARATA**
+
+---
+
+## D-0045 — Refactoring didattico e unico insieme incerto M4
+
+**Data:** 2026-09-01
+**Milestone:** revisione strutturale conclusiva
+
+### Decisione
+
+M0–M5 vengono presentate come un'unica macrofase didattica. Le scelte di
+attuatore, specifiche, costo LQR e covarianze Kalman sono dichiarate
+direttamente e verificate; non sono più ottenute mediante prodotti
+cartesiani, classifiche o selettori automatici.
+
+M4 contiene un solo insieme: `Jm1`, `k1`, `k2`, `wn` e `zeta` variano del
+±10%, il ritardo del ±20%. La famiglia attuatore resta coperta da WI di
+ordine 1. M5 e i controllori M6, Khinf e Kmu restano congelati.
+
+### Conseguenze
+
+Sono state rimosse le funzioni e gli artifact delle ricerche non più
+coerenti. M12 e M14 sono state ripetute sul dominio M4 corrente senza
+rilanciare M13: A5 fallisce RS con margine `[0.849720,0.859945]`; Kmu
+mantiene RS certificata con `[1.069561,1.212875]` e fallisce RP. M16 resta
+una campagna empirica comune 39/40, 40/40, 40/40 e non sostituisce M14.
+
+### Stato epistemico
+
+**APPROVATO COME SEMPLIFICAZIONE DIDATTICA; NESSUNA NUOVA SINTESI O
+CERTIFICAZIONE ATTRIBUITA ALLA MONTE CARLO.**

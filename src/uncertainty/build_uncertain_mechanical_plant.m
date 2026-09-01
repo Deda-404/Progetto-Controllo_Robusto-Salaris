@@ -61,7 +61,7 @@ row = find(rangeTable.Parameter == name, 1);
 if isempty(row)
     value = nominalValue;
 else
-    percent = rangeTable.BaselinePercent(row);
+    percent = rangeTable.Percentage(row);
     value = ureal(char(name), nominalValue, 'Percentage', percent);
 end
 end
