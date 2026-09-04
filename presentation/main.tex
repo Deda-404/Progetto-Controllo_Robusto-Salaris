@@ -104,9 +104,10 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \column{0.36\textwidth}
 \begin{itemize}
 \item LQG senza integratore
-\item ordine \MControllerOrder
+\item ricerca LQR: \MLqrAdmissibleCount/\MLqrCandidateCount\ casi ammissibili
+\item selezionato \MLqrSelectedCandidate
+\item ordine LQG \MControllerOrder
 \item $T_s$ peggiore \MControllerWorstTs\ s
-\item target nominali superati
 \end{itemize}
 \column{0.62\textwidth}
 \includegraphics[width=\linewidth]{assets/m6_lqg_reference_tracking.png}
@@ -190,7 +191,7 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \end{itemize}
 \bad{Il limite di ricerca non è una frontiera dinamica.}
 \column{0.61\textwidth}
-\includegraphics[width=\linewidth]{assets/m15_ras_m6_khinf_kmu.png}
+\includegraphics[width=\linewidth]{assets/ras_common_comparison.png}
 \end{columns}
 \end{frame}
 

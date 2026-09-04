@@ -12,7 +12,7 @@ Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è
 - **M6 LQG** è il riferimento di prestazione nominale: rispetta il tracking M5 sul modello nominale, ma presenta un caso instabile nella campagna M16 e non dispone di un certificato RS;
 - **Khinf** è il comparatore metodologico full-order della sintesi $H_\infty$.
 
-La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: M6 è stabile in 39/40 casi, Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
+La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: con il nuovo LQR M6 è stabile in 38/40 casi (Sample 5 e 6 instabili), Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
 
 ## Struttura del repository
 
@@ -21,6 +21,10 @@ Progetto_CR/
 ├── run_all.m             esecuzione completa M0--M18
 ├── analysis/modellazione_linearizzazione_controllo.m
 │                         macrofase didattica M0--M5, eseguibile per sezioni
+├── analysis/progetto_lqg.m
+│                         percorso didattico LQR/Kalman/LQG M6--M8 e RAS
+├── analysis/progetto_hinf.m
+│                         percorso didattico H-infinity M9--M12 e RAS
 ├── src/                  parametri, modello, attuatori e incertezze
 ├── controllers/          LQG, H-infinity e mu-synthesis
 ├── analysis/             analisi nominali, robuste e non lineari
@@ -50,7 +54,9 @@ Dalla radice del repository:
 run_all
 ```
 
-La pipeline esegue le verifiche M0--M18 e rigenera i risultati riproducibili. La D--K iteration M13 non viene rilanciata automaticamente: viene caricato e verificato l'artefatto approvato, evitando una nuova sintesi. Per lo studio didattico della prima macrofase si può aprire `analysis/modellazione_linearizzazione_controllo.m` ed eseguire le sezioni nell'ordine proposto.
+La pipeline esegue le verifiche M0--M18 e rigenera i risultati riproducibili. La D--K iteration M13 non viene rilanciata automaticamente: viene caricato e verificato l'artefatto approvato, evitando una nuova sintesi. Lo studio per l'esame è diviso in tre script indipendenti: `analysis/modellazione_linearizzazione_controllo.m` per M0--M5, `analysis/progetto_lqg.m` per M6--M8 e `analysis/progetto_hinf.m` per M9--M12. Gli ultimi due applicano la stessa metodologia RAS ai controllori significativi e mantengono separata la simulazione empirica dalla certificazione mu.
+
+In M6 la normalizzazione fisica serve a costruire costi confrontabili, ma la scelta finale di Q e R deriva da una ricerca esplicita di 36 combinazioni. Prima vengono applicati i vincoli obbligatori M5; i candidati ammissibili sono poi ordinati mediante un compromesso normalizzato che include tracking e comando. Le ipotesi Kalman sono accompagnate da tre casi di sensibilità sulla deviazione standard del rumore di misura.
 
 Per rigenerare macro, tabelle e asset dei documenti:
 

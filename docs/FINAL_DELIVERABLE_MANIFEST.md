@@ -6,10 +6,10 @@
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (41 pagine A4).
-- Macro: `report/generated/m18_values.tex`.
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (47 pagine A4).
+- Macro: `report/generated/m18_values.tex` (78 valori riconciliati).
 - Tabelle: 11 file generati in `report/tables/`.
-- Figure: 15 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
+- Figure: 18 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
 - Compilazione: `powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1`.
 
 ## Presentazione
@@ -40,7 +40,7 @@
 
 - M7 non produce un controllore integrale finale.
 - Kmu ha RS certificata ma NP/RP e tracking falliti.
-- M6 perde stabilità nel Sample 5 M16.
+- M6 perde stabilità nei Sample 5 e 6 M16.
 - Khinf/Kmu non soddisfano il tracking M5.
 - uScale non è una saturazione hardware.
 - RAS e Monte Carlo hanno semantica empirica.

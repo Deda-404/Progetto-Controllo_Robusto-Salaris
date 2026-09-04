@@ -1,5 +1,10 @@
 # Report finale del refactoring strutturale e didattico
 
+> **Snapshot storico (2026-09-01).** Questo documento descrive il refactoring
+> precedente sul ramo `codex/didactic-structural-refactor`. Per lo stato
+> corrente, i risultati aggiornati e la pubblicazione GitHub usare
+> `RESOCONTO_REVISIONE_LQR_LQG_HINF_RAS.md`.
+
 Data della revisione: 2026-09-01
 
 Ramo di lavoro: `codex/didactic-structural-refactor`

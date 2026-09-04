@@ -10,8 +10,12 @@ Il peso $W_1$ penalizza la sensibilità alle basse frequenze e quindi l'errore, 
 \]
 Il valore uno ha un significato diretto: una norma inferiore a uno soddisferebbe simultaneamente gli inviluppi pesati adottati. Un valore maggiore non indica un errore della sintesi, ma l'incompatibilità fra il controllore trovato e il target fissato.
 
+Il percorso $H_\infty$ non sostituisce LQG e non ne riutilizza il regolatore: risponde a una domanda diversa. LQG costruisce un feedback di stato stimato da un modello stocastico nominale; la mixed sensitivity cerca invece di limitare il peggior guadagno energetico delle mappe pesate. Per questo il file didattico \texttt{analysis/progetto\_hinf.m} resta separato da \texttt{analysis/progetto\_lqg.m} e rende visibili $S$, $T$, $KS$, i pesi e la generalized plant.
+
 \section{M9: sintesi con \texttt{mixsyn}}
 M9 applica \texttt{mixsyn} alla pianta nominale M3 usando senza modifiche i pesi M5. La chiusura è internamente stabile e il controllore è di ordine 18, ma la norma pesata è circa \MixsynGamma. La specifica normalizzata è quindi fallita. La risposta nel tempo conferma il significato del risultato frequenziale: il settling è più lento del target, l'overshoot è molto elevato e l'errore statico è significativo. Non è stato introdotto un prefiltro per migliorare artificialmente il tracking, perché ciò avrebbe cambiato l'architettura rispetto al problema dichiarato.
+
+La ricostruzione separa anche i due contributi: $\|W_1S\|_\infty\simeq10.128$ e $\|W_2KS\|_\infty\simeq10.185$. Il secondo è leggermente dominante, ma entrambi superano uno; non sarebbe quindi corretto attribuire il fallimento a un solo peso.
 
 La coppia M9 svolge due funzioni nel lavoro. Fornisce un primo controllore $H_\infty$ full-order e, soprattutto, definisce un riferimento indipendente per verificare la generalized plant esplicita di M10. La prestazione negativa viene pertanto conservata, invece di riaprire la scelta dei pesi.
 

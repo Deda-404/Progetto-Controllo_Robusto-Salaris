@@ -6,33 +6,59 @@ u=-K\hat x+N_rr.
 \]
 Il prefiltro $N_r$ garantisce il guadagno statico nominale sul riferimento, ma non introduce un modello interno del disturbo. È quindi previsto un offset sotto coppie costanti.
 
-\section{Costo LQR e principio di Bryson}
+\section{Normalizzazione fisica e ricerca LQR}
 Il regolatore minimizza
 \[
 J=\int_0^\infty(x^TQx+u^TRu)\,dt.
 \]
-Pesi grandi in $Q$ riducono maggiormente gli stati corrispondenti; pesi grandi in $R$ riducono il comando. Per rendere la scelta riproducibile costruiamo $Q=C_{cost}^TC_{cost}$ normalizzando posizione, velocità, deformazione SEA e velocità motore con massimi fisici desiderati:
+Pesi grandi in $Q$ penalizzano maggiormente gli stati corrispondenti; pesi grandi in $R$ rendono più costoso il comando. Per confrontare grandezze con unità diverse costruiamo $Q=C_{cost}^TC_{cost}$ normalizzando posizione, velocità, deformazione SEA e velocità motore con scale fisiche:
 \[
 q_s=5^\circ,\quad \dot q_s=\omega_Bq_s,\quad
 \delta_s=\frac{0.5}{\min(k_1,k_2)},\quad
 \dot\theta_s=\omega_Bq_s.
 \]
-Questa è la logica di Bryson: prima si rende ogni grandezza adimensionale, poi si applicano poche correzioni leggibili,
+La normalizzazione non sceglie automaticamente il controllore. Su di essa vengono provati fattori adimensionali piccoli e leggibili:
 \[
-w_q=1,\quad w_{\dot q}=0.5,\quad w_\delta=0.1,
-\quad w_{\dot\theta}=0.5,
-\qquad R=\frac{8}{u_{scale}^2}I_2.
+w_q\in\{0.5,1,2\},\quad
+w_{\dot q}=w_{\dot\theta}\in\{0.5,1\},\quad
+w_\delta\in\{0.1,0.5\},\quad
+\rho_U\in\{4,8,16\},\qquad R=\frac{\rho_U}{u_{scale}^2}I_2.
 \]
-Gli stati interni dell'attuatore non ricevono pesi diretti arbitrari. Il progetto finale usa un solo costo approvato; non esistono griglie coarse/extended o ranking.
+I tre valori di posizione esplorano una variazione moderata attorno alla scala del gradino; i due livelli di velocità controllano lo smorzamento senza dominarlo; i due livelli di deformazione distinguono una molla relativamente libera da una più penalizzata; i tre valori di $\rho_U$ vanno da un comando più aggressivo a uno più conservativo. Il prodotto cartesiano contiene \MLqrCandidateCount\ casi, cioè poche decine ispezionabili. Gli stati interni dell'attuatore non ricevono pesi diretti arbitrari.
 
-\section{Filtro di Kalman}
+La selezione avviene in due fasi. La prima conserva soltanto i candidati stabili che rispettano i requisiti obbligatori M5 su settling, overshoot ed errore statico; il cross-coupling resta diagnostico, come dichiarato in M5. La seconda ordina i soli candidati ammissibili con
+\[
+J_N=0.30\frac{T_s}{T_{s,\max}}+0.20\frac{M_p}{M_{p,\max}}+
+0.10\frac{e_{ss}}{e_{ss,\max}}+0.10\frac{c}{c_{\max}}+
+0.15\frac{u_{pk}}{u_{scale}}+0.15\frac{u_{rms}}{u_{scale}}.
+\]
+Questo score non trasforma una violazione in un buon compromesso: viene calcolato ai fini della scelta soltanto dopo l'ammissibilità. Risultano conformi \MLqrAdmissibleCount\ candidati su \MLqrCandidateCount; è selezionato \MLqrSelectedCandidate, con $w_q=\MLqrPositionWeight$, $w_{\dot q}=w_{\dot\theta}=\MLqrVelocityWeight$, $w_\delta=\MLqrDeformationWeight$, $\rho_U=\MLqrControlWeight$ e score \MLqrSelectedScore.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.76\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
+\caption{Ricerca LQR compatta: candidati, ammissibilità M5 e compromesso normalizzato.}\label{fig:m6-lqr-search}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.72\textwidth]{figures/m6_lqr_selected_weights.png}
+\caption{Fattori adimensionali del costo LQR selezionato.}\label{fig:m6-lqr-weights}
+\end{figure}
+
+\section{Filtro di Kalman e significato delle covarianze}
 Il modello di processo usa due coppie lato link e due coppie equivalenti all'ingresso. Le deviazioni standard sono dichiarate direttamente:
 \[
-\sigma_d=0.1\ \mathrm{N,m},\qquad
-\sigma_u=0.1\ \mathrm{N,m},\qquad
+\sigma_d=0.1\ \mathrm{N\,m},\qquad
+\sigma_u=0.1\ \mathrm{N\,m},\qquad
 \sigma_y=0.05^\circ.
 \]
-Ne seguono $Q_n=0.1^2I_4$ e $R_n=(0.05\pi/180)^2I_4$. Aumentare il rapporto $Q_n/R_n$ rende l'osservatore più rapido e più sensibile al rumore; diminuirlo produce una stima più lenta e filtrata. La scelta fornisce un rapporto fra velocità minima dello stimatore e del regolatore pari a 1.693, senza ricerca combinatoria.
+Le grandezze $0.1$ N m e $0.05^\circ$ sono deviazioni standard, mentre le covarianze richiedono le varianze: ne seguono $Q_n=0.1^2I_4$ e $R_n=(0.05\pi/180)^2I_4$. $Q_n$ esprime quanto si considera incerto il modello di processo; $R_n$ quanto si considera rumorosa la misura. A parità di struttura, aumentare $Q_n/R_n$ porta il filtro a correggersi più rapidamente con l'innovazione, mentre diminuirlo attribuisce più fiducia alla previsione del modello. La scelta nominale fornisce un rapporto fra velocità minima dello stimatore e del regolatore pari a \MKalmanSpeedRatio.
+
+La sensibilità è controllata ripetendo il calcolo con $\sigma_y=0.025^\circ,0.05^\circ,0.10^\circ$, senza modificare il LQR. Poiché $R_n=\sigma_y^2I$, dimezzare $\sigma_y$ divide $R_n$ per quattro e raddoppiarla lo moltiplica per quattro. Nei tre casi il rapporto di velocità stimatore/regolatore passa rispettivamente da 2.112 a 1.510 e 1.192; la norma del guadagno $L$ diminuisce quando le misure sono dichiarate più rumorose. Le metriche RMS vengono simulate con la corrispondente ampiezza di rumore, quindi non vanno lette come un confronto a ingresso identico.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.78\textwidth]{figures/m6_kalman_sensitivity.png}
+\caption{Sensibilità del filtro di Kalman alla deviazione standard del rumore encoder dichiarata.}\label{fig:m6-kalman-sensitivity}
+\end{figure}
 
 La realizzazione è
 \[
@@ -41,7 +67,7 @@ La realizzazione è
 I poli della chiusura coincidono con l'unione dei poli di $A-BK$ e $A-LC$ entro la tolleranza: è la verifica numerica del principio di separazione.
 
 \section{Risultati M6}
-Il controllore ha ordine \MControllerOrder\ e nessun integratore. Il settling peggiore è \MControllerWorstTs\ s, l'overshoot resta sotto il 10\% e il picco di comando è 4.69 N m, ossia 0.391 della scala prestazionale. Il rumore seeded è riproducibile.
+Il controllore ha ordine \MControllerOrder\ e nessun integratore. Il settling peggiore è \MControllerWorstTs\ s, l'overshoot resta sotto il 10\% e, per il caso full-state usato nella selezione, picco e valore RMS peggiori del comando sono \MLqrPeakControl\ N m e \MLqrRmsControl\ N m. Il rumore seeded è riproducibile.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.82\textwidth]{figures/m6_lqg_reference_tracking.png}
@@ -50,15 +76,23 @@ Il controllore ha ordine \MControllerOrder\ e nessun integratore. Il settling pe
 
 Le coppie costanti producono offset non nulli, coerentemente con l'assenza di integratori. M8 trasferisce esattamente lo stesso controllore sul modello non lineare; la RAS osservata rimane una stima empirica limitata al box esplorato.
 
+\section{Implementazione Simulink didattica}
+Il modello \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei blocchi funzionali: riferimento, controllore LQG, dinamica degli attuatori, pianta SEA non lineare, interfaccia di misura e monitoraggio. Dentro il controllore sono separati il prefiltro $N_r$, il feedback $-K\hat x$, la somma che genera il comando incrementale e l'osservatore di Kalman. Quest'ultimo realizza
+\[
+\dot{\hat x}=(A-LC)\hat x+B\,\delta u+L\,\delta y,
+\qquad \delta u=-K\hat x+N_rr.
+\]
+L'interfaccia di misura estrae soltanto $q$ e $\theta$, sottrae l'equilibrio e aggiunge il rumore encoder; le velocità non vengono misurate. La coppia assoluta inviata agli attuatori è $u_{abs}=\bar\tau+\delta u$. Tutti i guadagni sono incorporati dall'artifact M6 validato e le condizioni iniziali vengono passate con \texttt{SimulationInput}; il modello non dipende dal base workspace. Non sono presenti saturazioni.
+
 \section{Verifica LQI M7}
 Per studiare l'offset introduciamo due integratori
 \[
 \dot\xi=r-C_qx,
 \quad A_{aug}=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix}.
 \]
-I test PBH mostrano che il sistema augmentato è stabilizzabile e senza ostruzioni a zero. Il blocco $Q$ sui 14 stati fisici resta identico a M6.
+I test PBH mostrano che il sistema augmentato è stabilizzabile e senza ostruzioni a zero. Il blocco $Q$ sui 14 stati fisici riusa le priorità selezionate e salvate dall'artifact M6.
 
-Si confrontano soltanto tre costi manuali: azione integrale debole $(w_i,\rho_U)=(0.1,16)$, bilanciata $(1,8)$ e forte $(4,4)$. Tutti stabilizzano e annullano l'offset da disturbo costante. Il primo non si assesta entro 3 s; il secondo ha settling 2.924 s e overshoot 20.4\%; il terzo 1.88 s e 28.8\%. Nessun punto soddisfa simultaneamente i target M5.
+Si confrontano soltanto tre costi manuali: azione integrale debole $(w_i,\rho_U)=(0.1,16)$, bilanciata $(1,8)$ e forte $(4,4)$. Tutti stabilizzano e annullano l'offset da disturbo costante. I primi due non si assestano entro l'orizzonte di 3 s; le sovraelongazioni peggiori sono rispettivamente 7.10\% e 16.59\%. Il terzo raggiunge $T_s=2.168$ s con overshoot 25.05\%. Nessun punto soddisfa simultaneamente i target M5.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.78\textwidth]{figures/m7_augmented_cost_tradeoff.png}

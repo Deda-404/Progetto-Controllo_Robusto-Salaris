@@ -180,8 +180,8 @@ modello non lineare.
 
 M16 usa seed `20260826`, generatore `twister` e una sola sequenza comune di
 40 campioni lineari M4 per M6, Khinf e Kmu. Tutti i campioni sono validi;
-M6 è stabile 39/40, mentre Khinf e Kmu sono stabili 40/40. Il Sample 5 M6
-instabile resta nel dataset e non riceve metriche prestazionali. Tracking,
+M6 è stabile 38/40, mentre Khinf e Kmu sono stabili 40/40. I Sample 5 e 6 M6
+instabili restano nel dataset e non ricevono metriche prestazionali. Tracking,
 banda diagonale, errore, disturbo, cross-coupling e comando sono quantificati
 con pass rate espliciti: le caselle indicano esecuzione e tracciabilità, non
 conformità ai target. Kmu 40/40 è coerente con la RS M14, ma la Monte Carlo
