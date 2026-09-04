@@ -25,7 +25,7 @@ verifyTrue(testCase, ...
     testCase.TestData.m6.validationMetrics.nominalSynthesisOnly);
 end
 
-function testBrysonNormalizedStateCost(testCase)
+function testPhysicallyScaledStateCost(testCase)
 m6 = testCase.TestData.m6;
 verifyEqual(testCase, m6.Q, m6.Q.', 'AbsTol', 1e-12);
 verifyGreaterThanOrEqual(testCase, min(eig(m6.Q)), -1e-8);
@@ -38,10 +38,26 @@ end
 function testControlCostComesFromUScale(testCase)
 m5 = testCase.TestData.m5;
 m6 = testCase.TestData.m6;
-config = lqg_specs_m6;
 verifyEqual(testCase, m6.R, ...
-    config.lqr.rhoU / m5.spec.uScale^2 * eye(2), 'AbsTol', 1e-15);
+    m6.lqrCandidateTable.ControlWeight(m6.lqrCandidateTable.Selected) / ...
+    m5.spec.uScale^2 * eye(2), 'AbsTol', 1e-15);
 verifyGreaterThan(testCase, min(eig(m6.R)), 0);
+end
+
+function testCompactParametricSearchIsReproducible(testCase)
+m6 = testCase.TestData.m6;
+config = lqg_specs_m6;
+tableData = m6.lqrCandidateTable;
+verifyEqual(testCase, height(tableData), ...
+    config.lqr.expectedCandidateCount);
+verifyEqual(testCase, height(tableData), 36);
+verifyGreaterThan(testCase, sum(tableData.Admissible), 0);
+verifyEqual(testCase, sum(tableData.Selected), 1);
+selectedScore = tableData.CompromiseScore(tableData.Selected);
+verifyEqual(testCase, selectedScore, ...
+    min(tableData.CompromiseScore), 'AbsTol', 1e-12);
+verifyTrue(testCase, all(isfinite(tableData.WorstRmsControl)));
+verifyTrue(testCase, all(isfinite(tableData.WorstControlEnergy)));
 end
 
 function testLqrStabilizesAndTracksAtDc(testCase)
@@ -60,6 +76,17 @@ sigmaY = deg2rad(config.kalman.sigmaMeasurementDeg);
 verifyEqual(testCase, m6.Qn, 0.1^2 * eye(4), 'AbsTol', 1e-15);
 verifyEqual(testCase, m6.Rn, sigmaY^2 * eye(4), 'AbsTol', 1e-15);
 verifyGreaterThan(testCase, min(eig(m6.Rn)), 0);
+end
+
+function testKalmanSensitivityHasThreeDocumentedCases(testCase)
+tableData = testCase.TestData.m6.kalmanSensitivityTable;
+verifyEqual(testCase, height(tableData), 3);
+verifyEqual(testCase, sum(tableData.Selected), 1);
+verifyEqual(testCase, tableData.SigmaYDeg(tableData.Selected), 0.05, ...
+    'AbsTol', 1e-15);
+verifyGreaterThan(testCase, tableData.EstimatorSpeedRatio(1), ...
+    tableData.EstimatorSpeedRatio(3));
+verifyTrue(testCase, all(isfinite(tableData.RmsControlVariation)));
 end
 
 function testEstimatorAndSeparationPrinciple(testCase)
@@ -121,4 +148,9 @@ for index = 1:numel(oldFiles)
     verifyFalse(testCase, isfile(fullfile( ...
         testCase.TestData.root, oldFiles{index})));
 end
+verifyTrue(testCase, isfile(fullfile(testCase.TestData.root, ...
+    'controllers', 'lqg', 'search_lqr_weights_m6.m')));
+source = fileread(fullfile(testCase.TestData.root, ...
+    'controllers', 'lqg', 'design_lqr_m6.m'));
+verifyFalse(testCase, contains(lower(source), 'bryson'));
 end

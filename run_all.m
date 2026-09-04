@@ -46,7 +46,7 @@ try
         'figure M5 ---\n']);
     m5Metrics = validate_m5_performance_specs;
 
-    fprintf(['\n--- LQR normalizzato, Kalman dichiarato, LQG, ' ...
+    fprintf(['\n--- Ricerca LQR compatta, Kalman dichiarato, LQG, ' ...
         'dataset e figure M6 ---\n']);
     m6Metrics = validate_m6_lqg_no_integrator;
 
@@ -84,6 +84,7 @@ try
     fprintf(['\n--- M15: modello non lineare nominale, tracking, ' ...
         'disturbi, rumore, RAS e accordo LTI/NL Khinf/Kmu ---\n']);
     m15Metrics = validate_m15_nonlinear_robust(true);
+    rasCommonMetrics = build_common_ras_comparison(string(projectRoot), true);
 
     fprintf(['\n--- M16: Monte Carlo lineare su 40 campioni comuni M4, ' ...
         'confronto M6/Khinf/Kmu congelati ---\n']);

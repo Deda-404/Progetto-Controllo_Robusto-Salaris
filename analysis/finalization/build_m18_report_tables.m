@@ -46,7 +46,8 @@ end
 
 function text=localLqg(e)
 m6=e.m6.trackingMetrics.lqg;
-rows=["M6 LQG",string(order(e.m6.Klqg)),num(max(m6.SettlingTime)),num(max(m6.Overshoot)),"PASS nominale","senza integratore"; ...
+selected=e.m6.lqrCandidateTable(e.m6.lqrCandidateTable.Selected,:);
+rows=["M6 LQG",string(order(e.m6.Klqg)),num(max(m6.SettlingTime)),num(max(m6.Overshoot)),"PASS nominale",tex(selected.Candidate)+": "+string(sum(e.m6.lqrCandidateTable.Admissible))+"/"+string(height(e.m6.lqrCandidateTable))+" ammissibili"; ...
     "M7 LQG-I","N/A","N/A","N/A",tex(e.m7.validationMetrics.status),"3 verifiche manuali; nessuna conforme"];
 text=makeTable("Confronto M6/M7. Il risultato M7 negativo resta esplicito.","tab:lqg",["Studio","Ordine","$T_s$ [s]","$M_p$ [\%]","Stato","Nota"],rows,true);
 end
@@ -68,9 +69,9 @@ text=makeTable("Esiti distinti di NS, NP, RS e RP.","tab:mu",["Controllore","Ord
 end
 
 function text=localNonlinear(e)
-t=e.m17.nonlinearComparison; r=e.m17.rasComparison; rows=strings(height(t),7);
-for k=1:height(t), rr=r.Controller==t.Controller(k); rows(k,:)=[t.Controller(k),tex(t.TrackingStatus(k)),num(t.WorstTrackingTs(k)),num(t.WorstTrackingOvershootPercent(k)),num(100*t.WorstTrackingSteadyErrorRelative(k)),num(r.MinimumRadiusDeg(rr)),tex(r.Classification(rr))]; end
-text=makeTable("Validazione non lineare nominale M8/M15. Le RAS sono stime empiriche.","tab:nonlinear",["Controllore","Tracking","$T_s$ [s]","$M_p$ [\%]","$e_{ss}$ [\%]","$r_{min}$ [deg]","RAS"],rows,true);
+t=e.m17.nonlinearComparison; r=e.m17.rasComparison; rows=strings(height(t),10);
+for k=1:height(t), rr=r.Controller==t.Controller(k); rows(k,:)=[t.Controller(k),tex(t.TrackingStatus(k)),num(t.WorstTrackingTs(k)),num(t.WorstTrackingOvershootPercent(k)),num(100*t.WorstTrackingSteadyErrorRelative(k)),string(r.NumberConvergent(rr))+"/"+string(r.NumberUniquePoints(rr)),num(100*r.EmpiricalFraction(rr)),num(r.MinimumRadiusDeg(rr)),num(r.ApproximateAreaDeg2(rr)),tex(r.Classification(rr))]; end
+text=makeTable("Validazione non lineare nominale M8/M15 e confronto RAS omogeneo. Le RAS sono stime empiriche.","tab:nonlinear",["Controllore","Tracking","$T_s$ [s]","$M_p$ [\%]","$e_{ss}$ [\%]","RAS conv.","Fraz. [\%]","$r_{min}$ [deg]","Area [deg$^2$]","Classe"],rows,true);
 end
 
 function text=localMonteCarlo(e)

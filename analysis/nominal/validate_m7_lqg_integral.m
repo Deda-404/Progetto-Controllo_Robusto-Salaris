@@ -8,6 +8,12 @@ m3 = load(fullfile(dataDirectory, 'm3_nominal_actuated_plant.mat'));
 m5 = load(fullfile(dataDirectory, 'm5_performance_specs.mat'));
 m6 = load(fullfile(dataDirectory, 'm6_lqg_no_integrator.mat'));
 config = lqg_specs_m7;
+assert(isfield(m6, 'validationMetrics') && ...
+    isfield(m6.validationMetrics, 'cost') && ...
+    isfield(m6.validationMetrics.cost, 'priorities'), ...
+    'M7:MissingM6Priorities', ...
+    'M7 requires the priorities stored by the validated M6 artifact.');
+statePriorities = m6.validationMetrics.cost.priorities;
 manual = config.manualDesigns;
 numberDesigns = height(manual);
 designs = cell(numberDesigns, 1);
@@ -27,7 +33,7 @@ fundamentalPass = false(numberDesigns, 1);
 
 for index = 1:numberDesigns
     design = build_lqi_augmented_cost(m3, m5, m6, ...
-        manual.Wi(index), manual.RhoU(index), config.statePriorities);
+        manual.Wi(index), manual.RhoU(index), statePriorities);
     [Nff, feedforwardInfo] = build_lqi_reference_feedforward( ...
         m3, design.Kx, config);
     evaluation = evaluate_lqi_2dof_candidate( ...
@@ -90,7 +96,7 @@ localPlotTradeoff(manualComparisonTable, m5.spec, tradeoffFigurePath);
 
 datasetPath = fullfile(dataDirectory, 'm7_augmented_cost_feasibility.mat');
 save(datasetPath, 'manualComparisonTable', 'designs', 'evaluations', ...
-    'feedforward', 'validationMetrics', 'config', '-v7');
+    'feedforward', 'validationMetrics', 'statePriorities', 'config', '-v7');
 save(fullfile(dataDirectory, 'm7_lqg_integral.mat'), ...
     'manualComparisonTable', 'validationMetrics', 'config', '-v7');
 

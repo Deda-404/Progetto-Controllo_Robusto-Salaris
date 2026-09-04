@@ -34,6 +34,25 @@ load_system(modelPath);
 verifyTrue(testCase, bdIsLoaded('SEA_LQG_nonlinear'));
 end
 
+function testT1bDidacticTopLevelAndControllerBlocks(testCase)
+modelName = 'SEA_LQG_nonlinear';
+load_system(fullfile(testCase.TestData.projectRoot, 'simulink', ...
+    [modelName '.slx']));
+topLevel = string(find_system(modelName, 'SearchDepth', 1, ...
+    'Type', 'Block'));
+required = modelName + "/" + ["LQG Controller"; ...
+    "Actuator Dynamics"; "Nonlinear SEA Plant"; ...
+    "Measurement Interface"; "Signal Monitoring"];
+verifyTrue(testCase, all(ismember(required, topLevel)));
+controllerBlocks = string(find_system([modelName '/LQG Controller'], ...
+    'SearchDepth', 1, 'Type', 'Block'));
+verifyTrue(testCase, any(endsWith(controllerBlocks, ...
+    '/LQR State Feedback -K')));
+verifyTrue(testCase, any(endsWith(controllerBlocks, '/Kalman Observer')));
+verifyTrue(testCase, any(endsWith(controllerBlocks, ...
+    '/Reference Feedforward Nr')));
+end
+
 function testT2NoBaseWorkspaceDependency(testCase)
 load_system(fullfile(testCase.TestData.projectRoot, 'simulink', ...
     'SEA_LQG_nonlinear.slx'));
@@ -59,6 +78,7 @@ verifyEqual(testCase, metadata.mechanicalStateCount, 8);
 verifyEqual(testCase, metadata.actuatorStateCount, 6);
 verifyEqual(testCase, metadata.physicalPlantStateCount, 14);
 verifyEqual(testCase, metadata.totalContinuousStateCount, 28);
+verifyTrue(testCase, metadata.standardSimulinkLibraryBlocksOnly);
 end
 
 function testT5ControllerIsExactlyM6(testCase)
@@ -152,6 +172,17 @@ verifyEqual(testCase, height(m8.rasBoundary), ...
 verifyTrue(testCase, all(isfinite(m8.rasBoundary{:,:}), 'all'));
 verifyEqual(testCase, m8.rasBoundary.DirectionDeg, ...
     (0:10:350).', 'AbsTol', 1e-12);
+end
+
+function testT14bRasMetricsAreComparableAndEmpirical(testCase)
+m8 = testCase.TestData.m8;
+verifyFalse(testCase, m8.rasMetrics.certifiedRegion);
+verifyEqual(testCase, m8.rasMetrics.empiricalConvergenceFraction, ...
+    m8.rasMetrics.numberConvergent / m8.rasMetrics.numberUniquePoints, ...
+    'AbsTol', 1e-12);
+verifyTrue(testCase, isfinite(m8.rasMetrics.maximumConvergentControlNm));
+verifyTrue(testCase, any(m8.rasMetrics.classification == ...
+    ["SEARCH-BOX LIMITED", "EMPIRICAL BOUNDARY LOCATED"]));
 end
 
 function testT15NoInventedSaturation(testCase)
