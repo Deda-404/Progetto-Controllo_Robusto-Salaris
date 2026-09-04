@@ -29,7 +29,10 @@ verifyEqual(testCase, u.selectedMechanicalRanges.Parameter, ...
 verifyEqual(testCase, u.selectedMechanicalRanges.Percentage, [10; 10; 10]);
 verifyEqual(testCase, u.selectedActuatorRanges.Percentage, [10; 10; 20]);
 verifyEqual(testCase, u.selectedMechanicalRanges.Properties.VariableNames, ...
-    {'Parameter', 'NominalValue', 'Percentage', 'Rationale'});
+    {'Parameter', 'NominalValue', 'Unit', 'LowerBound', 'UpperBound', ...
+    'Percentage', 'Rationale'});
+verifyEqual(testCase, height(u.fixedModelParameters), 8);
+verifyTrue(testCase, all(strlength(u.fixedModelParameters.Rationale) > 0));
 end
 
 function testMechanicalBlocksAreUreal(testCase)

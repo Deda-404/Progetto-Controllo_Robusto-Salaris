@@ -8,10 +8,12 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 - Script didattico `analysis/modellazione_linearizzazione_controllo.m`, che
   riunisce M0–M5 in una macrofase eseguibile per sezioni.
-- Funzioni dirette `design_lqr_m6.m` e `design_kalman_m6.m` e tre verifiche
-  manuali M7, con test basati sul comportamento matematico pubblico.
-- Report A–P `docs/REFACTORING_DIDATTICO_FINALE.md` e resoconto breve
-  `docs/STATUS_REFACTORING_DIDATTICO.txt` per il passaggio di consegne.
+- Ricerca LQR compatta M6 da 36 combinazioni leggibili, filtro preliminare
+  sui gate M5 e selezione LQR30 fra 9 candidati ammissibili.
+- Sensibilità Kalman su tre livelli di rumore encoder e tre script didattici
+  separati per M0–M5, M6–M8 e M9–M12.
+- Resoconto conclusivo `docs/RESOCONTO_REVISIONE_LQR_LQG_HINF_RAS.md` e
+  versione TXT trasferibile a un'altra chat.
 
 - Audit editoriale conclusivo in `docs/FINAL_EDITORIAL_AUDIT.md`, con
   classificazione delle occorrenze operative residue e verifica degli
@@ -19,11 +21,11 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Motivazioni ingegneristiche estese nella relazione: modello, equilibrio,
   attuatori, incertezze, pesi, LQG, esito negativo M7, sintesi H-infinity,
   analisi mu, validazione non lineare, RAS e Monte Carlo.
-- Relazione editoriale finale di 41 pagine e presentazione di 17 slide,
+- Relazione editoriale finale di 47 pagine e presentazione di 17 slide,
   entrambe compilate e ispezionate integralmente.
 
 - Pipeline M18 artifact-only per caricare gli artifact congelati M1–M17,
-  riconciliare 59 valori e generare macro, 11 tabelle, manifest di 15 figure,
+  riconciliare 78 valori e generare macro, 11 tabelle, manifest di 18 figure,
   13 asset di presentazione e audit finale.
 - Relazione finale modulare in LaTeX (13 capitoli, 3 appendici, PDF di 27
   pagine) e presentazione Beamer 16:9 (17 slide, timing stimato 17:30), con
@@ -53,17 +55,17 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 - Unificato M4 in un solo insieme incerto: `Jm1`, `k1`, `k2`, `wn` e
   `zeta` a ±10%, ritardo a ±20%, con copertura WI di ordine 1 verificata.
-- Sostituite le ricerche automatiche M3–M7 con scelte ingegneristiche
-  dichiarate, controlli manuali e spiegazioni didattiche; M5 e i controllori
-  M6/Khinf/Kmu restano congelati.
+- Sostituite le ricerche automatiche non necessarie con scelte
+  ingegneristiche dichiarate; resta soltanto la ricerca LQR compatta M6
+  richiesta. M5, Khinf e Kmu restano congelati.
 - Rieseguite M12, M14, M16 e M17 sull'M4 corrente senza nuova `musyn`: A5
   fallisce RS con margine `[0.849720,0.859945]`, Kmu conserva RS certificata
-  con `[1.069561,1.212875]`, M16 resta 39/40, 40/40, 40/40.
+  con `[1.069561,1.212875]`; con LQR30 M16 vale 38/40, 40/40, 40/40.
 
 ### Removed
 
 - Selettori, screening, griglie e ranking obsoleti di attuatori, specifiche,
-  LQR, Kalman e LQI, insieme ai relativi dataset e grafici non più prodotti.
+  Kalman e LQI, insieme ai relativi dataset e grafici non più prodotti.
 
 - Inseriti Alessio de Dato e Valerio Rebechi come autori di relazione,
   presentazione, README e manifest; restano da completare matricole e data.
@@ -76,14 +78,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
   percentuali di incertezza con il segno più/meno.
 - Resi più naturali i commenti MATLAB e i messaggi della pipeline M17/M18,
   senza modificare logica o dati.
-- Aggiornati i test M3–M7 e M13–M18 dopo la rimozione della vecchia
-  infrastruttura; suite completa 590/590, `run_all` PASS e Code Analyzer
-  pulito su 38 file.
+- Aggiornati i test M3–M8 e M15–M18 per la ricerca LQR, la sensibilità
+  Kalman, il modello Simulink didattico e il confronto RAS comune.
+- Gate finale: 599/599 test PASS, `run_all` M0–M18 PASS, Code Analyzer
+  pulito su 162 file, relazione di 47 pagine e presentazione di 17 slide.
 
 - Esteso run_all.m fino a M18. La fase M18 genera e verifica soltanto i
-  deliverable, mantenendo congelati M4, M5 e i controllori M6/Khinf/Kmu.
+  deliverable, mantenendo congelati M4, M5 e i controllori Khinf/Kmu dopo
+  l'aggiornamento autorizzato di M6.
 - Documentati senza promozione gli esiti PARTIAL/FAIL: M7 senza controllore
-  finale, NP/RP e tracking falliti, Sample 5 M6 instabile, RAS/Monte Carlo
+  finale, NP/RP e tracking falliti, Sample 5 e 6 M6 instabili, RAS/Monte Carlo
   empiriche e assenza di saturazioni hardware certificate.
 
 - Esteso `run_all.m` fino a M17: M17 carica gli artifact congelati e non

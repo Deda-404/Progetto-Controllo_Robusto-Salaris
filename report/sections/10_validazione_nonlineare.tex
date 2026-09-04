@@ -15,6 +15,18 @@ Ogni campagna comprende equilibrio, tracking su entrambi i giunti e più ampiezz
 
 Le metriche temporali sono calcolate con le stesse convenzioni M5. Il comando è riportato in N m e normalizzato rispetto a $u_{\mathrm{scale}}$, ma non sottoposto a un limite di saturazione non documentato. La simulazione di rumore usa un seed fissato per verificare la riproducibilità; non viene interpretata come caratterizzazione statistica dell'hardware.
 
+\section{Definizione comune della regione empirica di attrazione}
+Nel progetto la sigla RAS indica una stima numerica della regione di attrazione nel piano delle perturbazioni iniziali $(\Delta q_1(0),\Delta q_2(0))$, non un insieme certificato tramite Lyapunov. Per ogni punto si inizializzano le velocità a zero, si traslano $\theta$ insieme a $q$ così da non introdurre deformazione elastica iniziale, si pongono gli attuatori nel loro equilibrio e gli stati incrementali del controllore a zero. Quest'ultima regola significa $\hat x(0)=0$ per LQG e stato dinamico nullo per $K_\infty$ e $K_\mu$.
+
+I tre controllori usano la stessa configurazione: griglia grossolana $\{-60,-30,0,30,60\}^2$ gradi, 36 direzioni radiali, box $\pm60^\circ$, tolleranza radiale $1^\circ$, solver \texttt{ode23t} e orizzonte 8 s estendibile a 12 s. Una traiettoria è convergente se termina, resta finita e limitata e, nell'ultimo 10\% dell'orizzonte, soddisfa
+\[
+|q-\bar q|_\infty\le0.5^\circ,\quad
+|\dot q|_\infty\le0.02\ \mathrm{rad/s},\quad
+|\theta-\bar\theta|_\infty\le0.5^\circ,\quad
+|\dot\theta|_\infty\le0.05\ \mathrm{rad/s},
+\]
+senza una crescita finale significativa. Se il punto estremo di una direzione non converge, una bisezione individua la frontiera empirica; se converge, quella direzione è marcata \emph{search-box limited}. Non sono presenti saturazioni.
+
 \section{Validazione M6 e regione empirica di attrazione}
 M8 conferma l'equilibrio nominale e il tracking M6 sul modello non lineare. Le differenze rispetto alla risposta LTI sono piccole nel dominio degli step di progetto. La ricerca RAS esplora una griglia di perturbazioni iniziali delle due posizioni, mantenendo espliciti criterio di convergenza, orizzonte e box massimo. Tutti i 57 punti delle due sezioni esaminate convergono fino a $\pm60^\circ$.
 
@@ -32,13 +44,15 @@ M15 applica sullo stesso modello nominale i controllori M10 e M13. Entrambe le c
 
 I picchi di comando sono quantificati e rimangono confrontabili con la scala M5. Non è però possibile dichiarare assenza di saturazione reale, perché il progetto non dispone delle curve coppia--velocità o dei limiti verificati degli attuatori. Analogamente, il superamento dei target di overshoot non viene attenuato usando il fatto che le simulazioni restano finite: stabilità e prestazione rispondono a domande differenti.
 
-\section{RAS dei controllori robusti}
-Per $K_{\infty}$ la ricerca individua una frontiera interna, con raggio minimo empirico \KhinfRasMin$^\circ$. Per $K_\mu$ tutti i punti raggiungono invece il limite del box e il raggio minimo riportato è \KmuRasMin$^\circ$. Anche in questo caso la classificazione è \emph{search-box limited}; il dato non dimostra che $K_\mu$ possieda una regione maggiore in senso globale.
+\section{Confronto RAS dei controllori significativi}
+Per LQG sono classificati \MLqgRasPoints\ punti unici, tutti convergenti; il raggio minimo è \MControllerRasMin$^\circ$ e l'area poligonale approssimata è \MLqgRasArea\ deg$^2$. Per $K_{\infty}$ la bisezione aggiunge punti vicino al confine: convergono \KhinfRasConvergent\ punti su \KhinfRasPoints, con raggio minimo \KhinfRasMin$^\circ$ e area \KhinfRasArea\ deg$^2$. Per $K_\mu$ convergono tutti i \KmuRasPoints\ punti, con raggio minimo \KmuRasMin$^\circ$ e area \KmuRasArea\ deg$^2$.
+
+LQG e $K_\mu$ hanno lo stesso profilo radiale fino al bordo del box: non si può ordinare la loro RAS reale perché per entrambi la frontiera rimane esterna al dominio esplorato. $K_{\infty}$ mostra invece una frontiera interna e una frazione empirica minore. Questa informazione è utile per descrivere il comportamento non lineare nominale, ma non basta a scegliere il controllore robusto finale: non contiene l'incertezza M4 e non sostituisce RS/RP.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.79\textwidth]{figures/m15_ras_m6_khinf_kmu.png}
-\caption{Confronto delle stime empiriche RAS. M6 e $K_\mu$ raggiungono il limite di ricerca; $K_{\infty}$ mostra una frontiera interna.}
+\includegraphics[width=0.79\textwidth]{figures/ras_common_comparison.png}
+\caption{Confronto omogeneo delle stime empiriche RAS. M6 e $K_\mu$ raggiungono il limite di ricerca; $K_{\infty}$ mostra una frontiera interna.}
 \label{fig:m15-ras}
 \end{figure}
 

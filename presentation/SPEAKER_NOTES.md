@@ -45,7 +45,7 @@
 ## Slide 7 - LQG M6 (1:10)
 
 - Messaggio: M6 è il miglior riferimento nominale di tracking.
-- Spiegare: LQR, Kalman, ordine e prestazioni.
+- Spiegare: 36 costi LQR motivati, 9 ammissibili, scelta LQR30 mediante score normalizzato; poi ipotesi e sensibilità Kalman.
 - Non sovrainterpretare: prestazione nominale non implica robustezza.
 - Transizione: discutere l'integratore richiesto dalla traccia.
 
@@ -87,7 +87,7 @@
 ## Slide 13 - RAS (0:55)
 
 - Messaggio: tutte le RAS sono stime empiriche.
-- Spiegare: frontiera interna Khinf e search-box limit M6/Kmu.
+- Spiegare: stesso piano $\Delta q_1$--$\Delta q_2$, stesso box, solver, soglie e orizzonte; frontiera interna Khinf e search-box limit M6/Kmu.
 - Non sovrainterpretare: 60 gradi non è una frontiera dinamica certificata.
 - Transizione: introdurre l'insieme incerto campionato.
 

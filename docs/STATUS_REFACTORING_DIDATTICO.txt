@@ -1,5 +1,8 @@
 STATUS PROGETTO CR — 2026-09-01
 
+SNAPSHOT STORICO: questo file descrive il refactoring precedente. Per lo stato
+corrente usare docs/RESOCONTO_REVISIONE_LQR_LQG_HINF_RAS_per_GPT.txt.
+
 Ramo: codex/didactic-structural-refactor
 Stato: refactoring strutturale e didattico concluso; working tree non ancora committato/pubblicato.
 

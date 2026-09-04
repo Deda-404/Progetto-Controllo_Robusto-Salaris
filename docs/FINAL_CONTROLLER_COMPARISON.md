@@ -16,13 +16,13 @@ M17 carica gli artefatti validati e mantiene separate quattro classi di evidenza
 
 | Controllore | Tracking nominale NL | Monte Carlo M4 | RS formale | RP formale |
 | --- | --- | --- | --- | --- |
-| M6 | `PASS` | 39/40 empirico; Sample 5 instabile | N/A | N/A |
+| M6 | `PASS` | 38/40 empirico; Sample 5 e 6 instabili | N/A | N/A |
 | Khinf | `FAIL` | 40/40 empirico | N/A | N/A |
 | Kmu | `FAIL` | 40/40 empirico | `PASS_CERTIFIED` [1.06956057969,1.21287515623] | `FAIL_CERTIFIED` |
 
-M6 ha worst settling nominale non lineare 0.77696 s e rispetta i target M5 studiati. Khinf e Kmu falliscono il tracking. M12 riguarda A5, non Khinf: non si trasferisce quindi una certificazione formale a Khinf.
+M6 ha worst settling nominale non lineare 0.67925 s e rispetta i target M5 studiati. Khinf e Kmu falliscono il tracking. M12 riguarda A5, non Khinf: non si trasferisce quindi una certificazione formale a Khinf.
 
-La Monte Carlo conserva il caso M6 instabile con max Re +2.47065 1/s. I core tracking pass rate sul totale sono 27.5% per M6 e 0% per i due controllori robusti. Queste frazioni non sono probabilità fisiche.
+La Monte Carlo conserva i due casi M6 instabili; il peggiore ha max Re +2.93760 1/s. I core tracking pass rate sul totale sono 55% per M6 e 0% per i due controllori robusti. Queste frazioni non sono probabilità fisiche.
 
 ## Assegnazione finale
 

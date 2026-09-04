@@ -2,16 +2,16 @@
 \begin{table}[H]
 \centering
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lllllll}
+\begin{tabular}{llllllllll}
 \toprule
-Controllore & Tracking & $T_s$ [s] & $M_p$ [\%] & $e_{ss}$ [\%] & $r_{min}$ [deg] & RAS \\
+Controllore & Tracking & $T_s$ [s] & $M_p$ [\%] & $e_{ss}$ [\%] & RAS conv. & Fraz. [\%] & $r_{min}$ [deg] & Area [deg$^2$] & Classe \\
 \midrule
-M6 & PASS & 0.77696 & 0.24099 & 0.44128 & 60 & SEARCH-BOX LIMITED \\
-Khinf & FAIL & 1.7322 & 261.35 & 49.068 & 52.876 & EMPIRICAL BOUNDARY LOCATED \\
-Kmu & FAIL & 1.7346 & 228.36 & 50.442 & 60 & SEARCH-BOX LIMITED \\
+M6 & PASS & 0.67925 & 0.38381 & 0.39626 & 57/57 & 100 & 60 & 14214 & SEARCH-BOX LIMITED \\
+Khinf & FAIL & 1.7322 & 261.35 & 49.068 & 101/143 & 70.629 & 52.876 & 12721 & EMPIRICAL BOUNDARY LOCATED \\
+Kmu & FAIL & 1.7346 & 228.36 & 50.442 & 57/57 & 100 & 60 & 14214 & SEARCH-BOX LIMITED \\
 \bottomrule
 \end{tabular}
 }
-\caption{Validazione non lineare nominale M8/M15. Le RAS sono stime empiriche.}
+\caption{Validazione non lineare nominale M8/M15 e confronto RAS omogeneo. Le RAS sono stime empiriche.}
 \label{tab:nonlinear}
 \end{table}

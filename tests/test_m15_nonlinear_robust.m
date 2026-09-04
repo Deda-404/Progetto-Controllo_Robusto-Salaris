@@ -226,6 +226,14 @@ localVerifyBoundary(testCase, testCase.TestData.m15.rasResults(2).boundary);
 end
 function testT40NoCertifiedRoaClaim(testCase)
 verifyFalse(testCase, any([testCase.TestData.m15.rasResults.certifiedRegion]));
+for index = 1:2
+    metrics = testCase.TestData.m15.rasResults(index).metrics;
+    verifyFalse(testCase, metrics.certifiedRegion);
+    verifyEqual(testCase, metrics.empiricalConvergenceFraction, ...
+        metrics.numberConvergent / metrics.numberUniquePoints, ...
+        'AbsTol', 1e-12);
+    verifyTrue(testCase, isfinite(metrics.maximumConvergentControlNm));
+end
 end
 function testT41M6RasLoadedFrozen(testCase)
 r = testCase.TestData.m15.m6FrozenRasReference;

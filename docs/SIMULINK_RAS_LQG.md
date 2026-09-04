@@ -15,9 +15,12 @@ lineare documentata in M7 e non influenza il quality gate M8.
 
 ## Architettura Simulink
 
-Il modello originale `simulink/SEA_LQG_nonlinear.slx` è costruito
-programmaticamente e contiene i moduli Reference, Controller, Actuators,
-Nonlinear SEA Plant, Disturbance, Measurement Noise e Logging. La catena è:
+Il modello `simulink/SEA_LQG_nonlinear.slx` è costruito programmaticamente
+usando soli blocchi standard e contiene i sottosistemi Reference, LQG
+Controller, Actuator Dynamics, Nonlinear SEA Plant, Measurement Interface e
+Signal Monitoring. Il controller espone separatamente precompensatore `Nr`,
+feedback `-K`, comando incrementale, ingressi dell'osservatore, Kalman
+Observer, coppia di equilibrio e comando assoluto. La catena è:
 
 `M6 LQG -> attuatori nominali M3 -> meccanica SEA non lineare M1`.
 
@@ -55,10 +58,10 @@ workspace.
 ## Solver
 
 Un gradino da 2° è stato simulato sia con `ode45` sia con `ode23t`. A parità di
-tolleranze lo scarto massimo sulle posizioni è `5.5565e-6 rad`; nella prova
-eseguita i tempi a parete sono stati rispettivamente 2.1604 s e 0.4780 s. È
-stato scelto `ode23t`, adeguato alla combinazione moderatamente stiff di
-elasticità SEA, attuatori e stimatore.
+tolleranze lo scarto massimo sulle posizioni è `6.213e-6 rad`. È stato scelto
+`ode23t`, adeguato alla combinazione moderatamente stiff di elasticità SEA,
+attuatori e stimatore; i tempi a parete non sono usati come requisito perché
+dipendono dalla macchina di esecuzione.
 
 | Impostazione | Valore |
 | --- | ---: |
@@ -77,9 +80,9 @@ Con plant a `xbar`, attuatori all'equilibrio, stimatore incrementale nullo e
 
 | Metrica | Massimo |
 | --- | ---: |
-| `abs(q-qbar)` | `4.086e-17 rad` |
-| `abs(theta-thetabar)` | `3.845e-17 rad` |
-| `abs(u-taubar)` | `1.686e-15 N m` |
+| `abs(q-qbar)` | `1.061e-16 rad` |
+| `abs(theta-thetabar)` | `1.021e-16 rad` |
+| `abs(u-taubar)` | `5.020e-15 N m` |
 
 Le tolleranze del gate sono `1e-8` per posizione e comando. Non è osservato
 drift.
@@ -92,21 +95,21 @@ assoluto e la deformazione include la deformazione di equilibrio.
 
 | Rif. | Giunto | Ts [s] | OS [%] | errore statico rel. | cross coupling | peak u [N m] | peak SEA [rad] |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 2° | 1 | 0.77696 | 0.24099 | 0.0002796 | 0.17267 | 1.8759 | 0.009460 |
-| 2° | 2 | 0.51484 | 0.01228 | 0.0001269 | 0.17392 | 1.7241 | 0.004625 |
-| 5° | 1 | 0.77110 | 0.11301 | 0.0017391 | 0.17286 | 4.6897 | 0.023650 |
-| 5° | 2 | 0.51478 | 0 | 0.0007909 | 0.17398 | 4.3102 | 0.011563 |
-| 8° | 1 | 0.76704 | 0 | 0.0044128 | 0.17319 | 7.5034 | 0.037840 |
-| 8° | 2 | 0.51015 | 0 | 0.0020130 | 0.17409 | 6.8964 | 0.018501 |
+| 2° | 1 | 0.67925 | 0.38381 | 0.0002508 | 0.16939 | 1.8043 | 0.010426 |
+| 2° | 2 | 0.48155 | 0.02389 | 0.0001219 | 0.16919 | 1.7122 | 0.004864 |
+| 5° | 1 | 0.67739 | 0.27498 | 0.0015603 | 0.16954 | 4.5106 | 0.026065 |
+| 5° | 2 | 0.47643 | 0 | 0.0007594 | 0.16924 | 4.2806 | 0.012160 |
+| 8° | 1 | 0.66984 | 0.07654 | 0.0039626 | 0.16982 | 7.2170 | 0.041703 |
+| 8° | 2 | 0.47502 | 0 | 0.0019336 | 0.16934 | 6.8489 | 0.019457 |
 
 | Rif. | Giunto | max `abs(qNL-qLTI)` [rad] | RMS [rad] |
 | ---: | ---: | ---: | ---: |
-| 2° | 1 | `9.8193e-6` | `5.0770e-6` |
-| 2° | 2 | `4.5017e-6` | `2.5908e-6` |
-| 5° | 1 | `1.5269e-4` | `7.6225e-5` |
-| 5° | 2 | `7.0184e-5` | `3.9149e-5` |
-| 8° | 1 | `6.2015e-4` | `3.0836e-4` |
-| 8° | 2 | `2.8583e-4` | `1.5508e-4` |
+| 2° | 1 | `8.8445e-6` | `4.4738e-6` |
+| 2° | 2 | `4.3697e-6` | `2.4544e-6` |
+| 5° | 1 | `1.3754e-4` | `6.8575e-5` |
+| 5° | 2 | `6.8208e-5` | `3.7369e-5` |
+| 8° | 1 | `5.5916e-4` | `2.7614e-4` |
+| 8° | 2 | `2.7792e-4` | `1.4706e-4` |
 
 L'accordo diminuisce regolarmente con l'ampiezza nei casi eseguiti; questa è
 un'osservazione numerica locale, non un'ipotesi imposta al risultato.
@@ -118,12 +121,12 @@ caso nominale resta 0.50 N m.
 
 | d [N m] | Giunto | peak q [rad] | offset [rad] | Ts [s] | cross | peak u [N m] | max LTI-NL [rad] |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 0.25 | 1 | 0.039884 | 0.039780 | 0.75205 | 0.46360 | 0.64974 | `1.2625e-5` |
-| 0.25 | 2 | 0.080094 | 0.080084 | 0.44318 | 0.22898 | 0.57625 | `3.2380e-5` |
-| 0.50 | 1 | 0.079700 | 0.079485 | 0.74996 | 0.46390 | 1.2994 | `1.0068e-4` |
-| 0.50 | 2 | 0.16000 | 0.15998 | 0.43745 | 0.22929 | 1.1512 | `2.5736e-4` |
-| 1.00 | 1 | 0.15886 | 0.15838 | 0.74194 | 0.46506 | 2.5979 | `7.9600e-4` |
-| 1.00 | 2 | 0.31850 | 0.31849 | 0.41009 | 0.23044 | 2.2917 | `2.0058e-3` |
+| 0.25 | 1 | 0.036351 | 0.036204 | 0.65057 | 0.49494 | 0.64659 | `8.5758e-6` |
+| 0.25 | 2 | 0.077920 | 0.077908 | 0.41999 | 0.23006 | 0.57962 | `2.7455e-5` |
+| 0.50 | 1 | 0.072656 | 0.072357 | 0.64940 | 0.49515 | 1.2932 | `6.8416e-5` |
+| 0.50 | 2 | 0.15568 | 0.15566 | 0.41323 | 0.23035 | 1.1579 | `2.1846e-4` |
+| 1.00 | 1 | 0.14496 | 0.14431 | 0.64653 | 0.49596 | 2.5865 | `5.4261e-4` |
+| 1.00 | 2 | 0.31009 | 0.31007 | 0.39435 | 0.23144 | 2.3054 | `1.7096e-3` |
 
 L'offset è conservato e visibile: M6 non ha integratore.
 
@@ -134,9 +137,9 @@ M6, `8.7266e-4 rad`. Sul riferimento da 5° al giunto 1:
 
 | Metrica RMS | Non lineare | Lineare M6 |
 | --- | ---: | ---: |
-| tracking | 0.0158 rad | 0.0150 rad |
-| errore stima q | `2.2627e-4 rad` | `2.3377e-4 rad` |
-| variazione comando | 0.0753 N m | 0.0803 N m |
+| tracking | 0.0154 rad | 0.0145 rad |
+| errore stima q | `2.2641e-4 rad` | `2.3377e-4 rad` |
+| variazione comando | 0.0735 N m | 0.0784 N m |
 
 Il rilancio con lo stesso vettore di rumore ha errore massimo nullo.
 

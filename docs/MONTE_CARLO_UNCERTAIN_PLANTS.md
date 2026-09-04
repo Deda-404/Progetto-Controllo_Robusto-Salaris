@@ -12,11 +12,11 @@ Il Sample 0 nominale è un gate di ricostruzione e non entra nelle statistiche. 
 
 | Controllore | Stabili | Frazione empirica | Sample instabili | Worst max Re [1/s] |
 | --- | ---: | ---: | --- | ---: |
-| M6 | 39/40 | 0.975 | 5 | +2.47065 |
+| M6 | 38/40 | 0.950 | 5, 6 | +2.93760 |
 | Khinf | 40/40 | 1.000 | nessuno | -0.0304135 |
 | Kmu | 40/40 | 1.000 | nessuno | -0.0304794 |
 
-Il Sample 5 M6 ha due poli nel semipiano destro e resta nel dataset. Le sue metriche prestazionali sono non eleggibili, non sostituite da valori nominali. La stabilità 40/40 di Kmu è coerente con la RS M14 `[1.06956057969,1.21287515623]`, ma non ne costituisce una seconda prova.
+I Sample 5 e 6 M6 hanno due poli nel semipiano destro e restano nel dataset. Le loro metriche prestazionali sono non eleggibili, non sostituite da valori nominali. La stabilità 40/40 di Kmu è coerente con la RS M14 `[1.06956057969,1.21287515623]`, ma non ne costituisce una seconda prova.
 
 ## Prestazione sui campioni
 
@@ -30,6 +30,6 @@ M6 mantiene il miglior tracking sul sottoinsieme stabile, ma non è robustamente
 
 ## Interpretazione corretta
 
-Le frazioni 39/40 e 40/40 descrivono soltanto questa sequenza finita. M4 non definisce probabilità fisiche e il campionamento uniforme è una regola computazionale. M16 non sostituisce M14, non produce margini robusti e non seleziona un vincitore mediante score globale.
+Le frazioni 38/40 e 40/40 descrivono soltanto questa sequenza finita. M4 non definisce probabilità fisiche e il campionamento uniforme è una regola computazionale. M16 non sostituisce M14, non produce margini robusti e non seleziona un vincitore mediante score globale.
 
 Artifact: `results/data/m16_monte_carlo_uncertain_linear.mat`.

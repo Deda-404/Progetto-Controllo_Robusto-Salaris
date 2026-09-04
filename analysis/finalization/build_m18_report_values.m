@@ -20,6 +20,7 @@ end
 
 function rows = localRows(e)
 p = e.nominalParameters; a = e.nominalActuator; m5 = e.m5.spec;
+selectedLqr = e.m6.lqrCandidateTable(e.m6.lqrCandidateTable.Selected, :);
 m16s = e.m16.stabilitySummary; m16p = e.m16.empiricalPassRates;
 m6Unstable = e.m16.stabilityTable( ...
     e.m16.stabilityTable.Controller == "M6" & ...
@@ -62,6 +63,17 @@ rows(end+1)=localRow("Banda W1",m5.omegaB,"rad/s","M5","m5_performance_specs.mat
 rows(end+1)=localRow("uScale",m5.uScale,"N m","M5","m5_performance_specs.mat","spec.uScale","UScaleNm");
 rows(end+1)=localRow("Ordine M6",order(e.m6.Klqg),"states","M6","m6_lqg_no_integrator.mat","Klqg","MControllerOrder");
 rows(end+1)=localRow("M6 Ts peggiore",max(e.m6.trackingMetrics.lqg.SettlingTime),"s","M6","m6_lqg_no_integrator.mat","trackingMetrics.lqg.SettlingTime","MControllerWorstTs");
+rows(end+1)=localRow("Candidati LQR M6",height(e.m6.lqrCandidateTable),"count","M6","m6_lqg_no_integrator.mat","lqrCandidateTable","MLqrCandidateCount");
+rows(end+1)=localRow("Candidati LQR M6 ammissibili",sum(e.m6.lqrCandidateTable.Admissible),"count","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.Admissible","MLqrAdmissibleCount");
+rows(end+1)=localRow("Candidato LQR selezionato",selectedLqr.Candidate,"id","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.Selected","MLqrSelectedCandidate");
+rows(end+1)=localRow("Peso posizione LQR",selectedLqr.PositionWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.PositionWeight","MLqrPositionWeight");
+rows(end+1)=localRow("Peso velocita LQR",selectedLqr.VelocityWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.VelocityWeight","MLqrVelocityWeight");
+rows(end+1)=localRow("Peso deformazione LQR",selectedLqr.DeformationWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.DeformationWeight","MLqrDeformationWeight");
+rows(end+1)=localRow("Peso comando LQR",selectedLqr.ControlWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.ControlWeight","MLqrControlWeight");
+rows(end+1)=localRow("Score LQR selezionato",selectedLqr.CompromiseScore,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.CompromiseScore","MLqrSelectedScore");
+rows(end+1)=localRow("Picco comando LQR full-state",selectedLqr.WorstPeakControl,"N m","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.WorstPeakControl","MLqrPeakControl");
+rows(end+1)=localRow("RMS comando LQR full-state",selectedLqr.WorstRmsControl,"N m","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.WorstRmsControl","MLqrRmsControl");
+rows(end+1)=localRow("Rapporto velocita Kalman",e.m6.validationMetrics.kalman.estimatorSpeedRatio,"-","M6","m6_lqg_no_integrator.mat","validationMetrics.kalman.estimatorSpeedRatio","MKalmanSpeedRatio");
 rows(end+1)=localRow("Stato M7",e.m7.validationMetrics.status,"status","M7","m7_augmented_cost_feasibility.mat","validationMetrics.status","MSevenStatus");
 rows(end+1)=localRow("Verifiche M7 conformi",e.m7.validationMetrics.admissibleCount,"count","M7","m7_augmented_cost_feasibility.mat","validationMetrics.admissibleCount","MSevenAdmissible");
 rows(end+1)=localRow("RAS M6 minima",e.m8.rasMetrics.minimumRadiusDeg,"deg","M8","m8_lqg_nonlinear_ras.mat","rasMetrics.minimumRadiusDeg","MControllerRasMin");
@@ -82,6 +94,13 @@ rows(end+1)=localRow("RS Kmu lower",e.m14.robustStabilityMargin.LowerBound,"-","
 rows(end+1)=localRow("RS Kmu upper",e.m14.robustStabilityMargin.UpperBound,"-","M14","m14_final_mu_analysis_kmu.mat","robustStabilityMargin.UpperBound","KmuRSUpper");
 rows(end+1)=localRow("RAS Khinf minima",m15Khinf.minimumRadiusDeg,"deg","M15","m15_nonlinear_robust_validation.mat","rasResults(Khinf).metrics.minimumRadiusDeg","KhinfRasMin");
 rows(end+1)=localRow("RAS Kmu minima",m15Kmu.minimumRadiusDeg,"deg","M15","m15_nonlinear_robust_validation.mat","rasResults(Kmu).metrics.minimumRadiusDeg","KmuRasMin");
+rows(end+1)=localRow("Punti RAS LQG",e.m8.rasMetrics.numberUniquePoints,"points","M8","m8_lqg_nonlinear_ras.mat","rasMetrics.numberUniquePoints","MLqgRasPoints");
+rows(end+1)=localRow("Punti RAS Khinf",m15Khinf.numberUniquePoints,"points","M15","m15_nonlinear_robust_validation.mat","rasResults(Khinf).metrics.numberUniquePoints","KhinfRasPoints");
+rows(end+1)=localRow("Punti convergenti RAS Khinf",m15Khinf.numberConvergent,"points","M15","m15_nonlinear_robust_validation.mat","rasResults(Khinf).metrics.numberConvergent","KhinfRasConvergent");
+rows(end+1)=localRow("Punti RAS Kmu",m15Kmu.numberUniquePoints,"points","M15","m15_nonlinear_robust_validation.mat","rasResults(Kmu).metrics.numberUniquePoints","KmuRasPoints");
+rows(end+1)=localRow("Area RAS LQG",e.m8.rasMetrics.approximateAreaDeg2,"deg2","M8","m8_lqg_nonlinear_ras.mat","rasMetrics.approximateAreaDeg2","MLqgRasArea");
+rows(end+1)=localRow("Area RAS Khinf",m15Khinf.approximateAreaDeg2,"deg2","M15","m15_nonlinear_robust_validation.mat","rasResults(Khinf).metrics.approximateAreaDeg2","KhinfRasArea");
+rows(end+1)=localRow("Area RAS Kmu",m15Kmu.approximateAreaDeg2,"deg2","M15","m15_nonlinear_robust_validation.mat","rasResults(Kmu).metrics.approximateAreaDeg2","KmuRasArea");
 rows(end+1)=localRow("Seed M16",e.m16.seed,"seed","M16","m16_monte_carlo_uncertain_linear.mat","seed","MonteCarloSeed");
 rows(end+1)=localRow("Campioni M16",e.m16.numberSamples,"samples","M16","m16_monte_carlo_uncertain_linear.mat","numberSamples","MonteCarloSamples");
 rows(end+1)=localRow("M6 campioni stabili",m16s.NStable(m16s.Controller=="M6"),"samples","M16","m16_monte_carlo_uncertain_linear.mat","stabilitySummary.NStable(M6)","MControllerStableSamples");

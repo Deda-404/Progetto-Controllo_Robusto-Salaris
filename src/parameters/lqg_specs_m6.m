@@ -1,24 +1,37 @@
 function config = lqg_specs_m6
-%LQG_SPECS_M6 Approved, physically normalized LQG design data.
-%   The controller is intentionally defined by one explicit LQR cost and
-%   one explicit covariance model. No candidate grid or ranking is used.
+%LQG_SPECS_M6 Limited and interpretable LQG design data.
+%   Physical scales make unlike state variables comparable. The final LQR
+%   weights are then selected by a small, reproducible parametric search;
+%   the scales themselves are not used as a controller-selection rule.
 
-% Dimensionless corrections to Bryson-style physical normalization.
-config.lqr.wq = 1;
-config.lqr.wqdot = 0.5;
-config.lqr.wdelta = 0.1;
-config.lqr.wthetaDot = 0.5;
-config.lqr.rhoU = 8;
+% The four factors have a direct physical interpretation. A full factorial
+% combination gives 3*2*2*3 = 36 candidates: enough to show the trade-off,
+% but still small enough to inspect and explain during an oral exam.
+config.lqr.candidates.position = [0.5; 1; 2];
+config.lqr.candidates.velocity = [0.5; 1];
+config.lqr.candidates.deformation = [0.1; 0.5];
+config.lqr.candidates.control = [4; 8; 16];
+config.lqr.expectedCandidateCount = 36;
 config.lqr.rationale = [ ...
-    "state scales come from reference, bandwidth and SEA deformation"; ...
-    "velocity weights 0.5 avoid excessive damping demand"; ...
-    "deformation weight 0.1 avoids over-penalizing compliant motion"; ...
-    "rhoU=8 keeps the nominal command below its performance scale"];
+    "position 0.5/1/2: moderate changes around the 5 deg tracking scale"; ...
+    "velocity 0.5/1: damping is important without dominating position"; ...
+    "deformation 0.1/0.5: compliant travel is allowed but not ignored"; ...
+    "control 4/8/16: spans more aggressive to more conservative command"];
+
+% Equal-status, dimensionless terms used only after mandatory admissibility.
+% The weights sum to one and keep the compromise score transparent.
+config.lqr.score.settling = 0.30;
+config.lqr.score.overshoot = 0.20;
+config.lqr.score.steadyState = 0.10;
+config.lqr.score.crossCoupling = 0.10;
+config.lqr.score.peakControl = 0.15;
+config.lqr.score.rmsControl = 0.15;
 
 % Standard deviations used to form Qn and Rn directly.
 config.kalman.sigmaLinkDisturbance = 0.1;
 config.kalman.sigmaInputModel = 0.1;
 config.kalman.sigmaMeasurementDeg = 0.05;
+config.kalman.sensitivityMeasurementDeg = [0.025; 0.05; 0.10];
 config.kalman.rationale = [ ...
     "0.1 N m process channels represent unmodeled link/input torques"; ...
     "0.05 deg represents the assumed encoder-noise scale"; ...

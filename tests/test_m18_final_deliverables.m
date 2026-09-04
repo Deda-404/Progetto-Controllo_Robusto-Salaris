@@ -154,15 +154,18 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT22M16CountsPreserved(testCase)
             testCase.verifyEqual(testCase.Evidence.m16.numberSamples, 40);
             testCase.verifyEqual(testCase.Evidence.m16.stabilitySummary.NStable, ...
-                [39; 40; 40]);
+                [38; 40; 40]);
         end
 
         function testT23M6SampleFivePreserved(testCase)
-            row = testCase.Evidence.m16.stabilityTable.Controller == "M6" & ...
-                testCase.Evidence.m16.stabilityTable.Sample == 5;
-            testCase.verifyFalse(testCase.Evidence.m16.stabilityTable.Stable(row));
+            rows = testCase.Evidence.m16.stabilityTable.Controller == "M6" & ...
+                ismember(testCase.Evidence.m16.stabilityTable.Sample, [5; 6]);
+            testCase.verifyEqual(testCase.Evidence.m16. ...
+                stabilityTable.Sample(rows), [5; 6]);
+            testCase.verifyFalse(any(testCase.Evidence.m16. ...
+                stabilityTable.Stable(rows)));
             testCase.verifyGreaterThan(testCase.Evidence.m16. ...
-                stabilityTable.MaxRealPole(row), 0);
+                stabilityTable.MaxRealPole(rows), zeros(2, 1));
         end
 
         function testT24FinalRolesPreserved(testCase)
@@ -209,8 +212,8 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
 
         function testT29NumericMacrosProduced(testCase)
             macroText = string(fileread(testCase.M18.macroPath));
-            testCase.verifyEqual(height(testCase.M18.numericAudit), 60);
-            testCase.verifyEqual(count(macroText, "\newcommand{"), 60);
+            testCase.verifyEqual(height(testCase.M18.numericAudit), 78);
+            testCase.verifyEqual(count(macroText, "\newcommand{"), 78);
         end
 
         function testT30TablesProduced(testCase)
@@ -219,7 +222,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT31FigureManifestProduced(testCase)
-            testCase.verifyEqual(height(testCase.M18.figureManifest), 15);
+            testCase.verifyEqual(height(testCase.M18.figureManifest), 18);
             testCase.verifyTrue(isfile(fullfile(testCase.Root, 'report', ...
                 'generated', 'figure_manifest.csv')));
         end

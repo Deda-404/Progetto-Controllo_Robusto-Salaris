@@ -1,0 +1,190 @@
+RESOCONTO FINALE REVISIONE LQR/LQG, H-INFINITY E RAS
+Data: 2026-09-04
+Repository: Deda-404/Progetto_CR
+Branch: codex/lqr-kalman-hinf-ras-didactic-rework
+Base origin/main: 5bd969e2c8bcd80cc48bc3b5f3176f2816d4443b
+Commit storico confrontato: 4609d3cca0af84411f2c88404c33bb97c563ae03
+
+1. STATO INIZIALE
+Progetto già completo M0-M18. Vincoli: M5, Khinf M10 e Kmu M13 congelati;
+nessuna nuova musyn; risultati negativi conservati; M16 empirica e distinta
+dalla certificazione mu M14; lavoro svolto su branch separato da main.
+
+2. CONFRONTO CON 4609d3c
+La versione storica usava 240 costi LQR, selezionava C193 fra 139 ammissibili
+e valutava 27 terne Kalman. La versione finale usa 36 costi LQR leggibili,
+gate M5 prima dello score e tre soli casi di sensibilità Kalman. Khinf e Kmu
+non sono stati risintetizzati.
+
+3. FILE MODIFICATI
+Aggiornati parametri M4/M6/M7, progetto e validazione LQR/LQG, RAS M8/M15,
+confronto M17, generatori M18, modello Simulink M8, test, README,
+documentazione, relazione, presentazione e artifact rigenerati.
+
+4. FILE CREATI
+analysis/progetto_lqg.m; analysis/progetto_hinf.m;
+analysis/ras/build_common_ras_comparison.m;
+controllers/lqg/search_lqr_weights_m6.m;
+controllers/lqg/analyze_kalman_sensitivity_m6.m;
+tests/test_didactic_entry_points.m; dati e figure LQR/Kalman/RAS; resoconti.
+
+5. M0-M5
+analysis/modellazione_linearizzazione_controllo.m espone in sequenza modello
+non lineare, equilibrio, linearizzazione, attuatori, incertezze, specifiche e
+pesi, con scopo, formule, sorgenti, risultati e quality gate.
+
+6. PROGETTO_LQG
+analysis/progetto_lqg.m copre soltanto M6-M8: LQR, Kalman, separation
+principle, verifica LQI, Simulink non lineare e RAS LQG.
+
+7. PROGETTO_HINF
+analysis/progetto_hinf.m copre soltanto M9-M12: mixed sensitivity,
+generalized plant, controllo strutturato e mu-analysis A5. Non chiama musyn.
+
+8. SEPARAZIONE
+Non esiste uno script combinato M6-M12. Gli entry point sono M0-M5, M6-M8,
+M9-M12; run_all resta il gate completo M0-M18.
+
+9. LOGICA LQR
+Prima si applicano stabilità e gate M5. Solo gli ammissibili ricevono uno
+score: settling 30%, overshoot 20%, errore 10%, cross-coupling 10%, picco
+comando 15%, RMS comando 15%.
+
+10. SPAZIO LQR
+wq=[0.5,1,2], wqdot=wthetaDot=[0.5,1], wdelta=[0.1,0.5],
+rhoU=[4,8,16]: 36 combinazioni. Nessuna griglia estesa.
+
+11. MOTIVAZIONE
+Scale fisiche M5 invariate: 5 gradi, omegaB*qScale, coppia/rigidezza e
+uScale=12 N m. Moltiplicatori pochi e simmetrici per mostrare il compromesso.
+
+12. Q/R
+LQR30: wq=2, wqdot=wthetaDot=1, wdelta=0.1, rhoU=16;
+R=0.111111 I2. Q non nullo: Q11=Q22=902.6245;
+Q15=Q51=Q26=Q62=-640; Q55=Q66=640;
+Q33=Q44=Q77=Q88=0.9119.
+
+13. RISULTATI LQR
+9/36 ammissibili; score 0.394292; Ts 0.678 s; OS 0.4044%; cross 0.16936;
+picco u 4.5106 N m; RMS u 0.6261 N m; energia 2.3325 N m^2 s.
+
+14. KALMAN
+Quattro canali di processo, quattro encoder [q;theta]. Aggiunta sensibilità
+sigmaY=[0.025,0.05,0.10] gradi; nominale 0.05 gradi.
+
+15. QN/RN
+sigmaD=sigmaU=0.1 N m, sigmaY=0.05 gradi; Qn=0.1^2 I4,
+Rn=(0.05*pi/180)^2 I4. Rapporto velocità stimatore/regolatore 1.5099.
+
+16. PESI H-INFINITY
+Nessuna modifica numerica. W1: 20 -> 0.5; W2: 0.08333 -> 0.5;
+omegaB=12 rad/s, omegaU=30 rad/s, alpha=6. Ampliata solo la spiegazione.
+
+17. CAPITOLO INCERTEZZE
+Esplicitati parametri incerti e fissi, unità, nominali, intervalli e razionali.
+Le percentuali sono assunzioni ingegneristiche, non dati identificati.
+
+18. PARAMETRI INCERTI
+k1 45-55 N m/rad; k2 36-44 N m/rad; Jm1 0.009-0.011 kg m^2;
+wn 36-44 rad/s; zeta 0.72-0.88; delay 0.012-0.018 s.
+
+19. PARAMETRI FISSI
+m1=1 kg, m2=0.8 kg, l1=0.4 m, l2=0.3 m, Jm2=0.01 kg m^2,
+Bm1=Bm2=0.02 N m s/rad, g=9.81 m/s^2.
+
+20. RAZIONALE RANGE
+Rigidezze: assemblaggio/materiale; Jm1: inerzia riflessa dominante; wn/zeta:
+drive e carico; delay: latenza/jitter. Gli altri parametri restano nominali
+per evitare un insieme non identificato e sovradimensionato.
+
+21. SIMULINK
+SEA_LQG_nonlinear.slx usa soli blocchi standard. Separa Reference, LQG
+Controller, Actuator Dynamics, Nonlinear SEA Plant, Measurement Interface e
+Signal Monitoring; dentro LQG separa Nr, -K, observer, somme e bias.
+
+22. CONTROLLORI RAS
+M6 LQG ordine 14; Khinf M10 ordine 18; Kmu M13 ordine 52 congelato.
+
+23. METODO RAS COMUNE
+Stesso modello non lineare M1, attuatori M3, equilibrio, solver, orizzonti,
+griglia, direzioni, box e criterio. Confronto empirico, non certificato.
+
+24. PIANO IC
+Piano delta q1(0),delta q2(0); velocità nulle; theta spostata con q;
+attuatori all'equilibrio; stato controllore/stimatore nullo.
+
+25. GRIGLIA
+[-60,-30,0,30,60]^2 gradi; 36 direzioni; box +/-60 gradi; bisezione 1 grado.
+
+26. PUNTI
+M6: 57; Khinf: 143; Kmu: 57. Khinf richiede bisezioni per la frontiera
+interna; M6 e Kmu raggiungono il limite del box.
+
+27. CONVERGENZA
+ode23t, 8 s estendibili a 12 s, ultimo 10%: q/theta entro 0.5 gradi,
+qdot entro 0.02 rad/s, thetadot entro 0.05 rad/s, segnali finiti e nessuna
+crescita finale significativa.
+
+28. SATURAZIONI
+Nessuna saturazione o anti-windup. uScale=12 N m è solo una normalizzazione.
+
+29. RAS LQG
+57/57, frazione 1, rmin 60 gradi, rmax 78.324 gradi, area 14214 deg^2,
+max u convergente 223.74 N m, SEARCH-BOX LIMITED.
+
+30. RAS KHINF
+101/143, 42 divergenti, frazione 0.70629, rmin 52.876 gradi,
+rmax 78.324 gradi, area 12721 deg^2, max u 70.869 N m,
+EMPIRICAL BOUNDARY LOCATED.
+
+31. RAS KMU
+57/57, frazione 1, rmin 60 gradi, rmax 78.324 gradi, area 14214 deg^2,
+max u 77.257 N m, SEARCH-BOX LIMITED.
+
+32. ALTRI CONTROLLORI
+M7 escluso: 3 LQI stabili con offset nullo ma 0/3 conformi a Ts/OS. A5 resta
+oggetto storico M11/M12, non controllore finale aggiuntivo.
+
+33. CONFRONTO RAS
+M6 e Kmu: tutti i punti del box convergenti. Khinf: frontiera interna.
+Il confronto usa dati, soglie e condizioni iniziali comuni.
+
+34. INTERPRETAZIONE
+Non si può ordinare la vera RAS di M6 e Kmu oltre il box. Khinf ha una
+frontiera empirica interna. Il picco M6 segnala un limite attuativo pratico.
+
+35. LIMITI
+RAS/Monte Carlo dipendono da campione, griglia, soglie e orizzonte; nessuna
+certificazione non lineare. Incertezze non identificate; Kmu ordine 52;
+nessun controllore soddisfa tutte le specifiche.
+
+36. TEST
+Suite MATLAB 599/599 PASS; Code Analyzer 162 file e 0 segnalazioni; script
+didattici, modelli Simulink, run_all M0-M18 e audit LaTeX/PDF inclusi.
+
+37. RISULTATI FINALI
+M6 tracking nominale PASS, ma M16 38/40: Sample 5 max Re +2.9376 e Sample 6
++0.20602. Khinf/Kmu 40/40 ma tracking core 0%. Solo M14 certifica RS Kmu:
+[1.069561,1.212875]. M16 non certifica robustezza.
+
+38. RESIDUI
+M7 senza controllore finale; NP/RP Kmu e tracking robusti falliti; due Sample
+M6 instabili; limiti attuativi non certificati; matricole/data da inserire.
+
+39. DIFFERENZE DALLA REVISIONE PRECEDENTE
+Nuova ricerca LQR compatta, sensibilità Kalman, script separati, RAS comune a
+tre controllori, schema Simulink didattico, relazione 47 pagine, 78 macro e
+18 figure M18. M16 M6 cambia da 39/40 a 38/40 e il peggioramento è conservato.
+
+40. COMMIT
+13851f83dbf1cfb23d0cd8dc9a880d9744bee59c
+feat: revise LQR Kalman and common RAS workflow
+5c22fe9ae1d0a6e77760aca0f0321f0c1700b7a0
+docs: reconcile control design and validation deliverables
+Il commit conclusivo aggiorna soltanto i metadati di pubblicazione; il suo SHA
+è l'HEAD della PR e non può essere auto-incluso nel contenuto che lo determina.
+
+41. PULL REQUEST
+PR #26: https://github.com/Deda-404/Progetto_CR/pull/26
+Base main, head codex/lqr-kalman-hinf-ras-didactic-rework, stato open,
+merged=false. Main non modificato direttamente; nessun merge automatico.

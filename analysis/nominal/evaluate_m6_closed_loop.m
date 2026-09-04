@@ -35,6 +35,8 @@ overshoot = zeros(2, 1);
 steadyStateErrorRelative = zeros(2, 1);
 crossCouplingPeakRatio = zeros(2, 1);
 peakControl = zeros(2, 1);
+rmsControl = zeros(2, 1);
+controlEnergy = zeros(2, 1);
 peakDeformation = zeros(2, 2);
 peakElasticTorque = zeros(2, 2);
 referenceOutput = cell(2, 1);
@@ -63,6 +65,8 @@ for jointIndex = 1:2
     crossCouplingPeakRatio(jointIndex) = max(abs(q(:, otherJoint))) / ...
         max(max(abs(q(:, jointIndex))), eps);
     peakControl(jointIndex) = max(abs(u), [], 'all');
+    rmsControl(jointIndex) = sqrt(mean(u.^2, 'all'));
+    controlEnergy(jointIndex) = trapz(referenceTime, sum(u.^2, 2));
     peakDeformation(jointIndex, :) = max(abs(deformation), [], 1);
     peakElasticTorque(jointIndex, :) = max(abs( ...
         deformation * springStiffness.'), [], 1);
@@ -70,9 +74,10 @@ end
 
 trackingMetrics = table(referenceJoint, settlingTime, overshoot, ...
     steadyStateErrorRelative, crossCouplingPeakRatio, peakControl, ...
+    rmsControl, controlEnergy, ...
     'VariableNames', {'ReferenceJoint', 'SettlingTime', 'Overshoot', ...
     'SteadyStateErrorRelative', 'CrossCouplingPeakRatio', ...
-    'PeakControl'});
+    'PeakControl', 'RmsControl', 'ControlEnergy'});
 
 worstPeakDeformationByJoint = max(peakDeformation, [], 1).';
 worstPeakElasticTorqueByJoint = max(peakElasticTorque, [], 1).';
@@ -143,6 +148,8 @@ evaluation.summary.worstSteadyStateErrorRelative = ...
 evaluation.summary.worstCrossCouplingPeakRatio = ...
     max(crossCouplingPeakRatio);
 evaluation.summary.worstPeakControl = max(peakControl);
+evaluation.summary.worstRmsControl = max(rmsControl);
+evaluation.summary.worstControlEnergy = max(controlEnergy);
 evaluation.summary.peakDeformationByJoint = ...
     worstPeakDeformationByJoint;
 evaluation.summary.peakElasticTorqueByJoint = ...
