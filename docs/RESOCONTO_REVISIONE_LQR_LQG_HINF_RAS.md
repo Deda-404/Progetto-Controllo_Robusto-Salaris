@@ -297,12 +297,15 @@ nuovo risultato negativo è conservato e documentato.
 
 ## 40. Commit
 
-Da completare dopo la creazione dei commit finali. Il resoconto elencherà i
-commit tecnici e documentali pubblicati sul branch corrente.
+- `13851f83dbf1cfb23d0cd8dc9a880d9744bee59c` — `feat: revise LQR Kalman and common RAS workflow`;
+- `5c22fe9ae1d0a6e77760aca0f0321f0c1700b7a0` — `docs: reconcile control design and validation deliverables`;
+- il commit di chiusura aggiorna esclusivamente questi metadati di
+  pubblicazione; il suo SHA è l'HEAD della PR e non può essere auto-incluso
+  nel contenuto che determina il medesimo SHA.
 
 ## 41. Pull Request
 
-Da completare dopo il push. La Pull Request avrà base `main`, head
-`codex/lqr-kalman-hinf-ras-didactic-rework`, resterà aperta e non sarà eseguito
-alcun merge automatico.
-
+Pull Request `#26`: `https://github.com/Deda-404/Progetto_CR/pull/26`.
+Base `main`, head `codex/lqr-kalman-hinf-ras-didactic-rework`, stato `open`,
+`merged=false`. `main` non è stato modificato direttamente e non è stato
+eseguito alcun merge automatico.

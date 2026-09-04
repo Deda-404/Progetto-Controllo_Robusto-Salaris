@@ -177,9 +177,14 @@ tre controllori, schema Simulink didattico, relazione 47 pagine, 78 macro e
 18 figure M18. M16 M6 cambia da 39/40 a 38/40 e il peggioramento è conservato.
 
 40. COMMIT
-Da completare dopo i commit finali.
+13851f83dbf1cfb23d0cd8dc9a880d9744bee59c
+feat: revise LQR Kalman and common RAS workflow
+5c22fe9ae1d0a6e77760aca0f0321f0c1700b7a0
+docs: reconcile control design and validation deliverables
+Il commit conclusivo aggiorna soltanto i metadati di pubblicazione; il suo SHA
+è l'HEAD della PR e non può essere auto-incluso nel contenuto che lo determina.
 
 41. PULL REQUEST
-Da completare dopo il push. Base main, head
-codex/lqr-kalman-hinf-ras-didactic-rework; PR aperta, nessun merge automatico.
-
+PR #26: https://github.com/Deda-404/Progetto_CR/pull/26
+Base main, head codex/lqr-kalman-hinf-ras-didactic-rework, stato open,
+merged=false. Main non modificato direttamente; nessun merge automatico.
