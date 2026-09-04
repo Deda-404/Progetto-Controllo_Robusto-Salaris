@@ -1,9 +1,9 @@
 # Resoconto finale — revisione LQR/LQG, H∞ e RAS
 
-Data: 2026-09-04  
-Repository: `Deda-404/Progetto_CR`  
-Branch: `codex/lqr-kalman-hinf-ras-didactic-rework`  
-Base verificata: `origin/main` al commit `5bd969e2c8bcd80cc48bc3b5f3176f2816d4443b`  
+Data: 2026-09-04
+Repository: `Deda-404/Progetto_CR`
+Branch: `codex/lqr-kalman-hinf-ras-didactic-rework`
+Base verificata: `origin/main` al commit `5bd969e2c8bcd80cc48bc3b5f3176f2816d4443b`
 Commit storico di confronto: `4609d3cca0af84411f2c88404c33bb97c563ae03`
 
 ## 1. Stato iniziale
