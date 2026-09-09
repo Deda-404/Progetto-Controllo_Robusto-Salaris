@@ -1,5 +1,9 @@
 function design = design_kalman_m6(m3Data, m5Data, lqrDesign, config)
-%DESIGN_KALMAN_M6 Build one Kalman filter from declared noise scales.
+%DESIGN_KALMAN_M6 Kalman da ipotesi progettuali, non dati del docente.
+% sigma_d=sigma_u=0.1 N m e sigma_y=0.05 deg sono scelte del progetto,
+% non valori identificati sperimentalmente. Qn/Rn sono le intensita del
+% modello bianco continuo nella convenzione temporale di riferimento 1 s.
+% La prova randn a 2 ms e distinta da una calibrazione di tali intensita.
 
 arguments
     m3Data (1, 1) struct
@@ -42,5 +46,5 @@ design.estimatorSpeedRatio = estimatorSpeedRatio;
 design.gainFrobeniusNorm = norm(L, 'fro');
 design.h2NoiseAmplification = norm(noiseErrorSystem, 2);
 design.method = ...
-    "declared process and encoder-noise standard deviations; no grid search";
+    "project-assumed process and encoder-noise scales; no experimental identification";
 end

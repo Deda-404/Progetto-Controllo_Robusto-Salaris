@@ -6,17 +6,17 @@
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (47 pagine A4).
-- Macro: `report/generated/m18_values.tex` (78 valori riconciliati).
-- Tabelle: 11 file generati in `report/tables/`.
-- Figure: 18 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (63 pagine A4, conteggio verificato nell'audit LaTeX).
+- Macro: `report/generated/m18_values.tex` (78 valori storici riconciliati) e `revision_values.tex` (12 valori della revisione, con sorgenti in `revision_numeric_audit.csv`).
+- Tabelle: 17 file tabellari: 11 in `report/tables/` e 6 in `report/generated/`, oltre alle macro e alla tabella sintetica Kalman delle slide.
+- Figure: 24 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
 - Compilazione: `powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1`.
 
 ## Presentazione
 
 - Source: `presentation/main.tex` (Beamer 16:9).
-- PDF: `presentation/Progetto_CR_Presentazione.pdf` (17 slide 16:9).
-- Timing: `presentation/OUTLINE_AND_TIMING.md`, stima totale 17:30.
+- PDF: `presentation/Progetto_CR_Presentazione.pdf` (19 slide 16:9).
+- Timing: `presentation/OUTLINE_AND_TIMING.md`, stima totale 19:00.
 - Note: `presentation/SPEAKER_NOTES.md`, incluse domande probabili.
 - Compilazione: stesso comando PowerShell della relazione.
 
@@ -34,7 +34,10 @@
 - MATLAB R2025b con Control System Toolbox, Robust Control Toolbox, Simulink e Symbolic Math Toolbox usati dalla pipeline storica.
 - Seed M16: `20260826`, generatore `twister`.
 - Generazione M18: `validate_m18_deliverables(true,true)`.
-- Regressione completa: `run_all`.
+- Suite automatica: `r=runtests('tests'); assertSuccess(r)`.
+- `run_all`: ricostruzione storica, NOT RUN nella revisione corrente perché rilancerebbe M9–M11.
+- Nuove evidenze: `lyapunov_ras_nominal.mat`, `lyapunov_trajectories.mat/.csv`, `didactic_lqg_calculations.mat`, `didactic_hinf_calculations.mat` in `results/data/`.
+- Derivazioni e confronto didattico: `docs/REVISIONE_TECNICA_LYAPUNOV.md`.
 
 ## Limiti noti
 
@@ -43,7 +46,7 @@
 - M6 perde stabilità nei Sample 5 e 6 M16.
 - Khinf/Kmu non soddisfano il tracking M5.
 - uScale non è una saturazione hardware.
-- RAS e Monte Carlo hanno semantica empirica.
+- Lyapunov fornisce un limite interno nominale conservativo; il livello numerico campionato, le mappe M8/M15 e Monte Carlo restano empirici.
 - Le incertezze non sono identificate sperimentalmente.
 - Kmu resta di ordine 52.
 

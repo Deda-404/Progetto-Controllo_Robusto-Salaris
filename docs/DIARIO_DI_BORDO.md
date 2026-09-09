@@ -2473,3 +2473,66 @@ build PDF e ispezione visiva in esecuzione.
 **Refactoring COMPLETE.** Restano da inserire manualmente soltanto matricole
 e data di consegna. Il ramo non è stato committato, pubblicato o mergiato
 automaticamente.
+
+## 2026-09-08/09 — Revisione tecnica Q/R, Kalman e Lyapunov nominale
+
+**Tipo:** Ricognizione / Metodologia / Codice / Test / Documenti
+
+È stata verificata la baseline remota dopo l'integrazione della PR 26: main ec93ddfe5e926f02c0373e7cee86236c3460f2eb. Il lavoro è stato separato sul ramo codex/lyapunov-technical-coherence-review. Sono stati confrontati codice, requisiti e richieste precedenti con la traccia e con gli esercizi LQG, mixed sensitivity, incertezza e mu-analysis del docente. Non è stato scritto sul Drive di riferimento né su main.
+
+Sono stati riscritti i due script didattici, esposti i calcoli Q/R e Kalman, aggiunta sensibilità a rumore identico e implementata la verifica Lyapunov aumentata per tre controllori. Il limite analitico deriva dalle equazioni SEA, non dall'interpolazione dei punti simulati. Sono stati eseguiti 8192 punti indipendenti per controllore e 48 traiettorie ulteriori.
+
+### Problemi incontrati e correzioni
+
+- Nell'esportazione delle matrici LaTeX, la concatenazione iniziale fra char e string produceva dimensioni incompatibili; è stata resa esplicitamente string.
+- Un backslash del testo LaTeX veniva interpretato come escape da fprintf; corretto l'escaping e rigenerate le tabelle.
+- La prima compilazione rilevava una riga fuori margine nel collegamento fra qs e il codice; corretta l'impaginazione. La procedura ora classifica gli overfull come FAIL invece di registrare PASS con un conteggio non nullo.
+- La prima regressione completa ha superato 644/644 test. Il successivo Code Analyzer su 172 file ha però arrestato il comando con tre segnalazioni: blocco hinfsyn volutamente irraggiungibile, concatenazione incrementale delle direzioni e assegnazione inutilizzata. Il comando di sintesi è stato reso un esempio commentato e protetto dal congelamento; le altre due istruzioni sono state semplificate senza cambiare i calcoli.
+- Piccoli incrementi positivi di V, dell'ordine di 1e-22 rispetto al valore iniziale, compaiono quando LQG raggiunge il roundoff. Sono registrati, non eliminati; le verifiche distinguono questa tolleranza numerica dalla prova analitica.
+
+### Verifiche già concluse
+
+- Test mirati: 50/50 PASS; prima suite completa: 644/644 PASS, nessun incompleto.
+- M5 e matrici Q/R/K/L M6 confrontate con l'artifact estratto dalla baseline Git: identità verificata.
+- Script didattici LQG e H-infinity eseguiti; nessuna nuova sintesi H-infinity o musyn.
+- Nuova esecuzione di Lyapunov e di entrambi gli script dopo la correzione statica: PASS; Code Analyzer 172 file, 0 segnalazioni.
+- Figure documentali rigenerate con sfondo bianco e testi/assi neri.
+- Prima correzione PDF: 63 pagine e 19 slide, audit LaTeX senza errori né overfull.
+- Ispezione delle 63 pagine e 19 slide; accorciato un titolo M14 per evitare taglio nel rendering.
+
+La verifica conclusiva successiva alle ultime correzioni tipografiche viene registrata in una voce separata. run_all resta NOT RUN in questa revisione per preservare le sintesi congelate. Le vecchie voci non sono riscritte retroattivamente.
+
+## 2026-09-09 — Verifica conclusiva della revisione tecnica
+
+L'ultima ripetizione intermedia della suite ha prodotto 631 PASS e 13 failed/incomplete: l'esportatore PNG non riusciva ad aprire m6_lqr_selected_weights.png durante il setup M6. Il file è stato poi verificato come accessibile in modalità esclusiva. Non è stata attribuita una causa specifica non dimostrata e non sono stati modificati pesi o criteri per aggirare l'errore. L'esito completo è conservato in results/data/revision_test_results_io_failure.csv e .mat.
+
+La successiva esecuzione isolata, senza operazioni concorrenti sulle figure, ha superato **644/644 test**, 0 failed e 0 incomplete, in 68.4859 s di tempo test. Il confronto con la baseline conferma M5 e le matrici Q/R/K/L M6 invariati. Gli artifact M10, M13, M14 e M16 sono identici byte per byte a quelli della baseline ec93ddf.
+
+Code Analyzer: **172 file, 0 segnalazioni**. Gli script didattici e la ricerca Lyapunov sono stati rieseguiti dopo le correzioni. Il calcolo rimane nominale e conservativo; il livello numerico campionato non è certificato.
+
+Sono consegnati la relazione di **63 pagine**, la presentazione di **19 slide** con stima **19:00**, gli audit LaTeX, i risultati per test e il resoconto A–K in Markdown/TXT. Il controllo visivo completo è stato seguito da un'ispezione mirata delle ultime modifiche. Gli overfull e i riferimenti irrisolti sono assenti.
+
+**COMPLETE come revisione tecnica locale.** Nessuna nuova sintesi robusta, musyn, retuning, riduzione o modifica di main. run_all è NOT RUN deliberato per evitare M9–M11. La pubblicazione del nuovo ramo non è stata eseguita. Restano le matricole e la data di consegna da compilare manualmente.
+
+## 2026-09-09 — Sincronizzazione finale degli asset e chiusura locale
+
+La verifica M18 successiva alla suite completa ha superato **60/60 test**, 0 failed e 0 incomplete, in 11.0632 s. Ha ricopiato le figure sorgenti rigenerate dalla regressione nelle cartelle documentali. Il confronto SHA-256 finale conferma identità per tutti i **24 asset della relazione** e i **10 asset selezionati nelle slide**. Entrambi i PDF sono stati ricompilati dopo questa sincronizzazione: 63 pagine e 19 slide, audit PASS con tutti i conteggi di errore a zero. Non sono stati rieseguiti i generatori MATLAB dopo la compilazione finale.
+
+Il resoconto A–K in Markdown/TXT e lo stato del progetto riportano questi controlli. La chiusura Git riguarda soltanto il ramo locale di revisione; nessun push, nuova PR o merge.
+
+## 2026-09-09 — Pubblicazione richiesta e adeguamento Git LFS
+
+È stato richiesto l'allineamento del repository GitHub con la revisione locale.
+Il primo push del commit c3dc9be è stato rifiutato prima della creazione del
+branch remoto: results/data/lyapunov_trajectories.mat pesa 260319104 byte e
+supera il limite GitHub di 100 MiB. Nessun dato è stato rimosso o ricalcolato.
+
+Si conserva integralmente il MAT mediante Git LFS, limitando la regola a
+questo singolo file. SHA-256 dei dati:
+aae30fedb3d863b434649d184aee60d4822c22c5bbdc28c1a7baef6a4c203099.
+Il commit non ancora pubblicato viene adeguato per sostituire il blob Git
+oversize con il puntatore LFS; non vengono riscritti commit remoti o usato
+force push. README e stato riportano i requisiti di download. Le verifiche
+MATLAB già concluse restano valide: sorgenti, dati, figure e PDF non cambiano.
+Il completamento del push richiede la verifica dell'identità degli SHA locale
+e remoto; main resta escluso dalla pubblicazione.

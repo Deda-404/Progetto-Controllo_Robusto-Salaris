@@ -1,80 +1,336 @@
 \chapter{Controllo LQG}
 \section{Obiettivo e architettura}
-M6 usa la pianta nominale completa a 14 stati e le quattro posizioni encoder $y=[q^T,\theta^T]^T$. Le velocità non sono misurate. Il feedback LQR stabilizza e modella il transitorio; il filtro di Kalman ricostruisce lo stato. Il comando è
-\[
-u=-K\hat x+N_rr.
-\]
-Il prefiltro $N_r$ garantisce il guadagno statico nominale sul riferimento, ma non introduce un modello interno del disturbo. È quindi previsto un offset sotto coppie costanti.
+Il regolatore usa il modello nominale M3 a 14 stati e le quattro misure encoder
+$y=[\Delta q^T,\Delta\theta^T]^T$. Le velocità e gli stati interni degli attuatori
+non sono misurati. LQR progetta il feedback supponendo lo stato disponibile;
+Kalman lo ricostruisce da modello, ingressi e misure. La legge effettivamente
+implementata è $u=-K\hat x+N_rr$, nelle coordinate incrementali M2.
+Il prefiltro rende unitario il guadagno statico nominale riferimento--posizione,
+ma non contiene un modello interno dei disturbi costanti.
 
-\section{Normalizzazione fisica e ricerca LQR}
-Il regolatore minimizza
+\section{Scelta e normalizzazione di Q e R}
+\subsection{Il problema LQR e le unità fisiche}
+Il costo è
 \[
-J=\int_0^\infty(x^TQx+u^TRu)\,dt.
+J=\int_0^\infty \left(x^TQx+u^TRu\right)\,dt .
 \]
-Pesi grandi in $Q$ penalizzano maggiormente gli stati corrispondenti; pesi grandi in $R$ rendono più costoso il comando. Per confrontare grandezze con unità diverse costruiamo $Q=C_{cost}^TC_{cost}$ normalizzando posizione, velocità, deformazione SEA e velocità motore con scale fisiche:
-\[
-q_s=5^\circ,\quad \dot q_s=\omega_Bq_s,\quad
-\delta_s=\frac{0.5}{\min(k_1,k_2)},\quad
-\dot\theta_s=\omega_Bq_s.
-\]
-La normalizzazione non sceglie automaticamente il controllore. Su di essa vengono provati fattori adimensionali piccoli e leggibili:
-\[
-w_q\in\{0.5,1,2\},\quad
-w_{\dot q}=w_{\dot\theta}\in\{0.5,1\},\quad
-w_\delta\in\{0.1,0.5\},\quad
-\rho_U\in\{4,8,16\},\qquad R=\frac{\rho_U}{u_{scale}^2}I_2.
-\]
-I tre valori di posizione esplorano una variazione moderata attorno alla scala del gradino; i due livelli di velocità controllano lo smorzamento senza dominarlo; i due livelli di deformazione distinguono una molla relativamente libera da una più penalizzata; i tre valori di $\rho_U$ vanno da un comando più aggressivo a uno più conservativo. Il prodotto cartesiano contiene \MLqrCandidateCount\ casi, cioè poche decine ispezionabili. Gli stati interni dell'attuatore non ricevono pesi diretti arbitrari.
+Il primo termine penalizza gli scostamenti delle coordinate fisiche di interesse;
+il secondo penalizza le coppie di comando. Il compromesso fra transitorio e
+sforzo dipende da entrambi. Usare una matrice identità senza spiegazione
+assegnerebbe lo stesso coefficiente numerico a radianti, radianti al secondo e
+coordinate arbitrarie di realizzazione, senza renderne comparabili gli effetti.
 
-La selezione avviene in due fasi. La prima conserva soltanto i candidati stabili che rispettano i requisiti obbligatori M5 su settling, overshoot ed errore statico; il cross-coupling resta diagnostico, come dichiarato in M5. La seconda ordina i soli candidati ammissibili con
+Lo stato completo, in deviazione dall'equilibrio, è
 \[
-J_N=0.30\frac{T_s}{T_{s,\max}}+0.20\frac{M_p}{M_{p,\max}}+
-0.10\frac{e_{ss}}{e_{ss,\max}}+0.10\frac{c}{c_{\max}}+
-0.15\frac{u_{pk}}{u_{scale}}+0.15\frac{u_{rms}}{u_{scale}}.
+x=[\Delta q_1,\Delta q_2,\Delta\dot q_1,\Delta\dot q_2,
+\Delta\theta_1,\Delta\theta_2,\Delta\dot\theta_1,\Delta\dot\theta_2,x_a^T]^T.
 \]
-Questo score non trasforma una violazione in un buon compromesso: viene calcolato ai fini della scelta soltanto dopo l'ammissibilità. Risultano conformi \MLqrAdmissibleCount\ candidati su \MLqrCandidateCount; è selezionato \MLqrSelectedCandidate, con $w_q=\MLqrPositionWeight$, $w_{\dot q}=w_{\dot\theta}=\MLqrVelocityWeight$, $w_\delta=\MLqrDeformationWeight$, $\rho_U=\MLqrControlWeight$ e score \MLqrSelectedScore.
+I sei elementi di $x_a$ appartengono alla realizzazione \texttt{ss} dei due
+attuatori secondo ordine--Padé; le loro unità dipendono dalla realizzazione,
+non sono ulteriori posizioni fisiche. Non viene attribuita loro una scala
+meccanica inventata e non ricevono una penalizzazione diretta. Restano comunque
+nel modello, nel feedback e nella verifica di stabilità.
+
+\subsection{Scale e provenienza: il significato esatto di qs}
+Distinguiamo parametri imposti dalla traccia (A), derivati matematicamente (B),
+ricavati da grandezze fisiche (C), scelti nel progetto (D) e selezionati dalla
+ricerca (E). Questa distinzione evita di attribuire al docente scelte nostre.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{p{3.4cm}p{3.5cm}p{6.6cm}}\toprule
+Grandezza del costo & Scala & Origine e significato\\\midrule
+$\Delta q_i$ [rad] & $q_s=5\pi/180$ & C da M5-D: ampiezza del riferimento nominale.\\
+$\Delta\dot q_i$ [rad/s] & $\dot q_s=12q_s$ & C: velocità caratteristica banda per ampiezza; non velocità massima.\\
+$\Delta\theta_i-\Delta q_i$ [rad] & $\delta_s=0.5/40=0.0125$ & C da coppia di disturbo M5-D e rigidezza minima della traccia-A. Scala comune della molla più cedevole.\\
+$\Delta\dot\theta_i$ [rad/s] & $\dot\theta_s=\dot q_s$ & D/C: stessa scala cinematica scelta per i motori; non un vincolo.\\
+$x_a$ (6 coordinate) & nessuna scala diretta & Nessuna penalizzazione diretta di coordinate dipendenti dalla realizzazione.\\
+\bottomrule\end{tabular}
+\caption{Scale del costo M6: derivazioni fisiche basate su scelte M5, non nuovi limiti hardware.}
+\end{table}
+
+Nel codice di produzione \path{build_lqr_state_cost.m} l'assegnazione è:
+\begin{verbatim}
+scales.q = m5Spec.referenceAmplitude;
+\end{verbatim}
+Nel file didattico la medesima
+grandezza è chiamata \texttt{qs} e definita nella sezione 5.
+Quindi $q_s=\RevQs$ rad è una \emph{scala dimensionale}, non un peso relativo,
+non un candidato di tuning e non un risultato della ricerca.
+Il peso adimensionale sulla posizione si chiama invece $w_q$.
+La scala di velocità effettiva è \RevQds\ rad/s; quella di deformazione
+è \RevDeltaScale\ rad. $\Delta\theta$ non viene pesata isolatamente:
+entra attraverso la deformazione $\Delta\theta-\Delta q$.
+
+\subsection{Trasformazione esplicita e matrice Q non diagonale}
+Introduciamo le otto uscite fisiche del costo:
+\[
+v=Fx=\begin{bmatrix}\Delta q\\\Delta\dot q\\
+\Delta\theta-\Delta q\\\Delta\dot\theta\end{bmatrix},\qquad
+F=\begin{bmatrix}
+I_2&0&0&0&0\\0&I_2&0&0&0\\-I_2&0&I_2&0&0\\0&0&0&I_2&0
+\end{bmatrix}.
+\]
+L'ultima colonna a blocchi ha sei colonne scalari. Le posizioni sono quindi
+penalizzate sia come errore articolare sia come parte della deformazione.
+Definiamo
+\[
+S_x=\operatorname{diag}(q_sI_2,\dot q_sI_2,\delta_sI_2,\dot\theta_sI_2),
+\quad \tilde v=S_x^{-1}Fx,\quad
+W_q=\operatorname{diag}(w_qI_2,w_vI_2,w_\delta I_2,w_vI_2).
+\]
+Qui $S_x$ è $8\times8$ perché normalizza le uscite del costo, non uno stato
+trasformato invertibile di dimensione 14. Ne segue esattamente
+\[
+x^TQx=\tilde v^TW_q\tilde v,\qquad
+Q=F^TS_x^{-T}W_qS_x^{-1}F=C_{cost}^TC_{cost},\quad
+C_{cost}=W_q^{1/2}S_x^{-1}F.
+\]
+Per ogni uscita normalizzata il coefficiente è $w_i/s_i^2$.
+Espandendo il termine elastico compaiono coefficienti incrociati negativi fra
+$q_i$ e $\theta_i$. Pertanto scrivere semplicemente $Q=\operatorname{diag}(q_i)$
+sarebbe errato per questo progetto. $Q$ è semidefinita positiva: il blocco
+attuativo nullo non implica assenza degli attuatori dalla dinamica ottimizzata.
+
+\subsection{R: scala di comando e peso di progetto}
+Le due componenti di $u$ sono coppie di comando in N m. Si pone
+\[
+S_u=\operatorname{diag}(12,12)\ \mathrm{N\,m},\quad
+\tilde u=S_u^{-1}u,\quad W_u=\rho_U I_2,\quad
+R=S_u^{-T}W_uS_u^{-1}.
+\]
+La scala 12 N m proviene da M5: è una scelta prestazionale D per normalizzare
+il comando, non una coppia massima nominale del motore né un dato sperimentale.
+Il coefficiente $\rho_U$ è invece un peso adimensionale di tuning.
+Il termine $u^TRu$ equivale quindi a $\rho_U\|\tilde u\|^2$.
+La scelta finale $\rho_U=16$ produce $R=(16/144)I_2=(1/9)I_2$.
+
+\subsection{Ricerca semplice: ammissibilità prima del compromesso}
+Si conserva la ricerca già approvata, senza nuovi candidati:
+\[
+w_q\in\{0.5,1,2\},\quad w_v\in\{0.5,1\},\quad
+w_\delta\in\{0.1,0.5\},\quad \rho_U\in\{4,8,16\}.
+\]
+Le scale rimangono costanti. Questi intervalli esplorano variazioni moderate di
+priorità di posizione, smorzamento, deformazione e comando; sono scelte D,
+non conseguenze univoche delle equazioni fisiche. Per ciascuno dei 36 candidati
+si calcolano $Q,R,K,N_r$, si verifica $A-BK$ e si simulano separatamente i due
+gradini di 5 gradi, da stato nullo e senza disturbi, su $0:0.002:3$ s.
+Si prendono le metriche peggiori dei due giunti.
+
+Sono ammissibili solo i candidati con poli a parte reale $<-10^{-8}$,
+$T_s\le0.8$ s, overshoot $\le10\%$, errore statico relativo $\le0.05$ e
+residuo del prefiltro finito. $T_s$ usa la banda del 2\% del riferimento
+attorno al valore finale nominale. Cross-coupling e comando non vengono
+trasformati in nuovi vincoli obbligatori. Fra i candidati ammissibili si minimizza
+\[
+J_N=0.30\frac{T_s}{0.8}+0.20\frac{M_p}{10}
++0.10\frac{e_{ss}}{0.05}+0.10\frac{c}{0.25}
++0.15\frac{u_{pk}}{12}+0.15\frac{u_{rms}}{12}.
+\]
+I coefficienti dello score sono priorità progettuali D e sommano a uno.
+Il cross-coupling è il rapporto fra picco del giunto non comandato e picco
+del giunto comandato; $u_{pk}$ è il massimo assoluto delle coppie e
+$u_{rms}$ la radice della media dei quadrati su tempi e canali.
+Restano \MLqrAdmissibleCount/\MLqrCandidateCount\ candidati.
+Il minimo seleziona \MLqrSelectedCandidate\ (E):
+$w_q=2$, $w_v=1$, $w_\delta=0.1$, $\rho_U=16$ e
+$J_N=\MLqrSelectedScore$. Non si è eseguito un nuovo retuning.
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.76\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
-\caption{Ricerca LQR compatta: candidati, ammissibilità M5 e compromesso normalizzato.}\label{fig:m6-lqr-search}
+\includegraphics[width=0.78\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
+\caption{Ogni punto deriva dai due gradini nominali di un candidato LQR:
+ascissa $T_s$ peggiore, ordinata picco di coppia; il colore indica lo score dei
+candidati ammissibili e il simbolo evidenzia quello selezionato.
+La linea a 12 N m è una scala, non una saturazione.}
+\label{fig:m6-lqr-search}
 \end{figure}
-
 \begin{figure}[H]\centering
-\includegraphics[width=0.72\textwidth]{figures/m6_lqr_selected_weights.png}
-\caption{Fattori adimensionali del costo LQR selezionato.}\label{fig:m6-lqr-weights}
+\includegraphics[width=0.70\textwidth]{figures/m6_lqr_selected_weights.png}
+\caption{Priorità adimensionali selezionate, da non confondere con le scale fisiche
+né con i singoli elementi della matrice non diagonale $Q$.}\label{fig:m6-lqr-weights}
 \end{figure}
 
-\section{Filtro di Kalman e significato delle covarianze}
-Il modello di processo usa due coppie lato link e due coppie equivalenti all'ingresso. Le deviazioni standard sono dichiarate direttamente:
+\subsection{Q e R finali, Riccati, guadagno e stabilità}
+MATLAB risolve l'equazione algebrica di Riccati:
 \[
-\sigma_d=0.1\ \mathrm{N\,m},\qquad
-\sigma_u=0.1\ \mathrm{N\,m},\qquad
-\sigma_y=0.05^\circ.
+A^TP_{\mathrm{LQR}}+P_{\mathrm{LQR}}A
+-P_{\mathrm{LQR}}BR^{-1}B^TP_{\mathrm{LQR}}+Q=0,\qquad
+K=R^{-1}B^TP_{\mathrm{LQR}}.
 \]
-Le grandezze $0.1$ N m e $0.05^\circ$ sono deviazioni standard, mentre le covarianze richiedono le varianze: ne seguono $Q_n=0.1^2I_4$ e $R_n=(0.05\pi/180)^2I_4$. $Q_n$ esprime quanto si considera incerto il modello di processo; $R_n$ quanto si considera rumorosa la misura. A parità di struttura, aumentare $Q_n/R_n$ porta il filtro a correggersi più rapidamente con l'innovazione, mentre diminuirlo attribuisce più fiducia alla previsione del modello. La scelta nominale fornisce un rapporto fra velocità minima dello stimatore e del regolatore pari a \MKalmanSpeedRatio.
+$P_{\mathrm{LQR}}$ non è la matrice di Lyapunov introdotta nel Capitolo 10.
+Le matrici seguenti provengono dallo script eseguito, arrotondate a cinque cifre
+significative; gli artifact conservano la doppia precisione.
+\input{generated/lqr_matrices.tex}
+La norma del residuo CARE è \RevCareResidual; il polo dominante del regolatore
+ha parte reale $-\RevRegulatorDecay$ s$^{-1}$. Tutti i poli di $A-BK$ sono
+strettamente nel semipiano sinistro. Il collegamento verificato è dunque
+$Q,R\to P_{\mathrm{LQR}}\to K\to A-BK\to$ risposte temporali.
+Il prefiltro è $N_r=[-C_q(A-BK)^{-1}B]^{-1}$: garantisce tracking statico
+nominale, non reiezione esatta di disturbi costanti.
 
-La sensibilità è controllata ripetendo il calcolo con $\sigma_y=0.025^\circ,0.05^\circ,0.10^\circ$, senza modificare il LQR. Poiché $R_n=\sigma_y^2I$, dimezzare $\sigma_y$ divide $R_n$ per quattro e raddoppiarla lo moltiplica per quattro. Nei tre casi il rapporto di velocità stimatore/regolatore passa rispettivamente da 2.112 a 1.510 e 1.192; la norma del guadagno $L$ diminuisce quando le misure sono dichiarate più rumorose. Le metriche RMS vengono simulate con la corrispondente ampiezza di rumore, quindi non vanno lette come un confronto a ingresso identico.
+\section{Filtro di Kalman: ipotesi, covarianze e verifica}
+\subsection{Stima dello stato e innovazione}
+LQR richiede $x$, mentre sono disponibili soltanto le quattro posizioni.
+Il modello usato per la stima è
+\[
+\dot x=Ax+Bu+G_ww,\qquad y=Cx+v,\qquad G_w=[B_d\ B].
+\]
+I primi due canali di $w$ sono coppie equivalenti lato link, i successivi due
+coppie equivalenti all'ingresso attuativo. I quattro canali di $v$ rappresentano
+gli encoder di $q$ e $\theta$. Sono ipotizzati indipendenti, a media nulla,
+senza correlazione processo--misura. Lo stimatore realizza
+\[
+\dot{\hat x}=A\hat x+Bu+L(y-C\hat x).
+\]
+L'innovazione $y-C\hat x$ confronta la misura con la previsione del modello:
+il guadagno $L$ stabilisce quanto questa differenza corregga ciascuno stato.
 
+\subsection{Origine delle sigma e costruzione non ambigua delle covarianze}
+Non sono disponibili dati sperimentali sui sensori o sugli errori di processo.
+Le scale
+$\sigma_d=0.1$ N m, $\sigma_u=0.1$ N m e $\sigma_y=0.05^\circ$
+sono ipotesi progettuali D di questo lavoro, \emph{non dati del docente}.
+Il loro scopo è assegnare fiducia relativa al modello e alle misure, non
+rappresentare una caratterizzazione dell'hardware.
+Per contestualizzarle, 0.1 N m equivale al 20\% del disturbo M5 e allo 0.83\%
+della scala di comando; 0.05 gradi equivale all'1\% del riferimento.
+Questi rapporti descrivono i valori già scelti: non sono una legge fisica che
+li determini univocamente. La sensibilità successiva ne rende verificabili
+le conseguenze senza un'ottimizzazione delle covarianze.
+
+La varianza è il quadrato della deviazione standard. La costruzione effettiva è
+\[
+Q_n=\operatorname{diag}(\sigma_d^2,\sigma_d^2,\sigma_u^2,\sigma_u^2)
+=0.01\,I_4,\qquad
+R_n=(0.05\pi/180)^2I_4=\RevRn\,I_4.
+\]
+$Q_n$ agisce sui quattro canali di $w$, non direttamente sui 14 stati;
+la covarianza equivalente nello stato è $G_wQ_nG_w^T$.
+La notazione $0.01 I_4$ evita ogni ambiguità fra $(0.1)^2$ e $0.12$.
+
+Una precisazione è necessaria per il filtro continuo: il rumore bianco ideale
+non ha una deviazione standard istantanea finita. In \texttt{lqe}, $Q_n,R_n$
+sono intensità, ossia coefficienti della delta di Dirac nelle correlazioni.
+Le sigma sopra sono scale equivalenti riferite alla convenzione temporale di
+1 s; restituendo le dimensioni temporali, le intensità hanno unità
+$(\mathrm{N\,m})^2\,\mathrm{s}$ e $\mathrm{rad}^2\,\mathrm{s}$.
+La successiva simulazione \texttt{randn} usa invece campioni con deviazione
+standard finita a passo 2 ms. Non viene affermata l'equivalenza di questo
+esperimento con il modello bianco continuo né una calibrazione probabilistica.
+
+\subsection{Guadagno, poli e sensibilità a ingresso identico}
+Il calcolo eseguito è
+$\texttt{L=lqe(A,Gw,C,Qn,Rn)}$. La matrice seguente segue l'ordine degli stati
+M3 per le righe e $[q_1,q_2,\theta_1,\theta_2]$ per le colonne:
+\input{generated/kalman_matrices.tex}
+I poli di $A-LC$ sono stabili; la velocità asintotica minima vale
+$\alpha_e=\RevEstimatorDecay$ s$^{-1}$, contro
+$\alpha_c=\RevRegulatorDecay$ s$^{-1}$ del regolatore.
+Il rapporto è \MKalmanSpeedRatio, non un requisito imposto dal docente.
+
+Nella nuova verifica si varia soltanto il rumore \emph{assunto} dallo stimatore:
+$0.5\sigma_y,\sigma_y,2\sigma_y$, cioè $R_n/4,R_n,4R_n$.
+$Q_n$ e LQR restano invariati. Si applica a tutti la stessa sequenza encoder,
+con $\sigma_y=0.05^\circ$, seed 20260826, 4 s a passo 2 ms, riferimento
+$r_1=5^\circ,r_2=0$, stato iniziale nullo e nessun disturbo di coppia.
+\input{generated/kalman_sensitivity_fixed.tex}
+Il filtro che assume misure più affidabili è più rapido, ma nella prova
+a rumore identico amplifica maggiormente le fluttuazioni di stima e comando.
+Aumentare relativamente $R_n$ tende a filtrare di più; aumentare relativamente
+$Q_n$ tende a valorizzare l'innovazione. Questa è una tendenza complessiva:
+nel caso MIMO non implica monotonia di ogni polo o elemento di $L$.
+La norma $\mathcal H_2$ è quella della mappa
+$v\to C_{cost}(x-\hat x)$ a ingresso unitario, non un RMS fisico del sensore.
+
+L'esperimento precedente, conservato nelle colonne storiche dell'artifact,
+variava anche l'ampiezza del rumore applicato: confrontava scenari diversi.
+Le nuove colonne \texttt{RmsEstimationErrorFixedNoise} e
+\texttt{RmsControlFixedNoise} isolano invece l'effetto della sola covarianza assunta.
 \begin{figure}[H]\centering
-\includegraphics[width=0.78\textwidth]{figures/m6_kalman_sensitivity.png}
-\caption{Sensibilità del filtro di Kalman alla deviazione standard del rumore encoder dichiarata.}\label{fig:m6-kalman-sensitivity}
+\includegraphics[width=0.84\textwidth]{figures/m6_kalman_sensitivity.png}
+\caption{A sinistra, rapidità relativa dello stimatore; a destra, RMS della
+variazione di coppia a rumore applicato identico. L'ascissa è il rapporto
+$Q_n/R_n$ relativo al progetto nominale, non un rapporto adimensionale
+fra grandezze fisiche eterogenee.}\label{fig:m6-kalman-sensitivity}
 \end{figure}
 
-La realizzazione è
+\subsection{LQG e principio di separazione}
+Per $z=[x^T,\hat x^T]^T$ la matrice completa è
 \[
-\dot{\hat x}=(A-BK-LC)\hat x+BN_rr+Ly.
+A_{cl}=\begin{bmatrix}A&-BK\\LC&A-BK-LC\end{bmatrix}.
 \]
-I poli della chiusura coincidono con l'unione dei poli di $A-BK$ e $A-LC$ entro la tolleranza: è la verifica numerica del principio di separazione.
+Con $e=x-\hat x$ si ottiene la forma triangolare
+\[
+\begin{bmatrix}\dot x\\\dot e\end{bmatrix}
+=\begin{bmatrix}A-BK&BK\\0&A-LC\end{bmatrix}
+\begin{bmatrix}x\\e\end{bmatrix}
+\]
+in assenza di ingressi esogeni. L'unione degli spettri di regolatore e stimatore
+coincide quindi con quello della chiusura completa. La trasformazione viene
+verificata numericamente nello script; il residuo è \RevSeparation.
+Questo risultato riguarda stabilità nominale lineare, non robustezza rispetto
+a M4 o stabilità non lineare globale.
+\input{generated/lqg_poles.tex}
 
-\section{Risultati M6}
-Il controllore ha ordine \MControllerOrder\ e nessun integratore. Il settling peggiore è \MControllerWorstTs\ s, l'overshoot resta sotto il 10\% e, per il caso full-state usato nella selezione, picco e valore RMS peggiori del comando sono \MLqrPeakControl\ N m e \MLqrRmsControl\ N m. Il rumore seeded è riproducibile.
-
+\section{Risultati M6: lettura delle figure}
+\subsection{Tracking del riferimento}
+La Figura~\ref{fig:m6-tracking} usa tempo in secondi e deviazioni articolari
+in gradi. Nel pannello superiore si applica $r_1=5^\circ,r_2=0$;
+in quello inferiore $r_1=0,r_2=5^\circ$. Stato fisico e osservatore partono
+da zero; coppie di disturbo e rumore sono nulli.
+Le curve continue sono $q_1,q_2$, la tratteggiata il riferimento non nullo.
+Si osservano rapidità del giunto comandato, picco del giunto non comandato e
+raggiungimento del valore finale. Il peggiore $T_s$ è \MControllerWorstTs\ s:
+M6 soddisfa i target nominali, pur senza disaccoppiamento perfetto.
 \begin{figure}[H]\centering
 \includegraphics[width=0.82\textwidth]{figures/m6_lqg_reference_tracking.png}
-\caption{Tracking nominale del controllore LQG M6.}\label{fig:m6-tracking}
+\caption{Due prove di tracking nominale LQG a gradino di 5 gradi, senza disturbi
+o rumore e da condizioni iniziali nulle.}\label{fig:m6-tracking}
 \end{figure}
 
-Le coppie costanti producono offset non nulli, coerentemente con l'assenza di integratori. M8 trasferisce esattamente lo stesso controllore sul modello non lineare; la RAS osservata rimane una stima empirica limitata al box esplorato.
+\subsection{Disturbo costante e limite del prefiltro}
+Nella Figura~\ref{fig:m6-disturbo} il riferimento è nullo e si applica da $t=0$
+una coppia costante di 0.5 N m al primo link (sopra) o al secondo (sotto).
+Il rumore è nullo e gli stati iniziali sono nulli. Le curve riportano le due
+deviazioni di posizione in gradi nel tempo. L'offset non nullo non è un errore
+del grafico: il prefiltro corregge il guadagno statico sul riferimento,
+non introduce l'azione integrale necessaria alla reiezione esatta.
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{figures/m6_lqg_disturbance_response.png}
+\caption{Risposta ai due gradini di coppia lato link: il recupero resta stabile,
+ma permane un offset coerente con l'assenza di integratori.}\label{fig:m6-disturbo}
+\end{figure}
+
+\subsection{Errore di stima e rumore sul comando}
+La Figura~\ref{fig:m6-stima} usa lo scenario seeded di 4 s:
+$r_1=5^\circ,r_2=0$, nessuna coppia disturbante, stati iniziali nulli
+e rumore sui quattro encoder di deviazione standard 0.05 gradi.
+Sopra si leggono $q_i-\hat q_i$ in gradi; sotto la differenza fra le coppie
+della prova rumorosa e quelle della stessa prova senza rumore, in N m.
+Non è quindi il comando totale. Le oscillazioni residue quantificano il
+compromesso fra inseguimento delle misure e filtraggio.
+\begin{figure}[H]\centering
+\includegraphics[width=0.82\textwidth]{figures/m6_lqg_estimation.png}
+\caption{Errore sui due stati di posizione stimati e incremento di coppia
+imputabile alla sequenza di rumore encoder, a riferimento identico.}\label{fig:m6-stima}
+\end{figure}
+
+\subsection{Poli e portata delle conclusioni}
+La Figura~\ref{fig:m6-poli} non è una simulazione temporale: ascisse e ordinate
+sono le parti reale e immaginaria dei poli in s$^{-1}$.
+Non richiede condizioni iniziali, riferimenti o disturbi.
+I simboli separano regolatore, stimatore e chiusura aumentata; la sovrapposizione
+verifica il principio di separazione e la posizione a sinistra dell'asse
+immaginario verifica la stabilità nominale.
+\begin{figure}[H]\centering
+\includegraphics[width=0.80\textwidth]{figures/m6_lqg_poles.png}
+\caption{Spettri del regolatore, dello stimatore e della chiusura LQG completa,
+senza cancellazioni di stati.}\label{fig:m6-poli}
+\end{figure}
+Il comando full-state usato nella selezione ha picco peggiore
+\MLqrPeakControl\ N m e RMS \MLqrRmsControl\ N m.
+La verifica non lineare e il limite interno di Lyapunov, che includono
+l'osservatore, sono sviluppati nel Capitolo 10; non sono dedotti dai soli poli.
 
 \section{Implementazione Simulink didattica}
 Il modello \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei blocchi funzionali: riferimento, controllore LQG, dinamica degli attuatori, pianta SEA non lineare, interfaccia di misura e monitoraggio. Dentro il controllore sono separati il prefiltro $N_r$, il feedback $-K\hat x$, la somma che genera il comando incrementale e l'osservatore di Kalman. Quest'ultimo realizza

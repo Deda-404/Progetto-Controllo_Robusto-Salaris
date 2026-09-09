@@ -1,5 +1,7 @@
 # Audit editoriale e strutturale conclusivo
 
+> Documento storico della revisione integrata nella PR 26 (47 pagine, 17 slide). Per la revisione tecnica corrente di Lyapunov, Q/R e Kalman si vedano `PROJECT_STATUS.md` e `REVISIONE_TECNICA_LYAPUNOV.md`. I test e i conteggi sottostanti non sono quelli della revisione dell'8 settembre 2026.
+
 ## Perimetro
 
 La revisione corrente è stata eseguita sul ramo `codex/lqr-kalman-hinf-ras-didactic-rework` per rendere il progetto coerente con una metodologia universitaria leggibile: scelta ingegneristica, motivazione, verifica MATLAB ed eventuale correzione. È stato usato come riferimento anche lo stato storico precedente, senza copiarne automaticamente le scelte numeriche.

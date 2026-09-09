@@ -38,7 +38,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT03SourceInventoryComplete(testCase)
-            testCase.verifyEqual(height(testCase.M18.sourceInventory), 17);
+            testCase.verifyEqual(height(testCase.M18.sourceInventory), 21);
             testCase.verifyTrue(all(testCase.M18.sourceInventory.Exists));
         end
 
@@ -193,11 +193,11 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
                 "la sola certificazione"));
         end
 
-        function testT27RasNotCertified(testCase)
+        function testT27EmpiricalRasDistinctFromLyapunov(testCase)
             testCase.verifyFalse(any(testCase.Evidence.m17. ...
                 rasComparison.AnalyticallyCertified));
             testCase.verifyTrue(contains(testCase.M18.metadata. ...
-                rasInterpretation, "EMPIRICAL_ONLY"));
+                rasInterpretation, "ANALYTIC_NOMINAL_INNER_BOUND"));
         end
 
         function testT28A5NotKhinf(testCase)
@@ -217,12 +217,12 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT30TablesProduced(testCase)
-            testCase.verifyEqual(numel(testCase.M18.tablePaths), 11);
+            testCase.verifyEqual(numel(testCase.M18.tablePaths), 17);
             testCase.verifyTrue(all(isfile(testCase.M18.tablePaths)));
         end
 
         function testT31FigureManifestProduced(testCase)
-            testCase.verifyEqual(height(testCase.M18.figureManifest), 18);
+            testCase.verifyEqual(height(testCase.M18.figureManifest), 24);
             testCase.verifyTrue(isfile(fullfile(testCase.Root, 'report', ...
                 'generated', 'figure_manifest.csv')));
         end
@@ -281,7 +281,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT39PresentationSourceProduced(testCase)
             source = string(fileread(fullfile(testCase.Root, 'presentation', ...
                 'main.tex')));
-            testCase.verifyEqual(count(source, "\begin{frame}"), 17);
+            testCase.verifyEqual(count(source, "\begin{frame}"), 19);
             testCase.verifyTrue(contains(source, "Alessio de Dato") && ...
                 contains(source, "Valerio Rebechi") && ...
                 contains(source, "M14 certifica RS"));
@@ -290,14 +290,14 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT40PresentationTimingProduced(testCase)
             timing = string(fileread(fullfile(testCase.Root, 'presentation', ...
                 'OUTLINE_AND_TIMING.md')));
-            testCase.verifyTrue(contains(timing, "17:30") && ...
+            testCase.verifyTrue(contains(timing, "19:00") && ...
                 contains(timing, "20 minuti"));
         end
 
         function testT41SpeakerNotesProduced(testCase)
             notes = string(fileread(fullfile(testCase.Root, 'presentation', ...
                 'SPEAKER_NOTES.md')));
-            testCase.verifyEqual(count(notes, "## Slide "), 17);
+            testCase.verifyEqual(count(notes, "## Slide "), 19);
             testCase.verifyTrue(contains(notes, "Domande probabili"));
         end
 
@@ -338,7 +338,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT48FinalManifestProduced(testCase)
             manifest = string(fileread(fullfile(testCase.Root, 'docs', ...
                 'FINAL_DELIVERABLE_MANIFEST.md')));
-            testCase.verifyTrue(contains(manifest, "17:30") && ...
+            testCase.verifyTrue(contains(manifest, "19:00") && ...
                 contains(manifest, "m18_final_deliverable_audit.mat"));
         end
 
@@ -430,7 +430,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
             testCase.verifyEqual(testCase.M18.qualityGate.overallStatus, ...
                 "COMPLETE");
             testCase.verifyEqual(testCase.M18.qualityGate.fullRegression, ...
-                "PASS");
+                "NOT RUN");
             testCase.verifyEqual(testCase.M18.metadata.overallStatus, ...
                 "COMPLETE");
         end

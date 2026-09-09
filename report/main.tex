@@ -4,6 +4,7 @@
 \usepackage[italian]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{mathtools}
+\usepackage{siunitx}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -21,6 +22,7 @@
 \newcommand{\status}[1]{\texttt{#1}}
 \newcommand{\artifact}[1]{\texttt{#1}}
 \input{generated/m18_values.tex}
+\input{generated/revision_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
 \author{Alessio de Dato \\ Valerio Rebechi \\[0.8em]\small Matricole: da completare}
 \date{Data di consegna: da completare}
@@ -33,6 +35,10 @@
 Il lavoro affronta la modellistica, la sintesi e la validazione di controllori per un manipolatore planare a due gradi di libertà azionato mediante Series Elastic Actuators. La presenza delle molle torsionali separa le coordinate dei link da quelle dei rotori e introduce modi elastici che rendono necessario considerare, oltre alle prestazioni nominali, l'effetto delle incertezze parametriche e della dinamica non modellata degli attuatori. A partire dalle equazioni non lineari sono stati determinati un equilibrio verticale superiore, il modello incrementale locale e una pianta nominale a 14 stati comprendente secondo ordine e ritardo degli attuatori. Le specifiche temporali e frequenziali sono state fissate prima delle sintesi e tradotte in pesi di sensibilità e di comando.
 
 Sono stati studiati un regolatore LQG nominale, una famiglia di controllori $H_\infty$ e un controllore $K_\mu$ ottenuto mediante D--K iteration. Il regolatore LQG raggiunge i target di tracking nominale, mentre l'estensione integrale evidenzia un conflitto non risolto fra tempo di assestamento, sovraelongazione e sforzo di controllo. Le sintesi $H_\infty$ conservano una norma pesata maggiore di uno e risultati temporali non conformi. La verifica indipendente del controllore $K_\mu$ certifica la Robust Stability sul modello incerto con margine [\KmuRSLower,\KmuRSUpper], ma mantiene Nominal Performance \status{\KmuNPStatus} e Robust Performance \status{\KmuRPStatus}. Le simulazioni non lineari e una campagna Monte Carlo su 40 campioni completano il quadro senza sostituire la $\mu$-analysis. Il confronto finale assegna quindi ruoli distinti: $K_\mu$ è il controllore robusto finale, M6 è il riferimento per la prestazione nominale e $K_{\infty}$ è il comparatore della sintesi $H_\infty$. La relazione conserva esplicitamente tutti gli esiti negativi e i limiti del modello.
+Un'analisi aggiuntiva di Lyapunov include l'intera dinamica nominale aumentata
+dei tre controllori: una maggiorazione analitica fornisce regioni interne
+sufficienti e conservative, distinte dai livelli pi\`u ampi verificati su
+punti finiti. Queste regioni non certificano il modello non lineare incerto.
 \end{abstract}
 \tableofcontents
 \listoffigures

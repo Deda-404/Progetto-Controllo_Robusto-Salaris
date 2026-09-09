@@ -11,6 +11,13 @@ La D--K iteration M13 produce $K_\mu$ di ordine \KmuOrder. La post-analisi M14, 
 Le campagne non lineari e Monte Carlo completano la lettura. M6 conserva il miglior tracking nominale, ma M16 osserva una perdita di stabilità nei Sample ID \MControllerUnstableSampleIds. $K_{\infty}$ e $K_\mu$ sono stabili rispettivamente in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ campioni, pur fallendo il tracking M5. La frazione empirica di $K_\mu$ è coerente con M14, ma non sostituisce la certificazione. Sul modello non lineare nominale tutte le architetture mostrano regioni empiriche di convergenza significative; le stime search-box limited non sono trasformate in frontiere certificate.
 
 \section{Decisione ingegneristica}
+La verifica aggiuntiva di Lyapunov riguarda l'intera dinamica nominale aumentata
+di ciascun controllore, non il solo sottosistema meccanico. Una maggiorazione
+analitica del resto cubico fornisce tre regioni interne sufficienti, piccole
+e conservative. Le ellissi numeriche pi\`u ampie e le mappe di traiettorie
+non sono certificate. Questo risultato non estende M14 al non lineare incerto
+e non sostituisce i requisiti prestazionali falliti.
+
 Non emerge un controllore che domini tutte le metriche. La selezione finale è pertanto per ruolo:
 \begin{itemize}
 \item $K_\mu$ è il controllore robusto finale, per la RS certificata;
@@ -27,6 +34,12 @@ I limiti hanno conseguenze dirette. Senza dati di saturazione e rate limit, i pi
 L'ordine 52 di $K_\mu$ aumenta memoria, costo computazionale e sensibilità numerica di un'eventuale implementazione discreta. Nessuna riduzione è stata applicata nella fase conclusiva, perché preservare approssimativamente la risposta nominale non garantirebbe la conservazione del margine RS. Infine, le regioni empiriche di attrazione dipendono da box, griglia, orizzonte e criterio di convergenza; per M6 e $K_\mu$ la vera frontiera non è stata localizzata.
 
 \section{Sviluppi futuri}
+Per ampliare le regioni interne di Lyapunov si potrebbero studiare coordinate
+meglio scalate e maggiorazioni meno conservative, senza interpretare il
+livello numerico campionato come prova. Una verifica con aritmetica
+intervallare sarebbe necessaria per certificare anche gli arrotondamenti
+del calcolo; non \`e stata eseguita in questa revisione.
+
 Un seguito sperimentale dovrebbe partire dalla caratterizzazione degli attuatori: limiti di coppia e velocità, saturazioni, rate limit, attriti e ritardi misurati. Questi dati consentirebbero di sostituire le sole scale prestazionali con vincoli verificabili e di aggiornare l'incertezza dinamica. Una campagna di identificazione su più configurazioni potrebbe inoltre valutare se le variazioni di rigidezza e inerzia adottate in M4 descrivano correttamente l'impianto.
 
 Sul piano del controllo, una revisione motivata dei pesi potrebbe affrontare il fallimento NP/RP, ma costituirebbe una nuova iterazione di progetto e dovrebbe essere valutata senza cancellare gli esiti presenti. Architetture 2-DoF potrebbero separare tracking e reiezione dei disturbi; l'anti-windup diventerebbe necessario una volta definiti i limiti di attuazione. Una riduzione di $K_\mu$ dovrebbe essere accompagnata da una post-analisi M14 completa, dalle simulazioni non lineari e da una nuova Monte Carlo sugli stessi criteri.

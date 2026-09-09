@@ -74,6 +74,7 @@ ylabel('Singular value [dB]');
 title(layout, 'M10 — Ricostruzione mixed sensitivity hinfsyn', ...
     'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -96,6 +97,7 @@ xlabel('Frequenza [rad/s]'); ylabel('Massima singular value [dB]');
 title('M9/M10 — Mappa pesata quasi equivalente');
 legend('Location', 'best');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -123,6 +125,7 @@ end
 xlabel(layout, 'Tempo [s]', 'Color', 'black');
 title(layout, 'Tracking 5 deg — confronto M6/M9/M10', 'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -150,6 +153,7 @@ xlabel(layout, 'Tempo [s]', 'Color', 'black');
 title(layout, 'Disturbo 0.5 N m — confronto M6/M9/M10', ...
     'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -169,6 +173,7 @@ legend('Tracking', 'Disturbo', 'Location', 'best');
 title(['Sforzo normalizzato — confronto M6/M9/M10; ' ...
     'nessuna saturazione']);
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -186,6 +191,7 @@ xline(0, 'k--', 'HandleVisibility', 'off'); grid on; box on;
 xlabel('Parte reale [s^{-1}]'); ylabel('Parte immaginaria [rad/s]');
 title('Poli interni nominali M9/M10'); legend('Location', 'best');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

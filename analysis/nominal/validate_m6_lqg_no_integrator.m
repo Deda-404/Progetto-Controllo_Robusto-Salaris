@@ -355,6 +355,7 @@ figureHandle = figure('Visible', 'off', 'Color', 'white', ...
 bar(labels, priorities, 'FaceColor', [0.12, 0.48, 0.82]);
 grid on; ylabel('Priorita adimensionale');
 title('M6 - Fattori selezionati dalla ricerca LQR');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -385,6 +386,7 @@ ylabel('Picco di comando peggiore [N m]');
 title('M6 - Compromesso prestazione/sforzo nei 36 candidati LQR');
 legend('Location', 'best');
 colorbar;
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -400,12 +402,13 @@ grid on; xlabel('Rapporto Q_n/R_n relativo');
 ylabel('Rapporto velocita stimatore/regolatore');
 title('Rapidita dell''osservatore');
 nexttile;
-semilogx(caseTable.QOverRRelative, caseTable.RmsControlVariation, ...
+semilogx(caseTable.QOverRRelative, caseTable.RmsControlFixedNoise, ...
     '-o', 'LineWidth', 1.6, 'MarkerFaceColor', [0.86, 0.42, 0.16]);
 grid on; xlabel('Rapporto Q_n/R_n relativo');
 ylabel('RMS variazione comando [N m]');
-title('Sensibilita del comando al rumore');
+title('Stessa sequenza e ampiezza di rumore applicato');
 title(layout, 'M6 - Tre ipotesi didattiche sulle covarianze Kalman');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -425,6 +428,7 @@ for jointIndex = 1:2
     legend(axesHandle, {'q_1', 'q_2', 'r'}, 'Location', 'best');
 end
 xlabel(nexttile(layout, 2), 'Tempo [s]');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -443,6 +447,7 @@ for jointIndex = 1:2
     legend(axesHandle, {'q_1', 'q_2'}, 'Location', 'best');
 end
 xlabel(nexttile(layout, 2), 'Tempo [s]');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -462,6 +467,7 @@ plot(axesHandle, time, noisyOutput(:, 5:6) - ...
 grid(axesHandle, 'on'); ylabel(axesHandle, 'Delta u [N m]');
 xlabel(axesHandle, 'Tempo [s]');
 legend(axesHandle, {'Delta u_1', 'Delta u_2'}, 'Location', 'best');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -480,6 +486,7 @@ scatter(real(estimatorPoles), imag(estimatorPoles), 70, ...
 xline(0, '--k', 'HandleVisibility', 'off'); grid on; box on;
 xlabel('Parte reale [s^{-1}]'); ylabel('Parte immaginaria [s^{-1}]');
 title('M6 - Poli e principio di separazione'); legend('Location', 'best');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

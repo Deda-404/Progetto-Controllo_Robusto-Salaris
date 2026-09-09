@@ -331,6 +331,7 @@ xlabel(phaseAxes, 'Frequenza [rad/s]', 'Color', [0.10, 0.10, 0.10]);
 ylabel(phaseAxes, 'Fase [deg]', 'Color', [0.10, 0.10, 0.10]);
 legend(phaseAxes, 'Location', 'best', ...
     'TextColor', [0.10, 0.10, 0.10], 'Color', 'white');
+set_scientific_figure_style(plotFigure);
 exportgraphics(plotFigure, filePath, 'Resolution', 180);
 close(plotFigure);
 end
@@ -378,6 +379,7 @@ xlabel(phaseAxes, 'Frequenza [rad/s]', 'Color', [0.10, 0.10, 0.10]);
 ylabel(phaseAxes, 'Fase [deg]', 'Color', [0.10, 0.10, 0.10]);
 legend(phaseAxes, 'Location', 'best', ...
     'TextColor', [0.10, 0.10, 0.10], 'Color', 'white');
+set_scientific_figure_style(plotFigure);
 exportgraphics(plotFigure, filePath, 'Resolution', 180);
 close(plotFigure);
 end
@@ -422,6 +424,7 @@ title(plotAxes, 'M3 — Singular values della pianta nominale completa', ...
     'Color', [0.10, 0.10, 0.10]);
 legend(plotAxes, 'Location', 'best', ...
     'TextColor', [0.10, 0.10, 0.10], 'Color', 'white');
+set_scientific_figure_style(plotFigure);
 exportgraphics(plotFigure, filePath, 'Resolution', 180);
 close(plotFigure);
 end

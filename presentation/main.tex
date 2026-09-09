@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
 \usepackage{amsmath}
+\usepackage{siunitx}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{xcolor}
@@ -24,6 +25,7 @@
 \newcommand{\good}[1]{\textcolor{accent}{\textbf{#1}}}
 \newcommand{\bad}[1]{\textcolor{warn}{\textbf{#1}}}
 \input{../report/generated/m18_values.tex}
+\input{../report/generated/revision_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
 \subtitle{Modellazione, sintesi e validazione}
 \author{Alessio de Dato \and Valerio Rebechi}
@@ -91,12 +93,72 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \item $T_s\leq\SettlingTarget$ s
 \item overshoot $\leq\OvershootTarget\%$
 \item errore $\leq\ErrorTargetPct\%$
-\item cross-coupling $\leq\CrossTargetPct\%$
+\item cross-coupling $\leq\CrossTargetPct\%$ (diagnostico)
 \end{itemize}
 \bad{$u_{scale}=\UScaleNm$ N m non è una saturazione hardware.}
 \column{0.58\textwidth}
 \includegraphics[width=\linewidth]{assets/m5_spec_frequency_map.png}
 \end{columns}
+\end{frame}
+
+\begin{frame}{LQR: scale fisiche e pesi sono cose diverse}
+\small
+\[
+v=[\Delta q;\Delta\dot q;\Delta\theta-\Delta q;\Delta\dot\theta]=Fx
+\]
+\[
+\tilde v=S_x^{-1}Fx,\qquad
+Q=F^TS_x^{-T}W_qS_x^{-1}F,\qquad R=S_u^{-T}W_uS_u^{-1}
+\]
+\begin{columns}[T]
+\column{0.48\textwidth}
+Scale: $q_s=5^\circ$, $\dot q_s=12q_s$,
+$\delta_s=0.5/40$ rad, $S_u=12I_2$ N m.
+
+\medskip
+\bad{$q_s$ non è un peso di tuning.}
+\column{0.48\textwidth}
+Ricerca: \MLqrAdmissibleCount/\MLqrCandidateCount\ ammissibili.
+
+$w_q=2,\ w_v=1,\ w_\delta=0.1,\ \rho_U=16$.
+
+\medskip
+$R=I_2/9$; $Q$ non diagonale per $(\theta-q)^2$.
+\end{columns}
+\medskip
+\[
+Q,R\ \longrightarrow\ \mathrm{Riccati}\ \longrightarrow K
+\ \longrightarrow\ \max\Re\lambda(A-BK)=-\RevRegulatorDecay
+\]
+\end{frame}
+
+\begin{frame}{Kalman: ipotesi del progetto, non dati del docente}
+\small
+\[
+\dot{\hat x}=A\hat x+Bu+L(y-C\hat x),\qquad y=[q;\theta]
+\]
+\begin{columns}[T]
+\column{0.47\textwidth}
+$\sigma_d=\sigma_u=0.1$ N m,
+$\sigma_y=0.05^\circ$.
+
+$Q_n=0.01I_4$,
+
+$R_n=(0.05\pi/180)^2I_4$.
+
+\medskip
+Nessuna identificazione sperimentale.
+
+\bad{Non confondere scala del rumore e sua varianza.}
+\column{0.50\textwidth}
+Sensibilità con lo stesso rumore applicato:
+\input{../report/generated/kalman_slide.tex}
+\medskip
+Più fiducia nelle misure: stima più rapida, più rumore nel comando.
+\end{columns}
+\medskip
+$u=-K\hat x+N_rr$: nel nominale lineare i poli LQG sono l'unione
+dei poli di regolatore e stimatore.
 \end{frame}
 
 \begin{frame}{M6 è il riferimento di tracking nominale}
@@ -152,7 +214,7 @@ J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \bad{L'objective di sintesi non è un certificato RS o RP.}
 \end{frame}
 
-\begin{frame}{M14 certifica RS, non la Robust Performance}
+\begin{frame}{M14 certifica RS, ma non NP e RP}
 \begin{columns}[T]
 \column{0.41\textwidth}
 \good{RS: \KmuRSStatus}
@@ -181,21 +243,37 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \end{columns}
 \end{frame}
 
-\begin{frame}{Le RAS sono stime empiriche, non certificati}
+\begin{frame}{Lyapunov: regione interna, non RAS esatta}
 \begin{columns}[T]
-\column{0.37\textwidth}
-\begin{itemize}
-\item M6: search-box limited
-\item $K_{\infty}$: frontiera empirica interna
-\item $K_\mu$: search-box limited
-\end{itemize}
-\bad{Il limite di ricerca non è una frontiera dinamica.}
-\column{0.61\textwidth}
-\includegraphics[width=\linewidth]{assets/ras_common_comparison.png}
+\column{0.48\textwidth}
+\small
+Sistemi aumentati: 28 / 32 / 66 stati.
+\[
+A_{cl}^TP+PA_{cl}=-I,\quad P>0
+\]
+\[
+V=z^TPz,\quad \dot V=2z^TPf_{cl}(z)
+\]
+\[
+\Omega_{\rho_a}=\{z:V(z)\le\rho_a\}
+\]
+Il limite analitico del resto garantisce
+$\dot V<0$ per $z\ne0$ nell'insieme.
+
+\medskip
+\bad{Nominale, Padé 1, senza saturazione.
+Il livello solo campionato non è certificato.}
+\column{0.50\textwidth}
+\includegraphics[width=\linewidth]{assets/lyapunov_lqg_section_slide.png}
+
+\scriptsize
+Esempio LQG: sezione $\Delta\theta=\Delta q$,
+altri stati iniziali nulli. Zoom conservativo;
+la RAS empirica è molto più ampia.
 \end{columns}
 \end{frame}
 
-\begin{frame}{M16 confronta gli stessi 40 campioni M4}
+\begin{frame}{M16: confronto sugli stessi 40 campioni M4}
 \begin{columns}[T]
 \column{0.39\textwidth}
 \begin{itemize}
@@ -241,7 +319,7 @@ $K_{\infty}$: comparatore $H_\infty$
 \item M7 senza controllore integrale finale.
 \item Nessuna saturazione hardware certificata.
 \item Incertezze non identificate sperimentalmente.
-\item RAS e Monte Carlo con semantica empirica.
+\item Lyapunov nominale conservativo; Monte Carlo empirica.
 \item $K_\mu$ resta di ordine \KmuOrder.
 \end{itemize}
 \vfill

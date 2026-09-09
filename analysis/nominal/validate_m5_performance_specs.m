@@ -208,6 +208,7 @@ yline(20 * log10(highGain), ':', 'guadagno ad alta frequenza');
 xline(cornerFrequency, '-.', 'frequenza di transizione');
 grid on; box on;
 xlabel('Frequenza [rad/s]'); ylabel('Modulo [dB]'); title(plotTitle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -236,6 +237,7 @@ xlim(axesHandle, [4, 120]); ylim(axesHandle, [-0.5, 4.5]);
 grid(axesHandle, 'on'); box(axesHandle, 'on');
 xlabel(axesHandle, 'Frequenza [rad/s]');
 title(axesHandle, 'Separazione delle scale di progetto');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

@@ -287,6 +287,7 @@ legendHandle = legend([familyLines(1), envelopeLine, weightLine], ...
 localStyleLegend(legendHandle);
 grid on;
 xlim([family.frequencies(1), family.frequencies(end)]);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, fileName, 'Resolution', 180);
 end
 
@@ -321,6 +322,7 @@ legendHandle = legend([firstSampleLine, nominalLine], ...
 localStyleLegend(legendHandle);
 grid on;
 xlim([frequencies(1), frequencies(end)]);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, fileName, 'Resolution', 180);
 end
 

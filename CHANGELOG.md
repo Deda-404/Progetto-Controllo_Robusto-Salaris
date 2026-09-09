@@ -4,6 +4,28 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Pubblicazione Git — 2026-09-09
+
+- Conservato il MAT delle traiettorie Lyapunov mediante Git LFS: il push
+  ordinario è stato rifiutato dal limite GitHub di 100 MiB per file.
+- Aggiornate le istruzioni di clone; nessuna modifica a codice, risultati,
+  figure o PDF. Adeguato soltanto il commit locale non ancora pubblicato.
+
+### Revisione tecnica Lyapunov — 2026-09-08
+
+- Riscritti i percorsi didattici LQG e H-infinity: scale, Q/R, CARE, Kalman,
+  sensibilità a rumore identico, generalized plant e simulazioni esplicite.
+- Aggiunto Lyapunov nominale aumentato per LQG/Khinf/Kmu con bound cubico
+  analitico e livello campionato separato; salvate 48 traiettorie di controllo.
+- Rigenerate figure a sfondo bianco con assi/testi neri; ampliate le sezioni
+  7.2–7.4 e 10 della relazione, aggiunte slide Q/R, Kalman e Lyapunov.
+- Esportate automaticamente matrici e tabelle; aggiornate tracciabilità,
+  note orali e timing (19 slide, 19:00).
+- L'audit LaTeX ora fallisce anche per overfull; il generatore M18 non
+  dichiara più autonomamente PASS la suite che non esegue.
+- Nessuna modifica ai controllori congelati, ai pesi M5 o alle conclusioni
+  negative; nessuna nuova sintesi robusta o retuning.
+
 ### Added
 
 - Script didattico `analysis/modellazione_linearizzazione_controllo.m`, che
