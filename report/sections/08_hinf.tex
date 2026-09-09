@@ -46,6 +46,17 @@ Prima di eseguire \texttt{hinfsyn}, il controllore M9 viene chiuso sulla nuova $
 La differenza relativa fra gli objective M9 e M10 è trascurabile. La conclusione metodologica non è che M10 migliori M9, ma che \texttt{mixsyn} e la generalized plant esplicita producano controllori quasi equivalenti quando pianta, pesi, convenzioni e canali sono gli stessi. Entrambi mantengono $\gamma>1$ e falliscono il tracking M5. La generalized plant esplicita è tuttavia essenziale per le fasi successive, perché rende trasparenti partizioni e interconnessioni richieste da \texttt{hinfstruct}, dalla $\mu$-analysis e dalla D--K iteration.
 
 \section{M11: strutture implementabili}
+Il file didattico ricostruisce i passaggi nominali precedenti con
+\texttt{tf}, \texttt{ss}, \texttt{sumblk}, \texttt{connect} e la formula
+a blocchi di $P$, che vengono confrontate numericamente. Il comando
+\texttt{hinfsyn(P,2,2)} rimane leggibile, ma il flag
+\texttt{ricalcolaSintesi=false} preserva il controllore salvato.
+Si verificano la norma pesata e i 32 poli della chiusura completa.
+Tre campioni M4 illustrano la dispersione senza essere confusi con M16;
+il recupero non lineare da $[5^\circ,0]^T$ conduce poi alla verifica
+Lyapunov del Capitolo 10. Questo percorso non contiene una nuova sintesi
+robusta e non promuove $\gamma>1$ a prestazione conforme.
+
 Un controllore full-order di ordine 18 può essere oneroso e poco interpretabile. M11 studia quindi sei famiglie strutturate senza cambiare il problema di ottimizzazione: guadagno statico MIMO, due PI decentralizzati, due PID filtrati e tre realizzazioni MIMO full di ordine 2, 4 e 6. Per ogni famiglia sono conservate cinque partenze, per un totale di 30 ottimizzazioni. Stabilità interna e objective vengono verificati su ogni risultato, senza eliminare i tentativi non validi.
 
 Le architetture A0 e A1 non producono objective finiti; A2 fornisce alcuni valori finiti ma nessun controllore internamente stabile. A3, A4 e A5 producono cinque soluzioni stabili ciascuna. I loro migliori objective sono rispettivamente circa $16.6419$, $11.6555$ e \AFiveGamma. L'aumento dell'ordine riduce quindi il divario dalla soluzione full-order, definendo una frontiera di Pareto fra complessità e norma pesata. A5 raggiunge un valore vicino a M10 con ordine 6, ma resta sopra uno e non soddisfa i target temporali.

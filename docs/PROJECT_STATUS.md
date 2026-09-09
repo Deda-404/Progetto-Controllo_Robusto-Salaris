@@ -1,74 +1,69 @@
 # Stato del progetto
 
-**Fase corrente:** refactoring strutturale e didattico concluso
+**Fase corrente:** revisione tecnica del refactoring strutturale e didattico conclusa e validata.
 
-**Ramo:** `codex/didactic-structural-refactor`
+**Ramo:** `codex/lyapunov-technical-coherence-review`
 
 **Autori:** Alessio de Dato, Valerio Rebechi
 
-**Ultimo aggiornamento:** 2026-09-01
+**Ultimo aggiornamento:** 2026-09-09
 
 ## Decisioni vincolanti
 
-- M0–M5 formano la macrofase «Modellazione, linearizzazione e definizione del problema di controllo».
 - Esiste un unico insieme incerto M4; non sono presenti scenari alternativi.
-- Specifiche e pesi M5 sono congelati.
-- M6 LQG, M10 Khinf e M13 Kmu sono congelati; non sono state aperte nuove sintesi né eseguito retuning.
+- Specifiche e pesi M5, M6 LQG, M10 Khinf e M13 Kmu sono congelati.
+- La ricerca LQR da 36 combinazioni è riprodotta senza cambiare candidati, score o selezione LQR30; non è un nuovo retuning.
 - M16 è una valutazione Monte Carlo empirica e non sostituisce la μ-analysis M14.
-- Gli esiti negativi sono risultati tecnici e restano visibili.
+- Gli esiti negativi rimangono risultati tecnici, non errori da occultare.
+- La nuova analisi Lyapunov è nominale, aumentata e senza saturazione: non modifica la certificazione M14.
 
-## Struttura didattica corrente
+## Revisione corrente
 
-La macrofase iniziale è percorribile per sezioni in `analysis/modellazione_linearizzazione_controllo.m`. Le funzioni matematiche riutilizzabili e i validator numerici restano separati.
+I due script `analysis/progetto_lqg.m` e `analysis/progetto_hinf.m` espongono direttamente modello, scale, matrici e calcoli. Il primo distingue qs fisico e pesi adimensionali, sviluppa Q/R, CARE e Kalman, verifica separazione e simulazioni. Il secondo ricostruisce i pesi e la pianta generalizzata, ricarica Khinf e ne verifica norme, risposta e stabilità interna.
 
-| Parte | Scelta diretta | Verifica MATLAB |
-| --- | --- | --- |
-| M3 attuatore | wn 40 rad/s, ζ 0.8, ritardo 15 ms, Padé 1 | confronto manuale lento/nominale/veloce, `stepinfo`, `bandwidth`, Bode |
-| M4 meccanica | Jm1, k1, k2 tutti ±10% | range, nominale, struttura `ureal`, campioni `usample` |
-| M4 attuatori | wn e ζ ±10%, ritardo ±20% | famiglia di 120 modelli e copertura WI ordine 1 |
-| M5 | ωB 12 rad/s, As 0.05, Ms 2, uScale 12 N m, ωU 30 rad/s, α 6 | asintoti, properness e disturbance path |
-| M6 LQR | LQR30, 9/36 ammissibili, rhoU 16 | CARE, stabilità, separazione e tracking |
-| M6 Kalman | σd=σu=0.1 N m, σy=0.05° | stabilità dello stimatore e rapporto di velocità 1.510 |
-| M7 | tre verifiche manuali LQI | tutte stabili e con offset nullo; nessuna conforme insieme a Ts e overshoot |
+Le sigma Kalman sono ipotesi progettuali, non dati del docente. I tre stimatori sono confrontati con la stessa sequenza di rumore applicato. Il progetto nominale rimane invariato.
 
-Le ricerche cartesiane, le classifiche e le funzioni di selezione automatica M3–M7 sono state rimosse. I test verificano il comportamento matematico pubblico e l'assenza dei moduli obsoleti.
+La nuova analisi Lyapunov include 28/32/66 stati per LQG/Khinf/Kmu. Il limite analitico del resto cubico produce regioni interne sufficienti con rho circa 6.0044e-9, 3.5414e-10, 2.9332e-11. Le regioni campionate più ampie non sono certificate. Sono salvate 48 traiettorie aggiuntive e le matrici complete.
 
-## Esiti tecnici principali
+## Esiti tecnici preservati
 
-| Milestone | Stato | Evidenza sintetica |
-| --- | --- | --- |
-| M1–M5 | `PASS` | modello, equilibrio, linearizzazione, attuatori, unico M4, specifiche e pesi verificati |
-| M6 | `PASS` | LQG nominale ordine 14; ricerca 36 casi, 9 ammissibili; worst Ts 0.678 s |
-| M7 | `PARTIAL` | tre prove manuali; offset da disturbo annullato, ma 0/3 conformi a settling e overshoot |
-| M8 | `COMPLETE` | validazione non lineare M6 e RAS empirica |
-| M9–M11 | `PARTIAL` | sintesi H∞ corrette come metodo, obiettivi pesati maggiori di uno |
-| M12 A5 | `PARTIAL` | NS PASS, NP FAIL, RS `[0.849720, 0.859945]` FAIL_CERTIFIED, RP FAIL_CERTIFIED |
-| M13 Kmu | `COMPLETE` | artifact congelato, ordine 52; nessuna nuova `musyn` |
-| M14 Kmu | `PARTIAL` | NS PASS, NP FAIL, RS `[1.069561,1.212875]` PASS_CERTIFIED, RP FAIL_CERTIFIED |
-| M15 | `PARTIAL` | Khinf/Kmu stabili nominalmente ma tracking M5 fallito; RAS empiriche |
-| M16 | `COMPLETE` empirico | M6 38/40, Khinf 40/40, Kmu 40/40; Sample 5 e 6 M6 instabili |
-| M17 | `COMPLETE` | Kmu robusto finale, M6 riferimento nominale, Khinf comparatore H∞ |
-| M18 | `COMPLETE` | tracciabilità, relazione e presentazione compilate e auditate |
+| Evidenza | Risultato |
+| --- | --- |
+| M6 nominale | 9/36 candidati ammissibili; LQR30; Ts peggiore 0.678 s |
+| M7 integrale | PARTIAL: 0/3 conformi simultaneamente a settling e overshoot |
+| M10 Khinf | ordine 18; gamma 10.2071 > 1 |
+| M13 Kmu | ordine 52; controllore D–K storico congelato |
+| M14 Kmu | RS [1.069561,1.212875] PASS_CERTIFIED; NP FAIL; RP FAIL_CERTIFIED |
+| M16 | M6 38/40, Khinf 40/40, Kmu 40/40; Sample 5 e 6 M6 instabili |
+| M17 | Kmu robusto finale; M6 riferimento nominale; Khinf comparatore |
 
-## Interpretazione conclusiva
+Le regioni empiriche M8/M15 e le frazioni Monte Carlo non diventano certificati grazie alla nuova analisi nominale. Il valore rho dipende dalle coordinate interne e non classifica i controllori. uScale=12 N m non è una saturazione hardware.
 
-Kmu resta il controllore robusto finale perché M14 certifica la Robust Stability sull'M4 corrente. Questa proprietà non cancella NP, RP e tracking falliti. M6 resta il riferimento nominale, ma non possiede un certificato RS e perde stabilità nei Sample 5 e 6 M16. Khinf resta il comparatore full-order H∞.
+## Verifica della revisione corrente
 
-Le frazioni 38/40 e 40/40 non sono probabilità fisiche. La certificazione RS deriva soltanto dalla μ-analysis M14. `uScale=12 N m` è una normalizzazione di prestazione, non una saturazione hardware.
+- Script didattici LQG e H-infinity: eseguiti, identità dei controllori verificata.
+- Test mirati: 50/50 PASS.
+- Lyapunov: tre modelli, verifica indipendente di 8192 punti ciascuno; 48 traiettorie.
+- Figure documentali: rigenerate con sfondo bianco e testi/assi neri.
+- Relazione: 63 pagine; presentazione: 19 slide, stima 19:00.
+- Prima compilazione: una riga fuori margine; corretta. Audit successivo: PASS, zero errori/riferimenti irrisolti/overfull/destinazioni duplicate.
+- Suite completa conclusiva: 644/644 PASS, 0 failed, 0 incomplete. Il tentativo intermedio con errore I/O PNG (631 PASS, 13 incomplete/failed) è conservato separatamente; la riesecuzione isolata è PASS.
+- Code Analyzer: 172 file di progetto, 0 segnalazioni dopo correzione dei tre avvisi iniziali.
+- Consegna M18 conclusiva: 60/60 PASS; 24 asset della relazione e 10 delle slide identici alle figure sorgenti per SHA-256; PDF ricompilati dopo la sincronizzazione, audit PASS.
+- `git diff --check`: PASS. M5/Q/R/K/L M6 invariati rispetto alla baseline; artifact M10/M13/M14/M16 identici byte per byte.
+- `run_all`: NOT RUN in questa revisione perché rilancerebbe le sintesi M9–M11. La suite usa gli artifact congelati.
+- Nessuna nuova musyn, hinfsyn, mixsyn o hinfstruct; nessun retuning.
 
-## Quality gate conclusivo
+Gli esiti 599/599, run_all PASS e 47 pagine/17 slide appartengono alla revisione precedente, ora integrata nella PR 26: non sono la validazione della revisione corrente.
 
-- [x] revisione M0–M8 e propagazione M12–M18;
-- [x] M5, Khinf e Kmu invariati; M6 aggiornato dalla sola ricerca LQR autorizzata e poi congelato;
-- [x] M12, M14, M16 e M17 rigenerati sull'M4 corrente;
-- [x] artifact obsoleti rimossi e recuperabili mediante Git;
-- [x] suite MATLAB completa: 599/599 PASS;
-- [x] `run_all` M0–M18: PASS, exit code 0;
-- [x] Code Analyzer: 162 file di progetto, 0 segnalazioni;
-- [x] `git diff --check`: PASS;
-- [x] audit lessicale del codice e della documentazione corrente: PASS;
-- [x] relazione: 47 pagine, audit LaTeX PASS, ispezione visiva PASS;
-- [x] presentazione: 17 slide, audit LaTeX PASS, ispezione visiva PASS;
-- [x] resoconto corrente Markdown e TXT prodotto.
+## Consegna e Git
 
-Restano da completare manualmente soltanto le matricole degli autori e la data di consegna. Commit, branch remoto e Pull Request sono registrati nel resoconto corrente; `main` non viene modificato direttamente.
+Su richiesta del gruppo è stata avviata la pubblicazione del ramo di revisione.
+Il primo push è stato rifiutato perché il MAT delle traiettorie pesa 260319104
+byte. Il file viene quindi conservato integralmente con Git LFS, senza
+ricalcolare i risultati. La pubblicazione riguarda il branch, non un merge su
+main; le istruzioni di clone LFS sono nel README.
+
+Baseline remota verificata: PR 26 integrata, main a ec93ddfe5e926f02c0373e7cee86236c3460f2eb. Il nuovo lavoro è separato sul ramo indicato e non modifica main direttamente.
+
+Restano da completare le matricole e la data di consegna. Il resoconto dettagliato corrente è `docs/REVISIONE_TECNICA_LYAPUNOV.md`; la versione TXT ne facilita il trasferimento. Pubblicazione e revisione manuale non equivalgono a un merge automatico.

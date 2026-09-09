@@ -197,7 +197,7 @@ il caso M6 instabile e l'assenza di certificazione RS M6/Khinf restano limiti es
 
 ## Deliverable finali
 
-- [x] `run_all.m` rigenera deterministicamente tutti i risultati finali.
+- [x] `run_all.m` mantiene la pipeline storica M0–M18; il percorso di revisione congelata aggiunge esplicitamente Lyapunov e script didattici come documentato nel README.
 - [x] Parametri e specifiche hanno un'unica sorgente.
 - [x] Test automatici completi e tutti gli esiti documentati.
 - [x] Dati, figure e tabelle generati automaticamente.
@@ -206,7 +206,16 @@ il caso M6 instabile e l'assenza di certificazione RS M6/Khinf restano limiti es
 - [x] Codice MATLAB e modelli Simulink consegnabili.
 - [x] Presentazione basata sulla relazione e contenuta in 20 minuti.
 
-M18 chiude i deliverable con relazione di 27 pagine, presentazione di 17
-slide e timing stimato 17:30. Le caselle aperte nelle sezioni tecniche
+La revisione tecnica aggiorna i deliverable a una relazione di 63 pagine,
+presentazione di 19 slide e timing stimato 19:00. Le caselle aperte nelle sezioni tecniche
 rimangono intenzionalmente aperte: la finalizzazione documentale non
 trasforma risultati falliti, parziali o non eseguiti in requisiti soddisfatti.
+
+## Lyapunov nominale: revisione tecnica
+
+- [x] Matrici aumentate complete LQG/H-infinity/Kmu, QL=I e P positiva.
+- [x] Residuo dell'equazione di Lyapunov e Jacobiano non lineare verificati.
+- [x] Maggiorazione analitica del resto e regione interna sufficiente.
+- [x] Ricerca di un livello più ampio con campionamento, margine e seed espliciti; nessuna certificazione attribuita a punti finiti.
+- [x] Sezioni coerenti con le condizioni iniziali empiriche e 48 traiettorie aggiuntive.
+- [ ] Regione di attrazione massima, modello non lineare incerto, saturazioni hardware e verifica con aritmetica intervallare: non ottenuti.

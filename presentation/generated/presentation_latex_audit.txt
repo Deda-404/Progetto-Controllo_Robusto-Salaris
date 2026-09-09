@@ -5,5 +5,5 @@ UNRESOLVED_REFERENCES=0
 OVERFULL_HBOX=0
 OVERFULL_VBOX=0
 DUPLICATE_DESTINATIONS=0
-Pages:           17
+Pages:           19
 PDF=C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\presentation\Progetto_CR_Presentazione.pdf

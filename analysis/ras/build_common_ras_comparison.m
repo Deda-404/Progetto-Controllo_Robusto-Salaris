@@ -137,6 +137,7 @@ function localPlotSingle(search, controller, searchBoxDeg, filePath)
 figureHandle = figure('Visible', 'off', 'Color', 'white', ...
     'Position', [100, 100, 780, 720]);
 localPlotOnAxes(gca, search, controller, searchBoxDeg, true);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -153,6 +154,7 @@ end
 xlabel(layout, 'delta q_1(0) [deg]');
 ylabel(layout, 'delta q_2(0) [deg]');
 title(layout, 'Confronto RAS empiriche con metodologia comune');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

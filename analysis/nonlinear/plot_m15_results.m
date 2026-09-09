@@ -164,5 +164,6 @@ f = figure('Visible', 'off', 'Color', 'white', ...
     'Position', [100, 100, 1200, 800]);
 end
 function localSave(f, path)
+set_scientific_figure_style(f);
 exportgraphics(f, path, 'Resolution', 180); close(f);
 end

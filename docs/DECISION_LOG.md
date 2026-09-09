@@ -1992,3 +1992,46 @@ una campagna empirica comune 39/40, 40/40, 40/40 e non sostituisce M14.
 
 **APPROVATO COME SEMPLIFICAZIONE DIDATTICA; NESSUNA NUOVA SINTESI O
 CERTIFICAZIONE ATTRIBUITA ALLA MONTE CARLO.**
+
+## D-0046 — Revisione tecnica nominale di Lyapunov e trasparenza LQG
+
+Data: 2026-09-08/09. Responsabile: Alessio.
+
+### Decisione
+
+Si recepisce la revisione tecnica richiesta dopo la PR 26. M5 e i controllori M6, M10, M13 restano congelati. La scelta LQR30 con 9/36 ammissibili appartiene alla revisione precedente: la ricerca viene riprodotta a parità di candidati e criterio, non riaperta. La rimozione delle ricerche M3–M7 descritta in D-0045 non descrive più M6; il replay corrente mantiene la ricerca M6 già approvata nella PR 26.
+
+La normalizzazione distingue qs=5 gradi, qds=12 qs, ds=0.5/40 rad e uScale=12 N m dai pesi adimensionali wq=2, wv=1, wdelta=0.1 e rhoU=16. Le sigma Kalman sono ipotesi del progetto, non dati del docente. Una sensibilità semplice varia solo la covarianza assunta, mantenendo identico il rumore applicato.
+
+### Metodo e alternative
+
+Una ricerca numerica di Vdot su punti finiti, da sola, non certifica una RAS. Per questo si affianca al livello campionato una condizione sufficiente analitica: maggiorazione cubica del resto nominale e P dall'equazione di Lyapunov sul sistema completo. Sono inclusi 28/32/66 stati rispettivamente per LQG/Khinf/Kmu. Si evita di certificare soltanto il sottosistema fisico omettendo osservatore o controllore dinamico.
+
+Si conserva QL=I nelle coordinate numeriche correnti. Un'ottimizzazione del certificato, cambi di coordinate più sofisticati o aritmetica intervallare restano sviluppi futuri. La doppia precisione e il controllo dei residui non sono una prova formale degli arrotondamenti.
+
+### Conseguenze
+
+- Il limite analitico è molto conservativo, nominale, senza saturazioni e con Padé 1; non è una RAS massima.
+- Il livello campionato più ampio e le mappe M8/M15 restano evidenze numeriche.
+- Le 48 traiettorie aggiuntive non ampliano il certificato.
+- M14 e M16 non sono riclassificate; i conteggi correnti M16 sono 38/40, 40/40, 40/40, con Sample 5 e 6 M6 instabili. Il precedente 39/40 in D-0045 è storico.
+- Non viene eseguito run_all perché rilancerebbe M9–M11. Sono eseguiti suite completa, script didattici, validatori e rigenerazione grafica a controllori congelati.
+- I flag M18 descrivono soltanto il generatore documentale; la suite completa non viene più dichiarata PASS da una funzione che non la esegue.
+
+### Stato epistemico
+
+METODO IMPLEMENTATO ED ESEGUITO. Bound analitico sufficiente sul nominale, con matrici e residui verificati in doppia precisione; nessuna verifica intervallare e nessun nuovo certificato robusto M4.
+
+## D-0047 — Conservazione delle traiettorie mediante Git LFS
+
+Data: 2026-09-09. Responsabile: Alessio.
+
+Per pubblicare il lavoro richiesto dal gruppo senza perdere dati, il solo
+artifact results/data/lyapunov_trajectories.mat viene gestito tramite Git LFS.
+Il push ordinario è stato rifiutato per la dimensione di 260319104 byte.
+Non si riducono campioni o precisione e non si ripetono simulazioni.
+
+La conversione riguarda il formato di archiviazione Git, non i byte del MAT
+disponibile nel working tree. Si adegua il solo commit locale mai pubblicato;
+main e la cronologia remota sono preservati. Per ottenere i dati completi
+dopo il clone occorre Git LFS. La decisione non autorizza un merge automatico.

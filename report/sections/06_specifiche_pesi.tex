@@ -19,7 +19,7 @@ Questa posizione della banda esprime un compromesso preciso. Scendere verso il p
 \section{Peso sulla sensibilità}
 Con $S=(I+GK)^{-1}$ adottiamo
 \[
-W_1(s)=\frac{s/M_s+\omega_B}{s+\omega_BA_s},qquad
+W_1(s)=\frac{s/M_s+\omega_B}{s+\omega_BA_s},\qquad
 A_s=0.05,\quad M_s=2.
 \]
 Ponendo $s=0$ si ottiene
@@ -32,18 +32,34 @@ W_1(\infty)=\frac{1}{M_s}=0.5.
 \]
 Il vincolo lascia quindi un picco di sensitivity dell'ordine di $M_s=2$; $\omega_B$ colloca la transizione tra accuratezza statica e roll-off.
 
+La frequenza a modulo unitario non coincide esattamente con $\omega_B$:
+\[
+\omega_{|W_1|=1}=\omega_B
+\sqrt{\frac{1-A_s^2}{1-1/M_s^2}}=\RevHinfCrossover\ \mathrm{rad/s}.
+\]
+Polo e zero sono rispettivamente 0.6 e 24 rad/s.
+
 La lettura del peso deve essere fatta attraverso il suo inverso. Se $\|W_1S\|_\infty<1$, allora $\bar\sigma(S)<1/|W_1|$: a bassa frequenza l'errore deve essere piccolo, nella zona di transizione si fissa la rapidità desiderata e ad alta frequenza il vincolo si rilassa. Non si tenta quindi di rendere $S$ piccolo a tutte le frequenze, cosa incompatibile con il roll-off e con i limiti di robustezza.
 
 \section{Peso sul comando}
 La scala $u_{scale}=12$ N m è una normalizzazione prestazionale, non una saturazione hardware. Usiamo
 \[
 W_2(s)=\frac{1}{u_{scale}}
-\frac{s/\omega_U+1}{s/(\alpha\omega_U)+1},qquad
+\frac{s/\omega_U+1}{s/(\alpha\omega_U)+1},\qquad
 \omega_U=30\ \mathrm{rad/s},\quad\alpha=6.
 \]
 A bassa frequenza $W_2(0)=1/12$; ad alta frequenza tende a $\alpha/12=0.5$. La penalizzazione del comando cresce quindi di un fattore sei prima dei modi elastici, scoraggiando azioni rapide nella regione in cui ritardo e flessibilità rendono il modello meno affidabile.
 
-Anche qui il limite è $1/|W_2|$. Alle basse frequenze il comando può sfruttare la scala di 12 N m; oltre $\omega_U$ il bound si riduce fino a circa 2 N m. Questa forma non simula un saturatore e non prova la compatibilità con una curva coppia--velocità reale: introduce soltanto una misura normalizzata dello sforzo di controllo nel problema $H_\infty$.
+Anche qui l'inviluppo desiderato è $1/|W_2|$: il suo valore numerico passa
+da 12 a 2. Esso limita la mappa $KS:r\mapsto u$, cioè il guadagno
+energetico del comando rispetto al riferimento nelle coordinate SI adottate,
+non il picco istantaneo assoluto di coppia. In particolare, un gradino di
+5 gradi non è un ingresso unitario e una norma frequenziale non è una
+saturazione nel tempo. Non viene provata la compatibilità con una curva
+coppia--velocità reale. $\omega_U=30$ è lo zero del peso, mentre il polo
+è a 180 rad/s: poiché $|W_2|$ resta fra $1/12$ e $1/2$, non esiste un
+crossover unitario del peso. La scelta penalizza lo sforzo nella mixed
+sensitivity senza introdurre limiti hardware non forniti dalla traccia.
 
 \section{Implementazione e interpretazione}
 I pesi MIMO sono due copie diagonali dei pesi SISO e non viene usato $W_3$. La mixed sensitivity è

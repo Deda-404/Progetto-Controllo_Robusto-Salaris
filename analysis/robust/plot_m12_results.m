@@ -54,6 +54,7 @@ xlabel('Frequenza [rad/s]'); ylabel('Bound di mu');
 title('M12 — structured singular value per Robust Stability');
 legend('Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -73,6 +74,7 @@ xlabel('Frequenza [rad/s]'); ylabel('Massima singular value [dB]');
 title('M12 — weighted closed loop nominale e worst-case');
 legend('Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -94,6 +96,7 @@ ylabel('Robust stability margin');
 title(sprintf('M12 — RS, frequenza critica %.3f rad/s', ...
     robustStability.margin.CriticalFrequency));
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -111,6 +114,7 @@ ylabel('Peak gain pesato');
 title(['M12 — NP fallita e worst-case gain non limitato ' ...
     'nell''insieme M4']);
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -129,6 +133,7 @@ title('M12 — sensibilità RS e perturbazioni critiche normalizzate');
 legend('RS sensitivity', 'WCU RS', 'WCU wcgain', ...
     'Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -146,6 +151,7 @@ yline(0, 'k-', 'HandleVisibility', 'off');
 grid on; box on; ylabel('Classificazione');
 title('M12 — sintesi separata NS / NP / RS / RP');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

@@ -1,0 +1,13 @@
+nomi,valori,sourceArtifact,sourceField
+RevQs,0.0872664625997165,results/data/didactic_lqg_calculations.mat,"qs"
+RevQds,1.0471975511966,results/data/didactic_lqg_calculations.mat,"Sx(3,3)"
+RevDeltaScale,0.0125,results/data/didactic_lqg_calculations.mat,"Sx(5,5)"
+RevCareResidual,2.91284888456758e-10,results/data/didactic_lqg_calculations.mat,"norm(residuoCare,'fro')"
+RevRegulatorDecay,6.1716908436209,results/data/didactic_lqg_calculations.mat,"min(-real(poliLqr))"
+RevEstimatorDecay,9.31873988713687,results/data/didactic_lqg_calculations.mat,"min(-real(poliKalman))"
+RevSeparation,2.09440917929933e-13,results/data/didactic_lqg_calculations.mat,"erroreSeparazione"
+RevRn,7.61543549466772e-07,results/data/didactic_lqg_calculations.mat,"Rn(1,1)"
+RevCubicBound,18892.998210463,results/data/lyapunov_ras_nominal.mat,"risultati{1}.bound.c"
+RevHinfCrossover,13.839075113605,results/data/didactic_hinf_calculations.mat,"crossoverW1"
+RevTrajectoryFinalV,7.15552791558084e-07,results/data/lyapunov_trajectories.mat,"max(tabella.rapportoFinaleV)"
+RevTrajectoryIncrement,7.36928400834256e-22,results/data/lyapunov_trajectories.mat,"max(tabella.maxIncrementoRelativo)"

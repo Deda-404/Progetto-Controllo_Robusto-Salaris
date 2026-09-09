@@ -2,13 +2,23 @@
 I valori riportati nella relazione non sono trascritti manualmente dai grafici. La generazione M18 carica i risultati validati delle milestone M1--M17, verifica la presenza dei campi richiesti e produce le macro in \artifact{report/generated/m18\_values.tex}. Ogni macro conserva l'associazione con milestone, file dati e campo MATLAB da cui proviene.
 
 Le tabelle sono costruite dallo stesso insieme di evidenze mediante il
+generatore storico M18 e il nuovo
+\path{build_technical_revision_tables.m}. Quest'ultimo carica i calcoli
+didattici LQG/$H_\infty$, i tre certificati interni nominali e le traiettorie
+di controllo, producendo matrici, tabelle e
+\path{report/generated/revision_values.tex}. La provenienza delle nuove
+macro \`e registrata in \path{report/generated/revision_numeric_audit.csv}.
+Le tabelle storiche rimangono prodotte dal
 generatore MATLAB della fase M18, collocato nella cartella
 \path{analysis/finalization}. Questo meccanismo riduce il rischio che relazione,
 presentazione e dataset mostrino numeri differenti. La revisione editoriale può
 modificare formulazioni, ordine degli argomenti e didascalie, ma le quantità
 tecniche restano legate ai risultati numerici verificati.
 
-Le figure usate nei deliverable sono elencate nel manifest seguente. Ogni file è copiato in modo deterministico da un risultato validato e ne conserva hash, milestone e destinazione.
+Gli asset selezionati per i deliverable sono elencati nel manifest seguente.
+Ogni file \`e copiato da un risultato validato e conserva nome, milestone e
+destinazione. L'uso effettivo nelle slide \`e ricavato dal sorgente Beamer;
+il manifest comprende anche l'asset empirico M8 mantenuto per consultazione.
 \input{generated/figure_manifest.tex}
 
 La matrice completa requisito--milestone--risultato--sezione è mantenuta nel

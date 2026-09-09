@@ -21,6 +21,8 @@ gainFrobeniusNorm = zeros(numberCases, 1);
 h2NoiseAmplification = zeros(numberCases, 1);
 rmsEstimationErrorQ = zeros(numberCases, 1);
 rmsControlVariation = zeros(numberCases, 1);
+rmsEstimationErrorFixedNoise = zeros(numberCases, 1);
+rmsControlFixedNoise = zeros(numberCases, 1);
 selected = false(numberCases, 1);
 
 for index = 1:numberCases
@@ -33,6 +35,11 @@ for index = 1:numberCases
     [rmsEstimationErrorQ(index), rmsControlVariation(index)] = ...
         localNoiseMetrics(realization.lqgClosedLoop, ...
         kalmanDesign.sigmaYRad, m5Data.spec, caseConfig);
+    % Confronto aggiuntivo a ingresso identico: varia solo il filtro,
+    % non la sequenza applicata ne la sua ampiezza nominale di 0.05 deg.
+    [rmsEstimationErrorFixedNoise(index), rmsControlFixedNoise(index)] = ...
+        localNoiseMetrics(realization.lqgClosedLoop, ...
+        deg2rad(config.kalman.sigmaMeasurementDeg),m5Data.spec,caseConfig);
     qOverRRelative(index) = ...
         (config.kalman.sigmaMeasurementDeg / sigmaYDeg(index))^2;
     estimatorSpeedRatio(index) = kalmanDesign.estimatorSpeedRatio;
@@ -60,6 +67,10 @@ sensitivity.interpretation = [ ...
     "smaller Rn relative to Qn trusts measurements more and speeds the observer"; ...
     "larger Rn relative to Qn filters measurements more strongly"; ...
     "the multivariable effect also depends on G, C and the Riccati solution"];
+sensitivity.table.RmsEstimationErrorFixedNoise = rmsEstimationErrorFixedNoise;
+sensitivity.table.RmsControlFixedNoise = rmsControlFixedNoise;
+sensitivity.fixedAppliedSigmaYDeg = config.kalman.sigmaMeasurementDeg;
+sensitivity.fixedNoiseMeaning = "same seeded input and amplitude; only assumed Rn changes";
 end
 
 function [rmsEstimationErrorQ, rmsControlVariation] = ...

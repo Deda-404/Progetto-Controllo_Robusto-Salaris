@@ -27,6 +27,7 @@ yline(synthesis.musynObjective, ':', 'LineWidth', 1.3, ...
     'DisplayName', 'Final musyn objective');
 xlabel('D-K iteration'); ylabel('Reported robust objective');
 title('M13 D-K objective history'); grid on; legend('Location', 'best');
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.objectiveHistory, 'Resolution', 180);
 close(fig);
 
@@ -44,6 +45,7 @@ else
     ylabel('Availability');
 end
 xlabel('D-K iteration'); title('M13 D/G scaling fit order'); grid on;
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.dScaleOrder, 'Resolution', 180);
 close(fig);
 
@@ -59,6 +61,7 @@ xlabel('D-K iteration'); ylabel('Controller order');
 title('M13 controller complexity through D-K iterations'); grid on;
 legend({'Iteration controller', 'Returned best controller'}, ...
     'Location', 'best');
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.controllerOrder, 'Resolution', 180);
 close(fig);
 
@@ -83,6 +86,7 @@ yline(1, ':', 'DisplayName', 'Unit target');
 xlabel('Frequency [rad/s]'); ylabel('Maximum singular value');
 title('Nominal weighted closed-loop comparison'); grid on;
 legend('Location', 'best');
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.nominalWeighted, 'Resolution', 180);
 close(fig);
 
@@ -94,6 +98,7 @@ title('Full pole set');
 localPoleAxes(nexttile, nominalAudit, [-250, 2]);
 title('Dominant-region detail');
 title(layout, 'M13 nominal pole audit');
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.poles, 'Resolution', 180);
 close(fig);
 
@@ -110,6 +115,7 @@ title(sprintf('M13 D-K: %s, %d/%d iterations', ...
     numel(tableData.Iteration) + max(0, ...
         synthesis.optionsSnapshot.MaxIter - history.iterationCount)), ...
     'Interpreter', 'none');
+set_scientific_figure_style(fig);
 exportgraphics(fig, figurePaths.convergenceSummary, 'Resolution', 180);
 close(fig);
 end

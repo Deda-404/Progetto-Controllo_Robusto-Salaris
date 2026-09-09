@@ -41,14 +41,13 @@ function Build-LatexArtifact {
         $unresolvedTokenCount = ([regex]::Matches(($pdfText -join "`n"), '\?\?')).Count
         $pageLine = (& $pdfinfo $pdfPath | Select-String '^Pages:').Line
 
-        if ($fatalCount -ne 0 -or $unresolvedTokenCount -ne 0 -or $duplicateDestinationCount -ne 0) {
-            throw "LaTeX audit failed for ${JobName}: fatal=$fatalCount unresolved=$unresolvedTokenCount duplicate-destinations=$duplicateDestinationCount"
-        }
+        $auditFailed = $fatalCount -ne 0 -or $unresolvedTokenCount -ne 0 -or $duplicateDestinationCount -ne 0 -or $overfullCount -ne 0 -or $overfullVBoxCount -ne 0
+        $auditStatus = if ($auditFailed) { 'FAIL' } else { 'PASS' }
 
         $auditDirectory = Split-Path -Parent $AuditPath
         New-Item -ItemType Directory -Path $auditDirectory -Force | Out-Null
         @(
-            'STATUS=PASS'
+            "STATUS=$auditStatus"
             "JOB=$JobName"
             "ERRORS=$fatalCount"
             "UNRESOLVED_REFERENCES=$unresolvedTokenCount"
@@ -58,6 +57,10 @@ function Build-LatexArtifact {
             $pageLine
             "PDF=$pdfPath"
         ) | Set-Content -LiteralPath $AuditPath -Encoding utf8
+
+        if ($auditFailed) {
+            throw "LaTeX audit failed for ${JobName}: fatal=$fatalCount unresolved=$unresolvedTokenCount duplicate-destinations=$duplicateDestinationCount overfull-hbox=$overfullCount overfull-vbox=$overfullVBoxCount"
+        }
 
         & $latexmk -c "-jobname=$JobName" main.tex | Out-Null
         if ($LASTEXITCODE -ne 0) {

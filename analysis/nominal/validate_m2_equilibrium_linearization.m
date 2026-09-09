@@ -166,6 +166,7 @@ title(poleAxes, 'M2 — Poli open-loop del modello meccanico SEA a 8 stati', ...
     'Color', [0.10, 0.10, 0.10]);
 legend(poleAxes, 'Location', 'best', 'TextColor', [0.10, 0.10, 0.10], ...
     'Color', 'white');
+set_scientific_figure_style(poleFigure);
 exportgraphics(poleFigure, figurePath, 'Resolution', 180);
 close(poleFigure);
 

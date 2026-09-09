@@ -190,5 +190,6 @@ set(findall(handle, 'Type', 'axes'), 'Color', 'white', ...
     'XColor', [0.15, 0.15, 0.15], 'YColor', [0.15, 0.15, 0.15], ...
     'GridColor', [0.65, 0.65, 0.65]);
 set(findall(handle, 'Type', 'text'), 'Color', [0.1, 0.1, 0.1]);
+set_scientific_figure_style(handle);
 exportgraphics(handle, path, 'Resolution', 180);
 end

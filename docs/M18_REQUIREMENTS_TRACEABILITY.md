@@ -18,14 +18,14 @@ La tabella distingue il completamento del deliverable dall'esito tecnico. Un ris
 | mu-synthesis D-K | M13 | `m13_musyn_dk.mat` | cap. 9 | PASS esecuzione - objective quantificato |
 | Post-analisi Kmu | M14 | `m14_final_mu_analysis_kmu.mat` | cap. 9 | PARTIAL - RS PASS, NP/RP FAIL |
 | Non lineare Khinf/Kmu | M15 | `m15_nonlinear_robust_validation.mat` | cap. 10 | PARTIAL - tracking FAIL |
-| RAS | M8/M15 | artifact M8/M15 | cap. 7/10 | PARTIAL - stime empiriche |
+| RAS nominale | Lyapunov + M8/M15 | lyapunov_ras_nominal.mat; lyapunov_trajectories.mat; artifact M8/M15 | cap. 7/10 | limite interno analitico sufficiente; livello numerico e mappe empiriche non certificati |
 | Monte Carlo incerta lineare | M16 | `m16_monte_carlo_uncertain_linear.mat` | cap. 11 | PASS esecuzione - evidenza empirica |
 | Confronto e ruoli finali | M17 | `m17_final_controller_comparison.mat` | cap. 12 | PASS |
 | Saturazioni hardware reali | nessuna | non disponibili | cap. 6/13 | NOT RUN |
 | Limiti fisici di coppia certificati | nessuna | non disponibili | cap. 13 | NOT RUN |
 | Riduzione di Kmu | nessuna | non autorizzata | cap. 9/13 | NOT RUN |
 | Relazione tecnica finale | M18 | `report/main.tex`, PDF | intero documento | PASS deliverable |
-| Presentazione entro 20 minuti | M18 | sorgente, PDF, outline | presentazione | PASS deliverable - timing stimato 17:30 |
+| Presentazione entro 20 minuti | M18 | sorgente, PDF, outline | presentazione | PASS deliverable - timing stimato 19:00 |
 | Audit numerico finale | M18 | `m18_final_deliverable_audit.mat` | appendice B | PASS |
 
 ## Classificazione finale

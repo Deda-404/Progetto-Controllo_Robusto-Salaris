@@ -1,8 +1,9 @@
-function metrics = validate_m8_simulink_ras(rebuild)
+function metrics = validate_m8_simulink_ras(rebuild, refreshRasFigure)
 %VALIDATE_M8_SIMULINK_RAS Build all M8 artifacts and enforce its gate.
 
 arguments
     rebuild (1, 1) logical = true
+    refreshRasFigure (1,1) logical = false
 end
 
 projectRoot = fileparts(fileparts(fileparts(mfilename('fullpath'))));
@@ -19,6 +20,13 @@ if ~rebuild && isfile(datasetPath)
         'The cached M8 dataset does not contain a passing quality gate.');
     metrics = load(datasetPath);
     metrics.datasetPath = datasetPath;
+    if refreshRasFigure
+        search=struct('convergentPoints',metrics.rasAllPoints(metrics.rasAllPoints.Convergent,:), ...
+            'divergentPoints',metrics.rasAllPoints(~metrics.rasAllPoints.Convergent,:), ...
+            'boundary',metrics.rasBoundary,'config',metrics.simulationConfig.ras);
+        localPlotRas(search,fullfile(figureDirectory,'m8_lqg_ras_q_plane.png'), ...
+            'M8 - Mappa empirica: xhat(0)=0, non certificata');
+    end
     fprintf('[PASS] Dataset M8 gia'' validato: %s\n', datasetPath);
     return
 end
@@ -419,6 +427,7 @@ for amplitudeIndex = 1:3
 end
 xlabel(layout, 'Tempo [s]');
 title(layout, 'M8 — Tracking non lineare LQG M6');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -443,6 +452,7 @@ for amplitudeIndex = 1:3
 end
 xlabel(layout, 'Tempo [s]');
 title(layout, 'M8 — Confronto LTI/non lineare, riferimento giunto 1');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -465,6 +475,7 @@ for jointIndex = 1:2
 end
 xlabel(layout, 'Tempo [s]');
 title(layout, 'M8 — Disturbo costante fisico lato link');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -505,6 +516,7 @@ xlabel('delta q_1(0) [deg]');
 ylabel('delta q_2(0) [deg]');
 title(plotTitle);
 legend(legendHandles, legendLabels, 'Location', 'southoutside');
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

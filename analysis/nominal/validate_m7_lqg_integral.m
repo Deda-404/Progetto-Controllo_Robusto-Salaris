@@ -134,6 +134,7 @@ xlabel('Worst settling [s]'); ylabel('Worst overshoot [%]');
 title('M7 - Confronto manuale dei tre costi LQI');
 colorbarHandle = colorbar;
 colorbarHandle.Label.String = 'peak |u| / uScale';
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

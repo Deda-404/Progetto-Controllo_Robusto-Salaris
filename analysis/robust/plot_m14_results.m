@@ -61,6 +61,7 @@ xlabel('Frequenza [rad/s]'); ylabel('Bound di mu');
 title('M14 — bound mu RS: Kmu vs A5');
 legend('Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -79,6 +80,7 @@ xlim([0.5, 2.5]); grid on; box on;
 ylabel('Robust stability margin');
 title('M14 — confronto dei bound robstab');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -99,6 +101,7 @@ ylabel('Massima singular value pesata [dB]');
 title('M14 — risposta pesata nominale A5/Kmu');
 legend('Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -119,6 +122,7 @@ ylabel('Massima singular value pesata [dB]');
 title('M14 — risposta pesata Kmu nominale e worst-case');
 legend('Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -134,6 +138,7 @@ ylabel('Sensitivity robstab [%]');
 title('M14 — sensibilità RS dei blocchi: A5 vs Kmu');
 legend('A5 M12', 'Kmu M14', 'Location', 'best');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -151,6 +156,7 @@ yline(0, 'k-', 'HandleVisibility', 'off');
 grid on; box on; ylabel('Classificazione');
 title('M14 — esiti finali separati NS / NP / RS / RP');
 localStyle(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

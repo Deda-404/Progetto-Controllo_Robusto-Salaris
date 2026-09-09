@@ -216,5 +216,6 @@ set(findall(handle, 'Type', 'axes'), 'Color', 'white', ...
 set(findall(handle, 'Type', 'text'), 'Color', [0.1, 0.1, 0.1]);
 set(findall(handle, 'Type', 'legend'), 'Color', 'white', ...
     'TextColor', [0.1, 0.1, 0.1], 'EdgeColor', [0.35, 0.35, 0.35]);
+set_scientific_figure_style(handle);
 exportgraphics(handle, path, 'Resolution', 180);
 end

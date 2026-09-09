@@ -90,6 +90,7 @@ legend('W_2KS, sigma_1', 'W_2KS, sigma_2', 'stacked max', ...
 title(layout, 'M9 — Mixed sensitivity nominale con pesi M5 congelati', ...
     'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -122,6 +123,7 @@ end
 xlabel(layout, 'Tempo [s]', 'Color', 'black');
 title(layout, 'M9 — Tracking nominale 1-DoF mixsyn', 'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -146,6 +148,7 @@ end
 xlabel(layout, 'Tempo [s]', 'Color', 'black');
 title(layout, 'M9 — Disturbo fisico costante lato link', 'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -176,6 +179,7 @@ title(axesHandle, 'Disturbo lato link');
 title(layout, ['M9 — Sforzo di controllo normalizzato; ' ...
     'nessuna saturazione hardware'], 'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -215,6 +219,7 @@ end
 title(layout, 'M9 — Confronto diagnostico nominale con M6', ...
     'Color', 'black');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -229,6 +234,7 @@ xline(0, 'k--'); grid on; box on;
 xlabel('Parte reale [s^{-1}]'); ylabel('Parte immaginaria [rad/s]');
 title('M9 — Poli dell''interconnessione interna nominale');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end

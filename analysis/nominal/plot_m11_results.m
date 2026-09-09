@@ -61,6 +61,7 @@ ylim([9.5, 17.2]);
 xlabel('Ordine reale del controllore'); ylabel('Norma H-infinity pesata');
 title('M11 — costo prestazionale della struttura ridotta');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -84,6 +85,7 @@ grid on; box on; xlabel('Architettura');
 ylabel('Objective hinfstruct per start');
 title('M11 — dispersione delle cinque partenze');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -114,6 +116,7 @@ xlabel('Ordine reale'); ylabel('Norma H-infinity pesata');
 title('M11 — frontiera Pareto gamma vs ordine');
 legend('Location', 'best');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -142,6 +145,7 @@ xlabel('Frequenza [rad/s]'); ylabel('Massima singular value [dB]');
 title('M11 — candidati Pareto vs full-order M10');
 legend('Location', 'southwest');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -179,6 +183,7 @@ title(layout, 'Tracking 5 deg — Pareto M11 vs M6/M10');
 layout.XLabel.Color = 'black';
 layout.Title.Color = 'black';
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
@@ -196,6 +201,7 @@ legend('Tracking peak U/12', 'Disturbo peak U/12', ...
     'Disturbo peak q [rad]', 'Location', 'best');
 title('M11 — sforzo normalizzato e risposta al disturbo');
 localPrepareFigure(figureHandle);
+set_scientific_figure_style(figureHandle);
 exportgraphics(figureHandle, filePath, 'Resolution', 180);
 close(figureHandle);
 end
