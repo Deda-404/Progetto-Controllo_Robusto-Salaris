@@ -2035,3 +2035,49 @@ La conversione riguarda il formato di archiviazione Git, non i byte del MAT
 disponibile nel working tree. Si adegua il solo commit locale mai pubblicato;
 main e la cronologia remota sono preservati. Per ottenere i dati completi
 dopo il clone occorre Git LFS. La decisione non autorizza un merge automatico.
+
+## D-0048 — Studio mirato LQI e H-infinity separato dalla baseline
+
+Data: 2026-09-10. Responsabile: Alessio.
+
+La revisione autorizzata riguarda §7.6, capitolo 8 e impaginazione.
+Il working tree iniziale è pulito e coincide con origin/main dopo PR 27.
+Il gruppo conferma che le ulteriori modifiche di Valerio non sono ancora
+pubblicate: saranno integrate quando disponibili, senza ricostruirle.
+Il prefisso del capitolo 7 precedente alla sezione LQI resta intatto.
+
+LQI è un servo a stato vero di 16 stati, non LQG con stima. Il punto
+wi=1, rhoU=8 viene ripreso da M7 soltanto per illustrare la reiezione
+di disturbi costanti: non è una nuova scelta di controllore finale.
+Tre calcoli a rhoU=16 fisso separano l'effetto di wi dal cambio di R.
+
+La nuova campagna H-infinity è ammessa in deroga al congelamento storico
+solo come studio separato: 13 candidati deterministici più una conferma
+hinfsyn e un diagnostico solo-comando. W1 conserva As e Ms; W2 passa
+a una specifica normalizzata alle scale di 5 gradi e 12 N m (requisito
+meno restrittivo dichiarato, non mera conversione di coordinate).
+W3 è una scelta nominale di roll-off, non requisito quantitativo del docente
+né certificato per l'incertezza moltiplicativa all'ingresso M4.
+
+Tutti i candidati sono nominalmente stabili; nessuno soddisfa gamma<1
+e tutti i target M5. ID 10 è selezionato dal criterio temporale esplicito,
+non dal gamma minimo. Non viene adottato: M9–M16 restano invariati,
+senza nuova D–K o post-analisi mu. Anche i risultati negativi e i cinque
+campioni empirici sono salvati. Non sono autorizzati commit o pubblicazione.
+
+I test esistenti vengono estesi nelle verifiche pertinenti, senza creare
+nuovi file di test. La suite globale è riservata alla fase conclusiva.
+
+## D-0049 — Pubblicazione della revisione mirata già validata
+
+Data: 2026-09-10. Responsabile: Alessio.
+
+La richiesta successiva del gruppo autorizza la pubblicazione del lavoro
+già concluso, superando esclusivamente il divieto di commit e pubblicazione
+di D-0048. Si prevede un commit della revisione sul branch
+`codex/lqi-hinf-targeted-review`, push su origin e PR verso `main`,
+da lasciare aperta per revisione manuale. Non sono autorizzati merge
+automatici, modifiche dirette a main o ulteriori interventi tecnici.
+La logica del codice, dati, figure, PDF e verifiche già registrate restano
+invariati durante questa operazione Git; è ammessa la sola pulizia di
+whitespace necessaria al controllo del diff.

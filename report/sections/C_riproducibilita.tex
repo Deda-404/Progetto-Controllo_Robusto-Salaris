@@ -9,9 +9,9 @@ Il comando configura i percorsi, azzera lo stato della sessione, imposta i seed 
 La fase M13 costituisce un'eccezione importante: la costosa campagna D--K non viene rilanciata dalla regressione ordinaria. La pipeline ricarica il checkpoint validato e ne controlla identità, iterazione selezionata e campi necessari. In questo modo la riproducibilità della consegna non dipende da una nuova ottimizzazione potenzialmente sensibile a opzioni o tempi di calcolo.
 
 \section{Rigenerazione di tabelle e figure}
-La revisione tecnica a controllori congelati \emph{non} ha rilanciato
-\texttt{run\_all}: tale comando ricalcola M9--M11. La regressione corrente
-esegue invece la suite con \texttt{runtests('tests')} e le verifiche seguenti:
+La precedente revisione tecnica a controllori congelati \emph{non} ha rilanciato
+\texttt{run\_all}: tale comando ricalcola M9--M11. Quella regressione
+ha eseguito invece la suite con \texttt{runtests('tests')} e le verifiche seguenti:
 \begin{verbatim}
 addpath(genpath('src'),genpath('controllers'),genpath('analysis'))
 validate_lyapunov_ras
@@ -29,6 +29,21 @@ La rigenerazione grafica riusa i risultati robusti e Monte Carlo salvati,
 senza nuove sintesi. I parametri di ricerca di Lyapunov sono esposti nei
 due script e nel validatore; le matrici complete sono negli artifact.
 
+Per lo studio mirato dei Capitoli~7--8, senza ripetere Lyapunov,
+D--K o Monte Carlo M16, si usano invece:
+\begin{verbatim}
+progetto_lqi
+studio = study_hinf_weights; % solo lettura della cache
+plot_lqi_hinf_revision
+\end{verbatim}
+La campagna viene prodotta con \path{study_hinf_weights(true)}
+solo se il suo MAT non esiste: 13 candidati e due sintesi diagnostiche.
+Il codice rifiuta la sovrascrittura di una campagna già presente.
+I cinque modelli M4 aggiuntivi usano seed \texttt{20260910}.
+Nessun nuovo controllore è adottato nella catena M9--M16.
+La verifica conclusiva usa una sola suite globale dei test esistenti,
+estendendo le verifiche pertinenti senza nuovi file di test.
+
 La sola finalizzazione documentale può essere ripetuta con:
 \begin{verbatim}
 validate_m18_deliverables(true,true)
@@ -41,6 +56,8 @@ Relazione e presentazione sono compilate con:
 powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
 \end{verbatim}
 Lo script esegue il numero di passaggi necessario per indice, riferimenti e sommari, quindi controlla errori, riferimenti irrisolti, box oltre margine e destinazioni PDF duplicate. I file conclusivi hanno nomi stabili:
+L'opzione \texttt{-ReportOnly} compila e audita soltanto la relazione;
+è la modalità della revisione mirata, che conserva la presentazione.
 \begin{itemize}
 \item \path{report/Progetto_CR_Relazione_finale.pdf};
 \item \path{presentation/Progetto_CR_Presentazione.pdf}.

@@ -4,8 +4,12 @@ arguments
     writeFiles (1,1) logical = true
     requireCompiledPdfs (1,1) logical = true
 end
+
+% Tabelle dello studio mirato, gia esportate dalla cache senza nuove sintesi.
+revisionTables = ["lqi_revision_results.tex"; "hinf_revision_results.tex"];
 e=load_m18_validated_artifacts; [numericAudit,macroPath]=build_m18_report_values(e); tablePaths=build_m18_report_tables(e); tablePaths=[tablePaths(:);build_technical_revision_tables(e.root)]; figureManifest=build_m18_figure_manifest(e); presentationAssetPaths=build_m18_presentation_assets(e,figureManifest); traceabilityAudit=validate_m18_traceability(e,numericAudit);
 requiredTextFiles=[fullfile(e.root,"report","main.tex");fullfile(e.root,"presentation","main.tex");fullfile(e.root,"presentation","OUTLINE_AND_TIMING.md");fullfile(e.root,"presentation","SPEAKER_NOTES.md");fullfile(e.root,"docs","M18_REQUIREMENTS_TRACEABILITY.md");fullfile(e.root,"docs","FINAL_DELIVERABLE_MANIFEST.md")];
+tablePaths=[tablePaths;fullfile(e.root,"report","generated",revisionTables)];
 requiredPdfFiles=[fullfile(e.root,e.config.reportPdf);fullfile(e.root,e.config.presentationPdf)];
 textFilesPresent=all(isfile(requiredTextFiles)); pdfFilesPresent=all(isfile(requiredPdfFiles)); figuresPresent=all(isfile(fullfile(e.root,figureManifest.ReportPath))); tablesPresent=all(isfile(tablePaths)); assetsPresent=all(isfile(presentationAssetPaths));
 if requireCompiledPdfs, assert(pdfFilesPresent,"M18:MissingCompiledPdf","Compiled PDF deliverables are missing."); end

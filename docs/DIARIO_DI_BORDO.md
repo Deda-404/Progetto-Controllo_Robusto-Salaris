@@ -2536,3 +2536,89 @@ force push. README e stato riportano i requisiti di download. Le verifiche
 MATLAB già concluse restano valide: sorgenti, dati, figure e PDF non cambiano.
 Il completamento del push richiede la verifica dell'identità degli SHA locale
 e remoto; main resta escluso dalla pubblicazione.
+
+## 2026-09-10 — Revisione mirata §7.6 / H-infinity: analisi e calcoli
+
+Ricognizione Git eseguita prima delle modifiche: status, diff, diff dei
+capitoli 7/8 e log; working tree pulito. Backup diff vuoto conservato in
+C:/tmp/pre_codex_manual_report_changes.patch. Creato il ramo
+codex/lqi-hinf-targeted-review da origin/main dopo PR 27, senza commit.
+Il gruppo conferma che le ulteriori modifiche di Valerio non sono pubblicate
+e limita inizialmente i controlli ai test esistenti; successivamente consente
+nuovi test solo se indispensabili. Non è necessario aggiungere file di test.
+
+Eseguito il confronto LQI con stato vero e wi=1, rhoU=8, due coppie da 0.5 N m,
+riferimento nullo, condizioni iniziali nulle e orizzonte 8 s. LQG conserva
+offset; LQI ha guadagno DC nullo e residuo massimo a 8 s 8.7316e-5 rad.
+Verificati CARE, guadagni e ranghi; suite specifica M7 7/7 PASS.
+Il setup M7 rigenera due MAT e una figura storica con gli stessi risultati.
+
+L'audit originale H-infinity distingue scaling delle coordinate e modifica
+del requisito W2. Un limite necessario puntuale supera 1 (circa 1.645),
+quindi i pesi originali non possono soddisfare gamma<1. Eseguite 13 nuove
+sintesi mixsyn, una hinfsyn equivalente e un diagnostico solo-comando:
+15 in totale, nessuna musyn. Gamma minimo 2.8056; nessun candidato conforme.
+ID 10 illustrativo: gamma 4.0730, overshoot 144.44%, peak control 15.686 N m,
+stabile su 2/5 campioni M4. Baseline M10 stabile su 5/5 degli stessi campioni.
+Archiviate anche le cinque piante, i poli dominanti e seed 20260910.
+
+M9–M16 non vengono aggiornati perché la nuova configurazione non è adottata.
+Esportati sei grafici e due file tabellari dalle cache; M18 censisce i nuovi
+artefatti. Prima compilazione della relazione: 72 pagine, audit LaTeX PASS,
+nessun overfull o riferimento irrisolto. La presentazione non è ricompilata.
+
+Correzioni diagnostiche: un avviso Code Analyzer di impaginazione nel nuovo
+script è stato eliminato; il primo comando di verifica isolata della sezione
+H-infinity cercava il campo inesistente Gq nel MAT M3. Il comando è stato
+corretto costruendo G dalle matrici Afull/Bfull/CfullQ effettive; non si tratta
+di una nuova sintesi né di una riesecuzione della suite globale.
+
+### Chiusura e verifiche del 10 settembre
+
+La suite globale è stata eseguita una sola volta in una copia locale isolata
+con 188 file MATLAB identici al working tree, LFS completo e tutti gli
+artefatti presenti. Esito: 644/644 PASS, zero failed/incomplete, 279.107 s.
+I test storici rigenerano M3/M5/M6/M7 nella copia, non nella consegna.
+Esiti per test conservati in lqi_hinf_revision_verification.mat/.csv.
+
+Code Analyzer: 172 file di progetto, zero segnalazioni. Dopo la suite sono
+state rifinite soltanto caption/float e tacche del grafico dei pesi;
+l'esportatore è stato rieseguito dalla cache con verifica statica, senza
+nuove sintesi. La relazione finale conta 71 pagine: audit LaTeX PASS.
+Il controllo visivo comprende tutte le pagine e dettagli dei nuovi grafici.
+Il manifest occupa una pagina dedicata; l'audit intercetta anche gli
+"ignored error". Conservati gli spazi delle sezioni protette e le normali
+pagine parziali di chiusura capitolo, senza compressione globale.
+
+I quattro artefatti M7 rigenerati nel test iniziale sono stati ricopiati
+dalla baseline dopo aver verificato identità dei payload MAT e dei pixel:
+eliminate esclusivamente variazioni di intestazione/metadati. Baseline M5,
+M6 e M9–M16, cartella presentation e capitolo Lyapunov sono identici a HEAD.
+Il prefisso §7.1–7.5 è identico alla copia iniziale (solo CRLF/LF normalizzati
+nel confronto). Nessuna modifica manuale di Valerio non ancora pubblicata
+può essere dichiarata integrata.
+
+Il ramo resta codex/lqi-hinf-targeted-review con HEAD a 4ce6ad191ffcbf664d8fa0d4e82c81540ae52c46.
+Non sono stati creati commit, eseguiti push o aperte PR. Main non è modificato.
+
+## 2026-09-10 — Pubblicazione richiesta della revisione mirata
+
+Il gruppo richiede successivamente l'allineamento GitHub e l'apertura
+della PR per le modifiche già apportate. La nuova autorizzazione è
+registrata in D-0049; la precedente chiusura senza pubblicazione resta
+documentata sopra come stato storico.
+
+Verificati 52 file modificati o aggiunti sul branch
+`codex/lqi-hinf-targeted-review`, nessuna eliminazione e
+`git diff --check` PASS. Dopo fetch, HEAD e origin/main coincidono ancora
+con 4ce6ad191ffcbf664d8fa0d4e82c81540ae52c46; il branch remoto e una PR
+corrispondente non risultano presenti. Riletti gli esiti salvati:
+644/644 PASS e audit LaTeX PASS, relazione di 71 pagine.
+
+La pubblicazione prevista comprende un commit, push del solo branch
+dedicato e PR aperta verso main per revisione manuale. Non vengono
+rieseguiti test, sintesi o simulazioni; logica del codice e artefatti
+validati restano invariati. Il controllo del diff staged, esteso ai nuovi
+file, rileva una riga vuota finale in `analysis/progetto_lqi.m`: viene
+rimossa esclusivamente questa riga per superare il controllo whitespace.
+Main e la cronologia pubblicata sono preservati.

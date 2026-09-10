@@ -31,6 +31,14 @@ classdef test_didactic_entry_points < matlab.unittest.TestCase
             testCase.verifyTrue(all(contains(s,["connect(","hinfsyn(","lyap(", ...
                 "ricalcolaSintesi=false","rhoCertificato","nBisezioni=12"])));
             testCase.verifyFalse(contains(s,'design_lqr_m6'));
+            testCase.verifyTrue(all(contains(s,["W3nuovo","Gnormalizzato","Pnuovo","KSnuovo"])));
+            d=load(fullfile(testCase.Root,'results','data','hinf_weight_revision.mat'));
+            h=d.studio; k=h.selezionato; m=h.mappe{k};
+            testCase.verifyEqual(norm(lft(h.P,h.Knuovo*h.qs/h.us),inf), ...
+                h.tabella.Gamma(k),'RelTol',1e-4);
+            testCase.verifyGreaterThan(norm(h.pesi{k}.W3*m.T,inf),0);
+            testCase.verifyLessThan(max(real(eig(m.Acl))),0);
+            testCase.verifyEqual(h.stabilitaCampioni,h.sampleMaxRealPoles<-1e-8);
         end
         function confrontoEmpiricoSeparato(testCase)
             s=string(fileread(fullfile(testCase.Root,'analysis','ras','build_common_ras_comparison.m')));
@@ -44,6 +52,12 @@ classdef test_didactic_entry_points < matlab.unittest.TestCase
             testCase.verifyEqual(d.L,m.L,'AbsTol',1e-8);
             testCase.verifyEqual(d.Q,m.Q,'AbsTol',1e-10);
             testCase.verifyEqual(d.R,m.R,'AbsTol',1e-12);
+            l=load(fullfile(testCase.Root,'results','data','m7_disturbance_comparison.mat'));
+            testCase.verifyEqual(l.Qaug(1:14,1:14),m.Q,'AbsTol',1e-10);
+            testCase.verifySize(l.Kx,[2 14]);
+            testCase.verifySize(l.Ki,[2 2]);
+            testCase.verifyLessThan(max(abs(l.metriche{3:4,3:4}),[],'all'),1e-9);
+            testCase.verifyGreaterThan(max(abs(l.metriche{1:2,3:4}),[],'all'),1e-4);
         end
         function traiettorieComplete(testCase)
             d=load(fullfile(testCase.Root,'results','data','lyapunov_trajectories.mat'));

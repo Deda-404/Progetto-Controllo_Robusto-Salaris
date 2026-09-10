@@ -14,6 +14,31 @@ Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è
 
 La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: con il LQR M6 congelato è stabile in 38/40 casi (Sample 5 e 6 instabili), Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
 
+## Studio mirato LQI e H-infinity (10 settembre 2026)
+
+La revisione di §7.6 e del capitolo 8 aggiunge un confronto nominale LQG/LQI
+con coppie costanti di 0.5 N m e uno studio H-infinity separato a tre pesi.
+LQI annulla l'offset asintotico, ma M7 resta PARTIAL. Nessuno dei 13 nuovi
+candidati H-infinity rispetta tutti i target M5; il minimo gamma è 2.8056.
+Il candidato illustrativo ID 10 (gamma 4.0730) non sostituisce Khinf:
+M5 e la catena M9–M16 originale restano invariati.
+
+```matlab
+addpath(genpath('src'),genpath('controllers'),genpath('analysis'))
+progetto_lqi
+studio = study_hinf_weights;  % legge la campagna già salvata
+plot_lqi_hinf_revision       % figure e tabelle dalla cache
+validate_m18_deliverables(true,true)
+```
+
+La prima produzione della campagna, soltanto in assenza del relativo MAT,
+usa `study_hinf_weights(true)`: 13 candidati deterministici e 2 sintesi
+diagnostiche, nessuna musyn. Il comando rifiuta di sovrascrivere una cache
+esistente. La revisione non richiede `run_all` né nuove analisi D–K/M14/M16.
+Per compilare soltanto la relazione aggiungere `-ReportOnly` a
+`tools/build_m18_latex.ps1`; le 19 slide restano quelle della baseline.
+Dettagli, numeri e verifica: `docs/REVISIONE_MIRATA_LQI_HINF.md`.
+
 ## Struttura del repository
 
 ```text

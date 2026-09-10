@@ -1,3 +1,5 @@
+param([switch]$ReportOnly)
+
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $latexmk = (Get-Command latexmk -ErrorAction Stop).Source
@@ -24,6 +26,7 @@ function Build-LatexArtifact {
         $logText = Get-Content -Raw -LiteralPath $logPath
         $fatalPatterns = @(
             'LaTeX Error:',
+            'ignored error:',
             'Undefined control sequence',
             'There were undefined references',
             'Reference .* undefined',
@@ -77,9 +80,13 @@ Build-LatexArtifact `
     -JobName 'Progetto_CR_Relazione_finale' `
     -AuditPath (Join-Path $projectRoot 'report/generated/report_latex_audit.txt')
 
-Build-LatexArtifact `
-    -SourceDirectory (Join-Path $projectRoot 'presentation') `
-    -JobName 'Progetto_CR_Presentazione' `
-    -AuditPath (Join-Path $projectRoot 'presentation/generated/presentation_latex_audit.txt')
-
-Write-Host '[PASS] Relazione e presentazione M18 compilate e auditate.'
+if (-not $ReportOnly) {
+    Build-LatexArtifact `
+        -SourceDirectory (Join-Path $projectRoot 'presentation') `
+        -JobName 'Progetto_CR_Presentazione' `
+        -AuditPath (Join-Path $projectRoot 'presentation/generated/presentation_latex_audit.txt')
+    Write-Host '[PASS] Relazione e presentazione M18 compilate e auditate.'
+}
+else {
+    Write-Host '[PASS] Relazione M18 compilata e auditata; presentazione non ricompilata.'
+}

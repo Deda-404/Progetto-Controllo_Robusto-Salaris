@@ -340,21 +340,205 @@ Il modello \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei bloc
 \]
 L'interfaccia di misura estrae soltanto $q$ e $\theta$, sottrae l'equilibrio e aggiunge il rumore encoder; le velocità non vengono misurate. La coppia assoluta inviata agli attuatori è $u_{abs}=\bar\tau+\delta u$. Tutti i guadagni sono incorporati dall'artifact M6 validato e le condizioni iniziali vengono passate con \texttt{SimulationInput}; il modello non dipende dal base workspace. Non sono presenti saturazioni.
 
-\section{Verifica LQI M7}
-Per studiare l'offset introduciamo due integratori
+\section{Azione integrale e verifica LQI M7}
+\label{sec:lqi}
+\subsection{Dall'offset alla memoria dell'errore}
+Le simulazioni precedenti mostrano il limite del solo prefiltro. La legge
+$\delta u=-K\hat x+N_rr$ corregge il guadagno statico nominale da riferimento
+a posizione, ma $N_r$ moltiplica soltanto $r$: non riceve l'errore prodotto
+da una coppia disturbante. A riferimento nullo il suo contributo è nullo,
+anche se $q$ converge a una posizione diversa dall'equilibrio.
+
+Per le due posizioni articolari incrementali definiamo
 \[
-\dot\xi=r-C_qx,
-\quad A_{aug}=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix}.
+e(t)=r(t)-q(t)=r(t)-C_qx(t),\qquad
+\xi(t)=\int_0^t e(\tau)\,d\tau,\qquad \dot\xi=r-C_qx,\quad \xi(0)=0.
 \]
-I test PBH mostrano che il sistema augmentato è stabilizzabile e senza ostruzioni a zero. Il blocco $Q$ sui 14 stati fisici riusa le priorità selezionate e salvate dall'artifact M6.
+Ogni componente di $\xi$ è misurata in rad\,s. Un errore positivo fa crescere
+la corrispondente componente; uno negativo la fa diminuire. Se l'errore
+persiste, il suo integrale continua ad accumularsi: il regolatore dispone
+così di una memoria del disallineamento. Un offset costante non può essere
+compatibile con un equilibrio finito dell'intero sistema, perché in un
+equilibrio deve essere anche $\dot\xi=0$.
 
-Si confrontano soltanto tre costi manuali: azione integrale debole $(w_i,\rho_U)=(0.1,16)$, bilanciata $(1,8)$ e forte $(4,4)$. Tutti stabilizzano e annullano l'offset da disturbo costante. I primi due non si assestano entro l'orizzonte di 3 s; le sovraelongazioni peggiori sono rispettivamente 7.10\% e 16.59\%. Il terzo raggiunge $T_s=2.168$ s con overshoot 25.05\%. Nessun punto soddisfa simultaneamente i target M5.
+Questa è l'applicazione del principio del modello interno ai segnali
+costanti: si inseriscono due modi integrali, uno per uscita regolata.
+Se la chiusura aumentata è stabile, ammette l'equilibrio richiesto e il
+comando non è limitato da saturazioni, il regime costante ha $q=r$.
+La correzione $-K_i\xi$ può restare non nulla anche dopo che $e$ si è
+annullato: è proprio il contributo permanente necessario a bilanciare
+il disturbo. Non si afferma invece che l'errore sia nullo durante il
+transitorio o che il risultato valga automaticamente per il sistema incerto.
 
-\begin{figure}[H]\centering
-\includegraphics[width=0.78\textwidth]{figures/m7_augmented_cost_tradeoff.png}
-\caption{Tre verifiche manuali del compromesso LQI.}\label{fig:m7-tradeoff}
+\subsection{Il sistema aumentato effettivo: 14 più 2 stati}
+La pianta è ancora M3, con $A\in\mathbb R^{14\times14}$,
+$B\in\mathbb R^{14\times2}$ e $C_q\in\mathbb R^{2\times14}$.
+Lo stato $x$ comprende gli otto stati meccanici e i sei stati attuativi
+già descritti; non vengono eliminati gli attuatori. Ponendo
+$x_a=[x^T,\xi^T]^T\in\mathbb R^{16}$ si ottiene
+\[
+\begin{bmatrix}\dot x\\\dot\xi\end{bmatrix}
+=
+\underbrace{\begin{bmatrix}A&0_{14\times2}\\-C_q&0_{2\times2}\end{bmatrix}}_{A_a}
+\begin{bmatrix}x\\\xi\end{bmatrix}
++\underbrace{\begin{bmatrix}B\\0_{2\times2}\end{bmatrix}}_{B_a}u
++\underbrace{\begin{bmatrix}0_{14\times2}\\I_2\end{bmatrix}}_{B_r}r.
+\]
+Il disturbo lato link aggiunge $B_{d,a}d$, con
+$B_{d,a}=[B_d^T,0_{2\times2}]^T$. Le dimensioni di $A_a,B_a,B_r$
+sono rispettivamente $16\times16$, $16\times2$, $16\times2$.
+
+L'aggiunta degli integratori non è innocua: se un modo non stabile non
+è controllabile, Riccati non può fornire un regolatore stabilizzante.
+Il costruttore \texttt{build\_lqi\_augmented\_cost.m} verifica
+\[
+\operatorname{rank}\,[\lambda I_{16}-A_a\;\;B_a]=16
+\quad\text{per i poli con }\Re\lambda\geq-10^{-8}.
+\]
+Il test PBH all'origine restituisce 16, come il rango della matrice
+di Rosenbrock
+\[
+\operatorname{rank}\begin{bmatrix}A&B\\C_q&0\end{bmatrix}=16.
+\]
+Non vi è quindi un'ostruzione dovuta a zeri invarianti nell'origine.
+Questi controlli sono preferibili a interpretare ingenuamente il solo
+rango numerico di \texttt{ctrb}, sensibile allo scaling e alle potenze di $A_a$.
+
+\subsection{Costo, scala integrale e significato di \texorpdfstring{$w_i$}{wi}}
+Il problema risolto è
+\[
+J_{\rm LQI}=\int_0^\infty
+\left(x^TQx+\xi^TQ_i\xi+u^TRu\right)dt
+=\int_0^\infty\left(x_a^TQ_ax_a+u^TRu\right)dt,
+\qquad Q_a=\operatorname{blkdiag}(Q,Q_i).
+\]
+Il blocco $Q$ è esattamente quello M6, inclusi i termini non diagonali.
+Il codice adotta
+\[
+s_\xi=q_sT_{s,\mathrm{target}}
+=(5\pi/180)\,0.8\ {\rm rad\,s},\qquad
+Q_i=\frac{w_i}{s_\xi^2}I_2,\qquad
+R=\frac{\rho_U}{u_{\mathrm{scale}}^2}I_2.
+\]
+La scala $s_\xi$ è derivata dai target progettuali M5: rappresenta
+l'accumulo di un errore pari a $q_s$ per un tempo pari al settling richiesto.
+Non è una misura sperimentale né un limite fisico dell'integratore.
+Invece $w_i$ è una priorità adimensionale di tuning: pesa
+$\|\xi/s_\xi\|^2$ nel costo, senza cambiare la scala o il requisito M5.
+
+Con $w_i$ piccolo l'accumulo costa relativamente poco; con $w_i$ grande
+il problema LQR tende a contrastarlo maggiormente. Ci si attende in genere
+una correzione integrale più rapida, ma anche possibili aumenti di
+sovraelongazione e comando. Non è una monotonicità garantita per qualsiasi
+sistema MIMO. Non esiste pertanto un unico $w_i$ teoricamente corretto:
+dipende dal compromesso che si intende studiare.
+
+I tre casi originali sono $(w_i,\rho_U)=(0.1,16),(1,8),(4,4)$,
+denominati debole, intermedio e forte. Non sono tre prove a parità di $R$:
+all'aumento di $w_i$ si accompagna una riduzione della penalizzazione
+del comando. Non si può attribuire l'intera variazione delle prestazioni
+al solo integratore. Una verifica diagnostica aggiuntiva mantiene invece
+$\rho_U=16$ e lo stesso $Q$: per $w_i=0.1,1,4$ si ottengono
+$\|K_i\|_2=13.589,\ 42.972,\ 85.944$ e parti reali dominanti
+$-0.2610,\ -0.8307,\ -1.6975$ s$^{-1}$. In queste tre prove l'azione
+integrale cresce e il modo lento accelera; i punti originali M7 non
+vengono sostituiti né viene effettuata una nuova selezione del controllore.
+
+\subsection{Da Riccati a \texorpdfstring{$K_x$ e $K_i$}{Kx e Ki}: convenzione di segno}
+Fissati $Q,Q_i,R$, MATLAB risolve
+\[
+A_a^TP_a+P_aA_a-P_aB_aR^{-1}B_a^TP_a+Q_a=0,
+\qquad
+K_a=R^{-1}B_a^TP_a=[K_x\;\;K_i].
+\]
+La chiamata è \texttt{[Kaug,Pa,poli]=lqr(Aaug,Baug,Qaug,R)}:
+$K_a$ ha dimensione $2\times16$, $K_x$ è $2\times14$ e $K_i$ è
+$2\times2$. $K_i$ non è scelto a mano. La catena è
+\[
+Q,Q_i,R\ \longrightarrow\ Q_a\ \longrightarrow\ P_a\
+\longrightarrow\ K_a\ \longrightarrow\ (K_x,K_i).
+\]
+Con $\dot\xi=r-q$ la legge effettiva M7 è
+\[
+u=-K_xx-K_i\xi+N_{ff}r,\qquad
+N_{ff}=[-C_q(A-BK_x)^{-1}B]^{-1}.
+\]
+Il prefiltro è ricalcolato da $K_x$, non copiato da M6.
+Nel punto intermedio le diagonali di $K_i$ sono negative: il meno
+davanti a $K_i\xi$ non va cancellato o reinterpretato. La sua correttezza
+è verificata dalla matrice chiusa
+\[
+A_{\rm LQI}=
+\begin{bmatrix}A-BK_x&-BK_i\\-C_q&0\end{bmatrix}
+\]
+e dall'annullamento della mappa statica $d\mapsto q$.
+Per il solo confronto illustrativo si usa il punto intermedio,
+$w_i=1,\rho_U=8$, senza promuoverlo a soluzione finale.
+Le matrici seguenti e i residui sono esportati dallo script eseguito.
+\input{generated/lqi_revision_results.tex}
+
+\subsection{Confronto corretto: LQG stimato e LQI a stato vero}
+Il confronto non riguarda due architetture con gli stessi sensori.
+M6 usa $\hat x$ stimato da $q,\theta$; la verifica M7 usa $x$ vero.
+Il sistema chiuso LQG ha 28 stati, mentre il servo LQI ideale ne ha 16.
+L'integratore è un'estensione del problema di regolazione, non la
+presenza implicita di un filtro Kalman. Un'implementazione sullo stato
+stimato richiederebbe esplicitamente $u=-K_x\hat x-K_i\xi+N_{ff}r$
+e una nuova verifica della chiusura completa, non effettuata qui.
+
+\begin{table}[H]\centering\small
+\begin{tabular}{p{2.7cm}p{5.5cm}p{5.5cm}}\toprule
+Aspetto & LQG M6 & LQI M7 illustrativo \\\midrule
+Feedback e stato & $-K\hat x+N_rr$; stima Kalman & $-K_xx-K_i\xi+N_{ff}r$; stato vero \\
+Memoria dell'errore & Nessun integratore di $r-q$ & Due stati $\xi$ in rad\,s \\
+Tracking nominale & Guadagno statico unitario con prefiltro & Guadagno statico unitario nella chiusura stabile \\
+Disturbo costante & Offset generalmente non nullo & Offset asintotico nullo nelle prove nominali \\
+Complessità & 14 stati di osservatore, 28 chiusi & 2 integratori, 16 chiusi; stato vero richiesto \\
+Overshoot e tuning & M6 soddisfa i target nominali & Dipendono da $Q_i,R$; nessun caso M7 rispetta tutti i target \\
+Sforzo di controllo & Da valutare per lo scenario & Non cresce necessariamente in ogni prova; confrontare le metriche \\
+Saturazioni & Assenti nel modello & Assenti; accumulo e windup possibili in un attuatore reale saturato \\
+Vantaggio & Prestazione nominale con misure disponibili & Reiezione nominale dei disturbi costanti \\
+Limite & Non elimina l'offset da coppia costante & Settling/overshoot non conformi; servirebbero stima e anti-windup in una realizzazione con saturazioni \\\bottomrule
+\end{tabular}
+\caption[Confronto delle architetture LQG e LQI]{Differenze fra le architetture effettivamente simulate, non proprietà universali delle sigle LQG e LQI.}
+\label{tab:lqg-lqi-logica}
+\end{table}
+
+La Figura~\ref{fig:lqi-disturbo} applica due prove separate sul medesimo
+modello nominale: $r=0$, condizioni iniziali nulle, nessun rumore,
+disturbo a partire da $t=0$ e orizzonte comune di 8 s.
+Le colonne distinguono $d=[0.5,0]^T$ e $d=[0,0.5]^T$ N m;
+le righe mostrano $q_1$ e $q_2$ in gradi. Ogni asse sovrappone LQG e LQI.
+L'offset LQG non è un transitorio incompleto: coincide con il guadagno DC.
+LQI converge invece verso zero; a 8 s il massimo residuo osservato
+è circa $8.73\cdot10^{-5}$ rad, distinto dallo zero asintotico calcolato.
+La Figura~\ref{fig:lqi-comando} usa gli stessi esperimenti e mostra
+le coppie incrementali. In queste prove LQI non richiede un picco maggiore
+di M6: elimina l'offset con un contributo statico che bilancia la coppia
+disturbante. Questo non contraddice i maggiori picchi osservati nel
+tracking, che è uno scenario diverso.
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.86\textwidth]{figures/m7_lqg_lqi_constant_disturbance.png}
+\caption{LQG senza integratore e LQI a stato vero, punto $(w_i,\rho_U)=(1,8)$, sotto le due coppie costanti da 0.5 N m. Tutti gli ingressi e gli stati iniziali sono identici; cambia l'architettura di feedback.}
+\label{fig:lqi-disturbo}
+\par\medskip
+\includegraphics[width=0.86\textwidth]{figures/m7_lqg_lqi_disturbance_control.png}
+\caption{Comandi degli stessi due esperimenti della Figura~\ref{fig:lqi-disturbo}. Non sono applicate saturazioni o compensazioni anti-windup.}
+\label{fig:lqi-comando}
 \end{figure}
 
-M7 resta \status{\MSevenStatus}: soltanto \MSevenAdmissible\ delle tre verifiche soddisfano tutti i criteri. Il risultato negativo è documentato e non viene promosso un punto diagnostico a controllore finale.
+\subsection{Perché lo studio non sostituisce il controllore nominale}
+La Tabella~\ref{tab:lqi-tre-punti} conserva l'esito M7: tutti i punti sono
+stabili e rigettano i disturbi costanti, ma i primi due non si assestano
+entro 3 s e il terzo richiede $2.168$ s con overshoot $25.05\%$.
+Il target M5 è $0.8$ s e $10\%$. Il punto intermedio usato nei grafici
+ha overshoot $16.59\%$ e picco di tracking $7.805$ N m.
+Il caso forte raggiunge $12.921$ N m: il superamento della scala
+prestazionale di 12 N m non è una simulazione di saturazione hardware.
 
-\input{tables/lqg_m6_m7.tex}
+Se un attuatore reale saturasse, l'errore potrebbe continuare ad accumularsi
+mentre il comando richiesto non è realizzabile: sarebbe necessaria una
+strategia anti-windup, assente dal progetto. M7 resta dunque
+\status{\MSevenStatus}, con \MSevenAdmissible\ punti conformi a tutti
+i criteri. La reiezione dell'offset è un vantaggio reale, ma non basta
+a sostituire M6 né a certificare robustezza.

@@ -6,11 +6,12 @@
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (63 pagine A4, conteggio verificato nell'audit LaTeX).
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (71 pagine; conteggio verificato in `report/generated/report_latex_audit.txt`).
 - Macro: `report/generated/m18_values.tex` (78 valori storici riconciliati) e `revision_values.tex` (12 valori della revisione, con sorgenti in `revision_numeric_audit.csv`).
-- Tabelle: 17 file tabellari: 11 in `report/tables/` e 6 in `report/generated/`, oltre alle macro e alla tabella sintetica Kalman delle slide.
-- Figure: 24 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
+- Tabelle: 19 file tabellari: 11 in `report/tables/` e 8 in `report/generated/`, oltre alle macro e alla tabella sintetica Kalman delle slide.
+- Figure: 30 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
 - Compilazione: `powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1`.
+- Revisione mirata: aggiungere `-ReportOnly` per non ricompilare le slide.
 
 ## Presentazione
 
@@ -27,6 +28,11 @@
 - Khinf comparator: `m10_hinfsyn_nominal.mat`.
 - Kmu final robust controller: `m13_musyn_dk.mat`.
 - Audit finale: `results/data/m18_final_deliverable_audit.mat`.
+- Studio LQI: `analysis/progetto_lqi.m`, `m7_disturbance_comparison.mat/.csv`.
+- Studio H-infinity: `analysis/nominal/study_hinf_weights.m`,
+  `hinf_weight_revision.mat/.csv`; il default ricarica i dati già prodotti.
+- Figure/tabelle mirate: `analysis/nominal/plot_lqi_hinf_revision.m`.
+- M18 censisce 23 sorgenti; i nuovi studi non sostituiscono M9–M16.
 - Modelli: `simulink/SEA_LQG_nonlinear.slx` e `simulink/SEA_ROBUST_nonlinear.slx`.
 
 ## Riproducibilità
@@ -38,6 +44,10 @@
 - `run_all`: ricostruzione storica, NOT RUN nella revisione corrente perché rilancerebbe M9–M11.
 - Nuove evidenze: `lyapunov_ras_nominal.mat`, `lyapunov_trajectories.mat/.csv`, `didactic_lqg_calculations.mat`, `didactic_hinf_calculations.mat` in `results/data/`.
 - Derivazioni e confronto didattico: `docs/REVISIONE_TECNICA_LYAPUNOV.md`.
+- Revisione mirata successiva: `docs/REVISIONE_MIRATA_LQI_HINF.md`.
+- Regressione mirata conclusiva: `lqi_hinf_revision_verification.mat/.csv`,
+  644/644 PASS in un'unica suite globale; i due test file esistenti sono
+  stati estesi senza aggiungere nuovi file di test.
 
 ## Limiti noti
 
@@ -45,6 +55,8 @@
 - Kmu ha RS certificata ma NP/RP e tracking falliti.
 - M6 perde stabilità nei Sample 5 e 6 M16.
 - Khinf/Kmu non soddisfano il tracking M5.
+- Nessuno dei 13 nuovi candidati H-infinity soddisfa tutti i target M5;
+  il minimo gamma è 2.8056. Il candidato illustrativo ID 10 non è adottato.
 - uScale non è una saturazione hardware.
 - Lyapunov fornisce un limite interno nominale conservativo; il livello numerico campionato, le mappe M8/M15 e Monte Carlo restano empirici.
 - Le incertezze non sono identificate sperimentalmente.
