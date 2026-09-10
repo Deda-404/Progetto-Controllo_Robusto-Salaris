@@ -4,6 +4,22 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Revisione mirata LQI / H-infinity — 2026-09-10
+
+- Approfondita localmente la sola §7.6; preservate le precedenti sezioni
+  Q/R, CARE, Kalman e Lyapunov. Aggiunto confronto di disturbo LQG/LQI.
+- Audit dei pesi originali e campagna deterministica separata a tre pesi:
+  13 candidati e 2 sintesi diagnostiche, cache MATLAB, nessuna musyn.
+- Conservati gli esiti negativi e la baseline M9–M16; ID 10 illustrativo,
+  non nuovo controllore finale. Cinque campioni M4 sono soltanto empirici.
+- Quattro figure H-infinity, due LQI e due tabelle generate; inventario M18
+  esteso a 23 sorgenti, 19 file tabellari e 30 asset.
+- Estese verifiche in test già presenti, senza nuovi file di test.
+- Compilazione della sola relazione tramite opzione ReportOnly, senza
+  modificare la presentazione.
+- Registrata la successiva richiesta di pubblicazione del branch e PR
+  verso main; nessuna ulteriore modifica tecnica o merge automatico.
+
 ### Pubblicazione Git — 2026-09-09
 
 - Conservato il MAT delle traiettorie Lyapunov mediante Git LFS: il push

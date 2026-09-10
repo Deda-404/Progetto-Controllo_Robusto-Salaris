@@ -1,5 +1,6 @@
 %% 1 - Introduzione e dati: progetto H-infinity, separato dal percorso LQG
-% M5, Khinf M10 e Kmu M13 restano congelati. Nessuna nuova musyn.
+% Le sezioni 1-19 riproducono la baseline congelata M5/M10/M13.
+% La sezione 20 espone il successivo studio a tre pesi, separato e salvato.
 clearvars; clc; close all;
 radice=fileparts(fileparts(mfilename('fullpath')));
 addpath(genpath(fullfile(radice,'src')),genpath(fullfile(radice,'controllers')), ...
@@ -256,7 +257,41 @@ assert(abs(rhoNumerico/archivio.risultati{2}.rhoNumerical-1)<1e-5);
 plot_lyapunov_ras(archivio.risultati,radice);
 fprintf(['Khinf: NS nominale PASS, prestazione pesata FAIL. Il limite interno ' ...
     'Lyapunov e nominale, non robusto M4.\nIl livello campionato non e certificato. ' ...
-    'Il calcolo e double, non aritmetica intervallare. Nessun retuning o musyn.\n']);
+    'Il calcolo e double, non aritmetica intervallare. Baseline preservata.\n']);
 save(fullfile(dati,'didactic_hinf_calculations.mat'),'Pgen','Ak','Bk','Ck','Dk', ...
     'gammaCongelato','gammaRicostruito','crossoverW1','Acl','P','rhoCertificato', ...
     'rhoNumerico','tempoNl','zNl','stabileCampioni','-v7');
+
+%% 20 - Studio successivo: normalizzazione dichiarata, W3 e baseline distinta
+% study_hinf_weights(true) esegue una sola campagna: 13 candidati,
+% una verifica hinfsyn equivalente e un diagnostico sul solo comando.
+% Il default false qui ricarica; non ripete sintesi ad ogni esecuzione.
+studio=study_hinf_weights(false);
+scelto=studio.selezionato;
+wb=studio.tabella.OmegaB(scelto);
+beta=studio.tabella.BetaU(scelto);
+wt=studio.tabella.OmegaT(scelto);
+qsNuovo=spec.referenceAmplitude; usNuovo=spec.uScale;
+Gnormalizzato=G*usNuovo/qsNuovo;
+W1nuovo=((s/spec.Ms+wb)/(s+wb*spec.As))*eye(2);
+W2normalizzato=beta*(s/spec.omegaU+1)/ ...
+    (s/(spec.controlWeightAlpha*spec.omegaU)+1)*eye(2);
+W2nuovo=(qsNuovo/usNuovo)*W2normalizzato;
+W3nuovo=(s/wt+0.1)/(s/(5*wt)+1)*eye(2);
+% W3 e una scelta di roll-off/rumore, non il certificato dell'incertezza
+% moltiplicativa all'ingresso M4: quella coinvolge T_i, non T di uscita.
+Pnuovo=[W1nuovo -W1nuovo*Gnormalizzato;ss(zeros(2)) W2normalizzato; ...
+    ss(zeros(2)) W3nuovo*Gnormalizzato;ss(eye(2)) -Gnormalizzato];
+errorePnuovo=max(abs(freqresp(Pnuovo,omega)-freqresp(studio.P,omega)),[],'all');
+assert(errorePnuovo<1e-8);
+% [Kn,CLn,gammaNuovo]=hinfsyn(Pnuovo,2,2); eseguito nella campagna salvata.
+Knuovo=studio.Knuovo; % Kfisico=us*Kn/qs
+Tnuovo=feedback(G*Knuovo,ss(eye(2)));
+Snuovo=ss(eye(2))-Tnuovo;
+KSnuovo=feedback(Knuovo,G);
+normeNuove=[norm(W1nuovo*Snuovo,inf),norm(W2nuovo*KSnuovo,inf), ...
+    norm(W3nuovo*Tnuovo,inf)];
+disp(studio.tabella);
+disp('Norme W1S, W2KS, W3T del candidato illustrativo:'); disp(normeNuove);
+% Nessuno dei candidati supera tutti i target M5; non viene sostituito Khinf.
+% Le conclusioni M11-M16 e la precedente RAS valgono per la baseline.

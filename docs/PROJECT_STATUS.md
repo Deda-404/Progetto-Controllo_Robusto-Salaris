@@ -1,12 +1,43 @@
 # Stato del progetto
 
-**Fase corrente:** revisione tecnica del refactoring strutturale e didattico conclusa e validata.
+**Fase corrente:** revisione mirata LQI / H-infinity conclusa e validata; pubblicazione del branch e apertura della PR richieste dal gruppo, senza merge automatico.
 
-**Ramo:** `codex/lyapunov-technical-coherence-review`
+**Ramo:** `codex/lqi-hinf-targeted-review`
 
 **Autori:** Alessio de Dato, Valerio Rebechi
 
-**Ultimo aggiornamento:** 2026-09-09
+**Ultimo aggiornamento:** 2026-09-10
+
+## Revisione mirata corrente
+
+- Baseline: origin/main dopo PR 27, working tree inizialmente pulito.
+  Le ulteriori modifiche manuali di Valerio non sono ancora pubblicate:
+  verranno integrate quando disponibili; nessuna ricostruzione presunta.
+- §7.1–7.5 preservate testualmente; §7.6 LQI estesa localmente.
+  Confronto con stato vero, 16 stati, wi=1 e rhoU=8: offset DC LQI nullo,
+  residuo massimo a 8 s 8.732e-5 rad. Nessuna nuova selezione finale M7.
+- H-infinity: 13 candidati deterministici e 2 sintesi diagnostiche;
+  gamma minimo 2.8056. ID 10 illustrativo: gamma 4.0730, overshoot
+  144.44%, peak control 15.686 N m; non conforme e non adottato.
+- Cinque campioni M4 comuni: ID 10 stabile in 2/5, baseline in 5/5.
+  È un controllo empirico aggiuntivo, non la campagna M16.
+- M5, M6 e M9–M16 restano la baseline; nessuna nuova musyn.
+  W1/W2/W3 rivisti esistono esclusivamente nel nuovo studio.
+- Verifica mirata M7: 7/7 PASS; suite globale eseguita una sola volta in
+  copia isolata: 644/644 PASS, 0 failed/incomplete, 279.107 s.
+- Code Analyzer: 172 file di progetto, zero segnalazioni.
+- Relazione: 71 pagine; audit PASS, zero errori/overfull/riferimenti
+  irrisolti. Controllate tutte le pagine; conservati gli spazi ereditati
+  nelle sezioni protette, senza alterare margini o font globali.
+- Presentazione non aggiornata. La successiva richiesta del gruppo autorizza
+  commit, push di `codex/lqi-hinf-targeted-review` e PR verso `main`;
+  nessun merge automatico e nessuna modifica diretta a `main`.
+- Resoconto: `docs/REVISIONE_MIRATA_LQI_HINF.md`; esiti per test in
+  `results/data/lqi_hinf_revision_verification.mat/.csv`.
+
+Le sezioni seguenti conservano il contesto della revisione Lyapunov già
+conclusa: i relativi conteggi di test/PDF e l'assenza di nuove sintesi
+descrivono quella revisione, non la campagna mirata del 10 settembre.
 
 ## Decisioni vincolanti
 
@@ -17,7 +48,7 @@
 - Gli esiti negativi rimangono risultati tecnici, non errori da occultare.
 - La nuova analisi Lyapunov è nominale, aumentata e senza saturazione: non modifica la certificazione M14.
 
-## Revisione corrente
+## Revisione Lyapunov precedente
 
 I due script `analysis/progetto_lqg.m` e `analysis/progetto_hinf.m` espongono direttamente modello, scale, matrici e calcoli. Il primo distingue qs fisico e pesi adimensionali, sviluppa Q/R, CARE e Kalman, verifica separazione e simulazioni. Il secondo ricostruisce i pesi e la pianta generalizzata, ricarica Khinf e ne verifica norme, risposta e stabilità interna.
 
@@ -39,7 +70,7 @@ La nuova analisi Lyapunov include 28/32/66 stati per LQG/Khinf/Kmu. Il limite an
 
 Le regioni empiriche M8/M15 e le frazioni Monte Carlo non diventano certificati grazie alla nuova analisi nominale. Il valore rho dipende dalle coordinate interne e non classifica i controllori. uScale=12 N m non è una saturazione hardware.
 
-## Verifica della revisione corrente
+## Verifica della revisione Lyapunov precedente
 
 - Script didattici LQG e H-infinity: eseguiti, identità dei controllori verificata.
 - Test mirati: 50/50 PASS.

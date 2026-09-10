@@ -62,11 +62,14 @@ crossover unitario del peso. La scelta penalizza lo sforzo nella mixed
 sensitivity senza introdurre limiti hardware non forniti dalla traccia.
 
 \section{Implementazione e interpretazione}
-I pesi MIMO sono due copie diagonali dei pesi SISO e non viene usato $W_3$. La mixed sensitivity è
+Nella baseline M5 i pesi MIMO sono due copie diagonali dei pesi SISO e non viene usato $W_3$. La mixed sensitivity è
 \[
 \left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_\infty.
 \]
 I test verificano stabilità, properness, dimensioni e asintoti. Il valore uno separa soddisfacimento e violazione del profilo pesato. Le specifiche restano congelate anche quando una sintesi produce $\gamma>1$: il risultato negativo documenta la difficoltà del problema e non giustifica un retuning retroattivo.
+Il Capitolo~8 affianca a questa baseline uno studio dichiarato con pesi
+rivisti e terzo canale: non modifica retroattivamente il problema M5
+né i risultati robusti successivi.
 
 La stessa M5 alimenta anche la sintesi LQR: ampiezza del riferimento, banda, coppia di disturbo e scala del comando costruiscono normalizzazioni fisiche comuni. Questo non rende equivalenti LQR e mixed sensitivity; garantisce però che il confronto successivo non usi unità o obiettivi ricavati a posteriori per favorire un controllore.
 

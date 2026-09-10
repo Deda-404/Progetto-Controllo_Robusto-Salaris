@@ -42,6 +42,10 @@ del calcolo; non \`e stata eseguita in questa revisione.
 
 Un seguito sperimentale dovrebbe partire dalla caratterizzazione degli attuatori: limiti di coppia e velocità, saturazioni, rate limit, attriti e ritardi misurati. Questi dati consentirebbero di sostituire le sole scale prestazionali con vincoli verificabili e di aggiornare l'incertezza dinamica. Una campagna di identificazione su più configurazioni potrebbe inoltre valutare se le variazioni di rigidezza e inerzia adottate in M4 descrivano correttamente l'impianto.
 
-Sul piano del controllo, una revisione motivata dei pesi potrebbe affrontare il fallimento NP/RP, ma costituirebbe una nuova iterazione di progetto e dovrebbe essere valutata senza cancellare gli esiti presenti. Architetture 2-DoF potrebbero separare tracking e reiezione dei disturbi; l'anti-windup diventerebbe necessario una volta definiti i limiti di attuazione. Una riduzione di $K_\mu$ dovrebbe essere accompagnata da una post-analisi M14 completa, dalle simulazioni non lineari e da una nuova Monte Carlo sugli stessi criteri.
+Sul piano del controllo, lo studio mirato a tre pesi del Capitolo~8
+costituisce un primo confronto motivato ma non risolve i target nominali:
+non modifica il problema NP/RP della baseline. Un'eventuale configurazione
+futura da adottare richiederebbe una nuova iterazione completa, senza
+cancellare gli esiti presenti. Architetture 2-DoF potrebbero separare tracking e reiezione dei disturbi; l'anti-windup diventerebbe necessario una volta definiti i limiti di attuazione. Una riduzione di $K_\mu$ dovrebbe essere accompagnata da una post-analisi M14 completa, dalle simulazioni non lineari e da una nuova Monte Carlo sugli stessi criteri.
 
 Infine, l'estensione più rilevante sarebbe una validazione non lineare incerta, possibilmente abbinata a prove hardware-in-the-loop. Tale fase collegherebbe la robustezza formale locale alle dinamiche fisiche oltre l'equilibrio. Fino ad allora, il risultato raggiunto resta deliberatamente preciso: il progetto dispone di un controllore con stabilità robusta certificata sul modello M4, di un riferimento nominale con tracking conforme e di una documentazione esplicita delle prestazioni non soddisfatte.

@@ -16,9 +16,19 @@ modificare formulazioni, ordine degli argomenti e didascalie, ma le quantità
 tecniche restano legate ai risultati numerici verificati.
 
 Gli asset selezionati per i deliverable sono elencati nel manifest seguente.
+Il confronto LQI e la campagna a tre pesi sono conservati in
+\path{m7_disturbance_comparison.mat} e \path{hinf_weight_revision.mat},
+con esportazioni CSV. Il secondo archivio contiene anche i cinque modelli
+campionati, il seed e i poli dominanti delle chiusure complete.
+\path{plot_lqi_hinf_revision.m} produce le due tabelle
+\path{lqi_revision_results.tex} e \path{hinf_revision_results.tex}
+direttamente da questi dati, senza ripetere le sintesi. M18 censisce
+23 sorgenti, 19 file tabellari e 30 asset, inclusi quelli storici.
 Ogni file \`e copiato da un risultato validato e conserva nome, milestone e
 destinazione. L'uso effettivo nelle slide \`e ricavato dal sorgente Beamer;
 il manifest comprende anche l'asset empirico M8 mantenuto per consultazione.
+La Tabella~\ref{tab:manifest-figure} riunisce l'inventario su una pagina
+dedicata, mantenendo leggibili tutti i nomi dei file.
 \input{generated/figure_manifest.tex}
 
 La matrice completa requisito--milestone--risultato--sezione è mantenuta nel

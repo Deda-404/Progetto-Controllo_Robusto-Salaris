@@ -38,7 +38,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT03SourceInventoryComplete(testCase)
-            testCase.verifyEqual(height(testCase.M18.sourceInventory), 21);
+            testCase.verifyEqual(height(testCase.M18.sourceInventory), 23);
             testCase.verifyTrue(all(testCase.M18.sourceInventory.Exists));
         end
 
@@ -217,12 +217,12 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT30TablesProduced(testCase)
-            testCase.verifyEqual(numel(testCase.M18.tablePaths), 17);
+            testCase.verifyEqual(numel(testCase.M18.tablePaths), 19);
             testCase.verifyTrue(all(isfile(testCase.M18.tablePaths)));
         end
 
         function testT31FigureManifestProduced(testCase)
-            testCase.verifyEqual(height(testCase.M18.figureManifest), 24);
+            testCase.verifyEqual(height(testCase.M18.figureManifest), 30);
             testCase.verifyTrue(isfile(fullfile(testCase.Root, 'report', ...
                 'generated', 'figure_manifest.csv')));
         end

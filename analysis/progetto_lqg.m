@@ -286,6 +286,9 @@ assert(abs(rhoNumerico/archivio.risultati{1}.rhoNumerical-1)<1e-5);
 plot_lyapunov_ras(archivio.risultati,radice);
 
 %% 22 - Riepilogo e limiti
+% La derivazione LQI e il confronto da disturbo sono in progetto_lqi.m:
+% Aaug/Baug/Br -> Qaug/R -> Riccati -> Kx/Ki -> due prove d=0.5 N*m.
+% M7 usa lo stato vero, non Kalman; il suo punto intermedio e illustrativo.
 disp(m6.trackingMetrics); disp(m6.disturbanceMetrics);
 fprintf(['Certificato interno nominale e conservativo, valutato in double, ' ...
     'non con aritmetica intervallare.\nLivello campionato non certificato. ' ...
