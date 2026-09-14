@@ -1,25 +1,25 @@
 function config = lqg_specs_m7
-%LQG_SPECS_M7 Three manual LQI feasibility checks.
-%   These points illustrate the integral-action trade-off. They are not a
-%   search grid and no automatic ranking or controller selection is used.
+%LQG_SPECS_M7 Parametri dichiarati del servo LQRI con Kalman M6.
+%   Tre valori di wi isolano il costo integrale a Q e R fissi.
+%   wi=1 e illustrativo, non selezionato mediante ottimizzazione.
 
 m6 = lqg_specs_m6;
 config.manualDesigns = table( ...
     ["weakIntegral"; "balanced"; "strongIntegral"], ...
-    [0.1; 1; 4], [16; 8; 4], ...
-    'VariableNames', {'Tuning', 'Wi', 'RhoU'});
+    [0.1; 1; 4], repmat(1/9,3,1), ...
+    'VariableNames', {'Tuning', 'Wi', 'Ru'});
+config.illustrativeIndex = 2;
 config.statePrioritiesSource = ...
     "M6 validated artifact: validationMetrics.cost.priorities";
-config.disturbanceSteadyStateTolerance = 1e-4;
-config.referenceHorizon = m6.referenceHorizon;
+% Tolleranza sull'equilibrio DC; il residuo a 8 s e riportato separatamente.
+config.disturbanceSteadyStateTolerance = 1e-9;
+config.referenceHorizon = 8;
 config.disturbanceHorizon = 8;
 config.simulationTimeStep = m6.simulationTimeStep;
 config.settlingBandFraction = m6.settlingBandFraction;
 config.numericStabilityTolerance = m6.numericStabilityTolerance;
-config.feedforwardResidualTolerance = 1e-10;
-config.feedforwardConditionWarning = 1e8;
 config.antiWindupEnabled = false;
 config.saturationEnabled = false;
 config.status = ...
-    "feasibility study only; M6 remains the approved nominal controller";
+    "LQRI nominale: 14 stati stimati e 2 integratori misurati";
 end

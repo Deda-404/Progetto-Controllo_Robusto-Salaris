@@ -10,7 +10,7 @@ La tabella distingue il completamento del deliverable dall'esito tecnico. Un ris
 | Incertezze parametriche/dinamiche | M4 | `m4_uncertain_plant.mat` | cap. 5 | PASS |
 | Specifiche e pesi | M5 | `m5_performance_specs.mat` | cap. 6 | PASS |
 | LQG senza integratore | M6/M8 | artifact M6/M8 | cap. 7 | PASS |
-| LQG con integratore finale | M7 | artifact delle tre verifiche manuali | cap. 7 | FAIL - nessuna verifica conforme |
+| LQRI con Kalman e integratori misurati | M7 | m7_lqg_integral.mat; tre prove a Q/R fissi | §7.6 | PASS architettura/stabilità/DC; PARTIAL prestazioni M5 |
 | mixsyn | M9 | `m9_hinf_mixsyn_nominal.mat` | cap. 8 | PARTIAL - gamma > 1, tracking FAIL |
 | hinfsyn | M10 | `m10_hinfsyn_nominal.mat` | cap. 8 | PARTIAL - gamma > 1, tracking FAIL |
 | hinfstruct | M11 | `m11_hinfstruct_structured.mat` | cap. 8 | PARTIAL - campagna completa, prestazione FAIL |

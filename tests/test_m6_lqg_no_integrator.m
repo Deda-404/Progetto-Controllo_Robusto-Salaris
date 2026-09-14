@@ -5,13 +5,14 @@ end
 
 function setupOnce(testCase)
 root = fileparts(fileparts(mfilename('fullpath')));
-metrics = validate_m6_lqg_no_integrator;
+% La pipeline prepara M6; i test verificano l'output senza rigenerare figure.
 m3 = load(fullfile(root, 'results', 'data', ...
     'm3_nominal_actuated_plant.mat'));
 m5 = load(fullfile(root, 'results', 'data', ...
     'm5_performance_specs.mat'));
 m6 = load(fullfile(root, 'results', 'data', ...
     'm6_lqg_no_integrator.mat'));
+metrics = m6.validationMetrics;
 testCase.TestData = struct('root', root, 'metrics', metrics, ...
     'm3', m3, 'm5', m5, 'm6', m6);
 end
@@ -35,12 +36,19 @@ verifyGreaterThan(testCase, [scales.q; scales.qdot; ...
     scales.delta; scales.thetadot], zeros(4, 1));
 end
 
-function testControlCostComesFromUScale(testCase)
-m5 = testCase.TestData.m5;
+function testControlCostUsesEquivalentDirectWeight(testCase)
+% Confronto indipendente con le tre matrici R approvate in precedenza.
 m6 = testCase.TestData.m6;
 verifyEqual(testCase, m6.R, ...
-    m6.lqrCandidateTable.ControlWeight(m6.lqrCandidateTable.Selected) / ...
-    m5.spec.uScale^2 * eye(2), 'AbsTol', 1e-15);
+    m6.lqrCandidateTable.ControlWeight(m6.lqrCandidateTable.Selected) * ...
+    eye(2), 'AbsTol', 1e-15);
+config = lqg_specs_m6;
+verifyEqual(testCase, config.lqr.candidates.control, [4;8;16]/144, 'AbsTol', 1e-15);
+verifyEqual(testCase, m6.R, eye(2)/9, 'AbsTol', 1e-15);
+% L'archivio didattico precedente e indipendente dalla nuova ricerca.
+baseline = load(fullfile(testCase.TestData.root,'results','data','didactic_lqg_calculations.mat'));
+verifyEqual(testCase, m6.K, baseline.K, 'AbsTol', 1e-8);
+verifyEqual(testCase, m6.L, baseline.L, 'AbsTol', 1e-8);
 verifyGreaterThan(testCase, min(eig(m6.R)), 0);
 end
 

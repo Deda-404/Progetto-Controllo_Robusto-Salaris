@@ -2081,3 +2081,29 @@ automatici, modifiche dirette a main o ulteriori interventi tecnici.
 La logica del codice, dati, figure, PDF e verifiche già registrate restano
 invariati durante questa operazione Git; è ammessa la sola pulizia di
 whitespace necessaria al controllo del diff.
+
+## D-0050 — LQRI con Kalman M6 e parametrizzazione diretta di R
+
+Data: 2026-09-14. Responsabile: Alessio. Stato: APPROVATA DAL GRUPPO.
+
+La richiesta successiva sostituisce l'architettura M7 a stato fisico
+disponibile con un servo LQRI: `u=-Kx*xhat-Ki*xi`, `xi_dot=r-q_measured`.
+Il filtro M6 continua a stimare solo i 14 stati fisici, con L/Qn/Rn
+invariati; i due integratori sono stati interni calcolati dall'errore misurato.
+Si elimina il prefiltro M7 e si verifica la chiusura completa a 30 stati.
+La decisione supera la sola parte M7 di D-0048; H-infinity resta invariata.
+
+R viene costruita direttamente da ru, con griglia M6 {1/36,1/18,1/9}.
+Le matrici numeriche R dei 36 candidati sono identiche a quelle precedenti:
+non si esegue un nuovo retuning M6. La scala prestazionale M5 uScale
+resta valida negli altri usi, ma non normalizza più R.
+
+Per la sensibilità M7 si conservano tre wi={0.1,1,4}, mantenendo Q M6 e
+R=(1/9)I2 fissi. La scala integrale esistente è conservata per evitare
+un ulteriore cambiamento implicito del costo. wi=1 è scelto a priori
+come punto illustrativo, senza attribuirgli conformità M5 non dimostrata.
+
+Le modifiche restano circoscritte a M6/M7 e alle dipendenze documentali.
+Il percorso run_all con CR_RUN_SCOPE=lqri non esegue M8-M17; il percorso
+completo storico rimane disponibile e distinto. È autorizzata la
+pubblicazione su branch dedicato e PR verso main, senza merge automatico.

@@ -1,5 +1,10 @@
 # Revisione mirata LQI / H-infinity
 
+Documento storico del 10 settembre: la parte M7 è superata dalla revisione
+LQRI/R del 14 settembre, descritta in `RESOCONTO_REVISIONE_LQRI_R.txt`.
+Numeri e architettura M7 riportati sotto non descrivono il progetto corrente.
+La parte H-infinity rimane valida e invariata.
+
 Data: 2026-09-10. Responsabile: Alessio.
 Ambito tecnico: §7.6, capitolo 8 e impaginazione.
 Baseline: PR 27, commit 4ce6ad191ffcbf664d8fa0d4e82c81540ae52c46.

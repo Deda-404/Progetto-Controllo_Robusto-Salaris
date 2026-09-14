@@ -6,10 +6,10 @@
 ## Relazione
 
 - Source principale: `report/main.tex`, con 13 capitoli e 3 appendici modulari in `report/sections/`.
-- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (71 pagine; conteggio verificato in `report/generated/report_latex_audit.txt`).
+- PDF finale: `report/Progetto_CR_Relazione_finale.pdf` (72 pagine; conteggio verificato in `report/generated/report_latex_audit.txt`).
 - Macro: `report/generated/m18_values.tex` (78 valori storici riconciliati) e `revision_values.tex` (12 valori della revisione, con sorgenti in `revision_numeric_audit.csv`).
 - Tabelle: 19 file tabellari: 11 in `report/tables/` e 8 in `report/generated/`, oltre alle macro e alla tabella sintetica Kalman delle slide.
-- Figure: 30 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
+- Figure: 31 asset selezionati, registrati in `report/generated/figure_manifest.csv`.
 - Compilazione: `powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1`.
 - Revisione mirata: aggiungere `-ReportOnly` per non ricompilare le slide.
 
@@ -28,10 +28,10 @@
 - Khinf comparator: `m10_hinfsyn_nominal.mat`.
 - Kmu final robust controller: `m13_musyn_dk.mat`.
 - Audit finale: `results/data/m18_final_deliverable_audit.mat`.
-- Studio LQI: `analysis/progetto_lqi.m`, `m7_disturbance_comparison.mat/.csv`.
+- LQRI con Kalman M6: `analysis/progetto_lqri.m`, `m7_disturbance_comparison.mat/.csv`.
 - Studio H-infinity: `analysis/nominal/study_hinf_weights.m`,
   `hinf_weight_revision.mat/.csv`; il default ricarica i dati già prodotti.
-- Figure/tabelle mirate: `analysis/nominal/plot_lqi_hinf_revision.m`.
+- Figure/tabelle mirate: `analysis/nominal/plot_lqri_revision.m` e `plot_hinf_revision.m`.
 - M18 censisce 23 sorgenti; i nuovi studi non sostituiscono M9–M16.
 - Modelli: `simulink/SEA_LQG_nonlinear.slx` e `simulink/SEA_ROBUST_nonlinear.slx`.
 
@@ -41,17 +41,20 @@
 - Seed M16: `20260826`, generatore `twister`.
 - Generazione M18: `validate_m18_deliverables(true,true)`.
 - Suite automatica: `r=runtests('tests'); assertSuccess(r)`.
-- `run_all`: ricostruzione storica, NOT RUN nella revisione corrente perché rilancerebbe M9–M11.
+- `run_all`: percorso circoscritto con `CR_RUN_SCOPE=lqri`; il percorso completo storico resta distinto e rilancia M9–M11.
 - Nuove evidenze: `lyapunov_ras_nominal.mat`, `lyapunov_trajectories.mat/.csv`, `didactic_lqg_calculations.mat`, `didactic_hinf_calculations.mat` in `results/data/`.
 - Derivazioni e confronto didattico: `docs/REVISIONE_TECNICA_LYAPUNOV.md`.
 - Revisione mirata successiva: `docs/REVISIONE_MIRATA_LQI_HINF.md`.
-- Regressione mirata conclusiva: `lqi_hinf_revision_verification.mat/.csv`,
+- Regressione precedente del 10 settembre: `lqi_hinf_revision_verification.mat/.csv`,
   644/644 PASS in un'unica suite globale; i due test file esistenti sono
   stati estesi senza aggiungere nuovi file di test.
 
+La revisione LQRI/R corrente è descritta in `RESOCONTO_REVISIONE_LQRI_R.txt`;
+la sua verifica è conservata separatamente in `lqri_r_verification.mat/.csv`.
+
 ## Limiti noti
 
-- M7 non produce un controllore integrale finale.
+- M7 implementa LQRI (Kalman M6 + 2 integratori, chiusura a 30 stati), ma resta PARTIAL per il target di settling.
 - Kmu ha RS certificata ma NP/RP e tracking falliti.
 - M6 perde stabilità nei Sample 5 e 6 M16.
 - Khinf/Kmu non soddisfano il tracking M5.

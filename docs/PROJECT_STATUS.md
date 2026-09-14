@@ -1,14 +1,36 @@
 # Stato del progetto
 
-**Fase corrente:** revisione mirata LQI / H-infinity conclusa e validata; pubblicazione del branch e apertura della PR richieste dal gruppo, senza merge automatico.
+**Fase corrente:** revisione LQRI e parametrizzazione diretta di R completata e verificata; pubblicazione su branch dedicato per revisione manuale. M7 resta PARTIAL sul requisito prestazionale.
 
-**Ramo:** `codex/lqi-hinf-targeted-review`
+**Ramo:** `codex/lqri-direct-r-review`
 
 **Autori:** Alessio de Dato, Valerio Rebechi
 
-**Ultimo aggiornamento:** 2026-09-10
+**Ultimo aggiornamento:** 2026-09-14
 
-## Revisione mirata corrente
+## Revisione LQRI/R corrente
+
+- M7 usa `u=-Kx*xhat-Ki*xi`, `xi_dot=r-q_measured`, Kalman M6 invariato.
+- 14 stati fisici, 14 stimati, 2 integratori: chiusura reale di ordine 30.
+- Q M6 riutilizzata; R diretta con griglia equivalente `ru={1/36,1/18,1/9}`.
+- Tre prove wi={0.1,1,4} a Q/R fissi; punto illustrativo wi=1, R=(1/9)I2.
+- Tutti i 30 poli stabili; parte reale dominante del punto wi=1: -0.830657 s^-1.
+- M7 resta PARTIAL: settling 4.996 s, contro target 0.8 s; reiezione DC verificata.
+- H-infinity, M8-M17 e presentazione non sono oggetto della revisione.
+- I sorgenti LaTeX correnti sono preservati fuori dai passaggi strettamente coinvolti.
+- Verifica corrente: `run_all` con `CR_RUN_SCOPE=lqri`; esiti registrati
+  separatamente in `lqri_r_verification.mat/.csv`, senza attribuire i PASS storici.
+- Esito: 106/106 PASS, zero failed/incomplete; 15.62176 s per i test.
+- Entry point `analysis/progetto_lqri.m`: PASS; Code Analyzer su 172 file:
+  zero segnalazioni. Nessuna nuova esecuzione globale M0-M18.
+- Relazione: 72 pagine, audit LaTeX PASS, zero errori, riferimenti irrisolti,
+  overfull e destinazioni duplicate; controllo visivo completato.
+- Confronto con la baseline iniziale: differenze massime di K/Q/R M6 nulle;
+  L/Qn/Rn identici. Risultati H-infinity, mu, Monte Carlo e presentazione invariati.
+- Resoconto autosufficiente: `docs/RESOCONTO_REVISIONE_LQRI_R.txt`.
+- Destinazione: PR aperta verso main; nessun merge automatico.
+
+## Revisione storica del 10 settembre (M7 superata dalla revisione LQRI)
 
 - Baseline: origin/main dopo PR 27, working tree inizialmente pulito.
   Le ulteriori modifiche manuali di Valerio non sono ancora pubblicate:

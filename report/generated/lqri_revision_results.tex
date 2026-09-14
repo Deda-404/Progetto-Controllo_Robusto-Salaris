@@ -1,0 +1,37 @@
+% Generato da plot_lqri_revision.m; dati della chiusura reale.
+\[w_i=1,\quad Q_i=205.1754 I_2,\quad R=\tfrac{1}{9}I_2.\]
+\[K_x=[K_{x,a}\ K_{x,b}].\]
+{\small
+\[K_{x,a}=\begin{bmatrix}
+252.816 & 17.9583 & 19.5316 & 4.04857 & -155.124 & -13.0398 & -1.22792 \\
+18.073 & 206.531 & 4.97254 & 7.35789 & -6.14249 & -132.374 & -0.628205 \\
+\end{bmatrix}.\]
+\[K_{x,b}=\begin{bmatrix}
+-0.891209 & 11.2579 & 21.3459 & 40.7267 & -0.967425 & -2.32205 & -13.1358 \\
+1.31034 & -0.967425 & -2.18987 & -10.6186 & 14.0302 & 27.8105 & 77.4027 \\
+\end{bmatrix}.\]
+\[K_i=\begin{bmatrix}
+-42.9309 & 1.87553 \\
+-1.87553 & -42.9309 \\
+\end{bmatrix}.\]
+}
+Residuo relativo CARE: $\num{4.5682369e-13}$; residuo del guadagno: $\num{1.2652827e-11}$; residuo della trasformazione di separazione: $\num{2.1004269e-13}$.
+Parte reale dominante della chiusura completa: $\num{-0.830656945}$ s$^{-1}$.
+Il massimo residuo LQRI a 8 s nei due esperimenti vale $\num{0.00015827686}$ rad; non coincide con il valore asintotico.\par
+\begin{table}[htbp]\centering\small
+\begin{tabular}{rrrrr}\toprule
+$w_i$ & $\|K_i\|_2$ & $T_s$ [s] & OS [\%] & picco $u$ [N m] \\
+\midrule
+0.1 & 13.589 & $\infty$ & 0 & 0.71357 \\
+1 & 42.972 & 4.996 & 0 & 0.82057 \\
+4 & 85.944 & 2.616 & 0 & 0.82184 \\
+\bottomrule\end{tabular}\caption{LQRI: tre valori di $w_i$ a $Q$ e $R=(1/9)I_2$ fissi. Gradini di 5 gradi, 8 s; $\infty$ indica mancato assestamento entro 8 s.}\label{tab:lqri-wi}\end{table}
+\begin{table}[htbp]\centering\small
+\begin{tabular}{llrrrr}\toprule
+Controllo & Disturbo & $q_1(\infty)$ & $q_2(\infty)$ & picco $u$ & RMS $u$ \\
+\midrule
+LQG & $d_1$ & 0.0724251 & -0.0283682 & 1.29317 & 0.787404 \\
+LQG & $d_2$ & -0.027264 & 0.155869 & 1.15908 & 0.573655 \\
+LQRI & $d_1$ & 0 & 8.54271e-19 & 1.29857 & 0.447006 \\
+LQRI & $d_2$ & 0 & 1.9209e-18 & 1.18559 & 0.394739 \\
+\bottomrule\end{tabular}\caption{Disturbi separati da 0.5 N m; posizioni DC in rad, coppie in N m. Picco e RMS su entrambi i comandi negli stessi 8 s.}\label{tab:lqri-disturbi}\end{table}

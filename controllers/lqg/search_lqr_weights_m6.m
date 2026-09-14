@@ -55,7 +55,8 @@ for index = 1:numberCandidates
     try
         [Ccost, Q, scales, costInfo] = build_lqr_state_cost( ...
             m3Data, m5Data.spec, priorities);
-        R = controlWeight(index) / m5Data.spec.uScale^2 * eye(2);
+        % ru pesa le coppie fisiche; uScale resta una scala delle metriche.
+        R = controlWeight(index) * eye(2);
         K = lqr(m3Data.Afull, m3Data.Bfull, Q, R);
         Acl = m3Data.Afull - m3Data.Bfull * K;
         regulatorPoles = eig(Acl);
@@ -162,10 +163,10 @@ selection.priorities = struct('wq', positionWeight(selectedIndex), ...
     'wqdot', velocityWeight(selectedIndex), ...
     'wdelta', deformationWeight(selectedIndex), ...
     'wthetaDot', velocityWeight(selectedIndex));
-selection.rhoU = controlWeight(selectedIndex);
+selection.ru = controlWeight(selectedIndex);
 selection.Ccost = costOutputs{selectedIndex};
 selection.Q = costMatrices{selectedIndex};
-selection.R = selection.rhoU / m5Data.spec.uScale^2 * eye(2);
+selection.R = selection.ru * eye(2);
 selection.K = controllers{selectedIndex};
 selection.Nr = prefilters{selectedIndex};
 selection.regulatorPoles = poles{selectedIndex};

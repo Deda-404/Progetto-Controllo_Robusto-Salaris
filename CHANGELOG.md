@@ -4,6 +4,20 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### LQRI con Kalman M6 e peso R diretto — 2026-09-14
+
+- Sostituita la retroazione ideale M7 con `u=-Kx*xhat-Ki*xi`, integrando
+  l'errore degli encoder; Kalman M6 invariato e nessun prefiltro M7.
+- Costruite e verificate la CARE aumentata, la realizzazione del controllore
+  a 16 stati e la chiusura reale a 30 stati con principio di separazione.
+- Parametrizzata R direttamente con ru={1/36,1/18,1/9}, senza cambiare
+  le matrici R o la selezione M6. Tre wi a Q/R fissi, senza nuova ricerca.
+- Sostituiti gli asset attivi M7, aggiunto tracking LQG/LQRI con comandi
+  e integratori; mantenuti gli esiti negativi sul target di settling.
+- Adeguati test M6/M7, generatori M18, §7.2.4 e §7.6 della relazione.
+- Aggiunto percorso `CR_RUN_SCOPE=lqri` per verificare le sole dipendenze
+  coinvolte senza rilanciare H-infinity o analisi robuste/non lineari.
+
 ### Revisione mirata LQI / H-infinity — 2026-09-10
 
 - Approfondita localmente la sola §7.6; preservate le precedenti sezioni

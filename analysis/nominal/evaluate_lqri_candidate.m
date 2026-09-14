@@ -1,14 +1,15 @@
-function evaluation = evaluate_lqi_2dof_candidate( ...
-    m3Data, m5Data, design, Nff, config)
-%EVALUATE_LQI_2DOF_CANDIDATE Evaluate one full-state M7 servo candidate.
-%   Reference and constant link-torque cases are simulated separately for
-%   both joints. Normalized quantities use only the approved M5/M6 scales.
+function evaluation = evaluate_lqri_candidate( ...
+    m3Data, m5Data, m6Data, design, config)
+%EVALUATE_LQRI_CANDIDATE Servo con Kalman M6 e integrale dell'errore misurato.
+%   Si costruisce la chiusura reale z=[x;xi;xhat], di ordine 30, senza
+%   cancellazioni di stati. Ingressi: [r;d;v], con v rumore dei 4 encoder.
+%   Le prove dei due giunti hanno stato iniziale nullo e rumore nullo.
 
 arguments
     m3Data (1, 1) struct
     m5Data (1, 1) struct
+    m6Data (1, 1) struct
     design (1, 1) struct
-    Nff (2, 2) double
     config (1, 1) struct = lqg_specs_m7
 end
 
@@ -22,13 +23,21 @@ n = size(A, 1);
 Kx = design.Kx;
 Ki = design.Ki;
 
-Acl = [A - B * Kx, -B * Ki; -Cq, zeros(2)];
-Bcl = [B * Nff, Bd; eye(2), zeros(2)];
-Ccl = [Cq, zeros(2); Ctheta, zeros(2); ...
-    -Kx, -Ki; zeros(2, n), eye(2)];
-Dcl = [zeros(4, 4); Nff, zeros(2); zeros(2, 4)];
+C=m3Data.CfullMeas; L=m6Data.L;
+% E estrae le due posizioni link dagli encoder [q;theta]. Lo stato xi
+% non e stimato: xi_dot=r-E*y. Il medesimo comando u alimenta lo stimatore.
+E=[eye(2),zeros(2)];
+assert(isequal(size(L),[14,4]) && norm(E*C-Cq,'fro')<1e-12, ...
+    'M7LQRI:EncoderSelection','Kalman M6 o selezione encoder incoerenti.');
+Acl=[A,-B*Ki,-B*Kx; -Cq,zeros(2),zeros(2,n); ...
+    L*C,-B*Ki,A-B*Kx-L*C];
+Bcl=[zeros(n,2),Bd,zeros(n,4);eye(2),zeros(2),-E; ...
+    zeros(n,4),L];
+Ccl=[Cq,zeros(2,2+n);Ctheta,zeros(2,2+n); ...
+    zeros(2,n),-Ki,-Kx;zeros(2,n),eye(2),zeros(2,n)];
+Dcl=zeros(8,8);
 closedLoop = ss(Acl, Bcl, Ccl, Dcl, ...
-    'InputName', {'r1', 'r2', 'd1', 'd2'}, ...
+    'InputName', {'r1','r2','d1','d2','vq1','vq2','vtheta1','vtheta2'}, ...
     'OutputName', {'q1', 'q2', 'theta1', 'theta2', ...
     'u1', 'u2', 'xi1', 'xi2'});
 
@@ -46,7 +55,7 @@ trackingDc = dcgain(closedLoop(1:2, 1:2));
 disturbanceDc = dcgain(closedLoop(1:2, 3:4));
 
 for jointIndex = 1:2
-    input = zeros(numel(referenceTime), 4);
+    input = zeros(numel(referenceTime), 8);
     input(:, jointIndex) = spec.referenceAmplitude;
     output = lsim(closedLoop, input, referenceTime);
     referenceOutput{jointIndex} = output;
@@ -74,7 +83,7 @@ for jointIndex = 1:2
     peakElasticTorque(jointIndex) = max(abs( ...
         deformation * Ks.'), [], 'all');
 
-    input = zeros(numel(disturbanceTime), 4);
+    input = zeros(numel(disturbanceTime), 8);
     input(:, jointIndex + 2) = spec.disturbanceTorqueAmplitude;
     output = lsim(closedLoop, input, disturbanceTime);
     disturbanceOutput{jointIndex} = output;
@@ -117,7 +126,25 @@ disturbancePass = stable && all(abs( ...
 deformationScale = design.physicalScales.delta;
 worstPeakXi = max([trackingMetrics.PeakXi; disturbanceMetrics.PeakXi]);
 
-evaluation.Nff = Nff;
+% T converte [x;xi;xhat] in [x;xi;ex]. La triangolarita dimostra la
+% separazione nominale; si controllano anche tutti i 30 autovalori reali.
+T=[eye(n),zeros(n,2+n);zeros(2,n),eye(2),zeros(2,n); ...
+    eye(n),zeros(n,2),-eye(n)];
+Aseparated=[A-B*Kx,-B*Ki,B*Kx;-Cq,zeros(2,2+n); ...
+    zeros(n,n+2),A-L*C];
+evaluation.separationResidual=norm(T*Acl/T-Aseparated,'fro');
+evaluation.Aseparated=Aseparated;
+evaluation.transformation=T;
+evaluation.fullPoles=eig(Acl);
+evaluation.estimatorPoles=eig(A-L*C);
+evaluation.L=L; evaluation.Qn=m6Data.Qn; evaluation.Rn=m6Data.Rn;
+% Realizzazione autonoma: 14 stati xhat e 2 stati xi, ingressi [r;y].
+% Non esiste feedthrough del riferimento: D=0, nessun Nr/Nff.
+evaluation.Klqri=ss([A-L*C-B*Kx,-B*Ki;zeros(2,n+2)], ...
+    [zeros(n,2),L;eye(2),-E],[-Kx,-Ki],zeros(2,6));
+assert(stable && all(real(evaluation.estimatorPoles)<0) && ...
+    evaluation.separationResidual<1e-9,'M7LQRI:InternalStability', ...
+    'La chiusura reale o il principio di separazione non sono verificati.');
 evaluation.closedLoop = closedLoop;
 evaluation.trackingMetrics = trackingMetrics;
 evaluation.disturbanceMetrics = disturbanceMetrics;

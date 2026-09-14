@@ -6,7 +6,8 @@ M8 valida esclusivamente il controllore M6 LQG senza integratore. Le matrici
 `K`, `L` e `Nr` sono caricate da
 `results/data/m6_lqg_no_integrator.mat`, incorporate numericamente nel modello
 e confrontate bit per bit con il dataset; non sono stati eseguiti tuning LQR,
-LQI o Kalman. M7 resta `PARTIAL` e congelata.
+integrali o Kalman. La nuova LQRI M7 resta `PARTIAL`: la sua validazione
+lineare non modifica né estende le evidenze Simulink M8.
 
 Le tre verifiche manuali M7 non sono state ricostruite in Simulink: nessuna
 soddisfa insieme settling time e overshoot M5, quindi non esiste un secondo
