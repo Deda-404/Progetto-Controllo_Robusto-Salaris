@@ -69,7 +69,8 @@ rows(end+1)=localRow("Candidato LQR selezionato",selectedLqr.Candidate,"id","M6"
 rows(end+1)=localRow("Peso posizione LQR",selectedLqr.PositionWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.PositionWeight","MLqrPositionWeight");
 rows(end+1)=localRow("Peso velocita LQR",selectedLqr.VelocityWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.VelocityWeight","MLqrVelocityWeight");
 rows(end+1)=localRow("Peso deformazione LQR",selectedLqr.DeformationWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.DeformationWeight","MLqrDeformationWeight");
-rows(end+1)=localRow("Peso comando LQR",selectedLqr.ControlWeight,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.ControlWeight","MLqrControlWeight");
+% Il valore e ru, coefficiente diretto del comando fisico, non rhoU.
+rows(end+1)=localRow("Peso diretto comando LQR ru",selectedLqr.ControlWeight,"(N m)^-2","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.ControlWeight","MLqrControlWeight");
 rows(end+1)=localRow("Score LQR selezionato",selectedLqr.CompromiseScore,"-","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.CompromiseScore","MLqrSelectedScore");
 rows(end+1)=localRow("Picco comando LQR full-state",selectedLqr.WorstPeakControl,"N m","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.WorstPeakControl","MLqrPeakControl");
 rows(end+1)=localRow("RMS comando LQR full-state",selectedLqr.WorstRmsControl,"N m","M6","m6_lqg_no_integrator.mat","lqrCandidateTable.WorstRmsControl","MLqrRmsControl");

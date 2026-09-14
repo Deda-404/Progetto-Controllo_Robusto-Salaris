@@ -14,20 +14,22 @@ Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è
 
 La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: con il LQR M6 congelato è stabile in 38/40 casi (Sample 5 e 6 instabili), Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
 
-## Studio mirato LQI e H-infinity (10 settembre 2026)
+## LQRI con Kalman M6 e studio H-infinity separato
 
-La revisione di §7.6 e del capitolo 8 aggiunge un confronto nominale LQG/LQI
-con coppie costanti di 0.5 N m e uno studio H-infinity separato a tre pesi.
-LQI annulla l'offset asintotico, ma M7 resta PARTIAL. Nessuno dei 13 nuovi
+La revisione del 14 settembre sostituisce M7 con una LQRI: `u=-Kx*xhat-Ki*xi`,
+`xi_dot=r-q_measured`, Kalman M6 invariato e chiusura reale a 30 stati.
+R è parametrizzata direttamente da `ru`, con gli stessi valori numerici M6.
+La LQRI annulla l'offset DC, ma resta PARTIAL per il settling; lo studio
+H-infinity del 10 settembre resta separato e invariato. Nessuno dei 13 nuovi
 candidati H-infinity rispetta tutti i target M5; il minimo gamma è 2.8056.
 Il candidato illustrativo ID 10 (gamma 4.0730) non sostituisce Khinf:
 M5 e la catena M9–M16 originale restano invariati.
 
 ```matlab
 addpath(genpath('src'),genpath('controllers'),genpath('analysis'))
-progetto_lqi
+progetto_lqri
 studio = study_hinf_weights;  % legge la campagna già salvata
-plot_lqi_hinf_revision       % figure e tabelle dalla cache
+plot_hinf_revision          % soli asset H-infinity dalla cache
 validate_m18_deliverables(true,true)
 ```
 
@@ -37,7 +39,11 @@ diagnostiche, nessuna musyn. Il comando rifiuta di sovrascrivere una cache
 esistente. La revisione non richiede `run_all` né nuove analisi D–K/M14/M16.
 Per compilare soltanto la relazione aggiungere `-ReportOnly` a
 `tools/build_m18_latex.ps1`; le 19 slide restano quelle della baseline.
-Dettagli, numeri e verifica: `docs/REVISIONE_MIRATA_LQI_HINF.md`.
+La verifica circoscritta usa `setenv('CR_RUN_SCOPE','lqri'); run_all`;
+ripristinare poi `setenv('CR_RUN_SCOPE','')` per il percorso completo.
+Dettagli correnti: `docs/RESOCONTO_REVISIONE_LQRI_R.txt` e
+`docs/LQG_CON_INTEGRATORE.md`. Il resoconto del 10 settembre
+`docs/REVISIONE_MIRATA_LQI_HINF.md` è storico per la parte M7.
 
 ## Struttura del repository
 
@@ -48,6 +54,8 @@ Progetto_CR/
 │                         macrofase didattica M0--M5, eseguibile per sezioni
 ├── analysis/progetto_lqg.m
 │                         percorso didattico LQR/Kalman/LQG M6--M8 e RAS
+├── analysis/progetto_lqri.m
+│                         servo M7 con Kalman M6 e integratori misurati
 ├── analysis/progetto_hinf.m
 │                         percorso didattico H-infinity M9--M12 e RAS
 ├── src/                  parametri, modello, attuatori e incertezze

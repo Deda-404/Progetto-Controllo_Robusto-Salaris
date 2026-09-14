@@ -32,17 +32,30 @@ due script e nel validatore; le matrici complete sono negli artifact.
 Per lo studio mirato dei Capitoli~7--8, senza ripetere Lyapunov,
 D--K o Monte Carlo M16, si usano invece:
 \begin{verbatim}
-progetto_lqi
+progetto_lqri
 studio = study_hinf_weights; % solo lettura della cache
-plot_lqi_hinf_revision
+plot_hinf_revision
 \end{verbatim}
 La campagna viene prodotta con \path{study_hinf_weights(true)}
 solo se il suo MAT non esiste: 13 candidati e due sintesi diagnostiche.
 Il codice rifiuta la sovrascrittura di una campagna già presente.
 I cinque modelli M4 aggiuntivi usano seed \texttt{20260910}.
 Nessun nuovo controllore è adottato nella catena M9--M16.
-La verifica conclusiva usa una sola suite globale dei test esistenti,
-estendendo le verifiche pertinenti senza nuovi file di test.
+La verifica del 10 settembre usava una suite globale. Per la successiva
+revisione LQRI e del peso diretto $R$, il percorso circoscritto è:
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','lqri')
+run_all
+setenv('CR_RUN_SCOPE','')
+\end{verbatim}
+Questo percorso rigenera M6 con le stesse matrici $R$, verifica l'identità
+dei guadagni e del Kalman, ricostruisce M7 e i nuovi grafici, quindi esegue
+le quattro suite coinvolte. Non rilancia H-infinity, D--K, Monte Carlo
+o validazioni non lineari. Con la variabile vuota resta disponibile
+il percorso completo storico; il suo esito non viene attribuito
+alla verifica circoscritta. Le sorgenti e gli artifact robusti versionati
+sono prerequisiti, inclusi i dati LFS: non si ricostruiscono checkpoint
+congelati inventando nuovi risultati.
 
 La sola finalizzazione documentale può essere ripetuta con:
 \begin{verbatim}

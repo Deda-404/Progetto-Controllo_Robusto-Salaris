@@ -50,21 +50,21 @@ tds=qds;                              % stessa scala velocita motore (D/C)
 F=zeros(8,n); F(1:4,1:4)=eye(4);
 F(5:6,1:2)=-eye(2); F(5:6,5:6)=eye(2); F(7:8,7:8)=eye(2);
 Sx=diag([qs qs qds qds ds ds tds tds]);
-Su=spec.uScale*eye(m);                % u: coppie [N m]
-disp('Scale [qs qds ds tds uScale]:'); disp([qs qds ds tds spec.uScale]);
+disp('Scale degli stati [qs qds ds tds]:'); disp([qs qds ds tds]);
 
 %% 6 - Q e ricerca parametrica approvata, esplicitamente ricostruita
 % J=int(x'Qx+u'Ru)dt: errore/deformazione contro sforzo attuativo.
 % Q=F'*Sx^(-T)*Wq*Sx^(-1)*F=Ccost'*Ccost. NON e diagonale:
 % (theta-q)^2 genera termini incrociati. xa non ha pesi diretti arbitrari.
 % Griglia e score sono scelte D; il punto selezionato e un risultato E.
-[gq,gv,gd,gu]=ndgrid([0.5 1 2],[0.5 1],[0.1 0.5],[4 8 16]);
+[gq,gv,gd,gu]=ndgrid([0.5 1 2],[0.5 1],[0.1 0.5],[1/36 1/18 1/9]);
 pesiScore=[0.30;0.20;0.10;0.10;0.15;0.15];
 config=lqg_specs_m6; % il valutatore riusa solo tempi e soglie del progetto
 indici=inf(numel(gq),1); ammissibili=false(numel(gq),1);
 for j=1:numel(gq)
     Wq=diag([gq(j) gq(j) gv(j) gv(j) gd(j) gd(j) gv(j) gv(j)]);
-    Qj=F'*(Sx'\Wq/Sx)*F; Rj=Su'\(gu(j)*eye(m))/Su;
+    Qj=F'*(Sx'\Wq/Sx)*F;
+    Rj=gu(j)*eye(m); % stesse matrici R, peso diretto ru
     Kj=lqr(A,B,Qj,Rj); Aj=A-B*Kj;
     Nrj=(-Cq*(Aj\B))\eye(m);
     % Due gradini separati, 0:0.002:3 s, x(0)=0, d=v=0.
@@ -89,18 +89,18 @@ for j=1:numel(gq)
     end
 end
 [indiceFinale,j]=min(indici);
-wq=gq(j); wv=gv(j); wd=gd(j); rhoU=gu(j);
+wq=gq(j); wv=gv(j); wd=gd(j); ru=gu(j);
 Wq=diag([wq wq wv wv wd wd wv wv]);
 Ccost=sqrt(Wq)*(Sx\F); Q=Ccost'*Ccost;
 fprintf('LQR%02d: %d/36 ammissibili, score %.9g\n',j,sum(ammissibili),indiceFinale);
 disp('Q finale:'); disp(Q);
 
-%% 7 - R: normalizzazione fisica distinta dal tuning
-% u_tilde=Su\u; R=Su^(-T)*Wu*Su^(-1), Wu=rhoU*I.
-% uScale=12 e la scala prestazionale M5-D, non una coppia massima misurata.
-% rhoU=16 e il peso E selezionato: R=16/12^2*I=0.111111...*I.
-Wu=rhoU*eye(m); R=Su'\Wu/Su;
-disp('Su, Wu, R:'); disp(Su); disp(Wu); disp(R);
+%% 7 - R: peso diretto dello sforzo di controllo
+% u contiene coppie in N m; ru moltiplica direttamente u'*u.
+% La griglia {1/36,1/18,1/9} conserva il problema LQR approvato.
+% Il candidato selezionato ha ru=1/9; non e un nuovo retuning.
+R=ru*eye(m);
+disp('ru e R:'); disp(ru); disp(R);
 
 %% 8 - Q/R -> Riccati -> K -> poli
 [K,Plqr,poliLqr]=lqr(A,B,Q,R);
@@ -286,13 +286,13 @@ assert(abs(rhoNumerico/archivio.risultati{1}.rhoNumerical-1)<1e-5);
 plot_lyapunov_ras(archivio.risultati,radice);
 
 %% 22 - Riepilogo e limiti
-% La derivazione LQI e il confronto da disturbo sono in progetto_lqi.m:
-% Aaug/Baug/Br -> Qaug/R -> Riccati -> Kx/Ki -> due prove d=0.5 N*m.
-% M7 usa lo stato vero, non Kalman; il suo punto intermedio e illustrativo.
+% progetto_lqri.m espone il servo M7 con lo stesso Kalman M6:
+% Riccati -> Kx/Ki -> xhat e integrale(r-q_mis) -> chiusura a 30 stati.
+% Nessun prefiltro M7; prove nominali, non certificazione robusta.
 disp(m6.trackingMetrics); disp(m6.disturbanceMetrics);
 fprintf(['Certificato interno nominale e conservativo, valutato in double, ' ...
     'non con aritmetica intervallare.\nLivello campionato non certificato. ' ...
     'M7 resta PARTIAL; M16 empirica; la RS incerta proviene da M14.\n']);
 save(fullfile(dati,'didactic_lqg_calculations.mat'),'Q','R','K','Plqr','Nr', ...
-    'Sx','Su','Wq','Wu','F','qs','Qn','Rn','L','Pkalman','poliLqr', ...
+    'Sx','ru','Wq','F','qs','Qn','Rn','L','Pkalman','poliLqr', ...
     'poliKalman','erroreSeparazione','residuoCare','sensibilita','tempoNl','zNl','-v7');

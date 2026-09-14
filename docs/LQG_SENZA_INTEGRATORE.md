@@ -21,7 +21,7 @@ La matrice `Q=Ccost'*Ccost` nasce da scale leggibili secondo la logica di Bryson
 
 La ricerca compatta confronta 36 combinazioni didattiche, ottenute da
 `wq=[0.5,1,2]`, `wqdot=wthetaDot=[0.5,1]`, `wdelta=[0.1,0.5]` e
-`rhoU=[4,8,16]`. Prima si applicano i vincoli M5; soltanto i candidati
+`ru=[1/36,1/18,1/9]`. Prima si applicano i vincoli M5; soltanto i candidati
 ammissibili sono ordinati con uno score normalizzato che combina settling,
 overshoot, errore statico, cross-coupling, picco e RMS del comando. Sono
 ammissibili 9 candidati su 36 e viene selezionato `LQR30`.
@@ -36,10 +36,10 @@ w_{\dot\theta}=1.
 Gli stati interni degli attuatori non ricevono pesi arbitrari diretti. Per il comando si usa
 
 \[
-R=\frac{16}{u_{scale}^2}I_2=0.111111I_2.
+R=r_u I_2,\qquad r_u=1/9.
 \]
 
-Questa è l'unica ricerca LQR aperta dalla revisione: non modifica M5 e non
+La nuova parametrizzazione conserva esattamente le matrici R e la selezione già approvata: non modifica M5 e non
 coinvolge Khinf o Kmu. Non esistono griglie estese né una seconda iterazione
 di retuning.
 

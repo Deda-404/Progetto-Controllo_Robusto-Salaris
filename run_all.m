@@ -21,6 +21,43 @@ fprintf(['Struttura didattica: macrofase modellazione-linearizzazione-' ...
     'specifiche, quindi LQG, H-infinity, mu e validazioni finali.\n\n']);
 
 try
+    % Percorso circoscritto alla revisione M6/M7. Gli artifact robusti
+    % versionati restano congelati; il percorso completo sotto e invariato.
+    % Esecuzione: setenv('CR_RUN_SCOPE','lqri'); run_all
+    if strcmp(getenv('CR_RUN_SCOPE'),'lqri')
+        baselineM6=load(fullfile(projectRoot,'results','data','m6_lqg_no_integrator.mat'));
+        validate_m6_lqg_no_integrator;
+        currentM6=load(fullfile(projectRoot,'results','data','m6_lqg_no_integrator.mat'));
+        % Equivalenza numerica e riuso esatto del Kalman, senza retuning.
+        assert(norm(currentM6.K-baselineM6.K,'fro')<1e-8);
+        assert(isequal(currentM6.R,baselineM6.R) && isequal(currentM6.Q,baselineM6.Q));
+        assert(isequal(currentM6.L,baselineM6.L) && ...
+            isequal(currentM6.Qn,baselineM6.Qn) && isequal(currentM6.Rn,baselineM6.Rn));
+        % Allineamento dei soli metadati del precedente calcolo didattico:
+        % Q/R/K e tutte le analisi Lyapunov restano numericamente invariati.
+        didacticPath=fullfile(projectRoot,'results','data','didactic_lqg_calculations.mat');
+        didactic=load(didacticPath);
+        obsoleteFields=intersect(fieldnames(didactic),{'Su','Wu'});
+        didactic=rmfield(didactic,obsoleteFields);
+        didactic.ru=currentM6.R(1,1);
+        save(didacticPath,'-struct','didactic','-v7');
+        validate_m7_lqg_integral;
+        plot_lqri_revision;
+        % Le quattro suite coinvolte includono verifiche matematiche,
+        % regressione M6, punti didattici e coerenza dei deliverable M18.
+        names={'test_m6_lqg_no_integrator.m','test_m7_lqg_integral.m', ...
+            'test_didactic_entry_points.m','test_m18_final_deliverables.m'};
+        testResults=runtests(fullfile(projectRoot,'tests',names));
+        verification=table(testResults);
+        save(fullfile(projectRoot,'results','data','lqri_r_verification.mat'), ...
+            'verification','-v7');
+        writetable(verification(:,{'Name','Passed','Failed','Incomplete','Duration'}), ...
+            fullfile(projectRoot,'results','data','lqri_r_verification.csv'));
+        assertSuccess(testResults);
+        fprintf('[PASS] RUN_ALL scope=lqri: %d/%d test. M8-M17 non rieseguiti.\n', ...
+            sum([testResults.Passed]),numel(testResults));
+        return
+    end
     fprintf(['--- Test automatici M0 + M1 + M2 + M3/M3.1 + ' ...
         'M4/M4.1 + M5 + M6 + M7 + M8 + M9 + M10 + M11 + M12 + ' ...
         'M13 + M14 + M15 + M16 + M17 + M18 ---\n']);
@@ -50,8 +87,10 @@ try
         'dataset e figure M6 ---\n']);
     m6Metrics = validate_m6_lqg_no_integrator;
 
-    fprintf('\n--- M7: tre verifiche manuali LQI e feasibility gate ---\n');
+    fprintf('\n--- M7: LQRI con Kalman M6, integratori misurati e 30 stati chiusi ---\n');
     m7Metrics = validate_m7_lqg_integral;
+    % Il confronto e i documenti M7 sono rigenerati dai risultati appena ottenuti.
+    plot_lqri_revision;
 
     fprintf(['\n--- M8: Simulink non lineare, LTI/NL, disturbi, ' ...
         'rumore e RAS empirica ---\n']);

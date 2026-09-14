@@ -1,0 +1,402 @@
+RESOCONTO DELLA REVISIONE MIRATA LQRI / R DIRETTO
+Progetto: controllo robusto di un manipolatore planare 2-DoF con SEA
+Autori: Alessio de Dato, Valerio Rebechi
+Data: 14 settembre 2026
+Repository: https://github.com/Deda-404/Progetto_CR
+Branch: codex/lqri-direct-r-review
+Baseline remota: 7abc2ad84fe2b3fc9e89e1459bd054932c2f2bab (main, PR 28 integrata)
+
+Questo documento riporta esclusivamente la revisione corrente, distinta
+dalle validazioni storiche. I numeri derivano da esecuzioni MATLAB R2025b
+e dagli artifact versionati. La pubblicazione prevista e' un commit sul
+branch indicato e una Pull Request aperta verso main per revisione manuale.
+Non e' previsto alcun merge automatico o aggiornamento diretto di main.
+
+1. PROBLEMA INIZIALE
+La precedente M7 impiegava una retroazione ideale a stato vero,
+u=-Kx*x-Ki*xi, non equivalente alla realizzazione richiesta con encoder
+e osservatore. La sola sostituzione del nome LQI non avrebbe corretto
+questa differenza. Inoltre R era presentata tramite una normalizzazione
+del comando che poteva essere eliminata senza cambiare il problema LQR.
+
+La revisione sostituisce l'architettura attiva, i test, i dati M7 e le
+parti documentali collegate. Non introduce una nuova soluzione robusta
+ne' riprogetta M6, H-infinity, mu, Monte Carlo o validazioni non lineari.
+
+2. ARCHITETTURA LQRI IMPLEMENTATA
+LQRI indica qui LQR aumentato con integratore e osservatore di Kalman:
+  u = -Kx*xhat - Ki*xi
+  xi_dot = r - q_measured
+  xhat_dot = A*xhat + B*u + L*(y-C*xhat)
+  y = C*x + v = [q;theta] + v
+  q_measured = E*y, E=[I2,0_2x2].
+
+x e xhat hanno 14 componenti; xi ha 2 componenti. Il Kalman stima
+esclusivamente x, non xi. Il controllore autonomo ha ordine 16;
+la chiusura pianta-controllore ha 30 stati e non viene minimizzata
+prima della verifica di stabilita' interna. Non esiste un prefiltro
+Nff/Nr in M7. M6 conserva invece il proprio Nr.
+
+3. FORMULE, EQUAZIONI E VERIFICHE INDIPENDENTI
+Il problema LQR viene formulato sul sistema fisico aumentato:
+  xa=[x;xi]
+  Aa=[A,0;-Cq,0], Ba=[B;0], Br=[0;I2]
+  Qa=blkdiag(Q_M6,Qi), R=ru*I2
+  J=integrale_0^inf (xa'*Qa*xa + u'*R*u) dt.
+
+Il guadagno nasce dalla medesima Riccati:
+  Aa'*P + P*Aa - P*Ba*R^(-1)*Ba'*P + Qa = 0
+  Kaug=R^(-1)*Ba'*P=[Kx,Ki].
+Nessun elemento di Ki e' assegnato manualmente. Kx e' progettato per
+lo stato fisico, ma nella realizzazione moltiplica solamente xhat.
+
+La chiusura realmente simulata, in z=[x;xi;xhat], e':
+  Acl=[ A,       -B*Ki, -B*Kx;
+       -Cq,       0,     0;
+        L*C,     -B*Ki,  A-B*Kx-L*C ].
+Per w=[r;d;v]:
+  Bcl=[0,Bd,0; I2,0,-E; 0,0,L].
+I termini -E*v nell'integratore e L*v nell'osservatore sono presenti.
+
+La trasformazione ex=x-xhat conduce realmente alla forma:
+  Asep=[A-B*Kx,-B*Ki,B*Kx; -Cq,0,0; 0,0,A-L*C].
+Il codice verifica la similarita', non soltanto una lista teorica di poli.
+Il test ricostruisce anche le derivate fisiche con x diverso da xhat
+e rumore encoder non nullo, per rilevare feedback sullo stato sbagliato.
+
+Nel punto illustrativo wi=1:
+  residuo relativo CARE = 4.5682369286100377e-13;
+  norma Frobenius del residuo del guadagno = 1.2652826658153031e-11;
+  norma Frobenius del residuo di separazione = 2.1004269469087341e-13.
+PBH sui modi non stabili e rango all'origine sono verificati;
+rank([A,B;Cq,0])=16. Gli equilibri DC e la risposta tramite expm sono
+ricostruiti nei test, senza limitarsi a confrontare copie degli artifact.
+
+4. ELENCO PRECISO DEI FILE COINVOLTI
+Inventario rispetto alla baseline sopra indicata; percorsi relativi
+alla radice del repository. M=modificato, A=aggiunto, D=rimosso.
+Git puo' rappresentare le coppie D/A come rinominazioni per similarita'.
+
+M  analysis/finalization/build_m18_figure_manifest.m
+M  analysis/finalization/build_m18_report_tables.m
+M  analysis/finalization/build_m18_report_values.m
+M  analysis/finalization/load_m18_validated_artifacts.m
+M  analysis/finalization/validate_m18_deliverables.m
+D  analysis/nominal/evaluate_lqi_2dof_candidate.m
+A  analysis/nominal/evaluate_lqri_candidate.m
+A  analysis/nominal/plot_hinf_revision.m
+D  analysis/nominal/plot_lqi_hinf_revision.m
+A  analysis/nominal/plot_lqri_revision.m
+M  analysis/nominal/regenerate_document_figures.m
+M  analysis/nominal/validate_m6_lqg_no_integrator.m
+M  analysis/nominal/validate_m7_lqg_integral.m
+M  analysis/progetto_lqg.m
+D  analysis/progetto_lqi.m
+A  analysis/progetto_lqri.m
+M  CHANGELOG.md
+D  controllers/lqg/build_lqi_augmented_cost.m
+D  controllers/lqg/build_lqi_reference_feedforward.m
+A  controllers/lqg/build_lqri_augmented_cost.m
+M  controllers/lqg/search_lqr_weights_m6.m
+M  docs/DECISION_LOG.md
+M  docs/DIARIO_DI_BORDO.md
+M  docs/FINAL_DELIVERABLE_MANIFEST.md
+M  docs/LQG_CON_INTEGRATORE.md
+M  docs/LQG_SENZA_INTEGRATORE.md
+M  docs/M18_REQUIREMENTS_TRACEABILITY.md
+M  docs/PROJECT_STATUS.md
+A  docs/RESOCONTO_REVISIONE_LQRI_R.txt
+M  docs/REVISIONE_MIRATA_LQI_HINF.md
+M  docs/SIMULINK_RAS_LQG.md
+M  README.md
+M  report/figures/m7_augmented_cost_tradeoff.png
+D  report/figures/m7_lqg_lqi_constant_disturbance.png
+D  report/figures/m7_lqg_lqi_disturbance_control.png
+A  report/figures/m7_lqg_lqri_constant_disturbance.png
+A  report/figures/m7_lqg_lqri_disturbance_control.png
+A  report/figures/m7_lqri_reference_tracking.png
+M  report/generated/figure_manifest.csv
+M  report/generated/figure_manifest.mat
+M  report/generated/figure_manifest.tex
+M  report/generated/hinf_revision_results.tex
+D  report/generated/lqi_revision_results.tex
+A  report/generated/lqri_revision_results.tex
+M  report/generated/m18_values.tex
+M  report/generated/report_latex_audit.txt
+M  report/main.tex
+M  report/Progetto_CR_Relazione_finale.pdf
+M  report/sections/07_lqg.tex
+M  report/sections/13_conclusioni_limiti.tex
+M  report/sections/B_artifact_traceability.tex
+M  report/sections/C_riproducibilita.tex
+M  report/tables/lqg_m6_m7.tex
+M  results/data/didactic_lqg_calculations.mat
+A  results/data/lqri_r_initial_verification.csv
+A  results/data/lqri_r_verification.csv
+A  results/data/lqri_r_verification.mat
+M  results/data/m18_final_deliverable_audit.mat
+M  results/data/m6_lqg_no_integrator.mat
+M  results/data/m7_augmented_cost_feasibility.mat
+M  results/data/m7_disturbance_comparison.csv
+M  results/data/m7_disturbance_comparison.mat
+M  results/data/m7_lqg_integral.mat
+A  results/data/m7_lqri_tracking_comparison.csv
+M  results/figures/m7_augmented_cost_tradeoff.png
+D  results/figures/m7_lqg_lqi_constant_disturbance.png
+D  results/figures/m7_lqg_lqi_disturbance_control.png
+A  results/figures/m7_lqg_lqri_constant_disturbance.png
+A  results/figures/m7_lqg_lqri_disturbance_control.png
+A  results/figures/m7_lqri_reference_tracking.png
+M  run_all.m
+M  src/parameters/lqg_specs_m6.m
+M  src/parameters/lqg_specs_m7.m
+M  tests/test_m18_final_deliverables.m
+M  tests/test_m6_lqg_no_integrator.m
+M  tests/test_m7_lqg_integral.m
+
+I file M18 cambiano esclusivamente per integrare nomi, risultati e
+tracciabilita' M7 e il peso diretto ru. Il manifest contiene 31 asset,
+19 file tabellari e 23 sorgenti. Gli archivi M6/didattici mantengono
+i risultati numerici; vengono allineati solo i metadati ru.
+
+La presentazione non e' modificata. Le sezioni LaTeX 7.1, 7.2.1-7.2.3
+e 7.3-7.5 sono state confrontate con la copia iniziale: testo preservato,
+normalizzando esclusivamente CRLF/LF nel confronto. Gli interventi
+principali sono in 7.2.4, nella griglia equivalente e in 7.6; i riferimenti
+finali strettamente dipendenti sono allineati. Non sono ricostruiti capitoli
+da versioni storiche. Eventuali modifiche manuali non pubblicate non
+possono essere dichiarate integrate.
+
+5. FILE RIMOSSI O SOSTITUITI
+- analysis/progetto_lqi.m -> analysis/progetto_lqri.m.
+- evaluate_lqi_2dof_candidate.m -> evaluate_lqri_candidate.m.
+- build_lqi_augmented_cost.m -> build_lqri_augmented_cost.m.
+- build_lqi_reference_feedforward.m rimosso, senza successore M7.
+- plot_lqi_hinf_revision.m separato in plot_lqri_revision.m e
+  plot_hinf_revision.m: il secondo mantiene la logica H-infinity da cache.
+- report/generated/lqi_revision_results.tex sostituito da
+  lqri_revision_results.tex.
+- I due vecchi grafici m7_lqg_lqi_constant_disturbance.png e
+  m7_lqg_lqi_disturbance_control.png rimossi sia da results/figures
+  sia da report/figures. Sono sostituiti dai grafici LQRI; e' aggiunto
+  m7_lqri_reference_tracking.png, con coppie e stati integrali.
+- Il commento iniziale di hinf_revision_results.tex nomina il nuovo
+  esportatore; nessun valore H-infinity della tabella viene modificato.
+
+Le rimozioni sono recuperabili dalla storia Git; non vi sono cancellazioni
+della cronologia. I quattro PNG obsoleti sono conservati anche in una
+copia temporanea locale ignorata. I vecchi resoconti conservano il contesto
+storico, ma non definiscono una seconda implementazione M7 attiva.
+
+6. RIUTILIZZO ESATTO DEL KALMAN M6 E REGRESSIONE M6
+L, Qn e Rn sono letti dall'archivio M6 e riutilizzati senza sintesi.
+La verifica rispetto alla copia M6 iniziale restituisce:
+  isequal(L_nuovo,L_baseline)=true;
+  isequal(Qn_nuovo,Qn_baseline)=true;
+  isequal(Rn_nuovo,Rn_baseline)=true;
+  max(abs(K_nuovo-K_baseline))=0;
+  max(abs(Q_nuovo-Q_baseline))=0;
+  max(abs(R_nuovo-R_baseline))=0.
+Rimane selezionato LQR30, con 9 candidati ammissibili su 36.
+I 36 candidati vengono riprodotti con matrici R identiche; non viene
+aperta una nuova ricerca di tuning. L'osservatore A-L*C resta stabile.
+
+Gli asset M6 rigenerati con soli metadati PNG differenti sono stati
+confrontati pixel per pixel: 15 copie identiche, incluse quelle del
+report e della presentazione. Sono state preservate le copie binarie
+originali, evitando modifiche estranee alla revisione.
+
+7. VALORI FINALI DI Kx E Ki
+Punto illustrativo wi=1, R=(1/9)I2, ordine dello stato fisico invariato
+rispetto a M3/M6. Le righe seguenti riportano le 14 colonne nell'ordine
+originale, senza riordinamenti.
+
+Kx =
+[252.81557424978945, 17.9583011511913, 19.531571482403923,
+ 4.048574331242234, -155.1242717084416, -13.039773443358904,
+ -1.2279172998901944, -0.89120887721644637, 11.25794011665918,
+ 21.345901199261185, 40.72666123583172, -0.967424562549592,
+ -2.3220471309822233, -13.135756097093717;
+ 18.072997541748631, 206.53136374059514, 4.9725396262028365,
+ 7.3578889130436815, -6.1424872219295628, -132.37379452793644,
+ -0.62820544392725175, 1.3103371148386869, -0.9674245625497544,
+ -2.1898653803249908, -10.618610808657092, 14.030152318501205,
+ 27.810477044082358, 77.402672412928467]
+
+Ki =
+[-42.930885762268147,  1.8755318041909821;
+ -1.8755318041892686, -42.930885762270691]
+
+Il segno nella legge resta u=-Kx*xhat-Ki*xi; non si eliminano i segni
+meno in base al segno numerico degli elementi di Ki. Gli archivi MAT
+conservano la doppia precisione; le matrici nel PDF sono arrotondate
+soltanto per leggibilita'.
+
+8. PESO INTEGRALE wi E RISULTATI DELLE TRE PROVE
+Si conserva la scala integrale gia' motivata:
+  xiScale=(5*pi/180)*0.8 rad s;
+  Qi=(wi/xiScale^2)*I2.
+E' la memoria di un errore pari al riferimento per il tempo target,
+non un nuovo limite fisico. Con wi=1, Qi=205.1754 I2 circa.
+
+Tre soli valori, sempre con Q_M6 e R=(1/9)I2 fissi:
+  wi=0.1: stabile; nessun assestamento entro 8 s; overshoot 0%;
+  wi=1:   stabile; Ts=4.996 s; overshoot 0%;
+  wi=4:   stabile; Ts=2.616 s; overshoot 0%.
+Il punto wi=1 e' dichiarato a priori come illustrativo centrale.
+Nessuno dei tre soddisfa il tempo di assestamento M5 di 0.8 s.
+Non si afferma una monotonia universale di poli o norma di Ki nel MIMO.
+M7 resta PARTIAL: correttezza architetturale non significa conformita'
+prestazionale.
+
+9. PESO DIRETTO R
+  R=ru*I2, ru in {1/36,1/18,1/9}.
+Il valore finale resta ru=1/9=0.1111111111111111.
+La griglia equivale esattamente alla precedente [4,8,16]/144.
+Non viene adottato R=16*I2. Su e Wu non sono piu' il meccanismo
+di costruzione di R; uScale resta dove serve come scala prestazionale,
+soglia grafica o specifica M5, senza modificare H-infinity.
+
+10. POLI DOMINANTI DELLA CHIUSURA COMPLETA
+Tutti i 30 poli hanno parte reale negativa, per ciascuno dei tre wi.
+Per wi=1, i primi sei ordinati per parte reale decrescente, in s^-1:
+  -0.83065694494167719
+  -0.88399040183842192
+  -6.14326827061492 + 3.6034622965656689 i
+  -6.14326827061492 - 3.6034622965656689 i
+  -9.3187398871376068 + 11.717052426119185 i
+  -9.3187398871376068 - 11.717052426119185 i.
+Le evidenze riguardano stabilita' interna nominale, non robusta.
+
+11. ERRORE STATICO LQG M6 SOTTO DISTURBO
+Esperimenti separati con d1=0.5 N m o d2=0.5 N m lato link;
+r=0, rumore nullo, tutti gli stati iniziali nulli.
+Gli offset q(infinito), in rad, sono:
+  disturbo d1: [ 0.0724250647382383; -0.028368186147463139 ];
+  disturbo d2: [-0.027263986384089663; 0.15586889550340693 ].
+L'errore e=r-q ha segno opposto. Il prefiltro M6 non elimina questi
+offset; M6 conserva il comportamento precedente.
+
+12. ERRORE STATICO LQRI NELLE MEDESIME CONDIZIONI
+Gli offset DC q(infinito), in rad, sono:
+  disturbo d1: [0; 8.5427139742929786e-19];
+  disturbo d2: [0; 1.9208989729700582e-18].
+Sono residui numerici compatibili con zero, non valori fisici esatti.
+
+Il campione finale a 8 s e' distinto dal limite asintotico:
+  d1: q(8)=[1.1956866428031023e-4; -1.2106852062854371e-5] rad;
+  d2: q(8)=[-9.2370816260169535e-6; 1.5827686172271364e-4] rad.
+Il residuo massimo a 8 s NON e' inferiore a 1e-4 rad.
+La verifica indipendente mediante expm a 20 s controlla il residuo
+inferiore a 1e-7 rad; il test DC usa tolleranza 1e-9.
+Il principio del modello interno impone xi_dot=0 in un equilibrio
+compatibile: quindi q_measured=r. La memoria xi sostiene il comando
+necessario a compensare il disturbo, senza dover tornare a zero.
+
+13. PICCHI DI COMANDO E CONFRONTO EQUO
+Campionamento comune 0:0.002:8 s; picco=max assoluto sui due comandi;
+RMS calcolato su entrambi i canali nell'identico intervallo, in N m.
+
+Disturbo         Picco M6    Picco LQRI   RMS M6     RMS LQRI
+d1=0.5 N m       1.29316846  1.29856583   0.78740360 0.44700621
+d2=0.5 N m       1.15907819  1.18559028   0.57365469 0.39473925
+
+Il picco LQRI sotto disturbo e' leggermente maggiore di M6; non si
+presenta l'integratore come un miglioramento universale del comando.
+
+Gradini separati di riferimento di 5 gradi:
+  r1: picco M6=4.5106446342; LQRI=0.82056999798534 N m;
+  r2: picco M6=4.2805801030; LQRI=0.20522124258003169 N m.
+Il minore picco nel tracking si accompagna a maggiore lentezza.
+La figura di tracking mostra giunto comandato, entrambe le coppie e xi;
+le figure di disturbo mostrano entrambi i giunti e i due comandi.
+
+14. TEST, STATIC ANALYSIS E RIPRODUCIBILITA'
+Eseguito realmente:
+  setenv('CR_RUN_SCOPE','lqri');
+  run_all;
+  setenv('CR_RUN_SCOPE','');
+
+Il percorso rigenera M6 equivalente, verifica la baseline, costruisce
+M7, esporta i risultati ed esegue le quattro suite esistenti coinvolte:
+  test_m6_lqg_no_integrator.m
+  test_m7_lqg_integral.m
+  test_didactic_entry_points.m
+  test_m18_final_deliverables.m.
+
+Esito finale: 106/106 PASS, 0 failed, 0 incomplete.
+Somma delle durate dei test: 15.62176 s, non durata totale della pipeline.
+Evidenze: results/data/lqri_r_verification.mat e .csv.
+Eseguito anche analysis/progetto_lqri.m: PASS, senza nuove sintesi.
+Code Analyzer finale: 172 file MATLAB, zero segnalazioni.
+
+La prima esecuzione aveva 102/106 PASS e quattro fallimenti, conservati
+in results/data/lqri_r_initial_verification.csv:
+- tre confronti assoluti dei poli vicino a -133.333 s^-1 erano sensibili
+  al condizionamento delle basi modali, fino a 9.368e9; scarti massimi
+  6.906e-6, 1.092e-6 e 5.635e-6 fra calcoli eig;
+- un controllo documentale cercava il nome della revisione precedente.
+La verifica spettrale usa ora sigma_min(Acl-lambda*I) /
+max(1,norm(Acl,2)+abs(lambda)) < 1e-12 (osservato <2.77e-17),
+insieme alla similarita' e alla stabilita' di tutti i poli della matrice
+effettiva. Non sono cambiati guadagni, pesi o matrici per superare i test.
+Il controllo documentale e' stato aggiornato alla revisione corrente.
+
+Il percorso globale preesistente run_all M0-M18 NON e' stato rieseguito:
+NOT RUN in questa revisione. I suoi PASS storici non sono attribuiti
+ai file correnti. Il percorso completo e' mantenuto, con dipendenze M7
+aggiornate, ma richiede gli artifact congelati e i file Git LFS.
+Non si dichiara verificata una ricostruzione da una cartella priva dei
+checkpoint versionati. Non sono state rieseguite H-infinity, musyn,
+mu-analysis, Monte Carlo, validazioni non lineari o RAS.
+La verifica corrente e' intenzionalmente circoscritta per evitare costi
+e modifiche non pertinenti.
+
+15. COMPILAZIONE LATEX E CONTROLLO VISIVO
+Comando:
+  powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1 -ReportOnly
+
+Esito finale: PASS, relazione di 72 pagine.
+ERRORS=0; UNRESOLVED_REFERENCES=0; OVERFULL_HBOX=0;
+OVERFULL_VBOX=0; DUPLICATE_DESTINATIONS=0.
+Evidenza: report/generated/report_latex_audit.txt.
+Le pagine sono state renderizzate e controllate visivamente; le pagine
+modificate sono state esaminate anche singolarmente. Corretto localmente
+un paragrafo spezzato dall'inserimento delle tabelle, senza cambiare dati.
+Le formule Kx/Ki sono leggibili; i grafici hanno unita', legende e condizioni
+esplicite. Nessun riferimento a LQI e' presente nel testo estratto dal PDF.
+La presentazione non e' stata ricompilata o modificata.
+
+16. LIMITI, ESITO E REVISIONE MANUALE
+- Correttezza dell'architettura e stabilita' nominale: PASS.
+- Equivalenza di M6 e riuso Kalman: PASS.
+- Tracking DC e reiezione DC nominali: PASS entro tolleranze dichiarate.
+- Requisito temporale M5: FAIL per tutti e tre i wi; M7 resta PARTIAL.
+- Le prove di prestazione usano rumore nullo; il corretto ingresso del
+  rumore encoder e' verificato nelle equazioni, non tramite una nuova
+  campagna stocastica.
+- Bias encoder, saturazione e anti-windup non sono validati. L'integratore
+  annullerebbe l'errore misurato, non necessariamente quello fisico in
+  presenza di bias. Una saturazione potrebbe causare windup.
+- Non viene trasferita alla LQRI alcuna certificazione di robustezza M14,
+  regione non lineare o RAS ottenuta per altri controllori.
+- Monte Carlo M16 resta evidenza empirica distinta dalla mu-analysis M14.
+- H-infinity, W1/W2/W3, M9-M11, risultati mu, Monte Carlo e non lineari
+  restano invariati; solo l'esportatore misto e il suo riferimento sono
+  separati per eliminare l'implementazione M7 obsoleta.
+- Nessun retuning successivo ai tre wi dichiarati; nessuna nuova musyn.
+- Verifica globale M0-M18 e rigenerazione senza checkpoint: NOT RUN.
+- I valori e i limiti richiedono revisione manuale del gruppo prima del
+  merge. La PR deve rimanere aperta; main non viene modificato direttamente.
+
+Fonti numeriche principali per una verifica indipendente:
+  results/data/m3_nominal_actuated_plant.mat
+  results/data/m5_performance_specs.mat
+  results/data/m6_lqg_no_integrator.mat
+  results/data/m7_augmented_cost_feasibility.mat
+  results/data/m7_lqg_integral.mat
+  results/data/m7_disturbance_comparison.mat/.csv
+  results/data/m7_lqri_tracking_comparison.csv
+  results/data/lqri_r_verification.mat/.csv
+  report/generated/lqri_revision_results.tex
+  report/sections/07_lqg.tex.

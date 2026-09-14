@@ -48,7 +48,9 @@ function text=localLqg(e)
 m6=e.m6.trackingMetrics.lqg;
 selected=e.m6.lqrCandidateTable(e.m6.lqrCandidateTable.Selected,:);
 rows=["M6 LQG",string(order(e.m6.Klqg)),num(max(m6.SettlingTime)),num(max(m6.Overshoot)),"PASS nominale",tex(selected.Candidate)+": "+string(sum(e.m6.lqrCandidateTable.Admissible))+"/"+string(height(e.m6.lqrCandidateTable))+" ammissibili"; ...
-    "M7 LQG-I","N/A","N/A","N/A",tex(e.m7.validationMetrics.status),"3 verifiche manuali; nessuna conforme"];
+    "M7 LQRI","16",num(e.m7.manualComparisonTable.WorstSettlingTime(2)), ...
+    num(e.m7.manualComparisonTable.WorstOvershoot(2)),tex(e.m7.validationMetrics.status), ...
+    "Kalman M6 e 2 integratori; 30 stati chiusi"];
 text=makeTable("Confronto M6/M7. Il risultato M7 negativo resta esplicito.","tab:lqg",["Studio","Ordine","$T_s$ [s]","$M_p$ [\%]","Stato","Nota"],rows,true);
 end
 

@@ -2622,3 +2622,89 @@ validati restano invariati. Il controllo del diff staged, esteso ai nuovi
 file, rileva una riga vuota finale in `analysis/progetto_lqi.m`: viene
 rimossa esclusivamente questa riga per superare il controllo whitespace.
 Main e la cronologia pubblicata sono preservati.
+
+## 2026-09-14 — Revisione mirata LQRI e peso R diretto
+
+La PR 28 risulta integrata in origin/main (7abc2ad). Il working tree
+iniziale è pulito e non presenta ulteriori modifiche manuali al LaTeX.
+Creato codex/lqri-direct-r-review dalla baseline remota corrente.
+Il Capitolo 7 è letto nella versione corrente e conservato in una copia
+temporanea per il confronto delle sezioni protette.
+
+Individuate le dipendenze M6/M7, i test e i generatori M18; nessuna
+revisione generale del repository. Il costo R è parametrizzato da ru,
+con matrici equivalenti. LQRI riusa Q/L/Qn/Rn M6 e integra r-q_measured,
+senza prefiltro; sono costruite le chiusure a 30 stati e la trasformazione
+di separazione. Le tre prove wi usano tutte R=(1/9)I2.
+
+Prima verifica M7: tutti i punti stabili, reiezione DC verificata,
+nessun punto conforme al settling M5. wi=1: Ts=4.996 s, polo dominante
+circa -0.830657 s^-1, residuo relativo CARE 4.56824e-13. Il dato negativo
+non viene corretto mediante tuning. Al termine di 8 s il residuo di
+disturbo massimo è 1.58277e-4 rad, distinto dal limite DC numericamente nullo.
+
+Rimossi dal flusso attivo gli script della precedente architettura,
+il prefiltro M7, la tabella e quattro copie dei due grafici obsoleti.
+I grafici rimossi sono recuperabili dalla storia Git e da una copia
+temporanea locale. Il generatore misto precedente è separato: la parte
+H-infinity resta un esportatore da cache, senza modifiche a pesi o risultati.
+
+La revisione dei test adotta controlli indipendenti di equazioni fisiche,
+Riccati, selezione encoder, equilibrio, separazione e risposta tramite expm.
+Avviata la verifica run_all circoscritta; gli esiti conclusivi saranno
+registrati separatamente dalle validazioni storiche.
+
+### Diagnostica dei primi test
+
+Prima esecuzione circoscritta: 102/106 PASS, quattro verifiche fallite.
+Tre riguardano la tolleranza assoluta 1e-6 nel confronto dei poli ripetuti
+vicino a -133.333 s^-1: scarti massimi 6.906e-6, 1.092e-6 e 5.635e-6,
+condizionamento delle basi modali fino a 9.368e9. Le matrici chiuse sono
+stabili e i residui spettrali normalizzati sono inferiori a 2.77e-17.
+Il test adotta quindi il residuo normalizzato della matrice caratteristica,
+mantenendo la verifica della similarità e di tutti i 30 poli naturali.
+Non vengono cambiati guadagni, pesi o matrici chiuse.
+
+La quarta verifica cerca una frase del refactoring precedente nello stato
+progetto: viene aggiornata al nome della revisione corrente, conservando
+i controlli relativi a M4/M14 e Monte Carlo. Gli esiti iniziali completi
+restano in results/data/lqri_r_initial_verification.csv.
+
+### Chiusura delle verifiche e preparazione della pubblicazione
+
+Il percorso `run_all` con `CR_RUN_SCOPE=lqri` termina con 106/106 PASS,
+zero failed/incomplete; durata complessiva dei soli test 15.62176 s.
+Gli esiti sono conservati in `lqri_r_verification.mat/.csv`. Il percorso
+globale M0-M18 resta NOT RUN nella revisione corrente: nessuna nuova
+esecuzione H-infinity, musyn, mu-analysis, Monte Carlo, non lineare o RAS.
+Anche `analysis/progetto_lqri.m` viene eseguito con PASS, riusando la cache.
+Il controllo finale Code Analyzer esamina 172 file senza segnalazioni.
+
+Il confronto con la copia M6 iniziale restituisce differenze massime
+nulle per K, Q e R e identita' esatta di L, Qn e Rn. Restano LQR30 e
+9/36 candidati ammissibili. I 15 PNG M6 rigenerati hanno pixel identici
+alla baseline; sono conservati i file originali, senza differenze di
+soli metadati in relazione e presentazione. H-infinity, mu, Monte Carlo,
+validazione non lineare e RAS mantengono dati e codice congelati.
+Il solo commento iniziale della tabella H-infinity viene allineato al
+nome dell'esportatore separato; i suoi valori sono invariati.
+
+La relazione compila con `-ReportOnly`: 72 pagine, audit PASS, zero
+errori, riferimenti irrisolti, overfull o destinazioni duplicate.
+Controllate visivamente tutte le pagine e singolarmente quelle modificate;
+corretto localmente un paragrafo interrotto dalle tabelle, intervenendo
+sull'esportatore e rigenerando il solo confronto M7 e il PDF. Nessuna
+modifica numerica deriva dalla correzione di impaginazione.
+Preservato il testo iniziale delle sezioni 7.1, 7.2.1-7.2.3 e 7.3-7.5,
+normalizzando soltanto CRLF/LF nel confronto. Presentazione invariata.
+
+Creato `docs/RESOCONTO_REVISIONE_LQRI_R.txt` con i sedici punti richiesti,
+matrici complete, inventario dei file, esiti positivi e negativi.
+M7 resta PARTIAL: Ts=4.996 s per wi=1 contro target 0.8 s; l'errore DC
+nullo non viene confuso con il residuo finito a 8 s.
+
+Il fetch conclusivo conferma origin/main alla baseline
+7abc2ad84fe2b3fc9e89e1459bd054932c2f2bab; non risultano PR preesistenti
+per `codex/lqri-direct-r-review`. La pubblicazione autorizzata prevede
+commit coerente, push del solo branch e PR aperta verso main. Nessun
+merge automatico, force push o modifica diretta al branch principale.

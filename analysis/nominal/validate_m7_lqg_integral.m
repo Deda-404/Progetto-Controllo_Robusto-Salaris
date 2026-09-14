@@ -1,5 +1,7 @@
 function metrics = validate_m7_lqg_integral
-%VALIDATE_M7_LQG_INTEGRAL Evaluate three explicit LQI feasibility points.
+%VALIDATE_M7_LQG_INTEGRAL Valida tre costi LQRI con il Kalman M6 invariato.
+%   wi varia a Q e R fissi. Il punto centrale e illustrativo: stabilita
+%   interna e reiezione DC non sono equiparate alla conformita a tutti i M5.
 
 root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
 dataDirectory = fullfile(root, 'results', 'data');
@@ -18,7 +20,6 @@ manual = config.manualDesigns;
 numberDesigns = height(manual);
 designs = cell(numberDesigns, 1);
 evaluations = cell(numberDesigns, 1);
-feedforward = cell(numberDesigns, 1);
 
 stable = false(numberDesigns, 1);
 worstSettlingTime = inf(numberDesigns, 1);
@@ -32,15 +33,12 @@ disturbancePass = false(numberDesigns, 1);
 fundamentalPass = false(numberDesigns, 1);
 
 for index = 1:numberDesigns
-    design = build_lqi_augmented_cost(m3, m5, m6, ...
-        manual.Wi(index), manual.RhoU(index), statePriorities);
-    [Nff, feedforwardInfo] = build_lqi_reference_feedforward( ...
-        m3, design.Kx, config);
-    evaluation = evaluate_lqi_2dof_candidate( ...
-        m3, m5, design, Nff, config);
+    % Q e L provengono dal MAT M6: nessuna nuova sintesi Kalman.
+    design = build_lqri_augmented_cost(m3, m5, m6, ...
+        manual.Wi(index), manual.Ru(index));
+    evaluation = evaluate_lqri_candidate(m3, m5, m6, design, config);
     designs{index} = design;
     evaluations{index} = evaluation;
-    feedforward{index} = struct('Nff', Nff, 'info', feedforwardInfo);
     stable(index) = evaluation.summary.stable;
     worstSettlingTime(index) = evaluation.summary.worstSettlingTime;
     worstOvershoot(index) = evaluation.summary.worstOvershoot;
@@ -52,8 +50,7 @@ for index = 1:numberDesigns
         evaluation.summary.worstDisturbanceSteadyStateOffset;
     trackingPass(index) = evaluation.summary.trackingPass;
     disturbancePass(index) = evaluation.summary.disturbancePass;
-    fundamentalPass(index) = evaluation.summary.fundamentalPass && ...
-        feedforwardInfo.wellConditioned;
+    fundamentalPass(index) = evaluation.summary.fundamentalPass;
 end
 
 manualComparisonTable = [manual, table(stable, worstSettlingTime, ...
@@ -64,14 +61,22 @@ manualComparisonTable = [manual, table(stable, worstSettlingTime, ...
     'PeakControlNormalized', 'PeakDeformationNormalized', ...
     'DisturbanceOffset', 'TrackingPass', 'DisturbancePass', ...
     'FundamentalPass'})];
+% Lo stato deriva dai risultati, senza imporre a priori un esito negativo.
 validationMetrics.status = "PARTIAL";
+if any(fundamentalPass), validationMetrics.status = "COMPLETE_NOMINAL"; end
 validationMetrics.interpretation = ...
-    "integral action rejects constant disturbances, but no manual point meets M5 tracking targets";
+    "LQRI con stato stimato: verifiche nominali, non certificazione robusta";
 validationMetrics.designCount = numberDesigns;
 validationMetrics.admissibleCount = sum(fundamentalPass);
 validationMetrics.allStable = all(stable);
 validationMetrics.allRejectConstantDisturbance = all(disturbancePass);
 validationMetrics.noControllerPublished = ~any(fundamentalPass);
+validationMetrics.architecture = "u=-Kx*xhat-Ki*xi; xi_dot=r-q_measured";
+validationMetrics.physicalStateCount = 14;
+validationMetrics.integratorStateCount = 2;
+validationMetrics.estimatorStateCount = 14;
+validationMetrics.closedLoopStateCount = 30;
+validationMetrics.kalmanPreserved = all(cellfun(@(e) isequal(e.L,m6.L),evaluations));
 validationMetrics.physicalScalesPreserved = all(cellfun( ...
     @(d) isequaln(d.physicalScales, ...
     m6.validationMetrics.cost.scales), designs));
@@ -82,13 +87,10 @@ assert(numberDesigns == 3, 'M7:ManualDesignCount', ...
     'M7 must contain exactly three named manual comparisons.');
 assert(validationMetrics.allStable && ...
     validationMetrics.physicalScalesPreserved, 'M7:MathematicalValidity', ...
-    'An LQI comparison is unstable or changes the M6 physical scales.');
+    'Una chiusura LQRI e instabile o modifica le scale fisiche M6.');
 assert(validationMetrics.allRejectConstantDisturbance, ...
     'M7:DisturbanceRejection', ...
     'Integral action must reject the declared constant disturbances.');
-assert(validationMetrics.admissibleCount == 0 && ...
-    validationMetrics.noControllerPublished, 'M7:UnexpectedController', ...
-    'A final LQI controller cannot be published from this feasibility study.');
 
 tradeoffFigurePath = fullfile(figureDirectory, ...
     'm7_augmented_cost_tradeoff.png');
@@ -96,22 +98,27 @@ localPlotTradeoff(manualComparisonTable, m5.spec, tradeoffFigurePath);
 
 datasetPath = fullfile(dataDirectory, 'm7_augmented_cost_feasibility.mat');
 save(datasetPath, 'manualComparisonTable', 'designs', 'evaluations', ...
-    'feedforward', 'validationMetrics', 'statePriorities', 'config', '-v7');
+    'validationMetrics', 'statePriorities', 'config', '-v7');
+% L'artifact M7 espone il controllore realmente implementabile a 16 stati.
+illustrativeIndex=config.illustrativeIndex;
+Klqri=evaluations{illustrativeIndex}.Klqri;
+Kx=designs{illustrativeIndex}.Kx; Ki=designs{illustrativeIndex}.Ki;
+L=m6.L; Qn=m6.Qn; Rn=m6.Rn;
 save(fullfile(dataDirectory, 'm7_lqg_integral.mat'), ...
+    'Klqri','Kx','Ki','L','Qn','Rn','illustrativeIndex', ...
     'manualComparisonTable', 'validationMetrics', 'config', '-v7');
 
-fprintf('\n=== M7: tre verifiche manuali LQI ===\n');
-disp(manualComparisonTable(:, {'Tuning', 'Wi', 'RhoU', ...
+fprintf('\n=== M7: tre verifiche LQRI, Q e R fissi ===\n');
+disp(manualComparisonTable(:, {'Tuning', 'Wi', 'Ru', ...
     'WorstSettlingTime', 'WorstOvershoot', 'DisturbanceOffset', ...
     'FundamentalPass'}));
-fprintf(['[PARTIAL] Tutti i punti sono stabili e rigettano il disturbo, ' ...
-    'ma nessuno soddisfa insieme i target M5.\n']);
+fprintf('[%s] Punti conformi ai target nominali: %d/%d.\n', ...
+    validationMetrics.status,sum(fundamentalPass),numberDesigns);
 
 metrics.config = config;
 metrics.manualComparisonTable = manualComparisonTable;
 metrics.designs = designs;
 metrics.evaluations = evaluations;
-metrics.feedforward = feedforward;
 metrics.validationMetrics = validationMetrics;
 metrics.datasetPath = datasetPath;
 metrics.figurePath = tradeoffFigurePath;
@@ -131,7 +138,7 @@ for index = 1:height(tableData)
 end
 grid on; box on;
 xlabel('Worst settling [s]'); ylabel('Worst overshoot [%]');
-title('M7 - Confronto manuale dei tre costi LQI');
+title('M7 - LQRI: variazione di wi a Q e R fissi');
 colorbarHandle = colorbar;
 colorbarHandle.Label.String = 'peak |u| / uScale';
 set_scientific_figure_style(figureHandle);

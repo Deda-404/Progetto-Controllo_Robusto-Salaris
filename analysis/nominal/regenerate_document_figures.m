@@ -11,6 +11,8 @@ validate_m4_uncertainty_model;
 validate_m5_performance_specs;
 validate_m6_lqg_no_integrator;
 validate_m7_lqg_integral;
+% I nuovi asset LQRI dipendono dalla chiusura M7 appena rigenerata.
+plot_lqri_revision;
 validate_m8_simulink_ras(false,true);
 e=load_m18_validated_artifacts;
 fig=char(fullfile(root,'results','figures'));
