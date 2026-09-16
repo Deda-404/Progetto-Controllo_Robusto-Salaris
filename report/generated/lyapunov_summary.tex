@@ -2,9 +2,9 @@
 \begin{tabular}{lrrrrr}\toprule
 Controllore & $n_z$ & $\max\Re\lambda(A_{cl})$ & $\lambda_{\min}(P)$ & $\lambda_{\max}(P)$ & $\|E_L\|_2$ \\
 \midrule
-LQG M6 & 28 & -6.1717 & 0.0017341 & 746.82 & 5.2e-10 \\
-Khinf M10 & 32 & -0.68383 & 0.00047344 & 4578.2 & 3.04e-09 \\
-Kmu M13 & 66 & -0.73199 & 4.0188e-05 & 5638.3 & 1.98e-08 \\
+LQG M6 & 28 & -6.2185 & 0.0017072 & 744.56 & 8.45e-10 \\
+Khinf M10 & 32 & -0.68383 & 0.00050713 & 6120.6 & 3.77e-09 \\
+Kmu M13 & 84 & -0.81721 & 0.0016593 & 13756 & 1.13e-08 \\
 \bottomrule\end{tabular}
 \caption{Lyapunov sul sistema completo: $E_L=A_{cl}^TP+PA_{cl}+I$. Calcolo in doppia precisione.}
 \end{table}
@@ -12,9 +12,9 @@ Kmu M13 & 66 & -0.73199 & 4.0188e-05 & 5638.3 & 1.98e-08 \\
 \begin{tabular}{lrrrrr}\toprule
 Controllore & $\|PE\|_2$ & $\rho_a$ analitico & $\rho_s$ campionato & $\max\dot V/\|z\|^2$ & Punti ricerca \\
 \midrule
-LQG M6 & 3.8215 & 6.0044e-09 & 1.1919 & -0.98976 & 2560 \\
-Khinf M10 & 17.69 & 3.5414e-10 & 3.7315 & -0.80522 & 2592 \\
-Kmu M13 & 18.129 & 2.9332e-11 & 3.9944 & -0.99636 & 2864 \\
+LQG M6 & 3.8039 & 5.9388e-09 & 1.1945 & -0.99005 & 2560 \\
+Khinf M10 & 15.764 & 4.2569e-10 & 3.3422 & -0.81215 & 2592 \\
+Kmu M13 & 22.964 & 9.5616e-10 & 1.3024 & -0.99236 & 3008 \\
 \bottomrule\end{tabular}
 \caption{Il massimo riportato usa gli 8192 punti della verifica indipendente. Solo $\rho_a$ deriva dalla maggiorazione analitica; $\rho_s$ non \`e certificato.}
 \end{table}

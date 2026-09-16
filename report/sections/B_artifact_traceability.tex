@@ -18,12 +18,15 @@ tecniche restano legate ai risultati numerici verificati.
 Gli asset selezionati per i deliverable sono elencati nel manifest seguente.
 Il confronto LQRI e la campagna a tre pesi sono conservati in
 \path{m7_disturbance_comparison.mat} e \path{hinf_weight_revision.mat},
-con esportazioni CSV. Il secondo archivio contiene anche i cinque modelli
-campionati, il seed e i poli dominanti delle chiusure complete.
+con esportazioni CSV. Il secondo archivio contiene i 12 candidati fisici
+e la baseline separata; non aggiunge campioni M4 alla campagna M16.
 \path{plot_lqri_revision.m} e \path{plot_hinf_revision.m} producono
 rispettivamente \path{lqri_revision_results.tex} e \path{hinf_revision_results.tex}
 direttamente da questi dati, senza ripetere le sintesi. M18 censisce
-23 sorgenti, 19 file tabellari e 31 asset, inclusi quelli storici.
+23 sorgenti, 20 file tabellari e 32 asset. Il confronto della produzione
+a due pesi deriva inoltre da \path{build_direct_weights_summary.m} e
+\path{direct_weights_summary.mat}; lo schema Lower LFT è verificato
+contro le dimensioni e le partizioni dell'artifact M10.
 Ogni file \`e copiato da un risultato validato e conserva nome, milestone e
 destinazione. L'uso effettivo nelle slide \`e ricavato dal sorgente Beamer;
 il manifest comprende anche l'asset empirico M8 mantenuto per consultazione.

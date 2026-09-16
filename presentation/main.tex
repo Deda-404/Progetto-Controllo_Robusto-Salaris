@@ -108,22 +108,24 @@ v=[\Delta q;\Delta\dot q;\Delta\theta-\Delta q;\Delta\dot\theta]=Fx
 \]
 \[
 \tilde v=S_x^{-1}Fx,\qquad
-Q=F^TS_x^{-T}W_qS_x^{-1}F,\qquad R=S_u^{-T}W_uS_u^{-1}
+Q=F^TS_x^{-T}W_qS_x^{-1}F,\qquad R=r_u I_2
 \]
 \begin{columns}[T]
 \column{0.48\textwidth}
 Scale: $q_s=5^\circ$, $\dot q_s=12q_s$,
-$\delta_s=0.5/40$ rad, $S_u=12I_2$ N m.
+$\delta_s=0.5/40$ rad.
+
+$r_u\in\{0.01,0.05,0.10\}$: pesi diretti.
 
 \medskip
 \bad{$q_s$ non è un peso di tuning.}
 \column{0.48\textwidth}
 Ricerca: \MLqrAdmissibleCount/\MLqrCandidateCount\ ammissibili.
 
-$w_q=2,\ w_v=1,\ w_\delta=0.1,\ \rho_U=16$.
+$w_q=2,\ w_v=1,\ w_\delta=0.1,\ r_u=0.10$.
 
 \medskip
-$R=I_2/9$; $Q$ non diagonale per $(\theta-q)^2$.
+$R=0.10I_2$; $Q$ non diagonale per $(\theta-q)^2$.
 \end{columns}
 \medskip
 \[
@@ -178,13 +180,13 @@ dei poli di regolatore e stimatore.
 
 \begin{frame}{M7 chiude con un risultato negativo utile}
 \begin{itemize}
-\item Studiata un'architettura LQI/LQG-I con costi fisicamente normalizzati.
-\item Tre verifiche manuali: azione integrale debole, bilanciata e forte.
+\item LQRI con Kalman M6: 14 stati fisici, 14 stimati, 2 integratori.
+\item Peso diretto $Q_i=\bar w_i I_2$, con $\bar w_i\in\{20,200,800\}$.
 \item Verifiche conformi a tutti i requisiti: \MSevenAdmissible.
 \item Nessuna verifica soddisfa insieme settling time e overshoot M5.
 \end{itemize}
 \vfill
-\bad{Stato M7: \MSevenStatus. Non esiste un controllore integrale finale.}
+\bad{Stato M7: \MSevenStatus. LQRI implementata, nessun candidato conforme.}
 \end{frame}
 
 \begin{frame}{Le sintesi $H_\infty$ restano sopra il target pesato}
@@ -205,8 +207,8 @@ dei poli di regolatore e stimatore.
 \begin{frame}{La D--K iteration produce $K_\mu$}
 \begin{itemize}
 \item M12 analizza A5: NS PASS, NP FAIL, RS/RP FAIL certificati.
-\item M13: unica campagna D--K storica; $K_\mu$ resta congelato.
-\item M14 rivaluta quel controllore sull'unico M4 corrente.
+\item M13: una nuova campagna D--K dopo la scelta definitiva dei pesi.
+\item M14 verifica il nuovo controllore sull'unico M4 corrente.
 \item Best iteration: \BestDKIteration; objective: \MusynObjective.
 \item $K_\mu$ è full-order, ordine \KmuOrder, senza riduzione.
 \end{itemize}
@@ -214,10 +216,10 @@ dei poli di regolatore e stimatore.
 \bad{L'objective di sintesi non è un certificato RS o RP.}
 \end{frame}
 
-\begin{frame}{M14 certifica RS, ma non NP e RP}
+\begin{frame}{M14: RS, NP e RP non soddisfatte}
 \begin{columns}[T]
 \column{0.41\textwidth}
-\good{RS: \KmuRSStatus}
+\bad{RS: \KmuRSStatus}
 
 Margine: [\KmuRSLower,\KmuRSUpper]
 
@@ -234,9 +236,8 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \column{0.38\textwidth}
 \begin{itemize}
 \item $K_{\infty}$ e $K_\mu$: equilibrio e simulazioni finite.
-\item Settling time circa 1.73 s.
-\item Overshoot oltre 200\%.
-\item Errore a regime circa 50\%.
+\item Settling, overshoot ed errore verificati sui nuovi controllori.
+\item Le metriche restano confrontate con i target M5 invariati.
 \end{itemize}
 \column{0.60\textwidth}
 \includegraphics[width=\linewidth]{assets/m15_tracking_khinf_vs_kmu.png}
@@ -247,7 +248,7 @@ Margine: [\KmuRSLower,\KmuRSUpper]
 \begin{columns}[T]
 \column{0.48\textwidth}
 \small
-Sistemi aumentati: 28 / 32 / 66 stati.
+Sistemi aumentati: 28 / 32 / 84 stati.
 \[
 A_{cl}^TP+PA_{cl}=-I,\quad P>0
 \]
@@ -291,17 +292,17 @@ la RAS empirica è molto più ampia.
 \begin{frame}{Monte Carlo osserva; la $\mu$-analysis certifica}
 \begin{itemize}
 \item Core tracking pass rate: M6 \MControllerTrackingPassPct\%, $K_{\infty}$ \KhinfTrackingPassPct\%, $K_\mu$ \KmuTrackingPassPct\%.
-\item 40/40 per $K_\mu$ è coerente con RS M14.
+\item La stabilità dei campioni non annulla l'esito RS negativo di M14.
 \item I campioni non definiscono una probabilità fisica.
 \end{itemize}
 \vfill
-\good{M14 resta l'unica fonte del certificato RS di $K_\mu$.}
+\bad{M14 non certifica RS per il nuovo $K_\mu$.}
 \end{frame}
 
 \begin{frame}{La decisione finale è per ruolo}
 \begin{columns}[T]
 \column{0.39\textwidth}
-\good{$K_\mu$: controllore robusto finale}
+\bad{Ruolo robusto finale non assegnato}
 
 M6: riferimento di prestazione nominale
 
@@ -315,8 +316,8 @@ $K_{\infty}$: comparatore $H_\infty$
 
 \begin{frame}{Il progetto è chiuso con limiti espliciti}
 \begin{itemize}
-\item RS $K_\mu$ certificata; NP/RP e tracking non conformi.
-\item M7 senza controllore integrale finale.
+\item RS, NP/RP e tracking di $K_\mu$ non conformi.
+\item M7 implementata, senza candidato integrale conforme.
 \item Nessuna saturazione hardware certificata.
 \item Incertezze non identificate sperimentalmente.
 \item Lyapunov nominale conservativo; Monte Carlo empirica.

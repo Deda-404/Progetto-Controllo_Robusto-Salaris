@@ -59,7 +59,7 @@ end
 function testT06KmuOrderMatchesArtifact(testCase)
 a = testCase.TestData.m15.controllerAudits(2);
 verifyEqual(testCase, a.order, order(testCase.TestData.m13.Kmu));
-verifyEqual(testCase, a.order, 52);
+verifyEqual(testCase, a.order, 70);
 end
 function testT07ControllerMatricesUnchanged(testCase)
 sources = {testCase.TestData.m10.Khinf, testCase.TestData.m13.Kmu};
@@ -209,10 +209,17 @@ verifyLessThanOrEqual(testCase, ...
 end
 function testT36RasConfigIdenticalM8(testCase)
 first = rmfield(testCase.TestData.m15.config.ras, ...
-    'secondarySectionEnabled');
+    {'secondarySectionEnabled', 'maximumSimulations'});
 second = rmfield(testCase.TestData.m8.simulationConfig.ras, ...
-    'secondarySectionEnabled');
+    {'secondarySectionEnabled', 'maximumSimulations'});
 verifyEqual(testCase, first, second);
+% Il budget non modifica il criterio: deve coprire la stessa ricerca e
+% l'eventuale estensione a 12 s di ciascun punto, senza soglie rilassate.
+maximumBisections = ceil(log2(sqrt(2) * first.searchBoxDeg / ...
+    first.radialToleranceDeg));
+verifyEqual(testCase, testCase.TestData.m15.config.ras.maximumSimulations, ...
+    2 * (numel(first.coarseGridDeg)^2 + ...
+    first.numberDirections * (1 + maximumBisections)));
 end
 function testT37RasControllerStateStartsZero(testCase)
 verifyTrue(testCase, all([testCase.TestData.m15.rasResults. ...

@@ -2107,3 +2107,35 @@ Le modifiche restano circoscritte a M6/M7 e alle dipendenze documentali.
 Il percorso run_all con CR_RUN_SCOPE=lqri non esegue M8-M17; il percorso
 completo storico rimane disponibile e distinto. È autorizzata la
 pubblicazione su branch dedicato e PR verso main, senza merge automatico.
+
+## D-0051 — Revisione diretta e circoscritta di W1/W2, R e Qi
+
+Data: 2026-09-16. Responsabile: Alessio. Stato: RICHIESTA APPROVATA;
+verifica finale della realizzazione in corso.
+
+La richiesta corrente supera il congelamento dei soli pesi/controllori
+coinvolti da D-0050: R M6 usa {0.01,0.05,0.10}; Qi M7 usa direttamente
+{20,200,800}; W1/W2 sono rivisti nelle coordinate fisiche mediante una
+ricerca limitata a 8+4 candidati. Restano fissi M0–M4, target M5, Kalman
+M6 e criteri PASS/FAIL. omegaW1 è separato da omegaB per non modificare Q.
+W3 è presente solo nello studio, non nella produzione M9/M10.
+
+La selezione ha attivato omegaW1=8, As=0.15, Ms=2.5, ku=0.05, omegaU=60,
+alpha=6. Nessuno dei candidati H-infinity è conforme; non sono autorizzate
+ulteriori ricerche per forzare un PASS. R=0.10 I2 è selezionato dai criteri
+esistenti. La LQRI illustrativa usa Qi=200 I2 e rimane PARTIAL.
+
+Poiché i controllori cambiano, sono rigenerate le sole dipendenze downstream,
+inclusa una nuova M13. M14 dimostra RS negativa per Kmu corrente: nessun
+trasferimento del certificato storico, nessun ruolo robusto assegnato.
+M16 mantiene valore esclusivamente empirico.
+
+Il limite RAS M15 di 400 esecuzioni non copriva il caso peggiore della
+ricerca già prevista. Viene derivato un limite finito di 626 dalla griglia,
+dalle 36 direzioni, dalla tolleranza radiale di 1 grado e dalle due durate
+8/12 s per punto. Nessuna soglia o durata è rilassata; il checkpoint serve
+soltanto a evitare ripetizioni. Questa è una correzione del budget di
+esecuzione, non una nuova ricerca di parametri del controllore.
+
+Prima della pubblicazione devono essere mostrati git status, diff stat e
+il resoconto tecnico autosufficiente; nessun merge automatico.

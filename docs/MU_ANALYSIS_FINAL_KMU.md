@@ -1,3 +1,12 @@
+# M14 corrente: esito robusto negativo
+
+Revisione 2026-09-16. Il Kmu corrente coincide esattamente con la best iteration 5 della nuova M13, ordine 70, senza riduzione. NS PASS; NP FAIL con norma 6.34971025763. RS FAIL_CERTIFIED, margine [0.774041952377,0.775696806012]; RP FAIL_CERTIFIED. Il vecchio certificato non è trasferibile al nuovo controllore.
+
+wcgain restituisce [12.0757289608, Inf], mentre usubs produce guadagno 12.0761806812 e una chiusura stabile. L'upper bound infinito non implica che la perturbazione associata al lower bound finito sia destabilizzante. Il controllo è stato corretto senza cambiare tolleranze o criteri RS/RP. Fonte primaria: https://www.mathworks.com/help/robust/ref/dynamicsystem.wcgain.html
+
+I paragrafi seguenti sono evidenza storica, precedente alla revisione, e non descrivono il controllore corrente.
+
+## Evidenza storica precedente alla revisione diretta
 # M14 — μ-analysis finale del Kmu congelato
 
 **Stato:** `PARTIAL` — software corretto e RS certificata; NP e RP non conformi.

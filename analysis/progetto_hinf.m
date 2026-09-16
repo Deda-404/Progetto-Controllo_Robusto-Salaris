@@ -42,24 +42,24 @@ disp(Ginc.Uncertainty);
 
 %% 6 - Pesi: formula, asintoti e frequenze caratteristiche
 s=tf('s');
-W1s=(s/spec.Ms+spec.omegaB)/(s+spec.omegaB*spec.As);
-W2s=(1/spec.uScale)*(s/spec.omegaU+1)/ ...
+W1s=(s/spec.Ms+spec.omegaW1)/(s+spec.omegaW1*spec.As);
+W2s=spec.controlWeightGain*(s/spec.omegaU+1)/ ...
     (s/(spec.controlWeightAlpha*spec.omegaU)+1);
 W1=blkdiag(W1s,W1s); W2=blkdiag(W2s,W2s);
-% W1(0)=1/As=20, W1(inf)=1/Ms=0.5; il limite desiderato e 1/|W1|.
-% Polo As*omegaB=0.6, zero Ms*omegaB=24 rad/s.
-crossoverW1=spec.omegaB*sqrt((1-spec.As^2)/(1-1/spec.Ms^2));
-% W2(0)=1/12, W2(inf)=6/12=0.5; zero30 e polo180 rad/s.
+% W1(0)=1/As, W1(inf)=1/Ms; il limite desiderato e 1/|W1|.
+% Polo As*omegaW1, zero Ms*omegaW1: non coincidono con il crossover.
+crossoverW1=spec.omegaW1*sqrt((1-spec.As^2)/(1-1/spec.Ms^2));
+% W2(0)=ku, W2(inf)=alpha*ku; zero omegaU e polo alpha*omegaU.
 % W2 NON attraversa 0 dB: omegaU e l'inizio della crescita, non un crossover.
 % uScale=12 e una scala prestazionale M5, NON una saturazione.
 fprintf('Crossover |W1|=1: %.8g rad/s. W2: nessun crossover unitario.\n',crossoverW1);
 disp('Guadagni DC:'); disp([dcgain(W1s),dcgain(W2s)]);
 
 %% 7 - Motivazione e verifica grafica dei pesi
-% As=5% e Ms=2 traducono accuratezza statica e picco desiderato.
-% omegaB=12 e una scelta progettuale verificata fra 10.81 e 13.91 rad/s,
-% sopra i modi instabili e sotto banda attuativa e primi modi elastici.
-% omegaU=30 e alpha=6 scoraggiano comandi rapidi; nessuna nuova ricerca.
+% As=0.15 e Ms=2.5 rilassano il profilo pesato, non i target temporali.
+% omegaW1=8 e distinto da omegaB=12, che resta la scala di velocita LQR.
+% ku=0.05 e omegaU=60 derivano dal confronto deterministico salvato.
+% La nuova configurazione e un compromesso non conforme, non un PASS.
 omega=logspace(-2,3,500);
 f=figure('Color','white'); tiledlayout(1,2);
 nexttile; semilogx(omega,20*log10(squeeze(abs(freqresp(W1s,omega))))); grid on;
@@ -84,13 +84,13 @@ assert(erroreP<1e-8);
 assert(max(abs(freqresp(Pgen,omega)-freqresp(m10.P,omega)),[],'all')<1e-8);
 
 %% 9 - Sintesi: comando esplicito, progetto approvato ricaricato
-% La sintesi storica usa [K,CL,gamma]=hinfsyn(Pgen,2,2), opzioni predefinite.
+% La sintesi M10 usa [K,CL,gamma]=hinfsyn(Pgen,2,2), opzioni predefinite.
 % Il comando e visibile qui per lo studio; disabilitato per non aprire una
-% nuova sintesi nella revisione. Non viene modificato alcun artifact M10.
+% ulteriore sintesi in questo script. Non modifica alcun artifact M10.
 ricalcolaSintesi=false;
 assert(~ricalcolaSintesi,'Revisione:ControlloreCongelato', ...
-    'Questa revisione non apre una nuova sintesi.');
-% Comando didattico della sintesi storica, intenzionalmente non eseguito:
+    'Questo script ricarica la sintesi M10 corrente.');
+% Comando didattico della sintesi, intenzionalmente non eseguito:
 % [Kverifica,CLverifica,gammaVerifica]=hinfsyn(Pgen,2,2);
 K=m10.Khinf;
 
@@ -115,7 +115,7 @@ gammaCongelato=m10.gammaHinf;
 fprintf('Gamma congelato %.10g, norma ricostruita %.10g, target 1\n', ...
     gammaCongelato,gammaRicostruito);
 assert(abs(gammaRicostruito/gammaCongelato-1)<1e-4);
-% Gamma circa10.207>1: la chiusura e stabile ma il profilo M5 fallisce.
+% La gamma viene riletta dall'artefatto corrente, non dalla vecchia baseline.
 
 %% 12 - Risposta nominale: due gradini separati, r=5 deg, stato nullo
 tempo=(0:0.002:4)'; risposte=cell(2,1);
@@ -262,36 +262,29 @@ save(fullfile(dati,'didactic_hinf_calculations.mat'),'Pgen','Ak','Bk','Ck','Dk',
     'gammaCongelato','gammaRicostruito','crossoverW1','Acl','P','rhoCertificato', ...
     'rhoNumerico','tempoNl','zNl','stabileCampioni','-v7');
 
-%% 20 - Studio successivo: normalizzazione dichiarata, W3 e baseline distinta
-% study_hinf_weights(true) esegue una sola campagna: 13 candidati,
-% una verifica hinfsyn equivalente e un diagnostico sul solo comando.
-% Il default false qui ricarica; non ripete sintesi ad ogni esecuzione.
+%% 20 - Studio diretto a tre pesi, distinto dalla produzione M10
+% Rilettura della campagna limitata: nessuna sintesi aggiuntiva.
+% G conserva gli ingressi u [N m] e le uscite q [rad].
 studio=study_hinf_weights(false);
 scelto=studio.selezionato;
-wb=studio.tabella.OmegaB(scelto);
-beta=studio.tabella.BetaU(scelto);
-wt=studio.tabella.OmegaT(scelto);
-qsNuovo=spec.referenceAmplitude; usNuovo=spec.uScale;
-Gnormalizzato=G*usNuovo/qsNuovo;
-W1nuovo=((s/spec.Ms+wb)/(s+wb*spec.As))*eye(2);
-W2normalizzato=beta*(s/spec.omegaU+1)/ ...
-    (s/(spec.controlWeightAlpha*spec.omegaU)+1)*eye(2);
-W2nuovo=(qsNuovo/usNuovo)*W2normalizzato;
-W3nuovo=(s/wt+0.1)/(s/(5*wt)+1)*eye(2);
-% W3 e una scelta di roll-off/rumore, non il certificato dell'incertezza
-% moltiplicativa all'ingresso M4: quella coinvolge T_i, non T di uscita.
-Pnuovo=[W1nuovo -W1nuovo*Gnormalizzato;ss(zeros(2)) W2normalizzato; ...
-    ss(zeros(2)) W3nuovo*Gnormalizzato;ss(eye(2)) -Gnormalizzato];
+ws=studio.selectedSpec;
+W1nuovo=((s/ws.Ms+ws.omegaW1)/(s+ws.omegaW1*ws.As))*eye(2);
+W2nuovo=ws.controlWeightGain*(s+ws.omegaU)/ ...
+    (s/ws.controlWeightAlpha+ws.omegaU)*eye(2);
+W3nuovo=studio.pesi{scelto}.W3;
+% W3 e un peso di roll-off dello studio: M9/M10 continuano senza W3.
+% Non certifica l'incertezza moltiplicativa M4, valutata separatamente.
+Pnuovo=[W1nuovo -W1nuovo*G;ss(zeros(2)) W2nuovo; ...
+    ss(zeros(2)) W3nuovo*G;ss(eye(2)) -G];
 errorePnuovo=max(abs(freqresp(Pnuovo,omega)-freqresp(studio.P,omega)),[],'all');
 assert(errorePnuovo<1e-8);
-% [Kn,CLn,gammaNuovo]=hinfsyn(Pnuovo,2,2); eseguito nella campagna salvata.
-Knuovo=studio.Knuovo; % Kfisico=us*Kn/qs
+Knuovo=studio.Knuovo;
 Tnuovo=feedback(G*Knuovo,ss(eye(2)));
 Snuovo=ss(eye(2))-Tnuovo;
 KSnuovo=feedback(Knuovo,G);
 normeNuove=[norm(W1nuovo*Snuovo,inf),norm(W2nuovo*KSnuovo,inf), ...
     norm(W3nuovo*Tnuovo,inf)];
 disp(studio.tabella);
-disp('Norme W1S, W2KS, W3T del candidato illustrativo:'); disp(normeNuove);
-% Nessuno dei candidati supera tutti i target M5; non viene sostituito Khinf.
-% Le conclusioni M11-M16 e la precedente RAS valgono per la baseline.
+disp('Norme fisiche W1S, W2KS, W3T del compromesso selezionato:'); disp(normeNuove);
+% Il PASS e calcolato, senza modificare le soglie: zero candidati conformi.
+% W1/W2 selezionati alimentano M5 e la catena M9-M17 rigenerata.

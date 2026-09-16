@@ -15,7 +15,8 @@ config.uncertaintySource = "results/data/m4_uncertain_plant.mat";
 config.weightSource = "results/data/m5_performance_specs.mat";
 config.m12Source = "results/data/m12_mu_analysis_a5.mat";
 config.m13Source = "results/data/m13_musyn_dk.mat";
-config.expectedControllerOrder = 52;
+% Ordine della nuova best iteration M13, senza riduzione del controllore.
+config.expectedControllerOrder = 70;
 config.identityFrequencyTolerance = ...
     config.nominalFrequencyTolerance;
 config.identityPoleTolerance = config.nominalPoleTolerance;

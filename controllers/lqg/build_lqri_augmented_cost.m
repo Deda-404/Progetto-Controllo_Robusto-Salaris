@@ -1,14 +1,12 @@
-function design = build_lqri_augmented_cost(m3Data, m5Data, m6Data, wi, ru)
+function design = build_lqri_augmented_cost(m3Data, m6Data, wbarI)
 %BUILD_LQRI_AUGMENTED_COST Riccati del servo integrale, senza prefiltro.
 %   La sintesi usa xa=[x;xi] e xi_dot=r-Cq*x. Nella realizzazione Kx
 %   moltiplica xhat; xi integra l'errore delle posizioni encoder misurate.
 %   Ki e il blocco integrale del guadagno LQR, non un parametro manuale.
 arguments
     m3Data (1,1) struct
-    m5Data (1,1) struct
     m6Data (1,1) struct
-    wi (1,1) double {mustBePositive,mustBeFinite}
-    ru (1,1) double {mustBePositive,mustBeFinite}
+    wbarI (1,1) double {mustBePositive,mustBeFinite}
 end
 % Il modello conserva gli attuatori fra i 14 stati fisici.
 A=m3Data.Afull; B=m3Data.Bfull; Cq=m3Data.CfullQ;
@@ -17,12 +15,10 @@ assert(isequal([n,p,m],[14,2,2]),'M7LQRI:Dimensions', ...
     'Sono richiesti 14 stati fisici, 2 uscite regolate e 2 comandi.');
 Aaug=[A,zeros(n,p);-Cq,zeros(p)];
 Baug=[B;zeros(p,m)]; Br=[zeros(n,p);eye(p)];
-% Si conserva la scala integrale gia motivata: errore di 5 gradi
-% accumulato per il target di 0.8 s. Non e un limite fisico.
-% wi e adimensionale; ru pesa direttamente il comando fisico.
-xiScale=m5Data.spec.referenceAmplitude*m5Data.spec.settlingTimeTarget;
-Qi=(wi/xiScale^2)*eye(p);
-Qaug=blkdiag(m6Data.Q,Qi); R=ru*eye(m);
+% Peso diretto della memoria integrale, espressa in rad*s: nessuna scala
+% addizionale. Q e R sono quelli M6 e restano fissi durante le tre prove.
+Qi=wbarI*eye(p);
+Qaug=blkdiag(m6Data.Q,Qi); R=m6Data.R; ru=R(1,1);
 % PBH sui modi non stabili e Rosenbrock all'origine verificano che
 % l'aggiunta degli integratori non introduca modi non stabilizzabili.
 openPoles=eig(Aaug); pbhRanks=zeros(n+p,1);
@@ -39,7 +35,7 @@ assert(isStabilizable && zeroRank==16 && rosenbrockRank==16, ...
 care=Aaug'*P+P*Aaug-P*Baug*(R\Baug')*P+Qaug;
 design=struct('Aaug',Aaug,'Baug',Baug,'Br',Br,'Qaug',Qaug, ...
     'R',R,'P',P,'Kaug',Kaug,'Kx',Kaug(:,1:n),'Ki',Kaug(:,n+(1:p)), ...
-    'Qi',Qi,'xiScale',xiScale,'wi',wi,'ru',ru,'servoPoles',servoPoles);
+    'Qi',Qi,'wbarI',wbarI,'ru',ru,'servoPoles',servoPoles);
 design.careRelativeResidual=norm(care,'fro')/max(1,norm(Qaug,'fro'));
 design.gainResidual=norm(Kaug-R\(Baug'*P),'fro');
 design.physicalScales=m6Data.validationMetrics.cost.scales;

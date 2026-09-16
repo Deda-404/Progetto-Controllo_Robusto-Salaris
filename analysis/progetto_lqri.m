@@ -16,14 +16,15 @@ j=m7.config.illustrativeIndex; d=m7.designs{j}; e=m7.evaluations{j};
 A=m3.Afull; B=m3.Bfull; C=m3.CfullMeas; Cq=m3.CfullQ;
 Aa=[A,zeros(14,2);-Cq,zeros(2)]; Ba=[B;zeros(2)];
 Br=[zeros(14,2);eye(2)];
-wi=d.wi; ru=d.ru; Qi=d.Qi; Qa=blkdiag(m6.Q,Qi); R=ru*eye(2);
+% Qi penalizza direttamente xi in rad*s, senza normalizzazione integrale.
+wbarI=d.wbarI; ru=d.ru; Qi=wbarI*eye(2); Qa=blkdiag(m6.Q,Qi); R=ru*eye(2);
 
 %% 3 - Verifica esplicita di Riccati: Kx e Ki hanno un'origine comune
 P=d.P; Kaug=d.Kaug; Kx=Kaug(:,1:14); Ki=Kaug(:,15:16);
 residuo=Aa'*P+P*Aa-P*Ba*(R\Ba')*P+Qa;
 assert(norm(residuo,'fro')/max(1,norm(Qa,'fro'))<1e-8);
 assert(norm(Kaug-R\(Ba'*P),'fro')<1e-7);
-disp('Kx (2x14), Ki (2x2), ru, wi:'); disp(Kx); disp(Ki); disp([ru,wi]);
+disp('Kx (2x14), Ki (2x2), ru, wbarI:'); disp(Kx); disp(Ki); disp([ru,wbarI]);
 
 %% 4 - Osservatore e realizzazione autonoma a 16 stati [xhat;xi]
 % L, Qn, Rn sono quelli M6. E seleziona q dai quattro encoder [q;theta].

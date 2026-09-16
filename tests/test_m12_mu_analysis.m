@@ -40,7 +40,8 @@ end
 function testT02SelectedArchitectureIsA5(testCase)
 selected = testCase.TestData.m12.selectedController;
 verifyEqual(testCase, selected.architectureID, "A5");
-verifyEqual(testCase, selected.startIndex, 5);
+% La revisione dei pesi seleziona il quarto avvio A5 della campagna M11.
+verifyEqual(testCase, selected.startIndex, 4);
 end
 
 function testT03ControllerIsIdenticalToM11Representative(testCase)

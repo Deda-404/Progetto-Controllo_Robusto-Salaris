@@ -10,15 +10,16 @@ function config = lqg_specs_m6
 config.lqr.candidates.position = [0.5; 1; 2];
 config.lqr.candidates.velocity = [0.5; 1];
 config.lqr.candidates.deformation = [0.1; 0.5];
-% ru pesa direttamente il comando fisico: R=ru*I2. La griglia conserva
-% esattamente le matrici R approvate, senza normalizzare gli ingressi.
-config.lqr.candidates.control = [1/36; 1/18; 1/9];
+% ru pesa direttamente il comando fisico: R=ru*I2. Tre valori positivi
+% rappresentano penalizzazioni bassa, intermedia e alta, non limiti hardware.
+% La griglia cambia il problema LQR e richiede una nuova selezione numerica.
+config.lqr.candidates.control = [0.01; 0.05; 0.10];
 config.lqr.expectedCandidateCount = 36;
 config.lqr.rationale = [ ...
     "position 0.5/1/2: moderate changes around the 5 deg tracking scale"; ...
     "velocity 0.5/1: damping is important without dominating position"; ...
     "deformation 0.1/0.5: compliant travel is allowed but not ignored"; ...
-    "ru=1/36,1/18,1/9: direct effort penalties, from less to more restrictive"];
+    "ru=0.01,0.05,0.10: direct effort penalties, from less to more restrictive"];
 
 % Equal-status, dimensionless terms used only after mandatory admissibility.
 % The weights sum to one and keep the compromise score transparent.

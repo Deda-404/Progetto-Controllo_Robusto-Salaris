@@ -9,15 +9,20 @@ spec.disturbanceTorqueScenarios = [0.25; 0.50; 1.00];
 spec.disturbanceTorqueAmplitude = 0.50;
 
 spec.omegaB = 12;
+% Banda generale e scala di velocita LQR: non dipende dal corner di W1.
+spec.omegaW1 = 8;
+% Compromesso ID 10 dello studio diretto: non soddisfa tutti i target M5.
 spec.bandwidthUnstableMultiplier = 1.5;
 spec.bandwidthActuatorFraction = 0.40;
 spec.bandwidthElasticFraction = 0.20;
 
-spec.As = 0.05;
-spec.Ms = 2.0;
+spec.As = 0.15;
+spec.Ms = 2.5;
 
 spec.uScale = 12;
-spec.omegaU = 30;
+% Peso diretto del comando fisico; uScale rimane solo una scala di metrica.
+spec.controlWeightGain = 0.05;
+spec.omegaU = 60;
 spec.controlWeightAlpha = 6;
 spec.controlOnsetElasticFraction = 0.50;
 

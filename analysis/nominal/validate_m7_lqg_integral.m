@@ -1,6 +1,6 @@
 function metrics = validate_m7_lqg_integral
 %VALIDATE_M7_LQG_INTEGRAL Valida tre costi LQRI con il Kalman M6 invariato.
-%   wi varia a Q e R fissi. Il punto centrale e illustrativo: stabilita
+%   wbarI varia a Q e R M6 fissi. Il punto centrale e illustrativo: stabilita
 %   interna e reiezione DC non sono equiparate alla conformita a tutti i M5.
 
 root = fileparts(fileparts(fileparts(mfilename('fullpath'))));
@@ -17,6 +17,9 @@ assert(isfield(m6, 'validationMetrics') && ...
     'M7 requires the priorities stored by the validated M6 artifact.');
 statePriorities = m6.validationMetrics.cost.priorities;
 manual = config.manualDesigns;
+% Il peso del comando e quello effettivamente selezionato dalla ricerca M6.
+manual.Ru = repmat(m6.R(1,1),height(manual),1);
+config.manualDesigns = manual;
 numberDesigns = height(manual);
 designs = cell(numberDesigns, 1);
 evaluations = cell(numberDesigns, 1);
@@ -34,8 +37,7 @@ fundamentalPass = false(numberDesigns, 1);
 
 for index = 1:numberDesigns
     % Q e L provengono dal MAT M6: nessuna nuova sintesi Kalman.
-    design = build_lqri_augmented_cost(m3, m5, m6, ...
-        manual.Wi(index), manual.Ru(index));
+    design = build_lqri_augmented_cost(m3, m6, manual.WbarI(index));
     evaluation = evaluate_lqri_candidate(m3, m5, m6, design, config);
     designs{index} = design;
     evaluations{index} = evaluation;
@@ -109,7 +111,7 @@ save(fullfile(dataDirectory, 'm7_lqg_integral.mat'), ...
     'manualComparisonTable', 'validationMetrics', 'config', '-v7');
 
 fprintf('\n=== M7: tre verifiche LQRI, Q e R fissi ===\n');
-disp(manualComparisonTable(:, {'Tuning', 'Wi', 'Ru', ...
+disp(manualComparisonTable(:, {'Tuning', 'WbarI', 'Ru', ...
     'WorstSettlingTime', 'WorstOvershoot', 'DisturbanceOffset', ...
     'FundamentalPass'}));
 fprintf('[%s] Punti conformi ai target nominali: %d/%d.\n', ...
@@ -138,7 +140,7 @@ for index = 1:height(tableData)
 end
 grid on; box on;
 xlabel('Worst settling [s]'); ylabel('Worst overshoot [%]');
-title('M7 - LQRI: variazione di wi a Q e R fissi');
+title('M7 - LQRI: peso integrale diretto a Q e R M6 fissi');
 colorbarHandle = colorbar;
 colorbarHandle.Label.String = 'peak |u| / uScale';
 set_scientific_figure_style(figureHandle);

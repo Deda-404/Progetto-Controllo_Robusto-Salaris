@@ -18,9 +18,9 @@ end
 
 function testSingleSpecificationSet(testCase)
 spec = testCase.TestData.m5.spec;
-verifyEqual(testCase, [spec.omegaB, spec.As, spec.Ms, ...
-    spec.uScale, spec.omegaU, spec.controlWeightAlpha], ...
-    [12, 0.05, 2, 12, 30, 6]);
+verifyEqual(testCase, [spec.omegaB, spec.omegaW1, spec.As, spec.Ms, ...
+    spec.uScale, spec.controlWeightGain, spec.omegaU, spec.controlWeightAlpha], ...
+    [12, 8, 0.15, 2.5, 12, 0.05, 60, 6]);
 candidateFields = fieldnames(spec);
 verifyFalse(testCase, any(contains(candidateFields, 'Candidates')));
 end
@@ -51,9 +51,9 @@ spec = testCase.TestData.m5.spec;
 info = testCase.TestData.m5.validationMetrics.weights.W2;
 verifyTrue(testCase, info.stable);
 verifyTrue(testCase, info.proper);
-verifyEqual(testCase, info.dcMeasured, 1 / spec.uScale, 'AbsTol', 1e-12);
+verifyEqual(testCase, info.dcMeasured, spec.controlWeightGain, 'AbsTol', 1e-12);
 verifyEqual(testCase, info.hfMeasured, ...
-    spec.controlWeightAlpha / spec.uScale, 'AbsTol', 1e-7);
+    spec.controlWeightAlpha * spec.controlWeightGain, 'AbsTol', 1e-7);
 verifyTrue(testCase, contains(spec.controlEffortScaleMeaning, ...
     "not a certified actuator saturation"));
 end

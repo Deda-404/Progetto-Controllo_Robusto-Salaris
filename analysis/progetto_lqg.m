@@ -1,5 +1,5 @@
 %% 1 - Pulizia e caricamento dati: LQR -> Kalman -> LQG -> Lyapunov
-% Si ricostruisce il progetto approvato: nessun cambiamento di pesi/griglia.
+% Si ricostruisce la griglia approvata: criteri invariati, tre pesi R diretti.
 clearvars; clc; close all;
 radice=fileparts(fileparts(mfilename('fullpath')));
 addpath(genpath(fullfile(radice,'src')),genpath(fullfile(radice,'controllers')), ...
@@ -57,14 +57,14 @@ disp('Scale degli stati [qs qds ds tds]:'); disp([qs qds ds tds]);
 % Q=F'*Sx^(-T)*Wq*Sx^(-1)*F=Ccost'*Ccost. NON e diagonale:
 % (theta-q)^2 genera termini incrociati. xa non ha pesi diretti arbitrari.
 % Griglia e score sono scelte D; il punto selezionato e un risultato E.
-[gq,gv,gd,gu]=ndgrid([0.5 1 2],[0.5 1],[0.1 0.5],[1/36 1/18 1/9]);
+[gq,gv,gd,gu]=ndgrid([0.5 1 2],[0.5 1],[0.1 0.5],[0.01 0.05 0.10]);
 pesiScore=[0.30;0.20;0.10;0.10;0.15;0.15];
 config=lqg_specs_m6; % il valutatore riusa solo tempi e soglie del progetto
 indici=inf(numel(gq),1); ammissibili=false(numel(gq),1);
 for j=1:numel(gq)
     Wq=diag([gq(j) gq(j) gv(j) gv(j) gd(j) gd(j) gv(j) gv(j)]);
     Qj=F'*(Sx'\Wq/Sx)*F;
-    Rj=gu(j)*eye(m); % stesse matrici R, peso diretto ru
+    Rj=gu(j)*eye(m); % penalizzazione diretta del comando fisico
     Kj=lqr(A,B,Qj,Rj); Aj=A-B*Kj;
     Nrj=(-Cq*(Aj\B))\eye(m);
     % Due gradini separati, 0:0.002:3 s, x(0)=0, d=v=0.
@@ -97,8 +97,8 @@ disp('Q finale:'); disp(Q);
 
 %% 7 - R: peso diretto dello sforzo di controllo
 % u contiene coppie in N m; ru moltiplica direttamente u'*u.
-% La griglia {1/36,1/18,1/9} conserva il problema LQR approvato.
-% Il candidato selezionato ha ru=1/9; non e un nuovo retuning.
+% I valori {0.01,0.05,0.10} esplorano tre livelli progettuali semplici.
+% Il valore finale deriva dai criteri numerici, non e imposto a priori.
 R=ru*eye(m);
 disp('ru e R:'); disp(ru); disp(R);
 

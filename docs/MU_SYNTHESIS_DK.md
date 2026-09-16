@@ -1,3 +1,10 @@
+# M13 corrente dopo la revisione dei pesi
+
+Revisione 2026-09-16. Dopo aver fissato i nuovi W1/W2, una sola chiamata musyn ha eseguito cinque iterazioni, con la configurazione precedente invariata. Best iteration 5, objective 6.38492231705, ordine 70. La norma nominale è 6.34971025763 e la chiusura nominale è stabile. Nessuna riduzione, nuova partenza o seconda campagna per migliorare l'esito.
+
+La post-analisi M14 corrente fallisce RS e RP. La sintesi non è una certificazione. I numeri che seguono descrivono solo la campagna storica di ordine 52; non sono i dati dell'artifact corrente.
+
+## Campagna storica precedente alla revisione diretta
 # M13 — D–K iteration / μ-synthesis
 
 **Responsabile:** Alessio

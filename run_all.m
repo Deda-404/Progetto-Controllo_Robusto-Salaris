@@ -28,19 +28,20 @@ try
         baselineM6=load(fullfile(projectRoot,'results','data','m6_lqg_no_integrator.mat'));
         validate_m6_lqg_no_integrator;
         currentM6=load(fullfile(projectRoot,'results','data','m6_lqg_no_integrator.mat'));
-        % Equivalenza numerica e riuso esatto del Kalman, senza retuning.
+        % Questo percorso e un replay della configurazione M6 corrente.
+        % Se cambiano i guadagni occorre la catena downstream completa.
         assert(norm(currentM6.K-baselineM6.K,'fro')<1e-8);
         assert(isequal(currentM6.R,baselineM6.R) && isequal(currentM6.Q,baselineM6.Q));
         assert(isequal(currentM6.L,baselineM6.L) && ...
             isequal(currentM6.Qn,baselineM6.Qn) && isequal(currentM6.Rn,baselineM6.Rn));
-        % Allineamento dei soli metadati del precedente calcolo didattico:
-        % Q/R/K e tutte le analisi Lyapunov restano numericamente invariati.
+        % Non aggiornare soltanto l'etichetta R di un calcolo didattico
+        % obsoleto: matrici e risultati devono provenire dallo stesso M6.
         didacticPath=fullfile(projectRoot,'results','data','didactic_lqg_calculations.mat');
         didactic=load(didacticPath);
-        obsoleteFields=intersect(fieldnames(didactic),{'Su','Wu'});
-        didactic=rmfield(didactic,obsoleteFields);
-        didactic.ru=currentM6.R(1,1);
-        save(didacticPath,'-struct','didactic','-v7');
+        assert(isequaln(didactic.Q,currentM6.Q) && ...
+            isequaln(didactic.R,currentM6.R), ...
+            'RunAll:StaleDidacticLqg', ...
+            'Rigenerare progetto_lqg dopo la catena downstream corrente.');
         validate_m7_lqg_integral;
         plot_lqri_revision;
         % Le quattro suite coinvolte includono verifiche matematiche,

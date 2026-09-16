@@ -2,12 +2,12 @@ FileName,Milestone,SourcePath,ReportPath,Caption,ReportSection,PresentationUse
 m2_open_loop_poles.png,M2,results\figures\m2_open_loop_poles.png,report\figures\m2_open_loop_poles.png,"Poli del modello meccanico linearizzato in anello aperto.",3,0
 m3_delay_pade_comparison.png,M3,results\figures\m3_delay_pade_comparison.png,report\figures\m3_delay_pade_comparison.png,"Confronto fra ritardo esatto e approssimazione di Pade del primo ordine.",4,1
 m4_actuator_uncertainty_cover.png,M4,results\figures\m4_actuator_uncertainty_cover.png,report\figures\m4_actuator_uncertainty_cover.png,"Copertura dell'incertezza dinamica degli attuatori mediante W_I.",5,1
-m5_spec_frequency_map.png,M5,results\figures\m5_spec_frequency_map.png,report\figures\m5_spec_frequency_map.png,"Mappa frequenziale delle specifiche e dei pesi M5.",6,1
+m5_spec_frequency_map.png,M5,results\figures\m5_spec_frequency_map.png,report\figures\m5_spec_frequency_map.png,"Mappa frequenziale delle specifiche e dei pesi M5.",8,1
 m6_lqg_reference_tracking.png,M6,results\figures\m6_lqg_reference_tracking.png,report\figures\m6_lqg_reference_tracking.png,"Tracking nominale lineare del controllore LQG M6.",7,1
 m6_lqr_selected_weights.png,M6,results\figures\m6_lqr_selected_weights.png,report\figures\m6_lqr_selected_weights.png,"Pesi fisicamente normalizzati del costo LQR selezionato in M6.",7,0
 m6_lqr_candidate_tradeoff.png,M6,results\figures\m6_lqr_candidate_tradeoff.png,report\figures\m6_lqr_candidate_tradeoff.png,"Ricerca LQR compatta: ammissibilita e compromesso normalizzato.",7,0
 m6_kalman_sensitivity.png,M6,results\figures\m6_kalman_sensitivity.png,report\figures\m6_kalman_sensitivity.png,"Sensibilita del filtro di Kalman alle ipotesi sul rumore di misura.",7,0
-m7_augmented_cost_tradeoff.png,M7,results\figures\m7_augmented_cost_tradeoff.png,report\figures\m7_augmented_cost_tradeoff.png,"Tre valori di wi per LQRI M7, a Q e R fissi; target M5 non raggiunti.",7,0
+m7_augmented_cost_tradeoff.png,M7,results\figures\m7_augmented_cost_tradeoff.png,report\figures\m7_augmented_cost_tradeoff.png,"Tre valori diretti di wbarI per LQRI M7, a Q e R fissi; target M5 non raggiunti.",7,0
 m8_lqg_ras_q_plane.png,M8,results\figures\m8_lqg_ras_q_plane.png,report\figures\m8_lqg_ras_q_plane.png,"Stima empirica della RAS M6 nel piano delle coordinate articolari.",7,0
 m10_weighted_comparison_m9.png,M10,results\figures\m10_weighted_comparison_m9.png,report\figures\m10_weighted_comparison_m9.png,"Confronto della prestazione pesata M9/M10 sul problema nominale congelato.",8,1
 m11_gamma_vs_order.png,M11,results\figures\m11_gamma_vs_order.png,report\figures\m11_gamma_vs_order.png,"Trade-off fra ordine e objective nella campagna hinfstruct M11.",8,0
@@ -28,5 +28,6 @@ m7_lqg_lqri_disturbance_control.png,M7R,results\figures\m7_lqg_lqri_disturbance_
 m7_lqri_reference_tracking.png,M7R,results\figures\m7_lqri_reference_tracking.png,report\figures\m7_lqri_reference_tracking.png,"Tracking, comandi e memoria integrale LQRI per due gradini di riferimento.",7,0
 hinf_revision_sensitivity_envelopes.png,HINFR,results\figures\hinf_revision_sensitivity_envelopes.png,report\figures\hinf_revision_sensitivity_envelopes.png,"Inviluppi di S e T del nuovo studio a tre pesi.",8,0
 hinf_revision_weighted_channels.png,HINFR,results\figures\hinf_revision_weighted_channels.png,report\figures\hinf_revision_weighted_channels.png,"Canali pesati del nuovo studio e soglia unitaria.",8,0
-hinf_revision_tracking_control.png,HINFR,results\figures\hinf_revision_tracking_control.png,report\figures\hinf_revision_tracking_control.png,"Tracking e comando del candidato illustrativo, non adottato.",8,0
-hinf_revision_weights.png,HINFR,results\figures\hinf_revision_weights.png,report\figures\hinf_revision_weights.png,"Pesi originali e nuova scelta progettuale separata dalla baseline.",8,0
+hinf_revision_tracking_control.png,HINFR,results\figures\hinf_revision_tracking_control.png,report\figures\hinf_revision_tracking_control.png,"Tracking e comando dello studio a tre pesi; produzione M10 a due pesi.",8,0
+hinf_revision_weights.png,HINFR,results\figures\hinf_revision_weights.png,report\figures\hinf_revision_weights.png,"Pesi precedenti e nuova scelta diretta, adottata in M5 per W1/W2.",8,0
+m10_lower_lft_block_diagram.png,M10,results\figures\m10_lower_lft_block_diagram.png,report\figures\m10_lower_lft_block_diagram.png,"Lower LFT M10 a due pesi.",8,0

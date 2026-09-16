@@ -18,7 +18,7 @@ classdef test_lyapunov_ras < matlab.unittest.TestCase
     end
     methods (Test)
         function ordineCompleto(testCase,controllore)
-            r=testCase.Risultati{controllore}; ordini=[28 32 66];
+            r=testCase.Risultati{controllore}; ordini=[28 32 84];
             testCase.verifySize(r.Acl,[ordini(controllore) ordini(controllore)]);
         end
         function stabilitaLineare(testCase,controllore)

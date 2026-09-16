@@ -2708,3 +2708,70 @@ Il fetch conclusivo conferma origin/main alla baseline
 per `codex/lqri-direct-r-review`. La pubblicazione autorizzata prevede
 commit coerente, push del solo branch e PR aperta verso main. Nessun
 merge automatico, force push o modifica diretta al branch principale.
+
+## 2026-09-16 — Pesi diretti e rigenerazione delle dipendenze
+
+Responsabile: Alessio. Branch: codex/direct-weights-hinf-lqr-lqri.
+Baseline: aae96148353506b8ba119de65f6dcf3103eec328 (PR 29).
+
+La ricognizione iniziale ha rilevato working tree pulito; il diff dei tre
+capitoli interessati è stato salvato prima degli interventi. M0–M4 e le
+parti non dipendenti della relazione sono preservati. Le modifiche manuali
+non sono ricostruite da versioni storiche.
+
+Fase B: M6 realmente ricalcolata su 36 costi, 9 ammissibili, R=0.10 I2
+selezionata; Q e Kalman identici alla baseline. M7 con Qi diretto 20/200/800:
+tutte le chiusure a 30 stati stabili, nessun candidato conforme. Verifica
+mirata M6/M7: 36/36 PASS, distinta dalla verifica globale ancora da eseguire.
+
+Fasi C/D: 8 casi W1 e 4 W2; tutti FAIL con criteri invariati. M5 usa i nuovi
+pesi fisici, senza normalizzazione della pianta; M9/M10 eseguite una volta
+(gamma=5.677221), M11 conserva 30 avvii (15 stabili, A5=5.708569).
+W3 rimane fisso nello studio e assente in produzione. Diagramma Lower LFT
+M10 generato; pesi spostati da §§6.3–6.5 al §8.2.
+
+Fase E: M12/M13/M14 realmente dipendenti rigenerate; una sola nuova musyn,
+Kmu ordine 70, migliore iterazione 5. M14 RS FAIL_CERTIFIED con margine
+[0.774041952377,0.775696806012], NP/RP negativi. Il controllo wcgain è stato
+corretto: wcu realizza il lower bound, mentre upper bound infinito non
+dimostra da solo l'instabilità di tale sostituzione. Fonte primaria:
+https://www.mathworks.com/help/robust/ref/dynamicsystem.wcgain.html
+Le soglie di confronto restano invariate.
+
+M8 rigenerata con PASS software. Primo tentativo M15 interrotto dal limite
+RAS di 400 chiamate, prima di produrre un nuovo artifact finale: il fallimento
+è conservato nel log di esecuzione. Il limite ora deriva dal massimo della
+stessa ricerca (626), senza cambiare convergenza, precisione o orizzonti.
+Un checkpoint con identità delle sorgenti salva i punti completati.
+M15/M16/M17 e Lyapunov sono in completamento; suite globale e PDF finali
+non ancora dichiarati validati. Nessuna sintesi già completata è ripetuta
+per questa correzione. Presentazione aggiornata soltanto nei passaggi
+dipendenti; restano 19 slide e lo stesso impianto grafico.
+
+## 2026-09-16 — Chiusura della revisione dei pesi diretti
+
+Completate le sole dipendenze: M15 software PASS, tracking FAIL; M16
+37/40 stabili per M6 e 40/40 per Khinf/Kmu. I campioni 5,6,35 M6 restano
+nel dataset. M17 non assegna un controllore robusto finale perché M14
+fallisce RS; le percentuali Monte Carlo non modificano tale conclusione.
+Rigenerate le regioni nominali Lyapunov e le 48 traiettorie.
+
+Unica suite globale: 658/660 PASS, zero incomplete, 297.697682 s.
+Fallimenti: testT02SelectedArchitectureIsA5 attendeva l'avvio storico 5
+anziché il nuovo 4; testT28M6SampleFivePreserved attendeva solo 5,6,
+omettendo il nuovo campione instabile 35. Aggiornate soltanto queste
+aspettative dipendenti dai dati: riesecuzione mirata 2/2 PASS.
+Conservati separatamente i risultati iniziali e la verifica correttiva.
+Nessuna soglia modificata e nessuna seconda suite globale.
+Code Analyzer conclusivo: 177 file, zero segnalazioni.
+
+La revisione visiva dei PDF ha motivato solo correzioni locali dei float
+dipendenti e del paragrafo conclusivo M14: relazione 70 pagine e
+presentazione 19 slide, audit PASS senza riferimenti irrisolti o overfull.
+Rimosse dal diff le rigenerazioni M3 della suite: MAT identico escluso
+l'header temporale e PNG con pixel identici alla baseline. Nessun dato
+manuale eliminato. M0–M4 rimangono invariati.
+
+Resoconto autosufficiente in RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt.
+Pubblicazione del solo branch dedicato, con PR aperta per revisione:
+nessun merge automatico o aggiornamento diretto di main.

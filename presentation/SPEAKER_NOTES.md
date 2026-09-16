@@ -37,7 +37,7 @@
 
 ## Slide 6 - Specifiche (1:00)
 
-- Messaggio: M5 è congelata prima delle sintesi.
+- Messaggio: i target M5 sono invariati; i pesi sono stati rivisti direttamente e poi fissati prima delle sintesi a valle.
 - Spiegare: target e significato di W1/W2.
 - Non sovrainterpretare: uScale non è una saturazione.
 - Transizione: mostrare il riferimento nominale.
@@ -46,15 +46,15 @@
 
 - Messaggio: la scala fisica non è un coefficiente di tuning.
 - Spiegare: qs=5 gradi dal riferimento M5; qds=12 qs; ds=0.5/40 rad; uScale=12 N m è una scala desiderata, non un limite hardware.
-- Calcolo: F forma [q; qdot; theta-q; thetadot]; Q=F' Sx^(-T) W Sx^(-1) F, con termini incrociati -640. R=16/12² I=I/9.
-- Scelta: replay della ricerca approvata di 36 combinazioni, 9 ammissibili, LQR30; nessun nuovo tuning. Riccati produce K e poli stabili.
+- Calcolo: F forma [q; qdot; theta-q; thetadot]; Q=F' Sx^(-T) W Sx^(-1) F, con termini incrociati -640. R=ru I2, senza normalizzazione del comando.
+- Scelta: nuova ricerca di 36 combinazioni con ru={0.01,0.05,0.10}; 9 ammissibili, selezionato LQR30 con ru=0.10 mediante i criteri invariati. Q resta identica, R e K cambiano realmente.
 - Transizione: lo stato necessario a K non è tutto misurato.
 
 ## Slide 8 - Kalman: ipotesi e sensibilità (1:00)
 
 - Messaggio: sigmaD=sigmaU=0.1 N m e sigmaY=0.05 gradi sono ipotesi del progetto, non dati del docente o di sensori identificati.
 - Calcolo: Qn=0.01 I4, Rn=(0.05 pi/180)² I4; lqe produce L. Nel continuo sono intensità equivalenti: il rumore bianco ideale non ha deviazione standard istantanea finita.
-- Spiegare: la stessa sequenza campionata di rumore è applicata ai tre stimatori. Variando l'ipotesi sigmaY, i rapporti di velocità diventano 2.112, 1.510, 1.192 e l'RMS del comando 0.1432, 0.07835, 0.04097 N m.
+- Spiegare: la stessa sequenza campionata di rumore è applicata ai tre stimatori. I valori aggiornati della tabella derivano da M6; L, Qn e Rn sono identici alla baseline, mentre cambia il regolatore.
 - Non sovrainterpretare: non è identificazione sperimentale né una nuova ottimizzazione; la discretizzazione diagnostica non identifica le intensità continue.
 - Transizione: combinare K e L tramite il principio di separazione.
 
@@ -67,28 +67,28 @@
 
 ## Slide 10 - LQG-I M7 (0:55)
 
-- Messaggio: nessuna delle tre verifiche manuali produce un controllore finale.
-- Spiegare: incompatibilità osservata fra settling time e overshoot.
-- Non sovrainterpretare: non presentare un controllore integrale inesistente.
+- Messaggio: tutti e tre i controllori LQRI sono implementati e stabili, ma nessuno soddisfa tutti i target M5.
+- Spiegare: Qi=wbarI I2, con wbarI={20,200,800}; Q/R e Kalman provengono da M6. Il punto illustrativo 200 annulla l'offset DC, ma Ts=5.046 s supera 0.8 s.
+- Non sovrainterpretare: distinguere implementazione valida da conformità prestazionale; il risultato negativo non implica inesistenza del controllore.
 - Transizione: passare alle sintesi H-infinity.
 
 ## Slide 11 - H-infinity (1:15)
 
 - Messaggio: mixsyn/hinfsyn sono coerenti ma gamma resta maggiore di uno.
-- Spiegare: generalized plant e frontiera hinfstruct.
+- Spiegare: pesi diretti nelle coordinate fisiche; 8 casi W1 e 4 casi W2, tutti non conformi. Il W3 fissato nello studio non appartiene alla pianta M10 a due pesi. La Lower LFT è ricostruita e verificata.
 - Non sovrainterpretare: A5 M12 non è Khinf M10.
 - Transizione: utilizzare A5 come base della mu-analysis.
 
 ## Slide 12 - D-K iteration (1:00)
 
 - Messaggio: la D-K iteration produce Kmu, ma non ne certifica ancora la robustezza.
-- Spiegare: M13 non viene rilanciata; best iteration e ordine 52 restano congelati, mentre M14 usa l'M4 corrente.
+- Spiegare: M13 è stata rigenerata una sola volta perché dipende dai nuovi pesi; best iteration 5, ordine 70. M14 usa lo stesso M4, non una nuova incertezza.
 - Non sovrainterpretare: l'objective musyn non è un certificato RS o RP.
 - Transizione: affidare la verifica ai quattro esiti indipendenti M14.
 
 ## Slide 13 - M14 (1:20)
 
-- Messaggio: M14 certifica RS; NP e RP falliscono.
+- Messaggio: M14 produce RS FAIL_CERTIFIED; anche NP e RP falliscono. Non è trasferibile il certificato della precedente configurazione.
 - Spiegare: intervallo del margine RS e distinzione NS/NP/RS/RP.
 - Non sovrainterpretare: evitare la frase generica "Kmu è robusto".
 - Transizione: verificare il modello non lineare nominale.
@@ -102,7 +102,7 @@
 
 ## Slide 15 - Lyapunov nominale (1:20)
 
-- Messaggio: P=lyap(Acl',I) riguarda l'intera chiusura: 28 stati LQG, 32 H-infinity, 66 Kmu, inclusi attuatori e osservatore/controllore.
+- Messaggio: P=lyap(Acl',I) riguarda l'intera chiusura: 28 stati LQG, 32 H-infinity, 84 Kmu, inclusi attuatori e osservatore/controllore.
 - Dimostrazione: f(z)=Acl z+E r(z), con ||r|| <= c||z||³ nell'equilibrio superiore. Dal residuo di Lyapunov e dal limite cubico si ricava rhoA>0 che garantisce Vdot <= -(1-epsilon)/2 ||z||².
 - Grafico: zoom della sezione analitica LQG, z=J dq con dtheta=dq, velocità e stati del controllore nulli. Le ellissi più ampie campionate e i punti delle simulazioni sono confrontati nella relazione, non in questa slide.
 - Limiti: bound molto conservativo, calcolo in doppia precisione senza aritmetica intervallare, modello nominale senza saturazione e con Padé. Non è una RAS massima né una certificazione robusta M4.
@@ -126,7 +126,7 @@
 ## Slide 18 - Decisione (1:00)
 
 - Messaggio: la selezione è per ruolo.
-- Spiegare: Kmu robusto, M6 nominale, Khinf comparatore.
+- Spiegare: ruolo robusto non assegnato per assenza di un candidato con RS certificata; M6 riferimento nominale e Khinf comparatore.
 - Non sovrainterpretare: nessun controllore domina tutte le metriche.
 - Transizione: chiudere con limiti e implicazioni.
 
@@ -140,23 +140,23 @@
 
 ### Perché M7 non ha un controllore finale?
 
-Le tre verifiche manuali sull'architettura LQI/LQG-I non rispettano simultaneamente settling time e overshoot M5. Il risultato è preservato come PARTIAL, senza inventare un controllore.
+Le tre LQRI implementate non rispettano simultaneamente tutti i target M5. Il risultato è PARTIAL: il candidato illustrativo wbarI=200 è stabile e annulla l'offset DC, ma non soddisfa il settling richiesto.
 
 ### Perché gamma maggiore di uno è stato conservato?
 
-Perché il problema, i pesi e i controllori sono congelati. Gamma maggiore di uno documenta la mancata conformità pesata; ritunare retroattivamente cambierebbe il problema approvato.
+La piccola ricerca autorizzata ha ridotto gamma modificando esplicitamente i pesi, ma non ha prodotto candidati conformi. I criteri non vengono cambiati per ottenere PASS e la ricerca termina al budget dichiarato.
 
 ### Qual è la differenza fra RS e RP?
 
-RS richiede stabilità interna per tutte le incertezze ammesse. RP richiede anche il rispetto della prestazione pesata su tutto l'insieme. Kmu supera RS ma fallisce RP.
+RS richiede stabilità interna per tutte le incertezze ammesse. RP richiede anche il rispetto della prestazione pesata su tutto l'insieme. Il nuovo Kmu fallisce entrambe secondo M14.
 
 ### Perché Monte Carlo non certifica robustezza?
 
-Perché verifica solo 40 realizzazioni e non tutte le perturbazioni ammissibili. Inoltre i range M4 non definiscono probabilità fisiche. Il certificato RS deriva da M14.
+Perché verifica solo 40 realizzazioni e non tutte le perturbazioni ammissibili. Inoltre i range M4 non definiscono probabilità fisiche. M14 mantiene autorità sulla valutazione formale RS, qui negativa.
 
-### Perché scegliere Kmu se il tracking è peggiore?
+### Perché non è assegnato il ruolo robusto finale?
 
-La scelta è per ruolo: Kmu è l'unico candidato con RS formale PASS_CERTIFIED. M6 resta il riferimento nominale proprio perché traccia meglio.
+Il criterio richiede RS formale PASS_CERTIFIED. Nessuno dei controllori principali la possiede nella configurazione corrente; non viene alterato il criterio per assegnare comunque un vincitore. M6 resta il riferimento nominale.
 
 ### Perché M6 non è il controllore robusto finale?
 
@@ -168,7 +168,7 @@ La riduzione altererebbe il controllore congelato e richiederebbe una rivalidazi
 
 ### Cosa rappresenta uScale?
 
-È la scala da 12 N m usata in W2 per normalizzare il comando. Non è un limite di coppia hardware e non attiva clipping.
+È la scala fisica desiderata da 12 N m usata nelle metriche del comando. Il nuovo W2 impiega invece il guadagno diretto ku=0.05; non viene trasformata la pianta. uScale non è un limite hardware e non attiva clipping.
 
 ### Cosa significa RAS search-box limited?
 

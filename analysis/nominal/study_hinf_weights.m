@@ -1,188 +1,212 @@
 function studio = study_hinf_weights(eseguiSintesi)
-%STUDY_HINF_WEIGHTS Campagna deterministica separata dalla baseline M9-M16.
-%   Il default ricarica la campagna. true esegue 13 candidati programmati,
-%   una verifica equivalente hinfsyn e un diagnostico sul solo comando.
+%STUDY_HINF_WEIGHTS Ricerca limitata di pesi nelle coordinate fisiche M3.
+%   Stage A: otto W1, con W2 e W3 fissi. Stage B: al massimo quattro
+%   sintesi, solo senza PASS e con W2*KS dominante. Nessuna scala di pianta.
+%   W3 resta quello dello studio precedente; M9/M10 mantengono due pesi.
 arguments
     eseguiSintesi (1,1) logical = false
 end
-radice=fileparts(fileparts(fileparts(mfilename('fullpath'))));
-dati=fullfile(radice,'results','data');
-archivio=fullfile(dati,'hinf_weight_revision.mat');
-if ~eseguiSintesi
-    assert(isfile(archivio),'HinfStudy:MissingCache', ...
-        'Eseguire study_hinf_weights(true) una sola volta per creare la campagna.');
-    caricato=load(archivio,'studio'); studio=caricato.studio; return
+root=fileparts(fileparts(fileparts(mfilename('fullpath'))));
+data=fullfile(root,'results','data');
+archive=fullfile(data,'hinf_weight_revision.mat');
+if isfile(archive)
+    cached=load(archive,'studio');
+    current=isfield(cached.studio,'coordinateSystem') && ...
+        cached.studio.coordinateSystem=="physical";
+    if current
+        studio=cached.studio;
+        assert(~eseguiSintesi,'DirectHinf:ExistingCampaign', ...
+            'Campagna gia completata: usare la cache, senza nuove sintesi.');
+        return
+    end
 end
-assert(~isfile(archivio),'HinfStudy:ExistingCache', ...
-    'La campagna esiste: ricaricarla senza ripetere le sintesi.');
-m3=load(fullfile(dati,'m3_nominal_actuated_plant.mat'));
-m4=load(fullfile(dati,'m4_uncertain_plant.mat'));
-m5=load(fullfile(dati,'m5_performance_specs.mat'));
-m10=load(fullfile(dati,'m10_hinfsyn_nominal.mat'));
-A=m3.Afull; B=m3.Bfull; Cq=m3.CfullQ; spec=m5.spec;
-G=ss(A,B,Cq,zeros(2)); qs=spec.referenceAmplitude; us=spec.uScale;
-% rN=r/qs, qN=q/qs, uN=u/us: plant e controllore normalizzati.
-Gn=(1/qs)*G*us;
-omega=logspace(-3,3,1201); tempo=(0:0.002:12)';
-s=tf('s'); formaU=(s/spec.omegaU+1)/(s/(spec.controlWeightAlpha*spec.omegaU)+1);
-% Non si cambiano As=0.05, Ms=2, il gradino 5 deg o i target temporali M5.
-% omegaB: meno aggressivo, originale, piu aggressivo (wn/5, 0.3wn, 0.4wn).
-% beta: uScale=12 o una penalita doppia (scala equivalente 6 N m).
-% W3: roll-off presso wn oppure 2wn, DC=0.1 e HF=5, scelta progettuale.
-% WI e incertezza INPUT: WI*T_output NON sarebbe un certificato M4.
-bande=[8 12 16]; penalita=[1 2]; rolloff=[40 80];
-parametri=zeros(13,3);
-parametri(1,:)=[12 1 0]; % diagnostico: nuova scala W2, W3 assente
-indiceParametro=1;
-for wb=bande
-    for beta=penalita
-        for wt=rolloff
-            indiceParametro=indiceParametro+1;
-            parametri(indiceParametro,:)=[wb beta wt];
+assert(eseguiSintesi,'DirectHinf:MissingCampaign', ...
+    'Eseguire una sola volta study_hinf_weights(true).');
+baseline=load(fullfile(data,'direct_weights_baseline.mat'));
+m3=load(fullfile(data,'m3_nominal_actuated_plant.mat'));
+m5=load(fullfile(data,'m5_performance_specs.mat'));
+G=ss(m3.Afull,m3.Bfull,m3.CfullQ,zeros(2));
+spec=m5.spec; omega=logspace(-3,3,1201); tempo=(0:0.002:12)';
+% Preallocazione: baseline ricaricata + non oltre 14 sintesi di studio.
+% Le due sintesi di produzione M9/M10 restano entro il limite totale 16.
+rows=nan(15,19); controllers=cell(15,1); maps=cell(15,1);
+weights=cell(15,1); stages=strings(15,1); errors=strings(15,1);
+count=1; synthesisCount=0; stageBExecuted=false; w3Alternatives=0;
+b=baseline.baselineM5.spec;
+initialParameters=[b.omegaB,b.As,b.Ms,1/b.uScale,b.omegaU,0];
+controllers{1}=baseline.baselineM10.Khinf;
+weights{1}=struct('W1',baseline.baselineM5.W1, ...
+    'W2',baseline.baselineM5.W2,'W3',ss(zeros(2)), ...
+    'parametri',initialParameters);
+maps{1}=localValuta(G,m5.BdFull,controllers{1},weights{1},spec,tempo);
+rows(1,:)=[0,initialParameters,baseline.baselineM10.gammaHinf,maps{1}.metriche];
+stages(1)="BASELINE_2_WEIGHTS";
+fixedOmegaT=baseline.w3Parameters(1);
+assert(isequal(baseline.w3Parameters,[40,0.1,5]), ...
+    'DirectHinf:W3Baseline','Il W3 congelato dello studio deve essere auditato.');
+
+%% Stage A: si modifica soltanto W1, interrompendo a due PASS reali.
+% L'ordine e deterministico; nessuna selezione di seed o ricerca casuale.
+[ow,aa,mm]=ndgrid([6,8],[0.10,0.15],[2.5,3.0]);
+for index=1:numel(ow)
+    evaluateOne([ow(index),aa(index),mm(index), ...
+        initialParameters(4:5),fixedOmegaT],"A");
+    t=currentTable();
+    if sum(t.Pass(t.Stage=="A"))>=2, break; end
+end
+t=currentTable(); order=rankCandidates(t);
+bestA=order(t.Stage(order)=="A"); bestA=bestA(1:min(2,numel(bestA)));
+dominantW2=any(t.W2KSNorm(bestA)>=t.W1SNorm(bestA) & ...
+    t.W2KSNorm(bestA)>=t.W3TNorm(bestA));
+stageBReason="NOT RUN: almeno un PASS oppure W2*KS non dominante.";
+if ~any(t.Pass(t.Stage=="A")) && dominantW2
+    stageBExecuted=true;
+    stageBReason="Nessun PASS Stage A; W2*KS domina in almeno uno dei due migliori W1.";
+    stop=false;
+    for index=bestA(:)'
+        for ku=[0.07,0.05]
+            % 60 rad/s e il valore esplicito autorizzato per Stage B;
+            % la baseline attiva e Stage A usano invece 30 rad/s.
+            evaluateOne([t.OmegaW1(index),t.As(index),t.Ms(index),ku,60,fixedOmegaT],"B");
+            current=currentTable();
+            if current.Pass(end), stop=true; break; end
+        end
+        if stop, break; end
+    end
+end
+%% W3: solo se e quantitativamente il collo di bottiglia del compromesso.
+% 80 rad/s = 2*wn; 40 rad/s = wn. La seconda alternativa riduce il solo
+% guadagno HF da 5 a 3, mantenendo DC=0.1. Nessun campionamento denso.
+t=currentTable(); order=rankCandidates(t); best=order(1);
+dominantW3=t.W3TNorm(best)>max(t.W1SNorm(best),t.W2KSNorm(best));
+if ~any(t.Pass(2:end)) && dominantW3
+    for wt=[80,40]
+        if synthesisCount>=14, break; end
+        parameters=t{best,{'OmegaW1','As','Ms','Ku','OmegaU','OmegaT'}};
+        parameters(6)=wt;
+        w3Alternatives=w3Alternatives+1;
+        evaluateOne(parameters,"W3");
+        current=currentTable();
+        if current.Pass(end), break; end
+    end
+end
+t=currentTable(); order=rankCandidates(t); selected=order(1);
+w=weights{selected}; K=controllers{selected};
+assert(~isempty(K),'DirectHinf:NoStableCandidate','Nessun compromesso stabile disponibile.');
+
+%% Lower LFT fisica: confronti indipendenti, senza seconda sintesi di studio.
+Gn=G; Gn.InputName={'u(1)','u(2)'}; Gn.OutputName={'q(1)','q(2)'};
+W1n=ss(w.W1); W1n.InputName={'e(1)','e(2)'}; W1n.OutputName={'z1(1)','z1(2)'};
+W2n=ss(w.W2); W2n.InputName={'u(1)','u(2)'}; W2n.OutputName={'z2(1)','z2(2)'};
+W3n=ss(w.W3); W3n.InputName={'q(1)','q(2)'}; W3n.OutputName={'z3(1)','z3(2)'};
+P=connect(Gn,W1n,W2n,W3n,sumblk('e = r - q',2), ...
+    {'r(1)','r(2)','u(1)','u(2)'}, ...
+    {'z1(1)','z1(2)','z2(1)','z2(2)','z3(1)','z3(2)','e(1)','e(2)'});
+Pformula=[w.W1,-w.W1*G;ss(zeros(2)),w.W2; ...
+    ss(zeros(2)),w.W3*G;ss(eye(2)),-G];
+errorP=max(abs(freqresp(P,omega)-freqresp(Pformula,omega)),[],'all');
+errorAugw=max(abs(freqresp(P,omega)-freqresp(augw(G,w.W1,w.W2,w.W3),omega)),[],'all');
+errorLFT=norm(lft(P,K)-maps{selected}.pesato,inf);
+assert(errorP<1e-8 && errorAugw<1e-8 && errorLFT<1e-7, ...
+    'DirectHinf:Reconstruction','Interconnessione fisica o norma non coerenti.');
+
+% Diagnostica dei pesi iniziali: limite puntuale necessario, non sufficiente.
+sv=sigma(G,omega); a=squeeze(abs(freqresp(weights{1}.W1(1,1),omega)))';
+bb=squeeze(abs(freqresp(weights{1}.W2(1,1),omega)))';
+bound=a.*bb./sqrt(bb.^2+(a.*sv(end,:)).^2);
+[boundMax,iBound]=max(bound);
+selectedSpec=spec; selectedSpec.omegaW1=t.OmegaW1(selected);
+selectedSpec.As=t.As(selected); selectedSpec.Ms=t.Ms(selected);
+selectedSpec.controlWeightGain=t.Ku(selected); selectedSpec.omegaU=t.OmegaU(selected);
+studio=struct('coordinateSystem',"physical",'baselineCommit',baseline.baselineCommit, ...
+    'tabella',t,'controllori',{controllers(1:count)},'mappe',{maps(1:count)}, ...
+    'pesi',{weights(1:count)},'selezionato',selected,'Knuovo',K, ...
+    'P',P,'Pformula',Pformula,'erroreP',errorP,'erroreAugw',errorAugw, ...
+    'erroreLFT',errorLFT,'tempo',tempo,'omega',omega,'spec',spec, ...
+    'selectedSpec',selectedSpec,'synthesisCount',synthesisCount, ...
+    'stageBExecuted',stageBExecuted,'stageBReason',stageBReason, ...
+    'w3Alternatives',w3Alternatives,'fixedW3Parameters',baseline.w3Parameters, ...
+    'diagnosi',struct('omega',omega,'limitePuntuale',bound, ...
+    'limiteMassimo',boundMax,'frequenzaLimite',omega(iBound)), ...
+    'productionUsesW3',false,'selectionOrder',order);
+save(archive,'studio','-v7');
+writetable(t,fullfile(data,'hinf_weight_revision.csv'));
+disp(t);
+fprintf('Sintesi studio=%d; ID selezionato=%d; PASS=%d. %s\n', ...
+    synthesisCount,t.Id(selected),sum(t.Pass(2:end)),stageBReason);
+
+    function evaluateOne(parameters,stage)
+        % Ogni esecuzione e contata anche se fallisce: budget non aggirabile.
+        assert(synthesisCount<14,'DirectHinf:Budget','Limite di sintesi raggiunto.');
+        synthesisCount=synthesisCount+1; count=count+1; stages(count)=stage;
+        candidateSpec=spec; candidateSpec.omegaW1=parameters(1);
+        candidateSpec.As=parameters(2); candidateSpec.Ms=parameters(3);
+        candidateSpec.controlWeightGain=parameters(4); candidateSpec.omegaU=parameters(5);
+        [~,W1,~,W2]=build_m5_weights(candidateSpec);
+        s=tf('s'); hf=5;
+        if stage=="W3" && w3Alternatives==2, hf=3; end
+        W3=((s/parameters(6)+0.1)/(s/(hf*parameters(6))+1))*eye(2);
+        weights{count}=struct('W1',W1,'W2',W2,'W3',W3,'parametri',parameters,'W3HighGain',hf);
+        fprintf('HINF %d stage=%s: omegaW1=%g As=%g Ms=%g ku=%g omegaU=%g W3omega=%g\n', ...
+            synthesisCount,stage,parameters);
+        try
+            % Checkpoint per sintesi: una ripresa non deve ripetere i solver.
+            checkpointDir=fullfile(root,'results','tmp','direct_weights_revision');
+            if ~isfolder(checkpointDir), mkdir(checkpointDir); end
+            checkpointPath=fullfile(checkpointDir,sprintf('hinf_case_%02d.mat',synthesisCount));
+            if isfile(checkpointPath)
+                saved=load(checkpointPath);
+                assert(isequal(saved.parameters,parameters), ...
+                    'DirectHinf:CheckpointMismatch','Parametri del checkpoint diversi.');
+                controller=saved.controller; closed=saved.closed; gamma=saved.gamma;
+            else
+                [controller,closed,gamma]=mixsyn(G,W1,W2,W3);
+                save(checkpointPath,'controller','closed','gamma','parameters','-v7');
+            end
+            controllers{count}=controller;
+            result=localValuta(G,m5.BdFull,controller,weights{count},spec,tempo);
+            result.synthesisClosedLoop=closed;
+            result.gammaRelativeError=abs(result.metriche(2)/gamma-1);
+            assert(result.gammaRelativeError<1e-4,'DirectHinf:GammaMismatch', ...
+                'La norma fisica ricostruita non coincide con gamma.');
+            maps{count}=result;
+            rows(count,:)=[count-1,parameters,gamma,result.metriche];
+        catch err
+            errors(count)=string(err.identifier)+": "+string(err.message);
+            rows(count,:)=[count-1,parameters,inf,0,inf(1,10)];
+            fprintf('FAIL conservato: %s\n',errors(count));
         end
     end
-end
-numero=size(parametri,1);
-assert(numero==13);
-controllori=cell(numero+1,1); mappe=cell(numero+1,1); pesi=cell(numero+1,1);
-righe=nan(numero+1,16); errori=strings(numero+1,1);
-
-% Baseline originale: ricaricata, non sovrascritta o cancellata.
-controllori{1}=m10.Khinf;
-pesi{1}=struct('W1',m5.W1,'W2',m5.W2,'W3',ss(zeros(2)), ...
-    'W1n',m5.W1,'W2n',formaU/qs*eye(2),'W3n',[],'parametri',[12 1/qs 0]);
-mappe{1}=localValuta(G,m5.BdFull,m10.Khinf,pesi{1},spec,tempo);
-righe(1,:)=[0 12 1/qs 0 m10.gammaHinf mappe{1}.metriche];
-
-for k=1:numero
-    wb=parametri(k,1); beta=parametri(k,2); wt=parametri(k,3);
-    W1n=((s/spec.Ms+wb)/(s+wb*spec.As))*eye(2);
-    W2n=beta*formaU*eye(2);
-    if wt==0, W3n=[];
-    else, W3n=((s/wt+0.1)/(s/(5*wt)+1))*eye(2); end
-    if isempty(W3n), W3fisico=ss(zeros(2)); else, W3fisico=W3n; end
-    pesi{k+1}=struct('W1',W1n,'W2',(qs/us)*W2n,'W3',W3fisico, ...
-        'W1n',W1n,'W2n',W2n,'W3n',W3n,'parametri',parametri(k,:));
-    fprintf('Sintesi deterministica %d/%d: omegaB=%g beta=%g omegaT=%g\n', ...
-        k,numero,wb,beta,wt);
-    try
-        [Kn,CLn,gamma]=mixsyn(Gn,W1n,W2n,W3n);
-        assert(~isempty(Kn) && isfinite(gamma),'HinfStudy:SynthesisFailed', ...
-            'Sintesi senza controllore o gamma finito.');
-        K=us*Kn*(1/qs);
-        valutazione=localValuta(G,m5.BdFull,K,pesi{k+1},spec,tempo);
-        valutazione.CLnorm=CLn;
-        valutazione.Knorm=Kn;
-        valutazione.erroreGamma=abs(valutazione.metriche(2)/gamma-1);
-        assert(valutazione.erroreGamma<1e-4,'HinfStudy:GammaMismatch', ...
-            'La norma fisica ricostruita non coincide con la sintesi normalizzata.');
-        controllori{k+1}=K; mappe{k+1}=valutazione;
-        righe(k+1,:)=[k wb beta wt gamma valutazione.metriche];
-    catch errore
-        errori(k+1)=string(errore.identifier)+": "+string(errore.message);
-        righe(k+1,:)=[k wb beta wt inf 0 inf inf inf inf inf inf inf inf inf inf];
-        fprintf('FAIL conservato: %s\n',errori(k+1));
+    function t=currentTable()
+        t=array2table(rows(1:count,:),'VariableNames', ...
+            {'Id','OmegaW1','As','Ms','Ku','OmegaU','OmegaT','Gamma', ...
+            'Stable','WeightedNorm','W1SNorm','W2KSNorm','W3TNorm', ...
+            'SettlingTime','OvershootPercent','SteadyErrorRelative', ...
+            'CrossCoupling','PeakControlNm','RmsControlNm'});
+        t.Stage=stages(1:count); t.Error=errors(1:count);
+        t.Ordine=cellfun(@(x) size(x.A,1),controllers(1:count),'ErrorHandler',@(~,~) 0);
+        % Target temporali e classificazione sono quelli gia utilizzati.
+        t.M5Pass=t.Stable==1 & t.SettlingTime<=spec.settlingTimeTarget & ...
+            t.OvershootPercent<=spec.overshootTarget & ...
+            t.SteadyErrorRelative<=spec.steadyStateTrackingTarget;
+        t.WeightedPass=t.Stable==1 & t.Gamma<1;
+        t.Pass=t.M5Pass & t.WeightedPass;
     end
 end
-tabella=array2table(righe,'VariableNames',{'Id','OmegaB','BetaU','OmegaT', ...
-    'Gamma','Stable','WeightedNorm','W1SNorm','W2KSNorm','W3TNorm', ...
-    'SettlingTime','OvershootPercent','SteadyErrorRelative','CrossCoupling', ...
-    'PeakControlNm','RmsControlNm'});
-tabella.Error=errori;
-tabella.Ordine=zeros(height(tabella),1);
-for k=1:height(tabella)
-    if ~isempty(controllori{k}), tabella.Ordine(k)=order(controllori{k}); end
-end
-tabella.M5Pass=tabella.Stable==1 & tabella.SettlingTime<=spec.settlingTimeTarget ...
-    & tabella.OvershootPercent<=spec.overshootTarget ...
-    & tabella.SteadyErrorRelative<=spec.steadyStateTrackingTarget;
 
-% Selezione: soltanto nuovi candidati a tre pesi, stabili e verificati.
-ammissibili=find(tabella.Id>0 & tabella.OmegaT>0 & tabella.Stable==1);
-assert(~isempty(ammissibili),'HinfStudy:NoStableCandidate', ...
-    'Nessun nuovo candidato stabile: nessuna selezione possibile.');
-rapporti=[tabella.SettlingTime/spec.settlingTimeTarget, ...
-    tabella.OvershootPercent/spec.overshootTarget, ...
-    tabella.SteadyErrorRelative/spec.steadyStateTrackingTarget];
-violazioni=sum(rapporti>1,2);
-% Ordinamento lessicografico dichiarato, non uno score con pesi nascosti.
-criteri=[tabella.Gamma>=1,violazioni,max(rapporti,[],2), ...
-    tabella.PeakControlNm/spec.uScale,tabella.CrossCoupling,tabella.Gamma];
-[~,ordine]=sortrows(criteri(ammissibili,:),1:6);
-selezionato=ammissibili(ordine(1));
-Knuovo=controllori{selezionato}; w=pesi{selezionato};
-
-% Pianta generalizzata esplicita: una sola istanza del modello nominale.
-Gnome=Gn; Gnome.InputName={'uN(1)','uN(2)'}; Gnome.OutputName={'qN(1)','qN(2)'};
-W1nome=ss(w.W1n); W1nome.InputName={'eN(1)','eN(2)'}; W1nome.OutputName={'z1(1)','z1(2)'};
-W2nome=ss(w.W2n); W2nome.InputName={'uN(1)','uN(2)'}; W2nome.OutputName={'z2(1)','z2(2)'};
-W3nome=ss(w.W3n); W3nome.InputName={'qN(1)','qN(2)'}; W3nome.OutputName={'z3(1)','z3(2)'};
-P=connect(Gnome,W1nome,W2nome,W3nome,sumblk('eN = rN - qN',2), ...
-    {'rN(1)','rN(2)','uN(1)','uN(2)'}, ...
-    {'z1(1)','z1(2)','z2(1)','z2(2)','z3(1)','z3(2)','eN(1)','eN(2)'});
-Pformula=[w.W1n -w.W1n*Gn;ss(zeros(2)) w.W2n; ...
-    ss(zeros(2)) w.W3n*Gn;ss(eye(2)) -Gn];
-erroreP=max(abs(freqresp(P,omega)-freqresp(Pformula,omega)),[],'all');
-erroreAugw=max(abs(freqresp(P,omega)-freqresp(augw(Gn,w.W1n,w.W2n,w.W3n),omega)),[],'all');
-erroreLFT=norm(lft(P,mappe{selezionato}.Knorm)-mappe{selezionato}.pesato,inf);
-assert(erroreP<1e-8 && erroreAugw<1e-8 && erroreLFT<1e-7);
-% Unica risintesi finale equivalente M10: non apre una seconda ricerca.
-[Kh,CLh,gammaH]=hinfsyn(P,2,2);
-verificaH=localValuta(G,m5.BdFull,us*Kh/qs,w,spec,tempo);
-assert(abs(gammaH/tabella.Gamma(selezionato)-1)<1e-3);
-assert(verificaH.metriche(1)==1);
-
-% Diagnosi necessaria (non sufficiente): rilassamento puntuale del problema.
-singolari=sigma(G,omega); a=squeeze(abs(freqresp(m5.W1(1,1),omega)))';
-b=squeeze(abs(freqresp(m5.W2(1,1),omega)))';
-limitePuntuale=a.*b./sqrt(b.^2+(a.*singolari(end,:)).^2);
-[limiteMassimo,iLimite]=max(limitePuntuale);
-diagnosi=struct('omega',omega,'sigmaMinG',singolari(end,:), ...
-    'limitePuntuale',limitePuntuale,'limiteMassimo',limiteMassimo, ...
-    'frequenzaLimite',omega(iLimite),'poliPianta',eig(A),'zeriPianta',tzero(G), ...
-    'WIdc',dcgain(m4.WI),'WIhf',abs(evalfr(m4.WI,1i*1e8)), ...
-    'baselinePeakFrequencies',m10.normMetrics, ...
-    'scalingEquivalentNorm',norm([m5.W1*mappe{1}.S; ...
-    (formaU/qs*eye(2))*(qs/us)*mappe{1}.KS],inf));
-
-% Togliere W1 e W3 isola il costo minimo numerico della stabilizzazione.
-% Non e un candidato di tracking: manca volutamente il requisito d'errore.
-[Kc,CLc,gc]=mixsyn(Gn,[],formaU*eye(2),[]);
-controlOnly=struct('Knorm',Kc,'CLnorm',CLc,'gamma',gc, ...
-    'W2norm',formaU*eye(2),'interpretation', ...
-    'diagnostic optimum for stability and normalized control effort only; not a robust certificate');
-
-% Cinque campioni comuni per tutti: controllo empirico, non certificazione.
-statoRng=rng; ripristinaRng=onCleanup(@() rng(statoRng));
-rng(20260910,'twister'); campioni=usample(m4.GuncQ,5);
-stabilitaCampioni=false(height(tabella),5);
-sampleMaxRealPoles=nan(height(tabella),5);
-for k=1:height(tabella)
-    if ~isempty(controllori{k})
-        for j=1:5
-            [Ap,Bp,Cp,Dp]=ssdata(campioni(:,:,j));
-            [Ak,Bk,Ck,Dk]=ssdata(controllori{k});
-            assert(norm(Dp,'fro')==0);
-            Ac=[Ap-Bp*Dk*Cp Bp*Ck;-Bk*Cp Ak];
-            sampleMaxRealPoles(k,j)=max(real(eig(Ac)));
-            stabilitaCampioni(k,j)=sampleMaxRealPoles(k,j)<-1e-8;
-        end
-    end
-end
-tabella.StableSamples=sum(stabilitaCampioni,2);
-studio=struct('tabella',tabella,'parametri',parametri,'controllori',{controllori}, ...
-    'mappe',{mappe},'pesi',{pesi},'selezionato',selezionato,'Knuovo',Knuovo, ...
-    'P',P,'Pformula',Pformula,'erroreP',erroreP,'erroreAugw',erroreAugw, ...
-    'erroreLFT',erroreLFT,'Kh',Kh,'CLh',CLh,'gammaH',gammaH,'verificaH',verificaH, ...
-    'diagnosi',diagnosi,'tempo',tempo,'qs',qs,'us',us,'spec',spec, ...
-    'stabilitaCampioni',stabilitaCampioni,'sampleSeed',20260910, ...
-    'samplePlants',campioni,'sampleMaxRealPoles',sampleMaxRealPoles, ...
-    'criteriSelezione',criteri,'baselinePreserved',true, ...
-    'controlOnly',controlOnly,'synthesisCount',numero+2);
-save(archivio,'studio','-v7');
-writetable(tabella,fullfile(dati,'hinf_weight_revision.csv'));
-disp(tabella); fprintf('Selezionato per lo studio: id=%d. Sintesi totali=%d.\n', ...
-    tabella.Id(selezionato),studio.synthesisCount);
+function order=rankCandidates(t)
+% Ordinamento lessicografico preesistente: gamma, violazioni temporali,
+% massimo rapporto ai target, comando e cross-coupling. Nessun target cambia.
+spec=performance_specs_m5;
+ratios=[t.SettlingTime/spec.settlingTimeTarget, ...
+    t.OvershootPercent/spec.overshootTarget, ...
+    t.SteadyErrorRelative/spec.steadyStateTrackingTarget];
+eligible=find(t.Id>0 & t.Stable==1);
+assert(~isempty(eligible),'DirectHinf:NoStableCandidate','Nessun candidato stabile.');
+criteria=[t.Gamma>=1,sum(ratios>1,2),max(ratios,[],2), ...
+    t.PeakControlNm/spec.uScale,t.CrossCoupling,t.Gamma];
+[~,indices]=sortrows(criteria(eligible,:),1:6);
+order=eligible(indices);
 end
 
 function risultato=localValuta(G,Bd,K,w,spec,tempo)

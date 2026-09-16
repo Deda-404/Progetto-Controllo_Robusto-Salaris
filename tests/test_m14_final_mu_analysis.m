@@ -66,7 +66,7 @@ end
 
 function testT05KmuOrderMatchesFrozenArtifact(testCase)
 m14 = testCase.TestData.m14;
-verifyEqual(testCase, order(m14.Kmu), 52);
+verifyEqual(testCase, order(m14.Kmu), 70);
 verifyEqual(testCase, order(m14.Kmu), m14.KmuSourceAudit.savedControllerOrder);
 verifyEqual(testCase, order(m14.Kmu), m14.KmuSourceAudit.rawControllerOrder);
 end
@@ -170,7 +170,7 @@ m14 = testCase.TestData.m14;
 verifyLessThanOrEqual(testCase, ...
     m14.nominalReconstruction.metrics.poleErrorVsM13, ...
     m14.config.nominalPoleTolerance);
-verifyEqual(testCase, m14.NSMetrics.internalStateCount, 66);
+verifyEqual(testCase, m14.NSMetrics.internalStateCount, 84);
 end
 
 function testT19NSClassificationIsCorrect(testCase)

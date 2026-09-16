@@ -1,5 +1,10 @@
 # Revisione tecnica completa: Q/R, Kalman e Lyapunov nominale
 
+> Documento storico della revisione 8–9 settembre. Il 16 settembre le
+> regioni sono state ricalcolate sui nuovi controllori: ordini 28/32/84,
+> 48 traiettorie verificate. Si veda
+> RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt per i valori correnti.
+
 Data: 8–9 settembre 2026.
 Progetto: Controllo robusto di un manipolatore SEA, Alessio de Dato e Valerio Rebechi.
 Repository: https://github.com/Deda-404/Progetto_CR

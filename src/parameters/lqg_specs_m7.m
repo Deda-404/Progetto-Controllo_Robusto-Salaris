@@ -1,13 +1,15 @@
 function config = lqg_specs_m7
 %LQG_SPECS_M7 Parametri dichiarati del servo LQRI con Kalman M6.
-%   Tre valori di wi isolano il costo integrale a Q e R fissi.
-%   wi=1 e illustrativo, non selezionato mediante ottimizzazione.
+%   Tre valori diretti di wbarI isolano il costo integrale a Q e R M6 fissi.
+%   wbarI=200 e illustrativo, non selezionato mediante ottimizzazione.
 
 m6 = lqg_specs_m6;
 config.manualDesigns = table( ...
     ["weakIntegral"; "balanced"; "strongIntegral"], ...
-    [0.1; 1; 4], repmat(1/9,3,1), ...
-    'VariableNames', {'Tuning', 'Wi', 'Ru'});
+    [20; 200; 800], ...
+    'VariableNames', {'Tuning', 'WbarI'});
+% Il validatore legge R dal candidato M6 selezionato, senza fissare ru a mano.
+config.controlCostSource = "M6 validated artifact: R";
 config.illustrativeIndex = 2;
 config.statePrioritiesSource = ...
     "M6 validated artifact: validationMetrics.cost.priorities";

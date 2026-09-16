@@ -2,23 +2,21 @@ function [W1siso, W1, W2siso, W2, info] = build_m5_weights(spec)
 %BUILD_M5_WEIGHTS Construct the two mixed-sensitivity performance weights.
 %   W1 shapes the sensitivity S. At zero frequency W1(0)=1/As, so
 %   ||W1*S||<1 asks for |S(0)|<As. At high frequency W1 tends to 1/Ms,
-%   which allows a sensitivity peak of approximately Ms. OmegaB places the
-%   transition and therefore expresses the desired closed-loop bandwidth.
+%   which allows a sensitivity peak of approximately Ms. omegaW1 places
+%   the weight transition independently of the LQR velocity scale omegaB.
 %
-%   W2 shapes the control signal. Its low-frequency gain 1/uScale makes
-%   uScale a performance normalization (not a saturation limit). Around
-%   omegaU the penalty rises and tends to alpha/uScale, discouraging fast
-%   commands close to actuator and elastic dynamics.
+%   W2 uses a direct control penalty ku=controlWeightGain. Its gain rises
+%   from ku to alpha*ku; no plant or controller coordinate is transformed.
 
 if nargin < 1 || isempty(spec)
     spec = performance_specs_m5;
 end
 
 s = tf('s');
-W1siso = (s / spec.Ms + spec.omegaB) / ...
-    (s + spec.omegaB * spec.As);
-W2siso = (1 / spec.uScale) * (s / spec.omegaU + 1) / ...
-    (s / (spec.controlWeightAlpha * spec.omegaU) + 1);
+W1siso = (s / spec.Ms + spec.omegaW1) / ...
+    (s + spec.omegaW1 * spec.As);
+W2siso = spec.controlWeightGain * (s + spec.omegaU) / ...
+    (s / spec.controlWeightAlpha + spec.omegaU);
 
 W1 = blkdiag(W1siso, W1siso);
 W2 = blkdiag(W2siso, W2siso);
@@ -38,9 +36,9 @@ info.W1.hfMeasured = abs(evalfr(W1siso, 1i * highFrequencyProbe));
 info.W2.stable = isstable(W2siso);
 info.W2.proper = isproper(W2siso);
 info.W2.order = order(W2siso);
-info.W2.dcExpected = 1 / spec.uScale;
+info.W2.dcExpected = spec.controlWeightGain;
 info.W2.dcMeasured = dcgain(W2siso);
-info.W2.hfExpected = spec.controlWeightAlpha / spec.uScale;
+info.W2.hfExpected = spec.controlWeightAlpha * spec.controlWeightGain;
 info.W2.hfMeasured = abs(evalfr(W2siso, 1i * highFrequencyProbe));
 info.W1MimoSize = size(W1);
 info.W2MimoSize = size(W2);

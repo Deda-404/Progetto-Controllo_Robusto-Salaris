@@ -1,5 +1,18 @@
 # M17 — Confronto finale dei controllori
 
+## Configurazione corrente — 16 settembre 2026
+
+I nuovi pesi M5 hanno richiesto la rigenerazione della catena dipendente.
+Kmu ha ordine 70 e M14 restituisce RS FAIL_CERTIFIED, con margine
+[0.774041952377,0.775696806012]; NP/RP falliscono. Il criterio del ruolo
+robusto richiede ancora RS PASS_CERTIFIED e stabilità empirica M16:
+il ruolo resta pertanto NON ASSEGNATO, senza abbassare i requisiti.
+M6 è il riferimento nominale e Khinf il comparatore H-infinity.
+I nuovi numeri M15/M16 e il gate M17 sono riportati negli artifact
+rigenerati e nel resoconto `RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt`.
+
+## Confronto storico precedente — risultati non trasferibili
+
 **Stato:** `COMPLETE` — decisione per ruolo, senza score globale.
 
 ## Metodo

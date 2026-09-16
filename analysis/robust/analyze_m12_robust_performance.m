@@ -54,7 +54,11 @@ worstGainLoop = usubs(TzwUnc, worstGainUncertainty);
     norm(worstGainLoop, inf);
 worstGainPoles = pole(worstGainLoop);
 worstGainMaximumRealPart = max(real(worstGainPoles));
-if isinf(worstCaseGain.UpperBound)
+% wcu realizza il limite INFERIORE. Un UpperBound infinito, con
+% LowerBound finito, segnala un bound non chiuso e non prova instabilita.
+% Si conserva la stessa tolleranza e non si attribuisce un PASS a RP.
+% Riferimento: MathWorks, wcgain, definizioni LowerBound/UpperBound/wcu.
+if isinf(worstCaseGain.LowerBound)
     gainSubstitutionCoherent = ~isstable(worstGainLoop) || ...
         worstGainMaximumRealPart >= ...
             -config.worstCaseBoundaryPoleTolerance;

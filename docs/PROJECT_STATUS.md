@@ -1,5 +1,43 @@
 # Stato del progetto
 
+## Revisione corrente — pesi H-infinity, LQR e LQRI (16 settembre 2026)
+
+Branch `codex/direct-weights-hinf-lqr-lqri`, baseline
+`aae96148353506b8ba119de65f6dcf3103eec328` (PR 29).
+M0–M4, target M5 e soglie di selezione sono invariati.
+
+- M6: nuova griglia R={0.01,0.05,0.10} I2, 9/36 ammissibili;
+  selezionato LQR30 con R=0.10 I2. Q/L/Qn/Rn preservati, K/Nr ricalcolati.
+- M7: Qi={20,200,800} I2; 3/3 stabili, 0/3 conformi. Punto illustrativo
+  200, Ts=5.046 s. Test mirati M6/M7: 36/36 PASS.
+- H-infinity: 8 casi Stage A e 4 Stage B, nessun PASS. W1=(s/2.5+8)/(s+1.2),
+  W2=0.05(s/60+1)/(s/360+1), entrambi moltiplicati per I2.
+  W3 fisso soltanto nello studio; M9/M10 restano a due pesi.
+- M9/M10: gamma=5.677221; M11: 30 avvii, 15 stabili, A5=5.708569.
+- M13: una sola nuova sintesi dipendente dai pesi, 5 iterazioni,
+  Kmu di ordine 70. M14: NS PASS, NP FAIL, RS/RP FAIL_CERTIFIED;
+  margine RS [0.774041952377,0.775696806012].
+  Nessun controllore robusto finale può essere assegnato con il criterio vigente.
+- M8 rigenerata e verificata. M15 completata: il tetto storico di
+  400 simulazioni RAS è risultato insufficiente. Il limite calcolato dalla
+  griglia/bisezione/estensione esistenti è 626 per controllore; criteri e
+  precisione invariati. Checkpoint numerici impediscono ripetizioni inutili.
+- M15 resta PARTIAL per tracking: Khinf Ts=1.482747 s; Kmu non si assesta
+  entro 4 s. RAS empiriche: raggio minimo 44.895 e 60 gradi, rispettivamente.
+- M16: M6 37/40 stabili (instabili 5,6,35), Khinf e Kmu 40/40.
+  Core tracking sul totale: 57.5%, 0%, 0%. Non è una certificazione.
+- M17: nessun robusto finale; M6 riferimento nominale, Khinf comparatore.
+  Lyapunov e 48 traiettorie rigenerati per chiusure di ordine 28/32/84.
+- Unica suite globale: 658/660 PASS, zero incomplete. Due aspettative
+  obsolete (avvio A5 e ID instabili M6) corrette senza cambiare soglie:
+  riesecuzione dei soli due test, 2/2 PASS. Gli esiti iniziali sono conservati.
+- Code Analyzer: 177 file, zero segnalazioni. Audit LaTeX PASS:
+  relazione 70 pagine, presentazione 19 slide; controllo visivo concluso.
+- Consegna su branch dedicato e PR aperta verso main; nessun merge automatico.
+  Stato pre-pubblicazione e resoconto: RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt.
+
+## Archivio delle revisioni precedenti — non descrive la configurazione corrente
+
 **Fase corrente:** revisione LQRI e parametrizzazione diretta di R completata e verificata; pubblicazione su branch dedicato per revisione manuale. M7 resta PARTIAL sul requisito prestazionale.
 
 **Ramo:** `codex/lqri-direct-r-review`
