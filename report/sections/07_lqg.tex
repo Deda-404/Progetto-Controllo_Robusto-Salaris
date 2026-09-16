@@ -101,16 +101,18 @@ $r_u>0$ è il coefficiente associato allo sforzo di controllo: aumentarlo,
 a parità di $Q$, rende più costoso il comando. Le sue unità rendono
 il termine quadratico coerente con quello degli stati; non è una
 saturazione né un limite di coppia.
-La griglia $r_u\in\{1/36,1/18,1/9\}$ conserva esattamente le matrici
-$R$ della ricerca approvata. Il candidato finale resta
-$r_u=1/9$, quindi $R=(1/9)I_2$: cambia la parametrizzazione,
-non il problema LQR o il suo guadagno.
+La griglia $r_u\in\{0.01,0.05,0.10\}$ confronta tre penalizzazioni
+dirette semplici, rispettivamente bassa, intermedia e alta.
+Sono scelte progettuali, non valori derivati da limiti fisici.
+La ricerca viene rieseguita: non è una riscrittura equivalente del costo
+precedente. Il candidato selezionato usa $R=0.10I_2$; il guadagno $K$
+e il prefiltro vengono ricalcolati.
 
 \subsection{Ricerca semplice: ammissibilità prima del compromesso}
-Si conserva la ricerca già approvata, senza nuovi candidati:
+Si mantengono griglia di $Q$, scenari e criteri; si modifica soltanto la griglia di $R$:
 \[
 w_q\in\{0.5,1,2\},\quad w_v\in\{0.5,1\},\quad
-w_\delta\in\{0.1,0.5\},\quad r_u\in\{1/36,1/18,1/9\}.
+w_\delta\in\{0.1,0.5\},\quad r_u\in\{0.01,0.05,0.10\}.
 \]
 Le scale rimangono costanti. Questi intervalli esplorano variazioni moderate di
 priorità di posizione, smorzamento, deformazione e comando; sono scelte D,
@@ -135,8 +137,9 @@ del giunto comandato; $u_{pk}$ è il massimo assoluto delle coppie e
 $u_{rms}$ la radice della media dei quadrati su tempi e canali.
 Restano \MLqrAdmissibleCount/\MLqrCandidateCount\ candidati.
 Il minimo seleziona \MLqrSelectedCandidate\ (E):
-$w_q=2$, $w_v=1$, $w_\delta=0.1$, $r_u=1/9$ e
-$J_N=\MLqrSelectedScore$. Non si è eseguito un nuovo retuning.
+$w_q=2$, $w_v=1$, $w_\delta=0.1$, $r_u=0.10$ e
+$J_N=\MLqrSelectedScore$. La matrice $Q$ selezionata resta invariata;
+$R,K,N_r$ sono i risultati della nuova ricerca.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.78\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
@@ -408,28 +411,24 @@ Si minimizza
 J=\int_0^\infty(x_a^TQ_ax_a+u^TRu)\,dt,\qquad
 Q_a=\operatorname{blkdiag}(Q,Q_i),\qquad R=r_uI_2.
 \]
-$Q$ è riutilizzata esattamente da M6. Conserviamo la scala integrale già
-motivata, evitando un cambiamento implicito del costo:
+$Q$ e $R$ sono riutilizzate esattamente da M6. Si sceglie direttamente
+il peso delle due memorie dell'errore:
 \[
-s_\xi=q_sT_{s,\mathrm{target}}=(5\pi/180)\,0.8\ \mathrm{rad\,s},
-\qquad Q_i=\frac{w_i}{s_\xi^2}I_2.
+Q_i=\bar w_i I_2,\qquad \bar w_i\in\{20,200,800\}.
 \]
-$s_\xi$ rappresenta un errore pari al riferimento accumulato per il tempo
-target; non è un limite fisico. $w_i$ pesa l'accumulo normalizzato.
-La formulazione equivale a un peso diretto $\bar w_i=w_i/s_\xi^2$ su
-$\xi^T\xi$; mantenere $s_\xi$ conserva il significato dei tre valori
-didattici già disponibili.
+Il costo è quindi $x^TQx+\xi^TQ_i\xi+u^TRu$.
+I tre valori sono arrotondati e rappresentano una penalizzazione debole,
+intermedia e forte; non sono limiti fisici né costanti imposte da una
+legge teorica. Il coefficiente diretto rende coerenti le unità del
+termine integrale, con $\xi$ espresso in rad\,s.
 
-Con $w_i$ piccolo l'accumulo è relativamente poco penalizzato e
-l'azione integrale tende a essere meno aggressiva. Con $w_i$ maggiore
-l'ottimizzazione tende a contrastare maggiormente $\xi$, con possibili
-benefici nella rapidità di reiezione e costi in termini di comando o
-sovraelongazione. Non si afferma una monotonia universale di
-$\|K_i\|$ o dei poli in un sistema MIMO.
-Le sole tre prove sono $w_i\in\{0.1,1,4\}$, tutte con lo stesso $Q$ e
-$R=(1/9)I_2$: si isola così il costo integrale.
-Il valore $w_i=1$ è il punto centrale dichiarato per il confronto,
-non l'esito di una ricerca di un candidato conforme.
+Con $\bar w_i$ basso la memoria dell'errore è relativamente poco
+penalizzata e l'azione integrale tende a essere più lenta.
+Un peso maggiore tende a renderla più incisiva e può aumentare rapidità
+e comando, senza una monotonia universale dei guadagni o dei poli MIMO.
+Le tre prove condividono $Q$, $R=0.10I_2$ e Kalman M6.
+Il punto intermedio $\bar w_i=200$ è dichiarato illustrativo:
+non è presentato come un candidato conforme.
 
 \subsection{Riccati e origine comune di \texorpdfstring{$K_x,K_i$}{Kx, Ki}}
 La soluzione stabilizzante $P_a$ soddisfa
@@ -503,14 +502,15 @@ verifica il relativo residuo e calcola tutti i 30 poli.
 Lo spettro è l'unione dei 16 poli di $A_a-B_aK_a$ e dei 14 poli di
 $A-LC$. Nessuno stato è eliminato mediante cancellazioni.
 Le verifiche confermano stabilità interna nominale, non robusta.
-Per $w_i=1$ il polo dominante ha parte reale circa $-0.830657$ s$^{-1}$.
+Il polo dominante del punto illustrativo è riportato nei risultati generati
+seguenti, insieme ai residui numerici della nuova Riccati.
 
 I poli attuativi ripetuti vicini a $-133.333$ s$^{-1}$ sono numericamente
 sensibili: il confronto diretto fra due chiamate a \texttt{eig} presenta
-scarti fino a $6.91\cdot10^{-6}$ s$^{-1}$. Per evitare una tolleranza
-assoluta inadeguata, i test verificano anche
+piccoli scarti legati al condizionamento della realizzazione. I test
+verificano anche
 $\sigma_{\min}(A_{\mathrm{cl}}-\lambda I)/(\|A_{\mathrm{cl}}\|_2+|\lambda|)$,
-inferiore a $2.77\cdot10^{-17}$, insieme alla trasformazione di
+insieme alla trasformazione di
 separazione e alla stabilità di tutti i poli della matrice naturale.
 Non vengono modificati i guadagni o eliminati modi per superare il test.
 
@@ -538,11 +538,11 @@ Le posizioni sono espresse in gradi.}\label{fig:lqri-disturbo}
 il contributo permanente necessario a compensare il disturbo.
 Non sono applicate saturazioni o anti-windup.}\label{fig:lqri-comando}
 \end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.90\textwidth]{figures/m7_lqri_reference_tracking.png}
+\begin{figure}[!htbp]\centering
+\includegraphics[width=0.82\textwidth]{figures/m7_lqri_reference_tracking.png}
 \caption{Due gradini di riferimento separati: posizione del giunto
 comandato, entrambe le coppie e stati integrali M7.
-LQRI usa $w_i=1$, $R=(1/9)I_2$ e nessun prefiltro.
+LQRI usa $\bar w_i=200$, $R=0.10I_2$ e nessun prefiltro.
 La lentezza rispetto a M6 resta visibile.}\label{fig:lqri-tracking}
 \end{figure}
 
@@ -552,7 +552,7 @@ $A_{\mathrm{cl}}z_\infty+B_{\mathrm{cl}}w=0$.
 Un controllo indipendente mediante esponenziale di matrice distingue
 la convergenza finita dal limite DC; non si identifica l'ultimo campione
 del grafico con il regime esatto.
-Per il punto illustrativo il settling peggiore è 4.996 s,
+Per il punto illustrativo il settling peggiore, riportato nella tabella generata, resta
 oltre il target M5 di 0.8 s; il picco di tracking e quello di disturbo
 sono misurati separatamente. Tutte le tre prove sono stabili ma nessuna
 soddisfa tutti i target. M7 resta quindi \status{\MSevenStatus},

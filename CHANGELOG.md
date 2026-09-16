@@ -4,6 +4,30 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Pesi diretti H-infinity, LQR e LQRI — 2026-09-16
+
+- Spostati i pesi mixed-sensitivity dal Capitolo 6 al §8.2; nuova figura
+  Lower LFT M10, senza W3 inesistente nella pianta di produzione.
+- Rimossa la trasformazione di coordinate H-infinity; ricerca deterministica
+  di 12 candidati fisici, tutti non conformi. Nuovi pesi M5 attivi,
+  omegaW1 distinto da omegaB per preservare Q del LQR.
+- R M6 diretto su {0.01,0.05,0.10}; Qi M7 diretto su {20,200,800},
+  senza xiScale. R=0.10 I2 selezionato dai criteri esistenti.
+- Rigenerate le sintesi dipendenti M9–M13 e M14. Il nuovo Kmu di ordine 70
+  fallisce RS: rimosso il trasferimento improprio del certificato precedente.
+- Corretto il controllo wcgain: il worst-case restituito realizza il lower
+  bound; un upper bound infinito, da solo, non ne implica instabilità.
+- Adeguato il solo budget RAS M15 al massimo deterministico di 626 chiamate,
+  senza cambiare criteri di convergenza; aggiunto checkpoint con identità sorgenti.
+- Rigenerate M8/M15/M16/M17, Lyapunov e 48 traiettorie; M6 stabile in
+  37/40 campioni, Khinf/Kmu in 40/40, senza attribuire garanzie robuste.
+- Test mirati M6/M7 36/36 PASS; unica suite globale 658/660 PASS.
+  Due aspettative storiche aggiornate (avvio A5=4; instabili M6=5,6,35):
+  riesecuzione mirata 2/2 PASS, senza una seconda suite globale.
+- Code Analyzer: 177 file, zero segnalazioni. PDF auditati e controllati
+  visivamente: relazione 70 pagine e presentazione 19 slide.
+
+
 ### LQRI con Kalman M6 e peso R diretto — 2026-09-14
 
 - Sostituita la retroazione ideale M7 con `u=-Kx*xhat-Ki*xi`, integrando

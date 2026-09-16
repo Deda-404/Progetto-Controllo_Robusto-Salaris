@@ -1,5 +1,12 @@
 # Simulink, validazione non lineare e RAS empirica LQG
 
+> Aggiornamento 16 settembre 2026: M8 rigenerata sul nuovo M6 con
+> R=0.10 I2, senza retuning durante la validazione. Massimo scarto
+> LTI/non lineare nei sei tracking: 0.0005554 rad (RMS 0.0002755 rad).
+> RAS: 57/57 punti convergenti, raggio minimo 60 gradi, limitato dal box.
+> L'architettura e i criteri sotto restano validi; eventuali valori numerici
+> precedenti sono storici. Fonte corrente: m8_lqg_nonlinear_ras.mat.
+
 ## Perimetro e controllore
 
 M8 valida esclusivamente il controllore M6 LQG senza integratore. Le matrici

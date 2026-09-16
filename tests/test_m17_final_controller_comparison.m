@@ -81,7 +81,7 @@ classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
 
         function testT06ControllerOrders(testCase)
             testCase.verifyEqual(testCase.M17.complexityComparison.Order, ...
-                [14; 18; 52]);
+                [14; 18; 70]);
         end
 
         function testT07M8Loaded(testCase)
@@ -214,17 +214,18 @@ classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
                 robustnessComparison.Note(2), "A5"));
         end
 
-        function testT28M6SampleFivePreserved(testCase)
+        function testT28M6UnstableSamplesPreserved(testCase)
             row = testCase.M17.monteCarloComparison.Controller == "M6";
+            % Il nuovo R rende instabile anche il campione 35: non ometterlo.
             testCase.verifyEqual(testCase.M17. ...
-                monteCarloComparison.UnstableSamples(row), "5,6");
+                monteCarloComparison.UnstableSamples(row), "5,6,35");
         end
 
         function testT29M16SampleCountsCoherent(testCase)
             testCase.verifyEqual(testCase.M17.monteCarloComparison.NTotal, ...
                 [40; 40; 40]);
             testCase.verifyEqual(testCase.M17.monteCarloComparison.NStable, ...
-                [38; 40; 40]);
+                [37; 40; 40]);
         end
 
         function testT30TrackingPassRatesCoherent(testCase)
@@ -287,12 +288,16 @@ classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
 
         function testT37RolesFollowDecisionRule(testCase)
             testCase.verifyTrue(all(testCase.M17.decisionRuleAudit.Passed));
-            testCase.verifyEqual(sort(testCase.M17. ...
-                finalRoleAssignment.Controller), ...
-                sort(testCase.M17.masterComparison.Controller));
-            testCase.verifyEqual(sort(testCase.M17. ...
-                finalRoleAssignment.Role), ...
-                sort(testCase.M17.masterComparison.FinalRole));
+            roles=testCase.M17.finalRoleAssignment;
+            testCase.verifyEqual(roles.Controller(roles.Role== ...
+                "FINAL ROBUST CONTROLLER"),"NONE");
+            testCase.verifyFalse(any(testCase.M17.masterComparison.FinalRole== ...
+                "FINAL ROBUST CONTROLLER"));
+            testCase.verifyLessThan(testCase.M14.robustStabilityMargin.UpperBound,1);
+            for k=find(roles.Controller~="NONE")'
+                row=testCase.M17.masterComparison.Controller==roles.Controller(k);
+                testCase.verifyEqual(testCase.M17.masterComparison.FinalRole(row),roles.Role(k));
+            end
         end
 
         function testT38ArtifactProduced(testCase)
@@ -315,9 +320,10 @@ classdef test_m17_final_controller_comparison < matlab.unittest.TestCase
         end
 
         function testT41QualityGateCoherent(testCase)
-            gate = struct2cell(testCase.M17.qualityGate);
-            testCase.verifyTrue(all(string(gate) == "PASS" | ...
-                string(gate) == "COMPLETE"));
+            gate=testCase.M17.qualityGate;
+            testCase.verifyEqual(gate.softwareCorrectness,"PASS");
+            testCase.verifyEqual(gate.finalRoleSelection,"PARTIAL_NO_ROBUST_CANDIDATE");
+            testCase.verifyEqual(gate.overallStatus,"PARTIAL");
         end
 
         function testT42NoM18(testCase)

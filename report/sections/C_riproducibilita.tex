@@ -37,25 +37,18 @@ studio = study_hinf_weights; % solo lettura della cache
 plot_hinf_revision
 \end{verbatim}
 La campagna viene prodotta con \path{study_hinf_weights(true)}
-solo se il suo MAT non esiste: 13 candidati e due sintesi diagnostiche.
-Il codice rifiuta la sovrascrittura di una campagna già presente.
-I cinque modelli M4 aggiuntivi usano seed \texttt{20260910}.
-Nessun nuovo controllore è adottato nella catena M9--M16.
-La verifica del 10 settembre usava una suite globale. Per la successiva
-revisione LQRI e del peso diretto $R$, il percorso circoscritto è:
-\begin{verbatim}
-setenv('CR_RUN_SCOPE','lqri')
-run_all
-setenv('CR_RUN_SCOPE','')
-\end{verbatim}
-Questo percorso rigenera M6 con le stesse matrici $R$, verifica l'identità
-dei guadagni e del Kalman, ricostruisce M7 e i nuovi grafici, quindi esegue
-le quattro suite coinvolte. Non rilancia H-infinity, D--K, Monte Carlo
-o validazioni non lineari. Con la variabile vuota resta disponibile
-il percorso completo storico; il suo esito non viene attribuito
-alla verifica circoscritta. Le sorgenti e gli artifact robusti versionati
-sono prerequisiti, inclusi i dati LFS: non si ricostruiscono checkpoint
-congelati inventando nuovi risultati.
+soltanto in assenza di una cache compatibile: 8 candidati Stage A e 4 Stage B,
+nelle coordinate fisiche, senza nuovi campioni diagnostici M4.
+I pesi selezionati sono adottati in M5 e nella catena M9--M17:
+M9/M10/M11 sono state eseguite una volta, seguite dalle sole dipendenze
+robuste, non lineari e Monte Carlo, inclusa una nuova M13.
+Il codice rifiuta la sovrascrittura di una campagna compatibile già presente.
+La revisione corrente usa una sola suite globale finale. Il percorso
+opzionale \texttt{CR\_RUN\_SCOPE=lqri} di \texttt{run\_all} è invece
+un replay circoscritto M6/M7, utilizzabile soltanto con guadagni già
+coerenti con le analisi downstream. Gli artifact versionati, inclusi
+i dati LFS, sono prerequisiti: non si ricostruiscono risultati congelati
+mediante nuove ottimizzazioni implicite.
 
 La sola finalizzazione documentale può essere ripetuta con:
 \begin{verbatim}
@@ -70,7 +63,8 @@ powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
 \end{verbatim}
 Lo script esegue il numero di passaggi necessario per indice, riferimenti e sommari, quindi controlla errori, riferimenti irrisolti, box oltre margine e destinazioni PDF duplicate. I file conclusivi hanno nomi stabili:
 L'opzione \texttt{-ReportOnly} compila e audita soltanto la relazione;
-è la modalità della revisione mirata, che conserva la presentazione.
+è utile quando non cambia la presentazione. La revisione corrente aggiorna
+entrambi i PDF perché i nuovi controllori modificano anche le conclusioni.
 \begin{itemize}
 \item \path{report/Progetto_CR_Relazione_finale.pdf};
 \item \path{presentation/Progetto_CR_Presentazione.pdf}.

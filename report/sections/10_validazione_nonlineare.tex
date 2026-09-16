@@ -27,7 +27,7 @@ Per LQG si usa $z=[x;\hat x]\in\mathbb R^{28}$:
 A_{cl,LQG}=\begin{bmatrix}A&-BK\\LC&A-BK-LC\end{bmatrix}.
 \]
 Per i controllori dinamici $K_\infty,K_\mu$, con realizzazione
-$(A_k,B_k,C_k,D_k)$, si usa $z=[x;x_k]$, rispettivamente di 32 e 66 stati:
+$(A_k,B_k,C_k,D_k)$, si usa $z=[x;x_k]$, rispettivamente di 32 e 84 stati:
 \[
 A_{cl,k}=\begin{bmatrix}A-BD_kC_q&BC_k\\-B_kC_q&A_k\end{bmatrix}.
 \]
@@ -136,7 +136,7 @@ Le matrici complete $A_{cl},Q_L,P$ sono salvate in
 Una rappresentazione compatta e univoca di $P$ è
 $P=\int_0^\infty e^{A_{cl}^Tt}e^{A_{cl}t}\,dt$; gli autovalori estremi e il
 residuo sono riportati nella tabella. Le sezioni numeriche $J^TPJ$ sono
-esplicitate sotto, senza stampare tre matrici fino a $66\times66$.
+esplicitate sotto, senza stampare tre matrici fino a $84\times84$.
 
 \section{Ricerca numerica di un livello più ampio: limiti espliciti}
 La ricerca comune usa, per ogni controllore, 512 direzioni gaussiane normalizzate,
@@ -241,13 +241,20 @@ I tre controllori usano la stessa configurazione: griglia grossolana $\{-60,-30,
 \]
 senza una crescita finale significativa. Se il punto estremo di una direzione non converge, una bisezione individua la frontiera empirica; se converge, quella direzione è marcata \emph{search-box limited}. Non sono presenti saturazioni.
 
+Per M15 il budget massimo è ricavato dalla ricerca stessa:
+$2[25+36(1+\lceil\log_2(60\sqrt{2}/1)\rceil)]=626$ simulazioni
+per controllore, includendo una possibile estensione temporale per punto.
+Il precedente tetto di 400 ha interrotto la nuova ricerca di $K_\infty$;
+la correzione non cambia la griglia, le soglie o l'orizzonte di convergenza.
+I punti completati sono salvati con identità del controllore e della pianta.
+
 \section{Validazione M6 e regione empirica di attrazione}
 M8 conferma l'equilibrio nominale e il tracking M6 sul modello non lineare. Le differenze rispetto alla risposta LTI sono piccole nel dominio degli step di progetto. La ricerca RAS esplora una griglia di perturbazioni iniziali delle due posizioni, mantenendo espliciti criterio di convergenza, orizzonte e box massimo. Tutti i 57 punti della sezione primaria articolare esaminata convergono fino a $\pm60^\circ$.
 
 Il raggio minimo osservato è \MControllerRasMin$^\circ$, ma non è stata intercettata una frontiera interna. La classificazione è quindi \emph{search-box limited}: si può affermare che i punti testati convergono, non che la regione di attrazione termini o si estenda globalmente a quella distanza. La RAS ottenuta per simulazione resta inoltre una stima empirica dipendente dalla griglia e dal criterio numerico.
 
 \section{Tracking di $K_{\infty}$ e $K_\mu$}
-M15 applica sullo stesso modello nominale i controllori M10 e M13. Entrambe le chiusure rimangono stabili e le simulazioni sono finite, ma i target M5 non sono raggiunti. I peggiori settling time sono rispettivamente circa $1.7322$ s e $1.7346$ s; le sovraelongazioni massime sono circa $261.35\%$ e $228.36\%$, mentre gli errori relativi a regime arrivano a circa $49.07\%$ e $50.44\%$. La mancata conformità non nasce quindi da un singolo indice marginale: coinvolge rapidità, forma del transitorio e accuratezza statica.
+M15 applica sullo stesso modello nominale i nuovi controllori M10 e M13. Le chiusure lineari nominali sono stabili e le simulazioni non lineari sono finite, ma i target M5 non sono raggiunti. I valori aggiornati di settling time, sovraelongazione, errore statico e comando sono riportati nella Tabella~\ref{tab:nonlinear}, generata dagli artifact correnti. Per $K_\mu$ almeno uno scenario non raggiunge l'assestamento entro l'orizzonte osservato: il valore $T_s=\infty$ indica questo esito, non una divergenza della simulazione. La mancata conformità coinvolge rapidità, forma del transitorio e accuratezza statica.
 
 \begin{figure}[H]
 \centering
@@ -277,9 +284,9 @@ M4 e non sostituisce RS/RP.
 \label{fig:m15-ras}
 \end{figure}
 
-È stata inoltre misurata una regione locale di accordo fra risposte LTI e non lineari. I raggi minimi osservati, circa $4^\circ$ per $K_{\infty}$ e $4.75^\circ$ per $K_\mu$, descrivono il dominio in cui la discrepanza resta sotto la soglia adottata; non coincidono con la RAS e non sono limiti assoluti della linearizzazione.
+È stata inoltre misurata una regione locale di accordo fra risposte LTI e non lineari. I raggi minimi osservati, $4.5^\circ$ per $K_{\infty}$ e $5^\circ$ per $K_\mu$, derivano da \texttt{agreementResults} dell'artifact M15 e descrivono il dominio in cui la discrepanza resta sotto la soglia adottata; non coincidono con la RAS e non sono limiti assoluti della linearizzazione.
 
 \section{Portata e limiti della campagna}
-M8 e M15 usano il modello non lineare nominale. Non introducono l'incertezza M4 nella dinamica non lineare e non certificano Robust Stability. Viceversa, la certificazione M14 appartiene al modello lineare incerto e non garantisce il tracking non lineare. La lettura congiunta è quindi intenzionalmente non sostitutiva: le simulazioni controllano la plausibilità fisica locale e individuano fenomeni prestazionali; la $\mu$-analysis copre formalmente l'insieme lineare strutturato.
+M8 e M15 usano il modello non lineare nominale. Non introducono l'incertezza M4 nella dinamica non lineare e non certificano Robust Stability. Viceversa, la valutazione M14 appartiene al modello lineare incerto e non garantisce il tracking non lineare; nella configurazione corrente RS è negativa. La lettura congiunta è quindi intenzionalmente non sostitutiva: le simulazioni controllano la plausibilità fisica locale e individuano fenomeni prestazionali; la $\mu$-analysis valuta formalmente l'insieme lineare strutturato.
 
 \input{tables/nonlinear_validation.tex}

@@ -1,0 +1,21 @@
+% Generato da build_direct_weights_summary.m.
+\begin{table}[htbp]\centering\scriptsize
+\begin{tabular}{lrrrrrrrl}\toprule
+Controllore & ordine & $\gamma$ & $\|W_1S\|_\infty$ & $\|W_2KS\|_\infty$ & $T_s$ & OS [\%] & picco $u$ & Esito \\
+\midrule
+M9 & 18 & 5.6772 & 5.6002 & 5.6568 & 1.486 & 228.62 & 9.5908 & FAIL \\
+M10 & 18 & 5.6772 & 5.6002 & 5.6568 & 1.486 & 228.62 & 9.5908 & FAIL \\
+M11 A3 & 2 & 8.1671 & 8.1473 & 8.1337 & 2.548 & 208.45 & 7.3041 & FAIL \\
+M11 A4 & 4 & 5.9672 & 5.9602 & 5.9538 & 2.27 & 227.24 & 9.6453 & FAIL \\
+M11 A5 & 6 & 5.7086 & 5.6336 & 5.6904 & 1.772 & 223.49 & 9.3331 & FAIL \\
+\bottomrule\end{tabular}
+\caption{Produzione a due pesi, senza $W_3$: scenari esistenti, tempi in s, coppie in N m. Esiti calcolati con soglie invariate.}\label{tab:direct-production}\end{table}
+\begin{table}[htbp]\centering\small
+\begin{tabular}{lrr}\toprule Controllore & errore statico relativo & cross-coupling \\
+\midrule
+M9 & 0.815096 & 0.244732 \\
+M10 & 0.815096 & 0.244732 \\
+M11 A3 & 1.18556 & 0.745547 \\
+M11 A4 & 0.888898 & 0.32632 \\
+M11 A5 & 0.841834 & 0.233384 \\
+\bottomrule\end{tabular}\caption{Metriche relative della stessa campagna; il target statico rimane 0.05.}\end{table}

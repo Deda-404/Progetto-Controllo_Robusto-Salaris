@@ -1,3 +1,12 @@
+# M9 corrente: pesi fisici diretti
+
+Revisione 2026-09-16. M9 è stata eseguita una volta sui W1/W2 selezionati e salvati in M5, senza W3 o normalizzazione della pianta. Parametri: omegaW1=8, As=0.15, Ms=2.5, ku=0.05, omegaU=60, alpha=6.
+
+Gamma=5.67722115259; norme W1S=5.60024012075 e W2KS=5.65676594408. Ordine 18, chiusura di 32 stati nominalmente stabile. Sui sei scenari 2/5/8 gradi: Ts massimo 1.486 s, overshoot 228.618%, errore statico relativo 0.815096, picco 9.59084 N m. Prestazione pesata e tracking FAIL; cross-coupling PASS. Il risultato resta PARTIAL.
+
+La baseline precedente è preservata in direct_weights_baseline.mat e Git. I paragrafi seguenti documentano esclusivamente quella baseline, non gli artifact correnti. Per la revisione attiva si vedano il Capitolo 8 e RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt.
+
+## Evidenza storica precedente alla revisione diretta
 # Sintesi H-infinity nominale `mixsyn` — M9
 
 **Responsabile:** Alessio  

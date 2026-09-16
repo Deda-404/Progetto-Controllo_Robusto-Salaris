@@ -66,8 +66,8 @@ end
 function testT06M5ParametersRemainFrozen(testCase)
 artifactSpec = testCase.TestData.m5.spec;
 sourceSpec = performance_specs_m5;
-fields = {'omegaB', 'As', 'Ms', 'uScale', 'omegaU', ...
-    'controlWeightAlpha'};
+fields = {'omegaB', 'omegaW1', 'As', 'Ms', 'uScale', 'omegaU', ...
+    'controlWeightGain', 'controlWeightAlpha'};
 for index = 1:numel(fields)
     verifyEqual(testCase, artifactSpec.(fields{index}), ...
         sourceSpec.(fields{index}));

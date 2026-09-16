@@ -124,7 +124,7 @@ path=fullfile(root,'report','generated','lqri_revision_results.tex');
 f=fopen(path,'w'); assert(f~=-1,'M7LQRI:Write','Impossibile scrivere la tabella.');
 cleanup=onCleanup(@() fclose(f));
 fprintf(f,'%% Generato da plot_lqri_revision.m; dati della chiusura reale.\n');
-fprintf(f,'\\[w_i=%.5g,\\quad Q_i=%.7g I_2,\\quad R=\\tfrac{1}{9}I_2.\\]\n',c.wi,c.Qi(1,1));
+fprintf(f,'\\[\\bar w_i=%.5g,\\quad Q_i=%.7g I_2,\\quad R=%.5g I_2.\\]\n',c.wbarI,c.Qi(1,1),c.ru);
 fprintf(f,'\\[K_x=[K_{x,a}\\ K_{x,b}].\\]\n{\\small\n');
 localMatrix(f,'K_{x,a}',c.Kx(:,1:7)); localMatrix(f,'K_{x,b}',c.Kx(:,8:14));
 localMatrix(f,'K_i',c.Ki); fprintf(f,'}\n');
@@ -136,14 +136,14 @@ fprintf(f,'Parte reale dominante della chiusura completa: $\\num{%.9g}$ s$^{-1}$
 fprintf(f,['Il massimo residuo LQRI a 8 s nei due esperimenti vale $\\num{%.8g}$ rad; ' ...
     'non coincide con il valore asintotico.\\par\n'],max(abs(c.metriche{3:4,5:6}),[],'all'));
 fprintf(f,'\\begin{table}[htbp]\\centering\\small\n\\begin{tabular}{rrrrr}\\toprule\n');
-fprintf(f,'$w_i$ & $\\|K_i\\|_2$ & $T_s$ [s] & OS [\\%%] & picco $u$ [N m] \\\\\n\\midrule\n');
+fprintf(f,'$\\bar w_i$ & $\\|K_i\\|_2$ & $T_s$ [s] & OS [\\%%] & picco $u$ [N m] \\\\\n\\midrule\n');
 for k=1:3
     t=m7.manualComparisonTable(k,:);
     fprintf(f,'%.4g & %.5g & %s & %.5g & %.5g \\\\\n', ...
-        t.Wi,norm(m7.designs{k}.Ki,2),localNumber(t.WorstSettlingTime),t.WorstOvershoot,t.PeakControl);
+        t.WbarI,norm(m7.designs{k}.Ki,2),localNumber(t.WorstSettlingTime),t.WorstOvershoot,t.PeakControl);
 end
-fprintf(f,['\\bottomrule\\end{tabular}\\caption{LQRI: tre valori di $w_i$ a $Q$ e $R=(1/9)I_2$ fissi. ' ...
-    'Gradini di 5 gradi, 8 s; $\\infty$ indica mancato assestamento entro 8 s.}\\label{tab:lqri-wi}\\end{table}\n']);
+fprintf(f,['\\bottomrule\\end{tabular}\\caption{LQRI: tre pesi integrali diretti a $Q$ e $R=%.5g I_2$ fissi. ' ...
+    'Gradini di 5 gradi, 8 s; $\\infty$ indica mancato assestamento entro 8 s.}\\label{tab:lqri-wi}\\end{table}\n'],c.ru);
 fprintf(f,'\\begin{table}[htbp]\\centering\\small\n\\begin{tabular}{llrrrr}\\toprule\n');
 fprintf(f,'Controllo & Disturbo & $q_1(\\infty)$ & $q_2(\\infty)$ & picco $u$ & RMS $u$ \\\\\n\\midrule\n');
 for k=1:4

@@ -31,14 +31,18 @@ classdef test_didactic_entry_points < matlab.unittest.TestCase
             testCase.verifyTrue(all(contains(s,["connect(","hinfsyn(","lyap(", ...
                 "ricalcolaSintesi=false","rhoCertificato","nBisezioni=12"])));
             testCase.verifyFalse(contains(s,'design_lqr_m6'));
-            testCase.verifyTrue(all(contains(s,["W3nuovo","Gnormalizzato","Pnuovo","KSnuovo"])));
+            testCase.verifyTrue(all(contains(s,["W3nuovo","Pnuovo","KSnuovo"])));
+            testCase.verifyFalse(contains(s,"Gnormalizzato"));
             d=load(fullfile(testCase.Root,'results','data','hinf_weight_revision.mat'));
             h=d.studio; k=h.selezionato; m=h.mappe{k};
-            testCase.verifyEqual(norm(lft(h.P,h.Knuovo*h.qs/h.us),inf), ...
+            testCase.verifyEqual(norm(lft(h.P,h.Knuovo),inf), ...
                 h.tabella.Gamma(k),'RelTol',1e-4);
             testCase.verifyGreaterThan(norm(h.pesi{k}.W3*m.T,inf),0);
             testCase.verifyLessThan(max(real(eig(m.Acl))),0);
-            testCase.verifyEqual(h.stabilitaCampioni,h.sampleMaxRealPoles<-1e-8);
+            testCase.verifyEqual(h.coordinateSystem,"physical");
+            testCase.verifyLessThanOrEqual(h.synthesisCount,14);
+            testCase.verifyEqual(h.tabella.Pass, ...
+                h.tabella.M5Pass & h.tabella.WeightedPass);
         end
         function confrontoEmpiricoSeparato(testCase)
             s=string(fileread(fullfile(testCase.Root,'analysis','ras','build_common_ras_comparison.m')));

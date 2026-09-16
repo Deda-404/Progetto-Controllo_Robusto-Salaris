@@ -10,7 +10,8 @@ config.mergedPullRequestState = "MERGED";
 config.mergedPullRequestCommit = config.baselineCommit;
 
 config.controllerIDs = ["M6"; "Khinf"; "Kmu"];
-config.expectedControllerOrders = [14; 18; 52];
+% Ordini correnti; nessuna riduzione o modifica in fase di confronto.
+config.expectedControllerOrders = [14; 18; 70];
 config.controllerArchitectures = [ ...
     "LQG nominale senza integratore"; ...
     "H-infinity full-order"; ...

@@ -1,6 +1,6 @@
 # LQRI M7: LQR con integratore e osservatore di Kalman
 
-Data della revisione: 2026-09-14. Responsabile: Alessio.
+Data della revisione: 2026-09-16. Responsabile: Alessio.
 
 ## Ambito e correzione architetturale
 
@@ -39,19 +39,16 @@ Si conserva esattamente Q di M6 e si usa
 \[
 J=\int_0^\infty(x_a^TQ_ax_a+u^TRu)\,dt,\quad
 Q_a=\operatorname{blkdiag}(Q,Q_i),\quad
-Q_i=\frac{w_i}{s_\xi^2}I_2,\quad R=r_uI_2.
+Q_i=\bar w_i I_2,\quad R=r_uI_2.
 \]
 
-La scala già giustificata \(s_\xi=(5\pi/180)\,0.8\) rad s viene conservata
-per mantenere il significato dei valori disponibili di wi, senza aprire
-una nuova ricerca di costo. Corrisponde all'accumulo dell'errore nominale
-per il tempo target, non a un limite hardware.
-
-Le tre prove usano wi = 0.1, 1, 4 con Q e R=(1/9)I2 fissi. Il punto
-illustrativo wi=1 è dichiarato prima della valutazione, non selezionato
-per ottenere un PASS. Un wi maggiore penalizza maggiormente l'accumulo,
-con possibili effetti su rapidità, comando e sovraelongazione; non esiste
-una monotonia universale di ogni guadagno o polo in un sistema MIMO.
+Si scelgono direttamente tre valori arrotondati, wbarI = 20, 200, 800,
+per confrontare penalizzazione debole, intermedia e forte della memoria
+dell'errore. Non sono limiti fisici né costanti derivate da una legge teorica.
+Q e R=0.10 I2 provengono dalla M6 corrente. Il punto intermedio 200
+è illustrativo, non selezionato per ottenere un PASS. Un peso maggiore
+può rendere l'integratore più incisivo, senza monotonia universale MIMO.
+Il picco degli stati integrali è riportato direttamente in rad s.
 
 La soluzione stabilizzante della CARE soddisfa
 
@@ -97,9 +94,7 @@ Sono costruite e confrontate entrambe le matrici. La verifica comprende
 tutti i 30 poli e l'unione degli spettri del regolatore aumentato e
 dell'osservatore, senza riduzione tramite cancellazioni.
 
-Per wi=1 e ru=1/9 il residuo relativo CARE è circa 4.56824e-13,
-quello della trasformazione è circa 2.10043e-13; la parte reale dominante
-è -0.830657 s^-1. I valori completi sono nei MAT e nel resoconto finale.
+I residui CARE, di separazione e i poli correnti sono esportati dai MAT in `report/generated/lqri_revision_results.tex`; non vengono riutilizzati i numeri della precedente parametrizzazione.
 
 ## Esperimenti e lettura corretta degli esiti
 
@@ -113,18 +108,18 @@ inizializzati a zero, xi(0)=0, rumore nullo, passo 0.002 s e durata 8 s:
 L'offset DC viene calcolato dall'equilibrio della chiusura, non
 identificato con l'ultimo campione della simulazione. La prova indipendente
 tramite expm controlla la coerenza della simulazione e la reiezione a 20 s
-del punto wi=1, oltre 16 costanti di tempo del suo modo dominante.
+del punto wbarI=200, oltre 16 costanti di tempo del suo modo dominante.
 
 Il principio del modello interno implica errore statico nullo solo per
 una chiusura stabile con equilibrio compatibile e comando realizzabile.
 Il contributo integrale permanente consente di compensare il disturbo:
 l'errore non scompare senza una corrispondente coppia di controllo.
 
-| wi | ru | Settling peggiore su 8 s | Overshoot | Esito M5 |
+| wbarI | ru | Settling peggiore su 8 s | Overshoot | Esito M5 |
 | ---: | ---: | ---: | ---: | --- |
-| 0.1 | 1/9 | non raggiunto entro 8 s | 0% | FAIL |
-| 1 | 1/9 | 4.996 s | 0% | FAIL |
-| 4 | 1/9 | 2.616 s | 0% | FAIL |
+| 20 | 0.10 | non raggiunto entro 8 s | 0% | FAIL |
+| 200 | 0.10 | 5.046 s | 0% | FAIL |
+| 800 | 0.10 | 2.642 s | 0% | FAIL |
 
 Tutti i punti sono nominalmente stabili e hanno offset DC numericamente
 nullo, ma nessuno rispetta il target di settling 0.8 s. M7 resta PARTIAL,
@@ -142,7 +137,7 @@ il riferimento di prestazione nominale M6.
 - Artifact: m7_augmented_cost_feasibility.mat, m7_lqg_integral.mat,
   m7_disturbance_comparison.mat/.csv, m7_lqri_tracking_comparison.csv.
 - Test indipendenti: tests/test_m7_lqg_integral.m.
-- Esiti della revisione: lqri_r_verification.mat/.csv.
+- Esiti della revisione: direct_weights_phase_b_verification.mat/.csv.
 
 run_all con CR_RUN_SCOPE=lqri esegue soltanto la revisione e le suite
 coinvolte. Il percorso completo storico rimane disponibile con variabile

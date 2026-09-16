@@ -1,3 +1,12 @@
+# M10 corrente: Lower LFT a due pesi diretti
+
+Revisione 2026-09-16. La pianta generalizzata corrente è P=[W1,-W1G;0,W2;I,-G], 6x4, ordine 18. G rimane nelle coordinate fisiche e W3 è assente. w=r (2), z=[W1e;W2u] (4), y=e (2), u (2); u=Ky e P22=-G.
+
+Con i nuovi pesi M5: gamma=5.67722115259, ||W1S||=5.60024012075, ||W2KS||=5.65676594408; stabilità nominale PASS, prestazione e tracking FAIL. L'equivalenza con M9 è verificata senza retuning. Lo schema riproducibile è generato da analysis/nominal/plot_m10_lower_lft_diagram.m.
+
+I dati numerici sotto sono storici e non descrivono il nuovo artifact. La ricostruzione teorica resta valida; numeri correnti e catena dipendente sono nel resoconto RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt.
+
+## Evidenza storica precedente alla revisione diretta
 # Generalized plant esplicita e sintesi `hinfsyn` — M10
 
 **Responsabile:** Alessio

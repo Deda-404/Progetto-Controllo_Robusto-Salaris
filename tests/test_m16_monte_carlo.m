@@ -254,7 +254,9 @@ classdef test_m16_monte_carlo < matlab.unittest.TestCase
 
         function testT38KmuAllStableOrBlocked(testCase)
             rows = testCase.M16.stabilityTable.Controller == "Kmu";
-            testCase.verifyTrue(all(testCase.M16.stabilityTable.Stable(rows)));
+            certificate = string(testCase.M14.qualityGate.robustStability) == "PASS_CERTIFIED";
+            testCase.verifyEqual(testCase.M16.m14Consistency.passed, ...
+                ~certificate || all(testCase.M16.stabilityTable.Stable(rows)));
         end
 
         function testT39M14Consistency(testCase)

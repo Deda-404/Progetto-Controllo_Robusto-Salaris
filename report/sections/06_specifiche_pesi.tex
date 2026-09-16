@@ -1,4 +1,4 @@
-\chapter{Specifiche e pesi di prestazione}
+\chapter{Specifiche di prestazione}
 \section{Obiettivo e scenari}
 Le specifiche traducono il problema fisico in obiettivi comuni alle sintesi. Il riferimento nominale è un gradino articolare di $5^\circ$ attorno all'equilibrio; le ampiezze 2, 5 e $8^\circ$ servono soltanto a verificare la località del modello. Il disturbo nominale è una coppia di 0.5 N m applicata direttamente ai link. I target principali sono
 \[
@@ -16,64 +16,8 @@ cade nella finestra 10.81--13.91 rad/s: è sopra la dinamica instabile e sotto i
 
 Questa posizione della banda esprime un compromesso preciso. Scendere verso il polo instabile renderebbe il recupero dell'equilibrio lento e fragile; salire verso la banda dell'attuatore o il primo modo elastico richiederebbe più comando proprio dove ritardo, flessibilità e incertezza dinamica diventano più rilevanti. Il valore non pretende di essere l'unico possibile: è la specifica congelata rispetto alla quale tutti i controllori vengono confrontati.
 
-\section{Peso sulla sensibilità}
-Con $S=(I+GK)^{-1}$ adottiamo
-\[
-W_1(s)=\frac{s/M_s+\omega_B}{s+\omega_BA_s},\qquad
-A_s=0.05,\quad M_s=2.
-\]
-Ponendo $s=0$ si ottiene
-\[
-W_1(0)=\frac{1}{A_s}=20.
-\]
-Pertanto $\|W_1S\|_\infty<1$ richiede una sensitivity dell'ordine del 5\% alle basse frequenze. Dividendo numeratore e denominatore per $s$ e passando al limite,
-\[
-W_1(\infty)=\frac{1}{M_s}=0.5.
-\]
-Il vincolo lascia quindi un picco di sensitivity dell'ordine di $M_s=2$; $\omega_B$ colloca la transizione tra accuratezza statica e roll-off.
-
-La frequenza a modulo unitario non coincide esattamente con $\omega_B$:
-\[
-\omega_{|W_1|=1}=\omega_B
-\sqrt{\frac{1-A_s^2}{1-1/M_s^2}}=\RevHinfCrossover\ \mathrm{rad/s}.
-\]
-Polo e zero sono rispettivamente 0.6 e 24 rad/s.
-
-La lettura del peso deve essere fatta attraverso il suo inverso. Se $\|W_1S\|_\infty<1$, allora $\bar\sigma(S)<1/|W_1|$: a bassa frequenza l'errore deve essere piccolo, nella zona di transizione si fissa la rapidità desiderata e ad alta frequenza il vincolo si rilassa. Non si tenta quindi di rendere $S$ piccolo a tutte le frequenze, cosa incompatibile con il roll-off e con i limiti di robustezza.
-
-\section{Peso sul comando}
-La scala $u_{scale}=12$ N m è una normalizzazione prestazionale, non una saturazione hardware. Usiamo
-\[
-W_2(s)=\frac{1}{u_{scale}}
-\frac{s/\omega_U+1}{s/(\alpha\omega_U)+1},\qquad
-\omega_U=30\ \mathrm{rad/s},\quad\alpha=6.
-\]
-A bassa frequenza $W_2(0)=1/12$; ad alta frequenza tende a $\alpha/12=0.5$. La penalizzazione del comando cresce quindi di un fattore sei prima dei modi elastici, scoraggiando azioni rapide nella regione in cui ritardo e flessibilità rendono il modello meno affidabile.
-
-Anche qui l'inviluppo desiderato è $1/|W_2|$: il suo valore numerico passa
-da 12 a 2. Esso limita la mappa $KS:r\mapsto u$, cioè il guadagno
-energetico del comando rispetto al riferimento nelle coordinate SI adottate,
-non il picco istantaneo assoluto di coppia. In particolare, un gradino di
-5 gradi non è un ingresso unitario e una norma frequenziale non è una
-saturazione nel tempo. Non viene provata la compatibilità con una curva
-coppia--velocità reale. $\omega_U=30$ è lo zero del peso, mentre il polo
-è a 180 rad/s: poiché $|W_2|$ resta fra $1/12$ e $1/2$, non esiste un
-crossover unitario del peso. La scelta penalizza lo sforzo nella mixed
-sensitivity senza introdurre limiti hardware non forniti dalla traccia.
-
-\section{Implementazione e interpretazione}
-Nella baseline M5 i pesi MIMO sono due copie diagonali dei pesi SISO e non viene usato $W_3$. La mixed sensitivity è
-\[
-\left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_\infty.
-\]
-I test verificano stabilità, properness, dimensioni e asintoti. Il valore uno separa soddisfacimento e violazione del profilo pesato. Le specifiche restano congelate anche quando una sintesi produce $\gamma>1$: il risultato negativo documenta la difficoltà del problema e non giustifica un retuning retroattivo.
-Il Capitolo~8 affianca a questa baseline uno studio dichiarato con pesi
-rivisti e terzo canale: non modifica retroattivamente il problema M5
-né i risultati robusti successivi.
-
-La stessa M5 alimenta anche la sintesi LQR: ampiezza del riferimento, banda, coppia di disturbo e scala del comando costruiscono normalizzazioni fisiche comuni. Questo non rende equivalenti LQR e mixed sensitivity; garantisce però che il confronto successivo non usi unità o obiettivi ricavati a posteriori per favorire un controllore.
-
-\begin{figure}[H]\centering
-\includegraphics[width=0.79\textwidth]{figures/m5_spec_frequency_map.png}
-\caption{Scale dinamiche utilizzate per motivare $\omega_B$ e $\omega_U$.}\label{fig:m5-map}
-\end{figure}
+La banda generale $\omega_B$ resta distinta dal parametro $\omega_{W1}$
+del peso sulla sensibilità: la revisione di quest'ultimo non modifica
+la scala di velocità impiegata nel costo LQR.
+La costruzione e l'interpretazione dei pesi sono raccolte nel
+Capitolo~\ref{cap:hinf}, nel contesto della mixed sensitivity.

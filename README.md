@@ -4,46 +4,51 @@ Progetto universitario di Controllo Robusto sviluppato da **Alessio de Dato** e 
 
 Il repository contiene l'intero percorso di lavoro: modello non lineare, equilibrio e linearizzazione, dinamica degli attuatori, insieme incerto, specifiche, sintesi LQG e $H_\infty$, D--K iteration, $\mu$-analysis, simulazioni non lineari, regioni interne nominali di Lyapunov, mappe empiriche di attrazione e Monte Carlo.
 
-## Risultato conclusivo
+## Revisione corrente: pesi diretti H-infinity, LQR e LQRI
 
-Nessun controllore soddisfa simultaneamente tutte le specifiche. La selezione è quindi distinta per ruolo:
+La revisione parte dalla baseline `aae96148353506b8ba119de65f6dcf3103eec328`
+(PR 29), su un branch dedicato riportato nello stato di progetto.
+Modello M0–M4, target temporali M5 e criteri di selezione sono invariati.
 
-- **Kmu** è il controllore robusto finale: M14 certifica la Robust Stability sull'insieme lineare incerto M4, mentre Nominal Performance e Robust Performance restano non conformi;
-- **M6 LQG** è il riferimento di prestazione nominale: rispetta il tracking M5 sul modello nominale, ma presenta due casi instabili nella campagna M16 e non dispone di un certificato RS;
-- **Khinf** è il comparatore metodologico full-order della sintesi $H_\infty$.
+- **H-infinity:** pianta nelle coordinate fisiche; 8 candidati W1 e 4 W2,
+  tutti non conformi. Sono attivi omegaW1=8 rad/s, As=0.15, Ms=2.5,
+  ku=0.05, omegaU=60 rad/s, alpha=6. M9/M10 restano a due pesi
+  (gamma=5.67722); W3 è fisso e presente soltanto nello studio separato.
+- **M6 LQG:** ricerca reale di 36 costi con ru={0.01,0.05,0.10};
+  9 ammissibili, selezionato LQR30 con R=0.10 I2. Q e Kalman sono
+  identici alla baseline, R/K/Nr sono ricalcolati.
+- **M7 LQRI:** Qi=wbarI I2 con wbarI={20,200,800}, senza xiScale.
+  Tre chiusure stabili di ordine 30; nessuna soddisfa tutti i target.
+  Il punto illustrativo 200 annulla l'offset DC ma ha Ts=5.046 s.
+- **M14:** il nuovo Kmu, ottenuto con una sola campagna D–K dipendente
+  dai nuovi pesi, ha ordine 70. RS è FAIL_CERTIFIED con margine
+  [0.774042,0.775697]; anche NP/RP falliscono.
+  **Il ruolo robusto finale non è assegnato.** Il certificato precedente
+  non è trasferibile al controllore corrente.
 
-La Monte Carlo M16 usa 40 realizzazioni comuni dell'unico insieme M4: con il LQR M6 congelato è stabile in 38/40 casi (Sample 5 e 6 instabili), Khinf e Kmu in 40/40. Queste frazioni sono evidenza empirica sul campione e non probabilità fisiche; la certificazione RS di Kmu deriva esclusivamente dalla $\mu$-analysis M14.
+M16 resta evidenza empirica su 40 realizzazioni comuni M4, non una
+certificazione né una probabilità fisica. La catena downstream viene
+rigenerata soltanto perché i controllori sorgente sono cambiati.
+Stato di validazione e limiti: `docs/PROJECT_STATUS.md`.
+Il resoconto della revisione è `docs/RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt`;
+i resoconti del 10 e 14 settembre sono storici.
 
-## LQRI con Kalman M6 e studio H-infinity separato
-
-La revisione del 14 settembre sostituisce M7 con una LQRI: `u=-Kx*xhat-Ki*xi`,
-`xi_dot=r-q_measured`, Kalman M6 invariato e chiusura reale a 30 stati.
-R è parametrizzata direttamente da `ru`, con gli stessi valori numerici M6.
-La LQRI annulla l'offset DC, ma resta PARTIAL per il settling; lo studio
-H-infinity del 10 settembre resta separato e invariato. Nessuno dei 13 nuovi
-candidati H-infinity rispetta tutti i target M5; il minimo gamma è 2.8056.
-Il candidato illustrativo ID 10 (gamma 4.0730) non sostituisce Khinf:
-M5 e la catena M9–M16 originale restano invariati.
+Per leggere i risultati già calcolati, senza ripetere sintesi:
 
 ```matlab
 addpath(genpath('src'),genpath('controllers'),genpath('analysis'))
-progetto_lqri
-studio = study_hinf_weights;  % legge la campagna già salvata
-plot_hinf_revision          % soli asset H-infinity dalla cache
-validate_m18_deliverables(true,true)
+studio = study_hinf_weights;
+build_direct_weights_summary
+plot_hinf_revision
+plot_lqri_revision
 ```
 
-La prima produzione della campagna, soltanto in assenza del relativo MAT,
-usa `study_hinf_weights(true)`: 13 candidati deterministici e 2 sintesi
-diagnostiche, nessuna musyn. Il comando rifiuta di sovrascrivere una cache
-esistente. La revisione non richiede `run_all` né nuove analisi D–K/M14/M16.
-Per compilare soltanto la relazione aggiungere `-ReportOnly` a
-`tools/build_m18_latex.ps1`; le 19 slide restano quelle della baseline.
-La verifica circoscritta usa `setenv('CR_RUN_SCOPE','lqri'); run_all`;
-ripristinare poi `setenv('CR_RUN_SCOPE','')` per il percorso completo.
-Dettagli correnti: `docs/RESOCONTO_REVISIONE_LQRI_R.txt` e
-`docs/LQG_CON_INTEGRATORE.md`. Il resoconto del 10 settembre
-`docs/REVISIONE_MIRATA_LQI_HINF.md` è storico per la parte M7.
+La produzione dello studio tramite `study_hinf_weights(true)` è riservata
+all'assenza di una cache compatibile: al massimo 12 candidati, più M9/M10.
+M11 conserva i suoi 30 avvii strutturati. La selezione dello studio a tre
+pesi non va confusa con la produzione M10 a due pesi.
+I Capitoli 6 e 8 separano target generali e pesi mixed-sensitivity;
+il §8.3 include il diagramma della Lower LFT effettivamente usata in M10.
 
 ## Struttura del repository
 
@@ -80,7 +85,7 @@ Progetto_CR/
 - una distribuzione LaTeX compatibile con `latexmk`.
 - Git LFS per scaricare le traiettorie Lyapunov complete.
 
-Il file `results/data/lyapunov_trajectories.mat` (circa 248 MiB) è conservato
+Il file `results/data/lyapunov_trajectories.mat` è conservato
 integralmente tramite Git LFS. Dopo il clone eseguire `git lfs install` e
 `git lfs pull` dalla radice del repository. Il solo archivio ZIP o un clone
 senza LFS potrebbe contenere il puntatore testuale invece dei dati MATLAB.
@@ -109,9 +114,9 @@ regenerate_document_figures
 r = runtests('tests'); assertSuccess(r)
 ```
 
-Il bound di Lyapunov include 28, 32 e 66 stati per LQG, Khinf e Kmu. Il confronto grafico distingue regione analitica sufficiente, ellisse verificata su punti finiti e traiettorie empiriche. Q/R, sigma e parametri della ricerca sono spiegati nei due script; le matrici numeriche sono esportate automaticamente in LaTeX.
+Il bound di Lyapunov include 28, 32 e 84 stati per LQG, Khinf e Kmu. Il confronto grafico distingue regione analitica sufficiente, ellisse verificata su punti finiti e traiettorie empiriche. Q/R, sigma e parametri della ricerca sono spiegati nei due script; le matrici numeriche sono esportate automaticamente in LaTeX.
 
-**Attenzione:** `run_all` è la ricostruzione storica completa e rilancia M9–M11; non è il comando usato per la revisione a controllori congelati. La revisione non rilancia `musyn`, `hinfsyn`, `mixsyn` o `hinfstruct`.
+**Attenzione:** `run_all` è la ricostruzione completa e rilancia M9–M11; non va ripetuto per il solo aggiornamento dei documenti. La revisione corrente ha eseguito le sintesi richieste e una sola nuova M13, dopo aver fissato i pesi; non implica ulteriori campagne.
 
 Per rigenerare macro, tabelle e asset dei documenti:
 

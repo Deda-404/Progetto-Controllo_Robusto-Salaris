@@ -14,12 +14,12 @@ Una casella non valutata non viene trasformata in un esito positivo. In particol
 \section{Tracking nominale}
 M6 è l'unico dei tre controllori finali che rispetta i target di tracking nominale M5 nel dominio validato. Il worst settling time è \MControllerWorstTs\ s, con overshoot contenuto ed errore statico trascurabile sul modello nominale. Il prefiltro statico è parte integrante di questa architettura e spiega perché il confronto debba riportare anche le differenze strutturali, non soltanto le curve.
 
-$K_{\infty}$ e $K_\mu$ mantengono la stabilità nelle simulazioni nominali, ma falliscono settling, overshoot ed errore a regime. Il fatto che $K_\mu$ sia il controllore robusto finale non modifica tale risultato. La robustezza della stabilità protegge una proprietà diversa dall'accuratezza di tracking pesata.
+$K_{\infty}$ e $K_\mu$ mantengono la stabilità nelle simulazioni nominali, ma falliscono settling, overshoot ed errore a regime. La provenienza di $K_\mu$ dalla sintesi robusta non implica un certificato positivo. La robustezza della stabilità protegge una proprietà diversa dall'accuratezza di tracking pesata.
 
 \section{Stabilità incerta e prestazione robusta}
 M16 osserva M6 stabile in \MControllerStableSamples/\MonteCarloSamples\ campioni; gli ID instabili sono \MControllerUnstableSampleIds. $K_{\infty}$ e $K_\mu$ sono stabili rispettivamente in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ realizzazioni, ma i loro core tracking pass rate sono nulli. Il campionamento favorisce quindi i controllori robusti sul piano della stabilità osservata e M6 sul piano della prestazione, senza produrre un vincitore assoluto.
 
-Sul piano formale, soltanto $K_\mu$ dispone di una post-analisi completa sull'insieme M4. M14 certifica RS con margine [\KmuRSLower,\KmuRSUpper], ma NP e RP restano negative. M6 e $K_{\infty}$ non ricevono retroattivamente una certificazione dalla Monte Carlo. Questa asimmetria delle evidenze è riportata esplicitamente nella tabella master.
+Sul piano formale, soltanto $K_\mu$ dispone di una post-analisi completa sull'insieme M4. M14 restituisce RS fallita con margine [\KmuRSLower,\KmuRSUpper]; anche NP e RP sono negative. M6 e $K_{\infty}$ non ricevono retroattivamente una certificazione dalla Monte Carlo. Questa asimmetria delle evidenze è riportata esplicitamente nella tabella master.
 
 \begin{figure}[H]
 \centering
@@ -37,15 +37,18 @@ realizzazione del controllore: non \`e una metrica comparabile di merito.
 Il confronto empirico M17 resta distinto e non viene riclassificato come
 certificato a seguito di questa analisi.
 
-Le RAS non lineari nominali mostrano M6 e $K_\mu$ limitati dal box di ricerca a $60^\circ$, mentre $K_{\infty}$ presenta una frontiera interna con raggio minimo circa $52.88^\circ$. Poiché due risultati sono search-box limited, non è corretto ordinare i controllori come se $60^\circ$ fosse una misura esatta della regione di attrazione. La RAS viene perciò usata come informazione diagnostica, non come criterio dominante.
+Le RAS non lineari nominali sono ricalcolate per i controllori correnti.
+Raggi, aree e classificazioni provengono dalla tabella del Capitolo 10.
+Un risultato limitato dal box non localizza la frontiera dinamica:
+le RAS rimangono informazioni diagnostiche, non un criterio dominante.
 
-I picchi di comando rimangono dello stesso ordine nelle campagne di tracking considerate, ma la mancanza di limiti hardware impedisce una dichiarazione di fattibilità attuativa completa. L'ordine dinamico distingue nettamente le architetture: \MControllerOrder\ per M6, \KhinfOrder\ per $K_{\infty}$ e \KmuOrder\ per $K_\mu$. L'ordine 52 è un costo implementativo reale e viene accettato senza riduzione perché la fase conclusiva non autorizza una nuova validazione.
+I picchi di comando rimangono dello stesso ordine nelle campagne di tracking considerate, ma la mancanza di limiti hardware impedisce una dichiarazione di fattibilità attuativa completa. L'ordine dinamico distingue nettamente le architetture: \MControllerOrder\ per M6, \KhinfOrder\ per $K_{\infty}$ e \KmuOrder\ per $K_\mu$. L'ordine di $K_\mu$ è un costo implementativo reale; non viene ridotto in questa revisione.
 
 \section{Assegnazione dei ruoli}
 La selezione risultante è:
 \input{tables/final_role_selection.tex}
 
-$K_\mu$ è il controllore robusto finale perché è l'unico con RS formalmente certificata e la campagna M16 non mostra contraddizioni. M6 è il riferimento di prestazione nominale perché soddisfa il tracking M5 nel dominio validato, pur conservando i casi instabili M16 e l'assenza di certificato RS. $K_{\infty}$ rimane il riferimento metodologico $H_\infty$: rappresenta la soluzione full-order ottenuta dalla generalized plant esplicita e consente di misurare cosa cambia passando alla sintesi strutturata e alla D--K iteration.
+Il ruolo robusto finale rimane non assegnato: nessun candidato principale dispone di RS certificata. Il criterio non viene indebolito per selezionare comunque $K_\mu$. M6 è il riferimento di prestazione nominale perché soddisfa il tracking M5 nel dominio validato, pur conservando i casi instabili M16 e l'assenza di certificato RS. $K_{\infty}$ rimane il riferimento metodologico $H_\infty$: rappresenta la soluzione full-order ottenuta dalla generalized plant esplicita e consente di misurare cosa cambia passando alla sintesi strutturata e alla D--K iteration.
 
 \begin{figure}[H]
 \centering
@@ -54,4 +57,4 @@ $K_\mu$ è il controllore robusto finale perché è l'unico con RS formalmente c
 \label{fig:m17-tradeoff}
 \end{figure}
 
-La decisione non promuove $K_\mu$ a controllore conforme alla Robust Performance e non declassa M6 come progetto nominale. Espone invece il conflitto centrale del lavoro: il miglior tracking nominale non coincide con la più forte evidenza di stabilità sull'insieme incerto. Questa conclusione è più informativa di uno score globale, perché mantiene visibile quale proprietà verrebbe sacrificata scegliendo ciascuna architettura.
+La decisione non promuove $K_\mu$ a controllore conforme alla Robust Performance e non declassa M6 come progetto nominale. Espone invece il conflitto centrale del lavoro: il tracking nominale conforme non garantisce la stabilità sull'intero insieme incerto, e la nuova sintesi robusta non ha risolto tale limite. Questa conclusione è più informativa di uno score globale, perché mantiene visibile quale proprietà verrebbe sacrificata scegliendo ciascuna architettura.

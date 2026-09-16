@@ -31,6 +31,10 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
             testCase.verifyEqual(order(e.Klqri),16);
             testCase.verifyEqual(e.Klqri.D,zeros(2,6),'AbsTol',0);
             testCase.verifyFalse(isfield(e,'Nff'));
+            % Il peso integrale e diretto e non conserva una scala implicita.
+            testCase.verifyEqual(d.Qi,d.wbarI*eye(2),'AbsTol',0);
+            testCase.verifyFalse(isfield(d,'xiScale'));
+            testCase.verifyFalse(isfield(e.summary,'windupIndicator'));
         end
         function augmentedRiccatiAndGain(testCase,Index)
             % Ricostruzione dalle matrici fisiche e dal peso dichiarato,
@@ -80,7 +84,7 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
             testCase.verifyEqual(e.Qn,testCase.M6.Qn,'AbsTol',0);
             testCase.verifyEqual(e.Rn,testCase.M6.Rn,'AbsTol',0);
             testCase.verifyEqual(d.Qaug(1:14,1:14),testCase.M6.Q,'AbsTol',0);
-            testCase.verifyEqual(d.R,eye(2)/9,'AbsTol',1e-15);
+            testCase.verifyEqual(d.R,testCase.M6.R,'AbsTol',1e-15);
         end
         function constantReferenceAndDisturbanceEquilibria(testCase,Index)
             % L'equilibrio e ricostruito risolvendo Acl*z+Bcl*w=0.
@@ -93,8 +97,8 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
                 e.closedLoop.B(:,1:4),'fro'),1e-8);
         end
         function finiteTimeRejectionAgreesWithMatrixExponential(testCase)
-            % 20 s corrispondono a oltre 16 costanti del modo dominante
-            % del punto wi=1. Si distingue la verifica dal grafico a 8 s.
+            % Verifica a 20 s del punto intermedio wbarI=200, distinta
+            % dal residuo sul grafico a 8 s e dalla soluzione asintotica.
             e=testCase.M7.evaluations{2};
             equilibrium=-e.closedLoop.A\(e.closedLoop.B(:,3:4)*0.5);
             stateAt20=equilibrium-expm(e.closedLoop.A*20)*equilibrium;
@@ -113,10 +117,10 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
             testCase.verifyEqual(c.metriche{1:2,3:4},dc','AbsTol',1e-9);
             testCase.verifyLessThan(max(abs(c.metriche{3:4,3:4}),[],'all'),1e-9);
         end
-        function wiStudyKeepsQAndRFixed(testCase)
+        function directIntegralStudyKeepsQAndRFixed(testCase)
             t=testCase.M7.manualComparisonTable;
-            testCase.verifyEqual(t.Wi,[0.1;1;4],'AbsTol',0);
-            testCase.verifyEqual(t.Ru,repmat(1/9,3,1),'AbsTol',1e-15);
+            testCase.verifyEqual(t.WbarI,[20;200;800],'AbsTol',0);
+            testCase.verifyEqual(t.Ru,repmat(testCase.M6.R(1,1),3,1),'AbsTol',1e-15);
             testCase.verifyEqual(testCase.M7.config.illustrativeIndex,2);
         end
         function unmetPerformanceIsNotHidden(testCase)

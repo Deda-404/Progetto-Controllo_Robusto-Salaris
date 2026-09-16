@@ -180,7 +180,8 @@ evaluation.summary.worstDisturbanceCrossCouplingPeakRatio = ...
     max(disturbanceMetrics.CrossCouplingPeakRatio);
 evaluation.summary.worstDisturbancePeakControl = ...
     max(disturbanceMetrics.PeakControl);
-evaluation.summary.windupIndicator = worstPeakXi / design.xiScale;
+% La memoria integrale e riportata direttamente in rad*s (worstPeakXi).
+% Non viene dedotto un indice di windup senza un modello di saturazione.
 end
 
 function settlingTime = localSettlingTime(signal, finalValue, time, threshold)

@@ -1,5 +1,30 @@
 # Validazione non lineare dei controllori H∞ e D–K
 
+## Configurazione corrente — 16 settembre 2026
+
+M15 è stata rigenerata dopo la selezione definitiva dei pesi M5. Khinf
+ha ordine 18 e Kmu ordine 70; il nuovo Kmu fallisce RS in M14.
+Le matrici restano congelate durante M15. Software PASS, tracking FAIL,
+stato PARTIAL; nessuna saturazione introdotta.
+
+| Metrica corrente | Khinf | Kmu |
+| --- | ---: | ---: |
+| Ts [s] | 1.482747 | Inf (non assestato entro 4 s) |
+| Overshoot [%] | 228.44698 | 182.07275 |
+| Errore statico relativo | 0.8150955 | 0.9324754 |
+| Peak delta u [N m] | 9.59350 | 8.79533 |
+| Raggio minimo RAS empirica [gradi] | 44.895 | 60 (limitato dal box) |
+| Raggio minimo accordo LTI/NL [gradi] | 4.5 | 5 |
+
+Il tetto storico di 400 simulazioni ha interrotto il primo tentativo RAS.
+Il budget è ora 626, derivato dalla griglia e dalla bisezione già esistenti,
+senza cambiare criteri, risoluzione o orizzonti; eseguite 501/90 simulazioni
+per Khinf/Kmu. Il checkpoint verifica l'identità delle sorgenti.
+Fonte corrente: `m15_nonlinear_robust_validation.mat` e
+`RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt`.
+
+## Archivio della precedente configurazione (numeri non correnti)
+
 **Responsabile:** Alessio  
 **Milestone:** M15  
 **Stato:** `PARTIAL` — software e simulazioni `PASS`, tracking M5 `FAIL`

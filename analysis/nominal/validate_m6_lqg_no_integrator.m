@@ -80,7 +80,7 @@ validationMetrics.cost.rank = rank(Q);
 validationMetrics.cost.actuatorDirectWeightNorm = ...
     norm(Ccost(:, 9:14), 'fro');
 validationMetrics.lqr.method = lqrDesign.method;
-% Metadato del peso diretto: R e il controllore restano invariati.
+% Il peso diretto e determinato dai criteri esistenti sulla griglia dichiarata.
 validationMetrics.lqr.ru = lqrDesign.ru;
 validationMetrics.lqr.numberCandidates = lqrDesign.numberCandidates;
 validationMetrics.lqr.numberAdmissible = lqrDesign.numberAdmissible;

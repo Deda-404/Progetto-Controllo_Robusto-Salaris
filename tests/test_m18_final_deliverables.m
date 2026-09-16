@@ -71,7 +71,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT08ControllerOrdersPreserved(testCase)
             testCase.verifyEqual([order(testCase.Evidence.m6.Klqg); ...
                 order(testCase.Evidence.m10.Khinf); ...
-                order(testCase.Evidence.m13.Kmu)], [14; 18; 52]);
+                order(testCase.Evidence.m13.Kmu)], [14; 18; 70]);
         end
 
         function testT09NoNewSynthesis(testCase)
@@ -139,9 +139,9 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
 
         function testT20KmuRobustStabilityPreserved(testCase)
             testCase.verifyEqual(string(testCase.Evidence.m14. ...
-                qualityGate.robustStability), "PASS_CERTIFIED");
-            testCase.verifyGreaterThan(testCase.Evidence.m14. ...
-                robustStabilityMargin.LowerBound, 1);
+                qualityGate.robustStability), "FAIL_CERTIFIED");
+            testCase.verifyLessThan(testCase.Evidence.m14. ...
+                robustStabilityMargin.UpperBound, 1);
         end
 
         function testT21KmuPerformanceFailuresPreserved(testCase)
@@ -154,24 +154,24 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         function testT22M16CountsPreserved(testCase)
             testCase.verifyEqual(testCase.Evidence.m16.numberSamples, 40);
             testCase.verifyEqual(testCase.Evidence.m16.stabilitySummary.NStable, ...
-                [38; 40; 40]);
+                [37; 40; 40]);
         end
 
-        function testT23M6SampleFivePreserved(testCase)
+        function testT23M6UnstableSamplesPreserved(testCase)
             rows = testCase.Evidence.m16.stabilityTable.Controller == "M6" & ...
-                ismember(testCase.Evidence.m16.stabilityTable.Sample, [5; 6]);
+                ismember(testCase.Evidence.m16.stabilityTable.Sample, [5; 6; 35]);
             testCase.verifyEqual(testCase.Evidence.m16. ...
-                stabilityTable.Sample(rows), [5; 6]);
+                stabilityTable.Sample(rows), [5; 6; 35]);
             testCase.verifyFalse(any(testCase.Evidence.m16. ...
                 stabilityTable.Stable(rows)));
             testCase.verifyGreaterThan(testCase.Evidence.m16. ...
-                stabilityTable.MaxRealPole(rows), zeros(2, 1));
+                stabilityTable.MaxRealPole(rows), zeros(3, 1));
         end
 
         function testT24FinalRolesPreserved(testCase)
             roles = testCase.Evidence.m17.finalRoleAssignment;
             testCase.verifyEqual(roles.Controller(roles.Role == ...
-                "FINAL ROBUST CONTROLLER"), "Kmu");
+                "FINAL ROBUST CONTROLLER"), "NONE");
             testCase.verifyEqual(roles.Controller(roles.Role == ...
                 "NOMINAL PERFORMANCE REFERENCE"), "M6");
         end
@@ -217,12 +217,12 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
         end
 
         function testT30TablesProduced(testCase)
-            testCase.verifyEqual(numel(testCase.M18.tablePaths), 19);
+            testCase.verifyEqual(numel(testCase.M18.tablePaths), 20);
             testCase.verifyTrue(all(isfile(testCase.M18.tablePaths)));
         end
 
         function testT31FigureManifestProduced(testCase)
-            testCase.verifyEqual(height(testCase.M18.figureManifest), 31);
+            testCase.verifyEqual(height(testCase.M18.figureManifest), 32);
             testCase.verifyTrue(isfile(fullfile(testCase.Root, 'report', ...
                 'generated', 'figure_manifest.csv')));
         end
@@ -284,7 +284,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
             testCase.verifyEqual(count(source, "\begin{frame}"), 19);
             testCase.verifyTrue(contains(source, "Alessio de Dato") && ...
                 contains(source, "Valerio Rebechi") && ...
-                contains(source, "M14 certifica RS"));
+                contains(source, "M14: RS, NP e RP non soddisfatte"));
         end
 
         function testT40PresentationTimingProduced(testCase)
@@ -358,7 +358,7 @@ classdef test_m18_final_deliverables < matlab.unittest.TestCase
             testCase.verifyTrue(contains(status, ...
                 "revisione LQRI") && ...
                 contains(status, "unico insieme incerto M4") && ...
-                contains(status, "[1.069561,1.212875]") && ...
+                contains(status, "[0.774041952377,0.775696806012]") && ...
                 contains(status, "Monte Carlo") && ...
                 contains(status, "non sostituisce"));
         end

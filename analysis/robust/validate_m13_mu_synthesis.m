@@ -1,5 +1,10 @@
-function metrics = validate_m13_mu_synthesis
+function metrics = validate_m13_mu_synthesis(refresh)
 %VALIDATE_M13_MU_SYNTHESIS Execute or audit the single frozen M13 campaign.
+%   refresh=true autorizza una campagna per il nuovo problema M5/M12.
+%   Il checkpoint conserva il problema effettivo, non soltanto le opzioni.
+arguments
+    refresh (1,1) logical = false
+end
 
 projectRoot = string(fileparts(fileparts(fileparts(mfilename('fullpath')))));
 addpath(genpath(fullfile(projectRoot, 'src')));
@@ -13,7 +18,7 @@ datasetPath = fullfile(dataDirectory, 'm13_musyn_dk.mat');
 checkpointPath = fullfile(dataDirectory, ...
     'm13_musyn_single_campaign_checkpoint.mat');
 
-if isfile(datasetPath)
+if isfile(datasetPath) && ~refresh
     saved = load(datasetPath);
     if isfield(saved, 'qualityGate') && isfield(saved, 'metadata') && ...
             saved.metadata.singleCampaignCompleted
@@ -29,13 +34,17 @@ m10 = load(fullfile(dataDirectory, 'm10_hinfsyn_nominal.mat'));
 m11 = load(fullfile(dataDirectory, 'm11_hinfstruct_structured.mat'));
 
 if isfile(checkpointPath)
-    checkpoint = load(checkpointPath, 'synthesis', 'config');
+    checkpoint = load(checkpointPath, 'synthesis', 'config', 'sourcePunc');
     assert(isequaln(checkpoint.config, config), 'M13:CheckpointConfig', ...
         'The existing single-campaign checkpoint uses another config.');
+    assert(isfield(checkpoint,'sourcePunc') && ...
+        isequaln(checkpoint.sourcePunc,frozen.Punc), ...
+        'M13:CheckpointPlant','Il checkpoint non appartiene al problema corrente.');
     synthesis = checkpoint.synthesis;
 else
     synthesis = run_m13_musyn(frozen.Punc, config);
-    save(checkpointPath, 'synthesis', 'config', '-v7.3');
+    sourcePunc = frozen.Punc;
+    save(checkpointPath, 'synthesis', 'config', 'sourcePunc', '-v7.3');
 end
 
 history = extract_m13_dk_history( ...

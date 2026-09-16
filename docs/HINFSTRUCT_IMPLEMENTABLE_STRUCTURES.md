@@ -1,3 +1,10 @@
+# M11 corrente: medesime strutture, nuovi pesi M5
+
+Revisione 2026-09-16. Una campagna di 30 partenze, cinque per A0–A5, è stata rieseguita senza modificare architetture, seed, solver o criteri. A0/A1 non hanno rappresentanti validi stabili, A2 non ha chiusure stabili, A3/A4/A5 hanno cinque chiusure stabili ciascuna. Objective migliori: A3=8.16714387415, A4=5.96724587110, A5=5.70856883334. Nessuno è PASS prestazionale.
+
+A5 corrente alimenta M12. Il confronto completo con M9/M10, incluse norme, tracking e comando, è esportato in results/data/direct_hinf_production.csv e nella relazione. I paragrafi numerici seguenti conservano la baseline precedente, non gli artifact aggiornati.
+
+## Evidenza storica precedente alla revisione diretta
 # M11 — Structured H-infinity con strutture implementabili
 
 **Responsabile:** Alessio

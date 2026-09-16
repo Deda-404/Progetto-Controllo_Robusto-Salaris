@@ -60,24 +60,23 @@ M5 definisce la forte attenuazione dei disturbi costanti/bassa frequenza, ma la 
 ## LQG
 
 - [x] Sintetizzare LQG senza integratore.
-- [ ] Sintetizzare LQG con integratore sulle uscite approvate.
+- [x] Sintetizzare LQRI con Kalman M6 e integratori sulle uscite misurate.
 - [x] Motivare e registrare \(Q\) e \(R\).
 - [x] Motivare e registrare covarianze di processo e misura.
 - [x] Verificare principio di separazione e poli dell'anello chiuso.
 - [x] Validare stima dello stato, rumore e condizioni iniziali per M6.
 - [x] Confrontare errore a regime con disturbo costante.
-- [ ] Confrontare sforzo di controllo con e senza integratore.
+- [x] Confrontare sforzo di controllo con e senza integratore.
 - [ ] Implementare entrambe le versioni in Simulink.
 - [x] Validare la versione senza integratore sul modello linearizzato.
 - [x] Validare M6 senza integratore sul modello non lineare.
 - [x] Stimare e documentare la RAS empirica M6 su due sezioni.
 
-M7 resta correttamente `PARTIAL`: nessun controllore integrale finale è stato
-pubblicato. M8 ha validato nel modello Simulink non lineare il solo LQG M6,
-inclusi equilibrio, tracking 2/5/8°, disturbi, rumore, confronto LTI/NL e RAS
-empirica. I25 resta un representative integral benchmark lineare e non entra
-nel gate M8; pertanto le voci che richiedono *entrambe* le versioni rimangono
-aperte senza occultare il risultato terminale M7.
+M7 implementa tre LQRI a 30 stati chiusi, tutte stabili e con offset DC
+nullo. Qi={20,200,800} I2 e Q/R/Kalman M6 sono espliciti. Nessuna raggiunge
+tutti i target; il punto illustrativo 200 resta PARTIAL per il settling.
+M8 valida il solo LQG M6 nel non lineare: la validazione non lineare
+della LQRI e l'implementazione di entrambe in Simulink rimangono aperte.
 
 ## Controllo \(H_\infty\)
 
@@ -92,20 +91,13 @@ aperte senza occultare il risultato terminale M7.
 - [x] Validare modello lineare e non lineare.
 - [x] Stimare e documentare la RAS empirica.
 
-M9 ha completato la baseline nominale 1-DoF con W1/W2 M5 congelati e
-`W3=[]`. La stabilità interna e la ricostruzione indipendente sono `PASS`, ma
-`gamma=10.2071036477`, tracking e cross-coupling falliscono i rispettivi
-target: M9 resta quindi `PARTIAL`, senza retuning. M10 ha definito e validato
-la pianta generalizzata nominale esplicita 1-DoF, eseguito una sintesi
-`hinfsyn` di default e confrontato a parità di problema le mappe M9/M10. Il
-risultato è quasi equivalente a M9 (`gamma=10.2071036477`) e conserva gli
-stessi fallimenti prestazionali: anche M10 è `PARTIAL`. M11 ha completato la
-campagna finita A0–A5 con cinque start per famiglia e ordine massimo sei:
-A0–A2 non hanno rappresentanti stabili, mentre A3/A4/A5 formano la frontiera
-Pareto con gamma 16.6419/11.6555/10.2477. M11 resta `PARTIAL` perché stabilità
-globale, gamma<1 e tracking falliscono. Il gruppo ha successivamente
-selezionato A5, ordine 6, per la sola analisi M12; questa scelta non promuove
-A5 a controllore conforme a M5.
+M9/M10 usano i nuovi W1/W2 M5 diretti, senza W3. La stabilità interna e
+la ricostruzione sono PASS; gamma=5.677221 e il tracking non raggiungono
+i target. Il cross-coupling passa, senza compensare gli altri FAIL.
+M11 conserva sei famiglie e cinque avvii ciascuna: 15/30 stabili,
+A0–A2 prive di rappresentanti stabili; A3/A4/A5 hanno objective
+8.167144/5.967246/5.708569. Nessuna è conforme. A5 resta il riferimento
+di ordine sei per M12, non un controllore conforme alle specifiche.
 
 M15 implementa in un modello Simulink separato Khinf M10 e Kmu M13 senza
 rigenerarli. Equilibrio, scenari M5, rumore, disturbi, confronti LTI/NL e RAS
@@ -127,7 +119,7 @@ tracciabilità, non conformità prestazionale.
 M12 ha analizzato il controllore A5 congelato con `GuncQ` M4 e pesi M5.
 La decomposizione N–Δ è coerente e la μ manuale conferma `robstab`. Gli esiti
 sono distinti: NS `PASS`, NP `FAIL`, RS `FAIL_CERTIFIED` con margin
-`[0.849720,0.859945]`, RP `FAIL_CERTIFIED` con margin `[0,0]`. Le caselle
+`[0.839830,0.850574]`, RP `FAIL_CERTIFIED` con margin `[0,0]`. Le caselle
 indicano che le verifiche richieste sono state eseguite e documentate, non
 che le proprietà prestazionali siano state soddisfatte. `wcgain` restituisce
 gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
@@ -139,18 +131,16 @@ gain non limitato nell'insieme M4 a causa del limite di stabilità incluso.
 - [x] Verificare ordine e stabilità interna del controllore.
 - [x] Ripetere NS, NP, RS e RP a posteriori.
 - [ ] Diagnosticare eventuali specifiche irrealizzabili.
-- [ ] Ottenere approvazione prima di rilassamenti sostanziali.
-- [ ] Registrare ogni rilassamento nel Decision Log.
+- [x] Ottenere approvazione per la revisione mirata dei pesi.
+- [x] Registrare la revisione corrente nel Decision Log (D-0051).
 - [ ] Se si riduce l'ordine, ripetere tutte le verifiche sul controllore ridotto.
 
-M13 ha eseguito la singola campagna valida con `Display='short'` e cinque
-iterazioni sul problema allora approvato. Il controller restituito è 2×2 di
-ordine 52 ed è nominalmente stabile; l'objective `10.4032233618` resta
-maggiore di uno. Il refactoring non rilancia la sintesi: M14 ripete la pipeline formale M12 sul Kmu congelato e sull'M4 corrente, senza
-riduzione: NS `PASS`, NP `FAIL`, RS `PASS_CERTIFIED` con margin
-`[1.069561,1.212875]` e RP `FAIL_CERTIFIED`. La verifica a posteriori è
-quindi completata, mentre l'eventuale diagnosi globale di irrealizzabilità e
-ogni rilassamento restano aperti.
+M13 è stata rigenerata una sola volta sui pesi definitivamente selezionati,
+con cinque iterazioni. Kmu è 2x2 di ordine 70 e nominalmente stabile;
+objective=6.38492231705. M14 lo verifica senza riduzione: NS PASS,
+NP FAIL, RS FAIL_CERTIFIED con margine [0.774042,0.775697], RP FAIL_CERTIFIED.
+La diagnosi globale di irrealizzabilità resta aperta; il budget limitato
+di ricerca non equivale a una dimostrazione di impossibilità.
 
 ## Validazione e confronto
 
@@ -165,35 +155,24 @@ ogni rilassamento restano aperti.
 - [x] Confrontare LQG, \(H_\infty\) e \(\mu\)-synthesis.
 - [x] Confrontare formalmente \(H_\infty\) e D–K in RS, RP e margini.
 
-M14 confronta l'A5 congelato M12 con Kmu: il margine RS passa da
-`[0.849720,0.859945]` a `[1.069561,1.212875]`, con transizione certificata
-`FAIL_CERTIFIED -> PASS_CERTIFIED`. Entrambi falliscono NP/RP sul target M5;
-il confronto distingue quindi recupero della stabilità robusta e mancata
-performance robusta.
+M14 confronta A5 e Kmu correnti: entrambi falliscono RS/NP/RP.
+Il margine RS di Kmu non migliora quello di A5. L'objective di sintesi
+e la certificazione a posteriori restano due grandezze distinte.
 
-M15 aggiunge la validazione nominale non lineare: Khinf e Kmu restano
-all'equilibrio ma falliscono tracking M5. La RAS Khinf localizza un boundary
-interno con raggio minimo 52.876°, mentre Kmu raggiunge il box in tutte le
-direzioni; le regioni di accordo LTI/NL hanno raggio minimo 4° e 4.75°.
-Queste evidenze non campionano M4 e non trasferiscono la RS lineare M14 al
-modello non lineare.
+M15 verifica le simulazioni nominali non lineari, senza nuovo tuning:
+tracking FAIL per entrambi. Khinf ha RAS empirica con raggio minimo
+44.895 gradi; Kmu raggiunge il box. L'accordo LTI/NL ha raggio minimo
+4.5 e 5 gradi. Il budget RAS è stato corretto a 626 esecuzioni massime,
+derivate dall'algoritmo, senza modificare precisione e convergenza.
 
-M16 usa seed `20260826`, generatore `twister` e una sola sequenza comune di
-40 campioni lineari M4 per M6, Khinf e Kmu. Tutti i campioni sono validi;
-M6 è stabile 38/40, mentre Khinf e Kmu sono stabili 40/40. I Sample 5 e 6 M6
-instabili restano nel dataset e non ricevono metriche prestazionali. Tracking,
-banda diagonale, errore, disturbo, cross-coupling e comando sono quantificati
-con pass rate espliciti: le caselle indicano esecuzione e tracciabilità, non
-conformità ai target. Kmu 40/40 è coerente con la RS M14, ma la Monte Carlo
-non è una certificazione e non fornisce probabilità fisiche. Il confronto è
-paired e privo di score globale; la selezione finale resta fuori da M16.
+M16 conserva seed 20260826 e 40 campioni comuni M4: M6 stabile in 37/40,
+Khinf e Kmu in 40/40. I tre casi M6 instabili restano nel dataset e non
+ricevono metriche prestazionali. La frazione stabile di Kmu non annulla
+RS negativa e non rappresenta una probabilità fisica.
 
-M17 completa il confronto finale senza nuove simulazioni. Le quattro classi
-di evidenza restano separate e la regola gerarchica assegna Kmu a final
-robust controller per la RS M14 certificata e coerente con M16, M6 a nominal
-performance reference per il tracking M8 e Khinf a H-infinity comparator.
-Nessun controllore è dichiarato conforme a tutte le specifiche M5; RP Kmu,
-il caso M6 instabile e l'assenza di certificazione RS M6/Khinf restano limiti espliciti.
+M17 mantiene i criteri e lascia il ruolo robusto finale NON ASSEGNATO.
+M6 resta riferimento nominale e Khinf comparatore. Il gate software è
+PASS, ma lo stato tecnico è PARTIAL per assenza del candidato robusto.
 
 ## Deliverable finali
 
@@ -206,8 +185,8 @@ il caso M6 instabile e l'assenza di certificazione RS M6/Khinf restano limiti es
 - [x] Codice MATLAB e modelli Simulink consegnabili.
 - [x] Presentazione basata sulla relazione e contenuta in 20 minuti.
 
-La revisione tecnica aggiorna i deliverable a una relazione di 63 pagine,
-presentazione di 19 slide e timing stimato 19:00. Le caselle aperte nelle sezioni tecniche
+Il conteggio aggiornato delle pagine è registrato nell'audit LaTeX;
+la presentazione mantiene 19 slide e timing stimato 19:00. Le caselle aperte nelle sezioni tecniche
 rimangono intenzionalmente aperte: la finalizzazione documentale non
 trasforma risultati falliti, parziali o non eseguiti in requisiti soddisfatti.
 

@@ -36,18 +36,17 @@ verifyGreaterThan(testCase, [scales.q; scales.qdot; ...
     scales.delta; scales.thetadot], zeros(4, 1));
 end
 
-function testControlCostUsesEquivalentDirectWeight(testCase)
-% Confronto indipendente con le tre matrici R approvate in precedenza.
+function testControlCostUsesSimpleDirectWeight(testCase)
+% La nuova griglia e un requisito progettuale, non un'equivalenza storica.
 m6 = testCase.TestData.m6;
 verifyEqual(testCase, m6.R, ...
     m6.lqrCandidateTable.ControlWeight(m6.lqrCandidateTable.Selected) * ...
     eye(2), 'AbsTol', 1e-15);
 config = lqg_specs_m6;
-verifyEqual(testCase, config.lqr.candidates.control, [4;8;16]/144, 'AbsTol', 1e-15);
-verifyEqual(testCase, m6.R, eye(2)/9, 'AbsTol', 1e-15);
-% L'archivio didattico precedente e indipendente dalla nuova ricerca.
+verifyEqual(testCase, config.lqr.candidates.control, [0.01;0.05;0.10], 'AbsTol', 1e-15);
+verifyTrue(testCase, ismember(m6.R(1,1),config.lqr.candidates.control));
+% La variazione di R non autorizza modifiche alle covarianze Kalman.
 baseline = load(fullfile(testCase.TestData.root,'results','data','didactic_lqg_calculations.mat'));
-verifyEqual(testCase, m6.K, baseline.K, 'AbsTol', 1e-8);
 verifyEqual(testCase, m6.L, baseline.L, 'AbsTol', 1e-8);
 verifyGreaterThan(testCase, min(eig(m6.R)), 0);
 end

@@ -14,6 +14,27 @@ xActuatorEquilibrium = -Aact \ (Bact * m3.taubar);
 cache = containers.Map('KeyType', 'char', 'ValueType', 'any');
 records = repmat(localEmptyRecord, 0, 1);
 simulationCount = 0;
+% Checkpoint dei soli risultati numerici: evita di ripetere simulazioni
+% completate. Il riuso richiede identita di controllore, pianta e criteri.
+checkpointDirectory = fullfile(projectRoot, 'results', 'tmp', 'm15_ras');
+if ~isfolder(checkpointDirectory), mkdir(checkpointDirectory); end
+checkpointPath = fullfile(checkpointDirectory, controller.id + ".mat");
+sourceIdentity = struct('controller', controller, 'plant', m3, ...
+    'solver', config.solver, 'simulation', config.simulation, 'ras', config.ras);
+if isfile(checkpointPath)
+    checkpoint = load(checkpointPath);
+    if isequaln(checkpoint.sourceIdentity, sourceIdentity)
+        records = checkpoint.records;
+        simulationCount = checkpoint.simulationCount;
+        for recordIndex = 1:numel(records)
+            cached = records(recordIndex);
+            key = sprintf('%.9f,%.9f', cached.Dq1Deg, cached.Dq2Deg);
+            cache(key) = cached;
+        end
+        fprintf('[M15 RAS %s] Riuso di %d punti verificati.\n', ...
+            controller.id, numel(records));
+    end
+end
 coarseDeg = config.ras.coarseGridDeg(:);
 for firstIndex = 1:numel(coarseDeg)
     for secondIndex = 1:numel(coarseDeg)
@@ -25,6 +46,9 @@ angles(end) = [];
 boundaryRadiusDeg = zeros(size(angles));
 boxLimited = false(size(angles));
 for directionIndex = 1:numel(angles)
+    fprintf('[M15 RAS %s] Direzione %d/%d; simulazioni %d/%d.\n', ...
+        controller.id, directionIndex, numel(angles), simulationCount, ...
+        config.ras.maximumSimulations);
     direction = [cos(angles(directionIndex)), sin(angles(directionIndex))];
     maximumRadius = config.ras.searchBoxDeg / max(abs(direction));
     endpoint = localEvaluate(maximumRadius * direction);
@@ -139,12 +163,17 @@ search = struct( ...
             record.Finite = assessment.finite;
             record.Bounded = assessment.bounded;
         catch simulationError
+            % Un errore di budget non e un punto fisicamente divergente.
+            if startsWith(string(simulationError.identifier), "M15RAS:")
+                rethrow(simulationError);
+            end
             record = localEmptyRecord;
             record.Dq1Deg = pointDeg(1); record.Dq2Deg = pointDeg(2);
             record.ErrorIdentifier = string(simulationError.identifier);
         end
         records(end + 1, 1) = record;
         cache(key) = record;
+        save(checkpointPath, 'sourceIdentity', 'records', 'simulationCount');
     end
 end
 
