@@ -469,3 +469,14 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - M5 con finestra di banda 10.8141–13.9133 rad/s, selezione `omegaB=12` rad/s, `W1(0)=20`, `W1(inf)=0.5`, `W2(0)=1/12` e `W2(inf)=0.5`.
 - `Bd` contro differenze finite con errore nullo alla precisione numerica e sottosistema da `u` invariato rispetto a M3.
 - `run_all.m` M5 con 66/66 test top-level, Code Analyzer senza messaggi, dataset e figure rigenerati e nessuna sintesi di controllo.
+
+## 2026-09-17 — Revisione H-infinity isolata
+
+Aggiunta campagna separata M9--M11 con filtro lower bound e unico ampliamento:
+21 candidati, 1 escluso prima della sintesi, 20 confronti mixsyn/hinfsyn.
+Full-order gamma=0.866036; 66 avvii fixed-order, ordine minimo trovato 6,
+objective=0.879311. Tracking 1-DoF ancora FAIL; estensione con prefiltro
+2-DoF conforme ai target temporali rivisti, non alla nuova norma pesata.
+Capitolo 8 e dieci figure aggiornati; baseline integrale conservata.
+Test mirati 7/7 PASS, Code Analyzer senza segnalazioni. Nessuna mu-analysis.
+Resoconto e riproducibilità: docs/RESOCONTO_HINF_TARGETED_RETUNING.md.

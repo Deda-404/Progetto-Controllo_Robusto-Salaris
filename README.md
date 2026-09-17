@@ -149,3 +149,12 @@ powershell -ExecutionPolicy Bypass -File tools/build_m18_latex.ps1
 - Kmu resta di ordine 52.
 
 Prima della consegna devono essere completate le matricole degli autori e la data nel frontespizio.
+# Revisione H-infinity del 17 settembre 2026
+
+Il branch `codex/hinf-targeted-retuning` aggiunge una campagna nominale
+isolata M9--M11: full-order gamma=0.866036 e MIMO ordine 6 objective=0.879311.
+Il tracking 1-DoF resta non conforme. Baseline e pipeline `run_all` sono
+conservate; i nuovi artifact non alimentano automaticamente M12 e successive.
+Esecuzione dedicata e risultati: [resoconto H-infinity](docs/RESOCONTO_HINF_TARGETED_RETUNING.md).
+Solo il Capitolo 8 della relazione integra la revisione; abstract e capitoli
+successivi continuano a descrivere la baseline. Merge riservato al gruppo.

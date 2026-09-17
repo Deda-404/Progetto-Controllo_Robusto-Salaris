@@ -1,5 +1,20 @@
 # Stato del progetto
 
+## Revisione H-infinity isolata — 17 settembre 2026
+
+Branch `codex/hinf-targeted-retuning`, base `cb325f6` (main, PR 30).
+Studio nominale richiesto COMPLETE; conformità complessiva PARTIAL.
+Full-order: NS PASS, NP PASS (gamma=0.866036), M5 temporal FAIL,
+revised temporal FAIL per overshoot. MIMO ordine 6: NP PASS,
+objective=0.879311, minimo ordine trovato in 66 avvii.
+Estensione 2-DoF: target temporali rivisti PASS, M5 FAIL per settling,
+norma pesata della nuova mappa tracking 1.381480 (FAIL).
+7/7 test mirati PASS; nessun nuovo calcolo M12--M18.
+M0--M8, modello fisico, incertezze e artifact H-infinity precedenti congelati.
+I risultati sotto sono storici e non validano i nuovi controllori.
+Resoconto: `docs/RESOCONTO_HINF_TARGETED_RETUNING.md`.
+STOP prima della mu-analysis; prossimo passo: revisione manuale del branch.
+
 ## Revisione corrente — pesi H-infinity, LQR e LQRI (16 settembre 2026)
 
 Branch `codex/direct-weights-hinf-lqr-lqri`, baseline
