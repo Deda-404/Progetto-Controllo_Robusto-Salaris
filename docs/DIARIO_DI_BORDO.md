@@ -2775,3 +2775,14 @@ manuale eliminato. M0–M4 rimangono invariati.
 Resoconto autosufficiente in RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt.
 Pubblicazione del solo branch dedicato, con PR aperta per revisione:
 nessun merge automatico o aggiornamento diretto di main.
+
+## 2026-09-17 — Revisione H-infinity isolata
+
+Aggiunta campagna separata M9--M11 con filtro lower bound e unico ampliamento:
+21 candidati, 1 escluso prima della sintesi, 20 confronti mixsyn/hinfsyn.
+Full-order gamma=0.866036; 66 avvii fixed-order, ordine minimo trovato 6,
+objective=0.879311. Tracking 1-DoF ancora FAIL; estensione con prefiltro
+2-DoF conforme ai target temporali rivisti, non alla nuova norma pesata.
+Capitolo 8 e dieci figure aggiornati; baseline integrale conservata.
+Test mirati 7/7 PASS, Code Analyzer senza segnalazioni. Nessuna mu-analysis.
+Resoconto e riproducibilità: docs/RESOCONTO_HINF_TARGETED_RETUNING.md.

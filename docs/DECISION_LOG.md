@@ -2139,3 +2139,30 @@ esecuzione, non una nuova ricerca di parametri del controllore.
 
 Prima della pubblicazione devono essere mostrati git status, diff stat e
 il resoconto tecnico autosufficiente; nessun merge automatico.
+
+## D-0052 — Retuning nominale H-infinity separato dalla baseline
+
+Data: 2026-09-17. Responsabile: Alessio. Stato: REVISIONE RICHIESTA DAL GRUPPO,
+implementata su branch dedicato; merge e adozione definitiva da controllare.
+
+La richiesta corrente autorizza esclusivamente la revisione H-infinity,
+superando il precedente divieto di ulteriori ricerche in D-0051 per questo
+studio limitato. M0--M8, specifiche generali M5 e modello incerto restano fissi.
+I nuovi pesi non sono scritti in M5 e non sostituiscono gli artifact esistenti.
+Prima fase: 12 profili accoppiati; unico ampliamento: 9 profili. Bound prima
+di ogni sintesi; una coppia esclusa senza solver. Target temporali rivisti
+fissati prima dei risultati: 2 s, 20% overshoot, 20% offset, cross .25.
+Nessun target viene alterato per ottenere PASS.
+
+Si seleziona omegaW1=2, As=.20, Ms=4, ku=.003, omegaU=80, alpha=6:
+gamma full-order .866036. La riduzione della penalizzazione di comando e
+sostanziale, motivata dal conflitto di stabilizzazione con la prima griglia;
+il picco di 13.31 N m è esplicitamente riportato, senza certificato hardware.
+Hinfstruct usa dieci RandomStart oltre a quello nominale per famiglia:
+ordine minimo riuscito 6. Il tracking 1-DoF resta non conforme.
+
+Il prefiltro 2-DoF è un'estensione nominale distinta; migliora il tracking
+ma la nuova norma pesata è 1.381480. Non si trasferisce il PASS del feedback.
+La coppia disturbante lato link M5 è verificata separatamente, mantenendo
+l'equivalenza del problema mixed sensitivity fra mixsyn e hinfsyn.
+Capitolo 9 e catena robusta non modificati: nessuna garanzia storica sui nuovi K.
