@@ -23,6 +23,7 @@
 \newcommand{\artifact}[1]{\texttt{#1}}
 \input{generated/m18_values.tex}
 \input{generated/revision_values.tex}
+\input{generated/hinf_final_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
 \author{Alessio de Dato \\ Valerio Rebechi \\[0.8em]\small Matricole: da completare}
 \date{Data di consegna: da completare}
@@ -32,18 +33,22 @@
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \begin{abstract}
-Il lavoro affronta la modellistica, la sintesi e la validazione di controllori per un manipolatore planare a due gradi di libertà azionato mediante Series Elastic Actuators. La presenza delle molle torsionali separa le coordinate dei link da quelle dei rotori e introduce modi elastici che rendono necessario considerare, oltre alle prestazioni nominali, l'effetto delle incertezze parametriche e della dinamica non modellata degli attuatori. A partire dalle equazioni non lineari sono stati determinati un equilibrio verticale superiore, il modello incrementale locale e una pianta nominale a 14 stati comprendente secondo ordine e ritardo degli attuatori. Le specifiche temporali e frequenziali sono state fissate prima delle sintesi e tradotte in pesi di sensibilità e di comando.
-
-Sono stati studiati un regolatore LQG nominale, una famiglia di controllori $H_\infty$ e un controllore $K_\mu$ ottenuto mediante D--K iteration. Il regolatore LQG raggiunge i target di tracking nominale, mentre l'estensione integrale evidenzia un conflitto non risolto fra tempo di assestamento, sovraelongazione e sforzo di controllo. Le sintesi $H_\infty$ conservano una norma pesata maggiore di uno e risultati temporali non conformi. La verifica indipendente del nuovo controllore $K_\mu$ restituisce Robust Stability \status{\KmuRSStatus} sul modello incerto, con margine [\KmuRSLower,\KmuRSUpper], Nominal Performance \status{\KmuNPStatus} e Robust Performance \status{\KmuRPStatus}. Le simulazioni non lineari e una campagna Monte Carlo su 40 campioni completano il quadro senza sostituire la $\mu$-analysis. Il confronto finale non assegna il ruolo robusto in assenza di RS certificata; M6 resta il riferimento per la prestazione nominale e $K_{\infty}$ il comparatore della sintesi $H_\infty$. La relazione conserva esplicitamente tutti gli esiti negativi e i limiti del modello.
-Un'analisi aggiuntiva di Lyapunov include l'intera dinamica nominale aumentata
-dei tre controllori: una maggiorazione analitica fornisce regioni interne
-sufficienti e conservative, distinte dai livelli pi\`u ampi verificati su
-punti finiti. Queste regioni non certificano il modello non lineare incerto.
-La revisione mirata confronta inoltre LQG e LQRI con Kalman M6 sotto coppie costanti e
-studia una famiglia deterministica $H_\infty$ a tre pesi. Il confronto
-conferma la reiezione statica LQRI, ma non risolve tutti i target M5;
-anche i nuovi candidati $H_\infty$ restano non conformi. Essi sono
-documentati separatamente e non sostituiscono la baseline M9--M16.
+Il progetto studia un manipolatore planare SEA a due giunti, a partire dalle
+equazioni non lineari e da un modello nominale a 14 stati con attuatori.
+Modello fisico, equilibrio, incertezze e specifiche originali restano invariati.
+LQG conserva il riferimento per il tracking nominale. La revisione H-infinity
+verifica il limite inferiore MIMO e confronta una ricerca finita 1-DoF con
+una vera sintesi 2-DoF, che riceve riferimento e posizione e include la coppia
+fisica disturbante lato link. Il candidato nominale raggiunge norma
+\FinalGamma\ senza overshoot, ma fallisce il tempo di assestamento M5 e
+mostra robustezza molto bassa: 0/40 campioni incerti sono stabili.
+La D--K iteration sul medesimo problema produce un nuovo Kmu di ordine
+\FinalMuOrder. La post-analisi indipendente certifica RS e RP sul modello
+lineare incerto M4, con margini circa 1.80 e 1.68; tutti i 40 campioni sono
+stabili. Simulazioni non lineari, rumore, regione di attrazione e Lyapunov
+quantificano ulteriori limiti: nessun risultato è trasferito dai precedenti
+controllori. Kmu assume il ruolo robusto, mantenendo espliciti i target M5
+non soddisfatti e l'assenza di validazione hardware.
 \end{abstract}
 \tableofcontents
 \listoffigures

@@ -1,45 +1,28 @@
 \chapter{Tracciabilità dei risultati}
-I valori riportati nella relazione non sono trascritti manualmente dai grafici. La generazione M18 carica i risultati validati delle milestone M1--M17, verifica la presenza dei campi richiesti e produce le macro in \artifact{report/generated/m18\_values.tex}. Ogni macro conserva l'associazione con milestone, file dati e campo MATLAB da cui proviene.
+La catena corrente H-infinity è raccolta in
+\path{results/data/hinf_final_coherent/}. La relazione legge le quantità
+esportate da MATLAB con \path{export_hinf_final_results.m}; il successivo
+\path{report/build_hinf_final_text.py} formatta testo e tabelle senza
+calcolare controllori, norme, poli o metriche di controllo.
 
-Le tabelle sono costruite dallo stesso insieme di evidenze mediante il
-generatore storico M18 e il nuovo
-\path{build_technical_revision_tables.m}. Quest'ultimo carica i calcoli
-didattici LQG/$H_\infty$, i tre certificati interni nominali e le traiettorie
-di controllo, producendo matrici, tabelle e
-\path{report/generated/revision_values.tex}. La provenienza delle nuove
-macro \`e registrata in \path{report/generated/revision_numeric_audit.csv}.
-Le tabelle storiche rimangono prodotte dal
-generatore MATLAB della fase M18, collocato nella cartella
-\path{analysis/finalization}. Questo meccanismo riduce il rischio che relazione,
-presentazione e dataset mostrino numeri differenti. La revisione editoriale può
-modificare formulazioni, ordine degli argomenti e didascalie, ma le quantità
-tecniche restano legate ai risultati numerici verificati.
-
-Gli asset selezionati per i deliverable sono elencati nel manifest seguente.
-Il confronto LQRI e la campagna a tre pesi sono conservati in
-\path{m7_disturbance_comparison.mat} e \path{hinf_weight_revision.mat},
-con esportazioni CSV. Il secondo archivio contiene i 12 candidati fisici
-e la baseline separata; non aggiunge campioni M4 alla campagna M16.
-\path{plot_lqri_revision.m} e \path{plot_hinf_revision.m} producono
-rispettivamente \path{lqri_revision_results.tex} e \path{hinf_revision_results.tex}
-direttamente da questi dati, senza ripetere le sintesi. M18 censisce
-23 sorgenti, 20 file tabellari e 32 asset. Il confronto della produzione
-a due pesi deriva inoltre da \path{build_direct_weights_summary.m} e
-\path{direct_weights_summary.mat}; lo schema Lower LFT è verificato
-contro le dimensioni e le partizioni dell'artifact M10.
-Ogni file \`e copiato da un risultato validato e conserva nome, milestone e
-destinazione. L'uso effettivo nelle slide \`e ricavato dal sorgente Beamer;
-il manifest comprende anche l'asset empirico M8 mantenuto per consultazione.
-La Tabella~\ref{tab:manifest-figure} riunisce l'inventario su una pagina
-dedicata, mantenendo leggibili tutti i nomi dei file.
-\input{generated/figure_manifest.tex}
-
-La matrice completa requisito--milestone--risultato--sezione è mantenuta nel
-documento \artifact{M18\_REQUIREMENTS\_TRACEABILITY.md} della cartella
-\path{docs}. L'audit serializzato è \artifact{m18\_final\_deliverable\_audit.mat}
-in \path{results/data}. Gli stati \status{FAIL}, \status{PARTIAL} e
-\status{NOT RUN} non vengono alterati dal completamento documentale: indicano
-rispettivamente una prestazione non raggiunta, una fase conclusa con obiettivi
-tecnici non soddisfatti o un'attività deliberatamente non eseguita.
-
-Questa tracciabilità non sostituisce il giudizio ingegneristico. Serve a rendere verificabile dove nasce ogni affermazione quantitativa e a impedire che una correzione editoriale diventi involontariamente una modifica dei risultati.
+\begin{longtable}{p{.40\textwidth}p{.52\textwidth}}\toprule
+Dataset corrente & Evidenza\\\midrule
+\path{nominal_study.mat} & 21 profili 1-DoF e tre veri problemi 2-DoF\\
+\path{selected_full_order.mat} & Identità del comparatore H-infinity\\
+\path{fixed_study.mat} & 66 avvii con obiettivi e verifiche indipendenti\\
+\path{m12.mat} & N--Delta e margini del comparatore selezionato\\
+\path{m13.mat}, \path{m14.mat} & D--K corrente e post-analisi indipendente\\
+\path{nonlinear_study.mat}, \path{noise_study.mat} & Equilibrio, gradini, disturbi e rumore\\
+\path{ras_study.mat}, \path{lyapunov_study.mat} & Sezioni empiriche e verifica nominale\\
+\path{monte_carlo_study.mat} & Sequenza paired e nuove chiusure\\
+\path{summary.json} & Esportazione delle quantità per M17/M18\\
+\path{hinf_final_traceability.json} & Provenienza delle macro della relazione\\\bottomrule
+\end{longtable}
+I file dati anteriori rimangono nei percorsi originali. Testo e PDF
+precedenti sono inoltre conservati in \path{report/archive/before_final_coherent/}.
+Le prime prove con tolleranza solver predefinita sono conservate nella
+sottodirectory \path{numerical_diagnostics_default_solver/}; non costituiscono
+la selezione corrente. M0--M8 e i relativi sorgenti della relazione restano
+congelati. Le macro storiche necessarie a quei capitoli non sono usate per
+presentare come attuali risultati dei vecchi controllori robusti.
+Il resoconto di revisione raccoglie errori numerici, test e limiti residui.

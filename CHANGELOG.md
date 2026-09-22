@@ -490,3 +490,5 @@ post-analisi RS[1.7998,1.8044],RP[1.6772,1.6807],40/40 stabili.
 NL/rumore/RAS/Lyapunov ricalcolati in MATLAB. Hinf Lyapunov e intervallo RP numerico
 non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
+
+Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.

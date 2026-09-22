@@ -1,256 +1,144 @@
-\chapter{Controllo $H_\infty$: baseline e revisione controllata}
+\chapter{Dalla sensibilità mista al controllo a due gradi di libertà}
 \label{cap:hinf}
-\section{Obiettivo, perimetro e baseline conservata}
-Questa revisione riguarda esclusivamente M9--M11. Pianta M3, modello
-incerto M4, specifiche generali M5, LQG/LQRI, Kalman e RAS M6--M8
-rimangono congelati. Tutti i precedenti artifact M9/M10/M11 sono conservati
-integralmente; i nuovi risultati sono in una directory separata.
-Il Capitolo 9 e i successivi descrivono la catena storica e non certificano
-i controllori qui introdotti. Anche il riepilogo generale precedente
-resta riferito alla baseline, in attesa della revisione successiva autorizzata.
+\section{Il problema iniziale}
+La stabilizzazione del manipolatore richiede di controllare due poli instabili,
+a circa 4.04 e 7.21 rad/s, attraverso attuatori con frequenza naturale 40 rad/s.
+I modi elastici, intorno a 70--79 rad/s, limitano quanto sia ragionevole aumentare
+il guadagno del feedback. La norma pesata e la risposta a un gradino descrivono
+aspetti diversi: ottenere una norma inferiore a uno non basta a garantire un
+tracking soddisfacente.
 
-La traccia consente semplificazioni motivate delle prestazioni.
-I due gradi di liberta' indicano i due giunti del manipolatore, non impongono
-un'architettura di controllo a due gradi di liberta'. La sintesi principale
-resta $u=K(r-q)$, nelle coordinate fisiche M3: $u$ in N m, $q$ in rad.
-Per $G:u\mapsto q$ definiamo
+La configurazione storica aveva norma 5.677221. La revisione precedente,
+con i parametri\[ (\omega_{W1},A_s,M_s,k_u,\omega_U)=(2,0.20,4,0.003,80),\]
+aveva ottenuto 0.866036, ma conservava una sovraelongazione superiore al 100\%.
+Il controllore strutturato di ordine 6 raggiungeva circa 0.879227 con
+sovraelongazione ancora maggiore. Questi risultati sono conservati integralmente;
+la presente revisione mantiene invariati modello fisico, attuatori, incertezze
+e specifiche M5, e propaga i nuovi controllori fino alle verifiche finali.
+
+\section{Diagnosi e limite inferiore}
+Per la struttura $u=K(r-q)$ valgono $S+GKS=I$ e
 \[
-S=(I+GK)^{-1},\qquad T=I-S,\qquad KS=K(I+GK)^{-1}.
+ W_1=\frac{s/M_s+\omega_{W1}}{s+\omega_{W1}A_s}I_2,\qquad
+ W_2=k_u\frac{s+\omega_U}{s/6+\omega_U}I_2.
 \]
-La norma $H_\infty$ e' il massimo valore singolare sulla frequenza per una
-mappa stabile; essa limita il guadagno energetico per ingressi $L_2$.
-Un gradino permanente non appartiene a $L_2$: norma pesata, overshoot e
-picco istantaneo del comando devono essere verificati separatamente.
-
-La prima configurazione storica aveva $\omega_{W1}=12$, $A_s=0.05$,
-$M_s=2$, $k_u=1/12$, $\omega_U=30$, con $\gamma\simeq10.207$.
-La baseline corrente, successiva alla prima revisione, usa
-$(8,0.15,2.5,0.05,60)$ e $\gamma\simeq5.677221$; il suo M11 A5
-aveva objective circa 5.708569. Entrambi gli esiti negativi rimangono
-tracciati. Il testo integrale del precedente Capitolo 8 e' archiviato in
-\path{report/archive/hinf_before_retuning/08_hinf.tex}.
-
-\section{Pesi e target separati dalle specifiche M5}
-Si mantengono due filtri scalari replicati sui giunti, senza $W_3$:
+A frequenza fissata poniamo $X=KS$, $a=|W_{1,s}|$ e $b=|W_{2,s}|>0$.
+Per ogni vettore unitario $v$, minimizzare
+$a^2\|v-Gx\|^2+b^2\|x\|^2$ rispetto a $x$ fornisce
 \[
-W_1=\frac{s/M_s+\omega_{W1}}{s+\omega_{W1}A_s}I_2,\qquad
-W_2=k_u\frac{s+\omega_U}{s/6+\omega_U}I_2.
+ H=a^2I-a^4G(a^2G^*G+b^2I)^{-1}G^*,\qquad
+ \left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_2
+ \geq\sqrt{\lambda_{\max}(H)}
+ =\frac{ab}{\sqrt{b^2+a^2\sigma_{\min}(G)^2}}.
 \]
-Con $\|[W_1S;W_2KS]\|_\infty<1$ valgono gli inviluppi
-$\bar\sigma(S)<1/|W_{1,siso}|$ e $\bar\sigma(KS)<1/|W_{2,siso}|$.
-Il parametro $A_s$ limita la sensitivity DC nel problema pesato;
-non sostituisce automaticamente la specifica temporale originale.
+La direzione critica è il vettore singolare sinistro associato al più piccolo
+valore singolare di $G$. Non occorre invertire $G$: anche per rango ridotto
+la formula resta valida e tende ad $a$ quando $\sigma_{\min}$ tende a zero.
+Il rilassamento è puntuale in frequenza; non costruisce un controllore causale
+stabilizzante. Il supremo continuo è un limite inferiore della norma cercata;
+il massimo su una griglia finita può soltanto sottostimarlo. Sette test,
+comprendenti casi SISO, diagonale, MIMO e quasi singolare, confermano la formula.
+Pertanto il precedente uso di $\sigma_{\min}$ era corretto.
 
-Prima della campagna si fissano target temporali H-infinity rivisti:
-$t_s\le2$ s, overshoot $\le20\%$, errore statico relativo $\le20\%$,
-cross-coupling $\le0.25$. M5 conserva rispettivamente 0.8 s, 10\%, 5\%
-e il target preliminare 0.25. Questi rilassamenti sono decisioni progettuali,
-non equivalenze fra specifiche. Picco e RMS del comando sono misurati:
-la scala storica 12 N m non e' una saturazione certificata.
+\section{Revisione moderata della sintesi a un grado di libertà}
+Sono stati dichiarati 21 profili prima delle sintesi, includendo penalizzazioni
+$k_u=0.005,0.01,0.02$, frequenze $\omega_{W1}=3,4$ e $M_s=3$.
+Non è stato esplorato l'intero prodotto cartesiano. Ogni caso confronta
+\texttt{mixsyn}, \texttt{hinfsyn}, pianta generalizzata, \texttt{augw}, LFT e
+norma dello stack ricostruito. La stabilità è verificata sulla realizzazione
+completa, senza \texttt{minreal}. La tolleranza relativa dei due solver è
+$10^{-4}$: questo spiega la piccola differenza fra la nuova riproduzione della
+baseline e il valore 0.866036 ottenuto con la tolleranza predefinita.
 
-Il nuovo peso selezionato ha $W_1(0)=5$, $W_1(\infty)=0.25$,
-polo a 0.4 e zero a 8 rad/s. Il crossover del peso e' circa 2.024 rad/s.
-$W_2$ passa da 0.003 a 0.018, con zero a 80 e polo a 480 rad/s.
-L'inviluppo del comando passa quindi da circa 333.3 a 55.56 nelle
-coordinate SI adottate. Non e' un limite di coppia costante in N m.
+Fra i casi nominalmente stabili con norma inferiore a uno si confrontano,
+nell'ordine, overshoot, errore statico, assestamento, accoppiamento e comando.
+Il migliore 1-DoF usa $(2,0.15,3,0.003,80)$: resta tuttavia una risposta
+fortemente sovraelongata. Il piccolo $k_u$ non è una scelta globalmente ottima;
+la riduzione della penalizzazione del comando è parte del compromesso studiato.
 
-\section{Pianta generalizzata ed equivalenza dei solver}
-La sintesi M9 rivista usa \texttt{mixsyn(G,W1,W2,[])}. M10 costruisce
-indipendentemente con \texttt{connect/sumblk}
+\section{Una vera sintesi a due gradi di libertà}
+Il precedente command-shaping era $F=T(0)^{-1}(2/(s+2))^2I$,
+con legge $u=K(Fr-q)$. Portava l'overshoot a circa 1.76\% e
+l'assestamento a 1.784 s, ma la norma della nuova mappa di tracking era
+1.38148. Rimane un confronto storico, distinto dalla sintesi seguente.
+
+Si sintetizzano simultaneamente i due rami del controllore:
 \[
-\begin{bmatrix}z_1\\z_2\\e\end{bmatrix}
-=\underbrace{\begin{bmatrix}W_1&-W_1G\\0&W_2\\I&-G\end{bmatrix}}_P
-\begin{bmatrix}r\\u\end{bmatrix},\qquad e=r-q.
+ u=K_r r+K_y q,\qquad y_K=\begin{bmatrix}r\\q\end{bmatrix},\qquad
+ w=\begin{bmatrix}r\\d\end{bmatrix}.
 \]
-Si applica \texttt{hinfsyn(P,2,2)} alla pianta $6\times4$. La lower LFT
-$F_\ell(P,K)$ deve coincidere con $[W_1S;W_2KS]$.
-Si confrontano $P$ e \texttt{augw}, la mappa ricostruita e la LFT per
-lo stesso controllore, e le norme restituite dai due solver.
-Due soluzioni ottime non devono necessariamente avere coefficienti identici.
-La stabilita' interna si verifica sulla matrice completa a 32 stati
-plant--controller, senza cancellazioni mediante \texttt{minreal}.
-
-\section{Diagnosi e rilassamento guidato}
-\subsection{Lower bound prima di ogni sintesi}
-Ponendo $a=|W_{1,siso}|$, $b=|W_{2,siso}|$ e
-$g=\underline\sigma(G)$, l'identita' $S+GKS=I$ implica
+Il segno di $K_y$ deriva dall'interconnessione. I due rami condividono gli
+stati del controllore. La coppia $d$ entra nella meccanica attraverso
+$B_{d,\mathrm{Full}}$ di M5; non è un disturbo artificiale di posizione.
+Si usano i pesi del migliore 1-DoF e
 \[
-\gamma\ge\sup_\omega
-\frac{a(\omega)b(\omega)}{\sqrt{b(\omega)^2+a(\omega)^2g(\omega)^2}}.
+ M_o=\frac{\omega_M^2}{s^2+2\omega_Ms+\omega_M^2}I_2,\qquad
+ z=\begin{bmatrix}W_e(q-M_or)\\W_u u\end{bmatrix}.
 \]
-Il limite deriva dal minimo rispetto al comando complesso libero $v$
-di $a^2|1-gv|^2+b^2|v|^2$. Non impone causalita' o stabilita':
-e' necessario, non sufficiente. Il massimo campionato su 2401 frequenze
-fra $10^{-4}$ e $10^4$ rad/s e' ancora un lower bound: un valore inferiore
-a uno non prova fattibilita', un valore maggiore o uguale a uno esclude
-il candidato. Tutti i parametri, il massimo e la frequenza critica sono salvati.
+La famiglia $\omega_M=2,3,4$ rad/s, con smorzamento critico, propone risposte
+monotone a frequenze inferiori alla dinamica degli attuatori e ai modi elastici.
+La banda del riferimento non coincide con quella necessaria alla stabilizzazione.
+Non si introduce $W_3$. Riferimenti in rad e disturbi in N m mantengono la
+convenzione numerica SI dichiarata: non si interpreta il diverso valore di
+norma rispetto al problema 1-DoF come un rapporto diretto di miglioramento.
 
-Il valore storico circa 1.645 apparteneva ai pesi iniziali con
-$\omega_{W1}=12$. Per la baseline corrente il limite e' 1.044723
-a 6.166 rad/s, ancora incompatibile con $\gamma<1$.
-Il nuovo candidato ha limite 0.257005 a 24.927 rad/s.
+La pianta costruita con \texttt{connect} e \texttt{sumblk} ha dimensione
+$8\times6$, con quattro misure e due comandi. La mappa verificata è
+\[
+ T_{zw}=\begin{bmatrix}
+ W_e(T_{qr}-M_o)&W_eT_{qd}\\W_uT_{ur}&W_uT_{ud}
+ \end{bmatrix}.
+\]
+La misura diretta del riferimento rende necessaria attenzione alla
+regolarizzazione del solver: norma e stabilità sono quindi ricontrollate
+sulla pianta originale. La norma propria del candidato selezionato,
+$\omega_M=4$, è \FinalGamma, con ordine \FinalOrder.
 
-\subsection{Campagna finita e motivazione fisica}
-La pianta presenta poli instabili a circa 4.04 e 7.21 rad/s; i primi
-modi elastici sono a circa 69.95 e 79.40 rad/s. Gli attuatori restano
-a $\omega_n=40$ rad/s, $\zeta=0.8$, ritardo 15 ms, Pad\'e di ordine uno,
-con zero nel semipiano destro a 133.33 rad/s.
-La prima fase incrocia quattro profili $(\omega_{W1},A_s,M_s)$:
-$(4,.20,4)$, $(5,.15,3)$, $(6,.10,3)$, $(8,.08,2.5)$, con tre
-profili $(k_u,\omega_U)$: $(.03,80)$, $(.04,60)$, $(.05,50)$.
-Si tratta di 12 casi motivati, non dell'intero prodotto cartesiano
-dei singoli intervalli. Uno viene escluso dal bound; i restanti 11
-producono $\gamma>1$ (il migliore circa 3.245).
-
-Si attiva una sola estensione: $\omega_{W1}\in\{2,3,4\}$,
-$A_s=.20$, $M_s=4$, $k_u\in\{.003,.005,.01\}$, $\omega_U=80$.
-La transizione di W1 scende per separare il tracking lento dall'azione
-rapida necessaria alla stabilizzazione; non si assume che la banda
-del loop possa essere inferiore al polo instabile.
-La penalizzazione del comando viene ridotta sensibilmente per lasciare
-autorita' stabilizzante. Lo zero a 80 rad/s e' pari a due volte
-$\omega_n$ e vicino ai modi elastici: questo spostamento rilassa
-il comando in quella regione, non certifica protezione delle risonanze.
-Il ritardo e la meccanica non vengono modificati. Il picco nominale
-misurato di 13.31 N m esplicita il prezzo attuativo; fattibilita' hardware
-e robustezza non sono dimostrate da questa sintesi nominale.
-Non vengono aggiunti altri tentativi dopo i nove casi dell'estensione.
-\input{generated/hinf_targeted_revision/search.tex}
-
-\section{Full-order e verifiche temporali}
-Un solo candidato, ID 13, raggiunge $\gamma<1$: entrambi i solver
-restituiscono $\gamma=0.8660359345$, ordine 18. La differenza relativa
-fra i gamma e' $6.43\,10^{-14}$; l'errore massimo in frequenza fra
-lower LFT e stack ricostruito e' $3.68\,10^{-13}$.
-La massima parte reale dei poli interni e' circa $-0.683829$.
-Le norme dei canali sono circa 0.86530 per $W_1S$ e 0.83629 per $W_2KS$;
-la norma dello stack non e' il massimo delle due norme separate.
-
-I gradini sono separati, di 5 gradi, per 12 s con passo 2 ms.
-Il settling e' l'ultimo ingresso definitivo nella banda del 2\%
-dell'ampiezza richiesta intorno al valore finale calcolato con DC gain;
-l'offset dal riferimento viene misurato separatamente.
-L'overshoot e' riferito all'ampiezza richiesta, non al valore finale.
-Il cross-coupling e' il picco del giunto non eccitato diviso per il picco
-del giunto eccitato. L'RMS aggrega entrambi gli attuatori e l'intero orizzonte.
-Queste definizioni rimangono fisse per tutti i confronti.
-\input{generated/hinf_targeted_revision/tracking.tex}
 \begin{table}[htbp]\centering\small
-\begin{tabular}{lcccc}\toprule
-Configurazione & NS & NP pesata & Tempo M5 & Tempo rivisto\\\midrule
-Baseline 1-DoF & PASS & FAIL & FAIL & FAIL\\
-Nuovo full-order 1-DoF & PASS & PASS & FAIL & FAIL\\
-Nuovo MIMO ordine 6 & PASS & PASS & FAIL & FAIL\\
-Estensione 2-DoF & PASS & FAIL$^*$ & FAIL & PASS\\\bottomrule
-\end{tabular}
-\caption{Classificazioni separate. $^*$Per il tracking 2-DoF si misura una nuova
-mappa; il feedback conserva il gamma 1-DoF, senza trasferirlo al tracking.}
-\end{table}
-Il full-order 1-DoF viola tutti e tre i target M5 di settling, overshoot
-ed errore statico. Nel set rivisto viola l'overshoot, fino al 130.12\%:
-la revisione risolve la fattibilita' nominale pesata, non il tracking 1-DoF.
+\resizebox{\textwidth}{!}{\input{generated/hinf_final_tracking.tex}}
+\caption{Massimi sui due gradini separati da $5^\circ$. $T_s$ in s,
+errori e cross adimensionali, comandi in N m. RMS su 12 s.
+L'assestamento usa una fascia del 2\% dell'ampiezza intorno al valore finale;
+l'errore statico è verificato separatamente.}\end{table}
 
-\section{Fixed-order: minimo ordine trovato}
-Solo dopo il PASS full-order vengono provati statico MIMO, PI
-decentralizzato, PID con filtro derivativo e MIMO dinamici di ordine 2, 4, 6.
-Ogni famiglia usa \texttt{RandomStart=10}, cioe' dieci avvii casuali
-oltre a quello nominale: 66 tentativi totali. I seed sono 20260917--20260922,
-con 300 iterazioni massime per avvio e nessun incremento adattativo.
-Sono salvati objective, blocchi sintonizzati, stabilita', norme ricostruite
-e metriche di tutti gli avvii. Il guadagno statico e il PI non forniscono
-soluzioni stabili trovate; questo non e' un certificato di impossibilita'.
-\input{generated/hinf_targeted_revision/fixed.tex}
-L'ordine minimo riuscito nella campagna e' 6: objective 0.879311348,
-norma verificata 0.879227202 e gap circa 1.523\% dal full-order.
-La piccola differenza objective/norma e' numerica, verificata entro
-la tolleranza 0.5\%. Il risultato non dimostra l'ottimalita' globale
-del minimo ordine: \texttt{hinfstruct} e' una ricerca locale.
-L'ordine 8 non viene attivato perche' l'ordine 6 raggiunge gia' il target.
+Il candidato 2-DoF elimina l'overshoot nominale e contiene il comando sotto
+1 N m nei due gradini. Rimane $T_s=1.46$ s contro il requisito M5 di 0.8 s:
+M5 è \status{FAIL}. I target rivisti sono soltanto una diagnosi separata.
+La scala di 12 N m rimane una normalizzazione, non una saturazione hardware.
 
-\section{Disturbo fisico e studio 2-DoF separato}
-La verifica applica una coppia di 0.5 N m separatamente a ciascun link,
-usando esattamente $B_d$ di M5. Le mappe sono $q_d=SG_d d$ e
-$u_d=-KSG_d d$, ricostruite sulla stessa matrice aumentata.
-Il confronto indipendente con $SG_d$ e' incluso nei test.
-I picchi di posizione sono circa 0.0690 e 0.2430 rad; quelli di comando
-1.046 e 1.162 N m. Non viene dichiarata una reiezione conforme senza
-un relativo target. Il disturbo resta nella verifica separata:
-aggiungerlo come ulteriore ingresso penalizzato cambierebbe l'obiettivo
-e impedirebbe il confronto diretto con la mixed sensitivity standard.
-Non e' sostituito da un disturbo artificiale di posizione.
+\section{Ordine fissato e scelta del comparatore nominale}
+Sul problema selezionato si eseguono undici partenze per famiglia
+(una iniziale e dieci casuali), con seed fissati. PI e PID sono strutture
+2-DoF con ingressi riferimento/misura, non concatenazioni di due
+integratori indipendenti. Le strutture MIMO condividono gli stati fra i rami.
+\begin{table}[htbp]\centering
+\input{generated/hinf_final_fixed.tex}
+\caption{Campagna strutturata sul medesimo problema 2-DoF. Gli avvii falliti
+restano inclusi.}\end{table}
+L'ordine minimo osservato con NP positiva è \FinalMinOrder, con norma circa
+0.682190; non è un minimo globale. Il migliore ordine 2 torna a mostrare
+overshoot di circa 22.8\% e cross di circa 0.386. L'ordine 8 non è necessario
+per trovare una soluzione con norma inferiore a uno. Il full-order rimane
+il comparatore H-infinity nominale analizzato nel capitolo successivo.
+La scelta non anticipa una garanzia robusta: il confronto con $K_\mu$ sarà decisivo.
 
-Come estensione didattica si aggiunge un prefiltro stabile, senza
-rifare la sintesi o imporre la struttura dei colleghi:
-\[
-M_o(s)=\left(\frac{2}{s+2}\right)^2 I_2,\quad
-F(s)=T(0)^{-1}M_o(s),\quad
-u=K(F r-q)=K_r r-K_y q.
-\]
-Qui $K_y=K$, $K_r=KF$. La frequenza 2 rad/s deriva dal corner W1
-selezionato; $M_o$ e' diagonale, mentre la matrice statica $T(0)^{-1}$
-compensa il guadagno nominale e l'accoppiamento a regime.
-Non si inverte dinamicamente la pianta e non si cancellano zeri instabili.
-La realizzazione condivide gli stati di K e aggiunge quattro stati stabili
-di prefiltro (ordine complessivo 22); non duplica due implementazioni di K.
-La stabilita' interna resta verificata e la mappa dal disturbo non cambia.
-
-Questa e' una estensione di command shaping, non una nuova sintesi
-$H_\infty$ 2-DoF ottima o un requisito imposto dalla traccia.
-Gli esempi del corso motivano la sintesi 1-DoF; il prefiltro viene
-derivato autonomamente dalle mappe gia' validate. Il confronto metodologico
-con il riferimento Drive e' successivo alla realizzazione e non ne
-adotta valori, pesi, disturbi o controllori.
-Il tracking ha errore DC nominale nullo, overshoot massimo 1.763\%
-e settling massimo 1.784 s: PASS sui target temporali rivisti, ma
-FAIL su quello originale di 0.8 s. Con gli stessi pesi, tuttavia,
-\[
-\left\|\begin{bmatrix}W_1(I-TF)\\W_2KSF\end{bmatrix}\right\|_\infty
-=1.381480>1.
-\]
-Il feedback conserva gamma 0.866036; tale valore non e' il gamma della
-nuova mappa di tracking. Miglioramento temporale e conformita' pesata
-restano giudizi distinti. La norma di $TF-M_o$ e' circa 0.2920.
-
-\section{Figure didattiche e riproducibilita'}
+\section{Risposte e comportamento in frequenza}
 \begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/01_W1.png}
-\caption{Peso W1 e inverso: accuratezza e rilassamento in frequenza.}\end{figure}
+\includegraphics[width=.48\textwidth]{figures/hinf_final/weights_error.png}
+\includegraphics[width=.48\textwidth]{figures/hinf_final/weights_control.png}
+\includegraphics[width=.48\textwidth]{figures/hinf_final/sensitivity.png}
+\includegraphics[width=.48\textwidth]{figures/hinf_final/control_sensitivity.png}
+\includegraphics[width=.7\textwidth]{figures/hinf_final/weighted.png}
+\caption{Pesi e inversi, sensibilità del solo ramo feedback e canali pesati
+2-DoF. In quest'ultimo problema $S$ e $KS$ sono diagnostiche del feedback;
+le prestazioni seguono la mappa $T_{zw}$ completa.}\end{figure}
 \begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/02_W2.png}
-\caption{Peso W2 e inverso: penalizzazione del comando nelle coordinate SI.}\end{figure}
+\includegraphics[width=.9\textwidth,height=.24\textheight,keepaspectratio]{figures/hinf_final/tracking_1dof.png}
+\includegraphics[width=.9\textwidth,height=.24\textheight,keepaspectratio]{figures/hinf_final/tracking_2dof.png}
+\includegraphics[width=.9\textwidth,height=.24\textheight,keepaspectratio]{figures/hinf_final/command.png}
+\caption{Tracking della baseline riprodotta, vero 2-DoF e relativo comando.}\end{figure}
 \begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/03_S.png}
-\caption{Sensitivity rispetto al nuovo inviluppo.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/04_KS.png}
-\caption{Mappa del comando rispetto al nuovo inviluppo.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/05_weighted.png}
-\caption{Canali pesati e livello uno.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/06_tracking.png}
-\caption{Due gradini separati da 5 gradi: il PASS pesato non elimina l'overshoot.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/07_control.png}
-\caption{Coppie richieste nei medesimi esperimenti.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/08_fixed_order.png}
-\caption{Frontiera ordine--objective; vengono conservati gli esiti negativi.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/09_2dof.png}
-\caption{Confronto 1-DoF/2-DoF sulla stessa pianta e sugli stessi riferimenti.}\end{figure}
-\begin{figure}[p]\centering
-\includegraphics[width=0.86\textwidth]{figures/hinf_targeted_revision/10_link_disturbance.png}
-\caption{Verifica fisica con coppie disturbanti lato link di 0.5 N m.}\end{figure}
-
-Gli script dedicati \path{run_hinf_revision},
-\path{run_hinf_revision_fixed}, \path{extend_hinf_revision_2dof}
-ed \path{export_hinf_revision} leggono M3/M5 congelati e scrivono
-soltanto i nuovi artifact. I checkpoint evitano di ripetere sintesi
-gia' eseguite. Il comando generale \texttt{run\_all} rimane riferito
-alla pipeline storica e non e' stato eseguito in questa revisione.
-I sette test mirati verificano identita', stabilita' interna, bound,
-66 avvii, metriche e separazione dei criteri. La valutazione e' nominale
-lineare: nessuna RAS o garanzia robusta viene trasferita ai nuovi K.
-La revisione si arresta qui: nessuna nuova $\mu$-analysis o $\mu$-synthesis.
-\clearpage
+\includegraphics[width=.9\textwidth]{figures/hinf_final/disturbance.png}
+\includegraphics[width=.7\textwidth]{figures/hinf_final/fixed_order.png}
+\caption{Risposta alla coppia fisica di 0.5 N m e norme verificate degli
+avvii strutturati stabili.}\end{figure}
