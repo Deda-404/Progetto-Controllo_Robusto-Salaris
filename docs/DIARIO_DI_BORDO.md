@@ -2786,3 +2786,15 @@ objective=0.879311. Tracking 1-DoF ancora FAIL; estensione con prefiltro
 Capitolo 8 e dieci figure aggiornati; baseline integrale conservata.
 Test mirati 7/7 PASS, Code Analyzer senza segnalazioni. Nessuna mu-analysis.
 Resoconto e riproducibilità: docs/RESOCONTO_HINF_TARGETED_RETUNING.md.
+
+## 2026-09-22 — Catena H-infinity 2-DoF coerente
+
+Base693e316. Lower bound sigma_min confermato (7 test);21 profili1-DoF,3 veri2-DoF,
+66 avvii hinfstruct. Hinf selezionato22stati,norma.04746,tracking migliore ma RS.0181,
+0/40 MonteCarlo e forte amplificazione del rumore. D-K corrente produce Kmu78stati;
+post-analisi RS[1.7998,1.8044],RP[1.6772,1.6807],40/40 stabili.
+NL/rumore/RAS/Lyapunov ricalcolati in MATLAB. Hinf Lyapunov e intervallo RP numerico
+non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
+Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
+
+Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.

@@ -1,292 +1,74 @@
 \chapter{Validazione non lineare nominale}
-\section{Perché la verifica non lineare è necessaria}
-Le sintesi sono sviluppate sul modello incrementale attorno all'equilibrio M2. La loro stabilità locale non garantisce che le stesse prestazioni si mantengano quando entrano in gioco la dipendenza configurazionale di $M(q)$, i termini di Coriolis, la gravità completa e la deformazione elastica fuori dal punto di linearizzazione. M8 e M15 verificano quindi i controllori congelati sul modello non lineare nominale. L'obiettivo non è costruire un nuovo progetto, ma controllare se l'implementazione e le conclusioni lineari restino plausibili nel dominio esplorato.
+\section{Equazioni e scenari}
+La nuova catena integra direttamente in MATLAB le equazioni SEA già usate
+nel modello Simulink storico. Meccanica, attuatori, equilibrio e parametri
+rimangono invariati. La legge implementata è
+\[
+ \delta u=C_Kx_K+D_K[r;\delta q],\qquad
+ \dot x_K=A_Kx_K+B_K[r;\delta q],\qquad u=\bar\tau+\delta u.
+\]
+Si usa \texttt{ode23t}, con tolleranze relativa $10^{-5}$ e assoluta $10^{-7}$,
+passo massimo 0.005 s e uscita ogni 0.002 s. Il nuovo calcolo non viene
+presentato come un'esecuzione del modello Simulink precedente, che implementa
+una diversa interfaccia del controllore. Il confronto locale con la mappa
+lineare è verificato automaticamente per entrambi i nuovi controllori.
 
-La pianta Simulink integra le equazioni meccaniche dei link e dei rotori, la dinamica attuativa e il ritardo nominale. Le coppie assolute sono ricostruite attorno all'equilibrio. Per i controllori robusti si usa
-\[
-e=r-q,\qquad
-\delta u=K e,\qquad
-u_{\mathrm{abs}}=\bar\tau+\delta u.
-\]
-Non vengono aggiunti prefiltri, integratori o saturazioni. M6 mantiene invece la propria realizzazione LQG, con osservatore e prefiltro già validati. Questa disciplina conserva l'identità dei controllori e rende leggibile il confronto.
+Gli scenari conservano gradini di 2, 5 e 8 gradi su ciascun giunto (4 s),
+disturbi lato link di 0.25, 0.5 e 1 N m (8 s), equilibrio e rumore (4 s).
+L'errore statico non lineare è stimato dalla media dell'ultimo 10\% della
+traiettoria: non viene sostituito con il guadagno DC lineare, come avveniva
+nel vecchio estrattore di metriche. Il valore è quindi una stima a orizzonte
+finito, da leggere insieme all'assestamento.
 
-\section{Scenari e configurazione numerica}
-Ogni campagna comprende equilibrio, tracking su entrambi i giunti e più ampiezze, disturbi di coppia, rumore riproducibile e sweep delle condizioni iniziali. Il solver stiff \texttt{ode23t}, le tolleranze e il passo massimo sono comuni alle simulazioni della stessa fase. Il test all'equilibrio precede gli altri scenari: in assenza di ingressi incrementali, il modello deve rimanere sulla configurazione $\bar q$ senza drift numerico significativo.
+\section{Tracking, disturbi e rumore}
+Gli equilibri restano invariati entro $1.7\,10^{-12}$ rad per H-infinity e
+$2.3\,10^{-15}$ rad per Kmu. I gradini confermano l'assenza di overshoot
+nei due controllori. Per $K_\mu$ a 5 gradi si misurano $T_s=1.522,1.484$ s,
+errori relativi circa 6.03\%, 3.08\% e picchi di comando 0.796,0.199 N m.
+I risultati conservano i fallimenti M5 di assestamento e, per Kmu sul primo
+giunto, offset. Risposte e metriche di tutti i disturbi fisici sono salvate
+con il controllore che le ha prodotte.
 
-Le metriche temporali sono calcolate con le stesse convenzioni M5. Il comando è riportato in N m e normalizzato rispetto a $u_{\mathrm{scale}}$, ma non sottoposto a un limite di saturazione non documentato. La simulazione di rumore usa un seed fissato per verificare la riproducibilità; non viene interpretata come caratterizzazione statistica dell'hardware.
+Il rumore usa esattamente i primi due canali della sequenza M15 originaria,
+con seed 20260826. La ripetizione restituisce differenza nulla.
+Qui emerge un limite decisivo del candidato H-infinity: il picco di comando
+è circa 5685 N m, con RMS 118.2 N m. Per Kmu si ottengono circa 8.12 N m
+e 1.934 N m. Il piccolo comando nel tracking privo di rumore non descrive
+dunque la sensibilità del controllore H-infinity alle misure disturbate.
+Non si aggiunge una saturazione numerica per nascondere questo risultato.
 
-\section{Lyapunov sul sistema aumentato nominale}
-La RAS reale è l'insieme delle condizioni iniziali da cui la soluzione converge
-all'equilibrio. Non la conosciamo esattamente. Affianchiamo alla mappa empirica
-due risultati diversi: una regione interna da una \emph{maggiorazione analitica}
-e un livello più ampio verificato su punti finiti, che resta \emph{non certificato}.
-Entrambi includono tutti gli stati del controllore, non soltanto la meccanica.
+\section{Regione di attrazione empirica}
+La sezione iniziale conserva $\delta\theta=\delta q$, velocità nulle,
+attuatori all'equilibrio e stato del controllore nullo. Restano la griglia
+$\{-60,-30,0,30,60\}^2$ gradi, 36 direzioni, precisione radiale di un grado,
+orizzonti 8/12 s e tutti i criteri M15. Il superamento del limite numerico
+originario $10^6$ termina anticipatamente la simulazione: quel punto avrebbe
+comunque fallito il criterio di limitatezza. Le metriche di coda sono valutate
+sull'uscita uniforme MATLAB; questo dettaglio differisce dai tempi adattivi
+registrati dal precedente modello Simulink e rende il confronto solo parzialmente paired.
 
-Per LQG si usa $z=[x;\hat x]\in\mathbb R^{28}$:
-\[
-A_{cl,LQG}=\begin{bmatrix}A&-BK\\LC&A-BK-LC\end{bmatrix}.
-\]
-Per i controllori dinamici $K_\infty,K_\mu$, con realizzazione
-$(A_k,B_k,C_k,D_k)$, si usa $z=[x;x_k]$, rispettivamente di 32 e 84 stati:
-\[
-A_{cl,k}=\begin{bmatrix}A-BD_kC_q&BC_k\\-B_kC_q&A_k\end{bmatrix}.
-\]
-Qui $x$ comprende gli otto stati meccanici e i sei attuativi.
-Non si usano cancellazioni o riduzioni d'ordine per verificare stabilità interna.
-Nel non lineare le prime otto equazioni sono quelle SEA della traccia, gli
-attuatori sono gli stessi M3 e il controllore rimane lineare, nelle deviazioni
-dall'equilibrio. Si pone $r=d=v=0$, senza saturazione e con Padé di ordine uno.
-La funzione \texttt{sea\_closed\_loop\_rhs} sottrae soltanto il residuo numerico
-dell'equilibrio, dovuto alla rappresentazione floating point di $\pi/2$.
-
-Per ogni matrice Hurwitz si sceglie $Q_L=I_{n_z}$ e si esegue
-\[
-P=\texttt{lyap}(A_{cl}^T,Q_L),\qquad
-A_{cl}^TP+PA_{cl}=-I_{n_z},\qquad V(z)=z^TPz.
-\]
-La convenzione è importante: \texttt{lyap(A,Q)} risolve
-$AP+PA^T=-Q$, perciò il primo argomento è $A_{cl}^T$.
-Si simmetrizza $P$ e si controllano autovalori e residuo $E_L$.
-Nel lineare $\dot V=-\|z\|^2<0$ per $z\ne0$; nel non lineare si valuta invece
-\[
-\dot V(z)=2z^TPf_{cl}(z),
-\]
-senza sostituire impropriamente $f_{cl}(z)$ con $A_{cl}z$.
-
-$Q_L=I$ è una scelta matematica D sulle coordinate numeriche SI adottate,
-non un'energia fisica. Per gli stati interni dei controllori vale la
-realizzazione salvata nell'artifact: cambiando coordinate cambierebbero
-$P$ e i livelli $\rho$. Non è quindi significativo ordinare i controllori
-confrontando soltanto i valori scalari di $\rho$.
-
-\section{Regione interna: maggiorazione analitica del resto}
-All'equilibrio specifico $\bar q=[\pi/2;0]$ la non linearità residua agisce
-soltanto sulle accelerazioni dei link:
-\[
-f_{cl}(z)=A_{cl}z+E\,r(z),\qquad
-E=\begin{bmatrix}0_{2\times2}\\I_2\\0_{(n_z-4)\times2}\end{bmatrix}.
-\]
-Le molle, i motori, gli attuatori Padé e i controllori sono lineari nelle
-coordinate incrementali. La dipendenza di $M$ da $\cos(q_2)$ e la gravità
-dell'equilibrio superiore fanno sì che il primo resto non nullo sia cubico.
-
-Poniamo $b=m_2l_1l_2$, $a=(m_1+m_2)gl_1$, $d=m_2gl_2$ e $M_0=M(0)$.
-Dalle matrici esplicite della traccia, per qualsiasi $q_2$,
-\[
-\det M(q_2)=m_1m_2l_1^2l_2^2+b^2\sin^2q_2
-\ge d_{\min}=m_1m_2l_1^2l_2^2>0.
-\]
-Essendo $M$ positiva definita e
-$\operatorname{tr}M\le t_{\max}=(m_1+m_2)l_1^2+2m_2l_2^2+2b$,
-si ha $\|M^{-1}\|_2\le t_{\max}/d_{\min}=:m_I$.
-Inoltre $|1-\cos t|\le t^2/2$ fornisce
-\[
-\|M(q_2)-M_0\|_2\le
-\frac{b(1+\sqrt2)}{2}|q_2|^2=:c_M|q_2|^2 .
-\]
-Per i termini di Coriolis si maggiora la norma di Frobenius della matrice:
-\[
-\|C(q,\dot q)\dot q\|_2\le
-\sqrt3\,b\,|q_2|\,\|\dot q\|_2^2 .
-\]
-Per la gravità, usando $|\sin t-t|\le |t|^3/6$ e
-$|\Delta q_1+\Delta q_2|\le\sqrt2\|\Delta q\|_2$,
-\[
-\|G(\bar q+\Delta q)-G(\bar q)-G_q\Delta q\|_2
-\le \frac{a+4d}{6}\|\Delta q\|_2^3 .
-\]
-Infine $M^{-1}-M_0^{-1}=-M^{-1}(M-M_0)M_0^{-1}$.
-Indicato con $A_a=A_{\mathrm{mech}}(3{:}4,:)$ il blocco di accelerazione
-lineare dei link, otteniamo la maggiorazione globale del resto rispetto
-alla norma dei valori numerici delle coordinate:
-\[
-\|r(z)\|_2\le c\|z\|_2^3,\qquad
-c=m_I\left(c_M\|A_a\|_2+\sqrt3 b+\frac{a+4d}{6}\right)
-=\RevCubicBound .
-\]
-Non si è stimato $c$ interpolando simulazioni: è calcolato dalle formule
-precedenti in \texttt{lyapunov\_cubic\_bound.m}. Il test numerico del resto
-è un controllo indipendente dell'implementazione, non la fonte della disuguaglianza.
-
-Tenendo conto del residuo numerico $\epsilon_L=\|E_L\|_2<1$, segue
-\[
-\dot V\le -(1-\epsilon_L)\|z\|^2
-+2\|PE\|_2c\|z\|^4.
-\]
-Si conserva metà del margine lineare scegliendo
-\[
-\delta^2=\frac{1-\epsilon_L}{4\|PE\|_2c},\qquad
-\rho_a=\lambda_{\min}(P)\delta^2,\qquad
-\Omega_{\rho_a}=\{z:z^TPz\le\rho_a\}.
-\]
-Infatti $V\le\rho_a$ implica $\|z\|^2\le\delta^2$ e quindi
-\[
-\dot V(z)\le-\frac{1-\epsilon_L}{2}\|z\|^2<0
-\quad\text{per }z\in\Omega_{\rho_a}\setminus\{0\}.
-\]
-L'insieme è compatto, contiene l'equilibrio e ha derivata strettamente negativa
-sul bordo: è una regione interna positivamente invariante che converge
-all'equilibrio del modello nominale. Non è la RAS massima.
-La garanzia proviene da questa disuguaglianza su tutti gli stati, non da una
-griglia nel piano $q$.
-
-\input{generated/lyapunov_summary.tex}
-Le matrici complete $A_{cl},Q_L,P$ sono salvate in
-\texttt{results/data/lyapunov\_ras\_nominal.mat}, per ciascun controllore.
-Una rappresentazione compatta e univoca di $P$ è
-$P=\int_0^\infty e^{A_{cl}^Tt}e^{A_{cl}t}\,dt$; gli autovalori estremi e il
-residuo sono riportati nella tabella. Le sezioni numeriche $J^TPJ$ sono
-esplicitate sotto, senza stampare tre matrici fino a $84\times84$.
-
-\section{Ricerca numerica di un livello più ampio: limiti espliciti}
-La ricerca comune usa, per ogni controllore, 512 direzioni gaussiane normalizzate,
-i $2n_z$ versi degli assi e 72 direzioni corrispondenti al piano iniziale $q$.
-Con $R_P=\operatorname{chol}(P)$ e $\|d_j\|=1$ si costruisce
-\[
-z_{jh}=\alpha_h\sqrt{\rho}\,R_P^{-1}d_j,\qquad
-\alpha_h\in\{0.25,0.5,0.75,1\}.
-\]
-Sono quindi controllati sia il bordo sia tre livelli interni.
-Si impongono $\dot V(z_{jh})/\|z_{jh}\|^2<-0.05$ e valori finiti.
-Gli zero non sono campionati perché $\dot V(0)=0$.
-
-La scansione comprende 49 livelli logaritmici da $\rho_a$ a
-\[
-\rho_{\max}=\frac{(60\pi/180)^2}
-{\max_{i\in\{1,2,5,6\}}(P^{-1})_{ii}},
-\]
-così tutti gli angoli meccanici dell'ellissoide restano nel box di ricerca
-$\pm60^\circ$. Velocità e coordinate interne non ricevono limiti hardware
-inventati: i massimi di ogni coordinata sono
-$\sqrt{\rho(P^{-1})_{ii}}$ e vengono salvati nell'artifact.
-Si arresta la scansione al primo livello che viola il criterio, si eseguono
-12 bisezioni geometriche fra ultimo successo e primo fallimento e si prende
-$\rho_s=0.8\rho_{\mathrm{ultimo\ successo}}$.
-Se non si incontra un fallimento, la ricerca è limitata dal box.
-Questo algoritmo non assume che tutti i livelli successivi debbano fallire
-e non pretende di trovare il massimo livello ammissibile.
-
-Il seed della ricerca è $20260908+k$, con $k=1,2,3$ per LQG, $H_\infty$ e $K_\mu$.
-Una verifica indipendente usa 2048 nuove direzioni e gli stessi quattro raggi,
-per 8192 punti, con seed $20261008+k$.
-I parametri si trovano all'inizio del validator e direttamente nelle sezioni
-20 e 18 degli script LQG e $H_\infty$. I massimi ottenuti sono riportati nella tabella.
-\emph{Anche il successo di tutti questi controlli non dimostra la negatività
-su ogni punto di $\Omega_{\rho_s}$}: $\rho_s$ resta un risultato numerico,
-mentre solo $\rho_a$ beneficia della maggiorazione analitica.
-
-\section{Sezioni coerenti e verifica mediante traiettorie}
-Per visualizzare il piano richiesto si definisce $z=J\Delta q$, con
-$J(1{:}2,:)=I_2$, $J(5{:}6,:)=I_2$ e tutte le altre righe nulle.
-Quindi $\Delta\theta=\Delta q$, velocità e stati attuativi nulli e
-$\hat x(0)=0$ oppure $x_k(0)=0$. La sezione è
-\[
-\Delta q^TH\Delta q\le\rho,\qquad H=J^TPJ.
-\]
-È una \emph{sezione}, non una proiezione: non si minimizza sugli altri stati.
-Il piano iniziale non è invariante; la prova di Lyapunov riguarda invece
-l'intero ellissoide aumentato, nel quale possono muoversi le traiettorie.
-\input{generated/lyapunov_sections.tex}
-
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{figures/lyapunov_ras_certified_sections.png}
-\caption{Zoom sulle sezioni delle regioni interne ottenute dalla maggiorazione
-analitica. Gli assi sono deviazioni iniziali in gradi; le scale molto piccole
-rendono esplicita la conservatività. Il simbolo nero indica l'equilibrio.}
-\label{fig:lyapunov-cert}
-\end{figure}
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{figures/lyapunov_ras_comparison.png}
-\caption{Punti convergenti e non convergenti delle campagne M8/M15 e sezione
-del livello campionato $\rho_s$ (tratteggio). Quest'ultimo non è certificato.
-Le sezioni analitiche della figura precedente sono troppo piccole per
-essere leggibili sulla scala di 60 gradi.}\label{fig:lyapunov-emp}
+Per H-infinity convergono 27 dei 285 punti esaminati; il raggio minimo risolto
+è zero e il massimo circa 6.98 gradi. Zero significa che la ricerca a
+risoluzione di un grado non individua un punto convergente in alcune direzioni,
+non che un sistema localmente stabile abbia regione di attrazione vuota.
+Per Kmu convergono tutti i 57 punti e tutti gli estremi radiali del box.
+La regione è quindi limitata dal dominio esplorato, non da una frontiera
+fisica identificata. Il comando massimo tra i casi convergenti raggiunge
+circa 61.1 N m per H-infinity e 2763 N m per Kmu: queste regioni senza
+saturazione non sono regioni operative certificate dell'hardware.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.7\textwidth]{figures/hinf_final/ras.png}
+\caption{Sezioni empiriche nominali con gli stessi criteri di convergenza.}
 \end{figure}
 
-La verifica aggiuntiva integra 48 traiettorie: otto direzioni del piano
-iniziale per due livelli ($\rho_a,\rho_s$) e tre controllori, 8 s,
-\texttt{ode23t}, tolleranze relativa $10^{-8}$ e assoluta $10^{-13}$,
-passo massimo 0.005 s. Per ogni traiettoria si salvano $V(t)$, $\dot V(t)$,
-incremento massimo relativo, $V(8)/V(0)$ ed errore articolare finale.
-Il peggiore rapporto finale \`e $V(8)/V(0)=\RevTrajectoryFinalV$;
-il massimo incremento relativo di $V$ \`e \RevTrajectoryIncrement.
-I test richiedono valori finiti, incrementi e derivate normalizzate inferiori
-a $10^{-8}$ (tolleranza numerica), e $V(8)/V(0)<10^{-3}$ come diagnostica
-di convergenza finita, non come criterio di certificazione.
-Le piccolissime oscillazioni numeriche quando LQG ha già raggiunto la
-precisione macchina non sono interpretate come una perdita fisica di
-stabilità. L'esito delle traiettorie costituisce una validazione numerica
-della costruzione, non un'estensione del certificato al livello campionato.
-
-\paragraph{Portata della certificazione}
-La maggiorazione riguarda i parametri nominali della traccia, l'equilibrio
-superiore, i controllori congelati e il modello attuativo Padé 1 senza
-saturazioni, riferimenti o disturbi. Non riguarda il ritardo esatto,
-l'hardware reale o l'insieme incerto M4. Le disuguaglianze hanno una
-derivazione analitica; matrici, norme e autovalori sono valutati in doppia
-precisione con controllo dei residui, non tramite aritmetica intervallare
-o una prova formale verificata da calcolatore. La forte conservatività e la
-dipendenza dalle coordinate interne sono limiti della scelta $Q_L=I$,
-non motivi per rinominare il livello campionato come certificato.
-
-\section{Definizione comune della mappa empirica di attrazione}
-La mappa empirica precedente resta un confronto numerico nel piano $(\Delta q_1(0),\Delta q_2(0))$: non va confusa con la regione interna analitica appena costruita. Per ogni punto si inizializzano le velocità a zero, si traslano $\theta$ insieme a $q$ così da non introdurre deformazione elastica iniziale, si pongono gli attuatori nel loro equilibrio e gli stati incrementali del controllore a zero. Quest'ultima regola significa $\hat x(0)=0$ per LQG e stato dinamico nullo per $K_\infty$ e $K_\mu$.
-
-I tre controllori usano la stessa configurazione: griglia grossolana $\{-60,-30,0,30,60\}^2$ gradi, 36 direzioni radiali, box $\pm60^\circ$, tolleranza radiale $1^\circ$, solver \texttt{ode23t} e orizzonte 8 s estendibile a 12 s. Una traiettoria è convergente se termina, resta finita e limitata e, nell'ultimo 10\% dell'orizzonte, soddisfa
-\[
-|q-\bar q|_\infty\le0.5^\circ,\quad
-|\dot q|_\infty\le0.02\ \mathrm{rad/s},\quad
-|\theta-\bar\theta|_\infty\le0.5^\circ,\quad
-|\dot\theta|_\infty\le0.05\ \mathrm{rad/s},
-\]
-senza una crescita finale significativa. Se il punto estremo di una direzione non converge, una bisezione individua la frontiera empirica; se converge, quella direzione è marcata \emph{search-box limited}. Non sono presenti saturazioni.
-
-Per M15 il budget massimo è ricavato dalla ricerca stessa:
-$2[25+36(1+\lceil\log_2(60\sqrt{2}/1)\rceil)]=626$ simulazioni
-per controllore, includendo una possibile estensione temporale per punto.
-Il precedente tetto di 400 ha interrotto la nuova ricerca di $K_\infty$;
-la correzione non cambia la griglia, le soglie o l'orizzonte di convergenza.
-I punti completati sono salvati con identità del controllore e della pianta.
-
-\section{Validazione M6 e regione empirica di attrazione}
-M8 conferma l'equilibrio nominale e il tracking M6 sul modello non lineare. Le differenze rispetto alla risposta LTI sono piccole nel dominio degli step di progetto. La ricerca RAS esplora una griglia di perturbazioni iniziali delle due posizioni, mantenendo espliciti criterio di convergenza, orizzonte e box massimo. Tutti i 57 punti della sezione primaria articolare esaminata convergono fino a $\pm60^\circ$.
-
-Il raggio minimo osservato è \MControllerRasMin$^\circ$, ma non è stata intercettata una frontiera interna. La classificazione è quindi \emph{search-box limited}: si può affermare che i punti testati convergono, non che la regione di attrazione termini o si estenda globalmente a quella distanza. La RAS ottenuta per simulazione resta inoltre una stima empirica dipendente dalla griglia e dal criterio numerico.
-
-\section{Tracking di $K_{\infty}$ e $K_\mu$}
-M15 applica sullo stesso modello nominale i nuovi controllori M10 e M13. Le chiusure lineari nominali sono stabili e le simulazioni non lineari sono finite, ma i target M5 non sono raggiunti. I valori aggiornati di settling time, sovraelongazione, errore statico e comando sono riportati nella Tabella~\ref{tab:nonlinear}, generata dagli artifact correnti. Per $K_\mu$ almeno uno scenario non raggiunge l'assestamento entro l'orizzonte osservato: il valore $T_s=\infty$ indica questo esito, non una divergenza della simulazione. La mancata conformità coinvolge rapidità, forma del transitorio e accuratezza statica.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.82\textwidth]{figures/m15_tracking_khinf_vs_kmu.png}
-\caption{Tracking non lineare nominale di $K_{\infty}$ e $K_\mu$. Le risposte restano stabili ma non soddisfano M5.}
-\label{fig:m15-tracking}
-\end{figure}
-
-I picchi di comando sono quantificati e rimangono confrontabili con la scala M5. Non è però possibile dichiarare assenza di saturazione reale, perché il progetto non dispone delle curve coppia--velocità o dei limiti verificati degli attuatori. Analogamente, il superamento dei target di overshoot non viene attenuato usando il fatto che le simulazioni restano finite: stabilità e prestazione rispondono a domande differenti.
-
-\section{Confronto RAS dei controllori significativi}
-Per LQG sono classificati \MLqgRasPoints\ punti unici, tutti convergenti; il raggio minimo è \MControllerRasMin$^\circ$ e l'area poligonale approssimata è \MLqgRasArea\ deg$^2$. Per $K_{\infty}$ la bisezione aggiunge punti vicino al confine: convergono \KhinfRasConvergent\ punti su \KhinfRasPoints, con raggio minimo \KhinfRasMin$^\circ$ e area \KhinfRasArea\ deg$^2$. Per $K_\mu$ convergono tutti i \KmuRasPoints\ punti, con raggio minimo \KmuRasMin$^\circ$ e area \KmuRasArea\ deg$^2$.
-
-LQG e $K_\mu$ hanno lo stesso profilo radiale fino al bordo del box: non si può
-ordinare la loro RAS reale perché per entrambi la frontiera non è stata
-individuata nei punti e nelle direzioni campionati. Questo non esclude
-comportamenti differenti fra i punti non testati. $K_{\infty}$ mostra invece
-una transizione empirica interna e una frazione convergente minore.
-Questa informazione descrive il comportamento non lineare nominale, ma non
-basta a scegliere il controllore robusto finale: non contiene l'incertezza
-M4 e non sostituisce RS/RP.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.79\textwidth]{figures/ras_common_comparison.png}
-\caption{Confronto omogeneo delle stime empiriche RAS. M6 e $K_\mu$ raggiungono il limite di ricerca; $K_{\infty}$ mostra una frontiera interna.}
-\label{fig:m15-ras}
-\end{figure}
-
-È stata inoltre misurata una regione locale di accordo fra risposte LTI e non lineari. I raggi minimi osservati, $4.5^\circ$ per $K_{\infty}$ e $5^\circ$ per $K_\mu$, derivano da \texttt{agreementResults} dell'artifact M15 e descrivono il dominio in cui la discrepanza resta sotto la soglia adottata; non coincidono con la RAS e non sono limiti assoluti della linearizzazione.
-
-\section{Portata e limiti della campagna}
-M8 e M15 usano il modello non lineare nominale. Non introducono l'incertezza M4 nella dinamica non lineare e non certificano Robust Stability. Viceversa, la valutazione M14 appartiene al modello lineare incerto e non garantisce il tracking non lineare; nella configurazione corrente RS è negativa. La lettura congiunta è quindi intenzionalmente non sostitutiva: le simulazioni controllano la plausibilità fisica locale e individuano fenomeni prestazionali; la $\mu$-analysis valuta formalmente l'insieme lineare strutturato.
-
-\input{tables/nonlinear_validation.tex}
+\section{Verifica Lyapunov}
+Si include l'intero stato aumentato e si risolve
+$A_{cl}^TP+PA_{cl}=-I$. Per H-infinity il residuo è circa 65.27:
+il controllo numerico fallisce e non si accredita alcun certificato.
+Per Kmu, con 92 stati complessivi, $P$ è positiva e il residuo è 0.04493,
+inferiore alla soglia preesistente 0.1. La stessa maggiorazione cubica del
+resto SEA fornisce $\rho_{\mathrm{interno}}\simeq1.066\,10^{-12}$.
+Il livello circa 3.697 supera la verifica su 2048 direzioni indipendenti
+alle quattro frazioni radiali dichiarate; è evidenza su punti finiti,
+non un'estensione del certificato analitico. LQG e i suoi risultati M8
+rimangono quelli già validati, senza trasferimenti ai nuovi controllori.

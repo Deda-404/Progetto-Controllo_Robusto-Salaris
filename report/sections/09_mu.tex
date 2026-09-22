@@ -1,47 +1,74 @@
-\chapter{$\mu$-analysis e $\mu$-synthesis}
-\section{Ruolo del valore singolare strutturato}
-Il campionamento di piante incerte può mostrare comportamenti critici, ma non copre l'intero insieme continuo M4. La $\mu$-analysis affronta questo limite mantenendo esplicita la struttura dei blocchi. L'interconnessione viene scritta nella forma $N$--$\Delta$, dove $\Delta$ raccoglie le tre incertezze parametriche reali e i due blocchi dinamici complessi indipendenti. Per una data frequenza, il valore singolare strutturato misura quanto deve essere scalata una perturbazione con quella struttura per rendere singolare la chiusura pertinente.
+\chapter{Robustezza e sintesi strutturata}
+\label{cap:mu}
+\section{Dal candidato nominale alla pianta incerta}
+Si analizza esattamente il controllore $2\times4$ del Capitolo 8.
+La meccanica conserva $k_1,k_2,J_{m1}$ reali al $\pm10\%$ e gli attuatori
+conservano i due blocchi dinamici indipendenti $\Delta_{act1},\Delta_{act2}$.
+L'ingresso di coppia lato link, il modello $M_o$ e i pesi sono quelli della
+sintesi nominale. La ricostruzione verifica sia i cinque nomi dei blocchi
+sia l'identità frequenziale della pianta nominale.
 
-Gli algoritmi numerici forniscono un limite inferiore e uno superiore di $\mu$. Il limite inferiore è associato a una perturbazione destabilizzante o prestazionalmente critica trovata; quello superiore esclude perturbazioni peggiori entro la scala analizzata. Per questo i risultati vengono riportati come intervalli e non come valori esatti. Le quattro domande restano separate:
-\begin{description}
-\item[Nominal Stability (NS)] stabilità interna per $\Delta=0$;
-\item[Nominal Performance (NP)] rispetto dei pesi sulla pianta nominale;
-\item[Robust Stability (RS)] stabilità per tutti i blocchi ammessi da M4;
-\item[Robust Performance (RP)] rispetto delle prestazioni pesate per tutti i blocchi ammessi.
-\end{description}
-RS non implica RP e un controllore può quindi stabilizzare robustamente l'insieme pur fallendo i requisiti di prestazione.
+Nella rappresentazione $N$--$\Delta$, $\Delta$ raccoglie i blocchi normalizzati
+e $N$ la parte certa della chiusura. L'estrazione usa \texttt{lftdata};
+la prestazione robusta riguarda la stessa mappa $[r;d]\mapsto[z_e;z_u]$.
+Per la stabilità autonoma il riferimento è nullo, ma gli stati condivisi del
+controllore rimangono nella chiusura. Non si separano i due rami mediante
+realizzazioni che duplicano stati né si trasferiscono certificati del vecchio $K$.
 
-\section{M12: analisi robusta del candidato A5}
-M12 costruisce l'interconnessione $N$--$\Delta$ a partire dalla stessa pianta incerta M4 e dagli stessi pesi M5. Gli audit verificano identità nominale, nomi e dimensioni dei cinque blocchi, partizione dell'LFT e ricostruzione delle mappe $S$, $T$ e $KS$. A5 è nominalmente stabile, ma la norma pesata maggiore di uno determina NP negativa.
+NS e NP riguardano rispettivamente stabilità e norma nominali; RS richiede
+stabilità nell'intero insieme incerto, RP aggiunge il rispetto della norma
+unitaria. I margini indicano di quanto si può scalare simultaneamente
+l'incertezza normalizzata. Un estremo inferiore maggiore di uno garantisce
+la proprietà nel dominio M4; un estremo superiore minore di uno la esclude.
 
-Il margine di Robust Stability di A5 è nell'intervallo [\AFiveRSLower,\AFiveRSUpper]. Poiché anche l'estremo superiore è inferiore a uno, esiste una perturbazione ammissibile capace di destabilizzare la chiusura. RS è dunque \status{FAIL\_CERTIFIED}; RP è a sua volta \status{FAIL\_CERTIFIED}. L'esito fornisce la motivazione tecnica per la D--K iteration: non migliorare un numero estetico, ma cercare un controllore che tenga conto della struttura dell'incertezza.
+\section{H-infinity: tracking migliore, robustezza peggiore}
+Il candidato H-infinity passa NS e NP, ma il margine RS è
+[\FinalHRSLowerBound,\FinalHRSUpperBound], con frequenza critica circa
+70.32 rad/s. La criticità ricade presso i modi elastici: il buon comportamento
+nominale è ottenuto con una compensazione poco tollerante alle perturbazioni.
+Questo peggioramento è sostanziale e impedisce di proporre il solo H-infinity
+come soluzione robusta del progetto.
 
-\section{M13: D--K iteration}
-La D--K iteration alterna due passi. Nel passo D si stimano scaling frequenziali che maggiorano $\mu$ per il controllore corrente; nel passo K si sintetizza un nuovo controllore $H_\infty$ sul problema scalato. La procedura è euristica: può migliorare l'objective strutturato, ma il controllore che produce deve essere sottoposto a una post-analisi indipendente. L'objective della sintesi non è di per sé un certificato RS o RP.
+Per RP il solver restituisce estremi invertiti, circa
+[0.0172543,0.0171945], anche dopo una seconda analisi con ricerca
+rinforzata. Non si corregge il risultato scambiando gli estremi:
+l'intervallo numerico RP resta non validato. La proprietà RP è comunque
+esclusa dal fallimento di RS, che costituisce una condizione necessaria.
+La baseline storica e questo risultato negativo rimangono disponibili.
 
-Dopo la selezione definitiva dei nuovi pesi, M13 esegue una sola nuova
-campagna sul problema M4/M5 aggiornato, con le stesse cinque iterazioni
-massime e senza ulteriori tentativi. La best iteration \BestDKIteration\
-produce objective \MusynObjective. Il controllore estratto, indicato con $K_\mu$, è 2-by-2 e ha ordine \KmuOrder. L'ordine deriva dall'augmentazione con pianta, pesi e scaling D. Non viene applicata una riduzione, perché anche una riduzione bilanciata richiederebbe di ripetere stabilità, prestazioni, simulazioni non lineari e analisi robusta.
+\section{D--K iteration sul medesimo problema}
+Il problema mantiene la struttura del corso: pianta generalizzata incerta,
+blocco di controllo e scaling per la maggiorazione di $\mu$. Le quattro
+misure $[r;q]$ cambiano la partizione del controllore, non la definizione
+dell'interconnessione robusta. Si usa pertanto \texttt{musyn(P,4,2)}.
 
-La corretta conclusione di M13 è pertanto: la D--K iteration produce $K_\mu$. Non si afferma ancora che $K_\mu$ possieda Robust Stability; tale proprietà appartiene alla verifica M14.
+Una sola campagna, con cinque iterazioni e opzioni fissate, alterna
+la sintesi del controllore alla stima e approssimazione degli scaling D/G.
+I valori di picco di $\mu$ nelle cinque iterazioni sono circa
+5.141, 1.704, 0.9137, 0.8997 e 0.8838.
+Il migliore objective è \FinalMuObjective; il controllore congelato
+ha ordine \FinalMuOrder. Non si effettua una riduzione non verificata.
+Il valore restituito dalla sintesi non è usato come certificato.
 
-\section{M14: post-analisi indipendente di $K_\mu$}
-M14 ricarica il controllore selezionato e ricostruisce senza riusare le conclusioni di sintesi le mappe nominali e l'interconnessione incerta. L'identità di $K_\mu$ è controllata rispetto a M13; il problema di verifica è invece ricostruito dall'unico M4 corrente, da M5 e da M12. La stabilità interna viene valutata sulla realizzazione completa, senza cancellazioni mediante \texttt{minreal}. Questa separazione consente di mantenere congelato il controllore e, nello stesso tempo, attribuire il certificato soltanto alla post-analisi sul dominio oggi dichiarato.
+\section{Post-analisi indipendente}
+La post-analisi ricalcola chiusura, norma e margini dopo aver congelato $K_\mu$.
+La norma nominale è \FinalMuGamma: NS e NP sono positive.
+Si ottengono inoltre
+\[
+ m_{RS}\in[\FinalMuRSLowerBound,\FinalMuRSUpperBound],\qquad
+ m_{RP}\in[\FinalMuRPLowerBound,\FinalMuRPUpperBound].
+\]
+RS e RP sono entrambe positive sul modello lineare incerto M4.
+Le frequenze critiche sono circa 61.96 e 9.85 rad/s rispettivamente.
+Questa è una nuova conclusione rispetto alla precedente catena, nella quale
+il vecchio $K_\mu$ aveva margine RS circa 0.775 e non stabilizzava robustamente
+l'intero insieme. I certificati dei due controllori appartengono a problemi
+prestazionali diversi e sono conservati separatamente.
 
-Per $K_\mu$, NS è positiva. NP resta \status{\KmuNPStatus}: la norma nominale è ancora maggiore di uno. Il margine RS è [\KmuRSLower,\KmuRSUpper], interamente sotto uno; di conseguenza RS è \status{\KmuRSStatus} sull'insieme lineare incerto M4. RP è invece \status{\KmuRPStatus}, coerentemente con il fallimento nominale. Il confronto con A5 non mostra un recupero della stabilità robusta: il nuovo controllore resta nominalmente stabile ma non stabilizza tutto M4.
-
-\input{tables/mu_summary.tex}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.38\textwidth]{figures/m14_ns_np_rs_rp_summary.png}
-\caption{Esiti distinti di NS, NP, RS e RP per $K_\mu$ nella post-analisi M14.}
-\label{fig:m14-summary}
-\end{figure}
-
-Il certificato precedente non è trasferibile al nuovo $K_\mu$, né al
-modello non lineare. In \texttt{wcgain} la perturbazione restituita è
-stabile e realizza il limite inferiore finito: il limite superiore
-infinito non dimostra l'instabilità di quella specifica sostituzione.
-Restano validi gli esiti negativi indipendenti di RS e RP sopra riportati.
+Il recupero di robustezza non risolve tutte le specifiche temporali:
+i due gradini nominali danno assestamenti di 1.522 e 1.478 s,
+nessun overshoot, errori statici relativi di circa 6.00\% e 3.07\%,
+con picco massimo del comando circa 0.798 N m. M5 resta negativa per
+assestamento e, sul primo giunto, errore statico. Il ruolo robusto di $K_\mu$
+è quindi riferito ai pesi e al dominio M4 dichiarati, non al superamento
+di tutte le richieste temporali originali o a una validazione hardware.

@@ -14,13 +14,16 @@ xActuatorEquilibrium = -Aact \ (Bact * m3.taubar);
 cache = containers.Map('KeyType', 'char', 'ValueType', 'any');
 records = repmat(localEmptyRecord, 0, 1);
 simulationCount = 0;
+simulator=@simulate_m15_nonlinear;
+if isfield(config,'simulatorFcn'), simulator=config.simulatorFcn; end
 % Checkpoint dei soli risultati numerici: evita di ripetere simulazioni
 % completate. Il riuso richiede identita di controllore, pianta e criteri.
 checkpointDirectory = fullfile(projectRoot, 'results', 'tmp', 'm15_ras');
 if ~isfolder(checkpointDirectory), mkdir(checkpointDirectory); end
 checkpointPath = fullfile(checkpointDirectory, controller.id + ".mat");
 sourceIdentity = struct('controller', controller, 'plant', m3, ...
-    'solver', config.solver, 'simulation', config.simulation, 'ras', config.ras);
+    'solver', config.solver, 'simulation', config.simulation, 'ras', config.ras, ...
+    'simulator',func2str(simulator));
 if isfile(checkpointPath)
     checkpoint = load(checkpointPath);
     if isequaln(checkpoint.sourceIdentity, sourceIdentity)
@@ -127,7 +130,7 @@ search = struct( ...
         simulationCount = simulationCount + 1;
         extended = false;
         try
-            result = simulate_m15_nonlinear(controller, scenario, ...
+            result = simulator(controller, scenario, ...
                 projectRoot, config);
             assessment = evaluate_m15_convergence(result, m3, config);
             if assessment.extensionEligible
@@ -136,7 +139,7 @@ search = struct( ...
                     'RAS extension exceeded its budget.');
                 scenario.horizon = config.ras.extendedHorizon;
                 simulationCount = simulationCount + 1;
-                result = simulate_m15_nonlinear(controller, scenario, ...
+                result = simulator(controller, scenario, ...
                     projectRoot, config);
                 assessment = evaluate_m15_convergence(result, m3, config);
                 extended = true;

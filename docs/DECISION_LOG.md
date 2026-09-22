@@ -2166,3 +2166,15 @@ ma la nuova norma pesata è 1.381480. Non si trasferisce il PASS del feedback.
 La coppia disturbante lato link M5 è verificata separatamente, mantenendo
 l'equivalenza del problema mixed sensitivity fra mixsyn e hinfsyn.
 Capitolo 9 e catena robusta non modificati: nessuna garanzia storica sui nuovi K.
+
+## 2026-09-22 — Catena H-infinity 2-DoF coerente
+
+Base693e316. Lower bound sigma_min confermato (7 test);21 profili1-DoF,3 veri2-DoF,
+66 avvii hinfstruct. Hinf selezionato22stati,norma.04746,tracking migliore ma RS.0181,
+0/40 MonteCarlo e forte amplificazione del rumore. D-K corrente produce Kmu78stati;
+post-analisi RS[1.7998,1.8044],RP[1.6772,1.6807],40/40 stabili.
+NL/rumore/RAS/Lyapunov ricalcolati in MATLAB. Hinf Lyapunov e intervallo RP numerico
+non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
+Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
+
+Decisione: Kmu assume il ruolo robusto sul dominio M4; Hinf rimane comparatore nominale. M5 non viene rilassata. Il nuovo integratore MATLAB evita modifiche ai modelli Simulink storici; la verifica locale ne controlla segno e mappe. Il limite numerico RAS1e6 conserva la soglia precedente. Nessuna nuova ricerca di tuning dopo gli esiti negativi.

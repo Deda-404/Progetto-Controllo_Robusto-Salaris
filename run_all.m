@@ -21,6 +21,11 @@ fprintf(['Struttura didattica: macrofase modellazione-linearizzazione-' ...
     'specifiche, quindi LQG, H-infinity, mu e validazioni finali.\n\n']);
 
 try
+    % Catena corrente. Il percorso precedente rimane esplicitamente storico.
+    if isempty(getenv('CR_RUN_SCOPE')) || strcmp(getenv('CR_RUN_SCOPE'),'hinf-final')
+        run_hinf_final_pipeline;
+        return
+    end
     % Percorso circoscritto alla revisione M6/M7. Gli artifact robusti
     % versionati restano congelati; il percorso completo sotto e invariato.
     % Esecuzione: setenv('CR_RUN_SCOPE','lqri'); run_all

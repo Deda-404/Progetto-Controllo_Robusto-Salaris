@@ -1,51 +1,31 @@
 \chapter{Conclusioni e limiti}
-\section{Risultati principali}
-Il lavoro ha costruito una catena coerente dalla meccanica non lineare alla valutazione robusta. Il manipolatore SEA è stato descritto mantenendo separate coordinate dei link e dei rotori, quindi linearizzato attorno all'equilibrio verticale superiore. La dinamica degli attuatori e il ritardo hanno portato la pianta nominale a 14 stati. L'insieme M4 combina variazioni parametriche reali e dinamica moltiplicativa non modellata, mentre M5 traduce i requisiti temporali in pesi frequenziali e scale fisiche.
+La revisione completa una catena coerente dalla sintesi nominale alla
+verifica robusta, alle simulazioni non lineari e al confronto finale.
+La derivazione del limite inferiore conferma l'uso di $\sigma_{\min}$;
+la ricerca finita dei pesi mostra che la struttura 1-DoF rimane fortemente
+sovraelongata anche quando la norma è inferiore a uno.
 
-La progettazione nominale mostra che M6 LQG, senza integratore, è il riferimento più efficace per il tracking: raggiunge il target di settling e mantiene overshoot e cross-coupling entro i limiti adottati. L'offset da disturbo costante rimane però non nullo. M7 dimostra che l'introduzione dell'internal model elimina tale offset, ma nella LQRI con Kalman M6 e integratore misurato studiata non consente di raggiungere il target di rapidità. La LQRI è implementata e stabile sul nominale, ma resta non conforme alle specifiche M5; non viene promossa a sostituto del riferimento M6.
+La vera sintesi 2-DoF, con riferimento e posizione misurata come ingressi
+del controllore e coppia disturbante lato link nella pianta, raggiunge
+norma \FinalGamma\ e tracking nominale senza overshoot. Tuttavia il
+margine RS circa 0.018 e lo 0/40 Monte Carlo impediscono di considerare
+questa soluzione robusta. Anche la prova di rumore evidenzia un comando
+inaccettabilmente grande per una futura implementazione non protetta.
+Questo risultato negativo è parte della conclusione, non un dettaglio
+omesso perché il gradino nominale appare migliore.
 
-Le sintesi $H_\infty$ M9 e M10 verificano l'equivalenza fra \texttt{mixsyn} e una generalized plant costruita esplicitamente. Entrambe restituiscono una norma pesata circa \HinfsynGamma, superiore a uno. M11 mostra come l'aumento dell'ordine delle strutture MIMO da A3 ad A5 riduca il divario dalla soluzione full-order; nessuna architettura soddisfa tuttavia l'obiettivo pesato. A5 viene usato per la successiva analisi robusta, non confuso con $K_{\infty}$.
+La D--K iteration sullo stesso problema produce Kmu di ordine \FinalMuOrder.
+La post-analisi restituisce margini RS circa 1.80 e RP circa 1.68,
+con 40/40 campioni stabili. Kmu è quindi il candidato robusto del modello
+lineare incerto dichiarato; non soddisfa ancora tutti i target M5.
+LQG mantiene il ruolo di riferimento nominale. I certificati Lyapunov,
+quando il controllo numerico riesce, riguardano il solo modello nominale.
 
-La D--K iteration M13 produce $K_\mu$ di ordine \KmuOrder. La post-analisi M14, separata dalla sintesi, costituisce il risultato formale centrale: Robust Stability è \status{\KmuRSStatus} con margine [\KmuRSLower,\KmuRSUpper] sull'insieme lineare incerto M4. Nominal Performance e Robust Performance restano \status{FAIL} e \status{FAIL\_CERTIFIED}. L'intervallo RS è sotto uno: il risultato è negativo anche per la stabilità robusta e non eredita il certificato della baseline precedente.
-
-Le campagne non lineari e Monte Carlo completano la lettura. M6 conserva il miglior tracking nominale, ma M16 osserva una perdita di stabilità nei Sample ID \MControllerUnstableSampleIds. $K_{\infty}$ e $K_\mu$ sono stabili rispettivamente in \KhinfStableSamples/\MonteCarloSamples\ e \KmuStableSamples/\MonteCarloSamples\ campioni, pur fallendo il tracking M5. La frazione empirica di $K_\mu$ non sostituisce M14 e non ne ribalta il risultato negativo. Sul modello non lineare nominale tutte le architetture mostrano regioni empiriche di convergenza significative; le stime search-box limited non sono trasformate in frontiere certificate.
-
-\section{Decisione ingegneristica}
-La verifica aggiuntiva di Lyapunov riguarda l'intera dinamica nominale aumentata
-di ciascun controllore, non il solo sottosistema meccanico. Una maggiorazione
-analitica del resto cubico fornisce tre regioni interne sufficienti, piccole
-e conservative. Le ellissi numeriche pi\`u ampie e le mappe di traiettorie
-non sono certificate. Questo risultato non estende M14 al non lineare incerto
-e non sostituisce i requisiti prestazionali falliti.
-
-Non emerge un controllore che domini tutte le metriche. La selezione finale è pertanto per ruolo:
-\begin{itemize}
-\item il ruolo di controllore robusto finale rimane non assegnato, per assenza di RS certificata;
-\item M6 è il riferimento di prestazione nominale, per il tracking conforme;
-\item $K_{\infty}$ è il comparatore metodologico full-order della famiglia $H_\infty$.
-\end{itemize}
-Questa assegnazione evita due semplificazioni scorrette: attribuire un certificato a $K_\mu$ perché proviene dalla sintesi robusta, oppure dichiarare M6 robusto perché supera quasi tutti i campioni. La conclusione documenta quale evidenza sostiene ogni ruolo e quale evidenza manca.
-
-\section{Limiti noti}
-\input{tables/limitations.tex}
-
-I limiti hanno conseguenze dirette. Senza dati di saturazione e rate limit, i picchi di comando non bastano a dimostrare l'implementabilità sull'hardware. Senza identificazione sperimentale, i range M4 restano scelte ingegneristiche motivate ma non intervalli statistici. Senza un modello non lineare incerto, la certificazione lineare e la simulazione non lineare rimangono complementari, non unificate. La Monte Carlo usa soltanto 40 campioni e non autorizza inferenze probabilistiche.
-
-L'ordine \KmuOrder\ di $K_\mu$ aumenta memoria, costo computazionale e sensibilità numerica di un'eventuale implementazione discreta. Nessuna riduzione è stata applicata nella fase conclusiva, perché preservare approssimativamente la risposta nominale richiederebbe una nuova verifica completa dei margini. Infine, le regioni empiriche di attrazione dipendono da box, griglia, orizzonte e criterio di convergenza; per M6 e $K_\mu$ la vera frontiera non è stata localizzata.
-
-\section{Sviluppi futuri}
-Per ampliare le regioni interne di Lyapunov si potrebbero studiare coordinate
-meglio scalate e maggiorazioni meno conservative, senza interpretare il
-livello numerico campionato come prova. Una verifica con aritmetica
-intervallare sarebbe necessaria per certificare anche gli arrotondamenti
-del calcolo; non \`e stata eseguita in questa revisione.
-
-Un seguito sperimentale dovrebbe partire dalla caratterizzazione degli attuatori: limiti di coppia e velocità, saturazioni, rate limit, attriti e ritardi misurati. Questi dati consentirebbero di sostituire le sole scale prestazionali con vincoli verificabili e di aggiornare l'incertezza dinamica. Una campagna di identificazione su più configurazioni potrebbe inoltre valutare se le variazioni di rigidezza e inerzia adottate in M4 descrivano correttamente l'impianto.
-
-Sul piano del controllo, lo studio mirato a tre pesi del Capitolo~8
-costituisce un primo confronto motivato ma non risolve i target nominali:
-i suoi nuovi $W_1,W_2$ sono stati adottati nella catena, che è stata rivalutata senza riusare i precedenti certificati. Un'eventuale configurazione
-futura da adottare richiederebbe una nuova iterazione completa, senza
-cancellare gli esiti presenti. Architetture 2-DoF potrebbero separare tracking e reiezione dei disturbi; l'anti-windup diventerebbe necessario una volta definiti i limiti di attuazione. Una riduzione di $K_\mu$ dovrebbe essere accompagnata da una post-analisi M14 completa, dalle simulazioni non lineari e da una nuova Monte Carlo sugli stessi criteri.
-
-Infine, l'estensione più rilevante sarebbe una validazione non lineare incerta, possibilmente abbinata a prove hardware-in-the-loop. Tale fase collegherebbe la robustezza formale locale alle dinamiche fisiche oltre l'equilibrio. Fino ad allora, il risultato raggiunto resta deliberatamente preciso: la configurazione corrente dispone di un riferimento nominale con tracking conforme, ma non di un controllore principale con RS certificata; documenta esplicitamente questa limitazione e le prestazioni non soddisfatte.
+Restano da studiare limiti reali di coppia e velocità, saturazioni,
+rate limit, attriti e ritardi misurati. Nessuno di questi dati è inventato.
+Il rumore e la fragilità ai modi elastici motivano un eventuale progetto
+successivo con richiesta esplicita di attenuazione delle misure e,
+se giustificato, un terzo peso. Non è stato aggiunto retroattivamente W3
+per alterare l'esito di questa campagna. Qualsiasi riduzione di Kmu o
+nuova scelta dei pesi richiederà una nuova verifica della stessa catena.
+Matricole e data definitiva di consegna restano da completare sul frontespizio.
