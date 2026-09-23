@@ -18,3 +18,11 @@ La relazione usa \path{export_hinf_final_results.m}, poi
 \path{report/}. Gli hash delle evidenze correnti sono in
 \path{report/generated/hinf_final_manifest.json}.
 Matricole e data di consegna richiedono completamento umano.
+
+\section{Percorso Simulink circoscritto}
+\texttt{setenv('CR\_RUN\_SCOPE','simulink'); run\_all}
+esegue 67 verifiche e sette test senza rilanciare le sintesi.
+I dati sono in \path{results/data/simulink_integration}, i modelli in
+\path{simulink/models}, gli originali in \path{simulink/legacy/valerio}.
+Setup, validatore e limiti sono descritti nel Capitolo 10 e nel resoconto
+\path{docs/RESOCONTO_SIMULINK_INTEGRATION.md}.

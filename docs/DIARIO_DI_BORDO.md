@@ -2798,3 +2798,8 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Audit, conservazione dei modelli Valerio e correzione su base889c0eb. Risolti incompatibilità di versione, libreria LTI e bus esterni, disturbo motore errato, rumore scalare, integratore ideale e interfaccia Hinf obsoleta.67/67 controlli+7/7 test PASS realmente eseguiti. Aggiornati PDF e resoconto. Nessuna sintesi costosa ripetuta; limiti e fallimenti preservati.

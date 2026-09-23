@@ -21,6 +21,12 @@ fprintf(['Struttura didattica: macrofase modellazione-linearizzazione-' ...
     'specifiche, quindi LQG, H-infinity, mu e validazioni finali.\n\n']);
 
 try
+    if strcmp(getenv('CR_RUN_SCOPE'),'simulink')
+        validate_simulink_integration;
+        results=runtests(fullfile(projectRoot,'tests','test_simulink_integration.m'));
+        assertSuccess(results);
+        return
+    end
     % Catena corrente. Il percorso precedente rimane esplicitamente storico.
     if isempty(getenv('CR_RUN_SCOPE')) || strcmp(getenv('CR_RUN_SCOPE'),'hinf-final')
         run_hinf_final_pipeline;

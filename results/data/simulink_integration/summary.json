@@ -1,0 +1,818 @@
+{
+  "baseCommit": "889c0eb46580767d8e6a958fda1af17f0c64658e",
+  "matlab": "25.2.0.3150157 (R2025b) Update 4",
+  "date": "23-Sep-2026 09:47:35",
+  "checks": [
+    {
+      "name": "LQG compile",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "LQG state count",
+      "pass": true,
+      "value": 28,
+      "tolerance": 28
+    },
+    {
+      "name": "LQG full state output",
+      "pass": true,
+      "value": 14,
+      "tolerance": 14
+    },
+    {
+      "name": "LQG estimated feedback",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG Gw physical channels",
+      "pass": true,
+      "value": 7.1054273576010019E-15,
+      "tolerance": 1E-5
+    },
+    {
+      "name": "LQG equilibrium",
+      "pass": true,
+      "value": 4.9894388542562157E-15,
+      "tolerance": 1E-8
+    },
+    {
+      "name": "LQG MATLAB Simulink q",
+      "pass": true,
+      "value": 7.6322220977687082E-10,
+      "tolerance": 2E-7
+    },
+    {
+      "name": "LQG MATLAB Simulink u",
+      "pass": true,
+      "value": 1.5521187538935881E-7,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "LQG actuators M3",
+      "pass": true,
+      "value": 3.1687942504686787E-6,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "LQG tracking finite j1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG tracking finite j2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG noise scenario 1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG noise scenario 2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG noise scenario 3",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQG noise repeatability",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "LQG Kalman convergence",
+      "pass": true,
+      "value": 1.230804389867195E-14,
+      "tolerance": 1E-6
+    },
+    {
+      "name": "LQG disturbance with noise",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI compile",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "LQRI state count",
+      "pass": true,
+      "value": 30,
+      "tolerance": 30
+    },
+    {
+      "name": "LQRI full state output",
+      "pass": true,
+      "value": 14,
+      "tolerance": 14
+    },
+    {
+      "name": "LQRI estimated feedback",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI measured integral input",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI no Nr block",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "LQRI Gw physical channels",
+      "pass": true,
+      "value": 7.1054273576010019E-15,
+      "tolerance": 1E-5
+    },
+    {
+      "name": "LQRI equilibrium",
+      "pass": true,
+      "value": 5.2551498232693144E-15,
+      "tolerance": 1E-8
+    },
+    {
+      "name": "LQRI MATLAB Simulink q",
+      "pass": true,
+      "value": 2.9630812656448061E-10,
+      "tolerance": 2E-7
+    },
+    {
+      "name": "LQRI MATLAB Simulink u",
+      "pass": true,
+      "value": 3.8219412633470125E-8,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "LQRI actuators M3",
+      "pass": true,
+      "value": 1.6189510812546223E-8,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "LQRI tracking finite j1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI tracking finite j2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI noise scenario 1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI noise scenario 2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI noise scenario 3",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI noise repeatability",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "LQRI Kalman convergence",
+      "pass": true,
+      "value": 4.9978307288833067E-15,
+      "tolerance": 1E-6
+    },
+    {
+      "name": "LQRI disturbance with noise",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf compile",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "Hinf state count",
+      "pass": true,
+      "value": 36,
+      "tolerance": 36
+    },
+    {
+      "name": "Hinf full state output",
+      "pass": true,
+      "value": 14,
+      "tolerance": 14
+    },
+    {
+      "name": "Hinf Gw physical channels",
+      "pass": true,
+      "value": 7.1054273576010019E-15,
+      "tolerance": 1E-5
+    },
+    {
+      "name": "Hinf equilibrium",
+      "pass": true,
+      "value": 6.1097062269429062E-13,
+      "tolerance": 1E-8
+    },
+    {
+      "name": "Hinf MATLAB Simulink q",
+      "pass": true,
+      "value": 8.8824760440258006E-10,
+      "tolerance": 2E-7
+    },
+    {
+      "name": "Hinf MATLAB Simulink u",
+      "pass": true,
+      "value": 4.8670472447103473E-8,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "Hinf actuators M3",
+      "pass": true,
+      "value": 3.2732679618079693E-6,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "Hinf tracking finite j1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf tracking finite j2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf noise scenario 1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf noise scenario 2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf noise scenario 3",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Hinf noise repeatability",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "Hinf link disturbance",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu compile",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "Kmu state count",
+      "pass": true,
+      "value": 92,
+      "tolerance": 92
+    },
+    {
+      "name": "Kmu full state output",
+      "pass": true,
+      "value": 14,
+      "tolerance": 14
+    },
+    {
+      "name": "Kmu Gw physical channels",
+      "pass": true,
+      "value": 7.1054273576010019E-15,
+      "tolerance": 1E-5
+    },
+    {
+      "name": "Kmu equilibrium",
+      "pass": true,
+      "value": 5.1253267886048164E-15,
+      "tolerance": 1E-8
+    },
+    {
+      "name": "Kmu MATLAB Simulink q",
+      "pass": true,
+      "value": 1.0324212148306875E-9,
+      "tolerance": 2E-7
+    },
+    {
+      "name": "Kmu MATLAB Simulink u",
+      "pass": true,
+      "value": 1.208260573361329E-8,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "Kmu actuators M3",
+      "pass": true,
+      "value": 6.06598492037101E-9,
+      "tolerance": 0.0002
+    },
+    {
+      "name": "Kmu tracking finite j1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu tracking finite j2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu noise scenario 1",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu noise scenario 2",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu noise scenario 3",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "Kmu noise repeatability",
+      "pass": true,
+      "value": 0,
+      "tolerance": 0
+    },
+    {
+      "name": "Kmu link disturbance",
+      "pass": true,
+      "value": 1,
+      "tolerance": 1
+    },
+    {
+      "name": "LQRI constant disturbance rejection",
+      "pass": true,
+      "value": 2.3064107714621646E-7,
+      "tolerance": 0.1
+    }
+  ],
+  "controllers": [
+    {
+      "kind": "LQG",
+      "equilibriumError": 4.9894388542562157E-15,
+      "GwError": 7.1054273576010019E-15,
+      "maxAbsErrorQ": 7.6322220977687082E-10,
+      "rmsErrorQ": 8.3130227021045268E-11,
+      "maxAbsErrorU": 1.5521187538935881E-7,
+      "actuatorError": 3.1687942504686787E-6,
+      "tracking": [
+        [
+          0.668,
+          0.28297528447935871,
+          0.001549560396007732,
+          0.16927090004951284,
+          4.7462810945368989,
+          0.61951505325147738
+        ],
+        [
+          0.47400000000000003,
+          0,
+          0.000752038554973633,
+          0.1690011358242838,
+          4.510979063225995,
+          0.23834941776942833
+        ]
+      ],
+      "noise": {
+        "repeatError": 0,
+        "peakU": 0.33922912459612159,
+        "rmsU": 0.091952632244360219,
+        "noiseCovariance": [
+          [
+            8.5391951272180764E-7,
+            6.3736470329963332E-8,
+            9.0675966971790422E-9,
+            8.15849735433095E-9
+          ],
+          [
+            6.3736470329963332E-8,
+            7.0843864053770493E-7,
+            -6.9765375273852621E-8,
+            5.0883575219586675E-8
+          ],
+          [
+            9.0675966971790422E-9,
+            -6.9765375273852621E-8,
+            8.5109756525540653E-7,
+            -2.7009794481281191E-8
+          ],
+          [
+            8.15849735433095E-9,
+            5.0883575219586675E-8,
+            -2.7009794481281191E-8,
+            6.4428499146698027E-7
+          ]
+        ],
+        "processCovariance": [
+          [
+            0.010838283333077134,
+            0.00128058128015594,
+            0.00063350036952230474,
+            -0.00012640286953391865
+          ],
+          [
+            0.00128058128015594,
+            0.010248650635210944,
+            -0.00012558739776285467,
+            0.00023962446748437705
+          ],
+          [
+            0.00063350036952230474,
+            -0.00012558739776285467,
+            0.010285253794770724,
+            -0.00056223536215947647
+          ],
+          [
+            -0.00012640286953391865,
+            0.00023962446748437705,
+            -0.00056223536215947647,
+            0.0078568981742409179
+          ]
+        ]
+      },
+      "kalman": {
+        "initialError": 0.0001,
+        "finalError": 1.230804389867195E-14,
+        "noiselessRMS": 0.00014789212997535478,
+        "noisyRMS": 0.01061837467271951
+      },
+      "disturbance": {
+        "errorBefore": [
+          0,
+          8.7971541920842028E-18
+        ],
+        "errorAfter": [
+          0.052335845797994232,
+          -0.02799384005396751
+        ],
+        "errorFinal": [
+          0.071825256398378653,
+          -0.028024006377385842
+        ]
+      }
+    },
+    {
+      "kind": "LQRI",
+      "equilibriumError": 5.2551498232693144E-15,
+      "GwError": 7.1054273576010019E-15,
+      "maxAbsErrorQ": 2.9630812656448061E-10,
+      "rmsErrorQ": 4.1125077224875162E-11,
+      "maxAbsErrorU": 3.8219412633470125E-8,
+      "actuatorError": 1.6189510812546223E-8,
+      "tracking": [
+        [
+          3.504,
+          0,
+          0.051928450500828172,
+          0.03770011380167921,
+          0.78401448607915825,
+          0.42961532633221927
+        ],
+        [
+          3.424,
+          0,
+          0.039307223058678287,
+          0.037294191284831184,
+          0.19749400533531425,
+          0.14865138068511652
+        ]
+      ],
+      "noise": {
+        "repeatError": 0,
+        "peakU": 0.34755169842247879,
+        "rmsU": 0.095261744501481185,
+        "noiseCovariance": [
+          [
+            8.5391951272180764E-7,
+            6.3736470329963332E-8,
+            9.0675966971790422E-9,
+            8.15849735433095E-9
+          ],
+          [
+            6.3736470329963332E-8,
+            7.0843864053770493E-7,
+            -6.9765375273852621E-8,
+            5.0883575219586675E-8
+          ],
+          [
+            9.0675966971790422E-9,
+            -6.9765375273852621E-8,
+            8.5109756525540653E-7,
+            -2.7009794481281191E-8
+          ],
+          [
+            8.15849735433095E-9,
+            5.0883575219586675E-8,
+            -2.7009794481281191E-8,
+            6.4428499146698027E-7
+          ]
+        ],
+        "processCovariance": [
+          [
+            0.010838283333077134,
+            0.00128058128015594,
+            0.00063350036952230474,
+            -0.00012640286953391865
+          ],
+          [
+            0.00128058128015594,
+            0.010248650635210944,
+            -0.00012558739776285467,
+            0.00023962446748437705
+          ],
+          [
+            0.00063350036952230474,
+            -0.00012558739776285467,
+            0.010285253794770724,
+            -0.00056223536215947647
+          ],
+          [
+            -0.00012640286953391865,
+            0.00023962446748437705,
+            -0.00056223536215947647,
+            0.0078568981742409179
+          ]
+        ]
+      },
+      "kalman": {
+        "initialError": 0.0001,
+        "finalError": 4.9978307288833067E-15,
+        "noiselessRMS": 0.00014789205820701,
+        "noisyRMS": 0.010618382288405373
+      },
+      "disturbance": {
+        "errorBefore": [
+          0,
+          6.1241878915392636E-18
+        ],
+        "errorAfter": [
+          0.041235794329977447,
+          -0.018956959992708113
+        ],
+        "errorFinal": [
+          1.7749153406576571E-8,
+          1.0824754726301374E-9
+        ]
+      }
+    },
+    {
+      "kind": "Hinf",
+      "equilibriumError": 6.1097062269429062E-13,
+      "GwError": 7.1054273576010019E-15,
+      "maxAbsErrorQ": 8.8824760440258006E-10,
+      "rmsErrorQ": 2.6476766407391014E-10,
+      "maxAbsErrorU": 4.8670472447103473E-8,
+      "actuatorError": 3.2732679618079693E-6,
+      "tracking": [
+        [
+          1.46,
+          0,
+          0.0051812104416787408,
+          0.014245714532593212,
+          0.86825776561109436,
+          0.56212028069258668
+        ],
+        [
+          1.46,
+          0,
+          0.0024752733261733662,
+          0.010548492428548752,
+          0.24389120679372134,
+          0.19218158866680868
+        ]
+      ],
+      "noise": {
+        "repeatError": 0,
+        "peakU": 21.533770481347233,
+        "rmsU": 4.9141650245536912,
+        "noiseCovariance": [
+          [
+            8.5391951272180764E-7,
+            6.3736470329963332E-8,
+            9.0675966971790422E-9,
+            8.15849735433095E-9
+          ],
+          [
+            6.3736470329963332E-8,
+            7.0843864053770493E-7,
+            -6.9765375273852621E-8,
+            5.0883575219586675E-8
+          ],
+          [
+            9.0675966971790422E-9,
+            -6.9765375273852621E-8,
+            8.5109756525540653E-7,
+            -2.7009794481281191E-8
+          ],
+          [
+            8.15849735433095E-9,
+            5.0883575219586675E-8,
+            -2.7009794481281191E-8,
+            6.4428499146698027E-7
+          ]
+        ],
+        "processCovariance": [
+          [
+            0.010838283333077134,
+            0.00128058128015594,
+            0.00063350036952230474,
+            -0.00012640286953391865
+          ],
+          [
+            0.00128058128015594,
+            0.010248650635210944,
+            -0.00012558739776285467,
+            0.00023962446748437705
+          ],
+          [
+            0.00063350036952230474,
+            -0.00012558739776285467,
+            0.010285253794770724,
+            -0.00056223536215947647
+          ],
+          [
+            -0.00012640286953391865,
+            0.00023962446748437705,
+            -0.00056223536215947647,
+            0.0078568981742409179
+          ]
+        ]
+      },
+      "kalman": [],
+      "disturbance": {
+        "errorBefore": [
+          -2.8421709430404008E-17,
+          -9.290689789285972E-18
+        ],
+        "errorAfter": [
+          0.0023675184562268496,
+          -0.0029844272357990647
+        ],
+        "errorFinal": [
+          0.000582476965011347,
+          -0.00072418908044044421
+        ]
+      }
+    },
+    {
+      "kind": "Kmu",
+      "equilibriumError": 5.1253267886048164E-15,
+      "GwError": 7.1054273576010019E-15,
+      "maxAbsErrorQ": 1.0324212148306875E-9,
+      "rmsErrorQ": 3.2308411102369592E-10,
+      "maxAbsErrorU": 1.208260573361329E-8,
+      "actuatorError": 6.06598492037101E-9,
+      "tracking": [
+        [
+          1.524,
+          0,
+          0.060204029115150659,
+          0.10430703491433171,
+          0.79637546875044063,
+          0.49929369948437274
+        ],
+        [
+          1.484,
+          0,
+          0.030751281081695336,
+          0.10986139432554981,
+          0.19917688173717152,
+          0.17282449406015607
+        ]
+      ],
+      "noise": {
+        "repeatError": 0,
+        "peakU": 8.0043594150582233,
+        "rmsU": 2.0481573663343777,
+        "noiseCovariance": [
+          [
+            8.5391951272180764E-7,
+            6.3736470329963332E-8,
+            9.0675966971790422E-9,
+            8.15849735433095E-9
+          ],
+          [
+            6.3736470329963332E-8,
+            7.0843864053770493E-7,
+            -6.9765375273852621E-8,
+            5.0883575219586675E-8
+          ],
+          [
+            9.0675966971790422E-9,
+            -6.9765375273852621E-8,
+            8.5109756525540653E-7,
+            -2.7009794481281191E-8
+          ],
+          [
+            8.15849735433095E-9,
+            5.0883575219586675E-8,
+            -2.7009794481281191E-8,
+            6.4428499146698027E-7
+          ]
+        ],
+        "processCovariance": [
+          [
+            0.010838283333077134,
+            0.00128058128015594,
+            0.00063350036952230474,
+            -0.00012640286953391865
+          ],
+          [
+            0.00128058128015594,
+            0.010248650635210944,
+            -0.00012558739776285467,
+            0.00023962446748437705
+          ],
+          [
+            0.00063350036952230474,
+            -0.00012558739776285467,
+            0.010285253794770724,
+            -0.00056223536215947647
+          ],
+          [
+            -0.00012640286953391865,
+            0.00023962446748437705,
+            -0.00056223536215947647,
+            0.0078568981742409179
+          ]
+        ]
+      },
+      "kalman": [],
+      "disturbance": {
+        "errorBefore": [
+          0,
+          7.5709807699519368E-18
+        ],
+        "errorAfter": [
+          0.043778742492613147,
+          -0.038572688326248758
+        ],
+        "errorFinal": [
+          0.0076265180328181645,
+          -0.0051088005390167376
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,550 @@
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+Error using build_simulink_integration>logsignal (line 137)
+line does not have a parameter named 'DataLogging'
+
+Error in build_simulink_integration (line 85)
+  logsignal(model,'Kalman filter',1,'xhat');
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+Error using build_simulink_integration>logsignal (line 137)
+Invalid Simulink object handle
+
+Error in build_simulink_integration (line 103)
+ logsignal(model,'Sum1',1,'u_abs'); logsignal(model,'Actuators',1,'tau');
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+Error using build_simulink_integration (line 125)
+Expression 'slBus1' for type of data <a href="matlab:sfprivate('sfOpenObjectBySId','SEA_LQG_integrated:662:::p')">'p'</a> did not evaluate
+to a valid type.
+
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Caused by:
+    Error using build_simulink_integration (line 125)
+    Invalid setting in '<a href="matlab:sf('Open', 62)">Non linear plant/MATLAB Function1</a>' for parameter 'Datatype'
+    
+    Error in cr_simulink_worker (line 8)
+      try, evalin('base',code); status='PASS';
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        Error using build_simulink_integration (line 125)
+        Error evaluating MATLAB Function parameter data 'Datatype' in its parent workspace.
+        
+        Error in cr_simulink_worker (line 8)
+          try, evalin('base',code); status='PASS';
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            Error using build_simulink_integration (line 125)
+            Unrecognized function or variable 'slBus1'.
+            
+            Error in cr_simulink_worker (line 8)
+              try, evalin('base',code); status='PASS';
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                Error using build_simulink_integration (line 125)
+                Variable 'slBus1' does not exist.
+                
+                Error in cr_simulink_worker (line 8)
+                  try, evalin('base',code); status='PASS';
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                Suggested Actions:
+                    • Load a file into base workspace. - Fix
+                    • Create a new variable. - Fix
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQG_integrated
+[Warning: Model 'Progetto_LQRI_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQRI_integrated
+[Warning: Model 'Progetto_Hinf_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+Error using build_simulink_integration>wire (line 136)
+The destination port already has a line connection
+
+Error in build_simulink_integration (line 99)
+  wire(model,'Mux/1','Sum/1'); wire(model,'Selettore1/1','Sum/2');
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQG_integrated
+[Warning: Model 'Progetto_LQRI_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQRI_integrated
+[Warning: Model 'Progetto_Hinf_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_Hinf_integrated
+[Warning: Model 'Progetto_Hinf_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_Kmu_integrated
+VALIDATE LQG
+Subscripted assignment between dissimilar structures.
+
+Error in validate_simulink_integration/check (line 121)
+  summary.checks(end+1)=row; fprintf('%s %s: %.6g (tol %.6g)\n',string(pass),name,value,tolerance);
+  ^^^^^^^^^^^^^^^^^^^^^
+Error in validate_simulink_integration (line 14)
+ check(kind+" compile",true,0,0);
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+       ^^^^^^^^^^^^^^^^^^^
+[Warning: Model 'Progetto_LQR_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQG_integrated
+[Warning: Model 'Progetto_LQRI_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_LQRI_integrated
+[Warning: Model 'Progetto_Hinf_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_Hinf_integrated
+[Warning: Model 'Progetto_Hinf_simulink' was created with a newer version (R2026a) of Simulink
+To create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to >
+Previous Version.] 
+[> In load_system>i_load_system (line 44)
+In load_system (line 20)
+In build_simulink_integration (line 15)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot load version 'R2025a_20251111' of family 'slid'.] 
+[Warning: Cannot load version 'R2025b_202504071000' of family 'sltp_mm'.] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+[Warning: Cannot find library called 'cstblocks_lti'.  To use this library, install <a
+href="matlab:matlab.internal.addons.launchers.showExplorer('AO_MODEL_RP','identifier','CT')">Control System Toolbox</a>.] 
+[> In Simulink.ModelReference/DeleteContent/deleteBlocks
+In Simulink.ModelReference.DeleteContent.deleteContents
+In deleteSSContentsImpl
+In slprivate
+In Simulink.SubSystem.deleteContents
+In build_simulink_integration (line 29)
+In cr_simulink_worker (line 8)] 
+BUILD PASS SEA_Kmu_integrated
+File: C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\analysis\validate_simulink_integration.m Line: 121 Column: 88
+Invalid expression. Check for missing multiplication operator, missing or unbalanced delimiters, or other syntax error. To construct
+matrices, use brackets instead of parentheses.
+
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+       ^^^^^^^^^^^^^^^^^^^
+VALIDATE LQG
+true LQG compile: 0 (tol 0)
+true LQG state count: 28 (tol 28)
+true LQG full state output: 14 (tol 14)
+true LQG estimated feedback: 1 (tol 1)
+true LQG Gw physical channels: 7.10543e-15 (tol 1e-05)
+true LQG equilibrium: 4.98944e-15 (tol 1e-08)
+true LQG MATLAB Simulink q: 7.63222e-10 (tol 2e-07)
+true LQG MATLAB Simulink u: 1.55212e-07 (tol 0.0002)
+true LQG actuators M3: 3.16879e-06 (tol 0.0002)
+true LQG tracking finite j1: 1 (tol 1)
+true LQG tracking finite j2: 1 (tol 1)
+true LQG noise scenario 1: 1 (tol 1)
+true LQG noise scenario 2: 1 (tol 1)
+true LQG noise scenario 3: 1 (tol 1)
+true LQG noise repeatability: 0 (tol 0)
+true LQG Kalman convergence: 1.2308e-14 (tol 1e-06)
+true LQG disturbance with noise: 1 (tol 1)
+VALIDATE LQRI
+true LQRI compile: 0 (tol 0)
+true LQRI state count: 30 (tol 30)
+true LQRI full state output: 14 (tol 14)
+true LQRI estimated feedback: 1 (tol 1)
+true LQRI measured integral input: 1 (tol 1)
+true LQRI no Nr block: 0 (tol 0)
+true LQRI Gw physical channels: 7.10543e-15 (tol 1e-05)
+true LQRI equilibrium: 5.25515e-15 (tol 1e-08)
+true LQRI MATLAB Simulink q: 2.96308e-10 (tol 2e-07)
+true LQRI MATLAB Simulink u: 3.82194e-08 (tol 0.0002)
+true LQRI actuators M3: 1.61895e-08 (tol 0.0002)
+true LQRI tracking finite j1: 1 (tol 1)
+true LQRI tracking finite j2: 1 (tol 1)
+true LQRI noise scenario 1: 1 (tol 1)
+true LQRI noise scenario 2: 1 (tol 1)
+true LQRI noise scenario 3: 1 (tol 1)
+true LQRI noise repeatability: 0 (tol 0)
+true LQRI Kalman convergence: 4.99783e-15 (tol 1e-06)
+true LQRI disturbance with noise: 1 (tol 1)
+VALIDATE Hinf
+true Hinf compile: 0 (tol 0)
+true Hinf state count: 36 (tol 36)
+true Hinf full state output: 14 (tol 14)
+true Hinf Gw physical channels: 7.10543e-15 (tol 1e-05)
+true Hinf equilibrium: 6.10971e-13 (tol 1e-08)
+true Hinf MATLAB Simulink q: 8.88248e-10 (tol 2e-07)
+true Hinf MATLAB Simulink u: 4.86705e-08 (tol 0.0002)
+true Hinf actuators M3: 3.27327e-06 (tol 0.0002)
+true Hinf tracking finite j1: 1 (tol 1)
+true Hinf tracking finite j2: 1 (tol 1)
+true Hinf noise scenario 1: 1 (tol 1)
+true Hinf noise scenario 2: 1 (tol 1)
+true Hinf noise scenario 3: 1 (tol 1)
+true Hinf noise repeatability: 0 (tol 0)
+true Hinf link disturbance: 1 (tol 1)
+VALIDATE Kmu
+true Kmu compile: 0 (tol 0)
+true Kmu state count: 92 (tol 92)
+true Kmu full state output: 14 (tol 14)
+true Kmu Gw physical channels: 7.10543e-15 (tol 1e-05)
+true Kmu equilibrium: 5.12533e-15 (tol 1e-08)
+true Kmu MATLAB Simulink q: 1.03242e-09 (tol 2e-07)
+true Kmu MATLAB Simulink u: 1.20826e-08 (tol 0.0002)
+true Kmu actuators M3: 6.06598e-09 (tol 0.0002)
+true Kmu tracking finite j1: 1 (tol 1)
+true Kmu tracking finite j2: 1 (tol 1)
+true Kmu noise scenario 1: 1 (tol 1)
+true Kmu noise scenario 2: 1 (tol 1)
+true Kmu noise scenario 3: 1 (tol 1)
+true Kmu noise repeatability: 0 (tol 0)
+true Kmu link disturbance: 1 (tol 1)
+true LQRI constant disturbance rejection: 2.30641e-07 (tol 0.1)
+SIMULINK: 67/67 checks PASS
+Running test_simulink_integration
+.......
+Done test_simulink_integration
+__________
+
+Running test_simulink_integration
+.......
+Done test_simulink_integration
+__________
+

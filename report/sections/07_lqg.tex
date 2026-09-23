@@ -338,12 +338,18 @@ La verifica non lineare e il limite interno di Lyapunov, che includono
 l'osservatore, sono sviluppati nel Capitolo 10; non sono dedotti dai soli poli.
 
 \section{Implementazione Simulink didattica}
-Il modello \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei blocchi funzionali: riferimento, controllore LQG, dinamica degli attuatori, pianta SEA non lineare, interfaccia di misura e monitoraggio. Dentro il controllore sono separati il prefiltro $N_r$, il feedback $-K\hat x$, la somma che genera il comando incrementale e l'osservatore di Kalman. Quest'ultimo realizza
+Il modello storico M8 \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei blocchi funzionali: riferimento, controllore LQG, dinamica degli attuatori, pianta SEA non lineare, interfaccia di misura e monitoraggio. Dentro il controllore sono separati il prefiltro $N_r$, il feedback $-K\hat x$, la somma che genera il comando incrementale e l'osservatore di Kalman. Quest'ultimo realizza
 \[
 \dot{\hat x}=(A-LC)\hat x+B\,\delta u+L\,\delta y,
 \qquad \delta u=-K\hat x+N_rr.
 \]
 L'interfaccia di misura estrae soltanto $q$ e $\theta$, sottrae l'equilibrio e aggiunge il rumore encoder; le velocità non vengono misurate. La coppia assoluta inviata agli attuatori è $u_{abs}=\bar\tau+\delta u$. Tutti i guadagni sono incorporati dall'artifact M6 validato e le condizioni iniziali vengono passate con \texttt{SimulationInput}; il modello non dipende dal base workspace. Non sono presenti saturazioni.
+
+L'integrazione corrente usa inoltre \path{SEA_LQG_integrated.slx} e
+\path{SEA_LQRI_integrated.slx}, derivati dai modelli di Valerio e inizializzati
+da un setup comune sul model workspace. Il Capitolo 10 documenta la verifica
+dei canali fisici, dei rumori e del confronto MATLAB/Simulink; il modello M8
+rimane conservato come riferimento storico.
 
 \section{LQRI M7: azione integrale e stato stimato}
 \label{sec:lqri}

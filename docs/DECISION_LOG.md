@@ -2178,3 +2178,8 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Decisione: Kmu assume il ruolo robusto sul dominio M4; Hinf rimane comparatore nominale. M5 non viene rilassata. Il nuovo integratore MATLAB evita modifiche ai modelli Simulink storici; la verifica locale ne controlla segno e mappe. Il limite numerico RAS1e6 conserva la soglia precedente. Nessuna nuova ricerca di tuning dopo gli esiti negativi.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Approvate esplicitamente API MATLAB locali e sole librerie standard in assenza di model_edit. Originali Valerio conservati; copie corrette su R2025b. Matrici M3 e6stati espliciti sostituiscono LTI esterni; vettore17 di parametri sostituisce slBus1. Nessuna modifica a controllori, pesi, specifiche o risultati robusti. PASS implementativo distinto dalla conformità M5.

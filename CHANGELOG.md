@@ -492,3 +492,8 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Integrati4modelli Simulink da Valerio con setup artifact, canali fisici corretti, rumori separati, Kalman, integratore misurato e vera2-DoF Hinf/Kmu. Aggiunti validatore e scope di esecuzione;67/67 controlli+7/7 test PASS. Relazione e presentazione aggiornate.

@@ -1,28 +1,27 @@
-# Outline e timing stimato
+# Scaletta aggiornata
 
-I tempi sono stime di preparazione, non misure di un'esposizione reale.
+Circa25–30 minuti; dimostrazione Simulink separata facoltativa.
 
-| Slide | Messaggio | Tempo stimato |
-| ---: | --- | ---: |
-| 1 | Titolo e perimetro | 0:30 |
-| 2 | Evidenze richieste e domanda di progetto | 1:00 |
-| 3 | Modello SEA | 1:10 |
-| 4 | Equilibrio e attuatori | 1:00 |
-| 5 | Insieme incerto M4 | 1:05 |
-| 6 | Specifiche e pesi M5 | 1:00 |
-| 7 | LQR: scale fisiche, Q/R e Riccati | 1:00 |
-| 8 | Kalman: ipotesi, covarianze e sensibilità | 1:00 |
-| 9 | Risultato nominale M6 | 0:45 |
-| 10 | Risultato negativo M7 | 0:55 |
-| 11 | Sintesi H-infinity | 1:15 |
-| 12 | D-K iteration e produzione di Kmu | 1:00 |
-| 13 | Verifica indipendente e certificazione M14 | 1:20 |
-| 14 | Validazione non lineare | 1:00 |
-| 15 | Lyapunov: regione interna e confronto numerico | 1:20 |
-| 16 | Monte Carlo M16 | 1:15 |
-| 17 | Monte Carlo e mu-analysis: evidenze distinte | 0:30 |
-| 18 | Decisione finale per ruolo | 1:00 |
-| 19 | Limiti e conclusione | 0:55 |
-| **Totale** | **stima di preparazione** | **19:00** |
-
-Il margine rispetto ai 20 minuti è destinato a pause e transizioni. Le derivazioni e le matrici complete restano nella relazione; la slide 15 distingue la regione nominale garantita analiticamente dall'ellisse verificata soltanto su punti finiti.
+2. La domanda di progetto richiede evidenze diverse
+3. L'elasticità separa link e rotori
+4. Attuatori e linearizzazione portano a 14 stati
+5. M4 combina parametri reali e dinamica non modellata
+6. M5 fissa target e pesi prima del confronto
+7. LQR: scale fisiche e pesi sono cose diverse
+8. Kalman: ipotesi del progetto, non dati del docente
+9. M6 è il riferimento di tracking nominale
+10. M7 chiude con un risultato negativo utile
+11. Da una norma minore di uno a un vero progetto 2-DoF
+12. H-infinity: tracking migliorato, robustezza insufficiente
+13. Kmu è il candidato robusto del modello dichiarato
+14. Quaranta campioni comuni: esiti opposti
+15. Rumore e regione di attrazione mostrano altri limiti
+16. Lyapunov: distinguere certificato e verifica campionata
+17. Simulink parte dai modelli originali di Valerio
+18. Otto stati meccanici più sei stati degli attuatori
+19. Disturbo, processo e misura sono tre canali diversi
+20. Kalman e integratore usano le misure effettive
+21. Il disturbo costante rende visibile il ruolo dell'integratore
+22. Confronto MATLAB/Simulink: quattro controllori verificati
+23. Il PASS implementativo non cambia la conformità di progetto
+24. Riproduzione circoscritta e limiti residui
