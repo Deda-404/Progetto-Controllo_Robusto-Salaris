@@ -1,0 +1,284 @@
+{
+  "matlab": "25.2.0.3150157 (R2025b) Update 4",
+  "checks": [
+    {
+      "name": "LQG LTI q scenario 1",
+      "value": 6.09464302636642E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQG LTI u scenario 1",
+      "value": 4.2839597491628467E-7,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQG LTI q scenario 2",
+      "value": 2.5657924812572119E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQG LTI u scenario 2",
+      "value": 5.1408456158696936E-7,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQG LTI q scenario 3",
+      "value": 2.4870399316367919E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQG LTI u scenario 3",
+      "value": 3.33222614640194E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQG nonlinear small q",
+      "value": 7.2605926888005259E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQG nonlinear small u",
+      "value": 1.4948463380689593E-7,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI q scenario 1",
+      "value": 1.0724326121591687E-8,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI u scenario 1",
+      "value": 9.06165710246043E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI q scenario 2",
+      "value": 9.67048788963476E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI u scenario 2",
+      "value": 2.2514251143967989E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI q scenario 3",
+      "value": 2.6006938855065165E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQRI LTI u scenario 3",
+      "value": 3.3436098924310986E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "LQRI nonlinear small q",
+      "value": 2.8949485726873372E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "LQRI nonlinear small u",
+      "value": 3.6443277384658364E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI q scenario 1",
+      "value": 3.3005972369006941E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI u scenario 1",
+      "value": 1.9444092708154059E-7,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI q scenario 2",
+      "value": 1.568591992406887E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI u scenario 2",
+      "value": 1.7916028462738876E-6,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI q scenario 3",
+      "value": 3.490255676705592E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Hinf LTI u scenario 3",
+      "value": 1.8037670505670345E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Hinf nonlinear small q",
+      "value": 8.4201106936870494E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Hinf nonlinear small u",
+      "value": 4.6146978893607288E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI q scenario 1",
+      "value": 9.1648889475812179E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI u scenario 1",
+      "value": 1.3586854308300644E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI q scenario 2",
+      "value": 1.5730284436132891E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI u scenario 2",
+      "value": 1.4134758197226205E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI q scenario 3",
+      "value": 1.0972589781763943E-9,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Kmu LTI u scenario 3",
+      "value": 8.2220798190701938E-9,
+      "tolerance": 0.0002,
+      "pass": true
+    },
+    {
+      "name": "Kmu nonlinear small q",
+      "value": 9.80032255991207E-10,
+      "tolerance": 2E-7,
+      "pass": true
+    },
+    {
+      "name": "Kmu nonlinear small u",
+      "value": 1.1465242918094493E-8,
+      "tolerance": 0.0002,
+      "pass": true
+    }
+  ],
+  "controllers": [
+    {
+      "kind": "LQG",
+      "linearErrorsQU": [
+        [
+          6.09464302636642E-9,
+          4.2839597491628467E-7
+        ],
+        [
+          2.5657924812572119E-9,
+          5.1408456158696936E-7
+        ],
+        [
+          2.4870399316367919E-10,
+          3.33222614640194E-8
+        ]
+      ],
+      "nonlinearErrorsQU": [
+        7.2605926888005259E-10,
+        1.4948463380689593E-7
+      ]
+    },
+    {
+      "kind": "LQRI",
+      "linearErrorsQU": [
+        [
+          1.0724326121591687E-8,
+          9.06165710246043E-8
+        ],
+        [
+          9.67048788963476E-9,
+          2.2514251143967989E-8
+        ],
+        [
+          2.6006938855065165E-10,
+          3.3436098924310986E-8
+        ]
+      ],
+      "nonlinearErrorsQU": [
+        2.8949485726873372E-10,
+        3.6443277384658364E-8
+      ]
+    },
+    {
+      "kind": "Hinf",
+      "linearErrorsQU": [
+        [
+          3.3005972369006941E-9,
+          1.9444092708154059E-7
+        ],
+        [
+          1.568591992406887E-9,
+          1.7916028462738876E-6
+        ],
+        [
+          3.490255676705592E-10,
+          1.8037670505670345E-8
+        ]
+      ],
+      "nonlinearErrorsQU": [
+        8.4201106936870494E-10,
+        4.6146978893607288E-8
+      ]
+    },
+    {
+      "kind": "Kmu",
+      "linearErrorsQU": [
+        [
+          9.1648889475812179E-10,
+          1.3586854308300644E-8
+        ],
+        [
+          1.5730284436132891E-9,
+          1.4134758197226205E-8
+        ],
+        [
+          1.0972589781763943E-9,
+          8.2220798190701938E-9
+        ]
+      ],
+      "nonlinearErrorsQU": [
+        9.80032255991207E-10,
+        1.1465242918094493E-8
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,361 @@
+Historical M8 K,L,Nr identities: 1 1 1
+LINEAR COMMON LQG
+LINEAR COMMON LQRI
+LINEAR COMMON Hinf
+LINEAR COMMON Kmu
+              name                value       tolerance    pass
+    ________________________    __________    _________    _____
+
+    "LQG LTI q scenario 1"      6.0946e-09      2e-07      true
+    "LQG LTI u scenario 1"       4.284e-07     0.0002      true
+    "LQG LTI q scenario 2"      2.5658e-09      2e-07      true
+    "LQG LTI u scenario 2"      5.1408e-07     0.0002      true
+    "LQG LTI q scenario 3"       2.487e-10      2e-07      true
+    "LQG LTI u scenario 3"      3.3322e-08     0.0002      true
+    "LQG nonlinear small q"     7.2606e-10      2e-07      true
+    "LQG nonlinear small u"     1.4948e-07     0.0002      true
+    "LQRI LTI q scenario 1"     1.0724e-08      2e-07      true
+    "LQRI LTI u scenario 1"     9.0617e-08     0.0002      true
+    "LQRI LTI q scenario 2"     9.6705e-09      2e-07      true
+    "LQRI LTI u scenario 2"     2.2514e-08     0.0002      true
+    "LQRI LTI q scenario 3"     2.6007e-10      2e-07      true
+    "LQRI LTI u scenario 3"     3.3436e-08     0.0002      true
+    "LQRI nonlinear small q"    2.8949e-10      2e-07      true
+    "LQRI nonlinear small u"    3.6443e-08     0.0002      true
+    "Hinf LTI q scenario 1"     3.3006e-09      2e-07      true
+    "Hinf LTI u scenario 1"     1.9444e-07     0.0002      true
+    "Hinf LTI q scenario 2"     1.5686e-09      2e-07      true
+    "Hinf LTI u scenario 2"     1.7916e-06     0.0002      true
+    "Hinf LTI q scenario 3"     3.4903e-10      2e-07      true
+    "Hinf LTI u scenario 3"     1.8038e-08     0.0002      true
+    "Hinf nonlinear small q"    8.4201e-10      2e-07      true
+    "Hinf nonlinear small u"    4.6147e-08     0.0002      true
+    "Kmu LTI q scenario 1"      9.1649e-10      2e-07      true
+    "Kmu LTI u scenario 1"      1.3587e-08     0.0002      true
+    "Kmu LTI q scenario 2"       1.573e-09      2e-07      true
+    "Kmu LTI u scenario 2"      1.4135e-08     0.0002      true
+    "Kmu LTI q scenario 3"      1.0973e-09      2e-07      true
+    "Kmu LTI u scenario 3"      8.2221e-09     0.0002      true
+    "Kmu nonlinear small q"     9.8003e-10      2e-07      true
+    "Kmu nonlinear small u"     1.1465e-08     0.0002      true
+
+RAS 1 points / 1 simulations: [-60 -60] convergent=1 error=
+RAS 2 points / 2 simulations: [-60 -30] convergent=1 error=
+RAS 3 points / 3 simulations: [-60 0] convergent=1 error=
+RAS 4 points / 4 simulations: [-60 30] convergent=1 error=
+RAS 5 points / 5 simulations: [-60 60] convergent=1 error=
+RAS 6 points / 6 simulations: [-30 -60] convergent=1 error=
+RAS 7 points / 7 simulations: [-30 -30] convergent=1 error=
+RAS 8 points / 8 simulations: [-30 0] convergent=1 error=
+RAS 9 points / 9 simulations: [-30 30] convergent=1 error=
+RAS 10 points / 10 simulations: [-30 60] convergent=1 error=
+RAS 11 points / 11 simulations: [0 -60] convergent=1 error=
+RAS 12 points / 12 simulations: [0 -30] convergent=1 error=
+RAS 13 points / 13 simulations: [0 0] convergent=1 error=
+RAS 14 points / 14 simulations: [0 30] convergent=1 error=
+RAS 15 points / 15 simulations: [0 60] convergent=1 error=
+RAS 16 points / 16 simulations: [30 -60] convergent=1 error=
+RAS 17 points / 17 simulations: [30 -30] convergent=1 error=
+RAS 18 points / 18 simulations: [30 0] convergent=1 error=
+RAS 19 points / 19 simulations: [30 30] convergent=1 error=
+RAS 20 points / 20 simulations: [30 60] convergent=1 error=
+RAS 21 points / 21 simulations: [60 -60] convergent=1 error=
+RAS 22 points / 22 simulations: [60 -30] convergent=1 error=
+RAS 23 points / 23 simulations: [60 0] convergent=1 error=
+RAS 24 points / 24 simulations: [60 30] convergent=1 error=
+RAS 25 points / 25 simulations: [60 60] convergent=1 error=
+RAS 26 points / 26 simulations: [60 10.5796] convergent=1 error=
+RAS 27 points / 27 simulations: [60 21.8382] convergent=1 error=
+RAS 28 points / 28 simulations: [60 34.641] convergent=1 error=
+RAS 29 points / 29 simulations: [60 50.346] convergent=1 error=
+RAS 30 points / 30 simulations: [50.346 60] convergent=1 error=
+RAS 31 points / 31 simulations: [34.641 60] convergent=1 error=
+RAS 32 points / 32 simulations: [21.8382 60] convergent=1 error=
+RAS 33 points / 33 simulations: [10.5796 60] convergent=1 error=
+RAS 34 points / 34 simulations: [-10.5796 60] convergent=1 error=
+RAS 35 points / 35 simulations: [-21.8382 60] convergent=1 error=
+RAS 36 points / 36 simulations: [-34.641 60] convergent=1 error=
+RAS 37 points / 37 simulations: [-50.346 60] convergent=1 error=
+RAS 38 points / 38 simulations: [-60 50.346] convergent=1 error=
+RAS 39 points / 39 simulations: [-60 34.641] convergent=1 error=
+RAS 40 points / 40 simulations: [-60 21.8382] convergent=1 error=
+RAS 41 points / 41 simulations: [-60 10.5796] convergent=1 error=
+RAS 42 points / 42 simulations: [-60 -10.5796] convergent=1 error=
+RAS 43 points / 43 simulations: [-60 -21.8382] convergent=1 error=
+RAS 44 points / 44 simulations: [-60 -34.641] convergent=1 error=
+RAS 45 points / 45 simulations: [-60 -50.346] convergent=1 error=
+RAS 46 points / 46 simulations: [-50.346 -60] convergent=1 error=
+RAS 47 points / 47 simulations: [-34.641 -60] convergent=1 error=
+RAS 48 points / 48 simulations: [-21.8382 -60] convergent=1 error=
+RAS 49 points / 49 simulations: [-10.5796 -60] convergent=1 error=
+RAS 50 points / 50 simulations: [10.5796 -60] convergent=1 error=
+RAS 51 points / 51 simulations: [21.8382 -60] convergent=1 error=
+RAS 52 points / 52 simulations: [34.641 -60] convergent=1 error=
+RAS 53 points / 53 simulations: [50.346 -60] convergent=1 error=
+RAS 54 points / 54 simulations: [60 -50.346] convergent=1 error=
+RAS 55 points / 55 simulations: [60 -34.641] convergent=1 error=
+RAS 56 points / 56 simulations: [60 -21.8382] convergent=1 error=
+RAS 57 points / 57 simulations: [60 -10.5796] convergent=1 error=
+               numberSimulations: 57
+              numberUniquePoints: 57
+                numberConvergent: 57
+                 numberDivergent: 0
+    empiricalConvergenceFraction: 1
+                minimumRadiusDeg: 60
+                maximumRadiusDeg: 78.3244
+             approximateAreaDeg2: 1.4214e+04
+             approximateAreaRad2: 4.3297
+            criticalDirectionDeg: 0
+           favorableDirectionDeg: 320
+                      directions: 36
+    allRadialEndpointsConvergent: 1
+                  classification: "SEARCH-BOX LIMITED"
+      maximumConvergentControlNm: 240.9605
+                 certifiedRegion: 0
+            extendedHorizonCount: 0
+
+Running test_simulink_integration
+.......
+Done test_simulink_integration
+__________
+
+Running test_simulink_completion
+........
+================================================================================
+Verification failed in test_simulink_completion/actualM3Diagram(kind=LQG).
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    verifySize failed.
+    --> The value had an incorrect size.
+
+        Actual Size:
+             1     1
+        Expected Size:
+            28    28
+
+    Actual Value:
+      struct with fields:
+
+                 a: [28×28 double]
+                 b: [28×0 double]
+                 c: [2×28 double]
+                 d: [2×0 double]
+         StateName: {28×1 cell}
+        OutputName: {2×1 cell}
+         InputName: {0×1 cell}
+         OperPoint: [1×1 struct]
+                Ts: 0
+    ------------------
+    Stack Information:
+    ------------------
+    In C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\tests\test_simulink_completion.m (test_simulink_completion.actualM3Diagram) at 48
+================================================================================
+.
+================================================================================
+Verification failed in test_simulink_completion/actualM3Diagram(kind=LQRI).
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    verifySize failed.
+    --> The value had an incorrect size.
+
+        Actual Size:
+             1     1
+        Expected Size:
+            30    30
+
+    Actual Value:
+      struct with fields:
+
+                 a: [30×30 double]
+                 b: [30×0 double]
+                 c: [2×30 double]
+                 d: [2×0 double]
+         StateName: {30×1 cell}
+        OutputName: {2×1 cell}
+         InputName: {0×1 cell}
+         OperPoint: [1×1 struct]
+                Ts: 0
+    ------------------
+    Stack Information:
+    ------------------
+    In C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\tests\test_simulink_completion.m (test_simulink_completion.actualM3Diagram) at 48
+================================================================================
+.
+================================================================================
+Verification failed in test_simulink_completion/actualM3Diagram(kind=Hinf).
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    verifySize failed.
+    --> The value had an incorrect size.
+
+        Actual Size:
+             1     1
+        Expected Size:
+            36    36
+
+    Actual Value:
+      struct with fields:
+
+                 a: [36×36 double]
+                 b: [36×0 double]
+                 c: [2×36 double]
+                 d: [2×0 double]
+         StateName: {36×1 cell}
+        OutputName: {2×1 cell}
+         InputName: {0×1 cell}
+         OperPoint: [1×1 struct]
+                Ts: 0
+    ------------------
+    Stack Information:
+    ------------------
+    In C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\tests\test_simulink_completion.m (test_simulink_completion.actualM3Diagram) at 48
+================================================================================
+.
+================================================================================
+Verification failed in test_simulink_completion/actualM3Diagram(kind=Kmu).
+    ---------------------
+    Framework Diagnostic:
+    ---------------------
+    verifySize failed.
+    --> The value had an incorrect size.
+
+        Actual Size:
+             1     1
+        Expected Size:
+            92    92
+
+    Actual Value:
+      struct with fields:
+
+                 a: [92×92 double]
+                 b: [92×0 double]
+                 c: [2×92 double]
+                 d: [2×0 double]
+         StateName: {92×1 cell}
+        OutputName: {2×1 cell}
+         InputName: {0×1 cell}
+         OperPoint: [1×1 struct]
+                Ts: 0
+    ------------------
+    Stack Information:
+    ------------------
+    In C:\Users\aless\Desktop\Progetto_ISCR\CR\Progetto_CR\tests\test_simulink_completion.m (test_simulink_completion.actualM3Diagram) at 48
+================================================================================
+....
+Done test_simulink_completion
+__________
+
+Failure Summary:
+
+     Name                                                 Failed  Incomplete  Reason(s)
+    ==================================================================================================
+     test_simulink_completion/actualM3Diagram(kind=LQG)     X                 Failed by verification.
+    --------------------------------------------------------------------------------------------------
+     test_simulink_completion/actualM3Diagram(kind=LQRI)    X                 Failed by verification.
+    --------------------------------------------------------------------------------------------------
+     test_simulink_completion/actualM3Diagram(kind=Hinf)    X                 Failed by verification.
+    --------------------------------------------------------------------------------------------------
+     test_simulink_completion/actualM3Diagram(kind=Kmu)     X                 Failed by verification.
+                                 Name                                  Passed    Failed    Incomplete    Duration       Details
+    _______________________________________________________________    ______    ______    __________    _________    ____________
+
+    {'test_simulink_integration/allNumericalChecks'               }    true      false       false           0.187    {1×1 struct}
+    {'test_simulink_integration/allFourControllers'               }    true      false       false        0.012726    {1×1 struct}
+    {'test_simulink_integration/lqgArtifactIdentity'              }    true      false       false         0.21254    {1×1 struct}
+    {'test_simulink_integration/lqriArtifactIdentity'             }    true      false       false         0.17655    {1×1 struct}
+    {'test_simulink_integration/hinfArtifactIdentity'             }    true      false       false         0.41464    {1×1 struct}
+    {'test_simulink_integration/muArtifactIdentity'               }    true      false       false         0.22204    {1×1 struct}
+    {'test_simulink_integration/independentNoiseChannels'         }    true      false       false         0.19143    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=LQG)' }    true      false       false        0.092519    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=LQRI)'}    true      false       false       0.0014329    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=Hinf)'}    true      false       false       0.0023314    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=Kmu)' }    true      false       false       0.0003863    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=LQG)'    }    true      false       false       0.0034771    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=LQRI)'   }    true      false       false       0.0003551    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=Hinf)'   }    true      false       false       0.0002603    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=Kmu)'    }    true      false       false       0.0002209    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=LQG)'         }    false     true        false          3.0742    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=LQRI)'        }    false     true        false         0.95112    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=Hinf)'        }    false     true        false         0.83809    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=Kmu)'         }    false     true        false         0.58189    {1×1 struct}
+    {'test_simulink_completion/rasProtocolUnchanged'              }    true      false       false         0.19945    {1×1 struct}
+    {'test_simulink_completion/rasNoHiddenExecutionFailure'       }    true      false       false        0.027736    {1×1 struct}
+    {'test_simulink_completion/historicalLqgIdentity'             }    true      false       false         0.21276    {1×1 struct}
+
+Error using assert
+At least one test failed in the test session.
+
+Error in matlab.unittest.internal.BaseTestResult/assertSuccess (line 126)
+             assert(~any([resultArray.Failed]),message('MATLAB:unittest:TestResult:UnsuccessfulRun'));
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in cr_simulink_worker (line 8)
+  try, evalin('base',code); status='PASS';
+       ^^^^^^^^^^^^^^^^^^^
+Running test_simulink_integration
+.......
+Done test_simulink_integration
+__________
+
+Running test_simulink_completion
+.......... .....
+Done test_simulink_completion
+__________
+
+                                 Name                                  Passed    Failed    Incomplete    Duration       Details
+    _______________________________________________________________    ______    ______    __________    _________    ____________
+
+    {'test_simulink_integration/allNumericalChecks'               }    true      false       false        0.072895    {1×1 struct}
+    {'test_simulink_integration/allFourControllers'               }    true      false       false       0.0038308    {1×1 struct}
+    {'test_simulink_integration/lqgArtifactIdentity'              }    true      false       false         0.10123    {1×1 struct}
+    {'test_simulink_integration/lqriArtifactIdentity'             }    true      false       false         0.13984    {1×1 struct}
+    {'test_simulink_integration/hinfArtifactIdentity'             }    true      false       false         0.35795    {1×1 struct}
+    {'test_simulink_integration/muArtifactIdentity'               }    true      false       false         0.17858    {1×1 struct}
+    {'test_simulink_integration/independentNoiseChannels'         }    true      false       false         0.14145    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=LQG)' }    true      false       false        0.076844    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=LQRI)'}    true      false       false       0.0004325    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=Hinf)'}    true      false       false       0.0004195    {1×1 struct}
+    {'test_simulink_completion/linearMatlabEquivalence(kind=Kmu)' }    true      false       false       0.0004499    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=LQG)'    }    true      false       false        0.002754    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=LQRI)'   }    true      false       false       0.0002807    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=Hinf)'   }    true      false       false       0.0002321    {1×1 struct}
+    {'test_simulink_completion/nonlinearSmallSignal(kind=Kmu)'    }    true      false       false       0.0002321    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=LQG)'         }    true      false       false         0.55734    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=LQRI)'        }    true      false       false          0.4319    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=Hinf)'        }    true      false       false         0.46328    {1×1 struct}
+    {'test_simulink_completion/actualM3Diagram(kind=Kmu)'         }    true      false       false          0.3953    {1×1 struct}
+    {'test_simulink_completion/rasProtocolUnchanged'              }    true      false       false         0.12576    {1×1 struct}
+    {'test_simulink_completion/rasNoHiddenExecutionFailure'       }    true      false       false       0.0065983    {1×1 struct}
+    {'test_simulink_completion/historicalLqgIdentity'             }    true      false       false         0.20823    {1×1 struct}
+
+               numberSimulations: 57
+              numberUniquePoints: 57
+                numberConvergent: 57
+                 numberDivergent: 0
+    empiricalConvergenceFraction: 1
+                minimumRadiusDeg: 60
+                maximumRadiusDeg: 78.3244
+             approximateAreaDeg2: 1.4214e+04
+             approximateAreaRad2: 4.3297
+            criticalDirectionDeg: 0
+           favorableDirectionDeg: 320
+                      directions: 36
+    allRadialEndpointsConvergent: 1
+                  classification: "SEARCH-BOX LIMITED"
+      maximumConvergentControlNm: 240.9605
+                 certifiedRegion: 0
+            extendedHorizonCount: 0
+
+CHECKPOINT REPLAY: identical results, no simulations
+CHECKCODE simulink/build_linear_common.m
+CHECKCODE simulink/setup_linear_common.m
+CHECKCODE simulink/simulate_linear_common.m
+CHECKCODE simulink/simulate_integrated_ras.m
+CHECKCODE analysis/validate_linear_common.m
+CHECKCODE analysis/ras/validate_lqri_ras.m
+CHECKCODE analysis/ras/estimate_lqg_ras.m
+CHECKCODE analysis/run_simulink_completion.m
+CHECKCODE analysis/export_simulink_completion.m
+CHECKCODE tests/test_simulink_completion.m

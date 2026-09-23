@@ -1,9 +1,19 @@
 # Stato del progetto — 23 settembre 2026
 
-Base main889c0eb (PR32 integrata); branch codex/simulink-integration, revisione e merge manuali.
-Integrazione COMPLETE:4modelli da Valerio,67/67 controlli e7/7 test PASS su R2025b. Documentazione e PDF aggiornati; artifact precedenti invariati.
-Conformità complessiva PARTIAL: Hinf NS/NP PASS, RS FAIL, RP non accreditata, M5 FAIL, Monte Carlo0/40; Kmu NS/NP/RS/RP PASS, M5 FAIL,40/40; LQRI M7 PARTIAL.
-Dimostrata reiezione nominale del disturbo costante LQRI, non nuova garanzia robusta.
-Limiti: importazione originali R2026a su R2025b; replay R2026a, hardware, saturazioni e code generation non verificati. Prove rumore integrazione0.5s, non sostitutive della campagna4s.
-Resoconto: RESOCONTO_SIMULINK_INTEGRATION.md/.txt. Esecuzione CR_RUN_SCOPE=simulink.
-TODO: revisione PR, eventuale merge, matricole e data formale di consegna.
+Branch codex/simulink-integration, PR #33 draft; nessun merge.
+Completamento revisione COMPLETE: un modello Simulink lineare M3 comune,
+32/32 nuovi confronti PASS, 15/15 nuovi test e 7/7 originari rieseguiti PASS.
+I 67 controlli della precedente integrazione rimangono intatti e PASS;
+non sono stati rilanciati. Quattro modelli non lineari e legacy invariati.
+RAS LQRI nominale: 57/57, zero errori/estensioni, SEARCH-BOX LIMITED ±60°;
+stesso protocollo LQG (identità guadagni storici verificata), non certificata.
+Primo run: quattro FAIL nel test dimensionale, uso errato del singolo output
+linmod; corretta solo la chiamata del test. Evidenza iniziale conservata.
+Presentazione: 20 slide, scaletta 17:55, margine 2:05; PDF aggiornati.
+Conformità complessiva PARTIAL: Hinf NS/NP PASS, RS FAIL, RP non accreditata,
+M5 FAIL, Monte Carlo 0/40; Kmu NS/NP/RS/RP PASS, M5 FAIL, 40/40; M7 PARTIAL.
+Nessun controllore o risultato robusto modificato, nessuna nuova sintesi.
+Ambiente eseguito: R2025b Update 4. Restano non verificati replay R2026a,
+hardware, saturazioni e code generation. Resoconto: RESOCONTO_PR33_COMPLETION.txt.
+Riproduzione circoscritta: CR_RUN_SCOPE=simulink-completion.
+TODO: revisione manuale PR draft; matricole/data definitiva e prova orale cronometrata.

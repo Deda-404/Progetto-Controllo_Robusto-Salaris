@@ -268,112 +268,72 @@ Raggio minimo risolto [deg] & 0 & 60\\\bottomrule
 Le evidenze della PR 32 sono conservate; l'integrazione non le ricalcola.
 \end{frame}
 
-\begin{frame}{Simulink parte dai modelli originali di Valerio}
+\begin{frame}{Simulink: due piante, la stessa architettura 8+6}
+\small
+\[x_{\rm mech}=[q;\dot q;\theta;\dot\theta]\in\mathbb R^8,
+\qquad x_a\in\mathbb R^6.\]
 \begin{itemize}
-\item Originali LQR/LQG, LQRI e H-infinity archiviati, con hash e inventario.
-\item Conservati struttura principale, Scope, selettori e Kalman.
-\item Corretti disturbo, rumori, inizializzazione e interfaccia 2-DoF.
-\item Kmu usa la stessa infrastruttura fisica di H-infinity.
+\item Quattro modelli non lineari conservati: coordinate assolute,
+attuatori inizializzati all'equilibrio, feedback incrementale.
+\item Un solo nuovo modello lineare comune, con i controllori congelati:
 \end{itemize}
-\vfill
-\good{MATLAB resta la fonte dei parametri e dei controllori.}
-\par\medskip
-Nessun nuovo tuning, nessuna D--K iteration o riduzione d'ordine.
-\end{frame}
-
-\begin{frame}{Otto stati meccanici più sei stati degli attuatori}
-\centering
-\fbox{Controllore}\quad$\longrightarrow$\quad
-\fbox{Attuatori M3}\quad$\longrightarrow$\quad\fbox{SEA non lineare}
-\[u_{\rm abs}=\bar\tau+\delta u+\eta_u,\qquad
-\tau=C_ax_a+D_au_{\rm abs}.\]
-\[x_{\rm mech}=[q;\dot q;\theta;\dot\theta]\in\mathbb R^8,\quad x_a\in\mathbb R^6.\]
+\[\dot x=A_{\rm full}x+B_{\rm full}u+B_{d,\rm full}d,
+\quad y=C_{\rm full,Meas}x,\quad q=C_{\rm full,Q}x.\]
 \begin{itemize}
-\item La pianta usa stati assoluti e parte da $\bar x$.
-\item Il controllore vede deviazioni dall'equilibrio.
-\item Un riferimento di $5^\circ$ non diventa un comando di $95^\circ$.
+\item LQG/LQRI ricevono $[r;y]$; H-infinity/Kmu ricevono $[r;q]$.
+\item Ordini totali: 28, 30, 36, 92. Nessuna nuova sintesi o riduzione.
+\item Originali di Valerio in legacy; parametri e guadagni dagli artifact MATLAB.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Disturbo, processo e misura sono tre canali diversi}
-\[M(q)\ddot q=K_s(\theta-q)-C\dot q-G+d_{\rm ext}+w_d.\]
-\[w=[w_d;\eta_u],\qquad G_w=[B_d\ B],\qquad y_{\rm mis}=y_{\rm ideal}+v.\]
-\begin{itemize}
-\item $d_{\rm ext}$ e $w_d$ agiscono sui link; $\eta_u$ prima degli attuatori.
-\item Quattro encoder, quattro rumori indipendenti; seed riproducibili.
-\item $Q_n=0.01I_4$, $R_n=(0.05\pi/180)^2 I_4$ dagli artifact M6.
-\item ZOH ogni 0.002 s: prova a banda finita, non white noise continuo esatto.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Kalman e integratore usano le misure effettive}
+\begin{frame}{Rumori, Kalman e integratore: segnali distinti}
+\small
+\[d_{\rm link}=d_{\rm ext}+w_d,\quad
+u_{\rm abs}=\bar\tau+\delta u+\eta_u,\quad y_{\rm mis}=y_{\rm ideal}+v.\]
+\[G_w=[B_d\ B],\quad Q_n=0.01I_4,\quad R_n=(0.05\pi/180)^2 I_4.\]
 \[\dot{\hat x}=A\hat x+B\delta u+L(y_{\rm mis}-C\hat x).\]
 \begin{columns}[T]
 \column{.48\textwidth}
 \textbf{LQG}\[\delta u=-K\hat x+N_rr.\]
-14 stati stimati, quattro misure. Lo stato vero serve al confronto, non al feedback.
+Lo stato vero serve al confronto, non al feedback.
 \column{.48\textwidth}
-\textbf{LQRI}\[\delta u=-K_x\hat x-K_i\xi.\]
-\[\dot\xi=r-q_{\rm mis}.\]
-Due integratori, nessun prefiltro $N_r$.
+\textbf{LQRI}\[\delta u=-K_x\hat x-K_i\xi,\quad\dot\xi=r-q_{\rm mis}.\]
+Due integratori, nessun $N_r$ aggiuntivo.
 \end{columns}
-\vfill
-\good{Errore finale dello stimatore senza rumore: inferiore a $1.3\,10^{-14}$.}
+\par\medskip
+Quattro rumori di misura indipendenti, seed fissi, ZOH 0.002 s.
+Prove a banda finita: non white noise continuo esatto.
 \end{frame}
 
-\begin{frame}{Il disturbo costante rende visibile il ruolo dell'integratore}
-\includegraphics[width=\textwidth,height=.6\textheight,keepaspectratio]{../report/figures/simulink_integration/disturbance.png}
-\par\medskip\small
-Stesso disturbo sul primo link: 0.5 Nm da $t=1$ s; riferimento nullo, niente rumori.
-A 20 s LQG mantiene circa $[0.07183;-0.02802]$ rad;
-LQRI lascia circa $[1.78\,10^{-8};1.08\,10^{-9}]$ rad.
-\end{frame}
-
-\begin{frame}{Confronto MATLAB/Simulink: quattro controllori verificati}
+\begin{frame}{LQG e LQRI: disturbo costante e condizioni iniziali}
 \small
-\begin{tabular}{lrrr}\toprule
-Controllore & max errore $q$ [rad] & RMS errore $q$ & max errore $u$ [Nm]\\\midrule
-LQG & 7.63e-10 & 8.31e-11 & 1.55e-07 \\
-LQRI & 2.96e-10 & 4.11e-11 & 3.82e-08 \\
-H-infinity & 8.88e-10 & 2.65e-10 & 4.87e-08 \\
-Kmu & 1.03e-09 & 3.23e-10 & 1.21e-08 \\\bottomrule
+{\centering\includegraphics[width=\textwidth,height=.42\textheight,keepaspectratio]{../report/figures/simulink_integration/disturbance.png}\par}
+\small
+$d_1=0.5$ Nm da 1 s: a 20 s LQG mantiene offset;
+LQRI lascia $\|e_q\|\simeq1.78\,10^{-8}$ rad.
+\par\medskip
+RAS nominale, stesso protocollo: \textbf{57/57 punti convergenti per entrambi},
+box $\pm60^\circ$, 36 direzioni, precisione $1^\circ$, $\hat x_0=0$, $\xi_0=0$.
+\par\medskip
+\bad{Entrambe limitate dal box: nessuna RAS certificata o superiorità dimostrata.}
+Picchi osservati: LQG 232.19 Nm, LQRI 240.96 Nm; M7 resta PARTIAL.
+\end{frame}
+
+\begin{frame}{Validazione completata, limiti di progetto conservati}
+\small
+\begin{tabular}{lrr}\toprule
+Confronto, quattro controllori & max errore $q$ [rad] & max errore $u$ [Nm]\\\midrule
+Simulink lineare / MATLAB lineare & 1.07e-08 & 1.79e-06\\
+SL non lineare / lineare (piccolo segnale) & 9.80e-10 & 1.49e-07\\\bottomrule
 \end{tabular}
 \par\medskip
+\good{32/32 nuovi controlli; 15/15 nuovi test e 7/7 originari PASS.}
+Le evidenze originarie 67/67 restano invariate.
 \begin{itemize}
-\item Piccolo segnale: $[10^{-4};-7\,10^{-5}]$ rad, tre secondi.
-\item Soglie: $2\,10^{-7}$ rad e $2\,10^{-4}$ Nm.
-\item Mappa processo del diagramma: errore $7.11\,10^{-15}$ rispetto a $[B_d\ B]$.
+\item LQG: riferimento nominale. LQRI: reiezione del disturbo costante.
+\item Kmu: RS/RP PASS sul modello M4; H-infinity: RS FAIL.
+\item M5 resta FAIL per i due robusti. Nessuna nuova garanzia hardware.
+\item Simulato su R2025b; saturazioni, code generation e replay R2026a non verificati.
 \end{itemize}
-\good{67/67 controlli Simulink e 7/7 test MATLAB PASS.}
-\end{frame}
-
-\begin{frame}{Il PASS implementativo non cambia la conformità di progetto}
-\small
-\begin{tabular}{lccc}\toprule
-Evidenza & H-infinity & Kmu & LQRI\\\midrule
-Implementazione Simulink & PASS & PASS & PASS\\
-NS / NP & PASS & PASS & non rivalutate\\
-RS & FAIL & PASS & non certificata\\
-Monte Carlo M4 & 0/40 & 40/40 & non eseguita\\
-Target M5 & FAIL & FAIL & M7 PARTIAL\\\bottomrule
-\end{tabular}
-\vfill
-Rumore Simulink: prove brevi di 0.5 s per integrazione e ripetibilità.
-Non sostituiscono la campagna MATLAB di quattro secondi né certificano
-un comando hardware ammissibile.
-\end{frame}
-
-\begin{frame}{Riproduzione circoscritta e limiti residui}
-\small
-\texttt{setenv('CR\_RUN\_SCOPE','simulink'); run\_all}
-\begin{itemize}
-\item Setup separati per LQG, LQRI, H-infinity e Kmu; dati dal model workspace.
-\item Originali R2026a conservati; copie compilate e simulate su R2025b.
-\item Risolti riferimento LTI e bus esterni tramite blocchi standard e dati M3.
-\item Logging completo dei segnali; Scope utilizzabili per la discussione.
-\item Restano non verificati hardware, saturazioni, code generation e replay R2026a.
-\end{itemize}
-\vfill
-\good{LQG: riferimento nominale. Kmu: candidato robusto. LQRI: reiezione del disturbo.}
 \end{frame}
 \end{document}

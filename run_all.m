@@ -21,6 +21,10 @@ fprintf(['Struttura didattica: macrofase modellazione-linearizzazione-' ...
     'specifiche, quindi LQG, H-infinity, mu e validazioni finali.\n\n']);
 
 try
+    if strcmp(getenv('CR_RUN_SCOPE'),'simulink-completion')
+        run_simulink_completion;
+        return
+    end
     if strcmp(getenv('CR_RUN_SCOPE'),'simulink')
         validate_simulink_integration;
         results=runtests(fullfile(projectRoot,'tests','test_simulink_integration.m'));

@@ -1,4 +1,4 @@
-function search = estimate_lqg_ras(projectRoot, config, section)
+function search = estimate_lqg_ras(projectRoot, config, section, simulator, checkpoint)
 %ESTIMATE_LQG_RAS Deterministic coarse-grid and radial empirical search.
 %   SECTION is either "zero-estimate" (the required primary section) or
 %   "coherent-estimate" (the optional diagnostic second section).
@@ -9,6 +9,8 @@ arguments
     config (1, 1) struct = m8_specs
     section (1, 1) string {mustBeMember(section, ...
         ["zero-estimate", "coherent-estimate"])} = "zero-estimate"
+    simulator (1, 1) function_handle = @simulate_m8_nonlinear
+    checkpoint (1, 1) string = ""
 end
 
 projectRoot = char(projectRoot);
@@ -19,6 +21,19 @@ xActuatorEquilibrium = -Aact \ (Bact * m3.taubar);
 cache = containers.Map('KeyType', 'char', 'ValueType', 'any');
 records = repmat(localEmptyRecord, 0, 1);
 simulationCount = 0;
+% Optional adapter/checkpoint: historical M8 calls retain their exact defaults.
+identity=struct('config',config,'section',section,'m3',m3, ...
+    'simulator',func2str(simulator));
+if strlength(checkpoint)>0 && isfile(checkpoint)
+    saved=load(checkpoint);
+    assert(isequaln(saved.identity,identity),'RAS:CheckpointIdentity', ...
+        'Checkpoint does not match the current protocol and artifacts.');
+    records=saved.records; simulationCount=saved.simulationCount;
+    for k=1:numel(records)
+        key=sprintf('%.9f,%.9f',records(k).Dq1Deg,records(k).Dq2Deg);
+        cache(key)=records(k);
+    end
+end
 
 coarseDeg = config.ras.coarseGridDeg(:);
 for firstIndex = 1:numel(coarseDeg)
@@ -123,13 +138,13 @@ search.certifiedRegion = false;
         simulationCount = simulationCount + 1;
         extended = false;
         try
-            result = simulate_m8_nonlinear(scenario, ...
+            result = simulator(scenario, ...
                 string(projectRoot), config);
             assessment = evaluate_m8_convergence(result, m3, config);
             if assessment.extensionEligible
                 scenario.horizon = config.ras.extendedHorizon;
                 simulationCount = simulationCount + 1;
-                result = simulate_m8_nonlinear(scenario, ...
+                result = simulator(scenario, ...
                     string(projectRoot), config);
                 assessment = evaluate_m8_convergence(result, m3, config);
                 extended = true;
@@ -163,6 +178,11 @@ search.certifiedRegion = false;
         end
         records(end + 1, 1) = record;
         cache(key) = record;
+        if strlength(checkpoint)>0
+            save(checkpoint,'identity','records','simulationCount');
+            fprintf('RAS %d points / %d simulations: [%g %g] convergent=%d error=%s\n', ...
+                numel(records),simulationCount,pointDeg,record.Convergent,record.ErrorIdentifier);
+        end
     end
 end
 

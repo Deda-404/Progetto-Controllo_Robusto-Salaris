@@ -28,3 +28,14 @@ I nuovi risultati sono in `results/data/hinf_final_coherent/`; quelli precedenti
 `src` contiene la fisica, `controllers` le sintesi, `analysis` le verifiche, `tests` i controlli.
 Modelli correnti: `simulink/models`; originali: `simulink/legacy/valerio`. Per la sola integrazione: `setenv('CR_RUN_SCOPE','simulink'); run_all`. Per aprire: `addpath('simulink'); setup_lqg_simulink` (analoghi lqri, hinf, kmu). Nessuna sintesi rilanciata.
 Il branch è destinato alla revisione manuale: il merge rimane al gruppo.
+
+## Completamento PR #33: modello lineare e RAS LQRI
+
+`setenv('CR_RUN_SCOPE','simulink-completion'); run_all` esegue solo le aggiunte:
+un modello Simulink lineare M3 comune ai quattro controllori, confronti
+lineare/MATLAB e non lineare/lineare, RAS nominale LQRI, test e figure.
+Non avvia nuove sintesi. I 67 controlli precedenti restano conservati;
+32 nuovi controlli PASS, 15 nuovi test e 7 originari rieseguiti PASS.
+RAS LQRI: 57/57, limitata dal box ±60°, non certificata.
+Presentazione: 20 slide, scaletta 17:55 (non prova orale cronometrata).
+Dettagli e limiti: [resoconto](docs/RESOCONTO_PR33_COMPLETION.md).

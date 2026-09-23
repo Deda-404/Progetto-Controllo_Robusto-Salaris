@@ -34,3 +34,11 @@ La successiva integrazione dei quattro modelli Simulink supera 67 controlli
 e sette test automatici, mantenendo gli artifact della sintesi. Il confronto
 LQG/LQRI dimostra la reiezione del disturbo costante nel caso simulato.
 Il PASS implementativo non modifica i giudizi M5, M7 o robusti.
+
+Il completamento della PR 33 aggiunge un diagramma Simulink esplicito del
+plant linearizzato M3 per tutti e quattro i controllori: 32/32 nuovi confronti
+PASS e 15 nuovi test PASS, oltre ai sette originari rieseguiti.
+La RAS nominale LQRI usa il protocollo LQG e converge in 57/57 punti:
+entrambe le ricerche raggiungono il box $\pm60^\circ$, senza certificare
+la RAS né dimostrare una superiorità della sua estensione.
+La presentazione è ridotta a 20 slide, con scaletta di 17 minuti e 55 secondi.

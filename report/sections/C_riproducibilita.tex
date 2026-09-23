@@ -26,3 +26,15 @@ I dati sono in \path{results/data/simulink_integration}, i modelli in
 \path{simulink/models}, gli originali in \path{simulink/legacy/valerio}.
 Setup, validatore e limiti sono descritti nel Capitolo 10 e nel resoconto
 \path{docs/RESOCONTO_SIMULINK_INTEGRATION.md}.
+
+\section{Completamento lineare e RAS LQRI della PR 33}
+\texttt{setenv('CR\_RUN\_SCOPE','simulink-completion'); run\_all}
+ricostruisce solo il diagramma lineare comune, esegue i confronti e la RAS
+LQRI nominale, e lancia le due suite (22 test). Non rilancia sintesi o
+analisi robuste. Il checkpoint RAS è riutilizzato solo se identico a
+configurazione e artifact correnti; per ricalcolare tutti i punti,
+archiviarlo fuori dalla cartella prima del run.
+Il nuovo dataset è \path{results/data/simulink_completion}; il testo si
+rigenera con \path{report/build_completion_text.py} dopo i test.
+LaTeX va compilato separatamente nelle cartelle report e presentation.
+Il resoconto completo e il primo run fallito dei test restano consultabili.

@@ -497,3 +497,13 @@ Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow
 ## 2026-09-23 — Integrazione Simulink
 
 Integrati4modelli Simulink da Valerio con setup artifact, canali fisici corretti, rumori separati, Kalman, integratore misurato e vera2-DoF Hinf/Kmu. Aggiunti validatore e scope di esecuzione;67/67 controlli+7/7 test PASS. Relazione e presentazione aggiornate.
+
+## 2026-09-23 — Completamento circoscritto PR #33
+
+- Aggiunto SEA_linear_common: plant M3 a 14 stati, quattro controllori da artifact.
+- 32 confronti numerici PASS; RAS LQRI nominale 57/57, SEARCH-BOX LIMITED.
+- 15 test aggiunti e 7 originari rieseguiti PASS; 67 controlli salvati invariati.
+- Conservato il primo run con quattro FAIL causati dall'uso di linmod nel test;
+  corretta la sola chiamata, senza cambiare modello, guadagni o soglie.
+- Relazione aggiornata dopo validazione; presentazione 24 -> 20 slide, 17:55.
+- Nessuna sintesi o campagna robusta rieseguita; PR draft, nessun merge.

@@ -2183,3 +2183,19 @@ Decisione: Kmu assume il ruolo robusto sul dominio M4; Hinf rimane comparatore n
 ## 2026-09-23 — Integrazione Simulink
 
 Approvate esplicitamente API MATLAB locali e sole librerie standard in assenza di model_edit. Originali Valerio conservati; copie corrette su R2025b. Matrici M3 e6stati espliciti sostituiscono LTI esterni; vettore17 di parametri sostituisce slBus1. Nessuna modifica a controllori, pesi, specifiche o risultati robusti. PASS implementativo distinto dalla conformità M5.
+
+## 2026-09-23 — Diagramma lineare comune e RAS M7
+
+Si adotta un modello lineare separato unico, parametrico sul controllore:
+questa scelta soddisfa la traccia senza duplicare quattro piante né alterare
+l'integrazione non lineare validata. Il plant SS espone tutti i 14 stati;
+i prodotti CfullMeas e CfullQ sono blocchi separati. Il modello di confronto
+è deterministico; le prove rumore restano nei modelli non lineari.
+Per RAS si riutilizzano algoritmo e criterio M8, con adattatore Simulink e
+checkpoint opzionali; i default delle chiamate storiche sono conservati.
+Il confronto LQG usa dati esistenti di cui si verifica l'identità dei guadagni.
+La RAS LQRI primaria usa xhat0=0 e xi0=0; la sezione secondaria non è richiesta
+per questo confronto e non viene calcolata. Box e soglie non vengono ampliati
+inseguendo una frontiera. Risultato empirico, non certificazione.
+Le ultime otto slide diventano quattro, conservando Hinf/Kmu e i risultati
+negativi nelle prime sedici. Scaletta totale 17:55, margine 2:05.

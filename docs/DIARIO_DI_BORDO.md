@@ -2808,3 +2808,23 @@ Audit, conservazione dei modelli Valerio e correzione su base889c0eb. Risolti in
 ### Chiusura del pacchetto Simulink
 
 Normalizzati spazi finali e caratteri di formattazione del log; aggiornati hash. Nessuna modifica numerica. PDF verificati:57pagine e24slide, nessun riferimento mancante o contenuto fuori margine.
+
+## 2026-09-23 — Chiusura dei tre punti di revisione PR #33
+
+Realizzato un solo diagramma M3 lineare comune ai quattro controllori, senza
+modificare i quattro modelli non lineari esistenti. Eseguiti 32 confronti
+lineare Simulink/MATLAB e non lineare/lineare: PASS. Usate per il secondo
+confronto le tracce non lineari già validate, senza duplicarne il calcolo.
+Eseguita RAS LQRI nominale con algoritmo e criteri M8 invariati: 57/57 punti
+convergenti in 8 s, zero estensioni, zero errori, box ±60° raggiunto.
+Verificata l'identità K/L/Nr della RAS LQG storica con gli artifact correnti.
+La prima esecuzione della suite ha fallito quattro verifiche dimensionali:
+linmod con un output restituiva una struttura. La chiamata nel test è stata
+corretta a quattro output, senza cambiare progetto o soglie. Run iniziale
+conservato in unit_tests_initial_failure.mat/.csv. Run finale: 22/22 PASS
+(7 originari + 15 nuovi). I 67 controlli precedenti non sono rilanciati;
+evidenza e modelli originali restano invariati.
+Documenti aggiornati dopo il calcolo: relazione, resoconto TXT/MD e
+presentazione di 20 slide con scaletta 17:55, non durata orale misurata.
+Stato implementativo COMPLETE; conformità M5/M7 e risultati robusti invariati.
+Nessuna sintesi, riduzione, Monte Carlo o mu-analysis. PR mantenuta draft.
