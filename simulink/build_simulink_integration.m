@@ -154,10 +154,3 @@ h=get_param([m '/' b],'PortHandles'); l=get_param(h.Outport(p),'Line');
 set_param(l,'Name',name);
 set_param(h.Outport(p),'DataLogging','on','DataLoggingNameMode','Custom','DataLoggingName',name);
 end
-
-
-
-
-
-
-

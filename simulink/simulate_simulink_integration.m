@@ -18,4 +18,3 @@ r.completed=abs(out.tout(end)-c.horizon)<1e-8;
 assert(r.completed && all(isfinite(r.q_abs),'all'),'Incomplete simulation');
 close_system(model,0);
 end
-

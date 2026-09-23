@@ -121,5 +121,3 @@ assert(summary.passed,'SimulinkIntegration:Validation','See saved check failures
   if isempty(summary.checks), summary.checks=row; else, summary.checks(end+1)=row; end; fprintf('%s %s: %.6g (tol %.6g)\n',string(pass),name,value,tolerance);
  end
 end
-
-

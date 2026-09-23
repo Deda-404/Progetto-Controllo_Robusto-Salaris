@@ -1,7 +1,7 @@
 {
-  "simulink/build_simulink_integration.m": "8b1da38d288ff979dac9fed89be51c79e5b7d1f40db79d14b37d406d2a91eeba",
+  "simulink/build_simulink_integration.m": "556b997fd50c20a365c9ac02e87859410b8df1b2a8a623eb73676611ed3f3be5",
   "simulink/setup_simulink_integration.m": "7807efb03ced6c201aa34cdf63bd708c978d2fd063c63e84104e4edb10b933da",
-  "simulink/simulate_simulink_integration.m": "b6453944701f01b4d79e62e5a4d4e54bf93efeeb8b9509a08595b7fbdfe76aa9",
+  "simulink/simulate_simulink_integration.m": "1db5b19b07a3b306806be90f9ea094bddcace85f0075a998a20498776b2ded40",
   "simulink/tidy_simulink_integration.m": "9e7b8923f85aa945988f1dc782ef7ee53bb8cb6c1ed4844c3572350ee977dfa5",
   "simulink/models/SEA_Hinf_integrated.slx": "3eca5ffa0cfdac4a9861775a69949f77779d44967a6f5e679c49d4d0809f1dd8",
   "simulink/models/SEA_Kmu_integrated.slx": "c6043c08421571e5ec692dd644ff35052d35e93db622100afacd5f3a26ed450d",
@@ -18,7 +18,7 @@
   "results/data/simulink_integration/unit_tests.mat": "a81c1d5d7da9582bc59010a148610e4e40ec9d0c834056849e405429fca0ad92",
   "results/data/simulink_integration/validation.mat": "8394b916a9a2db10e2117bbfb2e3d8d9b8e77da6a2fb433efb68d65d29d83372",
   "results/data/simulink_integration/summary.json": "18334cf29741d65a6c5ecb8163e1f0e0108c992e669c2c8a180ee7cbcda15b61",
-  "analysis/validate_simulink_integration.m": "e502cafaf312061ee240119afcdf5c7d8053c09f41224f6467fb292710532d4f",
+  "analysis/validate_simulink_integration.m": "0a02d72b1d500e7186cdb6c12d3130c0b80a0986d7490b87889fe936b6162135",
   "tests/test_simulink_integration.m": "ca39072d60e2cb3152ca8eaa639bc677506e693549757b15cf8ed8e3662ce4a9",
   "results/data/m3_nominal_actuated_plant.mat": "caa0980f694f5f760b0d9b0f572693b95957e94d1fa164c514c2d02e62d16a09",
   "results/data/m5_performance_specs.mat": "a4b1a9537ff1d343cf9436b075852ea5d49c8064fbb26cb309809d3d8606c97d",
