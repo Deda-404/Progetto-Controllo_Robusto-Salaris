@@ -9,7 +9,7 @@ arguments
     config (1, 1) struct = m8_specs
     section (1, 1) string {mustBeMember(section, ...
         ["zero-estimate", "coherent-estimate"])} = "zero-estimate"
-    simulator (1, 1) function_handle = @simulate_m8_nonlinear
+    simulator (1, 1) function_handle = @localMissingSimulator
     checkpoint (1, 1) string = ""
 end
 
@@ -213,4 +213,9 @@ else
     text = ["dq plane; zero velocities; theta shifted with q; " ...
         "actuators at equilibrium; xhat0=0 in incremental coordinates"];
 end
+end
+
+function varargout=localMissingSimulator(varargin)
+error('RAS:SimulatorRequired', ...
+    'Specificare un adattatore per un modello originale verificato.');
 end

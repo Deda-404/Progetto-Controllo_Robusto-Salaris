@@ -1,40 +1,51 @@
 \chapter{Riproducibilità}
-La catena corrente è \texttt{run\_all} con ambito vuoto oppure
-\texttt{CR\_RUN\_SCOPE=hinf-final}. L'ambito \texttt{legacy} conserva
-l'esecuzione storica. La rigenerazione completa è costosa: i dataset
-versionati permettono verifiche senza ripetere le sintesi.
-Le singole fasi sono in \path{analysis/run_hinf_final_*.m}.
+\section{Verifiche senza ripetere le sintesi}
+Dalla radice del repository, in MATLAB:
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','verify');
+run_all
+\end{verbatim}
+Il comando verifica modello fisico, equilibrio, linearizzazione, attuatori,
+incertezze, LQG, LQRI, limite inferiore $H_\infty$, coerenza della catena
+robusta e accordo locale non lineare. Sono incluse le verifiche di identità
+degli originali e della struttura LFT. Non vengono sintetizzati nuovi
+controllori, eseguite nuove Monte Carlo o ricostruiti diagrammi.
 
-I tre file di test correnti sono:\begin{itemize}
-\item \path{hinfLowerBoundTest.m};
-\item \path{hinfFinalCoherenceTest.m};
-\item \path{hinfFinalDownstreamTest.m}.\end{itemize}
-Diciotto test verificano proprietà matematiche, mappe, identità dei
-controllori, campioni comuni e comportamento locale non lineare.
-Un test software positivo non sostituisce la conformità prestazionale.
+I risultati del run sono in
+\path{results/data/organic_review/matlab_tests.csv}. Un test software positivo
+non trasforma in soddisfatto un requisito prestazionale fallito.
 
-La relazione usa \path{export_hinf_final_results.m}, poi
-\path{report/build_hinf_final_text.py}; LaTeX va eseguito dalla cartella
-\path{report/}. Gli hash delle evidenze correnti sono in
-\path{report/generated/hinf_final_manifest.json}.
-Matricole e data di consegna richiedono completamento umano.
+\section{Audit degli originali}
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','originals');
+run_all
+\end{verbatim}
+Si tenta il caricamento e la compilazione, senza salvare modifiche agli SLX.
+L'esito è registrato in \path{original_models_audit.json} nella stessa
+cartella di risultati. Il codice non avvia simulazioni dei diagrammi
+incompleti e non altera l'interfaccia del controllore H-infinity originale.
+Servono Simulink e Control System Toolbox; per l'analisi incerta serve
+Robust Control Toolbox. Gli originali richiedono R2026a o una esportazione
+compatibile effettuata e verificata dal gruppo.
 
-\section{Percorso Simulink circoscritto}
-\texttt{setenv('CR\_RUN\_SCOPE','simulink'); run\_all}
-esegue 67 verifiche e sette test senza rilanciare le sintesi.
-I dati sono in \path{results/data/simulink_integration}, i modelli in
-\path{simulink/models}, gli originali in \path{simulink/legacy/valerio}.
-Setup, validatore e limiti sono descritti nel Capitolo 10 e nel resoconto
-\path{docs/RESOCONTO_SIMULINK_INTEGRATION.md}.
-
-\section{Completamento lineare e RAS LQRI della PR 33}
-\texttt{setenv('CR\_RUN\_SCOPE','simulink-completion'); run\_all}
-ricostruisce solo il diagramma lineare comune, esegue i confronti e la RAS
-LQRI nominale, e lancia le due suite (22 test). Non rilancia sintesi o
-analisi robuste. Il checkpoint RAS è riutilizzato solo se identico a
-configurazione e artifact correnti; per ricalcolare tutti i punti,
-archiviarlo fuori dalla cartella prima del run.
-Il nuovo dataset è \path{results/data/simulink_completion}; il testo si
-rigenera con \path{report/build_completion_text.py} dopo i test.
-LaTeX va compilato separatamente nelle cartelle report e presentation.
-Il resoconto completo e il primo run fallito dei test restano consultabili.
+\section{Figure, tabelle e PDF}
+L'ambito \texttt{export} legge gli artifact e rigenera le figure di audit:
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','export');
+run_all
+\end{verbatim}
+Dopo l'esportazione, \path{python report/build_organic_tables.py}
+formatta le tabelle di confronto usando i JSON prodotti da MATLAB.
+La compilazione dei documenti va eseguita nelle rispettive cartelle:
+\begin{verbatim}
+cd report
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+cd ../presentation
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+\end{verbatim}
+Il testo dei capitoli è mantenuto nei sorgenti LaTeX; gli script di
+esportazione dei dati non lo sovrascrivono. I file finali sono
+\path{report/Progetto_CR_Relazione_finale.pdf} e
+\path{presentation/Progetto_CR_Presentazione.pdf}.
+Matricole, data definitiva e prova orale cronometrata richiedono
+completamento da parte del gruppo.

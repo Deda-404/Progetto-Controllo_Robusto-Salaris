@@ -507,3 +507,18 @@ Integrati4modelli Simulink da Valerio con setup artifact, canali fisici corretti
   corretta la sola chiamata, senza cambiare modello, guadagni o soglie.
 - Relazione aggiornata dopo validazione; presentazione 24 -> 20 slide, 17:55.
 - Nessuna sintesi o campagna robusta rieseguita; PR draft, nessun merge.
+
+
+## 29 settembre 2026 — Revisione organica e consegna degli originali
+
+Richiesta del 28 settembre: usare esclusivamente gli originali del gruppo, senza costruire o completare automaticamente diagrammi. La decisione sostituisce il precedente percorso d'integrazione; le voci anteriori restano cronologia e non descrivono la consegna attuale.
+
+Analisi preliminare di repository, traccia, artifact e materiale dei colleghi. Capitoli 1–7 conservati nei contenuti, salvo due correzioni verificate nel Capitolo 3 e rimandi/stile. Riscritti Capitoli 8–9, aggiunti schemi LFT, prestazione e D–K, grafici da dati salvati. Presentazione 19 slide, 17:15.
+
+Backup completo esterno verificato prima delle rimozioni; conservate copie esatte del working tree. Tre originali spostati senza modifica dei byte in simulink/originals; rimossi generatori, diagrammi e dipendenze esclusivi dalla consegna. Inventario e hash in docs/organic_review.
+
+104/104 test MATLAB PASS, 8 nuovi. Due suite riscrivono internamente m3/m5: isequaln con il baseline PASS, byte ripristinati e protezione aggiunta al runner. Audit originali: tre FAIL di caricamento per R2026a su R2025b; zero simulazioni accreditate. Errori preparatori nell'audit (nome del MAT e accumulatore di strutture/codice MATLAB in cache) corretti prima dell'esportazione, senza modificare risultati. Nessuna nuova sintesi, mu-analysis, Monte Carlo o RAS.
+
+Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
+
+Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.

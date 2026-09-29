@@ -6,9 +6,6 @@ config.milestone = "M15";
 config.baselineCommit = "c51142e624adea610e72d16ddfd764008cb65371";
 config.mergedPullRequest = 19;
 config.mergedPullRequestState = "MERGED";
-config.modelName = "SEA_ROBUST_nonlinear";
-config.modelRelativePath = fullfile('simulink', ...
-    'SEA_ROBUST_nonlinear.slx');
 config.controllerIDs = ["Khinf"; "Kmu"];
 config.controllerSources = [ ...
     "results/data/m10_hinfsyn_nominal.mat"; ...

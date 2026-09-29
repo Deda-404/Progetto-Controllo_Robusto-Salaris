@@ -1,35 +1,31 @@
 \chapter{Validazione non lineare nominale}
 \section{Equazioni e scenari}
-La campagna della revisione H-infinity integra direttamente in MATLAB le equazioni SEA già usate
-nel modello Simulink storico. Meccanica, attuatori, equilibrio e parametri
-rimangono invariati. La legge implementata è
+La campagna integra direttamente in MATLAB le equazioni SEA con i
+parametri, gli attuatori e l'equilibrio descritti nei capitoli iniziali. La legge implementata è
 \[
  \delta u=C_Kx_K+D_K[r;\delta q],\qquad
  \dot x_K=A_Kx_K+B_K[r;\delta q],\qquad u=\bar\tau+\delta u.
 \]
 Si usa \texttt{ode23t}, con tolleranze relativa $10^{-5}$ e assoluta $10^{-7}$,
-passo massimo 0.005 s e uscita ogni 0.002 s. Il nuovo calcolo non viene
-presentato come un'esecuzione del modello Simulink precedente, che implementa
-una diversa interfaccia del controllore. Il confronto locale con la mappa
-lineare è verificato automaticamente per entrambi i nuovi controllori.
+passo massimo 0.005 s e uscita ogni 0.002 s. Queste prove usano MATLAB, non Simulink. Il confronto locale con la mappa
+lineare è verificato automaticamente per entrambi i controllori.
 
 Gli scenari conservano gradini di 2, 5 e 8 gradi su ciascun giunto (4 s),
 disturbi lato link di 0.25, 0.5 e 1 N m (8 s), equilibrio e rumore (4 s).
 L'errore statico non lineare è stimato dalla media dell'ultimo 10\% della
-traiettoria: non viene sostituito con il guadagno DC lineare, come avveniva
-nel vecchio estrattore di metriche. Il valore è quindi una stima a orizzonte
-finito, da leggere insieme all'assestamento.
+traiettoria. È una stima a orizzonte finito, da leggere insieme
+all'assestamento; il guadagno DC lineare è una quantità distinta.
 
 \section{Tracking, disturbi e rumore}
 Gli equilibri restano invariati entro $1.7\,10^{-12}$ rad per H-infinity e
 $2.3\,10^{-15}$ rad per Kmu. I gradini confermano l'assenza di overshoot
 nei due controllori. Per $K_\mu$ a 5 gradi si misurano $T_s=1.522,1.484$ s,
 errori relativi circa 6.03\%, 3.08\% e picchi di comando 0.796,0.199 N m.
-I risultati conservano i fallimenti M5 di assestamento e, per Kmu sul primo
+I risultati conservano i fallimenti delle specifiche temporali di assestamento e, per Kmu sul primo
 giunto, offset. Risposte e metriche di tutti i disturbi fisici sono salvate
 con il controllore che le ha prodotte.
 
-Il rumore usa esattamente i primi due canali della sequenza M15 originaria,
+Il rumore usa esattamente due canali della sequenza encoder salvata,
 con seed 20260826. La ripetizione restituisce differenza nulla.
 Qui emerge un limite decisivo del candidato H-infinity: il picco di comando
 è circa 5685 N m, con RMS 118.2 N m. Per Kmu si ottengono circa 8.12 N m
@@ -41,11 +37,11 @@ Non si aggiunge una saturazione numerica per nascondere questo risultato.
 La sezione iniziale conserva $\delta\theta=\delta q$, velocità nulle,
 attuatori all'equilibrio e stato del controllore nullo. Restano la griglia
 $\{-60,-30,0,30,60\}^2$ gradi, 36 direzioni, precisione radiale di un grado,
-orizzonti 8/12 s e tutti i criteri M15. Il superamento del limite numerico
+orizzonti 8/12 s e i criteri dichiarati nel protocollo RAS. Il superamento del limite numerico
 originario $10^6$ termina anticipatamente la simulazione: quel punto avrebbe
 comunque fallito il criterio di limitatezza. Le metriche di coda sono valutate
-sull'uscita uniforme MATLAB; questo dettaglio differisce dai tempi adattivi
-registrati dal precedente modello Simulink e rende il confronto solo parzialmente paired.
+sull'uscita uniforme MATLAB. Le sezioni confrontano i due controllori robusti sullo stesso
+protocollo MATLAB; non sono una RAS dei modelli Simulink originali.
 
 Per H-infinity convergono 27 dei 285 punti esaminati; il raggio minimo risolto
 è zero e il massimo circa 6.98 gradi. Zero significa che la ricerca a
@@ -70,7 +66,6 @@ inferiore alla soglia preesistente 0.1. La stessa maggiorazione cubica del
 resto SEA fornisce $\rho_{\mathrm{interno}}\simeq1.066\,10^{-12}$.
 Il livello circa 3.697 supera la verifica su 2048 direzioni indipendenti
 alle quattro frazioni radiali dichiarate; è evidenza su punti finiti,
-non un'estensione del certificato analitico. LQG e i suoi risultati M8
-rimangono quelli già validati, senza trasferimenti ai nuovi controllori.
+non un'estensione del certificato analitico. Il risultato non viene trasferito a LQG o LQRI.
 
-\input{sections/10b_integrazione_simulink}
+\input{sections/10_originali_simulink}

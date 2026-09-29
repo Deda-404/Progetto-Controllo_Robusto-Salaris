@@ -1,83 +1,79 @@
-# Note del relatore — 20 slide, 17:55
+# Note per l’esposizione
 
-Rispettare i tempi per slide. Margine residuo 2:05; evitare demo live e lettura integrale delle tabelle.
+La scaletta è una stima da verificare con una prova orale cronometrata. Non leggere tutte le formule: indicare ingresso, uscita e significato fisico.
 
-## 1. Titolo — 0:15
+## 1. Titolo — 0:20
 
-Presentare tema e autori, senza anticipare l'intera scaletta.
+Presentare il problema e anticipare la distinzione fra risultati MATLAB e stato dei modelli originali.
 
-## 2. La domanda di progetto richiede evidenze diverse — 0:30
+## 2. SEA: otto stati meccanici, due poli instabili — 0:55
 
-Distinguere subito modellazione, prestazione nominale, simulazione non lineare e robustezza. Una curva di tracking non dimostra tutte e quattro le proprietà.
+Spiegare la trasmissione elastica e la differenza fra q e theta. Il disturbo agisce direttamente sul link.
 
-## 3. L'elasticità separa link e rotori — 0:55
+## 3. Sei stati di attuatore completano il modello — 0:55
 
-Leggere le due equazioni fisiche. L'elasticità separa link e rotori: quattro coordinate e quattro velocità. Indicare l'equilibrio e la necessità del feedback.
+Contare gli stati: 8 meccanici più 3 per ciascun attuatore. Il ritardo è approssimato con Padé; distinguere inviluppo campionato e insieme incerto.
 
-## 4. Attuatori e linearizzazione portano a 14 stati — 0:40
+## 4. Specifiche: norma pesata e tracking sono verifiche diverse — 0:40
 
-Spiegare i sei stati aggiuntivi: attuatori dinamici e Padé. La linearizzazione completa ha 14 stati; non confonderli con gli otto meccanici.
+Richiamare solo i tre target obbligatori. La scala 12 N m serve al confronto; non simula una saturazione.
 
-## 5. M4 combina parametri reali e dinamica non modellata — 0:45
+## 5. LQR: il costo deriva dalle grandezze fisiche — 1:00
 
-Indicare i parametri reali incerti e le due incertezze dinamiche. Il dominio è ingegneristico, non una distribuzione statistica identificata.
+Mostrare come la deformazione elastica produce termini incrociati in Q. Le scale hanno origine fisica, i pesi esprimono priorità progettuali.
 
-## 6. M5 fissa target e pesi prima del confronto — 0:45
+## 6. LQG: quattro encoder e stato stimato — 1:00
 
-Richiamare settling 0.8 s e gli altri target originali. La scala del comando non è una saturazione. Non leggere tutte le curve della figura.
+Il controllo usa xhat, non lo stato completo disponibile nel simulatore. Qn e Rn sono ipotesi; distinguere intensità continua e sequenza discreta di rumore. Il principio di separazione è nominale.
 
-## 7. LQR: scale fisiche e pesi sono cose diverse — 1:05
+## 7. LQRI: memoria dell’errore misurato — 1:00
 
-Spiegare trasformazione fisica, scale e pesi diretti. Il costo sulla deformazione rende Q non diagonale. Indicare il candidato selezionato senza ripercorrere la ricerca.
+L’integratore accumula l’errore misurato. Il prefiltro LQG non reagisce al disturbo; LQRI elimina l’offset DC ma è più lento. Il grafico proviene da MATLAB lineare.
 
-## 8. Kalman: ipotesi del progetto, non dati del docente — 1:00
+## 8. $H_\infty$: sensibilità mista e pesi adottati — 1:05
 
-Descrivere le quattro misure e le covarianze assunte, non fornite dal docente. Più fiducia nelle misure accelera la stima e trasferisce più rumore al comando. Feedback su xhat.
+Spiegare W1 e W2, l’assenza di W3 e la stessa formulazione risolta da mixsyn e hinfsyn. Gamma inferiore a uno non controlla direttamente overshoot e settling.
 
-## 9. M6 è il riferimento di tracking nominale — 0:40
+## 9. Due gradi di libertà: riferimento e feedback condividono gli stati — 1:05
 
-Mostrare il tracking LQG e il suo ruolo nominale. Non ripetere Riccati e selezione dei pesi già discussi.
+Seguire i due rami nel diagramma. Kr e Ky condividono 22 stati. Mo impone la forma desiderata, il disturbo fisico entra nei link. Le norme di obiettivi diversi non sono rapporti di miglioramento.
 
-## 10. M7 chiude con un risultato negativo utile — 0:45
+## 10. Ordine completo e ordine fissato: il compromesso rimane — 0:55
 
-Spiegare che LQRI esiste ed è implementata, ma M7 resta PARTIAL rispetto ai target congiunti. Due stati integrali si aggiungono ai 14 stimati.
+Confrontare full-order e SS2 sullo stesso problema. Undici avvii non garantiscono ottimo globale. Il risultato di ordine 2 non eredita robustezza.
 
-## 11. Da una norma minore di uno a un vero progetto 2-DoF — 1:30
+## 11. $\mu$-analysis: separare controllore e incertezza — 1:05
 
-Dedicare tempo alla vera architettura 2-DoF: riferimento e misura entrano separatamente, Kr e Ky condividono gli stati. Spiegare modello desiderato e uscite pesate. Gamma minore di uno riguarda quel problema pesato e non equivale al rispetto di M5.
+Distinguere LFT inferiore P-K e superiore N-Delta. Leggere la dimensione 5 di Delta e 9 di N: cinque canali incerti più quattro esogeni/prestazionali.
 
-## 12. H-infinity: tracking migliorato, robustezza insufficiente — 1:05
+## 12. Quattro domande: NS, NP, RS, RP — 1:05
 
-Mostrare miglioramento nominale e settling ancora troppo lento. Dichiarare chiaramente RS FAIL; l'intervallo RP invertito non viene accreditato. Non presentare questo controllore come robusto.
+Mu usa la perturbazione destabilizzante più piccola compatibile con la struttura. Il blocco prestazionale è fittizio. Non confondere valori di mu e margini; si usano limiti numerici.
 
-## 13. Kmu è il candidato robusto del modello dichiarato — 1:25
+## 13. D--K iteration: sintesi, analisi, fit degli scaling — 1:10
 
-Spiegare ruolo della D-K iteration e della successiva post-analisi. Kmu conserva 78 stati, RS/RP maggiori di uno sul modello dichiarato. Restano settling e offset M5: robustezza e prestazione temporale sono giudizi diversi.
+Descrivere il ciclo: K fissato, scaling in frequenza; fit razionale, nuova sintesi. MixedMU conserva parametri reali e usa D/G. PeakMuFit differisce da PeakMu: il fit costa ordine.
 
-## 14. Quaranta campioni comuni: esiti opposti — 0:40
+## 14. La post-analisi cambia la scelta del controllore — 1:00
 
-Confrontare 0/40, 40/40 e LQG storico 37/40. Il campionamento è un controllo empirico comune, non una probabilità fisica né un sostituto della mu-analysis.
+Leggere la soglia uno nel grafico. Hinf fallisce RS; il suo intervallo RP invertito non viene corretto artificialmente. Kmu supera i limiti inferiori su entrambe le proprietà.
 
-## 15. Rumore e regione di attrazione mostrano altri limiti — 0:55
+## 15. Robustezza pesata e requisiti temporali non coincidono — 0:50
 
-Evidenziare l'amplificazione del rumore Hinf nella campagna di quattro secondi. Spiegare raggio minimo zero come limite di risoluzione e Kmu come box-limited. Non confondere questi dati robusti con la nuova RAS LQRI.
+Ribadire che RP riguarda la norma pesata. Kmu rimane più lento di 0.8 s e il primo giunto supera il 5% di offset.
 
-## 16. Lyapunov: distinguere certificato e verifica campionata — 0:45
+## 16. Verifiche complementari: campioni incerti e non linearità — 0:45
 
-Distinguere equazione di Lyapunov, gate numerico e controllo campionato. Il residuo Hinf fallisce; il livello campionato Kmu non diventa un certificato. Nessuna nuova sintesi o riduzione è stata effettuata.
+I campioni sono identici fra controllori. Quaranta successi non sono una probabilità né una garanzia universale. L’accordo locale non lineare è verificato in MATLAB.
 
-## 17. Simulink: due piante, la stessa architettura 8+6 — 1:00
+## 17. Rumore, RAS e Lyapunov: limiti da dichiarare — 0:55
 
-Indicare i quattro modelli non lineari già validati e il solo nuovo diagramma lineare comune. Il blocco M3 espone 14 stati, Cmeas e Cq sono separati. Tutti i controllori provengono dagli artifact correnti; gli originali restano in legacy. Nessuna demo live nel tempo assegnato.
+Non nascondere le coppie molto elevate. RAS empirica limitata al piano iniziale e al box; il residuo Lyapunov fallito impedisce un certificato Hinf.
 
-## 18. Rumori, Kalman e integratore: segnali distinti — 1:05
+## 18. Simulink: stato effettivo degli originali — 0:50
 
-Seguire fisicamente i tre canali: coppia sui link, rumore prima degli attuatori, rumore sugli encoder. Kalman conosce il comando, non la realizzazione del rumore. LQRI integra r-q_mis; entrambi i feedback usano xhat. Citare discretizzazione ZOH e seed senza entrare nei dettagli di implementazione.
+Essere espliciti sul requisito Simulink incompleto: file originali conservati, nessuna ricostruzione automatica. Servono interventi manuali e una versione compatibile, poi confronti e RAS.
 
-## 19. LQG e LQRI: disturbo costante e condizioni iniziali — 1:05
+## 19. Conclusioni: scelta per ruolo e attività residue — 0:40
 
-Il grafico dimostra l'offset LQG e la reiezione LQRI del disturbo costante. Aggiungere il nuovo confronto RAS: 57 punti su 57, stessa sezione iniziale e box, nessuna estensione oltre 8 s. Entrambi raggiungono il bordo: non concludere che la RAS sia infinita, certificata o migliore per LQRI. I picchi di coppia restano un limite pratico.
-
-## 20. Validazione completata, limiti di progetto conservati — 1:05
-
-Spiegare i due confronti distinti e citare le soglie 2e-7 rad e 2e-4 Nm. Nuovi 32 controlli e 15 test, più i sette originari rieseguiti; i 67 controlli salvati non sono stati ricalcolati. Concludere sui ruoli dei controllori e sui limiti hardware. Se chiesto, il run iniziale dei test conteneva un errore di uso di linmod, documentato e corretto solo nel test.
+Concludere sui ruoli dei controllori, senza dichiarare conformità completa o validazione hardware. Lasciare il margine per domande.

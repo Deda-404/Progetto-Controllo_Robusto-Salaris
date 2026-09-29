@@ -1,33 +1,38 @@
 \chapter{Confronto finale e scelta per ruolo}
 La scelta finale distingue prestazioni nominali, robustezza rispetto al
-modello M4 e fattibilità implementativa. Un'unica classifica basata sulla
-norma pesata nasconderebbe proprio il limite emerso in questa revisione.
+modello incerto e fattibilità implementativa. Un'unica classifica basata sulla
+norma pesata nasconderebbe proprio il limite emerso nel progetto.
 
 \begin{table}[htbp]\centering\small
 \begin{tabular}{lccc}\toprule
-Proprietà & LQG M6 & H-infinity 2-DoF & Kmu 2-DoF\\\midrule
+Proprietà & LQG & H-infinity 2-DoF & Kmu 2-DoF\\\midrule
 Ordine & 14 & 22 & 78\\
 NS & PASS & PASS & PASS\\
 NP sul proprio problema & non confrontata & PASS & PASS\\
-M5 tracking nominale & PASS & FAIL & FAIL\\
-RS su M4 & non certificata & FAIL & PASS\\
+Tracking nominale & PASS & FAIL & FAIL\\
+RS & non certificata & FAIL & PASS\\
 RP sul problema corrente & non valutata & FAIL per RS & PASS\\
 Monte Carlo stabile & 37/40 & 0/40 & 40/40\\\bottomrule
 \end{tabular}
-\caption{Confronto M17 corrente. Gli intervalli robusti sono riportati nel Capitolo 9.}
+\caption{Confronto dei controllori. Gli intervalli robusti sono riportati nel Capitolo 9.}
 \end{table}
 
-LQG rimane il riferimento per il tracking nominale M5. H-infinity 2-DoF
+LQG rimane il riferimento per il tracking nominale delle specifiche temporali. H-infinity 2-DoF
 rimane il comparatore della sintesi nominale: mostra che il model following
-può eliminare l'enorme overshoot della precedente struttura, ma la sua
+può eliminare l'enorme overshoot della struttura 1-DoF, ma la sua
 fragilità incerta e l'amplificazione del rumore ne impediscono l'adozione
 come controllore robusto operativo. Il buon gradino nominale non compensa
 questi fallimenti.
 
-Kmu assume il ruolo di candidato robusto sul dominio M4, grazie a margini
+Kmu assume il ruolo di candidato robusto sul dominio incerto, grazie a margini
 RS e RP maggiori di uno verificati indipendentemente dalla sintesi.
-Rimangono il costo di ordine 78, il fallimento M5 per assestamento e offset,
+Rimangono il costo di ordine 78, il fallimento delle specifiche temporali per assestamento e offset,
 e l'assenza di limiti hardware identificati. La RAS senza saturazione non
 elimina questi limiti, soprattutto quando richiede coppie molto grandi.
 Il minimo ordine osservato 2 della campagna hinfstruct dimostra soltanto
 NP nominale: non sostituisce Kmu e non eredita i suoi certificati.
+
+LQRI completa il confronto sul disturbo costante: il suo integratore elimina
+lo scostamento asintotico nel modello lineare, ma il punto scelto non soddisfa
+tutti i target temporali. Non sono disponibili margini robusti o una RAS
+validata dei modelli originali LQG/LQRI.

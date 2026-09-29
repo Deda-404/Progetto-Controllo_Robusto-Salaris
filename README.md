@@ -1,41 +1,51 @@
-# Progetto CR — manipolatore SEA
+# Controllo robusto di un manipolatore SEA
 
-Modellistica e controllo di un manipolatore planare a due giunti, con MATLAB R2025b, Simulink, Control System Toolbox e Robust Control Toolbox.
+Progetto di Controllo Robusto: modello planare a due giunti, 8 stati meccanici e 14 stati con attuatori. Confronto LQG/LQRI, H∞ 1-DoF e 2-DoF, sintesi strutturata e Kµ.
 
-## Stato corrente
+## Documenti di consegna
 
-PR #32 integrata in main889c0eb. Branch codex/simulink-integration: 67/67 controlli e7/7 test PASS su R2025b. Artifact precedenti invariati.
-Vero H∞2-DoF: norma0.04746 e tracking migliorato, ma RS FAIL e0/40 campioni stabili.
-Nuovo Kμ: norma nominale0.63468, RS/RP PASS (margini1.80/1.68),40/40 campioni stabili.
-M5 resta FAIL per entrambi. LQG conserva il ruolo di riferimento nominale.
-Rumore e RAS mostrano limiti di comando; nessuna validazione hardware.
+- [Relazione](report/Progetto_CR_Relazione_finale.pdf), sorgenti in report/.
+- [Presentazione](presentation/Progetto_CR_Presentazione.pdf): 19 slide, scaletta 17:15.
+- [Note orali](presentation/SPEAKER_NOTES.md).
+- [Audit, inventario e limiti](docs/organic_review/AUDIT.md).
+- [Resoconto della revisione](docs/RESOCONTO_REVISIONE_ORGANICA.txt).
 
-- [Integrazione Simulink](docs/RESOCONTO_SIMULINK_INTEGRATION.md)
-- [Presentazione](presentation/Progetto_CR_Presentazione.pdf)
-- [Revisione H∞](docs/RESOCONTO_HINF_FINAL_COHERENT_REVISION.md)
-- [Relazione](report/Progetto_CR_Relazione_finale.pdf)
-- [Stato e limiti](docs/PROJECT_STATUS.md)
+## Risultati e stato
 
-## Esecuzione
+105 test MATLAB PASS. H∞ 2-DoF: ordine 22, norma 0.0474606, NS/NP positive ma RS negativa. L'intervallo numerico RP è non valido; RP è comunque esclusa dal fallimento RS.
+Kµ: ordine 78, norma nominale 0.63468, margini RS circa 1.80 e RP circa 1.68 sul modello dichiarato. Restano fallimenti temporali.
+LQG soddisfa il tracking nominale; LQRI elimina l'offset DC del disturbo costante nel modello lineare, con risposta più lenta.
 
-Dalla radice MATLAB: `run_all` avvia la catena corrente, con checkpoint di sintesi.
-Per il percorso precedente: `setenv('CR_RUN_SCOPE','legacy'); run_all`.
-Per i soli test: `runtests({'tests/hinfLowerBoundTest.m','tests/hinfFinalCoherenceTest.m','tests/hinfFinalDownstreamTest.m'})`.
-La rigenerazione completa è costosa; i risultati validati sono già salvati.
-Esportazione: `export_hinf_final_results`, poi `python report/build_hinf_final_text.py` e LaTeX dalla cartella `report`.
+La parte Simulink è **PARTIAL**. Sono consegnati soltanto i tre originali del gruppo, invariati: LQR/LQG, LQRI e Hinf. Sono R2026a e il caricamento è bloccato in R2025b. L'audit statico segnala collegamenti da completare manualmente; mancano gli originali Kµ e plant linearizzato. Nessuna simulazione degli originali è dichiarata validata.
 
-I nuovi risultati sono in `results/data/hinf_final_coherent/`; quelli precedenti rimangono nei percorsi originali.
-`src` contiene la fisica, `controllers` le sintesi, `analysis` le verifiche, `tests` i controlli.
-Modelli correnti: `simulink/models`; originali: `simulink/legacy/valerio`. Per la sola integrazione: `setenv('CR_RUN_SCOPE','simulink'); run_all`. Per aprire: `addpath('simulink'); setup_lqg_simulink` (analoghi lqri, hinf, kmu). Nessuna sintesi rilanciata.
-Il branch è destinato alla revisione manuale: il merge rimane al gruppo.
+## Esecuzione sicura delle verifiche
 
-## Completamento PR #33: modello lineare e RAS LQRI
+In MATLAB dalla radice:
+```matlab
+setenv('CR_RUN_SCOPE','verify'); run_all
+```
+Esegue i test pertinenti senza sintesi, mu-analysis o Monte Carlo. Le suite preesistenti di attuatori/specifiche rigenerano internamente dati: run_all conserva e ripristina gli artifact iniziali.
 
-`setenv('CR_RUN_SCOPE','simulink-completion'); run_all` esegue solo le aggiunte:
-un modello Simulink lineare M3 comune ai quattro controllori, confronti
-lineare/MATLAB e non lineare/lineare, RAS nominale LQRI, test e figure.
-Non avvia nuove sintesi. I 67 controlli precedenti restano conservati;
-32 nuovi controlli PASS, 15 nuovi test e 7 originari rieseguiti PASS.
-RAS LQRI: 57/57, limitata dal box ±60°, non certificata.
-Presentazione: 20 slide, scaletta 17:55 (non prova orale cronometrata).
-Dettagli e limiti: [resoconto](docs/RESOCONTO_PR33_COMPLETION.md).
+Altri ambiti:
+```matlab
+setenv('CR_RUN_SCOPE','originals'); run_all % audit senza salvare gli SLX
+setenv('CR_RUN_SCOPE','export'); run_all    % figure dai dati salvati
+```
+Per compilare i PDF, eseguire `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` separatamente da report/ e presentation/.
+
+## Struttura e fonti
+
+- src/: meccanica, parametri, attuatori, incertezze.
+- controllers/: sintesi e interconnessioni.
+- analysis/: validatori, calcoli MATLAB, esportazione.
+- tests/: verifiche matematiche e di coerenza.
+- results/data/hinf_final_coherent/: **fonte dei controllori robusti adottati**.
+- simulink/originals/: tre file originali e manifest SHA-256.
+- docs/organic_review/: inventario, backup, identità degli artifact e audit.
+- report/, presentation/: sorgenti e PDF.
+
+MATLAB, Control System Toolbox e Robust Control Toolbox sono necessari alle analisi. Simulink serve per i diagrammi e il setup dei relativi tipi; alcuni test del modello simbolico richiedono Symbolic Math Toolbox, già usato dal progetto. Non sono state introdotte nuove dipendenze.
+
+Gli studi didattici e i dataset robusti fuori dalla cartella adottata descrivono problemi separati: non usarli come fonte dei risultati dei capitoli 8–13. Il diario, il decision log, il changelog e i resoconti datati documentano la cronologia; la descrizione tecnica della consegna è nei PDF e nell'audit corrente.
+
+PR #33 mantenuta draft. Nessun merge automatico.

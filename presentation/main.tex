@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{xcolor}
+\usepackage{tikz}
 \usetheme{default}
 \definecolor{deepblue}{RGB}{20,52,92}
 \definecolor{accent}{RGB}{0,132,140}
@@ -28,312 +29,348 @@
 \input{../report/generated/revision_values.tex}
 \input{../report/generated/hinf_final_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
-\subtitle{Modellazione, sintesi e integrazione Simulink validata}
+\subtitle{Modello, sintesi nominale e robustezza strutturata}
 \author{Alessio de Dato \and Valerio Rebechi}
 \date{Data di consegna: da completare}
 \begin{document}
-
-\begin{frame}[plain]\titlepage\end{frame}
-
-\begin{frame}{La domanda di progetto richiede evidenze diverse}
-\begin{itemize}
-\item Modellare un manipolatore SEA non lineare e linearizzarlo.
-\item Confrontare LQG, $H_\infty$ e $\mu$-synthesis.
-\item Separare prestazione nominale, validazione non lineare, campionamento incerto e certificazione $\mu$.
-\end{itemize}
-\vfill
-\good{Obiettivo finale: scegliere per ruolo, senza nascondere i risultati negativi.}
+\begin{frame}[plain]
+\titlepage
 \end{frame}
 
-\begin{frame}{L'elasticità separa link e rotori}
+\begin{frame}{SEA: otto stati meccanici, due poli instabili}
+
 \[
-M(q)\ddot q+C(q,\dot q)\dot q+G(q)=K_s(\theta-q)
+M(q)\ddot q+C(q,\dot q)\dot q+G(q)=K_s(\theta-q)+d
 \]
 \[
 J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \]
 \begin{itemize}
-\item Stato meccanico: $[q,\dot q,\theta,\dot\theta]$.
-\item Equilibrio: $\bar q=[\EquilibriumQOneDeg^\circ,\EquilibriumQTwoDeg^\circ]^T$.
-\item Il modello open-loop richiede controllo attivo.
+\item $x_m=[q;\dot q;\theta;\dot\theta]\in\mathbb R^8$.
+\item Equilibrio: $\bar q=[\pi/2,0]^T$, velocità nulle.
+\item Poli instabili: $7.21$ e $4.04$ s$^{-1}$.
+\item Modi elastici: circa 70--79 rad/s.
 \end{itemize}
+\good{Il disturbo $d$ agisce sul link; il comando attraversa gli attuatori.}
+
 \end{frame}
 
-\begin{frame}{Attuatori e linearizzazione portano a 14 stati}
-\begin{columns}[T]
-\column{0.42\textwidth}
-\begin{itemize}
-\item $\omega_n=\ActuatorWn$ rad/s
-\item $\zeta=\ActuatorZeta$
-\item ritardo $\ActuatorDelayMs$ ms
-\item Padé del primo ordine
-\end{itemize}
-\column{0.56\textwidth}
-\includegraphics[width=\linewidth]{assets/m3_delay_pade_comparison.png}
-\end{columns}
-\end{frame}
+\begin{frame}{Sei stati di attuatore completano il modello}
 
-\begin{frame}{M4 combina parametri reali e dinamica non modellata}
 \begin{columns}[T]
-\column{0.40\textwidth}
+\column{.43\textwidth}
+\[
+G_a=\frac{40^2}{s^2+64s+40^2}
+\frac{1-0.015s/2}{1+0.015s/2}
+\]
 \begin{itemize}
-\item $J_{m1}$: $\pm\JmOneUncertaintyPct\%$
-\item $k_1,k_2$: $\pm\KOneUncertaintyPct\%$
-\item due blocchi $\Delta_{act}$ indipendenti
-\item range ingegneristici, non probabilità
+\item 3 stati per attuatore; totale $8+6=14$.
+\item $J_{m1},k_1,k_2$: $\pm10\%$.
+\item Due incertezze dinamiche indipendenti.
 \end{itemize}
-\column{0.58\textwidth}
+\column{.55\textwidth}
 \includegraphics[width=\linewidth]{assets/m4_actuator_uncertainty_cover.png}
 \end{columns}
+\small Inviluppo verificato sulla famiglia di 120 attuatori; intervalli ingegneristici, non probabilità.
+
 \end{frame}
 
-\begin{frame}{M5 fissa target e pesi prima del confronto}
+\begin{frame}{Specifiche: norma pesata e tracking sono verifiche diverse}
+
 \begin{columns}[T]
-\column{0.40\textwidth}
+\column{.46\textwidth}
+Gradini separati da $5^\circ$:
 \begin{itemize}
-\item $T_s\leq\SettlingTarget$ s
-\item overshoot $\leq\OvershootTarget\%$
-\item errore $\leq\ErrorTargetPct\%$
-\item cross-coupling $\leq\CrossTargetPct\%$ (diagnostico)
+\item $T_s\leq0.8$ s;
+\item overshoot $\leq10\%$;
+\item errore statico $\leq5\%$.
 \end{itemize}
-\bad{$u_{scale}=\UScaleNm$ N m non è una saturazione hardware.}
-\column{0.58\textwidth}
+Cross-coupling: indicatore di confronto.
+\column{.50\textwidth}
 \includegraphics[width=\linewidth]{assets/m5_spec_frequency_map.png}
 \end{columns}
+\bad{12 N m è una scala del comando, non una saturazione hardware.}
+
 \end{frame}
 
-\begin{frame}{LQR: scale fisiche e pesi sono cose diverse}
+\begin{frame}{LQR: il costo deriva dalle grandezze fisiche}
+
 \small
 \[
-v=[\Delta q;\Delta\dot q;\Delta\theta-\Delta q;\Delta\dot\theta]=Fx
+v=[\Delta q;\Delta\dot q;\Delta\theta-\Delta q;\Delta\dot\theta]=Fx,
+\quad Q=F^TS_x^{-T}W_qS_x^{-1}F
 \]
 \[
-\tilde v=S_x^{-1}Fx,\qquad
-Q=F^TS_x^{-T}W_qS_x^{-1}F,\qquad R=r_u I_2
+J=\int_0^\infty(x^TQx+u^TRu)\,dt,\qquad R=r_uI_2
 \]
 \begin{columns}[T]
-\column{0.48\textwidth}
+\column{.48\textwidth}
 Scale: $q_s=5^\circ$, $\dot q_s=12q_s$,
 $\delta_s=0.5/40$ rad.
 
-$r_u\in\{0.01,0.05,0.10\}$: pesi diretti.
+$Q$ non diagonale: contiene $(\theta-q)^2$.
+\column{.48\textwidth}
+36 candidati, \MLqrAdmissibleCount\ ammissibili.
 
-\par\medskip
-\bad{$q_s$ non è un peso di tuning.}
-\column{0.48\textwidth}
-Ricerca: \MLqrAdmissibleCount/\MLqrCandidateCount\ ammissibili.
-
-$w_q=2,\ w_v=1,\ w_\delta=0.1,\ r_u=0.10$.
-
-\par\medskip
-$R=0.10I_2$; $Q$ non diagonale per $(\theta-q)^2$.
+Selezione: $w_q=2$, $w_v=1$,
+$w_\delta=0.1$, $r_u=0.10$.
 \end{columns}
-\par\medskip
 \[
-Q,R\ \longrightarrow\ \mathrm{Riccati}\ \longrightarrow K
-\ \longrightarrow\ \max\Re\lambda(A-BK)=-\RevRegulatorDecay
+A^TX+XA-XBR^{-1}B^TX+Q=0,\qquad K=R^{-1}B^TX
 \]
+
 \end{frame}
 
-\begin{frame}{Kalman: ipotesi del progetto, non dati del docente}
+\begin{frame}{LQG: quattro encoder e stato stimato}
 \small
-\[
-\dot{\hat x}=A\hat x+Bu+L(y-C\hat x),\qquad y=[q;\theta]
-\]
-\begin{columns}[T]
-\column{0.47\textwidth}
-$\sigma_d=\sigma_u=0.1$ N m,
-$\sigma_y=0.05^\circ$.
 
-$Q_n=0.01I_4$,
+\[
+y=[q;\theta]+v,\quad
+\dot{\hat x}=A\hat x+Bu+L(y-C\hat x),\quad u=-K\hat x+N_rr
+\]
+\small
+\begin{columns}[T]
+\column{.45\textwidth}
+$G_w=[B_d\ B]$, $Q_n=0.01I_4$,
 
 $R_n=(0.05\pi/180)^2I_4$.
 
-\par\medskip
-Nessuna identificazione sperimentale.
+Covarianze assunte, non identificate.
+14 stati stimati; 28 stati in chiusura.
+\column{.53\textwidth}
+\includegraphics[width=\linewidth,height=.40\textheight,keepaspectratio]{assets/m6_lqg_reference_tracking.png}
+\end{columns}
+\good{Il tracking nominale soddisfa i target; il prefiltro non elimina un disturbo costante.}
 
-\bad{Non confondere scala del rumore e sua varianza.}
-\column{0.50\textwidth}
-Sensibilità con lo stesso rumore applicato:
-\input{../report/generated/kalman_slide.tex}
-\par\medskip
-Più fiducia nelle misure: stima più rapida, più rumore nel comando.
+\end{frame}
+
+\begin{frame}{LQRI: memoria dell’errore misurato}
+\small
+
+\[
+\dot\xi=r-q_{\rm mis},\qquad u=-K_x\hat x-K_i\xi
+\]
+\begin{columns}[T]
+\column{.40\textwidth}
+\small
+14 stati fisici, 14 stimati, 2 integratori.
+
+$Q_i=200I_2$, $R=0.10I_2$.
+
+Offset DC nullo per coppia costante nel modello lineare.
+\column{.58\textwidth}
+\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{../report/figures/m7_lqg_lqri_constant_disturbance.png}
+\end{columns}
+\bad{Tracking lento: $T_s$ peggiore 5.046 s. Nessuna saturazione o anti-windup.}
+
+\end{frame}
+
+\begin{frame}{$H_\infty$: sensibilità mista e pesi adottati}
+
+\small
+\[
+S=(I+GK)^{-1},\quad T=I-S,\quad
+\min_K\left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_\infty
+\]
+\[
+W_1=\frac{s/3+2}{s+0.3}I_2,\qquad
+W_2=0.003\,\frac{s+80}{s/6+80}I_2,\qquad W_3=[]
+\]
+\begin{itemize}
+\item $W_1$: errore a bassa frequenza; $W_2$: sforzo di controllo.
+\item 21 profili finiti: stabilità, norma e metriche temporali.
+\item \texttt{mixsyn} e \texttt{hinfsyn}: stesso obiettivo, pianta aumentata verificata.
+\end{itemize}
+\bad{I profili 1-DoF con $\gamma<1$ conservano overshoot superiore al 100\%.}
+
+\end{frame}
+
+\begin{frame}{Due gradi di libertà, stati condivisi}
+
+\centering
+\resizebox{.65\textwidth}{!}{\input{../report/figures/schemes/two_dof.tex}}
+\[
+u=K_rr+K_yq,\quad z=[W_e(q-M_or);W_uu],\quad w=[r;d]
+\]
+\small $M_o=16/(s^2+8s+16)I_2$; pianta $8\times6$, \texttt{hinfsyn(P,4,2)}.
+\par\good{Sintesi simultanea dei due rami: non un semplice prefiltro.}
+
+\end{frame}
+
+\begin{frame}{Ordine completo e ordine fissato: il compromesso rimane}
+
+\includegraphics[width=\textwidth,height=.36\textheight,keepaspectratio]{../report/figures/hinf_final/tracking_2dof.png}
+\small
+\begin{tabular}{lrrr}\toprule
+Soluzione & Ordine & Norma & Overshoot\\\midrule
+$H_\infty$ completo & 22 & 0.04746 & 0\%\\
+MIMO strutturato SS2 & 2 & 0.68219 & circa 22.8\%\\\bottomrule
+\end{tabular}
+\begin{itemize}
+\item \texttt{hinfstruct}: statico, PI, PID, SS2/4/6; 11 avvii per famiglia.
+\item Minimo ordine \emph{osservato}, non globale.
+\item Full-order: $T_s=1.46$ s, target 0.8 s fallito.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{$\mu$-analysis: separare controllore e incertezza}
+
+\[
+\Delta=\operatorname{diag}(\Delta_{a1},\Delta_{a2},\delta_J,\delta_{k1},\delta_{k2})
+\]
+\centering
+\resizebox{.82\textwidth}{!}{\input{../report/figures/schemes/lft.tex}}
+\par\small
+Due blocchi dinamici complessi e tre reali; una occorrenza ciascuno.
+\[
+N\in\mathbb C^{9\times9},\quad N_{11}\in\mathbb C^{5\times5},
+\quad CL=\texttt{lft(Delta,M)}.
+\]
+
+\end{frame}
+
+\begin{frame}{Quattro domande: NS, NP, RS, RP}
+
+\small
+\begin{columns}[T]
+\column{.54\textwidth}
+\[
+\mu_{\mathcal D}(M)=
+\frac{1}{\min\{\|\Delta\|:\det(I-M\Delta)=0\}}
+\]
+\begin{itemize}
+\item NS: stabilità nominale.
+\item NP: norma nominale $<1$.
+\item RS: stabilità per tutta la famiglia.
+\item RP: stabilità e norma $<1$ per tutta la famiglia.
+\end{itemize}
+\column{.44\textwidth}
+\resizebox{\linewidth}{!}{\input{../report/figures/schemes/performance.tex}}
+\par $\Delta_p$: blocco fittizio di prestazione, non un parametro fisico.
 \end{columns}
 \par\medskip
-$u=-K\hat x+N_rr$: nel nominale lineare i poli LQG sono l'unione
-dei poli di regolatore e stimatore.
+\good{Si calcolano limiti su $\mu$: margine inferiore $>1$ implica la proprietà nel modello.}
+
 \end{frame}
 
-\begin{frame}{M6 è il riferimento di tracking nominale}
+\begin{frame}{D--K iteration: sintesi, analisi, fit degli scaling}
+
 \begin{columns}[T]
-\column{0.36\textwidth}
-\begin{itemize}
-\item LQG senza integratore
-\item ricerca LQR: \MLqrAdmissibleCount/\MLqrCandidateCount\ casi ammissibili
-\item selezionato \MLqrSelectedCandidate
-\item ordine LQG \MControllerOrder
-\item $T_s$ peggiore \MControllerWorstTs\ s
-\end{itemize}
-\column{0.62\textwidth}
-\includegraphics[width=\linewidth]{assets/m6_lqg_reference_tracking.png}
+\column{.49\textwidth}
+\resizebox{\linewidth}{!}{\input{../report/figures/schemes/dk.tex}}
+\par\small
+\texttt{MixedMU=on}; scaling D/G.
+
+5 iterazioni; 1201 frequenze.
+FitOrder $[5,2]$ sui contributi di scaling.
+
+Nessuna garanzia di ottimo globale.
+\column{.49\textwidth}
+\includegraphics[width=\linewidth]{../report/figures/mu/dk_history.png}
 \end{columns}
-\end{frame}
-
-\begin{frame}{M7 chiude con un risultato negativo utile}
-\begin{itemize}
-\item LQRI con Kalman M6: 14 stati fisici, 14 stimati, 2 integratori.
-\item Peso diretto $Q_i=\bar w_i I_2$, con $\bar w_i\in\{20,200,800\}$.
-\item Verifiche conformi a tutti i requisiti: \MSevenAdmissible.
-\item Nessuna verifica soddisfa insieme settling time e overshoot M5.
-\end{itemize}
-\vfill
-\bad{Stato M7: \MSevenStatus. LQRI implementata, nessun candidato conforme.}
-\end{frame}
-
-
-\begin{frame}{Da una norma minore di uno a un vero progetto 2-DoF}
-\begin{itemize}
-\item La ricerca 1-DoF resta sovraelongata: $\gamma<1$ da solo non risolve il tracking.
-\item Il controllore corrente riceve $[r;q]$ e produce due comandi.
-\item $u=K_r r+K_yq$: i due rami condividono 22 stati interni.
-\item Norma pesata nominale: \FinalGamma; nessun overshoot nominale.
-\end{itemize}
-\[z=\begin{bmatrix}W_e(q-M_or)\\W_u u\end{bmatrix},\quad
-M_o(s)=\frac{16}{s^2+8s+16}I_2,\quad w=[r;d].\]
-\bad{I target M5 restano invariati e non tutti soddisfatti.}
-\end{frame}
-
-\begin{frame}{H-infinity: tracking migliorato, robustezza insufficiente}
-\includegraphics[width=\textwidth,height=.57\textheight,keepaspectratio]{../report/figures/hinf_final/tracking_2dof.png}
-\begin{itemize}
-\item $T_s\simeq1.46$ s: fallisce il target originale di 0.8 s.
-\item NS/NP PASS; margine RS $[0.01812,0.01816]$: FAIL.
-\item RP non accreditata: RS fallisce e l'intervallo numerico RP è invertito.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Kmu è il candidato robusto del modello dichiarato}
-\begin{itemize}
-\item Stesso problema incerto 2-DoF, controllore completo di 78 stati.
-\item Objective di sintesi \FinalMuObjective; norma nominale \FinalMuGamma.
-\item Post-analisi: RS $[1.7998,1.8044]$, RP $[1.6772,1.6807]$.
-\item NS, NP, RS e RP: PASS sul modello lineare incerto M4.
-\end{itemize}
-\vfill
-\good{La post-analisi indipendente sostiene il ruolo robusto.}
 \par\medskip
-\bad{M5 resta FAIL: settling e offset del primo giunto.}
+\good{$K_\mu$: ordine 78, obiettivo 0.88381. La post-analisi resta necessaria.}
+
 \end{frame}
 
-\begin{frame}{Quaranta campioni comuni: esiti opposti}
+\begin{frame}{La post-analisi cambia la scelta del controllore}
+
+\includegraphics[width=\textwidth,height=.53\textheight,keepaspectratio]{../report/figures/mu/robust_margins.png}
+\small
+\begin{itemize}
+\item $H_\infty$: RS circa 0.018; RP esclusa da RS, intervallo RP non valido.
+\item $K_\mu$: RS $[1.7998,1.8044]$, RP $[1.6772,1.6807]$.
+\item Stessi pesi, intervalli, canali e modello fisico; nessuna riduzione.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Robustezza pesata e requisiti temporali non coincidono}
+
+\small
+\begin{tabular}{lrrr}\toprule
+Proprietà & LQG & $H_\infty$ 2-DoF & $K_\mu$\\\midrule
+Ordine & 14 & 22 & 78\\
+Tracking nominale richiesto & soddisfatto & non soddisfatto & non soddisfatto\\
+Norma 2-DoF & non confrontata & 0.04746 & 0.63468\\
+RS/RP & non certificate & non soddisfatte & soddisfatte\\\bottomrule
+\end{tabular}
+\begin{itemize}
+\item $K_\mu$: $T_s=1.522,1.478$ s; errori statici $6.00\%,3.07\%$.
+\item Overshoot nullo e picco circa 0.798 N m nei gradini.
+\item LQRI: reiezione DC del disturbo, con tracking più lento.
+\end{itemize}
+\bad{Il superamento dei pesi non equivale al superamento di tutti i target temporali.}
+
+\end{frame}
+
+\begin{frame}{Verifiche complementari: campioni incerti e non linearità}
+
 \begin{columns}[T]
-\column{.36\textwidth}
+\column{.42\textwidth}
+\small
+40 campioni comuni, seed 20260826:
 \begin{itemize}
-\item H-infinity: 0/40 stabili.
-\item Kmu: 40/40 stabili.
-\item LQG storico: 37/40.
+\item LQG: 37/40 stabili;
+\item $H_\infty$: 0/40;
+\item $K_\mu$: 40/40.
 \end{itemize}
-\par\medskip
-Il campionamento è evidenza empirica; non definisce una probabilità fisica.
-\column{.62\textwidth}
+MATLAB non lineare: equilibrio e accordo locale verificati per i due controllori robusti.
+\column{.56\textwidth}
 \includegraphics[width=\linewidth]{../report/figures/hinf_final/monte_carlo.png}
 \end{columns}
+\bad{La frequenza empirica non è una probabilità fisica né un certificato robusto.}
+
 \end{frame}
 
-\begin{frame}{Rumore e regione di attrazione mostrano altri limiti}
+\begin{frame}{Rumore, RAS e Lyapunov: limiti da dichiarare}
+
 \small
 \begin{tabular}{lrr}\toprule
-Campagna MATLAB corrente & H-infinity & Kmu\\\midrule
-Picco comando, rumore 4 s [Nm] & 5685 & 8.12\\
-RMS comando [Nm] & 118.2 & 1.934\\
+Prova MATLAB & $H_\infty$ & $K_\mu$\\\midrule
+Picco comando con rumore [N m] & 5685 & 8.12\\
+RMS comando [N m] & 118.2 & 1.934\\
 Punti RAS convergenti & 27/285 & 57/57\\
-Raggio minimo risolto [deg] & 0 & 60\\\bottomrule
+Raggio minimo risolto [gradi] & 0 & 60\\
+Residuo Lyapunov & 65.27 (FAIL) & 0.04493\\\bottomrule
 \end{tabular}
 \begin{itemize}
-\item Raggio zero: limite della ricerca a risoluzione di un grado.
-\item Kmu: frontiera limitata dal box di ricerca, non dall'hardware.
-\item Nessuna saturazione identificata: picchi elevati restano dichiarati.
+\item Raggio zero: risoluzione della ricerca, non RAS localmente vuota.
+\item $K_\mu$: box esaurito; coppie senza saturazione, fino a 2763 N m.
+\item Livello interno analitico $K_\mu$: $1.066\,10^{-12}$; campionamento non è certificazione.
 \end{itemize}
+
 \end{frame}
 
-\begin{frame}{Lyapunov: distinguere certificato e verifica campionata}
-\[A_{cl}^{T}P+PA_{cl}=-I,\qquad V(z)=z^TPz.\]
-\begin{itemize}
-\item H-infinity, 36 stati: residuo 65.27; gate numerico FAIL.
-\item Kmu, 92 stati: residuo 0.04493, inferiore alla soglia 0.1.
-\item Kmu: livello interno analitico $\rho\simeq1.066\,10^{-12}$.
-\item Livello 3.697 verificato su direzioni finite: non è un nuovo certificato.
-\end{itemize}
-\vfill
-Le evidenze della PR 32 sono conservate; l'integrazione non le ricalcola.
-\end{frame}
+\begin{frame}{Simulink: stato effettivo degli originali}
 
-\begin{frame}{Simulink: due piante, la stessa architettura 8+6}
 \small
-\[x_{\rm mech}=[q;\dot q;\theta;\dot\theta]\in\mathbb R^8,
-\qquad x_a\in\mathbb R^6.\]
-\begin{itemize}
-\item Quattro modelli non lineari conservati: coordinate assolute,
-attuatori inizializzati all'equilibrio, feedback incrementale.
-\item Un solo nuovo modello lineare comune, con i controllori congelati:
-\end{itemize}
-\[\dot x=A_{\rm full}x+B_{\rm full}u+B_{d,\rm full}d,
-\quad y=C_{\rm full,Meas}x,\quad q=C_{\rm full,Q}x.\]
-\begin{itemize}
-\item LQG/LQRI ricevono $[r;y]$; H-infinity/Kmu ricevono $[r;q]$.
-\item Ordini totali: 28, 30, 36, 92. Nessuna nuova sintesi o riduzione.
-\item Originali di Valerio in legacy; parametri e guadagni dagli artifact MATLAB.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Rumori, Kalman e integratore: segnali distinti}
-\small
-\[d_{\rm link}=d_{\rm ext}+w_d,\quad
-u_{\rm abs}=\bar\tau+\delta u+\eta_u,\quad y_{\rm mis}=y_{\rm ideal}+v.\]
-\[G_w=[B_d\ B],\quad Q_n=0.01I_4,\quad R_n=(0.05\pi/180)^2 I_4.\]
-\[\dot{\hat x}=A\hat x+B\delta u+L(y_{\rm mis}-C\hat x).\]
-\begin{columns}[T]
-\column{.48\textwidth}
-\textbf{LQG}\[\delta u=-K\hat x+N_rr.\]
-Lo stato vero serve al confronto, non al feedback.
-\column{.48\textwidth}
-\textbf{LQRI}\[\delta u=-K_x\hat x-K_i\xi,\quad\dot\xi=r-q_{\rm mis}.\]
-Due integratori, nessun $N_r$ aggiuntivo.
-\end{columns}
-\par\medskip
-Quattro rumori di misura indipendenti, seed fissi, ZOH 0.002 s.
-Prove a banda finita: non white noise continuo esatto.
-\end{frame}
-
-\begin{frame}{LQG e LQRI: disturbo costante e condizioni iniziali}
-\small
-{\centering\includegraphics[width=\textwidth,height=.42\textheight,keepaspectratio]{../report/figures/simulink_integration/disturbance.png}\par}
-\small
-$d_1=0.5$ Nm da 1 s: a 20 s LQG mantiene offset;
-LQRI lascia $\|e_q\|\simeq1.78\,10^{-8}$ rad.
-\par\medskip
-RAS nominale, stesso protocollo: \textbf{57/57 punti convergenti per entrambi},
-box $\pm60^\circ$, 36 direzioni, precisione $1^\circ$, $\hat x_0=0$, $\xi_0=0$.
-\par\medskip
-\bad{Entrambe limitate dal box: nessuna RAS certificata o superiorità dimostrata.}
-Picchi osservati: LQG 232.19 Nm, LQRI 240.96 Nm; M7 resta PARTIAL.
-\end{frame}
-
-\begin{frame}{Validazione completata, limiti di progetto conservati}
-\small
-\begin{tabular}{lrr}\toprule
-Confronto, quattro controllori & max errore $q$ [rad] & max errore $u$ [Nm]\\\midrule
-Simulink lineare / MATLAB lineare & 1.07e-08 & 1.79e-06\\
-SL non lineare / lineare (piccolo segnale) & 9.80e-10 & 1.49e-07\\\bottomrule
+\begin{tabular}{lp{.68\textwidth}}\toprule
+Originale & Stato e completamento manuale\\\midrule
+LQR/LQG & Presente con osservatore; verificare disturbo e rumori.\\
+LQRI & Presente; integratore da collegare a $r-q_{\rm mis}$, rumore di processo da verificare.\\
+H-infinity & Presente a due ingressi; interfaccia incompatibile con il 2-DoF a quattro ingressi.\\
+$K_\mu$, lineare & Modelli originali non disponibili.\\\bottomrule
 \end{tabular}
 \par\medskip
-\good{32/32 nuovi controlli; 15/15 nuovi test e 7/7 originari PASS.}
-Le evidenze originarie 67/67 restano invariate.
-\begin{itemize}
-\item LQG: riferimento nominale. LQRI: reiezione del disturbo costante.
-\item Kmu: RS/RP PASS sul modello M4; H-infinity: RS FAIL.
-\item M5 resta FAIL per i due robusti. Nessuna nuova garanzia hardware.
-\item Simulato su R2025b; saturazioni, code generation e replay R2026a non verificati.
-\end{itemize}
+File R2026a: caricamento bloccato in R2025b. Nessuna simulazione originale accreditata.
+\par\medskip
+\bad{La parte Simulink della traccia resta da completare manualmente.}
+
 \end{frame}
+
+\begin{frame}{Conclusioni: scelta per ruolo e attività residue}
+
+\begin{itemize}
+\item LQG: riferimento nominale; LQRI: reiezione asintotica del disturbo.
+\item $H_\infty$: il 2-DoF risolve l'overshoot nominale, ma resta fragile.
+\item $K_\mu$: candidato robusto del modello dichiarato, con ordine elevato e target temporali parziali.
+\item Completare gli originali Simulink e le verifiche richieste.
+\end{itemize}
+\par\medskip
+\good{Ogni conclusione è riferita a un modello, un protocollo e una verifica identificabili.}
+
+\end{frame}
+
 \end{document}
