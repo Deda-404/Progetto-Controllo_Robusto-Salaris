@@ -2798,3 +2798,48 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Audit, conservazione dei modelli Valerio e correzione su base889c0eb. Risolti incompatibilità di versione, libreria LTI e bus esterni, disturbo motore errato, rumore scalare, integratore ideale e interfaccia Hinf obsoleta.67/67 controlli+7/7 test PASS realmente eseguiti. Aggiornati PDF e resoconto. Nessuna sintesi costosa ripetuta; limiti e fallimenti preservati.
+
+
+### Chiusura del pacchetto Simulink
+
+Normalizzati spazi finali e caratteri di formattazione del log; aggiornati hash. Nessuna modifica numerica. PDF verificati:57pagine e24slide, nessun riferimento mancante o contenuto fuori margine.
+
+## 2026-09-23 — Chiusura dei tre punti di revisione PR #33
+
+Realizzato un solo diagramma M3 lineare comune ai quattro controllori, senza
+modificare i quattro modelli non lineari esistenti. Eseguiti 32 confronti
+lineare Simulink/MATLAB e non lineare/lineare: PASS. Usate per il secondo
+confronto le tracce non lineari già validate, senza duplicarne il calcolo.
+Eseguita RAS LQRI nominale con algoritmo e criteri M8 invariati: 57/57 punti
+convergenti in 8 s, zero estensioni, zero errori, box ±60° raggiunto.
+Verificata l'identità K/L/Nr della RAS LQG storica con gli artifact correnti.
+La prima esecuzione della suite ha fallito quattro verifiche dimensionali:
+linmod con un output restituiva una struttura. La chiamata nel test è stata
+corretta a quattro output, senza cambiare progetto o soglie. Run iniziale
+conservato in unit_tests_initial_failure.mat/.csv. Run finale: 22/22 PASS
+(7 originari + 15 nuovi). I 67 controlli precedenti non sono rilanciati;
+evidenza e modelli originali restano invariati.
+Documenti aggiornati dopo il calcolo: relazione, resoconto TXT/MD e
+presentazione di 20 slide con scaletta 17:55, non durata orale misurata.
+Stato implementativo COMPLETE; conformità M5/M7 e risultati robusti invariati.
+Nessuna sintesi, riduzione, Monte Carlo o mu-analysis. PR mantenuta draft.
+
+
+## 29 settembre 2026 — Revisione organica e consegna degli originali
+
+Richiesta del 28 settembre: usare esclusivamente gli originali del gruppo, senza costruire o completare automaticamente diagrammi. La decisione sostituisce il precedente percorso d'integrazione; le voci anteriori restano cronologia e non descrivono la consegna attuale.
+
+Analisi preliminare di repository, traccia, artifact e materiale dei colleghi. Capitoli 1–7 conservati nei contenuti, salvo due correzioni verificate nel Capitolo 3 e rimandi/stile. Riscritti Capitoli 8–9, aggiunti schemi LFT, prestazione e D–K, grafici da dati salvati. Presentazione 19 slide, 17:15.
+
+Backup completo esterno verificato prima delle rimozioni; conservate copie esatte del working tree. Tre originali spostati senza modifica dei byte in simulink/originals; rimossi generatori, diagrammi e dipendenze esclusivi dalla consegna. Inventario e hash in docs/organic_review.
+
+104/104 test MATLAB PASS, 8 nuovi. Due suite riscrivono internamente m3/m5: isequaln con il baseline PASS, byte ripristinati e protezione aggiunta al runner. Audit originali: tre FAIL di caricamento per R2026a su R2025b; zero simulazioni accreditate. Errori preparatori nell'audit (nome del MAT e accumulatore di strutture/codice MATLAB in cache) corretti prima dell'esportazione, senza modificare risultati. Nessuna nuova sintesi, mu-analysis, Monte Carlo o RAS.
+
+Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
+
+Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.

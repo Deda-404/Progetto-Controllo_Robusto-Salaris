@@ -30,7 +30,7 @@ Per descrivere piccole variazioni attorno al punto di lavoro introduciamo
 \]
 Lo sviluppo di Taylor al primo ordine fornisce
 \[
-\dot{\widetilde x}=A\widetilde x+B\widetilde\tau,qquad
+\dot{\widetilde x}=A\widetilde x+B\widetilde\tau,\qquad
 A=\left.\frac{\partial f}{\partial x}\right|_{\bar x,\bar\tau},\quad
 B=\left.\frac{\partial f}{\partial\tau}\right|_{\bar x,\bar\tau}.
 \]
@@ -40,10 +40,10 @@ La linearizzazione è locale. Essa descrive correttamente il termine dominante p
 
 \section{Poli e proprietà strutturali}
 
-Il modello meccanico ha otto stati. In anello aperto possiede due poli reali instabili, circa $+7.2094$ e $+4.0408$ s$^{-1}$; la massima parte reale è \OpenLoopMaxRealPole\,s$^{-1}$. Sono inoltre presenti due coppie elastiche complesse prossime a 70 e 79.4 rad/s e quattro modi stabili più lenti. Questa separazione di scale guiderà sia la scelta della banda degli attuatori sia le normalizzazioni dei costi di controllo.
+Il modello meccanico ha otto stati. In anello aperto possiede due poli reali instabili, circa $+7.2094$ e $+4.0408$ s$^{-1}$; la massima parte reale è \OpenLoopMaxRealPole\,s$^{-1}$. Sono inoltre presenti due coppie elastiche complesse prossime a 70 e 79.4 rad/s e due poli reali stabili più lenti, circa $-7.8855$ e $-4.0734$ s$^{-1}$. Questa separazione di scale guiderà sia la scelta della banda degli attuatori sia le normalizzazioni dei costi di controllo.
 \begin{figure}[H]\centering
 \includegraphics[width=0.72\textwidth]{figures/m2_open_loop_poles.png}
-\caption{Poli del modello meccanico linearizzato in anello aperto (M2).}\label{fig:m2-poles}
+\caption{Poli del modello meccanico linearizzato in anello aperto .}\label{fig:m2-poles}
 \end{figure}
 
 Le matrici classiche di controllabilità e osservabilità sono fortemente condizionate, perché contengono potenze di $A$ e variabili con scale fisiche diverse. Per evitare conclusioni dipendenti da una soglia numerica implicita, abbiamo impiegato la SVD con tolleranza dichiarata e il test PBH sui modi critici. La coppia $(A,B)$ risulta controllabile; in particolare entrambi i modi instabili sono controllabili e il modello è stabilizzabile.

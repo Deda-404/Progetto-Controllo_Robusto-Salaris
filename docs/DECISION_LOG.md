@@ -2178,3 +2178,39 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Decisione: Kmu assume il ruolo robusto sul dominio M4; Hinf rimane comparatore nominale. M5 non viene rilassata. Il nuovo integratore MATLAB evita modifiche ai modelli Simulink storici; la verifica locale ne controlla segno e mappe. Il limite numerico RAS1e6 conserva la soglia precedente. Nessuna nuova ricerca di tuning dopo gli esiti negativi.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Approvate esplicitamente API MATLAB locali e sole librerie standard in assenza di model_edit. Originali Valerio conservati; copie corrette su R2025b. Matrici M3 e6stati espliciti sostituiscono LTI esterni; vettore17 di parametri sostituisce slBus1. Nessuna modifica a controllori, pesi, specifiche o risultati robusti. PASS implementativo distinto dalla conformità M5.
+
+## 2026-09-23 — Diagramma lineare comune e RAS M7
+
+Si adotta un modello lineare separato unico, parametrico sul controllore:
+questa scelta soddisfa la traccia senza duplicare quattro piante né alterare
+l'integrazione non lineare validata. Il plant SS espone tutti i 14 stati;
+i prodotti CfullMeas e CfullQ sono blocchi separati. Il modello di confronto
+è deterministico; le prove rumore restano nei modelli non lineari.
+Per RAS si riutilizzano algoritmo e criterio M8, con adattatore Simulink e
+checkpoint opzionali; i default delle chiamate storiche sono conservati.
+Il confronto LQG usa dati esistenti di cui si verifica l'identità dei guadagni.
+La RAS LQRI primaria usa xhat0=0 e xi0=0; la sezione secondaria non è richiesta
+per questo confronto e non viene calcolata. Box e soglie non vengono ampliati
+inseguendo una frontiera. Risultato empirico, non certificazione.
+Le ultime otto slide diventano quattro, conservando Hinf/Kmu e i risultati
+negativi nelle prime sedici. Scaletta totale 17:55, margine 2:05.
+
+
+## 29 settembre 2026 — Revisione organica e consegna degli originali
+
+Richiesta del 28 settembre: usare esclusivamente gli originali del gruppo, senza costruire o completare automaticamente diagrammi. La decisione sostituisce il precedente percorso d'integrazione; le voci anteriori restano cronologia e non descrivono la consegna attuale.
+
+Analisi preliminare di repository, traccia, artifact e materiale dei colleghi. Capitoli 1–7 conservati nei contenuti, salvo due correzioni verificate nel Capitolo 3 e rimandi/stile. Riscritti Capitoli 8–9, aggiunti schemi LFT, prestazione e D–K, grafici da dati salvati. Presentazione 19 slide, 17:15.
+
+Backup completo esterno verificato prima delle rimozioni; conservate copie esatte del working tree. Tre originali spostati senza modifica dei byte in simulink/originals; rimossi generatori, diagrammi e dipendenze esclusivi dalla consegna. Inventario e hash in docs/organic_review.
+
+104/104 test MATLAB PASS, 8 nuovi. Due suite riscrivono internamente m3/m5: isequaln con il baseline PASS, byte ripristinati e protezione aggiunta al runner. Audit originali: tre FAIL di caricamento per R2026a su R2025b; zero simulazioni accreditate. Errori preparatori nell'audit (nome del MAT e accumulatore di strutture/codice MATLAB in cache) corretti prima dell'esportazione, senza modificare risultati. Nessuna nuova sintesi, mu-analysis, Monte Carlo o RAS.
+
+Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
+
+Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.

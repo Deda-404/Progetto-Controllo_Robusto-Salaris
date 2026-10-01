@@ -47,3 +47,7 @@ desktop.ini
 # Temporary results only; validated result artifacts remain trackable
 results/tmp/
 tmp/
+
+# Intermediate PDF names; final deliverables are tracked
+/report/main.pdf
+/presentation/main.pdf

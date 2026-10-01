@@ -13,6 +13,7 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{float}
+\usepackage{tikz}
 \usepackage[protrusion=true,expansion=false]{microtype}
 \geometry{top=2.5cm,bottom=2.5cm,left=2.7cm,right=2.3cm}
 \hypersetup{hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!55!black,pdftitle={Controllo robusto di un manipolatore planare 2-DoF con SEA},pdfauthor={Alessio de Dato; Valerio Rebechi}}
@@ -33,22 +34,21 @@
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \begin{abstract}
-Il progetto studia un manipolatore planare SEA a due giunti, a partire dalle
-equazioni non lineari e da un modello nominale a 14 stati con attuatori.
-Modello fisico, equilibrio, incertezze e specifiche originali restano invariati.
-LQG conserva il riferimento per il tracking nominale. La revisione H-infinity
-verifica il limite inferiore MIMO e confronta una ricerca finita 1-DoF con
-una vera sintesi 2-DoF, che riceve riferimento e posizione e include la coppia
-fisica disturbante lato link. Il candidato nominale raggiunge norma
-\FinalGamma\ senza overshoot, ma fallisce il tempo di assestamento M5 e
-mostra robustezza molto bassa: 0/40 campioni incerti sono stabili.
-La D--K iteration sul medesimo problema produce un nuovo Kmu di ordine
-\FinalMuOrder. La post-analisi indipendente certifica RS e RP sul modello
-lineare incerto M4, con margini circa 1.80 e 1.68; tutti i 40 campioni sono
-stabili. Simulazioni non lineari, rumore, regione di attrazione e Lyapunov
-quantificano ulteriori limiti: nessun risultato è trasferito dai precedenti
-controllori. Kmu assume il ruolo robusto, mantenendo espliciti i target M5
-non soddisfatti e l'assenza di validazione hardware.
+Si studia il controllo di un manipolatore planare SEA a due giunti, a partire
+dalle equazioni non lineari e dalla linearizzazione con attuatori a 14 stati.
+LQG e LQRI illustrano il compromesso fra tracking e reiezione dei disturbi.
+La sensibilità mista e la sintesi $H_\infty$ a due gradi di libertà mostrano
+che una buona norma pesata non garantisce tutte le specifiche temporali.
+Il controllore nominale selezionato ha norma \FinalGamma\ e overshoot nullo,
+ma è fragile rispetto alle incertezze dichiarate. La $\mu$-synthesis sullo
+stesso problema produce un controllore di ordine \FinalMuOrder\ con margini
+di stabilità e prestazione robusta maggiori di uno. Restano fallimenti su
+assestamento e offset, oltre ai limiti legati a rumore e coppie non saturate.
+Le simulazioni non lineari MATLAB, le sezioni empiriche di attrazione e i
+40 campioni incerti sono distinti dalle garanzie del modello lineare.
+I tre modelli Simulink originali disponibili sono conservati e analizzati;
+le incompatibilità riscontrate impediscono di accreditarne la simulazione
+come validazione dei quattro controllori finali.
 \end{abstract}
 \tableofcontents
 \listoffigures

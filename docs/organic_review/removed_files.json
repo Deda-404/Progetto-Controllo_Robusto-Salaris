@@ -1,0 +1,527 @@
+{
+  "backup": "C:\\Users\\aless\\Desktop\\Progetto_ISCR\\CR\\Progetto_CR_prima_revisione_organica_91ea492.zip",
+  "base": "91ea492815a1f128657bd975dcb8995319ab0397",
+  "files": [
+    {
+      "path": "analysis/compact_simulink_evidence.m",
+      "sha256": "9a0afdfaf8ec321d4da6f4cb7b21689bf50dd49c986e588832e053b557d819cf"
+    },
+    {
+      "path": "analysis/export_simulink_completion.m",
+      "sha256": "a851f8d59ea2cd37fb97619ee477cd1d50513114b239d2e85508cd0d19404f0a"
+    },
+    {
+      "path": "analysis/export_simulink_integration.m",
+      "sha256": "bb43b924f15d9ca8f85775d46eac455821f3b4c15828fc3d91dcae5310fb9b8c"
+    },
+    {
+      "path": "analysis/nominal/regenerate_document_figures.m",
+      "sha256": "b8f02bd6e0c64335b710d0e1eeaa5775413076e22e8efe2d45d19f92acf4c6b4"
+    },
+    {
+      "path": "analysis/nonlinear/estimate_m15_lti_nl_agreement.m",
+      "sha256": "d93c1560c25e62ac108b85017a495b21671d6b097a556a6131f5a58a1b561ce8"
+    },
+    {
+      "path": "analysis/nonlinear/evaluate_m15_disturbance.m",
+      "sha256": "d2e4147c12283a99c1eb2ee806f9c7104b0d77c5f5a194d757df8de6aad7e8cb"
+    },
+    {
+      "path": "analysis/nonlinear/evaluate_m15_noise.m",
+      "sha256": "bef638a06f6bafe631fa9a1af0acbc3b0749b4d9d9bbaf1724534fee1e4feaab"
+    },
+    {
+      "path": "analysis/nonlinear/evaluate_m15_tracking.m",
+      "sha256": "7c18798be958f36531f47f87735951b0c7d9a157ab7cb5fd4d05e6b366b6768c"
+    },
+    {
+      "path": "analysis/nonlinear/simulate_m15_nonlinear.m",
+      "sha256": "15bf2047ecbe5ede6e0d6f8edadcdefdf1661c38031c20cc95b611888a2af96f"
+    },
+    {
+      "path": "analysis/nonlinear/validate_m15_nonlinear_robust.m",
+      "sha256": "8506300037fab49e36eedf1130cd9a7fefacd712d6ee0ba96ace4361ef2a7408"
+    },
+    {
+      "path": "analysis/ras/simulate_m8_nonlinear.m",
+      "sha256": "335402e0ca750d38a3ea4d0aeccd637f6b719b830f5ef6fbb79648993588a51d"
+    },
+    {
+      "path": "analysis/ras/validate_lqri_ras.m",
+      "sha256": "33ecd32e68b6ef835ab70e9c2e28e66e9d04bd9bf8ac1d7806d7bc817fa415a9"
+    },
+    {
+      "path": "analysis/ras/validate_m8_simulink_ras.m",
+      "sha256": "0d56eb7c1100f1c200806988b1a6d1caf230e1b45ba6632492167f93bdd8c7eb"
+    },
+    {
+      "path": "analysis/run_simulink_completion.m",
+      "sha256": "3f1ef882c0c0ac69aa2603d4f3a262e35bc403c31fcb409d7cdcdf1a0f189178"
+    },
+    {
+      "path": "analysis/validate_linear_common.m",
+      "sha256": "b7b9b572bf8ecf6c5b19d09a8057212abc3c9c96acb3426c1e2270bc090c968b"
+    },
+    {
+      "path": "analysis/validate_simulink_integration.m",
+      "sha256": "219bc81da07f8ee1d6a1e97b26f4322554cf94a22138875c556a80bb868de8ad"
+    },
+    {
+      "path": "docs/archive/before_final_coherent/PROJECT_STATUS.md",
+      "sha256": "7cdebd61e4d226c1737101b55fae16240ba07870a92a905c2211dca02a87bc06"
+    },
+    {
+      "path": "docs/archive/before_final_coherent/README.md",
+      "sha256": "52cd1c523e1369cb1f47e7c9ee49c9ad612b205febecbebb2daf8b44324a5d00"
+    },
+    {
+      "path": "docs/NONLINEAR_VALIDATION_HINF_MU.md",
+      "sha256": "00ead63f33e46a1d376efc07c3f9df176f64f6791a522672c15360c91e449d8e"
+    },
+    {
+      "path": "docs/RESOCONTO_PR33_COMPLETION.md",
+      "sha256": "06c1f38c6529bb9e2ebebbded31a3d39062bbaf205f00d95f5da472828659ea0"
+    },
+    {
+      "path": "docs/RESOCONTO_PR33_COMPLETION.txt",
+      "sha256": "06c1f38c6529bb9e2ebebbded31a3d39062bbaf205f00d95f5da472828659ea0"
+    },
+    {
+      "path": "docs/RESOCONTO_SIMULINK_INTEGRATION.md",
+      "sha256": "63fab0b3fda2bd3016ad8a946c363725b535b2f682e3f4a9d47386dc5268508d"
+    },
+    {
+      "path": "docs/RESOCONTO_SIMULINK_INTEGRATION.txt",
+      "sha256": "63fab0b3fda2bd3016ad8a946c363725b535b2f682e3f4a9d47386dc5268508d"
+    },
+    {
+      "path": "docs/SIMULINK_INITIAL_AUDIT.md",
+      "sha256": "593c14d6431f66221749e3680b920e6ba5f6def5a675cded3abbecf6aff7e542"
+    },
+    {
+      "path": "docs/SIMULINK_RAS_LQG.md",
+      "sha256": "292193747aa89d9463a846374e3901eab59ed043394e563a42035c073f734d1a"
+    },
+    {
+      "path": "presentation/archive/before_simulink_integration/main.tex",
+      "sha256": "fb5922327d86cf8ee294c6224d163c560fe33d4bfc1a00bb48c4bbb74c8d4cf0"
+    },
+    {
+      "path": "presentation/archive/before_simulink_integration/OUTLINE_AND_TIMING.md",
+      "sha256": "20a84f42efb2eac3f19521475cb1c0b7221e1a2e9f33bf6b8183732474f8a5bc"
+    },
+    {
+      "path": "presentation/archive/before_simulink_integration/Progetto_CR_Presentazione.pdf",
+      "sha256": "5f1d28bb8fb6e8dc24773034de122542503751c6f9bdc07c8b752f8a7f3b8c80"
+    },
+    {
+      "path": "presentation/archive/before_simulink_integration/SPEAKER_NOTES.md",
+      "sha256": "dc255bccd67cace3b0bb69a833e17249740f39e4583d87e79a9468cdff39c263"
+    },
+    {
+      "path": "report/archive/before_final_coherent/08_hinf.tex",
+      "sha256": "0a297f27d60d6ac4e8787248752c6b528e668b6792ba3be2c7dc78f798568e63"
+    },
+    {
+      "path": "report/archive/before_final_coherent/09_mu.tex",
+      "sha256": "974fdfe36b578e01e3f0bfeafe9f3cadd00b2ede3bba05949628cf837bee7d6d"
+    },
+    {
+      "path": "report/archive/before_final_coherent/10_validazione_nonlineare.tex",
+      "sha256": "fb4cea2cd4d5563abf84044e17047f24481c4a14125a6878d33c63a599c19141"
+    },
+    {
+      "path": "report/archive/before_final_coherent/11_monte_carlo.tex",
+      "sha256": "3411a83323abdb9bfc970c7778ee29d10a953670b4610a1387dcf292420cd4f8"
+    },
+    {
+      "path": "report/archive/before_final_coherent/12_confronto_finale.tex",
+      "sha256": "c8207e23181a41df15ed28d48127a731e95d2414b4e2012701efb868be48dbd1"
+    },
+    {
+      "path": "report/archive/before_final_coherent/13_conclusioni_limiti.tex",
+      "sha256": "954c40223078409682f345f069c64ed974adb529301e8cbd72aebd2a3ffb8d84"
+    },
+    {
+      "path": "report/archive/before_final_coherent/B_artifact_traceability.tex",
+      "sha256": "6727b7795b41516f833d5089d6172fd0180af3f0faebade6c59fc9a0861ffaa7"
+    },
+    {
+      "path": "report/archive/before_final_coherent/C_riproducibilita.tex",
+      "sha256": "5e5e1de795f959b0d0046f18f98a6de663f79d7dd625ebfbfd3c61ce9ae6079c"
+    },
+    {
+      "path": "report/archive/before_final_coherent/main.tex",
+      "sha256": "fb3acab421f6f0188373944725dfd5fdec6bb4ae534784f67fa42a9a3da97d76"
+    },
+    {
+      "path": "report/archive/before_final_coherent/Progetto_CR_Relazione_finale.pdf",
+      "sha256": "9548d0a651e117acef0f72c4f2efadd5b3cad55423ea7b41008cac50b8f416aa"
+    },
+    {
+      "path": "report/archive/hinf_before_retuning/08_hinf.tex",
+      "sha256": "c6120548028f66455751982cbc57e8674c4f34ce5931c2e5dceb9edfc0dfbb93"
+    },
+    {
+      "path": "report/build_completion_text.py",
+      "sha256": "a41e7ef0d6c5b723fe8bd5cec7679027ecf976fc64b91a4e2d0af5bf7856e19e"
+    },
+    {
+      "path": "report/build_simulink_text.py",
+      "sha256": "512b8c528173cda73af5f77c4263e10c71ae677fd26b701ea6403b70c91bfc0d"
+    },
+    {
+      "path": "report/figures/simulink_completion/linear_nonlinear.png",
+      "sha256": "87940e158cd7bae000c53fa663259f74e878eba540f3eb7b2848203acfd8e815"
+    },
+    {
+      "path": "report/figures/simulink_completion/ras_lqg_lqri.png",
+      "sha256": "f3519c6adef801906b2d7faa7d69b37cf3f5bdac079c5d03cb0f5348d39a9f59"
+    },
+    {
+      "path": "report/figures/simulink_integration/disturbance.png",
+      "sha256": "019898f5c4ea386fbbd827bd13377ce2cb71ff4021de3a01e45da1eec910efcf"
+    },
+    {
+      "path": "report/figures/simulink_integration/equivalence.png",
+      "sha256": "a16ed38f27ad619b31d2778c787d92586d605796789c6010cf4e9b4e93778aed"
+    },
+    {
+      "path": "report/figures/simulink_integration/tracking.png",
+      "sha256": "de84c652837b879d4c5b6c4dfdad0a1215331f9f82ac01d69d4f6e71b757333c"
+    },
+    {
+      "path": "report/generated/simulink_comparison.tex",
+      "sha256": "74c77c79b27d4deaba231d887413a1f50c30d82312f2d07f770eb264a2204a42"
+    },
+    {
+      "path": "report/generated/simulink_tracking.tex",
+      "sha256": "345358176c1efdf2cbb85be023e020423b8fa4538ad212bcca692c8d51674ddd"
+    },
+    {
+      "path": "report/sections/10b_integrazione_simulink.tex",
+      "sha256": "a21cce7fe7e09fce0f17c09fb6b4fe67e47554e60a745b82acb64f0c841f8651"
+    },
+    {
+      "path": "report/sections/10c_simulink_completion.tex",
+      "sha256": "4ef4f2cd70e3c2d1559516fae5892bd8c6164de71da86f3491cc6e382dbf019c"
+    },
+    {
+      "path": "results/data/simulink_completion/development_log.txt",
+      "sha256": "58540ecd3009dd899c9275189b0ab224b74fb855a2ddff8f884a2c385352fd1b"
+    },
+    {
+      "path": "results/data/simulink_completion/Hinf_linear.mat",
+      "sha256": "6d724f66242bc7f5033c22a2cdcfbe8c63f6eb01dc18be283dfb3965fda9de8a"
+    },
+    {
+      "path": "results/data/simulink_completion/Kmu_linear.mat",
+      "sha256": "5abda23bb5639f86247285f771bea427c2e56d02c20092e0d7180c737332749c"
+    },
+    {
+      "path": "results/data/simulink_completion/linear_summary.json",
+      "sha256": "7a1c4b687eff407ea3b20a53888c97a028ecbeee846169036148da738605420b"
+    },
+    {
+      "path": "results/data/simulink_completion/linear_validation.mat",
+      "sha256": "263e494eb43775426f19b6261ac1fb4ec90ce70cddda71e4de7c0379d3024b25"
+    },
+    {
+      "path": "results/data/simulink_completion/LQG_linear.mat",
+      "sha256": "0c984c661eabdb1e9b578f83a586228d84e179c662d6dd8a4b3bd1071b769548"
+    },
+    {
+      "path": "results/data/simulink_completion/LQRI_linear.mat",
+      "sha256": "487a445a81151c268871a111ca522a14de3037a735d22ec17ab14755bf18ed06"
+    },
+    {
+      "path": "results/data/simulink_completion/lqri_ras.mat",
+      "sha256": "89e06afaa944071a6c4a7e96410037e38fcfbfa7782538699b2e6ff3c212c8c4"
+    },
+    {
+      "path": "results/data/simulink_completion/lqri_ras_boundary.csv",
+      "sha256": "e18f3b0fd57b230cdadfd145ac18d965109c65c2d2ad8974b15abf8706ebcc73"
+    },
+    {
+      "path": "results/data/simulink_completion/lqri_ras_checkpoint.mat",
+      "sha256": "b2865586aaf45243c3caf5596e63c6fc24f6ddc6620ae4b75fca2aba391d03b5"
+    },
+    {
+      "path": "results/data/simulink_completion/lqri_ras_points.csv",
+      "sha256": "18e42392177a29e0f54b18bdfaee66eb52a7b2b4cd448935d43cab77acf5778a"
+    },
+    {
+      "path": "results/data/simulink_completion/lqri_ras_summary.json",
+      "sha256": "9a42dd639b2a39fbf9410afedea863c5df32e95a16063db8cad33e0fd53756de"
+    },
+    {
+      "path": "results/data/simulink_completion/manifest.json",
+      "sha256": "6ddeb0c17d7b8c88482423925dc7048f8e4228d9967e82d76783f6f1531bbb93"
+    },
+    {
+      "path": "results/data/simulink_completion/unit_tests.csv",
+      "sha256": "ca4c7025059da9f1bab18c5cdf027ef590bfe2b114d20bafb41286c6e2701e82"
+    },
+    {
+      "path": "results/data/simulink_completion/unit_tests.mat",
+      "sha256": "a8b74e32541b643924652266f908750c98138d637f56b868288457369a3bc764"
+    },
+    {
+      "path": "results/data/simulink_completion/unit_tests_initial_failure.csv",
+      "sha256": "83fe0d2fad61d1acd5ff18b5649d3257eb96a199820f5ab030d2f16a5d431b88"
+    },
+    {
+      "path": "results/data/simulink_completion/unit_tests_initial_failure.mat",
+      "sha256": "62b67ae80e93bec7150ed60a0bbf12cda256ed95af179052b01bc432387be516"
+    },
+    {
+      "path": "results/data/simulink_integration/development_log.txt",
+      "sha256": "6d575097a3e9463aeb5d3fe8d89f3c8a1d651f638369b5aa5f5f0b6e9dc82d6d"
+    },
+    {
+      "path": "results/data/simulink_integration/Hinf_disturbance.mat",
+      "sha256": "00c5d473391fab56741a76d7cdabe72fbdc5bb47b2c5db6310fb4b4fc8496f57"
+    },
+    {
+      "path": "results/data/simulink_integration/Hinf_runs.mat",
+      "sha256": "91aba7a3b5426ea422e314a59b5e2a2349a787494e195001714fe94382ce6ddd"
+    },
+    {
+      "path": "results/data/simulink_integration/Kmu_disturbance.mat",
+      "sha256": "6ecdc15982d05734fd46f1dced3a6067aa3b0291e4a71da576755266c9b0328a"
+    },
+    {
+      "path": "results/data/simulink_integration/Kmu_runs.mat",
+      "sha256": "c158e275d2ed0e04a3528b61645a6407bc65965f33c5e57aeb0d4aa5b52bbdf2"
+    },
+    {
+      "path": "results/data/simulink_integration/LQG_disturbance.mat",
+      "sha256": "fba46daedb116d6d251bf356a0c5a26511b84f8ae33ce44b42c162711522595a"
+    },
+    {
+      "path": "results/data/simulink_integration/LQG_runs.mat",
+      "sha256": "daed15c5609dedd7b1e49cc751642dde7d45870429a460c8adbc2144086e9aa4"
+    },
+    {
+      "path": "results/data/simulink_integration/LQRI_disturbance.mat",
+      "sha256": "2a9dae3d71be3158edcc7d8f7772d2e38a334f1b55304d641a6a915e20aad5d8"
+    },
+    {
+      "path": "results/data/simulink_integration/LQRI_runs.mat",
+      "sha256": "13b380a37b42fd09ecb119b31afcf7ca0fb94c344332c68944a81f75e0835922"
+    },
+    {
+      "path": "results/data/simulink_integration/manifest.json",
+      "sha256": "6d3784e9adf35de586b1477b4dbfa2281c7a2255ffb1db6152adc6f6f2b957dc"
+    },
+    {
+      "path": "results/data/simulink_integration/summary.json",
+      "sha256": "18334cf29741d65a6c5ecb8163e1f0e0108c992e669c2c8a180ee7cbcda15b61"
+    },
+    {
+      "path": "results/data/simulink_integration/unit_tests.mat",
+      "sha256": "a81c1d5d7da9582bc59010a148610e4e40ec9d0c834056849e405429fca0ad92"
+    },
+    {
+      "path": "results/data/simulink_integration/validation.mat",
+      "sha256": "8394b916a9a2db10e2117bbfb2e3d8d9b8e77da6a2fb433efb68d65d29d83372"
+    },
+    {
+      "path": "simulink/build_linear_common.m",
+      "sha256": "2d3457c0334e8d27d99ae0b66d4d521ccac5e1d8e4cbce4d9fa4f5a265ae37ab"
+    },
+    {
+      "path": "simulink/build_m15_robust_simulink_model.m",
+      "sha256": "622747d96c72236e062dd5ab5f6ff3f7340801482bb93b3dd9162e3a43a4956c"
+    },
+    {
+      "path": "simulink/build_m8_simulink_model.m",
+      "sha256": "c33fd197ee28d5dd00390ed46140a174b48887d0a049195c4dbc6059d759fde0"
+    },
+    {
+      "path": "simulink/build_simulink_integration.m",
+      "sha256": "bd98f2f9b242e80c09f0662f847661246f9f89787e4e09398c326eef157042ee"
+    },
+    {
+      "path": "simulink/m8_nonlinear_sea_sfun.m",
+      "sha256": "707b3bcb1fdd53b4187761d2161510a59d83bc5673994a3da3763958b34c0d00"
+    },
+    {
+      "path": "simulink/models/SEA_Hinf_integrated.slx",
+      "sha256": "3eca5ffa0cfdac4a9861775a69949f77779d44967a6f5e679c49d4d0809f1dd8"
+    },
+    {
+      "path": "simulink/models/SEA_Kmu_integrated.slx",
+      "sha256": "c6043c08421571e5ec692dd644ff35052d35e93db622100afacd5f3a26ed450d"
+    },
+    {
+      "path": "simulink/models/SEA_linear_common.slx",
+      "sha256": "f5c51edaa4c784747544e67e6f6dc42e42a3c4b7f0c27438b6cb520bc3520f59"
+    },
+    {
+      "path": "simulink/models/SEA_LQG_integrated.slx",
+      "sha256": "093cb6eab8c441d8d57c0c8799f26b5c589234cdad26588a946e1ad6d9ce610a"
+    },
+    {
+      "path": "simulink/models/SEA_LQRI_integrated.slx",
+      "sha256": "ce1060dd3c0b96df3957aa9e045860c9f34a904c2b5e98ca49f99f16b5416e5c"
+    },
+    {
+      "path": "simulink/SEA_LQG_nonlinear.slx",
+      "sha256": "09889029407563ba858369f6f92e9f9e7f206f994d9e21ef35d2d4442a5426e8"
+    },
+    {
+      "path": "simulink/SEA_ROBUST_nonlinear.slx",
+      "sha256": "b860bba7016f8b83f85305857627e3b6510da2cb72de117e1a93655cefd6b0e6"
+    },
+    {
+      "path": "simulink/setup_hinf_simulink.m",
+      "sha256": "3743d1fb2fc1317f7395f7691fa695d002aee672469c1ece5e193c244bc06179"
+    },
+    {
+      "path": "simulink/setup_kmu_simulink.m",
+      "sha256": "501b048c31c4cf396b51ef35d52bb13f4a0efea1e13fd0d354beda221657392b"
+    },
+    {
+      "path": "simulink/setup_linear_common.m",
+      "sha256": "d8d3f0347a6166e91823dccf9bb2ec11bac2810583e408f2e40133fad174e8c2"
+    },
+    {
+      "path": "simulink/setup_lqg_simulink.m",
+      "sha256": "d59373641dd96838408d0ba061be1dec3a3076ffcc132369d1717751d7f62060"
+    },
+    {
+      "path": "simulink/setup_lqri_simulink.m",
+      "sha256": "6f475f286c0f51b3c00a6604b7d4ad4a06eea3cc3908520a45da1250ef77ee46"
+    },
+    {
+      "path": "simulink/setup_simulink_integration.m",
+      "sha256": "94321e98f636d9dea4683c4a41e1ceef9b99f23fc232420c130032808a6e5c44"
+    },
+    {
+      "path": "simulink/simulate_integrated_ras.m",
+      "sha256": "4ecf48660a55a36bae86eaf34bb6de4739d5f84f4f37d419b0d9cfaf100fd732"
+    },
+    {
+      "path": "simulink/simulate_linear_common.m",
+      "sha256": "02365fdebef6e15fd750c25fd2c985936bf5b0e94c8eedbf535eb3d56c0701df"
+    },
+    {
+      "path": "simulink/simulate_simulink_integration.m",
+      "sha256": "daafa8ac0c45a183ef64f00feb620d22e6ccbcd7eefc30c7acd353dcb82743bb"
+    },
+    {
+      "path": "simulink/simulink_integration_linear_map.m",
+      "sha256": "69cb7948dcd70aefb871ca3fa472d8beefd7d59a65dd3b63058480e0f88688a4"
+    },
+    {
+      "path": "simulink/tidy_simulink_integration.m",
+      "sha256": "cdeb15af91a008b842c6c6149956d047ea7798caa649ce12a14359d091ff0f2d"
+    },
+    {
+      "path": "tests/test_m15_nonlinear_robust.m",
+      "sha256": "7a36ad8736d599314e09fba8e02ee8ff1747ba4925b4efe82c05ab9eda52521e"
+    },
+    {
+      "path": "tests/test_m8_simulink_ras.m",
+      "sha256": "af5cea324694fe7ed5830aff89f8e58f4991b97b5987963433ecea32a38325f0"
+    },
+    {
+      "path": "tests/test_simulink_completion.m",
+      "sha256": "e5bb2d38ac89f5c59f88702ca1acdb5f2866be0b7b5995f8ddabff9a06412f92"
+    },
+    {
+      "path": "tests/test_simulink_integration.m",
+      "sha256": "d10d30b7b7718ed8b82f97ff8fa41fc3da0c3b64beeb59f957a40aabc78f505c"
+    },
+    {
+      "path": "report/figures/m15_ras_m6_khinf_kmu.png",
+      "sha256": "dd653d8843253cc56c574dc9710fdadaa79c131a7ea7e90ee0ea7d0ecf1178c4"
+    },
+    {
+      "path": "report/figures/m15_tracking_khinf_vs_kmu.png",
+      "sha256": "1fc6fee810cfab969b0c62ee5444ec381e733121255a46c481eb053acb920d2f"
+    },
+    {
+      "path": "report/figures/m8_lqg_ras_q_plane.png",
+      "sha256": "e53282e8a63f520b45896f3ad80e9d50466757eea501876c94d87c338aa54c03"
+    },
+    {
+      "path": "presentation/assets/m15_ras_m6_khinf_kmu.png",
+      "sha256": "dd653d8843253cc56c574dc9710fdadaa79c131a7ea7e90ee0ea7d0ecf1178c4"
+    },
+    {
+      "path": "presentation/assets/m15_tracking_khinf_vs_kmu.png",
+      "sha256": "1fc6fee810cfab969b0c62ee5444ec381e733121255a46c481eb053acb920d2f"
+    },
+    {
+      "path": "presentation/assets/m8_lqg_ras_q_plane.png",
+      "sha256": "4fcc53b285c6bc4d9973333a519e59bf598c1b0f2094ecbb402e5e9916211852"
+    },
+    {
+      "path": "results/figures/m15_control_effort_khinf_vs_kmu.png",
+      "sha256": "5d781150c760fbd4f80f12fe51e5d37d97a09be2394cdc72ecc13d9742d3970a"
+    },
+    {
+      "path": "results/figures/m15_disturbance_khinf_vs_kmu.png",
+      "sha256": "84cba4c970b2bed73c16286bd4ef5b0d45d5d54dbf7a07f6a374ce58bb275f9a"
+    },
+    {
+      "path": "results/figures/m15_lti_nl_agreement_regions.png",
+      "sha256": "aadafc1b695a61343f085cd441b9b2f5af14380472aefed5e0efd9243fc6b508"
+    },
+    {
+      "path": "results/figures/m15_lti_nl_tracking_khinf.png",
+      "sha256": "a814c4d92f2cde61b6e70921e94136b3acba6e076d499350679bfb96cc64b740"
+    },
+    {
+      "path": "results/figures/m15_lti_nl_tracking_kmu.png",
+      "sha256": "a16e261418ee8d29f6b53ffedc13c62a5e8d02083c25533b3bb3728b603197f1"
+    },
+    {
+      "path": "results/figures/m15_nonlinear_summary_metrics.png",
+      "sha256": "47785269655e2cf874147c61bf0cdc7beefd7a6a158075be8ac451ca51981e2d"
+    },
+    {
+      "path": "results/figures/m15_ras_m6_khinf_kmu.png",
+      "sha256": "c5d37be7f7867f3d8be8038788fbda07c330b1a6a3aff544582634853406da4f"
+    },
+    {
+      "path": "results/figures/m15_tracking_khinf_vs_kmu.png",
+      "sha256": "1fc6fee810cfab969b0c62ee5444ec381e733121255a46c481eb053acb920d2f"
+    },
+    {
+      "path": "results/figures/m8_lqg_lti_vs_nonlinear.png",
+      "sha256": "eba90be291f9e0382a641de18f269c72d59facda15478eca0056f83bd9520a48"
+    },
+    {
+      "path": "results/figures/m8_lqg_nonlinear_disturbance.png",
+      "sha256": "fd0ccecb48c0d2b78b7e62fef98c454eec0722e14c019d451956a94e1fe8f01d"
+    },
+    {
+      "path": "results/figures/m8_lqg_nonlinear_tracking.png",
+      "sha256": "76f470d1753075123d3f466ba88c705e1da69d11096d6f5274b8c18f490ece66"
+    },
+    {
+      "path": "results/figures/m8_lqg_ras_q_plane.png",
+      "sha256": "e53282e8a63f520b45896f3ad80e9d50466757eea501876c94d87c338aa54c03"
+    },
+    {
+      "path": "results/figures/m8_lqg_ras_secondary_section.png",
+      "sha256": "541e28efecd3c5d7f0cc0eaeab1222fa2d139c8ddc5e1b1982b76a20b38546be"
+    },
+    {
+      "path": "docs/RESOCONTO_REVISIONE_LQR_LQG_HINF_RAS_per_GPT.txt",
+      "sha256": "251c7ecbadbfbce94afbae5b2d1fca2fe1dfcff27f0253625a6ec69cf0430ead"
+    },
+    {
+      "path": "docs/RESOCONTO_REVISIONE_LQR_LQG_HINF_RAS.md",
+      "sha256": "f7e3a945a6675302505acd18b02c3a45d40c73a28db600b7a67ee19515d97c65"
+    },
+    {
+      "path": "docs/RESOCONTO_REVISIONE_PESI_HINF_LQR_LQRI.txt",
+      "sha256": "1b8509781a2dd452c416016114fb7d5b634b20c8348e1c792d836218ca3665f0"
+    }
+  ],
+  "exactWorkingTreeBackup": "C:\\Users\\aless\\Desktop\\Progetto_ISCR\\CR\\Progetto_CR_backup_organico_files"
+}

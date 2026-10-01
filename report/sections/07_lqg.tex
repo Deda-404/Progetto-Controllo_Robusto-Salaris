@@ -1,10 +1,10 @@
-\chapter{Controllo LQG}
+\chapter{Controllo LQG e LQRI}
 \section{Obiettivo e architettura}
-Il regolatore usa il modello nominale M3 a 14 stati e le quattro misure encoder
+Il regolatore usa il modello nominale completo a 14 stati e le quattro misure encoder
 $y=[\Delta q^T,\Delta\theta^T]^T$. Le velocità e gli stati interni degli attuatori
 non sono misurati. LQR progetta il feedback supponendo lo stato disponibile;
 Kalman lo ricostruisce da modello, ingressi e misure. La legge effettivamente
-implementata è $u=-K\hat x+N_rr$, nelle coordinate incrementali M2.
+implementata è $u=-K\hat x+N_rr$, nelle coordinate incrementali.
 Il prefiltro rende unitario il guadagno statico nominale riferimento--posizione,
 ma non contiene un modello interno dei disturbi costanti.
 
@@ -39,13 +39,13 @@ ricerca (E). Questa distinzione evita di attribuire al docente scelte nostre.
 \begin{table}[H]\centering\small
 \begin{tabular}{p{3.4cm}p{3.5cm}p{6.6cm}}\toprule
 Grandezza del costo & Scala & Origine e significato\\\midrule
-$\Delta q_i$ [rad] & $q_s=5\pi/180$ & C da M5-D: ampiezza del riferimento nominale.\\
+$\Delta q_i$ [rad] & $q_s=5\pi/180$ & C da scelte progettuali D: ampiezza del riferimento nominale.\\
 $\Delta\dot q_i$ [rad/s] & $\dot q_s=12q_s$ & C: velocità caratteristica banda per ampiezza; non velocità massima.\\
-$\Delta\theta_i-\Delta q_i$ [rad] & $\delta_s=0.5/40=0.0125$ & C da coppia di disturbo M5-D e rigidezza minima della traccia-A. Scala comune della molla più cedevole.\\
+$\Delta\theta_i-\Delta q_i$ [rad] & $\delta_s=0.5/40=0.0125$ & C dalla coppia di disturbo dichiarata e rigidezza minima della traccia-A. Scala comune della molla più cedevole.\\
 $\Delta\dot\theta_i$ [rad/s] & $\dot\theta_s=\dot q_s$ & D/C: stessa scala cinematica scelta per i motori; non un vincolo.\\
 $x_a$ (6 coordinate) & nessuna scala diretta & Nessuna penalizzazione diretta di coordinate dipendenti dalla realizzazione.\\
 \bottomrule\end{tabular}
-\caption{Scale del costo M6: derivazioni fisiche basate su scelte M5, non nuovi limiti hardware.}
+\caption{Scale del costo LQG: derivazioni fisiche basate su scelte progettuali, non nuovi limiti hardware.}
 \end{table}
 
 Nel codice di produzione \path{build_lqr_state_cost.m} l'assegnazione è:
@@ -104,12 +104,11 @@ saturazione né un limite di coppia.
 La griglia $r_u\in\{0.01,0.05,0.10\}$ confronta tre penalizzazioni
 dirette semplici, rispettivamente bassa, intermedia e alta.
 Sono scelte progettuali, non valori derivati da limiti fisici.
-La ricerca viene rieseguita: non è una riscrittura equivalente del costo
-precedente. Il candidato selezionato usa $R=0.10I_2$; il guadagno $K$
-e il prefiltro vengono ricalcolati.
+Il candidato selezionato usa $R=0.10I_2$; guadagno $K$ e prefiltro
+sono calcolati con le matrici di costo selezionate.
 
 \subsection{Ricerca semplice: ammissibilità prima del compromesso}
-Si mantengono griglia di $Q$, scenari e criteri; si modifica soltanto la griglia di $R$:
+La griglia finita dei parametri del costo è:
 \[
 w_q\in\{0.5,1,2\},\quad w_v\in\{0.5,1\},\quad
 w_\delta\in\{0.1,0.5\},\quad r_u\in\{0.01,0.05,0.10\}.
@@ -138,8 +137,7 @@ $u_{rms}$ la radice della media dei quadrati su tempi e canali.
 Restano \MLqrAdmissibleCount/\MLqrCandidateCount\ candidati.
 Il minimo seleziona \MLqrSelectedCandidate\ (E):
 $w_q=2$, $w_v=1$, $w_\delta=0.1$, $r_u=0.10$ e
-$J_N=\MLqrSelectedScore$. La matrice $Q$ selezionata resta invariata;
-$R,K,N_r$ sono i risultati della nuova ricerca.
+$J_N=\MLqrSelectedScore$. Le matrici $Q,R,K,N_r$ sono i risultati della ricerca.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.78\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
@@ -197,7 +195,7 @@ $\sigma_d=0.1$ N m, $\sigma_u=0.1$ N m e $\sigma_y=0.05^\circ$
 sono ipotesi progettuali D di questo lavoro, \emph{non dati del docente}.
 Il loro scopo è assegnare fiducia relativa al modello e alle misure, non
 rappresentare una caratterizzazione dell'hardware.
-Per contestualizzarle, 0.1 N m equivale al 20\% del disturbo M5 e allo 0.83\%
+Per contestualizzarle, 0.1 N m equivale al 20\% del disturbo di progetto e allo 0.83\%
 della scala di comando; 0.05 gradi equivale all'1\% del riferimento.
 Questi rapporti descrivono i valori già scelti: non sono una legge fisica che
 li determini univocamente. La sensibilità successiva ne rende verificabili
@@ -226,14 +224,14 @@ esperimento con il modello bianco continuo né una calibrazione probabilistica.
 \subsection{Guadagno, poli e sensibilità a ingresso identico}
 Il calcolo eseguito è
 $\texttt{L=lqe(A,Gw,C,Qn,Rn)}$. La matrice seguente segue l'ordine degli stati
-M3 per le righe e $[q_1,q_2,\theta_1,\theta_2]$ per le colonne:
+del modello completo per le righe e $[q_1,q_2,\theta_1,\theta_2]$ per le colonne:
 \input{generated/kalman_matrices.tex}
 I poli di $A-LC$ sono stabili; la velocità asintotica minima vale
 $\alpha_e=\RevEstimatorDecay$ s$^{-1}$, contro
 $\alpha_c=\RevRegulatorDecay$ s$^{-1}$ del regolatore.
 Il rapporto è \MKalmanSpeedRatio, non un requisito imposto dal docente.
 
-Nella nuova verifica si varia soltanto il rumore \emph{assunto} dallo stimatore:
+Nella verifica si varia soltanto il rumore \emph{assunto} dallo stimatore:
 $0.5\sigma_y,\sigma_y,2\sigma_y$, cioè $R_n/4,R_n,4R_n$.
 $Q_n$ e LQR restano invariati. Si applica a tutti la stessa sequenza encoder,
 con $\sigma_y=0.05^\circ$, seed 20260826, 4 s a passo 2 ms, riferimento
@@ -247,10 +245,9 @@ nel caso MIMO non implica monotonia di ogni polo o elemento di $L$.
 La norma $\mathcal H_2$ è quella della mappa
 $v\to C_{cost}(x-\hat x)$ a ingresso unitario, non un RMS fisico del sensore.
 
-L'esperimento precedente, conservato nelle colonne storiche dell'artifact,
-variava anche l'ampiezza del rumore applicato: confrontava scenari diversi.
-Le nuove colonne \texttt{RmsEstimationErrorFixedNoise} e
-\texttt{RmsControlFixedNoise} isolano invece l'effetto della sola covarianza assunta.
+Le colonne \texttt{RmsEstimationErrorFixedNoise} e
+\texttt{RmsControlFixedNoise} confrontano l'effetto della sola covarianza
+assunta, mantenendo identico il rumore applicato.
 \begin{figure}[H]\centering
 \includegraphics[width=0.84\textwidth]{figures/m6_kalman_sensitivity.png}
 \caption{A sinistra, rapidità relativa dello stimatore; a destra, RMS della
@@ -274,10 +271,10 @@ in assenza di ingressi esogeni. L'unione degli spettri di regolatore e stimatore
 coincide quindi con quello della chiusura completa. La trasformazione viene
 verificata numericamente nello script; il residuo è \RevSeparation.
 Questo risultato riguarda stabilità nominale lineare, non robustezza rispetto
-a M4 o stabilità non lineare globale.
+al modello incerto o stabilità non lineare globale.
 \input{generated/lqg_poles.tex}
 
-\section{Risultati M6: lettura delle figure}
+\section{Risultati LQG: lettura delle figure}
 \subsection{Tracking del riferimento}
 La Figura~\ref{fig:m6-tracking} usa tempo in secondi e deviazioni articolari
 in gradi. Nel pannello superiore si applica $r_1=5^\circ,r_2=0$;
@@ -286,7 +283,7 @@ da zero; coppie di disturbo e rumore sono nulli.
 Le curve continue sono $q_1,q_2$, la tratteggiata il riferimento non nullo.
 Si osservano rapidità del giunto comandato, picco del giunto non comandato e
 raggiungimento del valore finale. Il peggiore $T_s$ è \MControllerWorstTs\ s:
-M6 soddisfa i target nominali, pur senza disaccoppiamento perfetto.
+LQG soddisfa i target nominali, pur senza disaccoppiamento perfetto.
 \begin{figure}[H]\centering
 \includegraphics[width=0.82\textwidth]{figures/m6_lqg_reference_tracking.png}
 \caption{Due prove di tracking nominale LQG a gradino di 5 gradi, senza disturbi
@@ -334,28 +331,35 @@ senza cancellazioni di stati.}\label{fig:m6-poli}
 \end{figure}
 Il comando full-state usato nella selezione ha picco peggiore
 \MLqrPeakControl\ N m e RMS \MLqrRmsControl\ N m.
-La verifica non lineare e il limite interno di Lyapunov, che includono
-l'osservatore, sono sviluppati nel Capitolo 10; non sono dedotti dai soli poli.
+La stabilità locale non determina una regione di attrazione non lineare.
+Una RAS confrontabile dei modelli originali richiede il completamento
+manuale descritto nel Capitolo 10.
 
-\section{Implementazione Simulink didattica}
-Il modello \texttt{SEA\_LQG\_nonlinear.slx} mostra al livello superiore sei blocchi funzionali: riferimento, controllore LQG, dinamica degli attuatori, pianta SEA non lineare, interfaccia di misura e monitoraggio. Dentro il controllore sono separati il prefiltro $N_r$, il feedback $-K\hat x$, la somma che genera il comando incrementale e l'osservatore di Kalman. Quest'ultimo realizza
+\section{Relazione con i modelli Simulink originali}
+Il regolatore LQG e lo stimatore soddisfano
 \[
-\dot{\hat x}=(A-LC)\hat x+B\,\delta u+L\,\delta y,
-\qquad \delta u=-K\hat x+N_rr.
+ \dot{\hat x}=(A-LC)\hat x+B\,\delta u+L\,\delta y,\qquad
+ \delta u=-K\hat x+N_rr.
 \]
-L'interfaccia di misura estrae soltanto $q$ e $\theta$, sottrae l'equilibrio e aggiunge il rumore encoder; le velocità non vengono misurate. La coppia assoluta inviata agli attuatori è $u_{abs}=\bar\tau+\delta u$. Tutti i guadagni sono incorporati dall'artifact M6 validato e le condizioni iniziali vengono passate con \texttt{SimulationInput}; il modello non dipende dal base workspace. Non sono presenti saturazioni.
+Il file originale \path{Progetto_LQR_simulink.slx}, pur denominato LQR,
+contiene un osservatore e il feedback dello stato stimato. Il file
+\path{Progetto_LQRI_simulink.slx} aggiunge l'integratore.
+Questi diagrammi sono conservati senza modifiche funzionali; i limiti di
+compatibilità e di collegamento sono elencati nel Capitolo 10.
+Le verifiche MATLAB illustrate qui non dimostrano che i diagrammi originali
+realizzino già l'intera interconnessione richiesta.
 
-\section{LQRI M7: azione integrale e stato stimato}
+\section{LQRI: azione integrale e stato stimato}
 \label{sec:lqri}
 \subsection{Dall'offset alla memoria dell'errore}
-Il prefiltro M6 corregge il guadagno statico nominale del riferimento,
+Il prefiltro LQG corregge il guadagno statico nominale del riferimento,
 ma non riceve l'errore generato da un disturbo. A riferimento nullo
 $N_rr=0$ anche quando la posizione converge a un valore non nullo.
 Introduciamo pertanto due integratori, uno per ciascuna uscita regolata.
 In questo progetto \emph{LQRI} significa LQR con integratore e osservatore
 di Kalman: un LQG servo, non una retroazione di stati fisici tutti misurati.
 
-Le quattro misure rimangono quelle M6:
+Le quattro misure rimangono quelle LQG:
 \[
 y=Cx+v=\begin{bmatrix}q\\\theta\end{bmatrix}+v,\qquad
 E_q=\begin{bmatrix}I_2&0\end{bmatrix},\qquad q_{\mathrm{mis}}=E_qy.
@@ -382,7 +386,7 @@ non si deduce una garanzia sul modello incerto o non lineare.
 
 \subsection{Sistema aumentato per la sintesi}
 Il problema LQR si costruisce sul sistema fisico aumentato
-$x_a=[x^T,\xi^T]^T$, con 14 stati M3 e due integratori. In assenza di
+$x_a=[x^T,\xi^T]^T$, con 14 stati del modello completo e due integratori. In assenza di
 rumore $E_qC=C_q$, quindi
 \[
 \dot x_a=
@@ -411,7 +415,7 @@ Si minimizza
 J=\int_0^\infty(x_a^TQ_ax_a+u^TRu)\,dt,\qquad
 Q_a=\operatorname{blkdiag}(Q,Q_i),\qquad R=r_uI_2.
 \]
-$Q$ e $R$ sono riutilizzate esattamente da M6. Si sceglie direttamente
+$Q$ e $R$ sono riutilizzate esattamente da LQG. Si sceglie direttamente
 il peso delle due memorie dell'errore:
 \[
 Q_i=\bar w_i I_2,\qquad \bar w_i\in\{20,200,800\}.
@@ -426,7 +430,7 @@ Con $\bar w_i$ basso la memoria dell'errore è relativamente poco
 penalizzata e l'azione integrale tende a essere più lenta.
 Un peso maggiore tende a renderla più incisiva e può aumentare rapidità
 e comando, senza una monotonia universale dei guadagni o dei poli MIMO.
-Le tre prove condividono $Q$, $R=0.10I_2$ e Kalman M6.
+Le tre prove condividono $Q$, $R=0.10I_2$ e Kalman LQG.
 Il punto intermedio $\bar w_i=200$ è dichiarato illustrativo:
 non è presentato come un candidato conforme.
 
@@ -447,9 +451,9 @@ alla legge
 Il segno numerico degli elementi di $K_i$ non autorizza a cancellare il
 meno nella legge. La coerenza viene verificata sulle equazioni chiuse.
 $K_x$ è progettato per lo stato fisico, ma nella realizzazione moltiplica
-esclusivamente $\hat x$. Non compare alcun prefiltro M7.
+esclusivamente $\hat x$. Non compare alcun prefiltro LQRI.
 
-\subsection{Riutilizzo del Kalman M6 e controllore implementato}
+\subsection{Riutilizzo del Kalman LQG e controllore implementato}
 Si mantengono esattamente $L\in\mathbb R^{14\times4}$,
 $Q_n$ e $R_n$ già progettati:
 \[
@@ -467,7 +471,7 @@ $x_K=[\hat x^T,\xi^T]^T\in\mathbb R^{16}$ e ingressi $[r^T,y^T]^T$:
 u=\begin{bmatrix}-K_x&-K_i\end{bmatrix}x_K.
 \]
 La matrice di attraversamento diretto è nulla. L'azione integrale realizza
-il tracking costante nella chiusura stabile, mentre M6 impiega
+il tracking costante nella chiusura stabile, mentre LQG impiega
 $u=-K\hat x+N_rr$. Non sono modificati sensori o covarianze per migliorare
 artificialmente il confronto.
 
@@ -503,7 +507,7 @@ Lo spettro è l'unione dei 16 poli di $A_a-B_aK_a$ e dei 14 poli di
 $A-LC$. Nessuno stato è eliminato mediante cancellazioni.
 Le verifiche confermano stabilità interna nominale, non robusta.
 Il polo dominante del punto illustrativo è riportato nei risultati generati
-seguenti, insieme ai residui numerici della nuova Riccati.
+seguenti, insieme ai residui numerici della Riccati.
 
 I poli attuativi ripetuti vicini a $-133.333$ s$^{-1}$ sono numericamente
 sensibili: il confronto diretto fra due chiamate a \texttt{eig} presenta
@@ -518,9 +522,9 @@ Le matrici seguenti, i residui e le metriche sono esportati dai risultati
 eseguiti, non trascritti da stime teoriche:
 \input{generated/lqri_revision_results.tex}
 
-\subsection{Confronto LQG M6 e LQRI M7}
+\subsection{Confronto LQG e LQRI}
 Entrambi usano i medesimi quattro encoder e lo stesso Kalman.
-Le condizioni iniziali sono nulle per pianta e osservatore; M7 ha inoltre
+Le condizioni iniziali sono nulle per pianta e osservatore; LQRI ha inoltre
 $\xi(0)=0$. Le prove separate applicano un gradino di 5 gradi a ciascun
 riferimento, oppure $d=[0.5,0]^T$ e $d=[0,0.5]^T$ N m con $r=0$.
 Rumore e altri ingressi sono nulli; passo 2 ms e orizzonte comune 8 s.
@@ -530,7 +534,7 @@ mentre il residuo a 8 s è riportato separatamente.
 \begin{figure}[p]\centering
 \includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqri_constant_disturbance.png}
 \caption{LQG e LQRI con identico Kalman sotto i due disturbi costanti.
-M6 conserva offset, mentre l'integratore M7 lo elimina asintoticamente.
+LQG conserva offset, mentre l'integratore LQRI lo elimina asintoticamente.
 Le posizioni sono espresse in gradi.}\label{fig:lqri-disturbo}
 \par\medskip
 \includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqri_disturbance_control.png}
@@ -541,9 +545,9 @@ Non sono applicate saturazioni o anti-windup.}\label{fig:lqri-comando}
 \begin{figure}[!htbp]\centering
 \includegraphics[width=0.82\textwidth]{figures/m7_lqri_reference_tracking.png}
 \caption{Due gradini di riferimento separati: posizione del giunto
-comandato, entrambe le coppie e stati integrali M7.
+comandato, entrambe le coppie e stati integrali LQRI.
 LQRI usa $\bar w_i=200$, $R=0.10I_2$ e nessun prefiltro.
-La lentezza rispetto a M6 resta visibile.}\label{fig:lqri-tracking}
+La lentezza rispetto a LQG resta visibile.}\label{fig:lqri-tracking}
 \end{figure}
 
 \subsection{Risultati, requisiti non raggiunti e limiti}
@@ -553,15 +557,15 @@ Un controllo indipendente mediante esponenziale di matrice distingue
 la convergenza finita dal limite DC; non si identifica l'ultimo campione
 del grafico con il regime esatto.
 Per il punto illustrativo il settling peggiore, riportato nella tabella generata, resta
-oltre il target M5 di 0.8 s; il picco di tracking e quello di disturbo
+oltre il target di progetto di 0.8 s; il picco di tracking e quello di disturbo
 sono misurati separatamente. Tutte le tre prove sono stabili ma nessuna
-soddisfa tutti i target. M7 resta quindi \status{\MSevenStatus},
-con \MSevenAdmissible\ punti conformi: la correzione architetturale
+soddisfa tutti i target. LQRI resta quindi \status{\MSevenStatus},
+con \MSevenAdmissible\ punti conformi: l’introduzione dell’integratore
 non viene presentata come una soluzione prestazionale completa.
 
 In presenza di bias encoder l'integratore annullerebbe l'errore misurato,
 non necessariamente quello fisico. In presenza di saturazioni potrebbe
 accumulare errore non compensabile, richiedendo anti-windup.
-Rumore, saturazioni, robustezza M4 e validazione non lineare della nuova
-LQRI non sono certificati da queste prove. I risultati M8--M16 restano
-riferiti ai controllori già validati, senza essere trasferiti a M7.
+Rumore, saturazioni, robustezza rispetto al modello incerto e RAS non lineare
+LQRI non sono certificati da queste prove. Per i modelli originali le
+simulazioni e la RAS restano da completare dopo la verifica dei collegamenti.

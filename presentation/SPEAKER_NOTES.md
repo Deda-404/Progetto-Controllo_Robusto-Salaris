@@ -1,187 +1,79 @@
-# Note per l'esposizione
+# Note per l’esposizione
 
-## Slide 1 - Titolo (0:30)
+La scaletta è una stima da verificare con una prova orale cronometrata. Non leggere tutte le formule: indicare ingresso, uscita e significato fisico.
 
-- Messaggio: presentare sistema, obiettivo e natura conclusiva del lavoro.
-- Spiegare: manipolatore planare 2-DoF con SEA.
-- Non sovrainterpretare: non anticipare una conformità completa.
-- Transizione: distinguere le evidenze richieste.
+## 1. Titolo — 0:20
 
-## Slide 2 - Domanda di progetto (1:00)
+Presentare il problema e anticipare la distinzione fra risultati MATLAB e stato dei modelli originali.
 
-- Messaggio: il confronto richiede livelli di evidenza differenti.
-- Spiegare: nominale, non lineare, Monte Carlo e mu-analysis.
-- Non sovrainterpretare: simulazione e certificazione non sono sinonimi.
-- Transizione: partire dal modello fisico.
+## 2. SEA: otto stati meccanici, due poli instabili — 0:55
 
-## Slide 3 - Modello SEA (1:10)
+Spiegare la trasmissione elastica e la differenza fra q e theta. Il disturbo agisce direttamente sul link.
 
-- Messaggio: elasticità e coordinate motore/link determinano la struttura.
-- Spiegare: due equazioni accoppiate, stato a otto componenti.
-- Non sovrainterpretare: la linearizzazione resta locale.
-- Transizione: aggiungere dinamica attuatore.
+## 3. Sei stati di attuatore completano il modello — 0:55
 
-## Slide 4 - Attuatori (1:00)
+Contare gli stati: 8 meccanici più 3 per ciascun attuatore. Il ritardo è approssimato con Padé; distinguere inviluppo campionato e insieme incerto.
 
-- Messaggio: secondo ordine e ritardo Padé portano a 14 stati.
-- Spiegare: parametri nominali e limite alle alte frequenze.
-- Non sovrainterpretare: Padé non è il ritardo esatto.
-- Transizione: modellare le dispersioni.
+## 4. Specifiche: norma pesata e tracking sono verifiche diverse — 0:40
 
-## Slide 5 - Incertezze (1:05)
+Richiamare solo i tre target obbligatori. La scala 12 N m serve al confronto; non simula una saturazione.
 
-- Messaggio: M4 contiene tre blocchi reali e due dinamici.
-- Spiegare: screening, range e copertura di W_I.
-- Non sovrainterpretare: i range non sono distribuzioni identificate.
-- Transizione: fissare il criterio di prestazione.
+## 5. LQR: il costo deriva dalle grandezze fisiche — 1:00
 
-## Slide 6 - Specifiche (1:00)
+Mostrare come la deformazione elastica produce termini incrociati in Q. Le scale hanno origine fisica, i pesi esprimono priorità progettuali.
 
-- Messaggio: i target M5 sono invariati; i pesi sono stati rivisti direttamente e poi fissati prima delle sintesi a valle.
-- Spiegare: target e significato di W1/W2.
-- Non sovrainterpretare: uScale non è una saturazione.
-- Transizione: mostrare il riferimento nominale.
+## 6. LQG: quattro encoder e stato stimato — 1:00
 
-## Slide 7 - LQR: scale e pesi (1:00)
+Il controllo usa xhat, non lo stato completo disponibile nel simulatore. Qn e Rn sono ipotesi; distinguere intensità continua e sequenza discreta di rumore. Il principio di separazione è nominale.
 
-- Messaggio: la scala fisica non è un coefficiente di tuning.
-- Spiegare: qs=5 gradi dal riferimento M5; qds=12 qs; ds=0.5/40 rad; uScale=12 N m è una scala desiderata, non un limite hardware.
-- Calcolo: F forma [q; qdot; theta-q; thetadot]; Q=F' Sx^(-T) W Sx^(-1) F, con termini incrociati -640. R=ru I2, senza normalizzazione del comando.
-- Scelta: nuova ricerca di 36 combinazioni con ru={0.01,0.05,0.10}; 9 ammissibili, selezionato LQR30 con ru=0.10 mediante i criteri invariati. Q resta identica, R e K cambiano realmente.
-- Transizione: lo stato necessario a K non è tutto misurato.
+## 7. LQRI: memoria dell’errore misurato — 1:00
 
-## Slide 8 - Kalman: ipotesi e sensibilità (1:00)
+L’integratore accumula l’errore misurato. Il prefiltro LQG non reagisce al disturbo; LQRI elimina l’offset DC ma è più lento. Il grafico proviene da MATLAB lineare.
 
-- Messaggio: sigmaD=sigmaU=0.1 N m e sigmaY=0.05 gradi sono ipotesi del progetto, non dati del docente o di sensori identificati.
-- Calcolo: Qn=0.01 I4, Rn=(0.05 pi/180)² I4; lqe produce L. Nel continuo sono intensità equivalenti: il rumore bianco ideale non ha deviazione standard istantanea finita.
-- Spiegare: la stessa sequenza campionata di rumore è applicata ai tre stimatori. I valori aggiornati della tabella derivano da M6; L, Qn e Rn sono identici alla baseline, mentre cambia il regolatore.
-- Non sovrainterpretare: non è identificazione sperimentale né una nuova ottimizzazione; la discretizzazione diagnostica non identifica le intensità continue.
-- Transizione: combinare K e L tramite il principio di separazione.
+## 8. $H_\infty$: sensibilità mista e pesi adottati — 1:05
 
-## Slide 9 - LQG M6 (0:45)
+Spiegare W1 e W2, l’assenza di W3 e la stessa formulazione risolta da mixsyn e hinfsyn. Gamma inferiore a uno non controlla direttamente overshoot e settling.
 
-- Messaggio: M6 è il miglior riferimento nominale di tracking.
-- Spiegare: 36 costi LQR motivati, 9 ammissibili, scelta LQR30 mediante score normalizzato; poi ipotesi e sensibilità Kalman.
-- Non sovrainterpretare: prestazione nominale non implica robustezza.
-- Transizione: discutere l'integratore richiesto dalla traccia.
+## 9. Due gradi di libertà: riferimento e feedback condividono gli stati — 1:05
 
-## Slide 10 - LQG-I M7 (0:55)
+Seguire i due rami nel diagramma. Kr e Ky condividono 22 stati. Mo impone la forma desiderata, il disturbo fisico entra nei link. Le norme di obiettivi diversi non sono rapporti di miglioramento.
 
-- Messaggio: tutti e tre i controllori LQRI sono implementati e stabili, ma nessuno soddisfa tutti i target M5.
-- Spiegare: Qi=wbarI I2, con wbarI={20,200,800}; Q/R e Kalman provengono da M6. Il punto illustrativo 200 annulla l'offset DC, ma Ts=5.046 s supera 0.8 s.
-- Non sovrainterpretare: distinguere implementazione valida da conformità prestazionale; il risultato negativo non implica inesistenza del controllore.
-- Transizione: passare alle sintesi H-infinity.
+## 10. Ordine completo e ordine fissato: il compromesso rimane — 0:55
 
-## Slide 11 - H-infinity (1:15)
+Confrontare full-order e SS2 sullo stesso problema. Undici avvii non garantiscono ottimo globale. Il risultato di ordine 2 non eredita robustezza.
 
-- Messaggio: mixsyn/hinfsyn sono coerenti ma gamma resta maggiore di uno.
-- Spiegare: pesi diretti nelle coordinate fisiche; 8 casi W1 e 4 casi W2, tutti non conformi. Il W3 fissato nello studio non appartiene alla pianta M10 a due pesi. La Lower LFT è ricostruita e verificata.
-- Non sovrainterpretare: A5 M12 non è Khinf M10.
-- Transizione: utilizzare A5 come base della mu-analysis.
+## 11. $\mu$-analysis: separare controllore e incertezza — 1:05
 
-## Slide 12 - D-K iteration (1:00)
+Distinguere LFT inferiore P-K e superiore N-Delta. Leggere la dimensione 5 di Delta e 9 di N: cinque canali incerti più quattro esogeni/prestazionali.
 
-- Messaggio: la D-K iteration produce Kmu, ma non ne certifica ancora la robustezza.
-- Spiegare: M13 è stata rigenerata una sola volta perché dipende dai nuovi pesi; best iteration 5, ordine 70. M14 usa lo stesso M4, non una nuova incertezza.
-- Non sovrainterpretare: l'objective musyn non è un certificato RS o RP.
-- Transizione: affidare la verifica ai quattro esiti indipendenti M14.
+## 12. Quattro domande: NS, NP, RS, RP — 1:05
 
-## Slide 13 - M14 (1:20)
+Mu usa la perturbazione destabilizzante più piccola compatibile con la struttura. Il blocco prestazionale è fittizio. Non confondere valori di mu e margini; si usano limiti numerici.
 
-- Messaggio: M14 produce RS FAIL_CERTIFIED; anche NP e RP falliscono. Non è trasferibile il certificato della precedente configurazione.
-- Spiegare: intervallo del margine RS e distinzione NS/NP/RS/RP.
-- Non sovrainterpretare: evitare la frase generica "Kmu è robusto".
-- Transizione: verificare il modello non lineare nominale.
+## 13. D--K iteration: sintesi, analisi, fit degli scaling — 1:10
 
-## Slide 14 - Non lineare (1:00)
+Descrivere il ciclo: K fissato, scaling in frequenza; fit razionale, nuova sintesi. MixedMU conserva parametri reali e usa D/G. PeakMuFit differisce da PeakMu: il fit costa ordine.
 
-- Messaggio: Khinf/Kmu sono stabili ma non raggiungono M5.
-- Spiegare: settling, overshoot, errore e comando.
-- Non sovrainterpretare: nessuna saturazione hardware.
-- Transizione: qualificare la RAS.
+## 14. La post-analisi cambia la scelta del controllore — 1:00
 
-## Slide 15 - Lyapunov nominale (1:20)
+Leggere la soglia uno nel grafico. Hinf fallisce RS; il suo intervallo RP invertito non viene corretto artificialmente. Kmu supera i limiti inferiori su entrambe le proprietà.
 
-- Messaggio: P=lyap(Acl',I) riguarda l'intera chiusura: 28 stati LQG, 32 H-infinity, 84 Kmu, inclusi attuatori e osservatore/controllore.
-- Dimostrazione: f(z)=Acl z+E r(z), con ||r|| <= c||z||³ nell'equilibrio superiore. Dal residuo di Lyapunov e dal limite cubico si ricava rhoA>0 che garantisce Vdot <= -(1-epsilon)/2 ||z||².
-- Grafico: zoom della sezione analitica LQG, z=J dq con dtheta=dq, velocità e stati del controllore nulli. Le ellissi più ampie campionate e i punti delle simulazioni sono confrontati nella relazione, non in questa slide.
-- Limiti: bound molto conservativo, calcolo in doppia precisione senza aritmetica intervallare, modello nominale senza saturazione e con Padé. Non è una RAS massima né una certificazione robusta M4.
-- Confronto: 48 traiettorie aggiuntive sulle due ellissi verificano la decrescita numerica di V; i punti empirici M8/M15 restano un'evidenza distinta.
-- Transizione: passare dalla stabilità nominale non lineare alla variabilità lineare M4.
+## 15. Robustezza pesata e requisiti temporali non coincidono — 0:50
 
-## Slide 16 - Monte Carlo (1:15)
+Ribadire che RP riguarda la norma pesata. Kmu rimane più lento di 0.8 s e il primo giunto supera il 5% di offset.
 
-- Messaggio: stessi 40 campioni per tutti i controllori; i casi instabili restano nel dataset.
-- Spiegare: seed, conteggi e core tracking pass rate.
-- Non sovrainterpretare: la frazione stabile non è una probabilità fisica.
-- Transizione: integrare le evidenze senza score globale.
+## 16. Verifiche complementari: campioni incerti e non linearità — 0:45
 
-## Slide 17 - Monte Carlo e mu-analysis (0:30)
+I campioni sono identici fra controllori. Quaranta successi non sono una probabilità né una garanzia universale. L’accordo locale non lineare è verificato in MATLAB.
 
-- Messaggio: le due analisi rispondono a domande diverse.
-- Spiegare: M16 osserva realizzazioni finite; M14 verifica il modello incerto strutturato.
-- Non sovrainterpretare: la frequenza empirica non è una certificazione né sostituisce M14.
-- Transizione: integrare le evidenze nella scelta per ruolo.
+## 17. Rumore, RAS e Lyapunov: limiti da dichiarare — 0:55
 
-## Slide 18 - Decisione (1:00)
+Non nascondere le coppie molto elevate. RAS empirica limitata al piano iniziale e al box; il residuo Lyapunov fallito impedisce un certificato Hinf.
 
-- Messaggio: la selezione è per ruolo.
-- Spiegare: ruolo robusto non assegnato per assenza di un candidato con RS certificata; M6 riferimento nominale e Khinf comparatore.
-- Non sovrainterpretare: nessun controllore domina tutte le metriche.
-- Transizione: chiudere con limiti e implicazioni.
+## 18. Simulink: stato effettivo degli originali — 0:50
 
-## Slide 19 - Limiti (0:55)
+Essere espliciti sul requisito Simulink incompleto: file originali conservati, nessuna ricostruzione automatica. Servono interventi manuali e una versione compatibile, poi confronti e RAS.
 
-- Messaggio: deliverable completo e requisiti tecnici falliti possono coesistere.
-- Spiegare: RP, tracking, saturazioni, incertezze, RAS, ordine.
-- Non sovrainterpretare: gli sviluppi futuri non sono risultati correnti.
+## 19. Conclusioni: scelta per ruolo e attività residue — 0:40
 
-## Domande probabili
-
-### Perché M7 non ha un controllore finale?
-
-Le tre LQRI implementate non rispettano simultaneamente tutti i target M5. Il risultato è PARTIAL: il candidato illustrativo wbarI=200 è stabile e annulla l'offset DC, ma non soddisfa il settling richiesto.
-
-### Perché gamma maggiore di uno è stato conservato?
-
-La piccola ricerca autorizzata ha ridotto gamma modificando esplicitamente i pesi, ma non ha prodotto candidati conformi. I criteri non vengono cambiati per ottenere PASS e la ricerca termina al budget dichiarato.
-
-### Qual è la differenza fra RS e RP?
-
-RS richiede stabilità interna per tutte le incertezze ammesse. RP richiede anche il rispetto della prestazione pesata su tutto l'insieme. Il nuovo Kmu fallisce entrambe secondo M14.
-
-### Perché Monte Carlo non certifica robustezza?
-
-Perché verifica solo 40 realizzazioni e non tutte le perturbazioni ammissibili. Inoltre i range M4 non definiscono probabilità fisiche. M14 mantiene autorità sulla valutazione formale RS, qui negativa.
-
-### Perché non è assegnato il ruolo robusto finale?
-
-Il criterio richiede RS formale PASS_CERTIFIED. Nessuno dei controllori principali la possiede nella configurazione corrente; non viene alterato il criterio per assegnare comunque un vincitore. M6 resta il riferimento nominale.
-
-### Perché M6 non è il controllore robusto finale?
-
-Non ha un certificato RS su M4; gli eventuali campioni instabili M16 restano evidenza empirica, non probabilistica.
-
-### Perché non ridurre Kmu?
-
-La riduzione altererebbe il controllore congelato e richiederebbe una rivalidazione completa nominale, non lineare, Monte Carlo e mu. Non è autorizzata in M18.
-
-### Cosa rappresenta uScale?
-
-È la scala fisica desiderata da 12 N m usata nelle metriche del comando. Il nuovo W2 impiega invece il guadagno diretto ku=0.05; non viene trasformata la pianta. uScale non è un limite hardware e non attiva clipping.
-
-### Cosa significa RAS search-box limited?
-
-Tutti i punti sul limite del dominio esplorato sono convergenti. La frontiera reale non è stata individuata; il bordo della box non è una frontiera dinamica.
-
-### Qual è il limite principale del modello di incertezza?
-
-I range sono inviluppi ingegneristici e la dinamica attuatore è coperta da un peso, ma non derivano da identificazione sperimentale. Il certificato vale rispetto a M4, non a ogni impianto fisico possibile.
-
-### La ricerca di rho certifica da sola la RAS?
-
-No. Il livello rhoA segue da una maggiorazione analitica del resto non lineare e dall'equazione di Lyapunov. Il livello rhoS, più ampio, supera una verifica finita di Vdot, ma non è certificato. Nessuno dei due rappresenta la regione di attrazione massima.
-
-### Perché le regioni analitiche sono così piccole?
-
-La maggiorazione usa norme globali molto conservative e QL=I nelle coordinate numeriche SI. Include tutti gli stati dinamici, anche quelli interni. È una condizione sufficiente; una regione interna piccola non dimostra una scarsa capacità di convergenza reale e non permette di classificare i controllori mediante rho.
+Concludere sui ruoli dei controllori, senza dichiarare conformità completa o validazione hardware. Lasciare il margine per domande.

@@ -14,12 +14,9 @@ dataDirectory = fullfile(projectRoot, 'results', 'data');
 figureDirectory = fullfile(projectRoot, 'results', 'figures');
 m8Path = fullfile(dataDirectory, 'm8_lqg_nonlinear_ras.mat');
 m15Path = fullfile(dataDirectory, 'm15_nonlinear_robust_validation.mat');
-if ~isfile(m8Path)
-    validate_m8_simulink_ras(true);
-end
-if ~isfile(m15Path)
-    validate_m15_nonlinear_robust(true);
-end
+assert(isfile(m8Path) && isfile(m15Path), ...
+    'RASComparison:MissingSavedResults', ...
+    'Questo confronto legge soltanto i dataset salvati; non avvia modelli.');
 m8 = load(m8Path);
 m15 = load(m15Path);
 

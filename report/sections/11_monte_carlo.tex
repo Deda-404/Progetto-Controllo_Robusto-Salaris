@@ -1,6 +1,5 @@
 \chapter{Monte Carlo sull'insieme incerto lineare}
-La campagna ricalcola entrambi i controllori finali sui medesimi 40 campioni
-M16, generati con seed 20260826 e \texttt{twister}. L'identità della sequenza
+La campagna valuta i controllori sui medesimi 40 campioni, generati con seed 20260826 e \texttt{twister}. L'identità della sequenza
 è verificata con il dataset originario. Non vengono sostituiti campioni
 instabili. I parametri reali e i due blocchi dinamici sono condivisi tra le
 chiusure; il disturbo entra nella medesima meccanica fisica.
@@ -10,18 +9,15 @@ Si mantengono gradini di 5 gradi su 4 s e coppie di 0.5 N m su 8 s,
 con passo 0.002 s. I casi instabili non ricevono metriche di prestazione
 finite che potrebbero essere scambiate per risultati accettabili.
 
-Il nuovo H-infinity è stabile in \textbf{0/40} campioni, Kmu in
-\textbf{40/40}. La precedente catena aveva 40/40 per entrambi: il peggioramento
-del comparatore nominale è quindi netto. LQG M6 conserva il risultato
-37/40 perché controllore, modello e sequenza sono invariati; non è un nuovo
-calcolo sul controllore robusto.
+H-infinity è stabile in \textbf{0/40} campioni, Kmu in
+\textbf{40/40}. LQG risulta stabile in 37/40 casi sulla stessa sequenza.
 \begin{figure}[htbp]\centering
 \includegraphics[width=.75\textwidth]{figures/hinf_final/monte_carlo.png}
 \caption{Stabilità empirica sulla sequenza comune; LQG è il riferimento invariato.}
 \end{figure}
-La concordanza con M12/M14 è significativa: la fragilità nominale di
+La concordanza con la post-analisi robusta è significativa: la fragilità nominale di
 H-infinity si manifesta anche nel campione, mentre Kmu soddisfa sia il
-controllo formale M4 sia quello empirico. La frequenza di successo del
+controllo sul modello incerto sia quello empirico. La frequenza di successo del
 campionamento non è una probabilità di affidabilità dell'impianto reale.
 Le matrici dei singoli campioni, i poli, le risposte e le metriche restano
-nel dataset corrente; nessun dato del vecchio Kmu è assegnato al nuovo.
+nel dataset indicato nell’Appendice B.

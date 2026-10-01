@@ -15,7 +15,7 @@ Adottiamo direttamente
 \]
 La motivazione nasce dal confronto fra scale fisiche: il polo instabile dominante è a $7.209$ rad/s, il primo modo elastico a $69.95$ rad/s e la banda dell'attuatore scelto è $34.78$ rad/s. Il drive è quindi abbastanza rapido da sostenere la stabilizzazione, ma non viene assunto infinitamente più veloce delle dinamiche elastiche. Lo smorzamento $0.8$ limita l'overshoot senza rallentare il secondo ordine come un caso fortemente sovrasmorzato.
 
-MATLAB non seleziona il punto da un prodotto cartesiano. Sono mostrati soltanto tre casi espliciti, lento, nominale e veloce, per verificare l'effetto di $\omega_n$. Il nominale produce rise time $0.0626$ s, settling $0.109$ s e overshoot $1.47\%$ e soddisfa la finestra di banda derivata dai modi M2.
+MATLAB non seleziona il punto da un prodotto cartesiano. Sono mostrati soltanto tre casi espliciti, lento, nominale e veloce, per verificare l'effetto di $\omega_n$. Il nominale produce rise time $0.0626$ s, settling $0.109$ s e overshoot $1.47\%$ e soddisfa la finestra di banda derivata dai modi meccanici.
 
 \section{Ritardo e Padé}
 Per utilizzare gli algoritmi di sintesi serve una realizzazione razionale. Impieghiamo il Padé del primo ordine

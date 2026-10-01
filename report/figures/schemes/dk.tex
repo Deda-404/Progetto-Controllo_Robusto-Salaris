@@ -1,0 +1,8 @@
+\begin{tikzpicture}[>=stealth,thick,b/.style={draw,rounded corners,align=center,text width=2.65cm,minimum height=1.3cm}]
+\node[b] (k) at (0,0) {Sintesi $H_\infty$\\scaling fissati};
+\node[b] (m) at (4,0) {Analisi $\mu$\\$K$ fissato};
+\node[b] (f) at (8,0) {Fit razionale\\scaling D/G};
+\draw[->] (k)--node[above]{$K_i$}(m);\draw[->] (m)--(f);
+\draw[->] (f.south)--(8,-1.5)--node[below]{pianta scalata per l'iterazione successiva}(0,-1.5)--(k.south);
+\draw[->] (m.north)--(4,2)node[above,align=center]{Controllore finale fissato\\Post-analisi NS/NP/RS/RP};
+\end{tikzpicture}

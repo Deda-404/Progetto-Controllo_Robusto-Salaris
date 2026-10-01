@@ -1,6 +1,6 @@
 # Resoconto H-infinity: revisione coerente
 
-Branch `codex/hinf-final-coherent-revision`, base main `693e316` (PR #31, tecnico `b6155a4`). Nessun merge. Responsabile: Alessio.
+Branch `codex/hinf-final-coherent-revision`, base main `693e316` (PR #31, tecnico `b6155a4`). Integrata tramite PR #32 in main889c0eb. Responsabile: Alessio.
 
 ## Esito
 

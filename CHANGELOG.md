@@ -492,3 +492,33 @@ non validati; nessun risultato negativo nascosto.18 test MATLAB PASS.
 Relazione e resoconto aggiornati,baseline conservate. Nessun merge.
 
 Chiusura editoriale: relazione compilata senza riferimenti indefiniti o overflow, figure correnti su fondo bianco con assi neri; macro confrontate con summary MATLAB e hash verificati. Commit tecnico e04ec4d. Nessuna nuova sintesi per la verifica editoriale.
+
+
+## 2026-09-23 — Integrazione Simulink
+
+Integrati4modelli Simulink da Valerio con setup artifact, canali fisici corretti, rumori separati, Kalman, integratore misurato e vera2-DoF Hinf/Kmu. Aggiunti validatore e scope di esecuzione;67/67 controlli+7/7 test PASS. Relazione e presentazione aggiornate.
+
+## 2026-09-23 — Completamento circoscritto PR #33
+
+- Aggiunto SEA_linear_common: plant M3 a 14 stati, quattro controllori da artifact.
+- 32 confronti numerici PASS; RAS LQRI nominale 57/57, SEARCH-BOX LIMITED.
+- 15 test aggiunti e 7 originari rieseguiti PASS; 67 controlli salvati invariati.
+- Conservato il primo run con quattro FAIL causati dall'uso di linmod nel test;
+  corretta la sola chiamata, senza cambiare modello, guadagni o soglie.
+- Relazione aggiornata dopo validazione; presentazione 24 -> 20 slide, 17:55.
+- Nessuna sintesi o campagna robusta rieseguita; PR draft, nessun merge.
+
+
+## 29 settembre 2026 — Revisione organica e consegna degli originali
+
+Richiesta del 28 settembre: usare esclusivamente gli originali del gruppo, senza costruire o completare automaticamente diagrammi. La decisione sostituisce il precedente percorso d'integrazione; le voci anteriori restano cronologia e non descrivono la consegna attuale.
+
+Analisi preliminare di repository, traccia, artifact e materiale dei colleghi. Capitoli 1–7 conservati nei contenuti, salvo due correzioni verificate nel Capitolo 3 e rimandi/stile. Riscritti Capitoli 8–9, aggiunti schemi LFT, prestazione e D–K, grafici da dati salvati. Presentazione 19 slide, 17:15.
+
+Backup completo esterno verificato prima delle rimozioni; conservate copie esatte del working tree. Tre originali spostati senza modifica dei byte in simulink/originals; rimossi generatori, diagrammi e dipendenze esclusivi dalla consegna. Inventario e hash in docs/organic_review.
+
+104/104 test MATLAB PASS, 8 nuovi. Due suite riscrivono internamente m3/m5: isequaln con il baseline PASS, byte ripristinati e protezione aggiunta al runner. Audit originali: tre FAIL di caricamento per R2026a su R2025b; zero simulazioni accreditate. Errori preparatori nell'audit (nome del MAT e accumulatore di strutture/codice MATLAB in cache) corretti prima dell'esportazione, senza modificare risultati. Nessuna nuova sintesi, mu-analysis, Monte Carlo o RAS.
+
+Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
+
+Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.

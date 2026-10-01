@@ -1,20 +1,21 @@
-# Stato del progetto
+# Stato del progetto — 29 settembre 2026
 
-## Revisione finale coerente H-infinity — 22 settembre 2026
+Branch codex/simulink-integration; PR #33 draft, nessun merge.
 
-Base693e316, branch `codex/hinf-final-coherent-revision`. Catena numerica COMPLETE;
-conformità complessiva PARTIAL. Nessun merge.
+Revisione teorica/documentale e inventario completati. Capitoli 1–7 analizzati prima degli interventi; formule, guadagni e parametri conservati. Correzione del refuso e del conteggio dei poli nel Capitolo 3. Capitoli 8–9 riscritti con pesi reali, LFT, struttura Delta, D/G–K e post-analisi.
+Presentazione: 19 slide, 17:15.
 
-- 18 test MATLAB PASS; lower bound confermato.
-- 21 profili1-DoF,3 modelli2-DoF,66 avvii strutturati; ordine minimo osservato2.
-- Hinf22stati: NS/NP PASS, RS FAIL, RP esclusa per RS (intervallo solver non validato), M5 FAIL.
-- Kmu78stati: NS/NP/RS/RP PASS, M5 FAIL. Nuova D-K e post-analisi indipendente.
-- MonteCarlo paired: Hinf0/40,Kmu40/40; NL,rumore,RAS ricalcolati in MATLAB.
-- Lyapunov:Hinf gate numerico FAIL;Kmu verifica PASS.
+MATLAB: 105/105 test PASS, inclusi 9 nuovi. Sette test del limite inferiore conservati.
+Controllori, sintesi, dati robusti e risultati numerici consolidati invariati. Nessuna nuova sintesi, mu-analysis, Monte Carlo o ricerca RAS.
+Due test preesistenti riscrivono MAT del modello attuato/specifiche: identità numerica verificata e byte iniziali ripristinati; il runner protegge ora i file.
 
-Sorgenti M0–M8 e dataset precedenti preservati. Relazione corrente: una sola catena.
-Resoconto: `RESOCONTO_HINF_FINAL_COHERENT_REVISION.md`.
-TODO umani: matricole,data consegna,revisione e merge.
-Limiti: nessun hardware/saturatore identificato; interfaccia Simulink2-DoF non realizzata,
-calcoli non lineari eseguiti direttamente in MATLAB. Stato precedente archiviato in
-`archive/before_final_coherent/PROJECT_STATUS.md`.
+Simulink: PARTIAL. Tre originali invariati in simulink/originals. Tre caricamenti falliti per file R2026a su R2025b; zero simulazioni originali eseguite. I difetti statici richiedono intervento manuale, dettagliato nell'audit. Modelli originali Kmu e lineare non disponibili.
+
+Esiti prestazionali:
+- LQG: tracking nominale soddisfatto; LQRI: offset DC nullo, tracking lento.
+- Hinf: NS/NP PASS, RS FAIL, RP numericamente non validata ed esclusa da RS, Monte Carlo 0/40.
+- Kmu: NS/NP/RS/RP PASS nel modello incerto; target temporali parziali, Monte Carlo 40/40.
+- RAS MATLAB robusti empirica; nessuna RAS accreditata agli originali LQG/LQRI.
+
+Conformità complessiva alla traccia: PARTIAL per Simulink e requisiti prestazionali dichiarati.
+Attività manuali: compatibilità/completamento degli originali, relative validazioni e RAS, dati frontespizio, prova orale cronometrata e revisione PR.

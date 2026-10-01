@@ -1,28 +1,25 @@
-# Outline e timing stimato
+# Scaletta e tempi
 
-I tempi sono stime di preparazione, non misure di un'esposizione reale.
+19 slide. Durata prevista: **17:15**; margine rispetto a 20 minuti: **2:45**.
 
-| Slide | Messaggio | Tempo stimato |
-| ---: | --- | ---: |
-| 1 | Titolo e perimetro | 0:30 |
-| 2 | Evidenze richieste e domanda di progetto | 1:00 |
-| 3 | Modello SEA | 1:10 |
-| 4 | Equilibrio e attuatori | 1:00 |
-| 5 | Insieme incerto M4 | 1:05 |
-| 6 | Specifiche e pesi M5 | 1:00 |
-| 7 | LQR: scale fisiche, Q/R e Riccati | 1:00 |
-| 8 | Kalman: ipotesi, covarianze e sensibilità | 1:00 |
-| 9 | Risultato nominale M6 | 0:45 |
-| 10 | Risultato negativo M7 | 0:55 |
-| 11 | Sintesi H-infinity | 1:15 |
-| 12 | D-K iteration e produzione di Kmu | 1:00 |
-| 13 | Verifica indipendente e certificazione M14 | 1:20 |
-| 14 | Validazione non lineare | 1:00 |
-| 15 | Lyapunov: regione interna e confronto numerico | 1:20 |
-| 16 | Monte Carlo M16 | 1:15 |
-| 17 | Monte Carlo e mu-analysis: evidenze distinte | 0:30 |
-| 18 | Decisione finale per ruolo | 1:00 |
-| 19 | Limiti e conclusione | 0:55 |
-| **Totale** | **stima di preparazione** | **19:00** |
-
-Il margine rispetto ai 20 minuti è destinato a pause e transizioni. Le derivazioni e le matrici complete restano nella relazione; la slide 15 distingue la regione nominale garantita analiticamente dall'ellisse verificata soltanto su punti finiti.
+| Slide | Contenuto | Tempo |
+|---|---|---:|
+| 1 | Titolo | 0:20 |
+| 2 | SEA: otto stati meccanici, due poli instabili | 0:55 |
+| 3 | Sei stati di attuatore completano il modello | 0:55 |
+| 4 | Specifiche: norma pesata e tracking sono verifiche diverse | 0:40 |
+| 5 | LQR: il costo deriva dalle grandezze fisiche | 1:00 |
+| 6 | LQG: quattro encoder e stato stimato | 1:00 |
+| 7 | LQRI: memoria dell’errore misurato | 1:00 |
+| 8 | $H_\infty$: sensibilità mista e pesi adottati | 1:05 |
+| 9 | Due gradi di libertà: riferimento e feedback condividono gli stati | 1:05 |
+| 10 | Ordine completo e ordine fissato: il compromesso rimane | 0:55 |
+| 11 | $\mu$-analysis: separare controllore e incertezza | 1:05 |
+| 12 | Quattro domande: NS, NP, RS, RP | 1:05 |
+| 13 | D--K iteration: sintesi, analisi, fit degli scaling | 1:10 |
+| 14 | La post-analisi cambia la scelta del controllore | 1:00 |
+| 15 | Robustezza pesata e requisiti temporali non coincidono | 0:50 |
+| 16 | Verifiche complementari: campioni incerti e non linearità | 0:45 |
+| 17 | Rumore, RAS e Lyapunov: limiti da dichiarare | 0:55 |
+| 18 | Simulink: stato effettivo degli originali | 0:50 |
+| 19 | Conclusioni: scelta per ruolo e attività residue | 0:40 |

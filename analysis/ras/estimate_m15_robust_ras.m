@@ -14,7 +14,7 @@ xActuatorEquilibrium = -Aact \ (Bact * m3.taubar);
 cache = containers.Map('KeyType', 'char', 'ValueType', 'any');
 records = repmat(localEmptyRecord, 0, 1);
 simulationCount = 0;
-simulator=@simulate_m15_nonlinear;
+simulator=@simulate_hinf_final_nonlinear;
 if isfield(config,'simulatorFcn'), simulator=config.simulatorFcn; end
 % Checkpoint dei soli risultati numerici: evita di ripetere simulazioni
 % completate. Il riuso richiede identita di controllore, pianta e criteri.

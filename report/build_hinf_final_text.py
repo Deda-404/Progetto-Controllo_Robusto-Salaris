@@ -23,7 +23,7 @@ def main():
         '% Source: MATLAB export_hinf_final_results, summary.json\n' +
         ''.join('\\newcommand{\\' + k + '}{' + n(v) + '}\n' for k, v in macros.items()), encoding='utf-8')
     rows = []
-    for label, key in [('1-DoF riprodotto', 'baseline'), ('1-DoF selezionato', 'bestOne'), ('2-DoF selezionato', 'selected')]:
+    for label, key in [('1-DoF iniziale', 'baseline'), ('1-DoF selezionato', 'bestOne'), ('2-DoF selezionato', 'selected')]:
         r = s[key]
         worst = [max(row[i] for row in r['metrics']) for i in range(6)]
         rows.append(label + ' & ' + n(r['gamma']) + ' & ' + str(r['order']) + ' & ' + ' & '.join(map(n, worst)) + r' \\')

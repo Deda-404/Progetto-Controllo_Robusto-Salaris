@@ -1,28 +1,36 @@
 \chapter{Tracciabilità dei risultati}
-La catena corrente H-infinity è raccolta in
-\path{results/data/hinf_final_coherent/}. La relazione legge le quantità
-esportate da MATLAB con \path{export_hinf_final_results.m}; il successivo
-\path{report/build_hinf_final_text.py} formatta testo e tabelle senza
-calcolare controllori, norme, poli o metriche di controllo.
+I parametri e le matrici dei Capitoli 2--7 provengono dai dataset di
+modellazione, LQG e LQRI in \path{results/data}. Le matrici $A_{\rm full}$
+e $B_{\rm full}$ sono in \path{m3_nominal_actuated_plant.mat}, il disturbo
+$B_{d,\rm full}$ in \path{m5_performance_specs.mat}; i controllori LQG e LQRI
+provengono rispettivamente da \path{m6_lqg_no_integrator.mat} e
+\path{m7_augmented_cost_feasibility.mat}. Per LQRI si usa l'indice
+\texttt{config.illustrativeIndex}.
 
-\begin{longtable}{p{.40\textwidth}p{.52\textwidth}}\toprule
-Dataset corrente & Evidenza\\\midrule
-\path{nominal_study.mat} & 21 profili 1-DoF e tre veri problemi 2-DoF\\
-\path{selected_full_order.mat} & Identità del comparatore H-infinity\\
-\path{fixed_study.mat} & 66 avvii con obiettivi e verifiche indipendenti\\
-\path{m12.mat} & N--Delta e margini del comparatore selezionato\\
-\path{m13.mat}, \path{m14.mat} & D--K corrente e post-analisi indipendente\\
-\path{nonlinear_study.mat}, \path{noise_study.mat} & Equilibrio, gradini, disturbi e rumore\\
-\path{ras_study.mat}, \path{lyapunov_study.mat} & Sezioni empiriche e verifica nominale\\
-\path{monte_carlo_study.mat} & Sequenza paired e nuove chiusure\\
-\path{summary.json} & Esportazione delle quantità per M17/M18\\
-\path{hinf_final_traceability.json} & Provenienza delle macro della relazione\\\bottomrule
+I risultati robusti sono in \path{results/data/hinf_final_coherent/}:
+\begin{longtable}{p{.41\textwidth}p{.51\textwidth}}\toprule
+Dataset & Evidenza\\\midrule
+\path{nominal_study.mat} & 21 profili 1-DoF, tre problemi 2-DoF e scelta del comparatore\\
+\path{selected_full_order.mat} & Controllore $H_\infty$ $2\times4$ di ordine 22\\
+\path{fixed_study.mat} & 66 avvii strutturati e relative verifiche\\
+\path{m12.mat} & N--Delta e margini del comparatore nominale\\
+\path{m13.mat}, \path{m14.mat} & Controllore $K_\mu$ di ordine 78, storia D--K e post-analisi\\
+\path{nonlinear_study.mat}, \path{noise_study.mat} & Equilibrio, gradini, disturbi e rumore in MATLAB\\
+\path{ras_study.mat}, \path{lyapunov_study.mat} & Sezioni empiriche e analisi nominale\\
+\path{monte_carlo_study.mat} & Campioni comuni e chiusure dei due controllori robusti\\
+\path{summary.json} & Quantità esportate per tabelle e confronto\\\bottomrule
 \end{longtable}
-I file dati anteriori rimangono nei percorsi originali. Testo e PDF
-precedenti sono inoltre conservati in \path{report/archive/before_final_coherent/}.
-Le prime prove con tolleranza solver predefinita sono conservate nella
-sottodirectory \path{numerical_diagnostics_default_solver/}; non costituiscono
-la selezione corrente. M0--M8 e i relativi sorgenti della relazione restano
-congelati. Le macro storiche necessarie a quei capitoli non sono usate per
-presentare come attuali risultati dei vecchi controllori robusti.
-Il resoconto di revisione raccoglie errori numerici, test e limiti residui.
+Il file \path{results/data/m16_monte_carlo_uncertain_linear.mat} conserva
+la sequenza comune e il risultato LQG. Le identità sono controllate dai test.
+
+L'audit in \path{results/data/organic_review} contiene la struttura effettiva
+di $\Delta$, i poli letti dagli artifact, i dati dei grafici D--K e l'esito
+di caricamento degli originali Simulink. Lo script
+\path{analysis/export_organic_audit.m} non effettua sintesi né nuove ricerche
+dei casi peggiori. Le figure e i testi non sostituiscono i dati numerici.
+
+I tre originali sono identificati dal manifest in
+\path{simulink/originals/manifest.json}. Gli schemi a blocchi del Capitolo 9
+sono rappresentazioni matematiche delle interconnessioni, non schermate
+Simulink. Gli hash degli artifact consolidati e la classificazione dei file
+sono raccolti in \path{docs/organic_review}.

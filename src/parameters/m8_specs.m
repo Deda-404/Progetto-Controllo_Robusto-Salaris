@@ -2,9 +2,6 @@ function config = m8_specs
 %M8_SPECS Reproducibility and quality-gate settings for M8.
 %   Physical/controller data are deliberately loaded from M2/M3/M5/M6.
 
-config.modelName = "SEA_LQG_nonlinear";
-config.modelRelativePath = fullfile('simulink', ...
-    'SEA_LQG_nonlinear.slx');
 
 config.solver.candidates = ["ode45"; "ode23t"];
 config.solver.selected = "ode23t";
