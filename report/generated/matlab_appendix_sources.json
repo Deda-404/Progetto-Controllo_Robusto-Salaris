@@ -1,0 +1,137 @@
+[
+  {
+    "file": "src/parameters/sea_params_nominal.m",
+    "firstline": 6,
+    "lastline": 13
+  },
+  {
+    "file": "src/model/sea_static_equilibrium.m",
+    "firstline": 10,
+    "lastline": 13
+  },
+  {
+    "file": "src/model/sea_linearize_static_equilibrium_analytic.m",
+    "firstline": 18,
+    "lastline": 38
+  },
+  {
+    "file": "src/actuators/build_nominal_actuator.m",
+    "firstline": 11,
+    "lastline": 21
+  },
+  {
+    "file": "src/model/build_m3_full_plant.m",
+    "firstline": 7,
+    "lastline": 18
+  },
+  {
+    "file": "src/uncertainty/build_uncertain_mechanical_plant.m",
+    "firstline": 60,
+    "lastline": 65
+  },
+  {
+    "file": "src/uncertainty/build_m4_uncertain_plant.m",
+    "firstline": 7,
+    "lastline": 14
+  },
+  {
+    "file": "controllers/lqg/search_lqr_weights_m6.m",
+    "firstline": 56,
+    "lastline": 65
+  },
+  {
+    "file": "controllers/lqg/design_kalman_m6.m",
+    "firstline": 15,
+    "lastline": 24
+  },
+  {
+    "file": "controllers/lqg/build_lqg_no_integrator.m",
+    "firstline": 28,
+    "lastline": 31
+  },
+  {
+    "file": "analysis/progetto_lqri.m",
+    "firstline": 17,
+    "lastline": 34
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_weights.m",
+    "firstline": 3,
+    "lastline": 5
+  },
+  {
+    "file": "analysis/run_hinf_final_nominal.m",
+    "firstline": 27,
+    "lastline": 30
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_plant.m",
+    "firstline": 3,
+    "lastline": 10
+  },
+  {
+    "file": "analysis/run_hinf_final_nominal.m",
+    "firstline": 66,
+    "lastline": 67
+  },
+  {
+    "file": "controllers/hinf/hinf_final_2dof_plant.m",
+    "firstline": 4,
+    "lastline": 11
+  },
+  {
+    "file": "analysis/run_hinf_final_nominal.m",
+    "firstline": 71,
+    "lastline": 72
+  },
+  {
+    "file": "controllers/hinf/hinf_final_evaluate.m",
+    "firstline": 3,
+    "lastline": 9
+  },
+  {
+    "file": "analysis/run_hinf_final_fixed.m",
+    "firstline": 15,
+    "lastline": 27
+  },
+  {
+    "file": "controllers/hinf/hinf_final_uncertain.m",
+    "firstline": 4,
+    "lastline": 11
+  },
+  {
+    "file": "analysis/run_hinf_final_robust.m",
+    "firstline": 23,
+    "lastline": 30
+  },
+  {
+    "file": "analysis/run_hinf_final_robust.m",
+    "firstline": 47,
+    "lastline": 51
+  },
+  {
+    "file": "analysis/robust/analyze_m12_manual_mu.m",
+    "firstline": 11,
+    "lastline": 15
+  },
+  {
+    "file": "analysis/monte_carlo/generate_m16_uncertainty_samples.m",
+    "firstline": 9,
+    "lastline": 12
+  },
+  {
+    "file": "analysis/run_hinf_final_monte_carlo.m",
+    "firstline": 11,
+    "lastline": 13
+  },
+  {
+    "file": "src/model/sea_nonlinear_rhs_with_link_disturbance.m",
+    "firstline": 16,
+    "lastline": 27
+  },
+  {
+    "file": "analysis/nonlinear/simulate_hinf_final_nonlinear.m",
+    "firstline": 34,
+    "lastline": 39
+  }
+]

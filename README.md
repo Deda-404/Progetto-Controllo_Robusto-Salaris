@@ -9,10 +9,12 @@ Progetto di Controllo Robusto: modello planare a due giunti, 8 stati meccanici e
 - [Note orali](presentation/SPEAKER_NOTES.md).
 - [Audit, inventario e limiti](docs/organic_review/AUDIT.md).
 - [Resoconto della revisione](docs/RESOCONTO_REVISIONE_ORGANICA.txt).
+- [Revisione didattica H∞/µ e appendice MATLAB](docs/RESOCONTO_SEMPLIFICAZIONE_HINF_MU_APPENDICE.md): relazione di 74 pagine; capitoli 8–9 e appendice D aggiornati il 2 ottobre 2026.
 
 ## Risultati e stato
 
 105 test MATLAB PASS. H∞ 2-DoF: ordine 22, norma 0.0474606, NS/NP positive ma RS negativa. L'intervallo numerico RP è non valido; RP è comunque esclusa dal fallimento RS.
+Nella revisione editoriale del 2 ottobre sono stati rieseguiti 20 test esistenti: 20/20 PASS, sottoinsieme della precedente verifica globale, senza nuove sintesi o campagne robuste.
 Kµ: ordine 78, norma nominale 0.63468, margini RS circa 1.80 e RP circa 1.68 sul modello dichiarato. Restano fallimenti temporali.
 LQG soddisfa il tracking nominale; LQRI elimina l'offset DC del disturbo costante nel modello lineare, con risposta più lenta.
 
@@ -32,6 +34,9 @@ setenv('CR_RUN_SCOPE','originals'); run_all % audit senza salvare gli SLX
 setenv('CR_RUN_SCOPE','export'); run_all    % figure dai dati salvati
 ```
 Per compilare i PDF, eseguire `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` separatamente da report/ e presentation/.
+Per rigenerare le nuove tabelle e l'appendice letterale, eseguire dalla radice
+`python report/build_didactic_tables.py` e `python report/build_matlab_appendix.py`.
+Il comando `tools/build_m18_latex.ps1 -ReportOnly` compila e audita la sola relazione.
 
 ## Struttura e fonti
 
@@ -48,4 +53,5 @@ MATLAB, Control System Toolbox e Robust Control Toolbox sono necessari alle anal
 
 Gli studi didattici e i dataset robusti fuori dalla cartella adottata descrivono problemi separati: non usarli come fonte dei risultati dei capitoli 8–13. Il diario, il decision log, il changelog e i resoconti datati documentano la cronologia; la descrizione tecnica della consegna è nei PDF e nell'audit corrente.
 
-PR #33 mantenuta draft. Nessun merge automatico.
+La PR #33 è già integrata nella base remota 8ca8e7e. La revisione del 2 ottobre
+usa `codex/semplificazione-hinf-mu-appendice`, senza merge automatico su main.

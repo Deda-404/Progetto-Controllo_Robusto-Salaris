@@ -14,6 +14,12 @@
 \usepackage{xcolor}
 \usepackage{float}
 \usepackage{tikz}
+\usepackage{listings}
+\lstset{language=Matlab,basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,keepspaces=true,breaklines=true,
+  showstringspaces=false,tabsize=2,frame=single,
+  rulecolor=\color{black!20},commentstyle=\color{black!60},
+  keywordstyle=\color{blue!45!black},aboveskip=.7em,belowskip=.7em}
 \usepackage[protrusion=true,expansion=false]{microtype}
 \geometry{top=2.5cm,bottom=2.5cm,left=2.7cm,right=2.3cm}
 \hypersetup{hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!55!black,pdftitle={Controllo robusto di un manipolatore planare 2-DoF con SEA},pdfauthor={Alessio de Dato; Valerio Rebechi}}
@@ -72,4 +78,5 @@ come validazione dei quattro controllori finali.
 \input{sections/A_parametri}
 \input{sections/B_artifact_traceability}
 \input{sections/C_riproducibilita}
+\input{sections/D_codici_matlab}
 \end{document}

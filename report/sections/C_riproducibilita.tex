@@ -36,6 +36,10 @@ run_all
 \end{verbatim}
 Dopo l'esportazione, \path{python report/build_organic_tables.py}
 formatta le tabelle di confronto usando i JSON prodotti da MATLAB.
+\path{python report/build_didactic_tables.py} aggiorna il confronto
+del Capitolo 8 dagli stessi JSON consolidati.
+\path{python report/build_matlab_appendix.py} seleziona le righe
+dei sorgenti per l'Appendice~\ref{app:matlab}, senza modificarli.
 La compilazione dei documenti va eseguita nelle rispettive cartelle:
 \begin{verbatim}
 cd report

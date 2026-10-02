@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-02",
+  "branch": "codex/semplificazione-hinf-mu-appendice",
+  "base_commit": "8ca8e7e22c95d9d5f839bdc9739fc0b54a97abed",
+  "source_campaign": "results/data/hinf_final_coherent",
+  "scope": "editorial changes; no new synthesis, robust search, Monte Carlo campaign or RAS",
+  "protected_paths_unchanged": [
+    "src",
+    "controllers",
+    "analysis",
+    "tests",
+    "results",
+    "simulink",
+    "presentation",
+    "report/sections/01_introduzione.tex",
+    "report/sections/02_modello_dinamico.tex",
+    "report/sections/03_equilibrio_linearizzazione.tex",
+    "report/sections/04_attuatori.tex",
+    "report/sections/05_incertezze.tex",
+    "report/sections/06_specifiche_pesi.tex",
+    "report/sections/07_lqg.tex",
+    "report/sections/A_parametri.tex"
+  ],
+  "protected_paths_gate": "PASS",
+  "matlab": {
+    "release": "R2025b",
+    "tests_passed": 20,
+    "tests_failed": 0,
+    "tests_incomplete": 0,
+    "suites": {
+      "hinfFinalCoherenceTest": 6,
+      "hinfFinalDownstreamTest": 5,
+      "organicReviewTest": 9
+    },
+    "existing_tests_subset": true,
+    "previous_global_test_count": 105,
+    "local_nonlinear_checks": 2,
+    "checks_file": "matlab_checks.csv"
+  },
+  "appendix": {
+    "excerpts": 27,
+    "matlab_lines": 210,
+    "literal_source_hashes": {
+      "analysis/monte_carlo/generate_m16_uncertainty_samples.m": "8c399be4e0c1c1f00623db42f63f3d6642433ba80716ef051f2a7b0fa169924e",
+      "analysis/nonlinear/simulate_hinf_final_nonlinear.m": "ee5cda62adcf4e2b609173adb3c3e92b22a5c03aed92dd78d892caf08c8c8afb",
+      "analysis/progetto_lqri.m": "1c9737d615020598582fb9a8d64bc87214458df921ac189a9421119413849aa7",
+      "analysis/robust/analyze_m12_manual_mu.m": "36060010450b9822aa3846026c3d1a509a1620d2792d4f934ae0d0fe2242169b",
+      "analysis/run_hinf_final_fixed.m": "fc6a4e0f22efb2a0aa2ec52d75da114a719862681f1f015bf293b20e7384c56f",
+      "analysis/run_hinf_final_monte_carlo.m": "ed47f0646dadffaa52db559a45ec872afce337e009f47254c26c8228035b0e7e",
+      "analysis/run_hinf_final_nominal.m": "41b5222516684a76f0a966eb95e52c48e54aebd42f16e31ae00a9d0386cdf19b",
+      "analysis/run_hinf_final_robust.m": "c2d8c541d51340e7dcf107924a27b7807bc78857fa1cea540b046f3472c9679a",
+      "controllers/hinf/hinf_final_2dof_plant.m": "f6da5d09e8643424b325569348123433dae8e958f38040ec16d533560a6a8f3d",
+      "controllers/hinf/hinf_final_evaluate.m": "7b0d14ae5415fbc53b88ea2f9aa3488fd6054931cbeff26b71ac109698171e5e",
+      "controllers/hinf/hinf_final_uncertain.m": "490224abd607f794853c57640559ce9e7b789ebbc67044e97f7446e0be9fdd17",
+      "controllers/hinf/hinf_revision_plant.m": "d94608539adfa3c30b0cd372e5481344de485dd8810a4e8d9696b2f0455cb305",
+      "controllers/hinf/hinf_revision_weights.m": "433337c95675787443ca8182776226a117f2103bb70cafe3c2f9e4128688a18f",
+      "controllers/lqg/build_lqg_no_integrator.m": "ae27e1512fbdf26bb3ddecb62f300016bf4ee02593745d30bb3de68422345a0a",
+      "controllers/lqg/design_kalman_m6.m": "3b49e0f92a31bb1337874e4f1e928f44e4b2f2277ede669f1d06df322e3c0e80",
+      "controllers/lqg/search_lqr_weights_m6.m": "1f8d326bc3124b5b21388285152b70570fcf6eea9ac62ef40d508f9065c06c89",
+      "src/actuators/build_nominal_actuator.m": "94dfe52de670bba9764a27a4c2cfaca9f8429f84d8d6264a6664efff096c9f22",
+      "src/model/build_m3_full_plant.m": "c1e771b2a859acb6696b80b06ae6c0a677a28232ede03fb7ed59e91212d14b51",
+      "src/model/sea_linearize_static_equilibrium_analytic.m": "19178bc48349347e55da2c2e677bdaac1f047c28ba68d61e9b1f00a8868f4a5c",
+      "src/model/sea_nonlinear_rhs_with_link_disturbance.m": "9a20136686273a3650b3239628f7fecc8381977bc35ef8aafcd65abbc06ca354",
+      "src/model/sea_static_equilibrium.m": "6f9bdae1628f970675048ba115ca981fb35844d76e03e016f71e728031df4e91",
+      "src/parameters/sea_params_nominal.m": "613e728ef60976764a2d93a96d927ac73be48f6508085fc2153b7fafd1346001",
+      "src/uncertainty/build_m4_uncertain_plant.m": "1405109bf086b2339e385bd04bebbe2f3f4a0fff617abad93b1d98b738c68f77",
+      "src/uncertainty/build_uncertain_mechanical_plant.m": "1875eaf58bb8e14fa0942e16414a4b35950271d906fd8d6bd751c9d7c76edb95"
+    }
+  },
+  "generated_files_sha256": {
+    "report/sections/D_codici_matlab.tex": "1769f43256491ecb52e7209464606c2b05c5501bba172494db138f4c11cf163f",
+    "report/generated/matlab_appendix_sources.json": "7341ccf008af51dbf328490c35b64e5484b8c766dbe29e7e8f1724e6deac4e46",
+    "report/generated/didactic_hinf_comparison.tex": "6a0e17715e4d870a32b34a97b1e0165233c55e5fae3bd13510aa33c264ae0774",
+    "report/generated/didactic_hinf_disturbance.tex": "2f1d86baa030c7f44a2ccb7d85e2e8ac56810ec54e314fd6b6e8a1da41d88545",
+    "report/generated/didactic_mixsyn_hinfsyn.tex": "e38083951ac7c1039ab7367c026fa6a90ece9e945d0d0f3df3709cbd3b9efe68"
+  },
+  "generators_idempotent": true,
+  "pdf": {
+    "file": "report/Progetto_CR_Relazione_finale.pdf",
+    "pages": 74,
+    "bytes": 3021310,
+    "sha256": "710a13c81382763306b79fb2b7d99dbb1387f482a53bfa4e105e686359d84294",
+    "pdflatex_passes": 3,
+    "final_latex_warnings": 0,
+    "audit": "report/generated/report_latex_audit.txt",
+    "visual_review_pdf_pages": [
+      [
+        3,
+        7
+      ],
+      [
+        38,
+        56
+      ],
+      [
+        67,
+        74
+      ]
+    ]
+  },
+  "remaining_launcher_message": "Perl C.UTF-8 locale unavailable; Windows Italian fallback",
+  "editorial_gate": "PASS",
+  "editorial_status": "COMPLETE",
+  "global_conformity": "PARTIAL"
+}
