@@ -1,319 +1,503 @@
-\chapter{\texorpdfstring{Controllo $H_\infty$: sensibilità mista e due gradi di libertà}{Controllo H infinity: sensibilità mista e due gradi di libertà}}
+\chapter{\texorpdfstring{Progetto e risultati del controllo $H_\infty$}{Progetto e risultati del controllo H infinity}}
 \label{cap:hinf}
-\section{Problema di controllo e motivazione fisica}
-Il modello nominale comprende otto stati meccanici e sei stati degli attuatori.
-I due poli instabili, circa $4.04$ e $7.21$ s$^{-1}$, richiedono un feedback
-sufficientemente rapido; i modi elastici intorno a 70--79 rad/s e gli attuatori
-con frequenza naturale 40 rad/s limitano l'aumento della banda. Vogliamo quindi
-stabilizzare il sistema, seguire piccoli riferimenti articolari e contenere la
-coppia richiesta senza eccitare eccessivamente le dinamiche elastiche.
+\section{Dal controllo LQG al problema che vogliamo risolvere}
+Nel capitolo precedente abbiamo progettato LQG combinando un regolatore
+quadratico e un filtro di Kalman. Il costo esprime il compromesso fra
+stato e comando; le covarianze descrivono le ipotesi sui rumori.
+Questo percorso ha permesso di stabilizzare il manipolatore e di
+studiare il beneficio dell'integratore sui disturbi costanti.
 
-Il controllo $H_\infty$ formula il compromesso attraverso una norma di
-trasferimento. Per una mappa stabile e propria $H(s)$ si definisce
-\[
- \|H\|_\infty=\sup_{\omega\in\mathbb R}\bar\sigma(H(j\omega))
- =\sup_{0\ne w\in L_2}\frac{\|Hw\|_2}{\|w\|_2}.
-\]
-La massima amplificazione è valutata su tutte le direzioni degli ingressi:
-questo è essenziale per un manipolatore accoppiato. Il gradino non appartiene a
-$L_2$; una norma piccola non implica direttamente i limiti richiesti su overshoot,
-assestamento o errore statico. Tali requisiti vengono verificati separatamente.
-Anche la stabilità interna deve essere verificata sulla realizzazione completa:
-una cancellazione ingresso--uscita non è una prova di stabilità degli stati.
+Introduciamo ora $H_\infty$ per formulare una domanda diversa: quanto
+può essere amplificata una perturbazione, nel caso peggiore, nelle
+grandezze che ci interessano? Non scegliamo una distribuzione della
+perturbazione, ma penalizziamo alcune mappe del sistema chiuso alle
+diverse frequenze. Vogliamo contenere errore articolare e comando,
+mantenendo stabile il modello nominale.
 
-\section{Sensibilità mista a un grado di libertà}
-\subsection{Significato delle mappe}
-Sia $G$ la pianta nominale dal comando incrementale $u$ alla posizione
-incrementale $q$, con gli attuatori inclusi. Nella retroazione
-$u=K(r-q-n)$, con rumore di misura $n$, poniamo
-\[
- S=(I+GK)^{-1},\qquad T=I-S=GK(I+GK)^{-1},\qquad KS=K(I+GK)^{-1}.
-\]
-L'ordine dei fattori va rispettato: in un sistema MIMO matrici e trasferimenti
-non commutano in generale. Per un disturbo $d$ che entra fisicamente sul link
-attraverso la mappa $G_d$ valgono
-\[
- q=Tr+SG_dd-Tn,\qquad u=KSr-KSG_dd-KSn.
-\]
-$S$ descrive l'errore rispetto al riferimento e la reiezione di perturbazioni
-additive all'uscita; $KS$ misura il comando necessario; $T$ descrive il tracking
-e la trasmissione del rumore alle posizioni. La coppia lato link non è una
-perturbazione di posizione: la sua risposta contiene anche $G_d$.
+La difficoltà fisica è la stessa già incontrata con LQG. Il modello
+ha 14 stati: otto meccanici e sei degli attuatori. Due poli instabili,
+circa $4.04$ e $7.21$ s$^{-1}$, richiedono una retroazione sufficientemente
+rapida. Attuatori a 40 rad/s, ritardo e modi elastici intorno a
+70--79 rad/s limitano invece l'aumento dell'azione di controllo.
+Una risposta più rapida può richiedere coppie maggiori ed eccitare i SEA.
 
-La formulazione generale della sensibilità mista minimizza
-\[
- \left\|\begin{bmatrix}W_1S\\ W_2KS\\ W_3T\end{bmatrix}\right\|_\infty.
-\]
-Nel progetto il terzo peso è \textbf{assente}: la chiamata usa
-\texttt{W3=[]}. L'inviluppo $W_I$ del Capitolo 5 descrive l'incertezza degli
-attuatori; non sostituisce un peso prestazionale sul rumore. La mancanza di
-un canale esplicito $W_3T$ va ricordata quando si interpreta la prova di rumore.
+La sintesi di questo capitolo usa la pianta nominale. Le prove non
+lineari e di rumore ne chiariscono i limiti; la verifica per tutte
+le incertezze ammesse è svolta nel Capitolo~\ref{cap:mu}.
 
-\subsection{Pesi effettivamente utilizzati}
-La famiglia esplorata è
+\section{Segnali, obiettivi e significato dei pesi}
+\subsection{Che cosa misuriamo e che cosa comandiamo}
+$q=[q_1,q_2]^T$ indica le deviazioni delle posizioni dei link
+dall'equilibrio e $r$ le deviazioni richieste, entrambe in rad.
+Nel seguito $y=q$: non sono le quattro misure $[q;\theta]$ usate
+dal Kalman. Il comando $u\in\mathbb R^2$ è la coppia richiesta
+agli attuatori, in N m. $G$ include meccanica e attuatori ed è
+la mappa nominale $u\mapsto q$.
+
+Il disturbo $d\in\mathbb R^2$ è una coppia applicata direttamente
+ai link. La sua mappa $G_d$ usa la stessa realizzazione a 14 stati
+di $G$, con una diversa matrice d'ingresso. Non attraversa gli
+attuatori e non è una perturbazione additiva di posizione.
+Nella prima sintesi, a un grado di libertà, il controllore riceve
+$e=r-q$; nel successivo progetto 2-DoF riceve separatamente $r$ e $q$.
+
+\subsection{Quanto errore siamo disposti ad accettare?}
+Il peso $W_1$ risponde a questa domanda alle diverse frequenze.
+Un errore lento o persistente deve essere penalizzato più di un
+ errore molto rapido, che il manipolatore non può correggere senza
+sollecitare attuatori e molle. Scegliamo quindi un peso grande a
+bassa frequenza e più piccolo ad alta frequenza.
+
+Il motivo è semplice: se chiediamo che $W_1e$ sia piccolo, un peso
+grande richiede un errore più piccolo. Nella formulazione a errore
+unico il peso agisce sulla sensibilità $S$; il suo inverso suggerisce
+quanto possa essere grande la mappa dell'errore. La transizione orienta
+la banda, mentre il livello alle frequenze alte esprime il compromesso
+sul picco di sensibilità. Il peso non fissa da solo banda effettiva
+ed errore a regime osservati nella simulazione.
+
+\subsection{Quanto penalizziamo l'azione di controllo?}
+$W_2$ serve a evitare che la sintesi riduca l'errore chiedendo
+comandi eccessivi. Le coppie rapide possono sollecitare i SEA ed
+eccitare i modi elastici: si è quindi scelto un peso che cresce
+con la frequenza. Questo orienta il compromesso di progetto, ma
+non introduce una saturazione. La scala di 12 N m delle specifiche
+serve a valutare lo sforzo, non è un limite hardware implementato.
+I picchi vanno controllati anche nelle simulazioni, soprattutto
+in presenza di rumore.
+
+\subsection{Formule e configurazione effettiva}
+I due pesi utilizzati da \path{hinf_revision_weights.m} sono
 \begin{equation}\label{eq:hinfweights}
  W_1=\frac{s/M_s+\omega_e}{s+\omega_e A_s}I_2,\qquad
  W_2=k_u\frac{s+\omega_u}{s/6+\omega_u}I_2.
 \end{equation}
-$1/A_s$ è il guadagno a bassa frequenza di $W_1$, mentre $1/M_s$ è quello
-asintotico ad alta frequenza. Un piccolo $A_s$ richiede un errore più contenuto;
-$M_s$ ammette un rilassamento alle frequenze elevate. $\omega_e$ regola la
-transizione ma non coincide automaticamente con la banda del sistema chiuso.
-Il peso sul comando passa da $k_u$ a $6k_u$: penalizza maggiormente i comandi
-rapidi, senza introdurre un limite rigido di coppia.
+$A_s$ regola la richiesta a bassa frequenza, $M_s$ il rilassamento
+alle frequenze alte e $\omega_e$ la transizione del peso sull'errore.
+$k_u$ regola quanto costa il comando e $\omega_u$ dove comincia a
+crescere la penalizzazione dei comandi rapidi. I due giunti usano
+gli stessi pesi, ma la pianta rimane accoppiata.
 
-Il profilo selezionato fra quelli a un grado di libertà è
-\[
- (\omega_e,A_s,M_s,k_u,\omega_u)=(2,0.15,3,0.003,80),
-\]
-quindi
+Il profilo selezionato usa
+$(\omega_e,A_s,M_s,k_u,\omega_u)=(2,0.15,3,0.003,80)$, quindi
 \[
  W_e=W_1=\frac{s/3+2}{s+0.3}I_2,\qquad
  W_u=W_2=0.003\frac{s+80}{s/6+80}I_2.
 \]
-I poli e gli zeri del primo peso sono $-0.3$ e $-6$ rad/s; quelli del secondo
-sono $-480$ e $-80$ rad/s. I guadagni estremi sono rispettivamente
-$6.667\to0.333$ e $0.003\to0.018$. Le posizioni sono espresse in rad, i comandi
-in N m e le frequenze in rad/s. Non è inserita una normalizzazione aggiuntiva
-degli ingressi: il valore della norma dipende da queste convenzioni numeriche.
-I pesi possono essere letti come scale inverse delle uscite penalizzate, ma
-non forniscono da soli una probabilità di errore o un limite hardware.
+Il primo peso passa da 6.667 a 0.333; il secondo da 0.003 a 0.018.
+Poli e zeri sono rispettivamente $-0.3,-6$ e $-480,-80$ rad/s.
+Non è aggiunta una normalizzazione degli ingressi: le norme usano
+posizioni in rad e comandi in N m. Nel 2-DoF i nomi $W_e,W_u$
+indicano gli stessi pesi, applicati a segnali che preciseremo.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.48\textwidth]{figures/hinf_final/weights_error.png}
 \includegraphics[width=.48\textwidth]{figures/hinf_final/weights_control.png}
-\caption{Valori singolari dei pesi selezionati e dei loro inversi. I pesi
-sono diagonali e uguali sui due giunti; le curve coincidenti non implicano
-che la pianta sia disaccoppiata.}\label{fig:hinfweights}
+\caption{Pesi selezionati e loro inversi. Un peso più grande richiede
+una mappa corrispondente più piccola. Le curve coincidono perché
+ i pesi sono diagonali e uguali.}\label{fig:hinfweights}
 \end{figure}
+Il terzo peso prestazionale è assente: \texttt{mixsyn} usa
+\texttt{W3=[]}. $W_I$ del Capitolo 5 descrive invece l'incertezza
+degli attuatori. Non è un peso prestazionale sul rumore.
 
-\subsection{Ricerca dei parametri e limite inferiore}
-Sono stati valutati 21 profili predefiniti. Le famiglie includono
-$\omega_e=2,3,4$, $A_s=0.1,0.15,0.2$, $M_s=3,4$,
-$k_u=0.003,0.005,0.01,0.02$ e $\omega_u=60,80$;
-non è stato esplorato l'intero prodotto cartesiano. La scelta deriva da
-un compromesso ingegneristico: richiedere più banda al feedback aiuta a
-stabilizzare il braccio, ma aumenta lo sforzo presso le risonanze elastiche.
-Tra i candidati stabili con norma inferiore a uno, il criterio confronta
-nell'ordine overshoot, errore statico, assestamento, accoppiamento, picco,
-RMS e norma. Si tratta di una selezione finita, non di un ottimo globale.
-
-Una diagnosi indipendente segue da $S+GKS=I$. A una frequenza fissata poniamo
-$a=|W_{1,s}|$, $b=|W_{2,s}|$ e $X=KS$. Per una direzione unitaria $v$, il
-rilassamento quadratico $a^2\|v-Gx\|^2+b^2\|x\|^2$ dà
+\section{Che cosa minimizza il controllo \texorpdfstring{$H_\infty$}{H infinity}}
+\label{sec:hinfmeaning}
+Raccogliamo in $w$ gli ingressi esterni e in $z$ le grandezze pesate
+che vogliamo mantenere piccole. Per un controllore $K$, la mappa
+$T_{zw}$ descrive come $w$ produce $z$. La sintesi cerca un
+controllore che stabilizzi internamente il sistema nominale
+ e riduca la norma
 \[
- H=a^2I-a^4G(a^2G^*G+b^2I)^{-1}G^*,\quad
- \left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_2
- \geq \sqrt{\lambda_{\max}(H)}
- =\frac{ab}{\sqrt{b^2+a^2\sigma_{\min}(G)^2}}.
+ \|T_{zw}\|_\infty=\sup_\omega\bar\sigma(T_{zw}(j\omega)).
 \]
-La direzione meno controllabile in frequenza coinvolge il più piccolo valore
-singolare di $G$. Non si deve invertire $G$, neppure vicino alla perdita di
-rango. Il massimo sulla griglia è soltanto un limite inferiore campionato:
-il rilassamento non costruisce un controllore causale e stabilizzante.
-Sette test indipendenti verificano la formula in casi SISO, diagonali, MIMO e
-quasi singolari. Il limite serve a riconoscere richieste incompatibili con
-l'autorità di controllo disponibile, non a certificare la soluzione numerica.
+A ogni frequenza si considera la combinazione di ingressi più
+sfavorevole; si prende poi la maggiore amplificazione fra tutte
+le frequenze. Il valore singolare massimo è necessario perché
+i due giunti interagiscono. Per una mappa stabile e propria, la
+norma coincide anche con il massimo rapporto energetico
+$\|z\|_2/\|w\|_2$, per ingressi di energia finita e stato iniziale nullo.
 
-\section{Sintesi con \texttt{mixsyn}}
-La funzione costruisce automaticamente la pianta aumentata associata a $G$
-e ai pesi, e risolve la sintesi $H_\infty$ non strutturata. Nel codice si usa
-\begin{verbatim}
-[Kmix,CLmix,gammaMix] = mixsyn(G,W1,W2,[],options);
-\end{verbatim}
-Il controllore riceve l'errore $r-q$ e produce due comandi. La tolleranza
-relativa del solver è $10^{-4}$. Il risultato viene controllato ricostruendo
-le mappe $S$, $KS$ e lo stack pesato dalla pianta originale. Il numero
-\texttt{gammaMix} è un esito della sintesi; la norma della chiusura ricostruita
-e i poli interni costituiscono verifiche distinte.
+Indichiamo con $\gamma$ il livello ottenuto dalla sintesi.
+Nel primo problema $w=r$ e $z=[W_1(r-q);W_2u]$: riguarda errore
+e comando pesati prodotti dal riferimento. Nel successivo problema
+2-DoF $w=[r;d]$ e l'errore è $q-M_or$: riguarda insieme inseguimento
+del modello desiderato, reiezione della coppia esterna e comando.
 
-\section{Sintesi con \texttt{hinfsyn} e pianta generalizzata}
-La costruzione esplicita chiarisce il problema risolto automaticamente da
-\texttt{mixsyn}. Con $w=r$, $z=[W_1e;W_2u]$, $y_K=e=r-Gu$, la partizione è
+La soglia uno è quella scelta per la prestazione pesata.
+$\gamma<1$, confermato sulla chiusura originale stabile, soddisfa
+quell'obiettivo nominale. Non dimostra tutti i requisiti temporali
+né la robusta stabilità. Distinguiamo quindi:
+\begin{itemize}
+\item stabilità nominale: gli stati del sistema chiuso nominale convergono;
+\item prestazione nominale pesata: la sua norma è minore di uno;
+\item stabilità robusta: la stabilità vale per tutte le incertezze ammesse;
+\item prestazione robusta: per tutte quelle incertezze valgono stabilità
+ e limite sulla stessa norma pesata.
+\end{itemize}
+Le ultime due proprietà richiedono il modello incerto del Capitolo 9.
+Assestamento, overshoot e offset si controllano con prove dedicate:
+un gradino non ha energia finita e il suo tempo di assestamento
+non si legge direttamente da $\gamma$.
+
+\section{Dallo schema di controllo alla pianta generalizzata}
+\label{sec:generalizedplant}
+Partiamo dal circuito noto: riferimento, controllore, comando,
+attuatori e manipolatore, con la posizione in retroazione.
+Aggiungiamo i segnali che servono a valutare errore e comando.
+La Figura~\ref{fig:generalizedplant} mostra la formulazione 2-DoF
+utilizzata nel progetto finale.
+
+\subsection{Il modello di riferimento \texorpdfstring{$M_o$}{Mo}}
+Il codice usa \texttt{Mo}, qui scritto $M_o$ con la lettera $o$:
+è il modello di riferimento indicato anche come $M_0$.
+Definisce la risposta articolare desiderata
+\[
+ q_m=M_or,\qquad e_m=q-q_m.
+\]
+Il controllore è progettato per avvicinare $q$ a $q_m$.
+Un gradino istantaneo non è una traiettoria ragionevole per un
+manipolatore con molle e attuatori; $M_o$ propone un transitorio
+graduale. Non produce $u$ e non è il feedback: entra nella
+valutazione dell'errore prestazionale. Il controllore finale
+riceve $r$ e $q$, non $q_m$.
+
+Il modello usato è diagonale, del secondo ordine, con smorzamento critico:
+\[
+ M_o=\frac{\omega_M^2}{s^2+2\omega_Ms+\omega_M^2}I_2,
+ \qquad M_o\big|_{\omega_M=4}=\frac{16}{s^2+8s+16}I_2.
+\]
+Sono stati provati $\omega_M=2,3,4$ rad/s; il valore finale è 4.
+Il modello desiderato è monotono, ma non garantisce da solo
+assenza di overshoot o saturazione dell'impianto.
+Nella prima formulazione 1-DoF non è presente questo filtro:
+l'errore penalizzato è direttamente $r-q$.
+
+\subsection{Raccogliere il problema in un solo blocco}
+La pianta generalizzata $P$ non sostituisce il manipolatore $G$.
+È una rappresentazione matematica che raccoglie il modello
+ dell'impianto, i pesi, l'eventuale modello di riferimento e le
+connessioni necessarie per definire il problema $H_\infty$.
+Il controllore rimane esterno: le porte di $P$ consentono
+ di collegarlo e di misurarne le prestazioni.
+
+\begin{figure}[p]\centering
+\resizebox{.98\textwidth}{!}{\input{figures/schemes/generalized_plant.tex}}
+\caption{Dallo schema intuitivo alla pianta generalizzata 2-DoF.
+Ogni segnale ha due componenti. $G$ include gli attuatori; $G_d$
+usa gli stessi stati fisici per la coppia lato link.
+$e_m=q-M_or$, $z_1=z_e$, $z_2=z_u$. Il segno di feedback è in $K_y$.
+È una figura teorica, non un modello Simulink.}\label{fig:generalizedplant}
+\end{figure}
+La descrizione compatta è
 \[
  \begin{bmatrix}z\\y_K\end{bmatrix}
- =\underbrace{\begin{bmatrix}W_1&-W_1G\\0&W_2\\I&-G\end{bmatrix}}_{P}
- \begin{bmatrix}w\\u\end{bmatrix}.
+ =P(s)\begin{bmatrix}w\\u\end{bmatrix},\qquad u=K(s)y_K.
 \]
-$P$ ha sei uscite e quattro ingressi. In una partizione generale
-$P=[P_{11}\ P_{12};P_{21}\ P_{22}]$, la chiusura inferiore è
-\begin{equation}\label{eq:lowerlft}
- F_l(P,K)=P_{11}+P_{12}K(I-P_{22}K)^{-1}P_{21}.
-\end{equation}
-Questa convenzione usa $u=Ky_K$: il segno negativo del feedback è già in
-$P_{22}=-G$. La realizzazione con segnali nominati evita di introdurre un
-secondo segno meno per errore:
-\begin{verbatim}
-P = hinf_revision_plant(G,W1,W2);
-[K,CL,gamma] = hinfsyn(P,2,2,options);
-\end{verbatim}
-Le ultime due uscite di $P$ sono le misure e gli ultimi due ingressi sono i
-comandi. Il confronto con \texttt{augw}, con \texttt{mixsyn} e con le mappe
-ricostruite controlla l'interconnessione. Non sono tre obiettivi di controllo
-indipendenti: a parità di $G,W_1,W_2$ si risolve la stessa sensibilità mista.
-Piccole differenze numeriche dei solver non vanno interpretate come un
-miglioramento fisico di un metodo rispetto all'altro.
+$w$ contiene gli ingressi esterni, $z$ le uscite pesate, $y_K$
+i segnali disponibili al controllore e $u$ i suoi comandi.
+Nel 1-DoF sono $w=r$, $z=[W_1e;W_2u]$, $y_K=e$.
+Nel 2-DoF sono $w=[r;d]$, $z=[W_ee_m;W_uu]$, $y_K=[r;q]$.
+Il numero di porte cambia con i segnali del problema;
+la pianta fisica conserva 14 stati.
 
-\section{Sintesi autentica a due gradi di libertà}
-\subsection{Architettura e problema di model following}
-Nella struttura a errore unico il ramo del riferimento è vincolato al feedback.
-Separiamo quindi le due funzioni e sintetizziamo simultaneamente
+\section{Il primo passo: sensibilità mista con \texttt{mixsyn}}
+\label{sec:mixsyn}
+Usiamo inizialmente $u=K(r-q)$: riferimento e misura passano
+ dallo stesso controllore, con segni opposti. La sensibilità
 \[
- u=K_r r+K_y q,\qquad y_K=[r^T,q^T]^T,\qquad w=[r^T,d^T]^T.
+ S=(I+GK)^{-1},\qquad KS=K(I+GK)^{-1}
 \]
-La misura $q$ è una deviazione dall'equilibrio; il controllore ha quattro
-ingressi e due uscite. $K_r$ e $K_y$ sono partizioni di un'unica realizzazione:
-condividono gli stati. Non si tratta di aggiungere un prefiltro a un feedback
-già fissato. La mappa desiderata è
+permette di leggere il problema. $S$ è la mappa dal riferimento
+all'errore $r-q$; $KS$ è quella dal riferimento al comando.
+La mappa di tracking è $T=I-S$. Un $S$ piccolo a bassa frequenza
+aiuta il tracking; un $KS$ troppo grande richiede troppa coppia.
+In un sistema MIMO l'ordine dei fattori va rispettato.
+
+\texttt{mixsyn} costruisce automaticamente il problema di sensibilità
+mista e cerca un controllore che renda piccola la norma
 \[
- M_o(s)=\frac{\omega_M^2}{s^2+2\omega_Ms+\omega_M^2}I_2,
- \qquad z=\begin{bmatrix}W_e(q-M_or)\\W_u u\end{bmatrix}.
+ \left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_\infty.
 \]
-Lo smorzamento critico propone una risposta monotona. Sono stati valutati
-$\omega_M=2,3,4$ rad/s, inferiori alla frequenza naturale degli attuatori.
-La rapidità del riferimento può così essere distinta dalla banda necessaria
-alla stabilizzazione. Il valore selezionato è $4$ rad/s, cioè
-$M_o=16/(s^2+8s+16)I_2$.
+È detta mista perché combina errore e comando nello stesso obiettivo.
+La chiamata in \path{analysis/run_hinf_final_nominal.m} è
+\begin{lstlisting}
+[Kmix,CLmix,r.gammaMix]=mixsyn(G,W1,W2,[],options);
+\end{lstlisting}
+$G$ ha due ingressi e due uscite; $K_{\rm mix}$ riceve i due errori
+ e produce due comandi. Il quarto argomento esclude $W_3$;
+\texttt{options} imposta una tolleranza relativa di $10^{-4}$.
+\texttt{CLmix} è la mappa pesata, non la sola risposta articolare.
+
+I due profili di riferimento producono controllori di ordine 18
+con $\gamma$ circa 0.862267 e 0.953412. Sono nominalmente stabili
+ e rispettano il limite pesato. Il profilo selezionato mostra però
+overshoot fino a circa 125\% e picco di comando vicino a 14 N m.
+Questo spiega perché esploriamo una gestione separata del riferimento.
+
+Con la coppia esterna valgono $q=Tr+SG_dd$ e $u=KSr-KSG_dd$.
+$d$ viene provato nella validazione, ma non è aggiunto retroattivamente
+all'obiettivo $w=r$ di \texttt{mixsyn}.
+
+\section{Da \texttt{hinfsyn} alla struttura 2-DoF}
+\subsection{Costruire esplicitamente lo stesso problema 1-DoF}
+\texttt{mixsyn} prepara automaticamente una particolare pianta aumentata.
+Con \texttt{hinfsyn} costruiamo $P$ e decidiamo quali segnali siano
+ingressi esterni, uscite prestazionali, ingressi del controllore
+ e comandi. Nel primo confronto manteniamo segnali e pesi:
+risolviamo lo stesso problema, controllandone l'interconnessione.
+
+Dopo lo schema possiamo leggere la partizione
+\[
+ P=\begin{bmatrix}P_{11}&P_{12}\\P_{21}&P_{22}\end{bmatrix},
+ \quad z=P_{11}w+P_{12}u,\quad y_K=P_{21}w+P_{22}u.
+\]
+Per $e=r-Gu$ la costruzione è
+\[
+ P=\begin{bmatrix}W_1&-W_1G\\0&W_2\\I&-G\end{bmatrix}.
+\]
+Le prime quattro uscite sono $z$, le ultime due sono l'errore.
+I primi due ingressi sono $r$, gli ultimi due $u$: $P$ è $6\times4$.
+La sintesi usa
+\begin{lstlisting}
+r.P=hinf_revision_plant(G,W1,W2);
+[r.Kfeedback,r.CL,r.gamma]=hinfsyn(r.P,2,2,options);
+\end{lstlisting}
+I due interi sono \texttt{nmeas=2}, numero dei segnali che entrano
+nel controllore, e \texttt{ncont=2}, numero dei comandi prodotti.
+Il meno è già in $P_{22}=-G$; chiudiamo con $u=Ky_K$.
+MATLAB indica questa chiusura con \texttt{lft(P,K)}; la formula
+ della LFT è nell'Appendice~\ref{app:matlab}.
+
+\begin{table}[htbp]\centering
+\input{generated/didactic_mixsyn_hinfsyn.tex}
+\caption{Confronto sullo stesso problema 1-DoF. Entrambi i metodi
+producono controllori di ordine 18.}
+\end{table}
+Le differenze tra i valori sono inferiori a $4\,10^{-13}$.
+Le mappe ricostruite coincidono entro $10^{-11}$ sulla griglia verificata.
+La costruzione esplicita non migliora da sola il tracking.
+
+\subsection{Due canali distinti per riferimento e misura}
+Per migliorare il transitorio del riferimento permettiamo al
+controllore di elaborare separatamente $r$ e $q$:
+\[
+ u=K_r r+K_y q,\qquad K=[K_r\ K_y].
+\]
+È la convenzione del codice: il segno del feedback è incorporato
+in $K_y$. Con un meno esplicito si avrebbe
+$u=K_r r-K_{\rm fb}q$, con $K_{\rm fb}=-K_y$.
+$K_r$ contribuisce principalmente a determinare come seguiamo il
+comando; $K_y$ usa la misura per stabilizzare il sistema e contrastare
+deviazioni e disturbi. Sono canali di un unico controllore, sintetizzati
+insieme e con gli stessi stati. Realizzarli come due sistemi separati
+duplicando gli stati non è l'implementazione del progetto.
+
+Il nome 2-DoF riguarda questa libertà di progetto, distinta dai
+ due gradi di libertà meccanici. Quando $r=0$, il ramo del riferimento
+non viene eccitato: la regolazione dipende dal feedback, dai disturbi
+ e dalle condizioni iniziali. Lo stato interno comune può comunque
+produrre comando durante il ritorno all'equilibrio.
 
 \begin{figure}[htbp]\centering
-\resizebox{.96\textwidth}{!}{\input{figures/schemes/two_dof.tex}}
-\caption{Architettura matematica 2-DoF. Il disturbo $d$ è una coppia lato link;
-i due rami del controllore condividono lo stesso stato. Lo schema descrive
-l'interconnessione MATLAB, non un modello Simulink eseguito.}\label{fig:twodof}
+\resizebox{.92\textwidth}{!}{\input{figures/schemes/two_dof.tex}}
+\caption{Canali del controllore 2-DoF ed errore rispetto a $M_or$.
+$K_y$ comprende il segno di retroazione.}\label{fig:twodof}
 \end{figure}
 
-\subsection{Mappe, dimensioni e implementazione}
-La pianta fisica a stati condivisi ha ingressi $[u;d]$ e uscita $q$:
+\subsection{Pianta generalizzata e chiamata utilizzate}
+Il disturbo entra attraverso $B_{d,\rm full}$ nel modello fisico:
 \[
- \dot x=A_{\mathrm{full}}x+B_{\mathrm{full}}u+B_{d,\mathrm{full}}d,
- \qquad q=C_{q,\mathrm{full}}x.
+ \dot x=A_{\rm full}x+B_{\rm full}u+B_{d,\rm full}d,
+ \qquad q=C_{q,\rm full}x.
 \]
-$B_{d,\mathrm{full}}$ agisce sulle accelerazioni dei link e non attraversa gli
-attuatori. Ponendo $S_y=(I-GK_y)^{-1}$ si ricavano
-\[
- T_{qr}=S_yGK_r,\quad T_{qd}=S_yG_d,\quad
- T_{ur}=K_r+K_yT_{qr},\quad T_{ud}=K_yT_{qd}.
-\]
-Il feedback equivalente con convenzione negativa è $-K_y$. La mappa obiettivo è
+Il codice collega questo modello, $M_o$ e i pesi mediante
+\texttt{connect} e \texttt{sumblk('em = q - qm',2)}. La sintesi è
+\begin{lstlisting}
+r.P=hinf_final_2dof_plant(physical,r.W1,r.W2,Mo);
+[r.K,r.CL,r.gamma,r.info]=hinfsyn(r.P,4,2,options);
+\end{lstlisting}
+Ora \texttt{nmeas=4}: due riferimenti e due posizioni;
+\texttt{ncont=2} rimane invariato. $P$ è $8\times6$: quattro
+uscite pesate, quattro segnali per $K$, quattro ingressi esterni
+ e due comandi. $M_o$ è incluso nel problema di sintesi.
+
+Ponendo $S_y=(I-GK_y)^{-1}$, le mappe articolari sono
+$T_{qr}=S_yGK_r$ e $T_{qd}=S_yG_d$; quelle del comando sono
+$T_{ur}=K_r+K_yT_{qr}$ e $T_{ud}=K_yT_{qd}$. L'obiettivo è
 \begin{equation}\label{eq:twodofweighted}
  T_{zw}=\begin{bmatrix}
  W_e(T_{qr}-M_o)&W_eT_{qd}\\W_uT_{ur}&W_uT_{ud}
  \end{bmatrix}.
 \end{equation}
-La pianta generalizzata ha dimensione $8\times6$: quattro uscite prestazionali,
-quattro misure, quattro ingressi esogeni e due comandi. Nel codice
-\begin{verbatim}
-P = hinf_final_2dof_plant(physical,We,Wu,Mo);
-[K,CL,gamma,info] = hinfsyn(P,4,2,options);
-\end{verbatim}
-La funzione usa \texttt{connect} e \texttt{sumblk('em = q - qm',2)}.
-La misura diretta del riferimento può richiedere regolarizzazione nel solver;
-per questo stabilità e norma sono ricontrollate sulla pianta originale.
-Non si applica \texttt{minreal}.
+La prima colonna di blocchi riguarda il riferimento, la seconda
+ il disturbo. Norma e poli sono ricontrollati sulla realizzazione
+originale completa, senza \texttt{minreal}. Il controllore selezionato
+ha ordine \FinalOrder\ e norma \FinalGamma.
 
-\subsection{Selezione e interpretazione della norma}
-I candidati devono essere internamente stabili, avere norma propria inferiore
-a uno e picco di comando non superiore a 1.25 volte quello del profilo iniziale
-1-DoF. La selezione confronta poi numero di requisiti temporali falliti,
-violazione massima, overshoot, offset, assestamento, accoppiamento, picco,
-RMS e norma. I target rimangono quelli del Capitolo 6. Nel ranking numerico viene
-conteggiato anche il superamento della soglia diagnostica di accoppiamento
-0.25; questo non introduce un ulteriore vincolo hardware.
+Non confrontiamo questa norma come un miglioramento percentuale
+rispetto al 1-DoF: sono cambiati errore e ingressi esterni.
+$[r;d]$ riunisce numeri in rad e N m senza scale aggiuntive.
+Il confronto delle norme è diretto solo sulla stessa pianta
+generalizzata; fra 1-DoF e 2-DoF confrontiamo anche le stesse
+prove fisiche di tracking e disturbo.
 
-Il controllore selezionato ha ordine \FinalOrder\ e norma \FinalGamma.
-Questo valore non si divide per quello 1-DoF per ottenere un miglioramento
-percentuale: sono cambiati ingressi esogeni, errore penalizzato e modello
-obiettivo. In particolare $[r;d]$ unisce valori numerici in rad e in N m,
-senza ulteriori scale sugli ingressi. Il confronto quantitativo delle norme
-è diretto soltanto fra controllori collegati alla stessa pianta generalizzata.
+\section{Una struttura più semplice con \texttt{hinfstruct}}
+Il controllore di ordine 22 può essere impegnativo da implementare.
+Possiamo imporre una struttura più semplice e verificare il prezzo
+pagato nelle prestazioni? \texttt{hinfstruct} permette di scegliere
+prima una struttura parametrica e ottimizzarne i parametri.
+Non riduce automaticamente il controllore di \texttt{hinfsyn}:
+esegue una sintesi strutturata sullo stesso problema 2-DoF.
 
-\section{Sintesi strutturata con \texttt{hinfstruct}}
-\subsection{Famiglie e variabili libere}
-Sul medesimo problema 2-DoF si considerano un guadagno statico MIMO,
-PI e PID a due gradi di libertà diagonali, e realizzazioni MIMO di ordine
-2, 4 e 6. Per il caso statico si usa \texttt{tunableGain} di dimensione $2\times4$;
-per PI/PID si usano due \texttt{tunablePID2}, riordinando gli ingressi in
-$[r_1,r_2,q_1,q_2]$. La struttura diagonale esclude termini incrociati fra
-i due giunti. Nel PID la derivata è filtrata.
-Per una realizzazione MIMO di ordine $n$ si usa
-\begin{verbatim}
-Kt = tunableSS('Kmimo',n,2,4);
-opts = hinfstructOptions('RandomStart',10, ...
-    'MaxIter',300,'UseParallel',false);
-[CL,gamma,info] = hinfstruct(lft(P,Kt),opts);
-\end{verbatim}
-Le matrici $A_K,B_K,C_K,D_K$ sono regolabili: nel nostro codice $D_K$ non è
-fissata a zero. Una struttura strettamente propria descriverebbe quindi un
-problema diverso. L'ordine degli stati non coincide con il numero di parametri:
-per una realizzazione piena sono $n^2+6n+8$, con ridondanze di rappresentazione.
+Nel repository sono state provate sei famiglie: guadagno statico
+MIMO $2\times4$, due PI diagonali, due PID diagonali con derivata
+filtrata e controllori MIMO di ordine 2, 4 e 6.
+PI e PID usano \texttt{tunablePID2}; i MIMO \texttt{tunableSS}.
+Per i MIMO la matrice diretta $D_K$ è libera. La chiamata
+ letterale per queste famiglie in \path{run_hinf_final_fixed.m} è
+\begin{lstlisting}
+Kt=genss(tunableSS('Kmimo',str2double(extractAfter(name,2)),2,4));
+[~,f.bestObjective,f.info]=hinfstruct(lft(q.P,Kt),opts);
+\end{lstlisting}
+Il nome SS2/SS4/SS6 determina il numero di stati. Ogni famiglia
+usa un avvio iniziale e dieci casuali, con seed esplicito.
+Si controllano stabilità interna, norma e risposte di ogni
+candidato; gli avvii non dimostrano un minimo globale.
 
-\subsection{Ottimizzazione locale e verifica degli avvii}
-Ogni famiglia usa undici avvii, uno iniziale e dieci casuali, con seed
-$20260918+j$ per la famiglia $j$. L'obiettivo è non convesso e non liscio:
-avvii multipli riducono la dipendenza dall'inizializzazione, ma non provano
-l'ottimalità globale. Si estraggono i blocchi regolati e si verificano
-stabilità interna e norma sul modello originale. I candidati instabili o
-non validi non vengono promossi sulla base del solo valore restituito dal solver.
-
-\begin{table}[H]\centering\small
+\begin{table}[htbp]\centering\small
 \input{generated/hinf_final_fixed.tex}
-\caption{Avvii strutturati sullo stesso problema 2-DoF. NS indica stabilità
-nominale; NP richiede anche norma verificata minore di uno.}
+\caption{Esiti dei 66 avvii salvati. NS indica stabilità nominale;
+NP stabilità e norma verificata minore di uno.}
 \end{table}
+Statico e PI non hanno chiusure stabili nella campagna, senza
+ dimostrarne l'impossibilità assoluta. Il PID ha un candidato
+ di ordine 4 con norma 0.800946. Il minimo ordine osservato
+con NP soddisfatta è 2, con norma 0.682190, ma overshoot massimo
+22.8\% e accoppiamento circa 0.386. L'ordine 8 era previsto come
+possibile estensione e non è stato eseguito.
 
-Il minimo ordine osservato con NP positiva è \FinalMinOrder, con norma circa
-0.682190. L'ordine 8 non è stato eseguito, perché l'obiettivo della ricerca di
-una struttura semplice con norma inferiore a uno era già raggiunto.
-Il candidato di ordine 2 presenta tuttavia overshoot circa 22.8\% e
-accoppiamento massimo circa 0.386: non rispetta tutte le specifiche temporali.
-Non viene dunque assunto come sostituto del controllore robusto.
-\input{generated/organic_structured_metrics.tex}
+La semplificazione peggiora l'indice rispetto al full-order,
+pur lasciandolo inferiore a uno per questi candidati.
+L'ordine 4 ha tracking più rapido; il PID annulla l'offset DC
+del disturbo nominale ma ha un transitorio più lento.
+Alle strutture non è accreditata una validazione robusta o
+non lineare equivalente a quella del controllore selezionato.
 
-\section{Confronto sul protocollo comune e limiti}
+\section{Logica del tuning: dall'errore unico al model following}
+Riassumiamo i passaggi che spiegano la scelta, lasciando gli
+altri tentativi e il limite inferiore diagnostico nel codice
+ e nell'Appendice~\ref{app:matlab}.
+\begin{enumerate}
+\item Configurazione iniziale 1-DoF $(2,0.20,4,0.003,80)$:
+stabile, norma 0.862267, ma overshoot fino a 129.9\%, errore
+statico fino a 17.1\% e picco di comando 13.26 N m.
+\item Fra 21 profili predefiniti si seleziona
+$(2,0.15,3,0.003,80)$. La richiesta pesata è più precisa,
+ma rimangono norma 0.953412, overshoot 125.3\% ed errore
+statico massimo 14.2\%.
+\item La modifica principale è separare riferimento e feedback
+con $M_o$ nel problema 2-DoF. A pesi invariati si confrontano
+ i tre modelli desiderati con $\omega_M=2,3,4$ rad/s.
+\item La configurazione finale usa $\omega_M=4$, scelta considerando
+stabilità, prestazione pesata, violazioni temporali e comando.
+Overshoot nullo e picco 0.868 N m migliorano il tracking, ma
+$T_s=1.46$ s resta sopra il target originario di 0.8 s.
+\end{enumerate}
+La selezione è finita e riproducibile, non un ottimo globale.
+La soglia di confronto sul picco è 1.25 volte quello iniziale.
+Gli indicatori diagnostici più permissivi del codice non
+sostituiscono le specifiche M5. In questa revisione non
+abbiamo ritoccato pesi, target o controllori.
 
-\begin{table}[H]\centering\small
-\resizebox{\textwidth}{!}{\input{generated/hinf_final_tracking.tex}}
-\caption{Massimi sui due gradini separati da $5^\circ$. $T_s$ in s, errore
-statico relativo e cross adimensionali, picco e RMS in N m. RMS su 12 s.
-Le norme 1-DoF e 2-DoF appartengono a problemi diversi.}\label{tab:hinfcomparison}
+\section{Confronto finale dei controllori \texorpdfstring{$H_\infty$}{H infinity}}
+\label{sec:hinfconclusions}
+\subsection{Risultati nominali sullo stesso protocollo}
+La tabella riunisce risultati salvati. Il tracking usa due gradini
+separati da $5^\circ$ a stato iniziale nullo; il disturbo usa
+0.5 N m su ciascun link in due prove separate. Si riportano i
+massimi sulle due prove. $T_s$ usa una fascia del 2\% attorno
+al valore finale; l'errore statico rispetto al gradino è valutato
+separatamente. Un transitorio assestato può quindi conservare offset.
+
+\begin{table}[htbp]\centering\small
+\resizebox{\textwidth}{!}{\input{generated/didactic_hinf_comparison.tex}}
+\caption{Confronto H-infinity. $e_{ss}$ è l'errore relativo di tracking;
+Picco $u$ è il comando massimo nel tracking. La prima riga usa le
+metriche di \texttt{hinfsyn}, con mappe equivalenti a \texttt{mixsyn}
+entro la tolleranza verificata. Le norme 1-DoF e 2-DoF appartengono
+a problemi diversi. Statico e PI non hanno candidati stabili.}\label{tab:hinfcomparison}
 \end{table}
-
-L'assestamento usa una fascia del 2\% dell'ampiezza attorno al valore finale;
-l'errore statico è valutato separatamente. I due profili 1-DoF di riferimento
-hanno parametri $(2,0.20,4,0.003,80)$ e $(2,0.15,3,0.003,80)$.
-Entrambi sono stabili e soddisfano il vincolo pesato, ma mostrano overshoot
-superiore al 100\%. Il 2-DoF elimina l'overshoot nominale e mantiene il comando
-sotto 1 N m nei gradini, con assestamento massimo 1.46 s contro il target 0.8 s.
-Il requisito temporale resta quindi non soddisfatto.
-
-\input{generated/organic_hinf_diagnostics.tex}
-Le risposte in frequenza completano le metriche: la sensibilità $S_y$ e
-$(-K_y)S_y$ descrivono il solo feedback, mentre la prestazione 2-DoF è la
-mappa completa~\eqref{eq:twodofweighted}. Non si attribuisce al 2-DoF una banda
-scalare di tracking a partire dalla sola $S_y$; le due direzioni MIMO e il
-modello obiettivo devono essere considerati esplicitamente.
+Il 1-DoF chiarisce la sensibilità mista, ma non soddisfa il tracking.
+Il 2-DoF completo ha overshoot nullo, errore statico massimo circa
+0.517\%, accoppiamento circa 0.0142 e comando RMS massimo
+0.585 N m su 12 s. Rimane troppo lento rispetto al target.
+Nessuno dei rappresentanti strutturati soddisfa insieme tutti
+ i target temporali. SS4 è più rapido del full-order con norma
+ e comando più elevati; SS6 ha norma migliore di SS4 ma è più lento.
 
 \begin{figure}[p]\centering
 \includegraphics[width=.48\textwidth]{figures/hinf_final/sensitivity.png}
 \includegraphics[width=.48\textwidth]{figures/hinf_final/control_sensitivity.png}
 \includegraphics[width=.72\textwidth]{figures/hinf_final/weighted.png}
-\caption{Sensibilità e sensibilità del comando nel feedback, e canali pesati
-2-DoF. I grafici distinguono diagnostica del feedback e obiettivo di sintesi.}
+\caption{Diagnostica del feedback $S_y$ e $(-K_y)S_y$, e canali
+pesati 2-DoF. L'obiettivo è la mappa completa~\eqref{eq:twodofweighted},
+non la sola sensibilità del feedback.}
 \end{figure}
 \begin{figure}[p]\centering
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/tracking_1dof.png}
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/tracking_2dof.png}
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/command.png}
-\caption{Gradini articolari: profilo iniziale 1-DoF, 2-DoF e comando del 2-DoF.
-Le prove sono lineari MATLAB, con condizioni iniziali nulle.}
+\caption{Gradini nominali MATLAB: configurazione iniziale 1-DoF,
+2-DoF selezionato e relativo comando. Grafici dai risultati consolidati.}
 \end{figure}
-\begin{figure}[htbp]\centering
-\includegraphics[width=.9\textwidth]{figures/hinf_final/disturbance.png}
-\caption{Risposta nominale 2-DoF a una coppia costante di 0.5 N m applicata
-separatamente ai link. Il canale fisico è $G_d$, non quello degli attuatori.}
-\end{figure}
-La scala di 12 N m definita nelle specifiche non è una saturazione.
-Il risultato nominale non garantisce robustezza parametrica né tolleranza al
-rumore: le due verifiche successive sono decisive per la scelta finale.
 
-\input{generated/organic_disturbance_metrics.tex}
+\subsection{Reiezione del disturbo fisico}
+Il 2-DoF completo riduce il picco articolare massimo a 0.0457 rad
+ e l'offset DC a 0.00266 rad. Non lo annulla esattamente: non
+contiene un integratore imposto per questo scopo. Il PID annulla
+l'offset nominale, ma richiede più comando e ha deviazioni maggiori.
+
+\begin{table}[htbp]\centering\small
+\resizebox{\textwidth}{!}{\input{generated/didactic_hinf_disturbance.tex}}
+\caption{Coppia costante di 0.5 N m lato link: massimi sulle due prove,
+orizzonte 12 s, RMS sull'intero orizzonte e offset dal guadagno DC.}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.88\textwidth]{figures/hinf_final/disturbance.png}
+\caption{Risposta nominale 2-DoF alla coppia lato link.
+Il disturbo entra attraverso $G_d$, senza attraversare gli attuatori.}
+\end{figure}
+
+\subsection{Prove non lineari, rumore e RAS}
+Per il controllore completo di ordine 22 sono disponibili le
+prove MATLAB sulle equazioni non lineari SEA. I gradini di
+2, 5 e 8 gradi confermano overshoot nullo e assestamento circa
+1.46 s. A 5 gradi gli errori relativi sono circa 0.518\% e
+0.248\%, con picco di comando 0.868 N m. L'accordo locale
+non rende soddisfatto il target di assestamento.
+
+La prova di rumore evidenzia un limite più grave: il comando
+raggiunge circa 5685 N m, con RMS 118.2 N m. È l'esito della
+sequenza encoder salvata senza saturazioni, non un comando
+fisicamente erogabile. Il piccolo picco nel tracking privo
+ di rumore non basta a valutare gli attuatori.
+
+Anche la regione di attrazione stimata è limitata: convergono
+27 dei 285 punti esplorati, con raggio massimo circa 6.98 gradi
+ e minimo risolto zero. In alcune direzioni la ricerca a risoluzione
+ di un grado non trova un punto convergente; non significa regione
+locale vuota. Si perturbano le posizioni con $\delta\theta=\delta q$,
+velocità e stato del controllore nulli, nel box $\pm60^\circ$.
+Il comando massimo nei casi convergenti è circa 61.1 N m.
+È una sezione empirica senza saturazione, non una regione operativa
+certificata. La verifica numerica Lyapunov del candidato fallisce
+ e non viene accreditata come certificato.
+
+I protocolli completi sono nel Capitolo 10. Le prove usano MATLAB;
+i tre originali Simulink hanno limiti di compatibilità e collegamento
+ documentati e non validano questo controllore.
+Abbiamo quindi un buon comparatore nominale 2-DoF e strutture
+più semplici con compromessi misurabili. Restano assestamento
+lento, sensibilità al rumore e una RAS empirica ristretta.
+Passiamo ora alla verifica rispetto alle incertezze dei parametri.

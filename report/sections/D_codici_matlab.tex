@@ -1,0 +1,195 @@
+\chapter{Principali codici MATLAB del progetto}\label{app:matlab}
+Questa appendice raccoglie i passaggi necessari per leggere e riprodurre
+il metodo, senza riportare plotting e salvataggi ripetitivi.
+Ogni listato è incluso direttamente dal file indicato: non è una
+riscrittura del codice. Gli estratti richiedono gli argomenti, i dati
+e le funzioni del file completo; non sono script autonomi da incollare
+ed eseguire in sequenza.
+
+Per i Capitoli 8--9 la fonte corrente è la campagna
+\path{analysis/run_hinf_final_*.m} e i dati in
+\path{results/data/hinf_final_coherent}. Gli script didattici
+\path{progetto_hinf.m} e i dataset M9--M14 nella radice di
+\path{results/data} descrivono anche configurazioni precedenti:
+non ne trasferiamo pesi, ordini e risultati alla campagna finale.
+Le verifiche che non ripetono le sintesi sono nell'Appendice C.
+
+
+\section{Parametri, equilibrio e linearizzazione}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/parameters/sea_params_nominal.m}\par\noindent\textit{Scopo.} Definisce i parametri meccanici nominali centralizzati.
+
+\lstinputlisting[firstline=6,lastline=13]{../src/parameters/sea_params_nominal.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/model/sea_static_equilibrium.m}\par\noindent\textit{Scopo.} Calcola posizione dei motori e coppia statica per la postura assegnata. Nel progetto si passa $\bar q=[\pi/2;0]$.
+
+\lstinputlisting[firstline=10,lastline=13]{../src/model/sea_static_equilibrium.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/model/sea_linearize_static_equilibrium_analytic.m}\par\noindent\textit{Scopo.} Costruisce i blocchi del Jacobiano statico. La stessa funzione accetta parametri numerici o incerti, conservando le dipendenze delle equazioni SEA.
+
+\lstinputlisting[firstline=18,lastline=38]{../src/model/sea_linearize_static_equilibrium_analytic.m}\end{minipage}
+
+\section{Attuatori e modello nominale a 14 stati}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/actuators/build_nominal_actuator.m}\par\noindent\textit{Scopo.} Combina il secondo ordine con il ritardo approssimato tramite Padé del primo ordine. I valori nominali sono 40 rad/s, 0.8 e 15 ms.
+
+\lstinputlisting[firstline=11,lastline=21]{../src/actuators/build_nominal_actuator.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/model/build_m3_full_plant.m}\par\noindent\textit{Scopo.} Collega gli otto stati meccanici ai sei dei due attuatori. Mantiene le viste delle quattro posizioni misurate e delle sole due posizioni articolari.
+
+\lstinputlisting[firstline=7,lastline=18]{../src/model/build_m3_full_plant.m}\end{minipage}
+
+\section{Costruzione delle incertezze}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/uncertainty/build_uncertain_mechanical_plant.m}\par\noindent\textit{Scopo.} Crea uno scalare reale soltanto per i parametri selezionati nella tabella centrale; gli altri restano nominali. La tabella corrente assegna il 10\% a $k_1,k_2,J_{m1}$.
+
+\lstinputlisting[firstline=60,lastline=65]{../src/uncertainty/build_uncertain_mechanical_plant.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/uncertainty/build_m4_uncertain_plant.m}\par\noindent\textit{Scopo.} Inserisce le due incertezze dinamiche indipendenti tramite l'inviluppo $W_I$. Gli intervalli della famiglia attuativa sono condensati in questi blocchi.
+
+\lstinputlisting[firstline=7,lastline=14]{../src/uncertainty/build_m4_uncertain_plant.m}\end{minipage}
+
+\section{LQR, filtro di Kalman e controllore LQG}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/lqg/search_lqr_weights_m6.m}\par\noindent\textit{Scopo.} Costruisce il costo del candidato, calcola il feedback LQR e il guadagno statico sul riferimento. La selezione finale deriva dalla ricerca e dalle verifiche M6, non dal solo frammento.
+
+\lstinputlisting[firstline=56,lastline=65]{../controllers/lqg/search_lqr_weights_m6.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/lqg/design_kalman_m6.m}\par\noindent\textit{Scopo.} Calcola Kalman con disturbi lato link, errore del comando e quattro misure encoder. Le scale sono ipotesi progettuali, non dati sperimentali.
+
+\lstinputlisting[firstline=15,lastline=24]{../controllers/lqg/design_kalman_m6.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/lqg/build_lqg_no_integrator.m}\par\noindent\textit{Scopo.} Combina feedback e osservatore nel controllore senza integratore. Gli ingressi sono due riferimenti e quattro misure.
+
+\lstinputlisting[firstline=28,lastline=31]{../controllers/lqg/build_lqg_no_integrator.m}\end{minipage}
+
+\section{LQRI con osservatore e integratore dell'errore}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqri.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
+
+\lstinputlisting[firstline=17,lastline=34]{../analysis/progetto_lqri.m}\end{minipage}
+
+\section{Pesi, sensibilità mista e sintesi 1-DoF}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/hinf/hinf_revision_weights.m}\par\noindent\textit{Scopo.} Costruisce i pesi dai cinque parametri del profilo; \texttt{c.alpha=6}. Il profilo finale è $(2,0.15,3,0.003,80)$.
+
+\lstinputlisting[firstline=3,lastline=5]{../controllers/hinf/hinf_revision_weights.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_nominal.m}\par\noindent\textit{Scopo.} Esegue le due sintesi 1-DoF sugli stessi pesi e scrive il controllore equivalente con ingressi separati $[r;q]$. Le verifiche successive confrontano mappe, norme e poli.
+
+\lstinputlisting[firstline=27,lastline=30]{../analysis/run_hinf_final_nominal.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/hinf/hinf_revision_plant.m}\par\noindent\textit{Scopo.} Costruisce esplicitamente $P$ con errore $r-q$, due uscite pesate e due segnali per il controllore.
+
+\lstinputlisting[firstline=3,lastline=10]{../controllers/hinf/hinf_revision_plant.m}\end{minipage}
+
+\section{Pianta 2-DoF, modello desiderato e partizioni del controllore}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_nominal.m}\par\noindent\textit{Scopo.} Definisce il modello di riferimento criticamente smorzato. I tre valori di frequenza provati sono 2, 3 e 4 rad/s.
+
+\lstinputlisting[firstline=66,lastline=67]{../analysis/run_hinf_final_nominal.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/hinf/hinf_final_2dof_plant.m}\par\noindent\textit{Scopo.} Collega modello fisico, $M_o$, $W_e$ e $W_u$ con errore $q-q_m$. Espone $[r;d;u]$ in ingresso e $[z_e;z_u;r;q]$ in uscita.
+
+\lstinputlisting[firstline=4,lastline=11]{../controllers/hinf/hinf_final_2dof_plant.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_nominal.m}\par\noindent\textit{Scopo.} Sintetizza il controllore con quattro ingressi e due comandi; riferimento e feedback sono progettati insieme.
+
+\lstinputlisting[firstline=71,lastline=72]{../analysis/run_hinf_final_nominal.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/hinf/hinf_final_evaluate.m}\par\noindent\textit{Scopo.} Partiziona $B_K,D_K$ nei canali $r$ e $q$, mantenendo $A_K,C_K$ condivise. La matrice chiusa verifica il segno $u=K_rr+K_yq$ e la stabilità interna senza cancellazioni.
+
+\lstinputlisting[firstline=3,lastline=9]{../controllers/hinf/hinf_final_evaluate.m}\end{minipage}
+
+\section{Sintesi strutturata sullo stesso problema}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_fixed.m}\par\noindent\textit{Scopo.} Definisce le famiglie statico, PI, PID e MIMO a ordine assegnato, con undici avvii e seed per famiglia. Le verifiche di ciascun risultato seguono nel file completo.
+
+\lstinputlisting[firstline=15,lastline=27]{../analysis/run_hinf_final_fixed.m}\end{minipage}
+
+\section{Pianta incerta, analisi e sintesi robusta correnti}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/hinf/hinf_final_uncertain.m}\par\noindent\textit{Scopo.} Preserva le proprietà incerte della meccanica e l'oggetto dinamico degli attuatori, aggiungendo il disturbo fisico lato link. Usare solo le matrici nominali eliminerebbe parte delle incertezze.
+
+\lstinputlisting[firstline=4,lastline=11]{../controllers/hinf/hinf_final_uncertain.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_robust.m}\par\noindent\textit{Scopo.} Prepara le opzioni della singola campagna D--K e chiama \texttt{musyn} con le stesse porte del 2-DoF nominale.
+
+\lstinputlisting[firstline=23,lastline=30]{../analysis/run_hinf_final_robust.m}\end{minipage}
+
+Le opzioni salvate sono: cinque iterazioni, \texttt{TargetPerf=0},
+\texttt{TolPerf=0.01}, \texttt{MixedMU='on'}, \texttt{FullDG=[true true]},
+\texttt{FitOrder=[5 2]}, griglia di 1201 frequenze da $10^{-3}$ a
+$10^4$ rad/s, scaling automatico, regolarizzazione e limitazione
+del guadagno attivi, \texttt{RandomStart=0}, \texttt{UseParallel=false},
+\texttt{MinDecay=1e-7}, \texttt{MaxFrequency=Inf}, seed 20260918.
+\texttt{FitOrder} limita il fit degli scaling, non l'ordine finale di $K$.
+
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_robust.m}\par\noindent\textit{Scopo.} A controllore fissato ricalcola nominale, struttura LFT e margini RS/RP sulla pianta originale. La funzione successiva conserva l'intervallo RP invertito e ne registra l'esito non validato.
+
+\lstinputlisting[firstline=47,lastline=51]{../analysis/run_hinf_final_robust.m}\end{minipage}
+
+\section{Calcolo diretto di mussv: procedura delle analisi precedenti}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/robust/analyze_m12_manual_mu.m}\par\noindent\textit{Scopo.} Calcola i limiti di $\mu$ per il ritorno dell'incertezza su una griglia fissata. È una funzione delle analisi M12 precedenti, non la fonte dei margini finali di ordine 22 e 78. Un picco campionato non certifica da solo tutto l'asse delle frequenze.
+
+\lstinputlisting[firstline=11,lastline=15]{../analysis/robust/analyze_m12_manual_mu.m}\end{minipage}
+
+\section{Campioni comuni e verifica Monte Carlo}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/monte_carlo/generate_m16_uncertainty_samples.m}\par\noindent\textit{Scopo.} Genera la sequenza riproducibile M16, con seed 20260826 e 40 campioni. Lo stato del generatore è preservato; il file completo controlla range, norme e replay.
+
+\lstinputlisting[firstline=9,lastline=12]{../analysis/monte_carlo/generate_m16_uncertainty_samples.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_monte_carlo.m}\par\noindent\textit{Scopo.} Ricarica e verifica i campioni comuni prima di valutarli con i controllori finali. Le configurazioni dei vecchi controllori nel file M16 non sono adottate come ordini dei nuovi controllori.
+
+\lstinputlisting[firstline=11,lastline=13]{../analysis/run_hinf_final_monte_carlo.m}\end{minipage}
+
+\section{Dinamica non lineare e collegamento con il controllore}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{src/model/sea_nonlinear_rhs_with_link_disturbance.m}\par\noindent\textit{Scopo.} Valuta le otto equazioni meccaniche con coppia motore e disturbo positivo sulle accelerazioni dei link. Il caso senza disturbo è in \path{sea_nonlinear_rhs.m}.
+
+\lstinputlisting[firstline=16,lastline=27]{../src/model/sea_nonlinear_rhs_with_link_disturbance.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/nonlinear/simulate_hinf_final_nonlinear.m}\par\noindent\textit{Scopo.} Collega gli otto stati SEA, i sei stati attuativi e lo stato condiviso di $K$. Le posizioni misurate sono incrementali e possono contenere il rumore salvato; il simulatore usa \texttt{ode23t}.
+
+\lstinputlisting[firstline=34,lastline=39]{../analysis/nonlinear/simulate_hinf_final_nonlinear.m}\end{minipage}
+
+La RAS nominale è calcolata da
+\path{analysis/run_hinf_final_ras.m}, che richiama
+\path{analysis/ras/estimate_m15_robust_ras.m} con lo stesso simulatore,
+box, risoluzione e criteri del protocollo dichiarato. La chiamata
+usa i controllori salvati e produce una sezione empirica, non
+una certificazione globale. I risultati di questa relazione
+non richiedono nuove ricerche RAS per essere letti o verificati.
+
+
+\section{Formule di connessione e diagnosi del limite inferiore}
+
+Le due LFT usate nei capitoli hanno le forme
+\begin{equation}\label{eq:lowerlft}
+ F_l(P,K)=P_{11}+P_{12}K(I-P_{22}K)^{-1}P_{21},
+\end{equation}
+\begin{equation}\label{eq:upperlft}
+ F_u(N,\Delta)=N_{22}+N_{21}\Delta(I-N_{11}\Delta)^{-1}N_{12}.
+\end{equation}
+La prima chiude $u=Ky_K$ sulle porte inferiori; la seconda chiude
+$w_\Delta=\Delta v_\Delta$ sulle porte superiori.
+Nel codice \texttt{lft(Delta,M)} ricostruisce la seconda connessione.
+
+Per la diagnosi 1-DoF, $S+GKS=I$ e $X=KS$.
+A una frequenza fissata, con pesi scalari replicati
+$a=|W_{1,s}|$, $b=|W_{2,s}|>0$, minimizzare
+$a^2\|v-Gx\|^2+b^2\|x\|^2$ per una direzione unitaria $v$
+fornisce il limite inferiore
+\[
+ \left\|\begin{bmatrix}W_1S\\W_2KS\end{bmatrix}\right\|_2
+ \ge \frac{ab}{\sqrt{b^2+a^2\sigma_{\min}(G)^2}}.
+\]
+Si usa il valore singolare minimo, senza invertire $G$.
+Il massimo sulla griglia è una diagnosi di richieste troppo severe:
+non costruisce un controllore causale stabilizzante e non dimostra
+la fattibilità quando è minore di uno. Il calcolo è in
+\path{controllers/hinf/hinf_revision_lower_bound.m}, verificato
+dai sette test in \path{tests/hinfLowerBoundTest.m}.

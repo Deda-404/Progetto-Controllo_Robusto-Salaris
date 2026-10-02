@@ -4,6 +4,21 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Semplificazione H∞/µ e appendice MATLAB — 2026-10-02
+
+- Riscritti i capitoli 8–9 con spiegazione progressiva di pesi, pianta
+  generalizzata, Mo, sintesi 1-/2-DoF, strutture e robustezza.
+- Aggiunti due schemi TikZ, tre tabelle dai dati salvati e appendice D:
+  27 estratti letterali, 210 righe MATLAB, provenienza registrata.
+- Conservati capitoli 1–7, controllori, sorgenti MATLAB, dati, SLX e
+  presentazione; distinti risultati correnti e campagne precedenti.
+- Relazione di 74 pagine: tre passaggi pdflatex, audit PASS senza warning
+  LaTeX finali; controllo visivo delle parti modificate e degli indici.
+- 20/20 controlli MATLAB esistenti PASS (sottoinsieme della suite precedente),
+  senza nuove sintesi, analisi robuste, campagne Monte Carlo o RAS.
+- Base origin/main 8ca8e7e con PR #33 già integrata; nuova branch dedicata,
+  nessun merge automatico. Resoconto ed evidenze in docs/didactic_review.
+
 ### Pesi diretti H-infinity, LQR e LQRI — 2026-09-16
 
 - Spostati i pesi mixed-sensitivity dal Capitolo 6 al §8.2; nuova figura

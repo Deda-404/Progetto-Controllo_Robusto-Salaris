@@ -2214,3 +2214,24 @@ Backup completo esterno verificato prima delle rimozioni; conservate copie esatt
 Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
 
 Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.
+
+## 2026-10-02 — Revisione didattica di H-infinity, mu e codici
+
+Decisione implementata su richiesta: migliorare esposizione e tracciabilità
+senza modificare il problema scientifico. I capitoli 1–7, MATLAB, controllori,
+pesi, dati, incertezze e SLX rimangono invariati. Alternativa esclusa: cambiare
+la sintesi per uniformarla al riferimento dei colleghi o rilanciare campagne
+costose per una revisione editoriale. Drive resta riferimento in sola lettura.
+
+Il capitolo 8 separa interpretazione, sintesi e conclusioni nominali; il 9
+segue incertezze/Delta/N-Delta/mu/RS/RP/musyn. Mo è il modello desiderato del
+costo; il feedback usa il segno incorporato in Ky e gli stati sono condivisi.
+Appendice D aggiuntiva, preservando A–C: estratti letterali inclusi dai .m,
+con provenienza e contesto, anziché copiare interi script.
+
+Fonti finali: analysis/run_hinf_final_*.m e results/data/hinf_final_coherent.
+Il mussv storico resta distinto; robstab/robgain sono i comandi effettivi.
+RP Hinf non validata numericamente resta esclusa da RS; nessun estremo scambiato.
+Conseguenze: maggiore leggibilità, nessuna nuova garanzia scientifica.
+Gate editoriale PASS/COMPLETE: PDF 74 pagine, 20/20 test mirati esistenti PASS.
+Base origin/main 8ca8e7e con PR #33 già integrata; nuova branch dedicata.

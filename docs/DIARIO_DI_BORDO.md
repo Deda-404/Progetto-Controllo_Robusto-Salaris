@@ -2843,3 +2843,39 @@ Backup completo esterno verificato prima delle rimozioni; conservate copie esatt
 Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
 
 Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.
+
+## 2026-10-02 — Semplificazione H-infinity/mu e appendice MATLAB
+
+Richiesta: intervenire direttamente sul repository fino a commit e push,
+preservando risultati e metodo. Analizzati inventario, traccia, decisioni,
+LaTeX, MATLAB, dati e figure. Consultato soltanto il PDF Drive pertinente
+in sola lettura. Checkout iniziale pulito; fetch e nuova branch
+codex/semplificazione-hinf-mu-appendice da origin/main 8ca8e7e, che include
+la PR #33. Il repository vuoto nel percorso OneDrive non è stato usato.
+
+Riscritti capitoli 8–9; aggiunti schemi pianta generalizzata a due pannelli
+e N-Delta, tre tabelle dai JSON salvati e appendice D (27 estratti letterali,
+210 righe MATLAB). Distinti problemi 1-/2-DoF, segno Ky, fonti correnti/storiche,
+120 attuatori/40 impianti, gamma/RS/RP. Conservati esiti negativi, intervallo
+RP invertito non validato, rumore, RAS e limiti Simulink. Nessuna modifica
+ai capitoli 1–7, alla presentazione o ai file scientifici.
+
+Verifica MATLAB R2025b: hinfFinalCoherenceTest 6/6, hinfFinalDownstreamTest
+5/5, organicReviewTest 9/9; totale 20/20 PASS. Sottoinsieme dei 105 precedenti,
+nessuna suite globale nuova. Incluse due piccole prove non lineari locali;
+nessuna sintesi, ricerca robusta, campagna Monte Carlo o RAS rilanciata.
+CSV e manifest in docs/didactic_review. Nessun test aggiunto.
+
+Prima bozza LaTeX fallita per path in didascalia; corretta prima della build
+finale. Migliorati schema N-Delta e impaginazione dei listati dopo controllo
+visivo. tools/build_m18_latex.ps1 -ReportOnly: tre passaggi pdflatex, 74 pagine,
+zero errori/riferimenti irrisolti/overfull/destinazioni duplicate; nessun
+warning LaTeX finale. Resta il messaggio launcher Perl sulla locale C.UTF-8,
+con fallback Windows italiano. Controllati visivamente PDF 3–7, 38–56, 67–74.
+Verifica delle 24 domande di leggibilità e integrità Git scientifica PASS.
+
+Resoconto completo in docs/RESOCONTO_SEMPLIFICAZIONE_HINF_MU_APPENDICE.md.
+README, changelog, decisioni e stato aggiornati prima del commit.
+Quality gate editoriale PASS/COMPLETE; conformità globale PARTIAL invariata.
+Pubblicazione richiesta sul solo branch dedicato; nessun merge su main,
+force push, eliminazione di branch o modifica dei riferimenti esterni.
