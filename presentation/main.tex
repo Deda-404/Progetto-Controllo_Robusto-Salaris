@@ -28,6 +28,7 @@
 \input{../report/generated/m18_values.tex}
 \input{../report/generated/revision_values.tex}
 \input{../report/generated/hinf_final_values.tex}
+\input{generated/coherent_review_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
 \subtitle{Modello, sintesi nominale e robustezza strutturata}
 \author{Alessio de Dato \and Valerio Rebechi}
@@ -123,6 +124,7 @@ A^TX+XA-XBR^{-1}B^TX+Q=0,\qquad K=R^{-1}B^TX
 
 \begin{frame}{LQG: quattro encoder e stato stimato}
 \small
+\good{LQG = LQR + filtro di Kalman.}
 
 \[
 y=[q;\theta]+v,\quad
@@ -144,24 +146,26 @@ Covarianze assunte, non identificate.
 
 \end{frame}
 
-\begin{frame}{LQRI: memoria dell’errore misurato}
+\begin{frame}{LQGI: memoria dell’errore misurato}
 \small
+\good{LQGI = LQR + Kalman + integratore.}
 
 \[
 \dot\xi=r-q_{\rm mis},\qquad u=-K_x\hat x-K_i\xi
 \]
 \begin{columns}[T]
-\column{.40\textwidth}
+\column{.36\textwidth}
 \small
 14 stati fisici, 14 stimati, 2 integratori.
 
 $Q_i=200I_2$, $R=0.10I_2$.
 
 Offset DC nullo per coppia costante nel modello lineare.
-\column{.58\textwidth}
-\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{../report/figures/m7_lqg_lqri_constant_disturbance.png}
+\column{.62\textwidth}
+\includegraphics[width=\linewidth,height=.42\textheight,keepaspectratio]{../report/figures/lqgi/disturbance_for_slides.png}
 \end{columns}
 \bad{Tracking lento: $T_s$ peggiore 5.046 s. Nessuna saturazione o anti-windup.}
+\par\small Grafico MATLAB non lineare: stima e integratore inizialmente nulli.
 
 \end{frame}
 
@@ -179,7 +183,7 @@ W_2=0.003\,\frac{s+80}{s/6+80}I_2,\qquad W_3=[]
 \begin{itemize}
 \item $W_1$: errore a bassa frequenza; $W_2$: sforzo di controllo.
 \item 21 profili finiti: stabilità, norma e metriche temporali.
-\item \texttt{mixsyn} e \texttt{hinfsyn}: stesso obiettivo, pianta aumentata verificata.
+\item $\gamma<1$ verifica la norma pesata, senza imporre un limite all'overshoot.
 \end{itemize}
 \bad{I profili 1-DoF con $\gamma<1$ conservano overshoot superiore al 100\%.}
 
@@ -193,7 +197,8 @@ W_2=0.003\,\frac{s+80}{s/6+80}I_2,\qquad W_3=[]
 u=K_rr+K_yq,\quad z=[W_e(q-M_or);W_uu],\quad w=[r;d]
 \]
 \small $M_o=16/(s^2+8s+16)I_2$; pianta $8\times6$, \texttt{hinfsyn(P,4,2)}.
-\par\good{Sintesi simultanea dei due rami: non un semplice prefiltro.}
+\par\small $\omega_M=2/3/4$: $T_s=2.918/1.944/1.460$ s; picco $u=0.822/0.821/0.868$ N m.
+\par\good{Riferimento e feedback separati; maggiore rapidità con un compromesso sul comando.}
 
 \end{frame}
 
@@ -230,15 +235,16 @@ N\in\mathbb C^{9\times9},\quad N_{11}\in\mathbb C^{5\times5},
 
 \end{frame}
 
-\begin{frame}{Quattro domande: NS, NP, RS, RP}
+\begin{frame}{$\mu$: valore singolare strutturato}
 
 \small
 \begin{columns}[T]
 \column{.54\textwidth}
 \[
-\mu_{\mathcal D}(M)=
-\frac{1}{\min\{\|\Delta\|:\det(I-M\Delta)=0\}}
+\mu_{\boldsymbol\Delta}(H)=
+\frac{1}{\min_{\Delta\in\boldsymbol\Delta}\{\bar\sigma(\Delta):\det(I-H\Delta)=0\}}
 \]
+\footnotesize $H=N_{11}$: ritorno fra le cinque incertezze fisiche.
 \begin{itemize}
 \item NS: stabilità nominale.
 \item NP: norma nominale $<1$.
@@ -250,7 +256,7 @@ N\in\mathbb C^{9\times9},\quad N_{11}\in\mathbb C^{5\times5},
 \par $\Delta_p$: blocco fittizio di prestazione, non un parametro fisico.
 \end{columns}
 \par\medskip
-\good{Si calcolano limiti su $\mu$: margine inferiore $>1$ implica la proprietà nel modello.}
+\good{\texttt{robstab}: stabilità; \texttt{robgain(CL,1)}: prestazione. Margini diversi da $\mu$.}
 
 \end{frame}
 
@@ -299,7 +305,7 @@ RS/RP & non certificate & non soddisfatte & soddisfatte\\\bottomrule
 \begin{itemize}
 \item $K_\mu$: $T_s=1.522,1.478$ s; errori statici $6.00\%,3.07\%$.
 \item Overshoot nullo e picco circa 0.798 N m nei gradini.
-\item LQRI: reiezione DC del disturbo, con tracking più lento.
+\item LQGI: reiezione DC del disturbo, con tracking più lento.
 \end{itemize}
 \bad{Il superamento dei pesi non equivale al superamento di tutti i target temporali.}
 
@@ -316,7 +322,7 @@ RS/RP & non certificate & non soddisfatte & soddisfatte\\\bottomrule
 \item $H_\infty$: 0/40;
 \item $K_\mu$: 40/40.
 \end{itemize}
-MATLAB non lineare: equilibrio e accordo locale verificati per i due controllori robusti.
+MATLAB non lineare: equilibrio e accordo locale verificati anche per LQGI.
 \column{.56\textwidth}
 \includegraphics[width=\linewidth]{../report/figures/hinf_final/monte_carlo.png}
 \end{columns}
@@ -327,18 +333,18 @@ MATLAB non lineare: equilibrio e accordo locale verificati per i due controllori
 \begin{frame}{Rumore, RAS e Lyapunov: limiti da dichiarare}
 
 \small
-\begin{tabular}{lrr}\toprule
-Prova MATLAB & $H_\infty$ & $K_\mu$\\\midrule
-Picco comando con rumore [N m] & 5685 & 8.12\\
-RMS comando [N m] & 118.2 & 1.934\\
-Punti RAS convergenti & 27/285 & 57/57\\
-Raggio minimo risolto [gradi] & 0 & 60\\
-Residuo Lyapunov & 65.27 (FAIL) & 0.04493\\\bottomrule
+\begin{tabular}{lrrr}\toprule
+Prova MATLAB & LQGI & $H_\infty$ & $K_\mu$\\\midrule
+Picco comando con rumore [N m] & \LqgiNoisePeak & 5685 & 8.12\\
+RMS comando [N m] & \LqgiNoiseRms & 118.2 & 1.934\\
+Punti RAS convergenti & \LqgiRasConvergent/\LqgiRasPoints & 27/285 & 57/57\\
+Raggio minimo risolto [gradi] & \LqgiRasMinimum & 0 & 60\\
+Residuo Lyapunov & non calcolato & 65.27 (FAIL) & 0.04493\\\bottomrule
 \end{tabular}
+\par\footnotesize Rumore: quattro encoder LQGI, due per i controllori robusti; stesso riferimento di 5 gradi.
 \begin{itemize}
-\item Raggio zero: risoluzione della ricerca, non RAS localmente vuota.
-\item $K_\mu$: box esaurito; coppie senza saturazione, fino a 2763 N m.
-\item Livello interno analitico $K_\mu$: $1.066\,10^{-12}$; campionamento non è certificazione.
+\item LQGI e $K_\mu$: box esaurito, senza individuare la frontiera fisica.
+\item Comandi RAS senza saturazioni: LQGI \LqgiRasCommand\ N m; $K_\mu$ 2763 N m.
 \end{itemize}
 
 \end{frame}
@@ -348,13 +354,13 @@ Residuo Lyapunov & 65.27 (FAIL) & 0.04493\\\bottomrule
 \small
 \begin{tabular}{lp{.68\textwidth}}\toprule
 Originale & Stato e completamento manuale\\\midrule
-LQR/LQG & Presente con osservatore; verificare disturbo e rumori.\\
-LQRI & Presente; integratore da collegare a $r-q_{\rm mis}$, rumore di processo da verificare.\\
-H-infinity & Presente a due ingressi; interfaccia incompatibile con il 2-DoF a quattro ingressi.\\
-$K_\mu$, lineare & Modelli originali non disponibili.\\\bottomrule
+LQR/LQG & Lineare e non lineare presenti con osservatore; verificare disturbo e rumori.\\
+LQGI & Due originali: integratore da spostare su $r-q_{\rm mis}$; correggere processo e disturbo.\\
+H-infinity & Due originali a due ingressi; adattare al 2-DoF a quattro ingressi.\\
+$K_\mu$ & Nessun originale del gruppo disponibile.\\\bottomrule
 \end{tabular}
 \par\medskip
-File R2026a: caricamento bloccato in R2025b. Nessuna simulazione originale accreditata.
+Sei file R2026a: caricamento bloccato in R2025b. Istruzioni puntuali sui SID degli originali nel repository.
 \par\medskip
 \bad{La parte Simulink della traccia resta da completare manualmente.}
 
@@ -363,7 +369,7 @@ File R2026a: caricamento bloccato in R2025b. Nessuna simulazione originale accre
 \begin{frame}{Conclusioni: scelta per ruolo e attività residue}
 
 \begin{itemize}
-\item LQG: riferimento nominale; LQRI: reiezione asintotica del disturbo.
+\item LQG: riferimento nominale; LQGI: reiezione asintotica del disturbo.
 \item $H_\infty$: il 2-DoF risolve l'overshoot nominale, ma resta fragile.
 \item $K_\mu$: candidato robusto del modello dichiarato, con ordine elevato e target temporali parziali.
 \item Completare gli originali Simulink e le verifiche richieste.

@@ -4,9 +4,10 @@ function results = audit_original_models
 % non viene avviata su diagrammi con incongruenze gia accertate.
 root=fileparts(fileparts(mfilename('fullpath')));
 addpath(fullfile(root,'simulink'));
-names=["Progetto_LQR_simulink","Progetto_LQRI_simulink","Progetto_Hinf_simulink"];
-kinds=["LQG","LQRI","Hinf"];
-out=fullfile(root,'results/data/organic_review');
+names=["Progetto_LQR_simulink","Progetto_LQRI_simulink","Progetto_Hinf_simulink", ...
+    "LQR_linear_sim","LQRI_linear_sim","Hinf_linear_sim"];
+kinds=["LQG","LQGI","Hinf","LQG","LQGI","Hinf"];
+out=fullfile(root,'results/data/coherent_review');
 if ~isfolder(out),mkdir(out);end
 results=repmat(struct('model','','loaded',false,'compiled',false, ...
     'simulation','NOT RUN','identifier','','diagnostic',''),1,numel(names));

@@ -50,9 +50,19 @@
     "lastline": 31
   },
   {
-    "file": "analysis/progetto_lqri.m",
+    "file": "analysis/progetto_lqgi.m",
     "firstline": 17,
     "lastline": 34
+  },
+  {
+    "file": "analysis/nonlinear/simulate_lqgi_nonlinear.m",
+    "firstline": 61,
+    "lastline": 66
+  },
+  {
+    "file": "analysis/run_hinf_final_nominal.m",
+    "firstline": 90,
+    "lastline": 101
   },
   {
     "file": "controllers/hinf/hinf_revision_weights.m",

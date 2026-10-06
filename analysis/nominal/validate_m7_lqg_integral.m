@@ -1,5 +1,5 @@
 function metrics = validate_m7_lqg_integral
-%VALIDATE_M7_LQG_INTEGRAL Valida tre costi LQRI con il Kalman M6 invariato.
+%VALIDATE_M7_LQG_INTEGRAL Valida tre costi LQGI con il Kalman M6 invariato.
 %   wbarI varia a Q e R M6 fissi. Il punto centrale e illustrativo: stabilita
 %   interna e reiezione DC non sono equiparate alla conformita a tutti i M5.
 
@@ -37,8 +37,8 @@ fundamentalPass = false(numberDesigns, 1);
 
 for index = 1:numberDesigns
     % Q e L provengono dal MAT M6: nessuna nuova sintesi Kalman.
-    design = build_lqri_augmented_cost(m3, m6, manual.WbarI(index));
-    evaluation = evaluate_lqri_candidate(m3, m5, m6, design, config);
+    design = build_lqgi_augmented_cost(m3, m6, manual.WbarI(index));
+    evaluation = evaluate_lqgi_candidate(m3, m5, m6, design, config);
     designs{index} = design;
     evaluations{index} = evaluation;
     stable(index) = evaluation.summary.stable;
@@ -67,7 +67,7 @@ manualComparisonTable = [manual, table(stable, worstSettlingTime, ...
 validationMetrics.status = "PARTIAL";
 if any(fundamentalPass), validationMetrics.status = "COMPLETE_NOMINAL"; end
 validationMetrics.interpretation = ...
-    "LQRI con stato stimato: verifiche nominali, non certificazione robusta";
+    "LQGI con stato stimato: verifiche nominali, non certificazione robusta";
 validationMetrics.designCount = numberDesigns;
 validationMetrics.admissibleCount = sum(fundamentalPass);
 validationMetrics.allStable = all(stable);
@@ -89,7 +89,7 @@ assert(numberDesigns == 3, 'M7:ManualDesignCount', ...
     'M7 must contain exactly three named manual comparisons.');
 assert(validationMetrics.allStable && ...
     validationMetrics.physicalScalesPreserved, 'M7:MathematicalValidity', ...
-    'Una chiusura LQRI e instabile o modifica le scale fisiche M6.');
+    'Una chiusura LQGI e instabile o modifica le scale fisiche M6.');
 assert(validationMetrics.allRejectConstantDisturbance, ...
     'M7:DisturbanceRejection', ...
     'Integral action must reject the declared constant disturbances.');
@@ -103,14 +103,14 @@ save(datasetPath, 'manualComparisonTable', 'designs', 'evaluations', ...
     'validationMetrics', 'statePriorities', 'config', '-v7');
 % L'artifact M7 espone il controllore realmente implementabile a 16 stati.
 illustrativeIndex=config.illustrativeIndex;
-Klqri=evaluations{illustrativeIndex}.Klqri;
+Klqgi=evaluations{illustrativeIndex}.Klqgi;
 Kx=designs{illustrativeIndex}.Kx; Ki=designs{illustrativeIndex}.Ki;
 L=m6.L; Qn=m6.Qn; Rn=m6.Rn;
 save(fullfile(dataDirectory, 'm7_lqg_integral.mat'), ...
-    'Klqri','Kx','Ki','L','Qn','Rn','illustrativeIndex', ...
+    'Klqgi','Kx','Ki','L','Qn','Rn','illustrativeIndex', ...
     'manualComparisonTable', 'validationMetrics', 'config', '-v7');
 
-fprintf('\n=== M7: tre verifiche LQRI, Q e R fissi ===\n');
+fprintf('\n=== M7: tre verifiche LQGI, Q e R fissi ===\n');
 disp(manualComparisonTable(:, {'Tuning', 'WbarI', 'Ru', ...
     'WorstSettlingTime', 'WorstOvershoot', 'DisturbanceOffset', ...
     'FundamentalPass'}));
@@ -140,7 +140,7 @@ for index = 1:height(tableData)
 end
 grid on; box on;
 xlabel('Worst settling [s]'); ylabel('Worst overshoot [%]');
-title('M7 - LQRI: peso integrale diretto a Q e R M6 fissi');
+title('M7 - LQGI: peso integrale diretto a Q e R M6 fissi');
 colorbarHandle = colorbar;
 colorbarHandle.Label.String = 'peak |u| / uScale';
 set_scientific_figure_style(figureHandle);

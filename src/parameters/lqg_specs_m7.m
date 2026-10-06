@@ -1,5 +1,5 @@
 function config = lqg_specs_m7
-%LQG_SPECS_M7 Parametri dichiarati del servo LQRI con Kalman M6.
+%LQG_SPECS_M7 Parametri dichiarati del servo LQGI con Kalman M6.
 %   Tre valori diretti di wbarI isolano il costo integrale a Q e R M6 fissi.
 %   wbarI=200 e illustrativo, non selezionato mediante ottimizzazione.
 
@@ -23,5 +23,5 @@ config.numericStabilityTolerance = m6.numericStabilityTolerance;
 config.antiWindupEnabled = false;
 config.saturationEnabled = false;
 config.status = ...
-    "LQRI nominale: 14 stati stimati e 2 integratori misurati";
+    "LQGI nominale: 14 stati stimati e 2 integratori misurati";
 end

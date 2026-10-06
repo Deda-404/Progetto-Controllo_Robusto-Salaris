@@ -1,4 +1,4 @@
-% Generato da plot_lqri_revision.m; dati della chiusura reale.
+% Generato da plot_lqgi_revision.m; dati della chiusura reale.
 \[\bar w_i=200,\quad Q_i=200 I_2,\quad R=0.1 I_2.\]
 \[K_x=[K_{x,a}\ K_{x,b}].\]
 {\small
@@ -17,7 +17,7 @@
 }
 Residuo relativo CARE: $\num{2.793777e-13}$; residuo del guadagno: $\num{1.3022188e-11}$; residuo della trasformazione di separazione: $\num{2.1806205e-13}$.
 Parte reale dominante della chiusura completa: $\num{-0.821436817}$ s$^{-1}$.
-Il massimo residuo LQRI a 8 s nei due esperimenti vale $\num{0.00017080376}$ rad; non coincide con il valore asintotico.\par
+Il massimo residuo LQGI a 8 s nei due esperimenti vale $\num{0.00017080376}$ rad; non coincide con il valore asintotico.\par
 \begin{table}[htbp]\centering\small
 \begin{tabular}{rrrrr}\toprule
 $\bar w_i$ & $\|K_i\|_2$ & $T_s$ [s] & OS [\%] & picco $u$ [N m] \\
@@ -25,13 +25,13 @@ $\bar w_i$ & $\|K_i\|_2$ & $T_s$ [s] & OS [\%] & picco $u$ [N m] \\
 20 & 14.142 & $\infty$ & 0 & 0.71121 \\
 200 & 44.721 & 5.046 & 0 & 0.82048 \\
 800 & 89.443 & 2.642 & 0 & 0.82184 \\
-\bottomrule\end{tabular}\caption{LQRI: tre pesi integrali diretti a $Q$ e $R=0.1 I_2$ fissi. Gradini di 5 gradi, 8 s; $\infty$ indica mancato assestamento entro 8 s.}\label{tab:lqri-wi}\end{table}
+\bottomrule\end{tabular}\caption{LQGI: tre pesi integrali diretti a $Q$ e $R=0.1 I_2$ fissi. Gradini di 5 gradi, 8 s; $\infty$ indica mancato assestamento entro 8 s.}\label{tab:lqgi-wi}\end{table}
 \begin{table}[htbp]\centering\small
 \begin{tabular}{llrrrr}\toprule
 Controllo & Disturbo & $q_1(\infty)$ & $q_2(\infty)$ & picco $u$ & RMS $u$ \\
 \midrule
 LQG & $d_1$ & 0.0718909 & -0.0280401 & 1.2925 & 0.784522 \\
 LQG & $d_2$ & -0.0269505 & 0.154304 & 1.15671 & 0.571555 \\
-LQRI & $d_1$ & 0 & 0 & 1.29841 & 0.447108 \\
-LQRI & $d_2$ & 0 & 0 & 1.18248 & 0.394729 \\
-\bottomrule\end{tabular}\caption{Disturbi separati da 0.5 N m; posizioni DC in rad, coppie in N m. Picco e RMS su entrambi i comandi negli stessi 8 s.}\label{tab:lqri-disturbi}\end{table}
+LQGI & $d_1$ & 0 & 0 & 1.29841 & 0.447108 \\
+LQGI & $d_2$ & 0 & 0 & 1.18248 & 0.394729 \\
+\bottomrule\end{tabular}\caption{Disturbi separati da 0.5 N m; posizioni DC in rad, coppie in N m. Picco e RMS su entrambi i comandi negli stessi 8 s.}\label{tab:lqgi-disturbi}\end{table}

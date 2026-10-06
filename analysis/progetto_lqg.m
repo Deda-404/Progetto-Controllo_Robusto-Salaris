@@ -286,7 +286,7 @@ assert(abs(rhoNumerico/archivio.risultati{1}.rhoNumerical-1)<1e-5);
 plot_lyapunov_ras(archivio.risultati,radice);
 
 %% 22 - Riepilogo e limiti
-% progetto_lqri.m espone il servo M7 con lo stesso Kalman M6:
+% progetto_lqgi.m espone il servo M7 con lo stesso Kalman M6:
 % Riccati -> Kx/Ki -> xhat e integrale(r-q_mis) -> chiusura a 30 stati.
 % Nessun prefiltro M7; prove nominali, non certificazione robusta.
 disp(m6.trackingMetrics); disp(m6.disturbanceMetrics);

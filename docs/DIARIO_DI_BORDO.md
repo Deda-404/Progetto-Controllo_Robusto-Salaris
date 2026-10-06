@@ -2879,3 +2879,19 @@ README, changelog, decisioni e stato aggiornati prima del commit.
 Quality gate editoriale PASS/COMPLETE; conformità globale PARTIAL invariata.
 Pubblicazione richiesta sul solo branch dedicato; nessun merge su main,
 force push, eliminazione di branch o modifica dei riferimenti esterni.
+
+## 2026-10-06 — Revisione coerente LQGI, H-infinity e mu
+
+Analisi preliminare completa del repository (692 file, 172 sorgenti MATLAB), traccia ufficiale, pipeline, dati salvati e riferimento Drive in sola lettura. Consultati report, 13 script e inventari di 11 MAT dei colleghi; nessun risultato importato. Ritrovati e acquisiti byte per byte tre originali lineari del gruppo. Branch codex/revisione-lqgi-hinf-mu da origin/main 283193e, con PR #34 integrata.
+
+La MATLAB M7 usava già lo stato stimato: la correzione principale riguarda nomenclatura e coerenza delle fonti, non sostituzione con un altro controllore. Nomi attivi LQGI, Kalman M6 e tre coppie di guadagni M7 verificate identiche al baseline. Nuovo simulatore non lineare a 30 stati con integratore sull'errore misurato, quattro encoder e quattro rumori di processo; 6 tracking, 6 disturbi, equilibrio, 3 prove di rumore e ripetizione. RAS: 57/57 punti, box esaurito, picco 240.2349 N m senza saturazioni.
+
+Il confronto iniziale rumoroso con la chiusura lineare ha mostrato discrepanze fino a 0.0071 rad. Corretto il rispetto delle discontinuità ZOH separando gli intervalli di integrazione e usando il hold lineare esatto; ricalcolati i casi e invalidato il checkpoint mediante hash del simulatore. Differenza finale massima 4.6870e-5 rad. Non sono stati modificati guadagni o covarianze per migliorare il risultato.
+
+Mo 2/3/4 ricalcolati dai tre controllori salvati, senza sintesi. Tempi 2.918/1.944/1.460 s, norme 0.0305405/0.0312036/0.0474606: 4 scelto per minore violazione temporale, con peggioramenti espliciti su altri indicatori. Capitoli 7–10 e conclusioni aggiornati; 8.2 spostata dopo il paragrafo richiesto del §8.6.1, figure 8.4/8.6 ridisegnate, Tabella 8.4 riordinata. Capitolo 9 chiarisce mu strutturata, H=N11, robstab e robgain. Slide 6–9, 12, 15–19 aggiornate; 19 slide, 17:45.
+
+112/112 test MATLAB PASS, sette nuovi. Dieci sorgenti LQGI senza segnalazioni Code Analyzer; baseline con due warning preesistenti di crescita array nei vecchi esportatori/RAS. Audit di 85 artifact protetti PASS, incluse fonti robuste e tre originali precedenti. Sei hash SLX PASS; sei load_system FAIL per R2026a su R2025b, simulazioni NOT RUN. Istruzioni manuali puntuali con SID: nessun diagramma sostitutivo, nessuna rinomina definitiva degli originali.
+
+Prima build delle slide interrotta perché la figura dedicata era ancora in esportazione; ricompilata dopo il completamento. Un'etichetta dello schema LQGI sovrapposta ai blocchi è stata rimossa dopo il rendering. Build finali: relazione 83 pagine, presentazione 19; zero errori, riferimenti irrisolti, overflow o destinazioni duplicate. Resta il warning di locale del launcher Perl con fallback Windows, estraneo al documento. Nuovi numeri soltanto da esecuzioni reali; nessuna nuova sintesi robusta o Monte Carlo.
+
+README, changelog, decisioni, stato e resoconto aggiornati prima del commit. Gate scientifico/editoriale PASS/COMPLETE; conformità complessiva PARTIAL per Simulink e requisiti prestazionali. Pubblicazione sul ramo dedicato, senza merge o force push.

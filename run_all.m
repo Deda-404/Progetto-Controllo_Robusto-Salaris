@@ -11,12 +11,12 @@ if isempty(scope) || strcmp(scope,'verify')
         'test_m5_performance_specs.m','test_m6_lqg_no_integrator.m', ...
         'test_m7_lqg_integral.m','hinfLowerBoundTest.m', ...
         'hinfFinalCoherenceTest.m','hinfFinalDownstreamTest.m', ...
-        'organicReviewTest.m'};
+        'organicReviewTest.m','lqgiValidationTest.m'};
     preserveOutputs=preserve_validation_outputs(projectRoot); %#ok<NASGU> cleanup su errore
     testResults=runtests(fullfile(projectRoot,'tests',names));
     clear preserveOutputs
     verification=table(testResults);
-    folder=fullfile(projectRoot,'results/data/organic_review');
+    folder=fullfile(projectRoot,'results/data/coherent_review');
     if ~isfolder(folder),mkdir(folder);end
     save(fullfile(folder,'matlab_tests.mat'),'verification');
     writetable(verification(:,1:5),fullfile(folder,'matlab_tests.csv'));
@@ -25,6 +25,10 @@ elseif strcmp(scope,'originals')
     audit_original_models;
 elseif strcmp(scope,'export')
     export_organic_audit;
+    export_hinf_readable_figures;
+    data=load(fullfile(projectRoot,'results/data/lqgi_validation/validation.mat'));
+    savedRas=load(fullfile(projectRoot,'results/data/lqgi_validation/ras.mat'));
+    export_lqgi_validation(data.result,projectRoot,savedRas.ras);
 else
     error('RunAll:Scope','Usare verify, originals oppure export. Le sintesi richiedono chiamata esplicita.');
 end
