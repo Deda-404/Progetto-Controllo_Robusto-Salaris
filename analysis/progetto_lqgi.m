@@ -1,4 +1,4 @@
-%% 1 - LQRI: LQR con integratore e osservatore di Kalman M6
+%% 1 - LQGI: LQR con integratore e osservatore di Kalman M6
 % Il controllore usa solo encoder: u=-Kx*xhat-Ki*xi, xi_dot=r-q_mis.
 % Lo stato vero entra nella pianta simulata, mai nel feedback implementato.
 clearvars; clc;
@@ -32,7 +32,7 @@ disp('Kx (2x14), Ki (2x2), ru, wbarI:'); disp(Kx); disp(Ki); disp([ru,wbarI]);
 L=m6.L; E=[eye(2),zeros(2)];
 Ak=[A-L*C-B*Kx,-B*Ki;zeros(2,16)];
 Bk=[zeros(14,2),L;eye(2),-E]; Ck=[-Kx,-Ki]; Dk=zeros(2,6);
-assert(norm(Ak-e.Klqri.A,'fro')<1e-12 && norm(Bk-e.Klqri.B,'fro')<1e-12);
+assert(norm(Ak-e.Klqgi.A,'fro')<1e-12 && norm(Bk-e.Klqgi.B,'fro')<1e-12);
 assert(isequal(L,e.L) && isequal(m6.Qn,e.Qn) && isequal(m6.Rn,e.Rn));
 
 %% 5 - Stabilita interna: chiusura reale di ordine 30 e separazione
@@ -48,7 +48,7 @@ fprintf('30 poli stabili; parte reale dominante = %.10g s^-1.\n',max(real(eig(Ac
 %% 6 - Confronto tracciabile: gli esperimenti salvati provengono da M7
 % validate_m7_lqg_integral rigenera M7; l'esportatore riusa la cache.
 % Si distinguono esplicitamente errore DC, residuo a 8 s e target M5.
-plot_lqri_revision;
+plot_lqgi_revision;
 disp(m7.manualComparisonTable);
 fprintf('Stato M7: %s. Nessun certificato robusto o non lineare.\n', ...
     m7.validationMetrics.status);

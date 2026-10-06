@@ -1,4 +1,8 @@
-"""Generate Chapter 8 tables and the review memo from executed MATLAB data."""
+"""Archivio del retuning Hinf precedente, non generatore della consegna corrente.
+
+I dati lqri_r_verification restano una prova storica distinta dalla LQGI M7.
+Per la consegna usare report/build_didactic_tables.py e build_matlab_appendix.py.
+"""
 import csv
 import json
 from pathlib import Path
@@ -72,7 +76,7 @@ def main():
 \label{cap:hinf}
 \section{Obiettivo, perimetro e baseline conservata}
 Questa revisione riguarda esclusivamente M9--M11. Pianta M3, modello
-incerto M4, specifiche generali M5, LQG/LQRI, Kalman e RAS M6--M8
+incerto M4, specifiche generali M5, LQG/LQGI, Kalman e RAS M6--M8
 rimangono congelati. Tutti i precedenti artifact M9/M10/M11 sono conservati
 integralmente; i nuovi risultati sono in una directory separata.
 Il Capitolo 9 e i successivi descrivono la catena storica e non certificano
@@ -492,4 +496,4 @@ di completezza robusta del progetto.
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit('Generatore storico disattivato: usare report/build_didactic_tables.py e report/build_matlab_appendix.py; non sovrascrivere il capitolo corrente.')

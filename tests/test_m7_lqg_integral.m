@@ -28,8 +28,8 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
             testCase.verifySize(d.Aaug,[16,16]);
             testCase.verifySize(d.Kx,[2,14]); testCase.verifySize(d.Ki,[2,2]);
             testCase.verifySize(e.L,[14,4]); testCase.verifySize(e.closedLoop.A,[30,30]);
-            testCase.verifyEqual(order(e.Klqri),16);
-            testCase.verifyEqual(e.Klqri.D,zeros(2,6),'AbsTol',0);
+            testCase.verifyEqual(order(e.Klqgi),16);
+            testCase.verifyEqual(e.Klqgi.D,zeros(2,6),'AbsTol',0);
             testCase.verifyFalse(isfield(e,'Nff'));
             % Il peso integrale e diretto e non conserva una scala implicita.
             testCase.verifyEqual(d.Qi,d.wbarI*eye(2),'AbsTol',0);
@@ -136,7 +136,7 @@ classdef test_m7_lqg_integral < matlab.unittest.TestCase
             paths=["analysis/progetto_lqi.m","controllers/lqg/build_lqi_reference_feedforward.m", ...
                 "controllers/lqg/build_lqi_augmented_cost.m","analysis/nominal/evaluate_lqi_2dof_candidate.m"];
             testCase.verifyFalse(any(isfile(fullfile(testCase.Root,paths))));
-            testCase.verifyTrue(isfile(fullfile(testCase.Root,'analysis','progetto_lqri.m')));
+            testCase.verifyTrue(isfile(fullfile(testCase.Root,'analysis','progetto_lqgi.m')));
         end
     end
 end

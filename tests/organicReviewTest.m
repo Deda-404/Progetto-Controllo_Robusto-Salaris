@@ -15,7 +15,7 @@ classdef organicReviewTest < matlab.unittest.TestCase
             folder=fullfile(t.Root,'simulink/originals');
             m=jsondecode(fileread(fullfile(folder,'manifest.json')));
             files=dir(fullfile(t.Root,'simulink','**','*.slx'));
-            t.verifyEqual(numel(files),3);
+            t.verifyEqual(numel(files),6);
             for k=1:numel(m)
                 f=fopen(fullfile(folder,m(k).file),'rb');
                 bytes=fread(f,inf,'*uint8');fclose(f);
@@ -34,8 +34,8 @@ classdef organicReviewTest < matlab.unittest.TestCase
             t.verifyEqual(data.K,m6.K);t.verifyEqual(data.L,m6.L);
             t.verifyEqual(data.Nr,m6.Nr);
         end
-        function lqriGainsFromValidatedDesign(t)
-            data=setup_original_models("LQRI");
+        function lqgiGainsFromValidatedDesign(t)
+            data=setup_original_models("LQGI");
             a=load(fullfile(t.Root,'results/data/m7_augmented_cost_feasibility.mat'));
             d=a.designs{a.config.illustrativeIndex};
             t.verifyEqual(data.Kx,d.Kx);t.verifyEqual(data.Ki,d.Ki);

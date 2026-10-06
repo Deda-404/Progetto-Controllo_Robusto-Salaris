@@ -1,53 +1,46 @@
-
 \section{Modelli Simulink originali: disponibilità e limiti}
 \label{sec:originali}
-Sono disponibili tre diagrammi realizzati dal gruppo e condivisi nella
-cartella di Valerio: LQR, LQRI e H-infinity. Il loro contenuto è conservato
-byte per byte in \path{simulink/originals}; le impronte SHA-256 sono registrate
-nel manifest. La denominazione LQR non descrive completamente il contenuto:
-sono presenti Kalman e retroazione di $\hat x$, quindi un'architettura LQG.
+L'inventario aggiornato del Drive contiene sei diagrammi del gruppo:
+tre non lineari e tre lineari. Sono conservati byte per byte in
+\path{simulink/originals}, con impronte SHA-256 nel manifest.
+I nomi ricevuti rimangono come provenienza d'archivio; non identificano
+versioni definitive già validate. Il diagramma chiamato LQR contiene
+Kalman e feedback di $\hat x$, quindi ha ruolo LQG.
 
-I diagrammi rappresentano la meccanica non lineare a otto stati e richiamano
-due attuatori tramite blocchi LTI. Lo stimatore deve invece usare le matrici
-del modello completo a 14 stati. Gli originali sono salvati con R2026a;
-il caricamento nell'ambiente R2025b disponibile termina con
-\texttt{Simulink:Commands:LoadingNewerModel}. Non è stata forzata una
-conversione né eseguita una simulazione di questi file.
-
+Tutti i file sono salvati con R2026a. Le sei prove di caricamento su
+R2025b falliscono con \texttt{Simulink:Commands:LoadingNewerModel}.
+Non viene accreditata alcuna simulazione originale. L'ispezione statica
+mostra differenze rispetto alle interconnessioni MATLAB che richiedono
+correzione anche disponendo della release compatibile.
 \begin{table}[htbp]\centering\small
-\begin{tabular}{p{.20\textwidth}p{.28\textwidth}p{.42\textwidth}}\toprule
-Originale & Architettura riscontrata & Attività manuale necessaria\\\midrule
-LQR & $-K\hat x+N_rr$ e Kalman & Verificare disturbo link-side,
-rumori e collegamenti liberi della derivata.\\
-LQRI & $-K_x\hat x-K_i\xi$ e Kalman & Collegare $r-q_{\rm mis}$ all'integratore;
-verificare rumore di processo e disturbo link-side.\\
-H-infinity & ingresso di errore a due canali & Adattare manualmente la
-struttura ai quattro ingressi $[r;q]$ del controllore 2-DoF.\\
-$K_\mu$ & modello non disponibile & Realizzazione manuale e validazione
-rispetto al controllore salvato.\\
-Pianta linearizzata & modello originale non disponibile & Implementazione
-manuale di $A_{\rm full},B_{\rm full},B_{d,\rm full},C_{\rm full}$ e confronto.\\\bottomrule
+\begin{tabular}{p{.19\textwidth}p{.27\textwidth}p{.43\textwidth}}\toprule
+Ruolo & Originali disponibili & Correzione necessaria\\\midrule
+LQG & lineare e non lineare & Quattro rumori indipendenti e disturbo lato link; controllo degli ingressi liberi.\\
+LQGI & lineare e non lineare & Integratore sull'errore misurato, rumore di processo e disturbo lato link.\\
+H-infinity & lineare e non lineare & Interfaccia a quattro ingressi $[r;q]$ del controllore 2-DoF; stati condivisi.\\
+$K_\mu$ & nessun originale del gruppo & Realizzazione manuale del controllore salvato a 78 stati.\\\bottomrule
 \end{tabular}
-\caption{Stato degli originali e attività necessarie per completare la parte
-Simulink della traccia. Nessuna riga equivale a una simulazione validata.}
+\caption{Disponibilità aggiornata. Nessuna riga equivale a una simulazione Simulink validata.}
 \end{table}
 
-L'ispezione dei file XML mostra che la coppia indicata come disturbo è sommata
-sul lato motore; non rappresenta il canale lato link usato in MATLAB.
-Il rumore di misura è scalare e condiviso, anziché composto da quattro
-realizzazioni indipendenti coerenti con gli encoder. Nell'originale LQRI
-il rumore di processo non è collegato e l'integratore usa la posizione ideale.
-Sono inoltre presenti ingressi non collegati; i blocchi LTI richiedono la
-libreria standard Control System Toolbox e la variabile \texttt{Gact}.
-Il tipo \texttt{slBus1} deve corrispondere alla struttura dei parametri.
+Nei due originali del servo, $K_x$ moltiplica già la stima: questo
+collegamento è corretto. L'integratore riceve però $q$ ideale.
+Nel lineare collegare il selettore SID50 al Sum rumoroso SID54,
+invece che al State-Space SID64. Nel non lineare il selettore SID50
+deve ricevere il Sum SID40, invece del selettore ideale SID36.
+I segni $\dot\xi=r-q_{\rm mis}$ e $u=-K_x\hat x-K_i\xi$ vanno conservati.
 
-Lo script \path{setup_original_models.m} fornisce soltanto dati e tipi
-richiesti dai diagrammi. Non modifica algoritmi, segni o collegamenti e
-rifiuta esplicitamente di inserire il controllore H-infinity $2\times4$ nel
-blocco a due ingressi. Gli interventi funzionali della tabella devono essere
-eseguiti e verificati manualmente dal gruppo.
-Dopo il completamento occorrerà confrontare, per ciascun controllore,
-Simulink linearizzato con MATLAB lineare e Simulink non lineare a piccolo
-segnale con il linearizzato. Le prove RAS LQG/LQRI sugli originali sono
-anch'esse da eseguire: non si attribuiscono loro i risultati MATLAB dei
-controllori robusti.
+Il rumore encoder scalare condiviso deve diventare un vettore di quattro
+canali indipendenti. Nel non lineare la coppia indicata come disturbo
+è sommata lato motore: va portata all'equazione dei link.
+Il rumore di processo, la porta d del chart meccanico e un ingresso
+libero della somma della derivata richiedono correzione.
+Attuatori LTI e bus devono conservare dimensioni e coordinate M3.
+
+\path{setup_original_models.m} fornisce dati e tipi senza modificare
+diagrammi o inserire il K H-infinity $2\times4$ in un blocco a due ingressi.
+Le istruzioni per blocchi, porte, inizializzazione, rumori, confronto ed
+esportazione sono in \path{docs/CORREZIONI_SIMULINK_LQGI.md}.
+Le copie definitive potranno essere chiamate LQGI dopo tali correzioni
+e verifiche. Le nuove prove MATLAB restano distinte dalla validazione
+degli originali Simulink.

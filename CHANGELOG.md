@@ -4,6 +4,18 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+
+### Revisione LQGI/H∞/µ — 2026-10-06
+
+- Nomi attivi LQGI e architettura verificata con xhat e integratore dell'errore misurato; guadagni M7 e Kalman M6 invariati.
+- Nuove prove lineari/non lineari, rumore ZOH e RAS LQGI; 57/57 punti, box esaurito, nessuna saturazione. Sette nuovi test, 112/112 PASS.
+- Confronto Mo 2/3/4 dai controllori salvati, motivazione basata sul criterio effettivo. Figure 8.4/8.6 rigenerate, 8.2 riposizionata, Tabella 8.4 riordinata.
+- Capitolo 9 chiarito con definizione strutturata di µ e significato distinto dei margini robstab/robgain; preservati tutti gli esiti negativi.
+- Tre originali lineari acquisiti dal Drive; sei file invariati, audit di versione fallito, istruzioni manuali per SID senza sostituti automatici.
+- Relazione 83 pagine, 29 estratti MATLAB; presentazione 19 slide, 17:45. Audit PDF PASS e revisione visiva completata.
+- Audit automatico di fonti, asset, nomenclatura e 85 artifact protetti invariati; cronologia preservata e vecchio generatore Hinf disabilitato nella CLI.
+
+
 ### Semplificazione H∞/µ e appendice MATLAB — 2026-10-02
 
 - Riscritti i capitoli 8–9 con spiegazione progressiva di pesi, pianta

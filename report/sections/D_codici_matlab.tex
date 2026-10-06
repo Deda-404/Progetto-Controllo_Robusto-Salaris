@@ -63,11 +63,19 @@ Le verifiche che non ripetono le sintesi sono nell'Appendice C.
 
 \lstinputlisting[firstline=28,lastline=31]{../controllers/lqg/build_lqg_no_integrator.m}\end{minipage}
 
-\section{LQRI con osservatore e integratore dell'errore}
+\section{LQGI con osservatore e integratore dell'errore}
 
-\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqri.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqgi.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
 
-\lstinputlisting[firstline=17,lastline=34]{../analysis/progetto_lqri.m}\end{minipage}
+\lstinputlisting[firstline=17,lastline=34]{../analysis/progetto_lqgi.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/nonlinear/simulate_lqgi_nonlinear.m}\par\noindent\textit{Scopo.} Collega misure dei quattro encoder, stato stimato e memoria integrale alle equazioni SEA. Il rumore di processo entra solo nella pianta, mentre il Kalman conosce il comando calcolato.
+
+\lstinputlisting[firstline=61,lastline=66]{../analysis/nonlinear/simulate_lqgi_nonlinear.m}\end{minipage}
+
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_hinf_final_nominal.m}\par\noindent\textit{Scopo.} Documenta il criterio di selezione effettivo: stabilita e norma propria, soglia sul comando, numero e severita delle violazioni temporali, poi gli altri indicatori. Il confronto ricalcolato dei tre modelli desiderati e in omegaM\_comparison.csv.
+
+\lstinputlisting[firstline=90,lastline=101]{../analysis/run_hinf_final_nominal.m}\end{minipage}
 
 \section{Pesi, sensibilità mista e sintesi 1-DoF}
 

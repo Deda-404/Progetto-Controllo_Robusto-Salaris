@@ -6,13 +6,13 @@ setenv('CR_RUN_SCOPE','verify');
 run_all
 \end{verbatim}
 Il comando verifica modello fisico, equilibrio, linearizzazione, attuatori,
-incertezze, LQG, LQRI, limite inferiore $H_\infty$, coerenza della catena
+incertezze, LQG, LQGI, limite inferiore $H_\infty$, coerenza della catena
 robusta e accordo locale non lineare. Sono incluse le verifiche di identità
 degli originali e della struttura LFT. Non vengono sintetizzati nuovi
 controllori, eseguite nuove Monte Carlo o ricostruiti diagrammi.
 
 I risultati del run sono in
-\path{results/data/organic_review/matlab_tests.csv}. Un test software positivo
+\path{results/data/coherent_review/matlab_tests.csv}. Un test software positivo
 non trasforma in soddisfatto un requisito prestazionale fallito.
 
 \section{Audit degli originali}
@@ -29,6 +29,19 @@ Robust Control Toolbox. Gli originali richiedono R2026a o una esportazione
 compatibile effettuata e verificata dal gruppo.
 
 \section{Figure, tabelle e PDF}
+La revisione LQGI e il confronto dei tre $M_o$ si riproducono senza
+nuova sintesi robusta. Dopo aver aggiunto i percorsi \path{src},
+\path{controllers} e \path{analysis} con \texttt{addpath(genpath(...))}:
+\begin{verbatim}
+validate_m7_lqg_integral; plot_lqgi_revision;
+run_lqgi_validation; run_lqgi_ras;
+export_hinf_readable_figures;
+\end{verbatim}
+I primi due comandi ricostruiscono i tre costi integrali a dati M6
+invariati; gli altri producono le nuove prove e figure da controllori
+salvati. \path{run_lqgi_ras} riusa checkpoint soltanto se controllore,
+pianta e protocollo coincidono. \path{export_hinf_readable_figures}
+ricalcola le risposte dei tre controllori 2-DoF, senza \texttt{hinfsyn}.
 L'ambito \texttt{export} legge gli artifact e rigenera le figure di audit:
 \begin{verbatim}
 setenv('CR_RUN_SCOPE','export');
@@ -47,6 +60,8 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 cd ../presentation
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 \end{verbatim}
+La compilazione verificata dei due nomi finali usa
+\path{tools/build_m18_latex.ps1}, senza l'opzione \texttt{-ReportOnly}.
 Il testo dei capitoli è mantenuto nei sorgenti LaTeX; gli script di
 esportazione dei dati non lo sovrascrivono. I file finali sono
 \path{report/Progetto_CR_Relazione_finale.pdf} e

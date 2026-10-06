@@ -62,9 +62,13 @@ excerpt("controllers/lqg/design_kalman_m6.m", "A = m3Data.Afull", "L = lqe",
 excerpt("controllers/lqg/build_lqg_no_integrator.m", "controllerA =", "controllerD =",
         "Combina feedback e osservatore nel controllore senza integratore. Gli ingressi sono due riferimenti e quattro misure.")
 
-section("LQRI con osservatore e integratore dell'errore")
-excerpt("analysis/progetto_lqri.m", "Aa=[A,zeros", "Bk=[zeros",
+section("LQGI con osservatore e integratore dell'errore")
+excerpt("analysis/progetto_lqgi.m", "Aa=[A,zeros", "Bk=[zeros",
         "Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \\texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.")
+excerpt("analysis/nonlinear/simulate_lqgi_nonlinear.m", "measured=[state(1:2)", "dz=[dm;",
+        "Collega misure dei quattro encoder, stato stimato e memoria integrale alle equazioni SEA. Il rumore di processo entra solo nella pianta, mentre il Kalman conosce il comando calcolato.")
+excerpt("analysis/run_hinf_final_nominal.m", "candidates=[study.one", "[~,ix]=sortrows(ranking,1:10)",
+        "Documenta il criterio di selezione effettivo: stabilita e norma propria, soglia sul comando, numero e severita delle violazioni temporali, poi gli altri indicatori. Il confronto ricalcolato dei tre modelli desiderati e in omegaM\\_comparison.csv.")
 
 section("Pesi, sensibilità mista e sintesi 1-DoF")
 excerpt("controllers/hinf/hinf_revision_weights.m", "s = tf", "W2 =",

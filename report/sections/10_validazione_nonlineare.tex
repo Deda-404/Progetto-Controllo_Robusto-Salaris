@@ -66,6 +66,80 @@ inferiore alla soglia preesistente 0.1. La stessa maggiorazione cubica del
 resto SEA fornisce $\rho_{\mathrm{interno}}\simeq1.066\,10^{-12}$.
 Il livello circa 3.697 supera la verifica su 2048 direzioni indipendenti
 alle quattro frazioni radiali dichiarate; è evidenza su punti finiti,
-non un'estensione del certificato analitico. Il risultato non viene trasferito a LQG o LQRI.
+non un'estensione del certificato analitico. Il risultato non viene trasferito a LQG o LQGI.
+
+\section{Validazione aggiornata del servo LQGI}
+La campagna \path{run_lqgi_validation.m} usa la stessa meccanica SEA,
+gli stessi attuatori M3 e il controllore M7 a 16 stati: 14 stime e
+due integratori. Il modello aumentato non lineare ha 30 stati.
+I gradini di 2, 5 e 8 gradi sono osservati per 8 s, come nel confronto
+lineare M7, per osservare il servo lento senza modificarne il peso.
+I disturbi di 0.25, 0.5 e 1 N m usano 8 s; equilibrio e rumore usano 4 s.
+
+La Figura~\ref{fig:lqgi-nl-tracking} confronta le traiettorie a 5 gradi
+con la chiusura lineare completa. L'accordo locale è verificato anche
+a piccolo segnale. L'overshoot è nullo nelle sei prove, ma la risposta
+resta lenta rispetto a 0.8 s. Il tempo non lineare della tabella è
+calcolato attorno alla media dell'ultimo 10\% della risposta; quello
+lineare M7 di 5.046 s usa il valore DC analitico. La piccola differenza
+non viene interpretata come un miglioramento del controllore.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\textwidth]{figures/lqgi/tracking_linear_nonlinear.png}
+\caption{LQGI, due gradini separati da 5 gradi: in alto il giunto
+comandato non lineare e lineare, insieme alla deviazione dell'altro;
+in basso entrambe le coppie incrementali. L'accordo locale conferma
+l'implementazione; la lentezza resta visibile.}\label{fig:lqgi-nl-tracking}
+\end{figure}
+
+Sotto 0.5 N m il massimo spostamento non lineare è circa 0.1271 rad,
+con picco di comando 1.2985 N m e RMS massimo 0.4471 N m.
+Il residuo massimo a 8 s è circa $1.71\,10^{-4}$ rad, mentre il
+residuo DC lineare è nullo: tempo finito e reiezione asintotica sono distinti.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\textwidth]{figures/lqgi/disturbance_nonlinear.png}
+\caption{LQGI non lineare, riferimento nullo e coppia costante
+su un link alla volta. Le posizioni tornano progressivamente verso
+l'equilibrio; i comandi mantengono la compensazione. L'ultimo campione
+non è un guadagno DC.}
+\end{figure}
+
+Le prove di rumore mantengono il Kalman M6 e $r_1=5^\circ$.
+Confrontiamo assenza di rumore, quattro encoder indipendenti e la
+stessa sequenza encoder con quattro rumori di processo aggiunti.
+Le deviazioni standard dei campioni sono quelle assunte nel progetto:
+$0.05^\circ$ e 0.1 N m. Sono sequenze ZOH a 2 ms, distinte dalle
+intensità bianche continue di \texttt{lqe}. L'RMS dell'errore fisico
+include tutto il transitorio lento di 4 s, non soltanto il rumore a regime.
+L'integrazione viene separata a ogni cambio del campione ZOH, per evitare
+che il solver attraversi le discontinuità senza risolverle. Con gli stessi
+campioni, la chiusura lineare discretizzata esattamente a 2 ms e il modello
+non lineare differiscono al massimo di circa $4.69\,10^{-5}$ rad sulle
+posizioni nelle tre prove. Questa verifica locale riguarda
+l'implementazione, non estende il risultato a rumore di ampiezza arbitraria.
+\input{generated/lqgi_validation_results.tex}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.88\textwidth]{figures/lqgi/encoder_noise.png}
+\caption{LQGI con quattro encoder rumorosi: errore misurato in alto
+e differenza di comando rispetto alla prova pulita in basso.
+L'integratore riceve l'errore encoder, senza sostituirlo con la posizione ideale.}
+\end{figure}
+
+La ricerca \path{run_lqgi_ras.m} usa i criteri di coda M8:
+posizioni link e motori entro 0.5 gradi, velocità rispettivamente
+entro 0.02 e 0.05 rad/s, traiettorie finite e limitate, senza crescita
+finale. Perturbiamo $q$ e $\theta$ della stessa quantità, con velocità
+nulle, attuatori all'equilibrio e $\hat x(0)=\xi(0)=0$.
+Tutti i 57 punti e gli estremi delle 36 direzioni convergono entro
+8 s; il raggio minimo è 60 gradi e il massimo circa 78.32 gradi,
+compatibile con le diagonali del box $\pm60^\circ$ sulle coordinate.
+La frontiera fisica non è stata individuata. Il comando massimo
+di circa 240.23 N m rende esplicito il limite della prova senza
+saturazioni: la sezione è empirica e non una RAS hardware certificata.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.75\textwidth]{figures/lqgi/ras_empirical.png}
+\caption{Sezione empirica LQGI: tutti gli estremi radiali raggiungono
+il bordo del dominio esplorato. La curva non identifica il confine
+della vera regione di attrazione e non include vincoli di coppia.}
+\end{figure}
 
 \input{sections/10_originali_simulink}

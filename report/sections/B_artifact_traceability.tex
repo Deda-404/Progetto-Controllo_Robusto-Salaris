@@ -1,10 +1,10 @@
 \chapter{Tracciabilità dei risultati}
 I parametri e le matrici dei Capitoli 2--7 provengono dai dataset di
-modellazione, LQG e LQRI in \path{results/data}. Le matrici $A_{\rm full}$
+modellazione, LQG e LQGI in \path{results/data}. Le matrici $A_{\rm full}$
 e $B_{\rm full}$ sono in \path{m3_nominal_actuated_plant.mat}, il disturbo
-$B_{d,\rm full}$ in \path{m5_performance_specs.mat}; i controllori LQG e LQRI
+$B_{d,\rm full}$ in \path{m5_performance_specs.mat}; i controllori LQG e LQGI
 provengono rispettivamente da \path{m6_lqg_no_integrator.mat} e
-\path{m7_augmented_cost_feasibility.mat}. Per LQRI si usa l'indice
+\path{m7_augmented_cost_feasibility.mat}. Per LQGI si usa l'indice
 \texttt{config.illustrativeIndex}.
 
 I risultati robusti sono in \path{results/data/hinf_final_coherent/}:
@@ -29,7 +29,14 @@ di caricamento degli originali Simulink. Lo script
 \path{analysis/export_organic_audit.m} non effettua sintesi né nuove ricerche
 dei casi peggiori. Le figure e i testi non sostituiscono i dati numerici.
 
-I tre originali sono identificati dal manifest in
+Le nuove prove LQGI sono in \path{results/data/lqgi_validation/validation.mat}
+e \path{ras.mat}, con JSON e CSV generati dalle stesse traiettorie.
+Il confronto dei tre $M_o$ ricalcolati e il nuovo audit dei sei
+originali sono in \path{results/data/coherent_review}. Gli audit
+precedenti restano evidenze datate; non descrivono la disponibilità
+aggiornata dei diagrammi lineari.
+
+I sei originali sono identificati dal manifest in
 \path{simulink/originals/manifest.json}. Gli schemi a blocchi del Capitolo 9
 sono rappresentazioni matematiche delle interconnessioni, non schermate
 Simulink. Gli hash degli artifact consolidati e la classificazione dei file

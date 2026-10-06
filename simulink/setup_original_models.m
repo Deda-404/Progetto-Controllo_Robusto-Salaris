@@ -3,7 +3,7 @@ function data = setup_original_models(kind)
 % Le variabili sono restituite in una struttura: nessun assegnamento implicito
 % al base workspace e nessun salvataggio o ricostruzione di file SLX.
 arguments
-    kind (1,1) string {mustBeMember(kind,["LQG","LQRI","Hinf"])}
+    kind (1,1) string {mustBeMember(kind,["LQG","LQGI","Hinf"])}
 end
 root=fileparts(fileparts(mfilename('fullpath')));
 addpath(genpath(fullfile(root,'src')));
@@ -22,7 +22,7 @@ end
 data.slBus1=Simulink.Bus; data.slBus1.Elements=elements;
 if kind=="LQG"
     data.K=m6.K; data.Nr=m6.Nr;
-elseif kind=="LQRI"
+elseif kind=="LQGI"
     m7=load(fullfile(root,'results/data/m7_augmented_cost_feasibility.mat'));
     design=m7.designs{m7.config.illustrativeIndex};
     data.Kx=design.Kx; data.Ki=design.Ki;

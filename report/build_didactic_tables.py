@@ -49,10 +49,15 @@ cases = [("1-DoF iniziale", summary["baseline"]["disturbanceMetrics"]),
          ("1-DoF selezionato", summary["bestOne"]["disturbanceMetrics"]),
          ("2-DoF completo", summary["selected"]["disturbanceMetrics"])]
 cases += [(q["family"], q["disturbanceMetrics"]) for q in audit["structured"]]
+interpretations = ["picco basso di comando", "offset ridotto rispetto al primo",
+                   "minima deviazione, RMS minimo", "offset nullo, transitorio maggiore",
+                   "RMS maggiore", "picco moderato, offset residuo",
+                   "deviazione contenuta, picco maggiore"]
 write("didactic_hinf_disturbance.tex", r"""
-\begin{tabular}{lrrrr}\toprule
-Controllore & Picco $q$ [rad] & Picco $u$ [N m] & RMS $u$ [N m] & Offset [rad]\\\midrule
-""" + "\n".join(row([label] + [max(v[i] for v in values) for i in range(4)])
-                     for label, values in cases) + r"""
+\begin{tabular}{lrrrrp{3.1cm}}\toprule
+Controllore & Deviazione $q$ & Residuo DC & Picco $u$ & RMS $u$ & Lettura dei dati\\
+ & [rad] & [rad] & [N m] & [N m] & \\\midrule
+""" + "\n".join(row([label] + [max(v[i] for v in values) for i in (0,3,1,2)] + [note])
+                     for (label, values), note in zip(cases,interpretations)) + r"""
 \bottomrule\end{tabular}
 """)

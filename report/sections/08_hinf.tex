@@ -167,9 +167,44 @@ Il modello usato è diagonale, del secondo ordine, con smorzamento critico:
  M_o=\frac{\omega_M^2}{s^2+2\omega_Ms+\omega_M^2}I_2,
  \qquad M_o\big|_{\omega_M=4}=\frac{16}{s^2+8s+16}I_2.
 \]
-Sono stati provati $\omega_M=2,3,4$ rad/s; il valore finale è 4.
-Il modello desiderato è monotono, ma non garantisce da solo
-assenza di overshoot o saturazione dell'impianto.
+Il parametro $\omega_M$ stabilisce quanto rapidamente chiediamo al
+modello desiderato di raggiungere il riferimento. La risposta al gradino
+unitario è $1-(1+\omega_Mt)e^{-\omega_Mt}$: aumentando $\omega_M$ lo stesso
+transitorio si svolge in meno tempo. La banda a $-3$ dB del solo modello
+è $\omega_M\sqrt{\sqrt2-1}$, quindi cresce da circa 1.29 a 2.57 rad/s
+passando da 2 a 4. Questa non è la banda effettiva del feedback del robot.
+Uno smorzamento critico rende $M_o$ monotono per tutti i valori provati;
+non garantisce invece che il manipolatore sintetizzato abbia overshoot
+nullo né che i comandi siano compatibili con una saturazione hardware.
+
+Sono stati sintetizzati tre controllori 2-DoF a pesi e pianta invariati,
+con $\omega_M=2,3,4$ rad/s. Il confronto seguente è ricalcolato da
+\path{export_hinf_readable_figures.m} usando quei controllori salvati:
+due gradini separati da 5 gradi, 12 s, stessi stati iniziali nulli.
+Le metriche sono i massimi sulle due prove; picco e RMS sono in N m.
+\input{generated/omegaM_comparison.tex}
+Tutti e tre i candidati sono nominalmente stabili, hanno norma pesata
+minore di uno e overshoot nullo. Nessuno raggiunge però $T_s\le0.8$ s.
+Il criterio realmente usato in \path{run_hinf_final_nominal.m} ammette
+prima le chiusure stabili con norma propria inferiore a uno e comando
+entro 1.25 volte il picco della baseline 1-DoF. Ordina poi per numero
+di violazioni dei target M5 e per massima violazione normalizzata,
+prima di overshoot, errore statico, assestamento e altri indicatori.
+I tre candidati violano soltanto l'assestamento: $T_s/0.8$ vale
+3.6475, 2.43 e 1.825. È questo confronto a selezionare 4, non il minimo
+$\gamma$, che appartiene invece al caso 2.
+
+Il guadagno di rapidità è concreto: $T_s$ scende da 2.918 a 1.460 s.
+Il prezzo è un errore statico massimo che cresce da circa 0.0506\%
+a 0.5169\%, un picco di comando da 0.822 a 0.868 N m e un RMS da
+0.567 a 0.585 N m. Anche l'accoppiamento cresce da circa 0.00689
+a 0.01425. La prova di disturbo non premia sempre il caso più rapido:
+la deviazione massima passa da 0.0366 a 0.0457 rad. Scegliamo quindi
+4 per privilegiare il tracking nel confronto finito effettuato,
+accettando questi compromessi; non come ottimo universale o garanzia
+di robustezza. Il valore entra nel costo della successiva sintesi
+attraverso $q-M_or$, chiedendo a riferimento e feedback di realizzare
+insieme una risposta articolare più rapida.
 Nella prima formulazione 1-DoF non è presente questo filtro:
 l'errore penalizzato è direttamente $r-q$.
 
@@ -181,14 +216,6 @@ connessioni necessarie per definire il problema $H_\infty$.
 Il controllore rimane esterno: le porte di $P$ consentono
  di collegarlo e di misurarne le prestazioni.
 
-\begin{figure}[p]\centering
-\resizebox{.98\textwidth}{!}{\input{figures/schemes/generalized_plant.tex}}
-\caption{Dallo schema intuitivo alla pianta generalizzata 2-DoF.
-Ogni segnale ha due componenti. $G$ include gli attuatori; $G_d$
-usa gli stessi stati fisici per la coppia lato link.
-$e_m=q-M_or$, $z_1=z_e$, $z_2=z_u$. Il segno di feedback è in $K_y$.
-È una figura teorica, non un modello Simulink.}\label{fig:generalizedplant}
-\end{figure}
 La descrizione compatta è
 \[
  \begin{bmatrix}z\\y_K\end{bmatrix}
@@ -235,6 +262,20 @@ con $\gamma$ circa 0.862267 e 0.953412. Sono nominalmente stabili
 overshoot fino a circa 125\% e picco di comando vicino a 14 N m.
 Questo spiega perché esploriamo una gestione separata del riferimento.
 
+Il risultato non contraddice la sintesi: $\gamma<1$ garantisce il
+limite della mappa nominale pesata verificata, mentre l'overshoot è
+una proprietà temporale diversa. $W_1$ e $W_2$ orientano indirettamente
+errore e comando alle diverse frequenze, ma non impongono che il
+massimo della risposta al gradino resti entro il 10\%. Nel 1-DoF
+la stessa dinamica elabora riferimento ed errore di feedback: la
+rapidità richiesta al loop si riflette anche nell'inseguimento di
+un comando improvviso. Per questo una buona norma può accompagnarsi
+a un tracking aggressivo. Il 2-DoF introduce una libertà distinta
+nel trattamento del riferimento; permette di modellare il transitorio
+senza vincolare allo stesso modo il ramo che corregge i disturbi.
+La robustezza risultante deve comunque essere verificata: due rami
+non la garantiscono automaticamente.
+
 Con la coppia esterna valgono $q=Tr+SG_dd$ e $u=KSr-KSG_dd$.
 $d$ viene provato nella validazione, ma non è aggiunto retroattivamente
 all'obiettivo $w=r$ di \texttt{mixsyn}.
@@ -246,6 +287,16 @@ Con \texttt{hinfsyn} costruiamo $P$ e decidiamo quali segnali siano
 ingressi esterni, uscite prestazionali, ingressi del controllore
  e comandi. Nel primo confronto manteniamo segnali e pesi:
 risolviamo lo stesso problema, controllandone l'interconnessione.
+
+\begin{figure}[H]\centering
+\resizebox{.98\textwidth}{!}{\input{figures/schemes/generalized_plant.tex}}
+\caption{Dallo schema intuitivo alla pianta generalizzata 2-DoF.
+Il pannello superiore mostra dove nascono errore e comando; quello
+inferiore raccoglie queste connessioni nelle porte di $P$.
+Ogni segnale ha due componenti. $G$ e $G_d$ condividono gli stati
+fisici; $e_m=q-M_or$, $z_1=z_e$, $z_2=z_u$. Il feedback ha il segno
+incorporato in $K_y$. È uno schema teorico.}\label{fig:generalizedplant}
+\end{figure}
 
 Dopo lo schema possiamo leggere la partizione
 \[
@@ -279,8 +330,12 @@ Le mappe ricostruite coincidono entro $10^{-11}$ sulla griglia verificata.
 La costruzione esplicita non migliora da sola il tracking.
 
 \subsection{Due canali distinti per riferimento e misura}
-Per migliorare il transitorio del riferimento permettiamo al
-controllore di elaborare separatamente $r$ e $q$:
+Per migliorare il transitorio il controllore riceve separatamente
+il riferimento e la posizione misurata. Il contributo del riferimento
+determina soprattutto come muoverci verso la posizione richiesta;
+quello della misura continua a correggere deviazioni, disturbi e
+gli effetti delle incertezze. I due contributi appartengono allo stesso
+controllore dinamico, progettato simultaneamente. In formule:
 \[
  u=K_r r+K_y q,\qquad K=[K_r\ K_y].
 \]
@@ -294,10 +349,13 @@ insieme e con gli stessi stati. Realizzarli come due sistemi separati
 duplicando gli stati non è l'implementazione del progetto.
 
 Il nome 2-DoF riguarda questa libertà di progetto, distinta dai
- due gradi di libertà meccanici. Quando $r=0$, il ramo del riferimento
-non viene eccitato: la regolazione dipende dal feedback, dai disturbi
- e dalle condizioni iniziali. Lo stato interno comune può comunque
-produrre comando durante il ritorno all'equilibrio.
+due gradi di libertà meccanici. Quando $r=0$, l'ingresso del ramo di
+riferimento è nullo; non segue che $u=0$. Un disturbo o una condizione
+iniziale non nulla può spostare il robot, attivando il feedback.
+Anche lo stato interno comune del controllore può produrre comando
+durante il ritorno all'equilibrio. La sola scrittura mediante funzioni
+di trasferimento sottintende stati iniziali nulli; nella simulazione
+si conserva esplicitamente l'intera realizzazione dinamica.
 
 \begin{figure}[htbp]\centering
 \resizebox{.92\textwidth}{!}{\input{figures/schemes/two_dof.tex}}
@@ -306,6 +364,12 @@ $K_y$ comprende il segno di retroazione.}\label{fig:twodof}
 \end{figure}
 
 \subsection{Pianta generalizzata e chiamata utilizzate}
+La sintesi cerca quindi un unico controllore che avvicini la posizione
+al modello desiderato e che contenga l'effetto delle coppie esterne,
+senza richiedere comandi eccessivi. Gli ingressi esterni sono $r$ e
+$d$; le uscite penalizzate sono l'errore $q-M_or$ e il comando,
+moltiplicati rispettivamente per $W_e$ e $W_u$. Le misure disponibili
+al controllore rimangono $[r;q]$: il disturbo non è misurato.
 Il disturbo entra attraverso $B_{d,\rm full}$ nel modello fisico:
 \[
  \dot x=A_{\rm full}x+B_{\rm full}u+B_{d,\rm full}d,
@@ -343,6 +407,11 @@ generalizzata; fra 1-DoF e 2-DoF confrontiamo anche le stesse
 prove fisiche di tracking e disturbo.
 
 \section{Una struttura più semplice con \texttt{hinfstruct}}
+La sintesi precedente con \texttt{hinfsyn} lascia libera la dinamica
+del controllore: il miglioramento del tracking nasce dal nuovo errore
+prestazionale e dalla separazione dei due ingressi, non dal nome del
+comando MATLAB. Qui manteniamo la stessa pianta generalizzata e lo
+stesso obiettivo, aggiungendo un vincolo sulla forma del controllore.
 Il controllore di ordine 22 può essere impegnativo da implementare.
 Possiamo imporre una struttura più semplice e verificare il prezzo
 pagato nelle prestazioni? \texttt{hinfstruct} permette di scegliere
@@ -436,13 +505,21 @@ Nessuno dei rappresentanti strutturati soddisfa insieme tutti
  i target temporali. SS4 è più rapido del full-order con norma
  e comando più elevati; SS6 ha norma migliore di SS4 ma è più lento.
 
+La Figura~\ref{fig:hinf-frequency} si legge dall'alto: prima la
+sensibilità del feedback, poi il comando richiesto dalla correzione.
+Il pannello inferiore rappresenta la mappa completa che la sintesi
+2-DoF minimizza. Si mostra il massimo valore singolare; 0 dB è il
+guadagno numerico unitario. I primi due pannelli sono diagnostici;
+gli ingressi eterogenei della mappa pesata conservano le unità del
+problema originale, senza una nuova normalizzazione.
 \begin{figure}[p]\centering
-\includegraphics[width=.48\textwidth]{figures/hinf_final/sensitivity.png}
-\includegraphics[width=.48\textwidth]{figures/hinf_final/control_sensitivity.png}
-\includegraphics[width=.72\textwidth]{figures/hinf_final/weighted.png}
-\caption{Diagnostica del feedback $S_y$ e $(-K_y)S_y$, e canali
-pesati 2-DoF. L'obiettivo è la mappa completa~\eqref{eq:twodofweighted},
-non la sola sensibilità del feedback.}
+\includegraphics[width=.90\textwidth,height=.73\textheight,keepaspectratio]{figures/hinf_final/frequency_diagnostics.png}
+\caption{Massimi valori singolari. In alto si confronta la sensibilità
+del feedback; al centro il comando associato alla deviazione di posizione.
+In basso la mappa completa 2-DoF è confrontata con le sue righe di errore
+e comando pesati: è il suo picco, sotto 0 dB, a verificare l'obiettivo
+nominale. La lettura delle prime due mappe da sola non basta.}
+\label{fig:hinf-frequency}
 \end{figure}
 \begin{figure}[p]\centering
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/tracking_1dof.png}
@@ -453,10 +530,35 @@ non la sola sensibilità del feedback.}
 \end{figure}
 
 \subsection{Reiezione del disturbo fisico}
-Il 2-DoF completo riduce il picco articolare massimo a 0.0457 rad
- e l'offset DC a 0.00266 rad. Non lo annulla esattamente: non
-contiene un integratore imposto per questo scopo. Il PID annulla
-l'offset nominale, ma richiede più comando e ha deviazioni maggiori.
+Applichiamo una coppia costante di 0.5 N m da $t=0$ per tutti i 12 s
+della prova. Il riferimento è nullo e pianta e controllore partono
+dall'equilibrio. Le prove sono due: prima sul link 1, poi sul link 2,
+con l'altra coppia nulla. Il disturbo entra attraverso $B_{d,\rm full}$,
+direttamente nella dinamica dei link: non attraversa gli attuatori.
+Osserviamo entrambe le posizioni e i due comandi incrementali.
+
+La deviazione massima è $\max_{t,i}|q_i(t)|$: un valore basso significa
+che il disturbo sposta poco il manipolatore. Il residuo DC è
+$\max_i|q_i(\infty)|$, calcolato dal guadagno statico della chiusura
+lineare, distinto dall'ultimo campione a 12 s. Un residuo piccolo
+indica un ritorno vicino all'equilibrio. Il picco di comando è
+$\max_{t,i}|u_i(t)|$; l'RMS è
+$\sqrt{\frac{1}{2n}\sum_{k=1}^n\sum_{i=1}^2u_i(t_k)^2}$.
+Quest'ultimo descrive l'impegno medio quadratico sull'intero
+orizzonte e sui due attuatori. La tabella prende, per ciascun indice,
+il peggiore dei due esperimenti; i massimi non devono quindi appartenere
+tutti alla stessa prova.
+
+Il 2-DoF completo ha la minore deviazione fra i controllori confrontati,
+0.0457 rad, e il minore RMS, 0.36195 N m. Conserva però un residuo
+di 0.002663 rad: la separazione del riferimento non introduce da sola
+l'azione integrale necessaria ad annullare una coppia costante.
+Il PID strutturato annulla il residuo nominale, ma la deviazione è
+0.2107 rad, il picco 3.9428 N m e l'RMS 0.5367 N m. Sono superiori
+ai corrispondenti valori del 2-DoF completo, il cui picco è 1.7597 N m.
+I 1-DoF hanno picchi di comando ancora inferiori, ma deviano molto di
+più. Il compromesso dipende quindi da quale grandezza interessa:
+non esiste una graduatoria unica ricavata da questa tabella.
 
 \begin{table}[htbp]\centering\small
 \resizebox{\textwidth}{!}{\input{generated/didactic_hinf_disturbance.tex}}
@@ -464,10 +566,19 @@ l'offset nominale, ma richiede più comando e ha deviazioni maggiori.
 orizzonte 12 s, RMS sull'intero orizzonte e offset dal guadagno DC.}
 \end{table}
 \begin{figure}[htbp]\centering
-\includegraphics[width=.88\textwidth]{figures/hinf_final/disturbance.png}
-\caption{Risposta nominale 2-DoF alla coppia lato link.
-Il disturbo entra attraverso $G_d$, senza attraversare gli attuatori.}
+\includegraphics[width=.98\textwidth]{figures/hinf_final/disturbance_positions_commands.png}
+\caption{Disturbo nominale lato link con $r=0$. Le colonne distinguono
+$d_1$ e $d_2$; in alto si legge lo spostamento di entrambi i giunti,
+in basso il comando necessario a contrastarlo. Le linee puntinate
+indicano le posizioni DC: il recupero resta stabile, ma non ritorna
+esattamente a zero. Sono visibili tutti i 12 s della prova.}
+\label{fig:hinf-disturbance}
 \end{figure}
+La Figura~\ref{fig:hinf-disturbance} va letta confrontando prima il
+massimo spostamento con il residuo della stessa curva, poi osservando
+quanto comando serve a ottenere quel recupero. La linea continua
+indica sempre il giunto 1, quella tratteggiata il giunto 2: il giunto
+non perturbato si muove anch'esso per l'accoppiamento meccanico.
 
 \subsection{Prove non lineari, rumore e RAS}
 Per il controllore completo di ordine 22 sono disponibili le
@@ -495,7 +606,7 @@ certificata. La verifica numerica Lyapunov del candidato fallisce
  e non viene accreditata come certificato.
 
 I protocolli completi sono nel Capitolo 10. Le prove usano MATLAB;
-i tre originali Simulink hanno limiti di compatibilità e collegamento
+i sei originali Simulink hanno limiti di compatibilità e collegamento
  documentati e non validano questo controllore.
 Abbiamo quindi un buon comparatore nominale 2-DoF e strutture
 più semplici con compromessi misurabili. Restano assestamento

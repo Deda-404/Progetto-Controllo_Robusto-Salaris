@@ -1,5 +1,5 @@
-function comparison = plot_lqri_revision
-%PLOT_LQRI_REVISION Confronto nominale LQG/LQRI e tabelle da dati eseguiti.
+function comparison = plot_lqgi_revision
+%PLOT_LQGI_REVISION Confronto nominale LQG/LQGI e tabelle da dati eseguiti.
 %   Nessuna sintesi: riusa i risultati M7. M6 e simulato agli stessi tempi,
 %   con gli stessi riferimenti, disturbi, rumore nullo e stati iniziali nulli.
 root=fileparts(fileparts(fileparts(mfilename('fullpath'))));
@@ -54,10 +54,10 @@ comparison.separationResidual=ev.separationResidual;
 comparison.architecture=m7.validationMetrics.architecture;
 save(fullfile(data,'m7_disturbance_comparison.mat'),'-struct','comparison','-v7');
 writetable(metriche,fullfile(data,'m7_disturbance_comparison.csv'));
-writetable(trackingMetrics,fullfile(data,'m7_lqri_tracking_comparison.csv'));
+writetable(trackingMetrics,fullfile(data,'m7_lqgi_tracking_comparison.csv'));
 
 % Le due figure di disturbo usano scale comuni e la stessa legenda.
-names=["m7_lqg_lqri_constant_disturbance.png","m7_lqg_lqri_disturbance_control.png"];
+names=["m7_lqg_lqgi_constant_disturbance.png","m7_lqg_lqgi_disturbance_control.png"];
 for kind=1:2
     f=figure('Visible','off','Color','white','Position',[100,100,1050,580]);
     tiledlayout(2,2,'TileSpacing','compact','Padding','compact');
@@ -75,7 +75,7 @@ for kind=1:2
             if kind==1, ylabel(sprintf('Delta q_%d [deg]',channel));
             else, ylabel(sprintf('u_%d [N m]',channel)); end
             title(sprintf('d_%d=0.5 N m; r=0',joint));
-            legend('LQG M6','LQRI M7','Location','best');
+            legend('LQG M6','LQGI M7','Location','best');
         end
     end
     localSaveFigure(f,names(kind),root);
@@ -92,7 +92,7 @@ for joint=1:2
     yline(rad2deg(m5.spec.referenceAmplitude),'--k','Riferimento');
     xlabel('Tempo [s]'); ylabel(sprintf('Delta q_%d [deg]',joint)); grid on;
     title(sprintf('r_%d=5 deg; altro riferimento nullo',joint));
-    legend('LQG M6','LQRI M7','Riferimento','Location','best');
+    legend('LQG M6','LQGI M7','Riferimento','Location','best');
     nexttile(joint+2); hold on;
     for controller=1:2
         y=trackingOutput{controller,joint};
@@ -105,7 +105,7 @@ for joint=1:2
     xlabel('Tempo [s]'); ylabel('Integrale xi [rad s]'); grid on;
     legend('xi_1','xi_2','Location','best');
 end
-localSaveFigure(f,'m7_lqri_reference_tracking.png',root);
+localSaveFigure(f,'m7_lqgi_reference_tracking.png',root);
 localWriteTables(root,comparison,m7);
 disp(metriche);
 end
@@ -120,10 +120,10 @@ end
 
 function localWriteTables(root,c,m7)
 % Matrici arrotondate soltanto per il PDF; i MAT conservano doppia precisione.
-path=fullfile(root,'report','generated','lqri_revision_results.tex');
-f=fopen(path,'w'); assert(f~=-1,'M7LQRI:Write','Impossibile scrivere la tabella.');
+path=fullfile(root,'report','generated','lqgi_revision_results.tex');
+f=fopen(path,'w'); assert(f~=-1,'M7LQGI:Write','Impossibile scrivere la tabella.');
 cleanup=onCleanup(@() fclose(f));
-fprintf(f,'%% Generato da plot_lqri_revision.m; dati della chiusura reale.\n');
+fprintf(f,'%% Generato da plot_lqgi_revision.m; dati della chiusura reale.\n');
 fprintf(f,'\\[\\bar w_i=%.5g,\\quad Q_i=%.7g I_2,\\quad R=%.5g I_2.\\]\n',c.wbarI,c.Qi(1,1),c.ru);
 fprintf(f,'\\[K_x=[K_{x,a}\\ K_{x,b}].\\]\n{\\small\n');
 localMatrix(f,'K_{x,a}',c.Kx(:,1:7)); localMatrix(f,'K_{x,b}',c.Kx(:,8:14));
@@ -133,7 +133,7 @@ fprintf(f,['Residuo relativo CARE: $\\num{%.8g}$; residuo del guadagno: ' ...
     c.careRelativeResidual,c.gainResidual,c.separationResidual);
 fprintf(f,'Parte reale dominante della chiusura completa: $\\num{%.9g}$ s$^{-1}$.\n',max(real(c.fullPoles)));
 % Il paragrafo numerico precede le tabelle flottanti e resta indiviso.
-fprintf(f,['Il massimo residuo LQRI a 8 s nei due esperimenti vale $\\num{%.8g}$ rad; ' ...
+fprintf(f,['Il massimo residuo LQGI a 8 s nei due esperimenti vale $\\num{%.8g}$ rad; ' ...
     'non coincide con il valore asintotico.\\par\n'],max(abs(c.metriche{3:4,5:6}),[],'all'));
 fprintf(f,'\\begin{table}[htbp]\\centering\\small\n\\begin{tabular}{rrrrr}\\toprule\n');
 fprintf(f,'$\\bar w_i$ & $\\|K_i\\|_2$ & $T_s$ [s] & OS [\\%%] & picco $u$ [N m] \\\\\n\\midrule\n');
@@ -142,17 +142,17 @@ for k=1:3
     fprintf(f,'%.4g & %.5g & %s & %.5g & %.5g \\\\\n', ...
         t.WbarI,norm(m7.designs{k}.Ki,2),localNumber(t.WorstSettlingTime),t.WorstOvershoot,t.PeakControl);
 end
-fprintf(f,['\\bottomrule\\end{tabular}\\caption{LQRI: tre pesi integrali diretti a $Q$ e $R=%.5g I_2$ fissi. ' ...
-    'Gradini di 5 gradi, 8 s; $\\infty$ indica mancato assestamento entro 8 s.}\\label{tab:lqri-wi}\\end{table}\n'],c.ru);
+fprintf(f,['\\bottomrule\\end{tabular}\\caption{LQGI: tre pesi integrali diretti a $Q$ e $R=%.5g I_2$ fissi. ' ...
+    'Gradini di 5 gradi, 8 s; $\\infty$ indica mancato assestamento entro 8 s.}\\label{tab:lqgi-wi}\\end{table}\n'],c.ru);
 fprintf(f,'\\begin{table}[htbp]\\centering\\small\n\\begin{tabular}{llrrrr}\\toprule\n');
 fprintf(f,'Controllo & Disturbo & $q_1(\\infty)$ & $q_2(\\infty)$ & picco $u$ & RMS $u$ \\\\\n\\midrule\n');
 for k=1:4
-    t=c.metriche(k,:); names=["LQG","LQRI"];
+    t=c.metriche(k,:); names=["LQG","LQGI"];
     fprintf(f,'%s & $d_%d$ & %.6g & %.6g & %.6g & %.6g \\\\\n', ...
         names(t.ControllerId),t.DisturbanceJoint,t.OffsetQ1Rad,t.OffsetQ2Rad,t.PeakControlNm,t.RmsControlNm);
 end
 fprintf(f,['\\bottomrule\\end{tabular}\\caption{Disturbi separati da 0.5 N m; posizioni DC in rad, ' ...
-    'coppie in N m. Picco e RMS su entrambi i comandi negli stessi 8 s.}\\label{tab:lqri-disturbi}\\end{table}\n']);
+    'coppie in N m. Picco e RMS su entrambi i comandi negli stessi 8 s.}\\label{tab:lqgi-disturbi}\\end{table}\n']);
 end
 
 function localMatrix(f,name,M)

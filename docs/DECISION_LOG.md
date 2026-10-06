@@ -2235,3 +2235,13 @@ RP Hinf non validata numericamente resta esclusa da RS; nessun estremo scambiato
 Conseguenze: maggiore leggibilità, nessuna nuova garanzia scientifica.
 Gate editoriale PASS/COMPLETE: PDF 74 pagine, 20/20 test mirati esistenti PASS.
 Base origin/main 8ca8e7e con PR #33 già integrata; nuova branch dedicata.
+
+## 2026-10-06 — Unica versione corrente LQGI e limiti degli originali
+
+Decisione implementata sulla richiesta del gruppo: denominazione LQGI per il servo effettivamente LQR + Kalman + integratore dell'errore encoder. La MATLAB M7 già usa xhat; conservati Q, R, Qi, segni, guadagni e Kalman M6. Gli SLX mantengono i nomi originali come provenienza fino alla correzione/validazione; istruzioni manuali specifiche soddisfano l'alternativa esplicitamente permessa dalla richiesta. Non vengono generati sostituti.
+
+Le nuove prove non lineari includono rumore sull'integratore e processo ignoto allo stimatore. Campioni gaussiani ZOH a 2 ms distinti dalle intensità continue lqe; integrazione per intervallo e confronto con discretizzazione esatta. RAS a stesso box e criteri M8, checkpoint invalidato quando cambia il simulatore; nessuna saturazione, anti-windup o certificazione trasferita.
+
+Mo=4 conservato perché il criterio reale minimizza prima numero e severità delle violazioni M5: fra 2/3/4 tutti violano Ts, 4 ha il rapporto minore. Non è la minima gamma e non certifica robustezza. Figure e tabelle provengono da controllori salvati; sintesi e incertezze robuste adottate invarianti. Mu definita sulla struttura mista e sulla matrice N11; margini robstab/robgain distinti, intervallo RP Hinf invertito mai riordinato.
+
+Gate MATLAB/editoriale PASS, 112/112 test, 83 pagine e 19 slide; Simulink PARTIAL con sei incompatibilità di versione e modifiche manuali ancora da validare. Prossimi passi: apertura/esportazione R2026a e prove degli originali, dati frontespizio, prova orale. Le decisioni precedenti restano cronologia.

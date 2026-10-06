@@ -1,4 +1,4 @@
-\chapter{Controllo LQG e LQRI}
+\chapter{Controllo LQG e LQGI}
 \section{Obiettivo e architettura}
 Il regolatore usa il modello nominale completo a 14 stati e le quattro misure encoder
 $y=[\Delta q^T,\Delta\theta^T]^T$. Le velocità e gli stati interni degli attuatori
@@ -349,15 +349,20 @@ compatibilità e di collegamento sono elencati nel Capitolo 10.
 Le verifiche MATLAB illustrate qui non dimostrano che i diagrammi originali
 realizzino già l'intera interconnessione richiesta.
 
-\section{LQRI: azione integrale e stato stimato}
-\label{sec:lqri}
+\section{LQGI: azione integrale e stato stimato}
+\label{sec:lqgi}
 \subsection{Dall'offset alla memoria dell'errore}
 Il prefiltro LQG corregge il guadagno statico nominale del riferimento,
 ma non riceve l'errore generato da un disturbo. A riferimento nullo
 $N_rr=0$ anche quando la posizione converge a un valore non nullo.
 Introduciamo pertanto due integratori, uno per ciascuna uscita regolata.
-In questo progetto \emph{LQRI} significa LQR con integratore e osservatore
-di Kalman: un LQG servo, non una retroazione di stati fisici tutti misurati.
+LQR calcola il guadagno supponendo disponibile lo stato. LQG combina
+quel regolatore con Kalman, ricostruendo gli stati mancanti dalle quattro
+misure. LQGI aggiunge a LQG la memoria dell'errore: il regolatore è
+progettato sul sistema aumentato, ma utilizza sempre lo stato stimato.
+Questa è la configurazione richiesta dalla traccia come LQG con integratore.
+La precedente denominazione del servo era imprecisa per l'architettura
+MATLAB già realizzata: il feedback non usava il vero stato completo.
 
 Le quattro misure rimangono quelle LQG:
 \[
@@ -375,6 +380,15 @@ un errore persistente continua a modificarla. Non si integra
 $r-C_q\hat x$, poiché $q$ è disponibile dagli encoder; questo evita di
 sostituire l'errore effettivamente misurato con un errore di previsione.
 
+\begin{figure}[htbp]\centering
+\resizebox{.98\textwidth}{!}{\input{figures/schemes/lqgi_architecture.tex}}
+\caption{LQGI: la pianta fornisce soltanto le misure encoder.
+Kalman ricostruisce i 14 stati; l'integratore riceve l'errore misurato.
+Il comando ritorna sia alla pianta sia allo stimatore, che ne conosce
+il valore. Lo stato fisico completo non entra direttamente nel feedback.}
+\label{fig:lqgi-architecture}
+\end{figure}
+
 Il principio del modello interno giustifica i due modi integrali per
 riferimenti e disturbi costanti. In un equilibrio finito deve essere
 $\dot\xi=0$, dunque $q_{\mathrm{mis}}=r$. Per il modello nominale senza
@@ -385,6 +399,10 @@ Stabilità e compatibilità dell'equilibrio sono condizioni necessarie;
 non si deduce una garanzia sul modello incerto o non lineare.
 
 \subsection{Sistema aumentato per la sintesi}
+Per calcolare insieme feedback e azione integrale aggiungiamo le due
+memorie al modello della Riccati. Questo aumento descrive il problema
+di progetto; Kalman resta quello dei 14 stati fisici, perché la memoria
+integrale è già calcolata dalle misure.
 Il problema LQR si costruisce sul sistema fisico aumentato
 $x_a=[x^T,\xi^T]^T$, con 14 stati del modello completo e due integratori. In assenza di
 rumore $E_qC=C_q$, quindi
@@ -399,7 +417,7 @@ $A_a$ è $16\times16$; $B_a$ e $B_r$ sono $16\times2$.
 Queste 16 coordinate definiscono il problema di ottimizzazione,
 \emph{non} l'ordine della chiusura con osservatore.
 
-Il costruttore \path{build_lqri_augmented_cost.m} verifica PBH sui modi
+Il costruttore \path{build_lqgi_augmented_cost.m} verifica PBH sui modi
 non stabili, incluso quello all'origine:
 \[
 \operatorname{rank}[\lambda I_{16}-A_a\;\;B_a]=16,\qquad
@@ -451,7 +469,7 @@ alla legge
 Il segno numerico degli elementi di $K_i$ non autorizza a cancellare il
 meno nella legge. La coerenza viene verificata sulle equazioni chiuse.
 $K_x$ è progettato per lo stato fisico, ma nella realizzazione moltiplica
-esclusivamente $\hat x$. Non compare alcun prefiltro LQRI.
+esclusivamente $\hat x$. Non compare alcun prefiltro LQGI.
 
 \subsection{Riutilizzo del Kalman LQG e controllore implementato}
 Si mantengono esattamente $L\in\mathbb R^{14\times4}$,
@@ -476,6 +494,10 @@ $u=-K\hat x+N_rr$. Non sono modificati sensori o covarianze per migliorare
 artificialmente il confronto.
 
 \subsection{Chiusura reale a 30 stati e principio di separazione}
+La verifica include pianta, stimatore e integratori. Nel caso nominale
+lineare la stabilità deriva da regolatore aumentato e filtro stabili:
+il principio di separazione esprime questa proprietà, senza estenderla
+al robot non lineare o alla famiglia incerta.
 Con $z=[x^T,\xi^T,\hat x^T]^T$ la matrice effettivamente simulata è
 \[
 A_{\mathrm{cl}}=
@@ -520,11 +542,11 @@ Non vengono modificati i guadagni o eliminati modi per superare il test.
 
 Le matrici seguenti, i residui e le metriche sono esportati dai risultati
 eseguiti, non trascritti da stime teoriche:
-\input{generated/lqri_revision_results.tex}
+\input{generated/lqgi_revision_results.tex}
 
-\subsection{Confronto LQG e LQRI}
+\subsection{Confronto LQG e LQGI}
 Entrambi usano i medesimi quattro encoder e lo stesso Kalman.
-Le condizioni iniziali sono nulle per pianta e osservatore; LQRI ha inoltre
+Le condizioni iniziali sono nulle per pianta e osservatore; LQGI ha inoltre
 $\xi(0)=0$. Le prove separate applicano un gradino di 5 gradi a ciascun
 riferimento, oppure $d=[0.5,0]^T$ e $d=[0,0.5]^T$ N m con $r=0$.
 Rumore e altri ingressi sono nulli; passo 2 ms e orizzonte comune 8 s.
@@ -532,22 +554,22 @@ L'offset asintotico deriva dall'equilibrio della chiusura completa,
 mentre il residuo a 8 s è riportato separatamente.
 
 \begin{figure}[p]\centering
-\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqri_constant_disturbance.png}
-\caption{LQG e LQRI con identico Kalman sotto i due disturbi costanti.
-LQG conserva offset, mentre l'integratore LQRI lo elimina asintoticamente.
-Le posizioni sono espresse in gradi.}\label{fig:lqri-disturbo}
+\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqgi_constant_disturbance.png}
+\caption{LQG e LQGI con identico Kalman sotto i due disturbi costanti.
+LQG conserva offset, mentre l'integratore LQGI lo elimina asintoticamente.
+Le posizioni sono espresse in gradi.}\label{fig:lqgi-disturbo}
 \par\medskip
-\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqri_disturbance_control.png}
+\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqgi_disturbance_control.png}
 \caption{Coppie dei medesimi esperimenti. La memoria integrale consente
 il contributo permanente necessario a compensare il disturbo.
-Non sono applicate saturazioni o anti-windup.}\label{fig:lqri-comando}
+Non sono applicate saturazioni o anti-windup.}\label{fig:lqgi-comando}
 \end{figure}
 \begin{figure}[!htbp]\centering
-\includegraphics[width=0.82\textwidth]{figures/m7_lqri_reference_tracking.png}
+\includegraphics[width=0.82\textwidth]{figures/m7_lqgi_reference_tracking.png}
 \caption{Due gradini di riferimento separati: posizione del giunto
-comandato, entrambe le coppie e stati integrali LQRI.
-LQRI usa $\bar w_i=200$, $R=0.10I_2$ e nessun prefiltro.
-La lentezza rispetto a LQG resta visibile.}\label{fig:lqri-tracking}
+comandato, entrambe le coppie e stati integrali LQGI.
+LQGI usa $\bar w_i=200$, $R=0.10I_2$ e nessun prefiltro.
+La lentezza rispetto a LQG resta visibile.}\label{fig:lqgi-tracking}
 \end{figure}
 
 \subsection{Risultati, requisiti non raggiunti e limiti}
@@ -559,13 +581,25 @@ del grafico con il regime esatto.
 Per il punto illustrativo il settling peggiore, riportato nella tabella generata, resta
 oltre il target di progetto di 0.8 s; il picco di tracking e quello di disturbo
 sono misurati separatamente. Tutte le tre prove sono stabili ma nessuna
-soddisfa tutti i target. LQRI resta quindi \status{\MSevenStatus},
+soddisfa tutti i target. LQGI resta quindi \status{\MSevenStatus},
 con \MSevenAdmissible\ punti conformi: l’introduzione dell’integratore
 non viene presentata come una soluzione prestazionale completa.
 
 In presenza di bias encoder l'integratore annullerebbe l'errore misurato,
 non necessariamente quello fisico. In presenza di saturazioni potrebbe
 accumulare errore non compensabile, richiedendo anti-windup.
-Rumore, saturazioni, robustezza rispetto al modello incerto e RAS non lineare
-LQRI non sono certificati da queste prove. Per i modelli originali le
-simulazioni e la RAS restano da completare dopo la verifica dei collegamenti.
+Le nuove prove di \path{run_lqgi_validation.m} integrano anche le
+equazioni non lineari SEA. Meccanica e attuatori partono dall'equilibrio
+assoluto; $\hat x(0)=0$ e $\xi(0)=0$ sono deviazioni nulle. Il comando
+fisico è $\bar\tau+u$; le misure sottraggono le posizioni di equilibrio.
+I quattro rumori encoder entrano sia nell'innovazione sia nell'integratore.
+I quattro canali ignoti di processo agiscono lato link e prima degli
+attuatori; allo stimatore è fornito soltanto il comando noto $u$.
+La realizzazione conserva $L,Q_n,R_n$ del progetto M6.
+
+Il Capitolo 10 riporta tracking, disturbo, rumore e sezione empirica RAS
+aggiornati. Sono verifiche MATLAB della LQGI effettivamente stimata,
+distinte dalla simulazione degli originali Simulink. Questi devono
+ancora ricevere le correzioni documentate e non sono accreditati con
+i risultati della nuova integrazione. Saturazioni e robustezza sul
+modello incerto restano fuori da queste prove.
