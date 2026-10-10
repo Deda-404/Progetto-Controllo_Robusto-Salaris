@@ -2277,3 +2277,19 @@ La PR #36 è già integrata in main a502609: nuova branch dedicata
 codex/simulink-drive-aggiornamento, per revisione prima del merge. La copia dei
 modelli non trasferisce validazioni, setup o istruzioni sui SID dalle versioni
 precedenti. Gate importazione COMPLETE / PASS, simulazione NOT RUN.
+
+## 2026-10-10 — MAT esistenti per gli script didattici H∞/μ
+
+Decisione: caricare le realizzazioni originali invece di incorporarne migliaia
+di coefficienti. Percorsi relativi al file e messaggi espliciti se manca un MAT.
+La variante con tutti i coefficienti resta recuperabile dalla storia Git;
+non viene introdotto un nuovo artifact quando i dati necessari già esistono.
+Eccezione motivata: PID ricostruito tramite pid2 dai parametri salvati,
+per conservare esattamente la realizzazione precedente. Nessuna riduzione
+o trasformazione di stato; Kr/Ky condividono gli stati originali.
+
+Risultati archiviati e nuove sintesi restano distinti. L'analisi mussv H∞
+precede la D-K e mantiene la stessa sequenza casuale verificata. Esiti
+negativi/inconclusivi RS/RP conservati. Approvazione del merge demandata
+alla revisione della PR; branch codex/refactoring-didattico-hinf-mu.
+Stato tecnico COMPLETE / PASS; parametri/scelte scientifiche invariati.

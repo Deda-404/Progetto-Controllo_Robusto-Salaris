@@ -2942,3 +2942,24 @@ Git dei byte importati. Aggiornati README principale/Simulink, changelog,
 decisioni e stato prima del commit. Quality gate importazione COMPLETE / PASS;
 simulazione NOT RUN, conformità scientifica complessiva PARTIAL invariata.
 Pubblicazione su branch dedicato con pull request in bozza per revisione.
+
+## 2026-10-10 — Refactoring didattico degli script robusti
+
+Base main 6133365, PR #36/#37 integrate; branch dedicato
+codex/refactoring-didattico-hinf-mu. Baseline dei due script eseguita prima
+delle modifiche, snapshot e manifest di 786 file. Artifact ispezionati con
+whos/load: mantenute realizzazioni, incertezze, pesi, specifiche e scenari.
+Rimossi coefficienti incorporati; PID ricostruito con pid2 per eliminare lo
+scarto della conversione tunablePID2→ss. Tre ausiliari per avvii PID;
+formule e chiamate significative restano nei due script in 13 sezioni.
+
+Durante i test sono corretti una dipendenza ausiliaria non trasferita,
+la lettura del margine audit.rpInitial.margin e i nomi u/tau dell'attuatore.
+MATLAB R2025b Update 4: H∞ default/risintesi, μ default/archivi/risintesi PASS;
+ABCD, risultati, margini, Workspace, RNG e grafici verificati. Nuova musyn
+ordine 76, obiettivo 0.8917483061 identici prima/dopo, distinta dall'archivio
+ordine 78. Regressione finale a scarto zero e messaggi MAT mancanti PASS.
+778 file protetti invariati per SHA-256; Simulink, non lineare, Monte Carlo
+e RAS NOT RUN in questa revisione. Gate refactoring COMPLETE / PASS;
+limiti scientifici complessivi PARTIAL invariati. Resoconto ed evidenze in
+docs/RESOCONTO_REFACTORING_DIDATTICO.md e docs/didactic_refactor/.

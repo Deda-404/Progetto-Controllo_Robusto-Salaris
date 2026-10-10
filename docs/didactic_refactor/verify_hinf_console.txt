@@ -1,0 +1,292 @@
+CONTROLLORI ARCHIVIATI DEL PROGETTO
+Poli della pianta nominale, prima del controllo:
+   1.0e+02 *
+
+  -0.0068 + 0.7940i
+  -0.0068 - 0.7940i
+  -0.0096 + 0.6995i
+  -0.0096 - 0.6995i
+   0.0721 + 0.0000i
+   0.0404 + 0.0000i
+  -0.0789 + 0.0000i
+  -0.0407 + 0.0000i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+
+Specifiche del confronto:
+      riferimentoDeg: 5
+          disturboNm: 0.5000
+        settlingTime: 0.8000
+    overshootPercent: 10
+    erroreRelativoDC: 0.0500
+       crossCoupling: 0.2500
+              uScale: 12
+
+    "Hinf 1 DoF"
+    "Hinf 2 DoF"
+    "PID migliore (2 DoF)"
+
+Parametri W1 [omegaW1 As Ms]:
+    2.0000    0.1500    3.0000
+
+Parametri W2 [ku omegaU alpha]:
+    0.0030   80.0000    6.0000
+
+Guadagni DC W1/W2: 6.6666667 / 0.003.
+mixsyn 1 DoF: gamma=0.9534124589.
+hinfsyn 1 DoF: gamma=0.9534124589, ordine=18.
+1 DoF: 32 stati chiusi, max Re(poli)=-0.68382856.
+Modello desiderato Mo, guadagno DC:
+     1     0
+     0     1
+
+hinfsyn 2 DoF: gamma=0.04746058126, ordine=22.
+2 DoF: 36 stati chiusi, max Re(poli)=-1.00000079.
+Avvii PID: validita, obiettivo, norma ricostruita e selezione:
+    Avvio    Obiettivo     Norma     Valida    Selezionata
+    _____    _________    _______    ______    ___________
+
+      1       0.80112     0.80095    true         true
+      2           Inf         Inf    false        false
+      3       0.86968     0.86966    true         false
+      4           Inf         Inf    false        false
+      5        0.8702     0.86942    true         false
+      6           Inf         Inf    false        false
+      7       0.86876      0.8685    true         false
+      8           Inf         Inf    false        false
+      9        1.5027      1.5026    true         false
+     10           Inf         Inf    false        false
+     11           Inf         Inf    false        false
+
+Coefficienti del PID selezionato:
+                 Kp         Ki        Kd         Tf_s          b            c
+               _______    ______    ______    __________    ________    __________
+
+    Giunto1      16.47    10.439    3.9373    5.5046e-05    0.074464    0.00060394
+    Giunto2    -73.277    45.631    212.22        2.6744      1.5686        1.4504
+
+Hinf 1 DoF: norma=0.9534124589, errore LFT=8.16e-12.
+Hinf 2 DoF: norma=0.04746058123, errore LFT=3.92e-10.
+PID migliore (2 DoF): norma=0.8009463144, errore LFT=4.11e-12.
+         Controllore          Ordine    MaxRePolo    NormaPropria    Ts_s     Overshoot_pct    ErroreRelativoDC    CrossCoupling    PiccoU_Nm    RmsU_Nm    TargetM5Falliti     NS       NP      TargetTemporaliM5
+    ______________________    ______    _________    ____________    _____    _____________    ________________    _____________    _________    _______    _______________    _____    _____    _________________
+
+    "Hinf 1 DoF"                18      -0.68383        0.95341      1.558       125.28              0.14205          0.18132         13.965     0.99527           3           true     true           false
+    "Hinf 2 DoF"                22            -1       0.047461       1.46            0             0.005169         0.014246        0.86826     0.58495           1           true     true           false
+    "PID migliore (2 DoF)"       4      -0.28152        0.80095      2.974           11           2.2204e-16          0.32471         3.8768     0.59479           3           true     true           false
+
+Target M5: Ts<=0.8 s, OS<=10%, errore DC<=0.05, cross<=0.25.
+Confronto nominale completato; esiti M5 visibili nella tabella.
+physical: exact, order 14
+Ke: exact, order 18
+K1: exact, order 18
+K2: exact, order 22
+Kpid: exact, order 4
+P1: exact, order 18
+P2: exact, order 22
+W1: exact, order 2
+W2: exact, order 2
+Mo: exact, order 4
+HINF DEFAULT PASS: ABCD, FULL RESULTS, FIGURES, RNG EXACT
+Poli della pianta nominale, prima del controllo:
+   1.0e+02 *
+
+  -0.0068 + 0.7940i
+  -0.0068 - 0.7940i
+  -0.0096 + 0.6995i
+  -0.0096 - 0.6995i
+   0.0721 + 0.0000i
+   0.0404 + 0.0000i
+  -0.0789 + 0.0000i
+  -0.0407 + 0.0000i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+
+Specifiche del confronto:
+      riferimentoDeg: 5
+          disturboNm: 0.5000
+        settlingTime: 0.8000
+    overshootPercent: 10
+    erroreRelativoDC: 0.0500
+       crossCoupling: 0.2500
+              uScale: 12
+
+    "Hinf 1 DoF"
+    "Hinf 2 DoF"
+    "PID migliore (2 DoF)"
+
+Parametri W1 [omegaW1 As Ms]:
+    2.0000    0.1500    3.0000
+
+Parametri W2 [ku omegaU alpha]:
+    0.0030   80.0000    6.0000
+
+Guadagni DC W1/W2: 6.6666667 / 0.003.
+mixsyn 1 DoF: gamma=0.9534124589.
+hinfsyn 1 DoF: gamma=0.9534124589, ordine=18.
+1 DoF: 32 stati chiusi, max Re(poli)=-0.68382856.
+Modello desiderato Mo, guadagno DC:
+     1     0
+     0     1
+
+hinfsyn 2 DoF: gamma=0.04746058126, ordine=22.
+2 DoF: 36 stati chiusi, max Re(poli)=-1.00000079.
+Final: Peak gain = 0.801, Iterations = 358
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.77)
+Final: Peak gain = 0.87, Iterations = 511
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.45)
+Final: Peak gain = 0.87, Iterations = 280
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.37)
+Final: Peak gain = 0.869, Iterations = 261
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.73)
+Final: Peak gain = 1.5, Iterations = 274
+Final: Failed to enforce closed-loop stability (max Re(s) = 2.2)
+Final: Failed to enforce closed-loop stability (max Re(s) = 1.1)
+Avvii PID: validita, obiettivo, norma ricostruita e selezione:
+    Avvio    Obiettivo     Norma     Valida    Selezionata
+    _____    _________    _______    ______    ___________
+
+      1       0.80112     0.80095    true         true
+      2           Inf         Inf    false        false
+      3       0.86968     0.86966    true         false
+      4           Inf         Inf    false        false
+      5        0.8702     0.86942    true         false
+      6           Inf         Inf    false        false
+      7       0.86876      0.8685    true         false
+      8           Inf         Inf    false        false
+      9        1.5027      1.5026    true         false
+     10           Inf         Inf    false        false
+     11           Inf         Inf    false        false
+
+Coefficienti del PID selezionato:
+                 Kp         Ki        Kd         Tf_s          b            c
+               _______    ______    ______    __________    ________    __________
+
+    Giunto1      16.47    10.439    3.9373    5.5046e-05    0.074464    0.00060394
+    Giunto2    -73.277    45.631    212.22        2.6744      1.5686        1.4504
+
+Hinf 1 DoF: norma=0.9534124589, errore LFT=8.16e-12.
+Hinf 2 DoF: norma=0.04746058123, errore LFT=3.92e-10.
+PID migliore (2 DoF): norma=0.8009463144, errore LFT=5.66e-12.
+         Controllore          Ordine    MaxRePolo    NormaPropria    Ts_s     Overshoot_pct    ErroreRelativoDC    CrossCoupling    PiccoU_Nm    RmsU_Nm    TargetM5Falliti     NS       NP      TargetTemporaliM5
+    ______________________    ______    _________    ____________    _____    _____________    ________________    _____________    _________    _______    _______________    _____    _____    _________________
+
+    "Hinf 1 DoF"                18      -0.68383        0.95341      1.558       125.28              0.14205          0.18132         13.965     0.99527           3           true     true           false
+    "Hinf 2 DoF"                22            -1       0.047461       1.46            0             0.005169         0.014246        0.86826     0.58495           1           true     true           false
+    "PID migliore (2 DoF)"       4      -0.28152        0.80095      2.974           11           2.2204e-16          0.32471         3.8768     0.59479           3           true     true           false
+
+Target M5: Ts<=0.8 s, OS<=10%, errore DC<=0.05, cross<=0.25.
+Confronto nominale completato; esiti M5 visibili nella tabella.
+NUOVA MIXSYN / HINFSYN / HINFSTRUCT
+Poli della pianta nominale, prima del controllo:
+   1.0e+02 *
+
+  -0.0068 + 0.7940i
+  -0.0068 - 0.7940i
+  -0.0096 + 0.6995i
+  -0.0096 - 0.6995i
+   0.0721 + 0.0000i
+   0.0404 + 0.0000i
+  -0.0789 + 0.0000i
+  -0.0407 + 0.0000i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+
+Specifiche del confronto:
+      riferimentoDeg: 5
+          disturboNm: 0.5000
+        settlingTime: 0.8000
+    overshootPercent: 10
+    erroreRelativoDC: 0.0500
+       crossCoupling: 0.2500
+              uScale: 12
+
+    "Hinf 1 DoF"
+    "Hinf 2 DoF"
+    "PID migliore (2 DoF)"
+
+Parametri W1 [omegaW1 As Ms]:
+    2.0000    0.1500    3.0000
+
+Parametri W2 [ku omegaU alpha]:
+    0.0030   80.0000    6.0000
+
+Guadagni DC W1/W2: 6.6666667 / 0.003.
+mixsyn 1 DoF: gamma=0.9534124589.
+hinfsyn 1 DoF: gamma=0.9534124589, ordine=18.
+1 DoF: 32 stati chiusi, max Re(poli)=-0.68382856.
+Modello desiderato Mo, guadagno DC:
+     1     0
+     0     1
+
+hinfsyn 2 DoF: gamma=0.04746058126, ordine=22.
+2 DoF: 36 stati chiusi, max Re(poli)=-1.00000079.
+Final: Peak gain = 0.801, Iterations = 358
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.77)
+Final: Peak gain = 0.87, Iterations = 511
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.45)
+Final: Peak gain = 0.87, Iterations = 280
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.37)
+Final: Peak gain = 0.869, Iterations = 261
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.73)
+Final: Peak gain = 1.5, Iterations = 274
+Final: Failed to enforce closed-loop stability (max Re(s) = 2.2)
+Final: Failed to enforce closed-loop stability (max Re(s) = 1.1)
+Avvii PID: validita, obiettivo, norma ricostruita e selezione:
+    Avvio    Obiettivo     Norma     Valida    Selezionata
+    _____    _________    _______    ______    ___________
+
+      1       0.80112     0.80095    true         true
+      2           Inf         Inf    false        false
+      3       0.86968     0.86966    true         false
+      4           Inf         Inf    false        false
+      5        0.8702     0.86942    true         false
+      6           Inf         Inf    false        false
+      7       0.86876      0.8685    true         false
+      8           Inf         Inf    false        false
+      9        1.5027      1.5026    true         false
+     10           Inf         Inf    false        false
+     11           Inf         Inf    false        false
+
+Coefficienti del PID selezionato:
+                 Kp         Ki        Kd         Tf_s          b            c
+               _______    ______    ______    __________    ________    __________
+
+    Giunto1      16.47    10.439    3.9373    5.5046e-05    0.074464    0.00060394
+    Giunto2    -73.277    45.631    212.22        2.6744      1.5686        1.4504
+
+Hinf 1 DoF: norma=0.9534124589, errore LFT=8.16e-12.
+Hinf 2 DoF: norma=0.04746058123, errore LFT=3.92e-10.
+PID migliore (2 DoF): norma=0.8009463144, errore LFT=5.66e-12.
+         Controllore          Ordine    MaxRePolo    NormaPropria    Ts_s     Overshoot_pct    ErroreRelativoDC    CrossCoupling    PiccoU_Nm    RmsU_Nm    TargetM5Falliti     NS       NP      TargetTemporaliM5
+    ______________________    ______    _________    ____________    _____    _____________    ________________    _____________    _________    _______    _______________    _____    _____    _________________
+
+    "Hinf 1 DoF"                18      -0.68383        0.95341      1.558       125.28              0.14205          0.18132         13.965     0.99527           3           true     true           false
+    "Hinf 2 DoF"                22            -1       0.047461       1.46            0             0.005169         0.014246        0.86826     0.58495           1           true     true           false
+    "PID migliore (2 DoF)"       4      -0.28152        0.80095      2.974           11           2.2204e-16          0.32471         3.8768     0.59479           3           true     true           false
+
+Target M5: Ts<=0.8 s, OS<=10%, errore DC<=0.05, cross<=0.25.
+Confronto nominale completato; esiti M5 visibili nella tabella.
+physical: exact, order 14
+Ke: exact, order 18
+K1: exact, order 18
+K2: exact, order 22
+Kpid: exact, order 4
+P1: exact, order 18
+P2: exact, order 22
+W1: exact, order 2
+W2: exact, order 2
+Mo: exact, order 4
+HINF FRESH PASS: MIXSYN HINFSYN HINFSTRUCT, RESULTS EXACT
