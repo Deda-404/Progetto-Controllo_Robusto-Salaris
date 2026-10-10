@@ -35,3 +35,18 @@ Copie verificate tramite SHA-256, contenuto LQG/LQGI equivalente agli allegati,
 percorsi dei dati coerenti con la nuova collocazione. Nessun cambiamento alle
 versioni consegnate o ai risultati scientifici. Nessuna nuova validazione
 numerica: restano gli esiti e i limiti preesistenti, stato complessivo PARTIAL.
+
+## 2026-10-10 — Modelli Drive importati in Simulink
+
+simulink/drive_project e drive_project_manifest.json: COMPLETE / PASS per
+importazione e integrità statica. Fonte Drive condivisa, 37/37 file:
+cinque archivi SLX e cartella H∞ non lineare con 32 componenti. Nuove versioni
+LQG/LQGI lineari/non lineari; H∞ coincide con gli originali già disponibili.
+Tutti i pacchetti registrano R2026a Update 4.
+
+Verificati dimensioni provider, cinque CRC ZIP, SHA-256 e identità dei sei
+originali preesistenti. Nessuna modifica del contenuto dei modelli o conversione
+di release. Simulazioni NOT RUN; nuovi LQG/LQGI non ancora validati in Simulink,
+nessun certificato trasferito dalle versioni precedenti. Stato complessivo
+PARTIAL invariato. Branch codex/simulink-drive-aggiornamento da main a502609,
+con PR #36 già integrata, in attesa di revisione e decisione sul merge.

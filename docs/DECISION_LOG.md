@@ -2259,3 +2259,21 @@ Branch codex/file-funzioni-progetto-accorpati creato direttamente da origin/main
 8e8de25 per limitare il confronto alla raccolta richiesta e alla documentazione.
 Pubblicazione per revisione in bozza; nessun merge, modifica delle specifiche,
 riduzione di K o sostituzione di artifact scientifici autorizzata in questa fase.
+
+## 2026-10-10 — Importazione completa del Drive Simulink del progetto
+
+Su richiesta del gruppo, aggiunta la copia completa della cartella Drive
+1wDiaAQVR7cDDt7T8WUlyZ0vgEa-2LWLx sotto simulink/drive_project. Si mantiene
+la struttura della fonte: cinque file SLX e una cartella Hinf_nonlinear_sim.slx
+contenente 32 componenti. Nessun diagramma è rigenerato, risalvato o convertito.
+
+Le nuove versioni LQG/LQGI restano separate dai sei originali precedenti.
+Hinf_linear_sim.slx coincide per SHA-256 con la copia esistente; il contenuto
+della cartella H∞ non lineare coincide integralmente, 32/32 componenti, con
+Progetto_Hinf_simulink.slx. Si conserva comunque la copia completa del Drive,
+con manifest di provenienza e protezione delle terminazioni di riga in Git.
+
+La PR #36 è già integrata in main a502609: nuova branch dedicata
+codex/simulink-drive-aggiornamento, per revisione prima del merge. La copia dei
+modelli non trasferisce validazioni, setup o istruzioni sui SID dalle versioni
+precedenti. Gate importazione COMPLETE / PASS, simulazione NOT RUN.

@@ -4,6 +4,17 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Importazione dei modelli Simulink dal Drive del progetto — 2026-10-10
+
+- Aggiunta `simulink/drive_project/` con i cinque SLX della cartella condivisa
+  e tutti i 32 componenti del suo `Hinf_nonlinear_sim.slx/` estratto.
+- Nuove versioni LQG/LQGI lineari e non lineari; H∞ lineare identico alla copia
+  esistente, contenuto H∞ non lineare identico a `Progetto_Hinf_simulink.slx`.
+- Manifest di provenienza e SHA-256 per 37 file; dimensioni e cinque CRC ZIP
+  verificati. Sei originali precedenti invariati; terminazioni di riga preservate.
+- Importazione COMPLETE / PASS; simulazioni NOT RUN. Pacchetti R2026a Update 4,
+  nessuna conversione di release, rigenerazione o modifica dei diagrammi.
+
 ### Raccolta dei quattro script MATLAB accorpati — 2026-10-10
 
 - Aggiunta `File_di_Funzioni_Progetto-Accorpati/` con LQG, LQGI, H∞ a tre
