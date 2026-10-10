@@ -1,0 +1,312 @@
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+Analisi adattiva Hinf 2 DoF...
+Analisi adattiva Mu 2 DoF...
+mussv su 1201 frequenze: Mu 2 DoF...
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                      OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    ______________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018129    0.018166    "FAIL"    0.031847    0.031208    "FAIL DA RS; MARGINE RP NON VALIDATO"    "RICALCOLATA"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "RICALCOLATA"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+Khinf ABCD EXACT, order 22
+Kmu ABCD EXACT, order 78
+Ga ABCD EXACT, order 3
+WI ABCD EXACT, order 1
+physicalNom ABCD EXACT, order 16
+P ABCD EXACT, order 24
+CLhinf ABCD EXACT, order 46
+CLmu ABCD EXACT, order 102
+W1 ABCD EXACT, order 2
+W2 ABCD EXACT, order 2
+Mo ABCD EXACT, order 4
+N_hinf ABCD EXACT, order 46
+N_mu ABCD EXACT, order 102
+N11_hinf ABCD EXACT, order 46
+N11_mu ABCD EXACT, order 102
+storico EXACT
+storiaDK EXACT
+obiettivoMu EXACT
+confronto EXACT
+tracking EXACT
+comandi EXACT
+analisi EXACT
+muGriglia EXACT
+risultati EXACT
+MU DEFAULT PASS: ABCD, RESULTS, FIGURES, RNG
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                           OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    _________________________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018125    0.018162    "FAIL"    0.017254    0.017194    "FAIL DA RS; MARGINE RP NON VALIDATO"    "ARCHIVIATA DEL PROGETTO"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "ARCHIVIATA DEL PROGETTO"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                           OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    _________________________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018125    0.018162    "FAIL"    0.017254    0.017194    "FAIL DA RS; MARGINE RP NON VALIDATO"    "ARCHIVIATA DEL PROGETTO"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "ARCHIVIATA DEL PROGETTO"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+Khinf ABCD EXACT, order 22
+Kmu ABCD EXACT, order 78
+Ga ABCD EXACT, order 3
+WI ABCD EXACT, order 1
+physicalNom ABCD EXACT, order 16
+P ABCD EXACT, order 24
+CLhinf ABCD EXACT, order 46
+CLmu ABCD EXACT, order 102
+W1 ABCD EXACT, order 2
+W2 ABCD EXACT, order 2
+Mo ABCD EXACT, order 4
+N_hinf ABCD EXACT, order 46
+N_mu ABCD EXACT, order 102
+N11_hinf ABCD EXACT, order 46
+N11_mu ABCD EXACT, order 102
+storico EXACT
+storiaDK EXACT
+obiettivoMu EXACT
+confronto EXACT
+tracking EXACT
+comandi EXACT
+analisi EXACT
+muGriglia EXACT
+risultati EXACT
+MU ARCHIVED PASS
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+
+
+DG-K ITERATION SUMMARY:
+-------------------------------------------------------------------
+                       Robust performance                 Fit order
+-------------------------------------------------------------------
+  Iter         K Step       Peak MU       DG Fit           D      G
+    1           5.719        5.141        5.195           36     16
+    2           3.171        1.704         2.27           32     16
+    3           2.221       0.9129        1.189           32     20
+    4           1.178          0.9        1.108           32     20
+    5           1.107       0.8917       0.9718           34     20
+
+Best achieved robust performance: 0.892
+
+NUOVA MUSYN: ordine 76, obiettivo 0.8917483061.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7044       3.1706         2.2703       76              32
+        3         0.91289       2.2212         1.1894       72              32
+        4         0.90001       1.1778          1.108       76              32
+        5         0.89175       1.1066        0.97178       76              34
+
+Migliore PeakMu 0.8917483061, iterazione 5 su 5.
+Analisi adattiva Hinf 2 DoF...
+Analisi adattiva Mu 2 DoF...
+mussv su 1201 frequenze: Hinf 2 DoF...
+mussv su 1201 frequenze: Mu 2 DoF...
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                      OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    ______________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018129    0.018166    "FAIL"    0.031847    0.031208    "FAIL DA RS; MARGINE RP NON VALIDATO"    "RICALCOLATA"
+    "Mu 2 DoF"        76      true        0.64941       true       1.7342      1.7387    "PASS"      1.6947       1.702    "PASS"                                   "RICALCOLATA"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+
+
+DG-K ITERATION SUMMARY:
+-------------------------------------------------------------------
+                       Robust performance                 Fit order
+-------------------------------------------------------------------
+  Iter         K Step       Peak MU       DG Fit           D      G
+    1           5.719        5.141        5.195           36     16
+    2           3.171        1.704         2.27           32     16
+    3           2.221       0.9129        1.189           32     20
+    4           1.178          0.9        1.108           32     20
+    5           1.107       0.8917       0.9718           34     20
+
+Best achieved robust performance: 0.892
+
+NUOVA MUSYN: ordine 76, obiettivo 0.8917483061.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7044       3.1706         2.2703       76              32
+        3         0.91289       2.2212         1.1894       72              32
+        4         0.90001       1.1778          1.108       76              32
+        5         0.89175       1.1066        0.97178       76              34
+
+Migliore PeakMu 0.8917483061, iterazione 5 su 5.
+Analisi adattiva Hinf 2 DoF...
+Analisi adattiva Mu 2 DoF...
+mussv su 1201 frequenze: Mu 2 DoF...
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                      OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    ______________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018129    0.018166    "FAIL"    0.031847    0.031208    "FAIL DA RS; MARGINE RP NON VALIDATO"    "RICALCOLATA"
+    "Mu 2 DoF"        76      true        0.64941       true       1.7342      1.7387    "PASS"      1.6947       1.702    "PASS"                                   "RICALCOLATA"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+Khinf ABCD EXACT, order 22
+Kmu ABCD EXACT, order 76
+Ga ABCD EXACT, order 3
+WI ABCD EXACT, order 1
+physicalNom ABCD EXACT, order 16
+P ABCD EXACT, order 24
+CLhinf ABCD EXACT, order 46
+CLmu ABCD EXACT, order 100
+W1 ABCD EXACT, order 2
+W2 ABCD EXACT, order 2
+Mo ABCD EXACT, order 4
+N_hinf ABCD EXACT, order 46
+N_mu ABCD EXACT, order 100
+N11_hinf ABCD EXACT, order 46
+N11_mu ABCD EXACT, order 100
+storico EXACT
+storiaDK EXACT
+obiettivoMu EXACT
+confronto EXACT
+tracking EXACT
+comandi EXACT
+analisi EXACT
+muGriglia EXACT
+risultati EXACT
+MU FRESH PASS
+{Error using assert
+Workspace differs: Ga
+
+Error in verify_final (line 45)
+    assert(isfield(m,name{1})); assert(isequaln(m.(name{1}),b.mu.(name{1})),'Workspace differs: %s',name{1});
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}

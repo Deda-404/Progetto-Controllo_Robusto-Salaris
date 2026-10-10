@@ -50,3 +50,15 @@ di release. Simulazioni NOT RUN; nuovi LQG/LQGI non ancora validati in Simulink,
 nessun certificato trasferito dalle versioni precedenti. Stato complessivo
 PARTIAL invariato. Branch codex/simulink-drive-aggiornamento da main a502609,
 con PR #36 già integrata, in attesa di revisione e decisione sul merge.
+
+## 2026-10-10 — Script didattici H∞/μ: COMPLETE / PASS
+
+Branch codex/refactoring-didattico-hinf-mu da main 6133365 (PR #36/#37
+integrate). H∞ 458 righe, μ 461, 13 sezioni ciascuno; MAT esistenti e sole
+funzioni ausiliarie PID. Run dall'Editor senza preparare il Workspace.
+Default, archivi e risintesi verificati in MATLAB R2025b Update 4;
+ABCD e risultati prima/dopo identici, scarto zero nella regressione finale.
+778 file protetti invariati. LQG/LQGI, dati, modelli, relazione e presentazione
+conservati; nessuna nuova validazione Simulink o non lineare. Stato generale
+PARTIAL invariato. Prossimo passo: revisione della PR, decisione sul merge.
+Dettagli: docs/RESOCONTO_REFACTORING_DIDATTICO.md.

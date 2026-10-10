@@ -73,11 +73,15 @@ La cartella `File_di_Funzioni_Progetto-Accorpati/` raccoglie i quattro script
 `progetto_mu.m`. Il README della cartella descrive contenuti, dipendenze e
 interruttori di analisi/sintesi. Aprire un file nell'Editor MATLAB e premere Run.
 
-LQG/LQGI richiedono i dati e le funzioni del repository; H∞/µ sono autonomi.
-La raccolta conserva integralmente i sorgenti consegnati e i percorsi originali
-LQG/LQGI, con verifica SHA-256 e risoluzione dei dati dalla nuova posizione.
-Branch di revisione: `codex/file-funzioni-progetto-accorpati`, basato su `main`
-8e8de25. Il merge resta da decidere dopo la revisione del gruppo.
+Tutti gli script risolvono i percorsi rispetto al proprio file e richiedono il
+repository completo. LQG/LQGI conservano i sorgenti originali; H∞/µ caricano
+modelli, controllori e risultati dai MAT esistenti, con tredici passi didattici.
+Per ripetere il confronto con la versione precedente: `python
+tools/verify_didactic_refactor.py --fresh` (MATLAB nel PATH, oppure `--matlab`).
+I test scrivono solo sotto `tmp/refactor_didactic/`. Dettagli e provenienza:
+`docs/RESOCONTO_REFACTORING_DIDATTICO.md`.
+Branch di revisione: `codex/refactoring-didattico-hinf-mu`, base `main` 6133365
+con PR #36 e #37 integrate; nessun merge automatico.
 
 ## Modelli Simulink dal Drive del progetto — 10 ottobre 2026
 

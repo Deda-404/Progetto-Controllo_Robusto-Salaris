@@ -1,0 +1,119 @@
+{
+  "baselineCommit": "6133365",
+  "release": "25.2.0.3150157 (R2025b) Update 4",
+  "matrixMaxError": 0,
+  "frequencyMaxError": 0,
+  "dcMaxError": 0,
+  "poleMaxError": 0,
+  "disturbanceMaxError": 0,
+  "commandPeakRmsMaxError": 0,
+  "workspaceHinf": [
+    "physical",
+    "A",
+    "B",
+    "Bd",
+    "Cq",
+    "G",
+    "W1",
+    "W2",
+    "Mo",
+    "P1",
+    "P2",
+    "Ke",
+    "K1",
+    "K2",
+    "Kr",
+    "Ky",
+    "Kpid",
+    "Ak1",
+    "Bk1",
+    "Ck1",
+    "Dk1",
+    "Ak2",
+    "Bk2",
+    "Ck2",
+    "Dk2",
+    "Acl1",
+    "Acl2",
+    "tempo",
+    "omega",
+    "cfg",
+    "spec",
+    "confronto",
+    "risultati"
+  ],
+  "workspaceMu": [
+    "physical",
+    "physicalNom",
+    "Amech",
+    "Btau",
+    "Bd",
+    "Cq",
+    "Gmech",
+    "Ga",
+    "WI",
+    "Gact",
+    "W1",
+    "W2",
+    "Mo",
+    "P",
+    "Khinf",
+    "Kmu",
+    "CLhinf",
+    "CLmu",
+    "N_hinf",
+    "Delta_hinf",
+    "N_mu",
+    "Delta_mu",
+    "BlkStruct",
+    "NormUnc",
+    "tempo",
+    "omega",
+    "analisi",
+    "muGriglia",
+    "storiaDK",
+    "tracking",
+    "comandi",
+    "mappeFisiche",
+    "confronto",
+    "risultati"
+  ],
+  "hinfNorms": [
+    0.95341245890839166,
+    0.047460581234786865,
+    0.80094631444739539
+  ],
+  "muNorms": [
+    0.047460581252934515,
+    0.63467962718389037
+  ],
+  "muRS": [
+    [
+      0.018129491870801397,
+      0.01816607980908733
+    ],
+    [
+      1.7997982656516696,
+      1.8044242781698929
+    ]
+  ],
+  "muRP": [
+    [
+      0.031847468804258733,
+      0.031207980013760957
+    ],
+    [
+      1.6771721833539004,
+      1.6806615462409857
+    ]
+  ],
+  "archivedObjective": 0.88380955757519075,
+  "codeAnalyzer": {
+    "progetto_hinf_tre_controllori_m": [],
+    "progetto_mu_m": [],
+    "parametri_pid_hinf_m": [],
+    "seleziona_pid_hinf_m": [],
+    "valuta_avvio_hinf_m": []
+  },
+  "gate": "PASS"
+}

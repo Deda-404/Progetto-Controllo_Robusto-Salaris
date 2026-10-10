@@ -570,3 +570,14 @@ Backup completo esterno verificato prima delle rimozioni; conservate copie esatt
 Relazione e presentazione compilate e verificate graficamente; rimossi gli overflow delle prime bozze. Controllori e artifact numerici consolidati invariati. Conformità complessiva PARTIAL: completamento e validazione degli originali richiedono intervento manuale. PR #33 rimane draft, nessun merge.
 
 Verifica finale aggiuntiva: corretto il callback onCleanup con cattura esplicita dei valori; test di interruzione su file temporanei PASS. Totale aggiornato: 105/105 test, 9 nuovi. Aggiunte tabelle dei candidati strutturati e del disturbo dai dati salvati.
+
+## 10 ottobre 2026 — Refactoring didattico H∞ e μ
+
+- Due script accorpati con 13 sezioni: H∞ 913→458 righe, μ 2098→461.
+- Matrici e risultati recuperati dai MAT esistenti, con realizzazioni identiche;
+  PID ricostruito con pid2 dai parametri salvati, senza nuovi artifact.
+- MATLAB R2025b Update 4: default, analisi archiviate e risintesi PASS;
+  confronto numerico esatto, variabili Workspace e file mancanti verificati.
+- Test ripetibili e resoconto in docs/RESOCONTO_REFACTORING_DIDATTICO.md.
+  LQG/LQGI, Simulink, risultati, relazione e presentazione invariati.
+- Branch codex/refactoring-didattico-hinf-mu da main 6133365, nessun merge.

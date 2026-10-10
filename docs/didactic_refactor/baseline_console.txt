@@ -1,0 +1,371 @@
+          name: 'study'
+          size: [1 1]
+         bytes: 47047362
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE nominal_study
+    {'study'}
+
+    {'config'          }
+    {'one'             }
+    {'two'             }
+    {'physical'        }
+    {'spec'            }
+    {'selectedOne'     }
+    {'selected'        }
+    {'selectionRanking'}
+    {'selectionIndex'  }
+
+          name: 'selected'
+          size: [1 1]
+         bytes: 1285609
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE selected_full_order
+    {'selected'}
+
+    {'id'          }
+    {'config'      }
+    {'architecture'}
+    {'parameters'  }
+    {'omegaM'      }
+    {'Mo'          }
+    {'W1'          }
+    {'W2'          }
+    {'status'      }
+    {'error'       }
+    {'gamma'       }
+    {'P'           }
+    {'K'           }
+    {'CL'          }
+    {'info'        }
+    {'e'           }
+    {'audit'       }
+
+          name: 'f'
+          size: [1 1]
+         bytes: 5140031
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE fixed_PID
+    {'f'}
+
+    {'name'         }
+    {'seed'         }
+    {'sourceK'      }
+    {'runs'         }
+    {'error'        }
+    {'bestObjective'}
+    {'info'         }
+
+          name: 'synthesis'
+          size: [1 1]
+         bytes: 13423299
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE m13
+    {'synthesis'}
+
+    {'K'        }
+    {'objective'}
+    {'info'     }
+    {'P'        }
+    {'options'  }
+    {'seed'     }
+
+          name: 'audit'
+          size: [1 1]
+         bytes: 294286
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE m14
+    {'audit'}
+
+    {'K'                }
+    {'CL'               }
+    {'NS'               }
+    {'nominalNorm'      }
+    {'NP'               }
+    {'M'                }
+    {'Delta'            }
+    {'BlkStruct'        }
+    {'NormUnc'          }
+    {'RS'               }
+    {'rsWorst'          }
+    {'rsInfo'           }
+    {'RP'               }
+    {'rpWorst'          }
+    {'rpInfo'           }
+    {'RSOutcome'        }
+    {'RPOutcome'        }
+    {'rpWorstActualNorm'}
+
+          name: 'result'
+          size: [1 1]
+         bytes: 17755040
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE robust_study
+    {'result'}
+
+    {'source'      }
+    {'physical'    }
+    {'P'           }
+    {'plantError'  }
+    {'m12'         }
+    {'m13'         }
+    {'m14'         }
+    {'muEvaluation'}
+
+          name: 'audit'
+          size: [1 1]
+         bytes: 105168
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE m12
+    {'audit'}
+
+    {'K'                }
+    {'CL'               }
+    {'NS'               }
+    {'nominalNorm'      }
+    {'NP'               }
+    {'M'                }
+    {'Delta'            }
+    {'BlkStruct'        }
+    {'NormUnc'          }
+    {'RS'               }
+    {'rsWorst'          }
+    {'rsInfo'           }
+    {'RP'               }
+    {'rpWorst'          }
+    {'rpInfo'           }
+    {'RSOutcome'        }
+    {'RPOutcome'        }
+    {'rpInitial'        }
+    {'rpWorstActualNorm'}
+
+          name: 'r'
+          size: [1 1]
+         bytes: 1989939
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE nominal_1dof_12
+    {'r'}
+
+    {'id'          }
+    {'parameters'  }
+    {'config'      }
+    {'architecture'}
+    {'W1'          }
+    {'W2'          }
+    {'Mo'          }
+    {'bound'       }
+    {'status'      }
+    {'error'       }
+    {'gammaMix'    }
+    {'gamma'       }
+    {'P'           }
+    {'Kfeedback'   }
+    {'CL'          }
+    {'K'           }
+    {'e'           }
+    {'mix'         }
+    {'audit'       }
+
+          name: 'r'
+          size: [1 1]
+         bytes: 1285609
+         class: 'struct'
+        global: 0
+        sparse: 0
+       complex: 0
+       nesting: [1×1 struct]
+    persistent: 0
+
+FILE nominal_2dof_03
+    {'r'}
+
+    {'id'          }
+    {'config'      }
+    {'architecture'}
+    {'parameters'  }
+    {'omegaM'      }
+    {'Mo'          }
+    {'W1'          }
+    {'W2'          }
+    {'status'      }
+    {'error'       }
+    {'gamma'       }
+    {'P'           }
+    {'K'           }
+    {'CL'          }
+    {'info'        }
+    {'e'           }
+    {'audit'       }
+
+Poli della pianta nominale, prima del controllo:
+   1.0e+02 *
+
+  -0.0068 + 0.7940i
+  -0.0068 - 0.7940i
+  -0.0096 + 0.6995i
+  -0.0096 - 0.6995i
+   0.0721 + 0.0000i
+   0.0404 + 0.0000i
+  -0.0789 + 0.0000i
+  -0.0407 + 0.0000i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+
+Specifiche del confronto:
+      riferimentoDeg: 5
+          disturboNm: 0.5000
+        settlingTime: 0.8000
+    overshootPercent: 10
+    erroreRelativoDC: 0.0500
+       crossCoupling: 0.2500
+              uScale: 12
+
+    "Hinf 1 DoF"
+    "Hinf 2 DoF"
+    "PID migliore (2 DoF)"
+
+Parametri W1 [omegaW1 As Ms]:
+    2.0000    0.1500    3.0000
+
+Parametri W2 [ku omegaU alpha]:
+    0.0030   80.0000    6.0000
+
+Guadagni DC W1/W2: 6.6666667 / 0.003.
+mixsyn 1 DoF: gamma=0.9534124589.
+hinfsyn 1 DoF: gamma=0.9534124589, ordine=18.
+1 DoF: 32 stati chiusi, max Re(poli)=-0.68382856.
+Modello desiderato Mo, guadagno DC:
+     1     0
+     0     1
+
+hinfsyn 2 DoF: gamma=0.04746058126, ordine=22.
+2 DoF: 36 stati chiusi, max Re(poli)=-1.00000079.
+Avvii PID: validita, obiettivo, norma ricostruita e selezione:
+    Avvio    Obiettivo     Norma     Valida    Selezionata
+    _____    _________    _______    ______    ___________
+
+      1       0.80112     0.80095    true         true
+      2           Inf         Inf    false        false
+      3       0.86968     0.86966    true         false
+      4           Inf         Inf    false        false
+      5        0.8702     0.86942    true         false
+      6           Inf         Inf    false        false
+      7       0.86876      0.8685    true         false
+      8           Inf         Inf    false        false
+      9        1.5027      1.5026    true         false
+     10           Inf         Inf    false        false
+     11           Inf         Inf    false        false
+
+Coefficienti del PID selezionato:
+                 Kp         Ki        Kd         Tf_s          b            c
+               _______    ______    ______    __________    ________    __________
+
+    Giunto1      16.47    10.439    3.9373    5.5046e-05    0.074464    0.00060394
+    Giunto2    -73.277    45.631    212.22        2.6744      1.5686        1.4504
+
+Hinf 1 DoF: norma=0.9534124589, errore LFT=8.16e-12.
+Hinf 2 DoF: norma=0.04746058123, errore LFT=3.92e-10.
+PID migliore (2 DoF): norma=0.8009463144, errore LFT=4.11e-12.
+         Controllore          Ordine    MaxRePolo    NormaPropria    Ts_s     Overshoot_pct    ErroreRelativoDC    CrossCoupling    PiccoU_Nm    RmsU_Nm    TargetM5Falliti     NS       NP      TargetTemporaliM5
+    ______________________    ______    _________    ____________    _____    _____________    ________________    _____________    _________    _______    _______________    _____    _____    _________________
+
+    "Hinf 1 DoF"                18      -0.68383        0.95341      1.558       125.28              0.14205          0.18132         13.965     0.99527           3           true     true           false
+    "Hinf 2 DoF"                22            -1       0.047461       1.46            0             0.005169         0.014246        0.86826     0.58495           1           true     true           false
+    "PID migliore (2 DoF)"       4      -0.28152        0.80095      2.974           11           2.2204e-16          0.32471         3.8768     0.59479           3           true     true           false
+
+Target M5: Ts<=0.8 s, OS<=10%, errore DC<=0.05, cross<=0.25.
+Confronto nominale completato; esiti M5 visibili nella tabella.
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058125.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+Analisi adattiva Hinf 2 DoF...
+Analisi adattiva Mu 2 DoF...
+mussv su 1201 frequenze: Hinf 2 DoF...
+mussv su 1201 frequenze: Mu 2 DoF...
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                      OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    ______________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018129    0.018166    "FAIL"    0.031847    0.031208    "FAIL DA RS; MARGINE RP NON VALIDATO"    "RICALCOLATA"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "RICALCOLATA"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+DEFAULT BASELINES PASS: HINF 4 FIGURES, MU 3 FIGURES, RNG RESTORED
