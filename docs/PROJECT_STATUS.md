@@ -23,3 +23,15 @@ Esiti consolidati:
 Conformità complessiva **PARTIAL** per Simulink e target prestazionali dichiarati. Prossimo passo: aprire gli originali in R2026a o esportarli da quella versione verso R2025b; applicare e verificare `docs/CORREZIONI_SIMULINK_LQGI.md`; completare i dati del frontespizio e la prova orale cronometrata.
 
 Resoconto: docs/RESOCONTO_REVISIONE_LQGI_HINF_MU.md. Evidenze: docs/coherent_review/, results/data/coherent_review/, results/data/lqgi_validation/. Le vecchie voci del diario e delle decisioni restano cronologia append-only.
+
+## 2026-10-10 — Raccolta MATLAB per revisione
+
+File_di_Funzioni_Progetto-Accorpati contiene i quattro script LQG, LQGI, H∞ e µ,
+con istruzioni per esecuzione e dipendenze. Branch dedicato da main 8e8de25:
+codex/file-funzioni-progetto-accorpati. Stato organizzativo COMPLETE / PASS;
+revisione e decisione sul merge in attesa del gruppo.
+
+Copie verificate tramite SHA-256, contenuto LQG/LQGI equivalente agli allegati,
+percorsi dei dati coerenti con la nuova collocazione. Nessun cambiamento alle
+versioni consegnate o ai risultati scientifici. Nessuna nuova validazione
+numerica: restano gli esiti e i limiti preesistenti, stato complessivo PARTIAL.

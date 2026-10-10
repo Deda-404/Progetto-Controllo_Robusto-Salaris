@@ -2245,3 +2245,17 @@ Le nuove prove non lineari includono rumore sull'integratore e processo ignoto a
 Mo=4 conservato perché il criterio reale minimizza prima numero e severità delle violazioni M5: fra 2/3/4 tutti violano Ts, 4 ha il rapporto minore. Non è la minima gamma e non certifica robustezza. Figure e tabelle provengono da controllori salvati; sintesi e incertezze robuste adottate invarianti. Mu definita sulla struttura mista e sulla matrice N11; margini robstab/robgain distinti, intervallo RP Hinf invertito mai riordinato.
 
 Gate MATLAB/editoriale PASS, 112/112 test, 83 pagine e 19 slide; Simulink PARTIAL con sei incompatibilità di versione e modifiche manuali ancora da validare. Prossimi passi: apertura/esportazione R2026a e prove degli originali, dati frontespizio, prova orale. Le decisioni precedenti restano cronologia.
+
+## 2026-10-10 — Raccolta dedicata dei quattro file MATLAB
+
+Su richiesta del gruppo, raccolti i quattro script LQG/LQGI/H∞/µ nella cartella
+radice File_di_Funzioni_Progetto-Accorpati. Scelta: copie integrali per conservare
+i riferimenti esistenti a analysis/progetto_lqg.m e analysis/progetto_lqgi.m.
+La nuova cartella ha la stessa profondità di analysis, quindi la ricerca della
+radice tramite fileparts(fileparts(mfilename('fullpath'))) resta coerente.
+H∞ e µ sono le versioni autonome finali consegnate, senza cambiamenti di codice.
+
+Branch codex/file-funzioni-progetto-accorpati creato direttamente da origin/main
+8e8de25 per limitare il confronto alla raccolta richiesta e alla documentazione.
+Pubblicazione per revisione in bozza; nessun merge, modifica delle specifiche,
+riduzione di K o sostituzione di artifact scientifici autorizzata in questa fase.
