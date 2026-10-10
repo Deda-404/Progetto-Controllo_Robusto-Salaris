@@ -78,3 +78,16 @@ La raccolta conserva integralmente i sorgenti consegnati e i percorsi originali
 LQG/LQGI, con verifica SHA-256 e risoluzione dei dati dalla nuova posizione.
 Branch di revisione: `codex/file-funzioni-progetto-accorpati`, basato su `main`
 8e8de25. Il merge resta da decidere dopo la revisione del gruppo.
+
+## Modelli Simulink dal Drive del progetto — 10 ottobre 2026
+
+`simulink/drive_project/` contiene la copia completa della cartella Drive
+condivisa: quattro nuove versioni LQG/LQGI lineari e non lineari, H∞ lineare,
+e i 32 componenti della cartella H∞ non lineare estratta. Il README Simulink
+chiarisce la distinzione fra file SLX e cartella; il manifest registra
+provenienza, dimensioni e SHA-256. Gli originali preesistenti sono conservati.
+
+Importazione e integrità statica COMPLETE / PASS, simulazioni NOT RUN.
+I pacchetti sono R2026a Update 4; nessuna conversione o modifica. Branch
+`codex/simulink-drive-aggiornamento`, basato su main a502609 con PR #36 integrata,
+proposto per revisione prima del merge.

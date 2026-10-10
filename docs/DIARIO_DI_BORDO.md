@@ -2915,3 +2915,30 @@ Aggiunto README della raccolta e aggiornati README principale, changelog,
 decisioni e stato prima del commit. Gate organizzativo COMPLETE / PASS;
 conformità scientifica complessiva PARTIAL invariata. Pubblicazione prevista
 sul branch dedicato con pull request in bozza, per decisione esplicita del gruppo.
+
+## 2026-10-10 — Aggiornamento della raccolta Simulink dal Drive
+
+Richiesta del gruppo: aggiungere nel GitHub del progetto i file della cartella
+Drive 1wDiaAQVR7cDDt7T8WUlyZ0vgEa-2LWLx. PR #36 trovata integrata; branch
+codex/simulink-drive-aggiornamento creata da origin/main a502609. Il Drive è
+stato soltanto letto: lista ricorsiva completa e download degli originali.
+
+Importati in simulink/drive_project cinque file SLX: LQG e LQGI lineari/non
+lineari, Hinf lineare. Hinf_nonlinear_sim.slx è una cartella sulla fonte, non
+un file SLX: conservati tutti i 32 componenti e i relativi percorsi, senza
+ricompressione. Totale 37/37 file, tutte le dimensioni corrispondenti ai metadati
+Drive, cinque archivi ZIP con CRC PASS e blockdiagram presente. Release letta
+dai metadati dei pacchetti: R2026a Update 4. Nessun caricamento o simulazione.
+
+Audit dei sei originali precedenti: SHA-256 invariati. Hinf lineare identico
+alla copia precedente; Hinf non lineare estratto identico in tutti i 32
+componenti all'archivio Progetto_Hinf_simulink.slx. Quattro nuove versioni
+LQG/LQGI conservate senza modifiche. I metadati normalizzati del connettore non
+espongono md5Checksum: il manifest riporta i SHA-256 calcolati localmente,
+non attribuisce al provider checksum non disponibili.
+
+Manifest completo con provenienza e date; .gitattributes impedisce conversioni
+Git dei byte importati. Aggiornati README principale/Simulink, changelog,
+decisioni e stato prima del commit. Quality gate importazione COMPLETE / PASS;
+simulazione NOT RUN, conformità scientifica complessiva PARTIAL invariata.
+Pubblicazione su branch dedicato con pull request in bozza per revisione.
