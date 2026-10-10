@@ -4,6 +4,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+### Raccolta dei quattro script MATLAB accorpati — 2026-10-10
+
+- Aggiunta `File_di_Funzioni_Progetto-Accorpati/` con LQG, LQGI, H∞ a tre
+  configurazioni e µ analisi/sintesi, più istruzioni di esecuzione.
+- Copie identiche alle versioni consegnate, con gli originali in `analysis/`
+  conservati; nessuna modifica a contenuto scientifico o artifact esistenti.
+- Branch dedicato da main 8e8de25 e revisione in bozza, senza merge automatico.
+- Gate organizzativo PASS: SHA-256 delle quattro copie e percorsi LQG/LQGI
+  verificati; nessuna nuova sintesi, simulazione o campagna numerica.
+
 
 ### Revisione LQGI/H∞/µ — 2026-10-06
 

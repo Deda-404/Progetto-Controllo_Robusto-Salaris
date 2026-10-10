@@ -65,3 +65,16 @@ python tools/audit_coherent_revision.py
 MATLAB, Control System Toolbox e Robust Control Toolbox sono necessari alle analisi; Simulink ai diagrammi e ai tipi del setup. Alcuni test simbolici richiedono Symbolic Math Toolbox, già usato nel progetto. Nessuna nuova dipendenza.
 
 Drive resta riferimento in sola lettura. Risultati robusti fuori dalla cartella adottata, vecchi manifest M18 e resoconti datati costituiscono cronologia. La PR #34 è integrata nella base 283193e; questa revisione usa `codex/revisione-lqgi-hinf-mu`, senza merge automatico su main.
+
+## File MATLAB accorpati — 10 ottobre 2026
+
+La cartella `File_di_Funzioni_Progetto-Accorpati/` raccoglie i quattro script
+`progetto_lqg.m`, `progetto_lqgi.m`, `progetto_hinf_tre_controllori.m` e
+`progetto_mu.m`. Il README della cartella descrive contenuti, dipendenze e
+interruttori di analisi/sintesi. Aprire un file nell'Editor MATLAB e premere Run.
+
+LQG/LQGI richiedono i dati e le funzioni del repository; H∞/µ sono autonomi.
+La raccolta conserva integralmente i sorgenti consegnati e i percorsi originali
+LQG/LQGI, con verifica SHA-256 e risoluzione dei dati dalla nuova posizione.
+Branch di revisione: `codex/file-funzioni-progetto-accorpati`, basato su `main`
+8e8de25. Il merge resta da decidere dopo la revisione del gruppo.

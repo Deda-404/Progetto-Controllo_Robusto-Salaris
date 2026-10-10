@@ -2895,3 +2895,23 @@ Mo 2/3/4 ricalcolati dai tre controllori salvati, senza sintesi. Tempi 2.918/1.9
 Prima build delle slide interrotta perché la figura dedicata era ancora in esportazione; ricompilata dopo il completamento. Un'etichetta dello schema LQGI sovrapposta ai blocchi è stata rimossa dopo il rendering. Build finali: relazione 83 pagine, presentazione 19; zero errori, riferimenti irrisolti, overflow o destinazioni duplicate. Resta il warning di locale del launcher Perl con fallback Windows, estraneo al documento. Nuovi numeri soltanto da esecuzioni reali; nessuna nuova sintesi robusta o Monte Carlo.
 
 README, changelog, decisioni, stato e resoconto aggiornati prima del commit. Gate scientifico/editoriale PASS/COMPLETE; conformità complessiva PARTIAL per Simulink e requisiti prestazionali. Pubblicazione sul ramo dedicato, senza merge o force push.
+
+## 2026-10-10 — Branch di revisione dei file MATLAB accorpati
+
+Richiesta del gruppo: pubblicare i quattro file MATLAB già consegnati nella
+cartella File_di_Funzioni_Progetto-Accorpati, su branch da analizzare prima
+della decisione di merge. Base origin/main 8e8de25, branch locale dedicato
+codex/file-funzioni-progetto-accorpati. Gli altri branch locali sono conservati.
+
+LQG/LQGI confrontati con gli allegati progetto_lqg.m.txt e progetto_lqgi.m.txt:
+contenuto testuale identico dopo normalizzazione delle terminazioni di riga.
+Le quattro copie nella nuova cartella hanno SHA-256 identico alle rispettive
+versioni consegnate. La cartella è a livello radice, quindi la risoluzione dei
+percorsi LQG/LQGI continua a individuare src/controllers/analysis e results/data.
+Gli originali in analysis restano invariati. Nessuna nuova esecuzione MATLAB,
+sintesi o simulazione: verifica proporzionata a copie senza cambi di contenuto.
+
+Aggiunto README della raccolta e aggiornati README principale, changelog,
+decisioni e stato prima del commit. Gate organizzativo COMPLETE / PASS;
+conformità scientifica complessiva PARTIAL invariata. Pubblicazione prevista
+sul branch dedicato con pull request in bozza, per decisione esplicita del gruppo.
