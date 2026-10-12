@@ -2293,3 +2293,9 @@ precede la D-K e mantiene la stessa sequenza casuale verificata. Esiti
 negativi/inconclusivi RS/RP conservati. Approvazione del merge demandata
 alla revisione della PR; branch codex/refactoring-didattico-hinf-mu.
 Stato tecnico COMPLETE / PASS; parametri/scelte scientifiche invariati.
+
+## 2026-10-12 — Integrità degli otto modelli e audit corrente
+
+Branch codex/chiusura-definitiva-progetto-sea da main fa78e588ede9b8a136692c19aeb39b01b56cb502. Working tree iniziale pulito; checkout separato per conservare la copia Desktop. Recuperati gli otto SLX dalla cartella Drive 1wDiaAQVR7cDDt7T8WUlyZ0vgEa-2LWLx, conservati sotto simulink/student_originals. SHA-256 download/importazione/dopo caricamento identici 8/8; CRC ZIP validi. Nessuna modifica, conversione, set_param o salvataggio degli originali. I tentativi read-only falliscono in R2025b Update 4 perché gli SLX sono R2026a Update 4: simulazioni NOT RUN, non attribuite alle prove MATLAB. L'inventario XML corrente sostituisce le conclusioni su disponibilità e collegamenti delle copie datate.
+
+Primo runner: 111/112 PASS, un FAIL nel conteggio globale degli SLX di organicReviewTest; gli hash dei sei file storici restano identici. Il controllo viene circoscritto alla sua cartella originale e affiancato dalla verifica degli otto file attuali. Le campagne scientifiche e i documenti restano in lavorazione; nessuna dichiarazione di prontezza alla consegna. Gate integrità COMPLETE/PASS; gate Simulink PARTIAL/NOT RUN.

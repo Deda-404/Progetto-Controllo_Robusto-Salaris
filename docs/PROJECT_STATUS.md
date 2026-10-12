@@ -62,3 +62,7 @@ ABCD e risultati prima/dopo identici, scarto zero nella regressione finale.
 conservati; nessuna nuova validazione Simulink o non lineare. Stato generale
 PARTIAL invariato. Prossimo passo: revisione della PR, decisione sul merge.
 Dettagli: docs/RESOCONTO_REFACTORING_DIDATTICO.md.
+
+## 2026-10-12 — Chiusura scientifica in corso
+
+Otto originali correnti disponibili e integri. Audit ZIP/XML PASS; caricamento R2025b FAIL per release, simulazioni NOT RUN. Nuove prove MATLAB di rumore e dieci impianti incerti eseguite; consolidamento RAS, test e PDF in corso. Stato complessivo PARTIAL. Nessun merge su main.
