@@ -1,0 +1,12 @@
+\begin{table}[htbp]\centering\small
+\resizebox{\textwidth}{!}{\begin{tabular}{lrrrrrr}\toprule
+Controllore & $\|D_y\|_2$ & Picco camp. & RMS camp. & Picco fra camp. & RMS integrato & Ritardo picco [s]\\\midrule
+LQG & 0 & 0.387 & 0.0878 & 0.387 & 0.0846 & 0.002\\
+LQGI & 0 & 0.401 & 0.091 & 0.401 & 0.0877 & 0\\
+$H_\infty$ 1-DoF & 0 & 0.266 & 0.0615 & 0.266 & 0.0556 & 0.002\\
+$H_\infty$ 2-DoF & 0 & 22.1 & 4.64 & \ensuremath{4.93\times10^{5}} & \ensuremath{1.32\times10^{4}} & \ensuremath{1.26\times10^{-5}}\\
+PID & \ensuremath{7.15\times10^{4}} & 315 & 62.8 & 315 & 7.37 & 0\\
+$K_\mu$ & 0 & 7.75 & 1.9 & 87.1 & 8.29 & \ensuremath{5.38\times10^{-5}}\\
+\bottomrule\end{tabular}}
+\caption{Rumore encoder isolato: $r=d=w=0$, $\sigma_y=0.05^\circ$, $T_s=2$ ms, 4 s. Comando in N m. Il picco fra campioni è il massimo osservato sulla scansione temporale; l\textquotesingle RMS integra la propagazione ZOH.}
+\end{table}

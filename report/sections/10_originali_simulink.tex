@@ -1,46 +1,30 @@
-\section{Modelli Simulink originali: disponibilità e limiti}
-\label{sec:originali}
-L'inventario aggiornato del Drive contiene sei diagrammi del gruppo:
-tre non lineari e tre lineari. Sono conservati byte per byte in
-\path{simulink/originals}, con impronte SHA-256 nel manifest.
-I nomi ricevuti rimangono come provenienza d'archivio; non identificano
-versioni definitive già validate. Il diagramma chiamato LQR contiene
-Kalman e feedback di $\hat x$, quindi ha ruolo LQG.
+\section{Implementazioni MATLAB/Simulink adottate}\label{sec:originali}
+Il progetto comprende otto modelli degli studenti: una coppia lineare e
+non lineare per LQG, LQGI, $H_\infty$ e $\mu$-sintesi. Le copie originali
+sono identificate da un manifest SHA-256. I modelli lineari usano 14 stati
+fisici, quattro uscite encoder e otto ingressi nell'ordine
+$[u;d;w_{link};w_u]$. Le misure rumorose alimentano il controllore,
+mentre i rumori di processo sono applicati alla pianta.
 
-Tutti i file sono salvati con R2026a. Le sei prove di caricamento su
-R2025b falliscono con \texttt{Simulink:Commands:LoadingNewerModel}.
-Non viene accreditata alcuna simulazione originale. L'ispezione statica
-mostra differenze rispetto alle interconnessioni MATLAB che richiedono
-correzione anche disponendo della release compatibile.
-\begin{table}[htbp]\centering\small
-\begin{tabular}{p{.19\textwidth}p{.27\textwidth}p{.43\textwidth}}\toprule
-Ruolo & Originali disponibili & Correzione necessaria\\\midrule
-LQG & lineare e non lineare & Quattro rumori indipendenti e disturbo lato link; controllo degli ingressi liberi.\\
-LQGI & lineare e non lineare & Integratore sull'errore misurato, rumore di processo e disturbo lato link.\\
-H-infinity & lineare e non lineare & Interfaccia a quattro ingressi $[r;q]$ del controllore 2-DoF; stati condivisi.\\
-$K_\mu$ & nessun originale del gruppo & Realizzazione manuale del controllore salvato a 78 stati.\\\bottomrule
-\end{tabular}
-\caption{Disponibilità aggiornata. Nessuna riga equivale a una simulazione Simulink validata.}
-\end{table}
+LQG realizza $u=N_rr-K\hat x$ con un filtro di Kalman a 14 stati. LQGI
+mantiene lo stesso osservatore e aggiunge due integratori sull'errore
+misurato, $\dot\xi=r-q_{mis}$, con $u=-K_x\hat x-K_i\xi$.
+Il modello $H_\infty$ confronta tre rami: il controllore 1-DoF riceve
+$r-q_{mis}$, mentre 2-DoF e PID ricevono $[r;q_{mis}]$. Il modello
+$\mu$ usa $K_\mu$ con la stessa interfaccia a quattro ingressi.
+Le matrici dei rami 2-DoF condividono gli stati tra riferimento e misura.
 
-Nei due originali del servo, $K_x$ moltiplica già la stima: questo
-collegamento è corretto. L'integratore riceve però $q$ ideale.
-Nel lineare collegare il selettore SID50 al Sum rumoroso SID54,
-invece che al State-Space SID64. Nel non lineare il selettore SID50
-deve ricevere il Sum SID40, invece del selettore ideale SID36.
-I segni $\dot\xi=r-q_{\rm mis}$ e $u=-K_x\hat x-K_i\xi$ vanno conservati.
+I modelli non lineari integrano gli otto stati meccanici assoluti,
+calcolano il disturbo sulle accelerazioni dei link e aggiungono i due
+attuatori LTI. Le misure sono riportate in deviazioni dall'equilibrio
+prima di essere usate dal controllore. L'inizializzazione esterna
+\path{setup_student_originals.m} restituisce tutte le matrici e i tipi
+Workspace necessari senza cambiare parametri o collegamenti interni.
 
-Il rumore encoder scalare condiviso deve diventare un vettore di quattro
-canali indipendenti. Nel non lineare la coppia indicata come disturbo
-è sommata lato motore: va portata all'equazione dei link.
-Il rumore di processo, la porta d del chart meccanico e un ingresso
-libero della somma della derivata richiedono correzione.
-Attuatori LTI e bus devono conservare dimensioni e coordinate M3.
-
-\path{setup_original_models.m} fornisce dati e tipi senza modificare
-diagrammi o inserire il K H-infinity $2\times4$ in un blocco a due ingressi.
-Le istruzioni per blocchi, porte, inizializzazione, rumori, confronto ed
-esportazione sono in \path{docs/CORREZIONI_SIMULINK_LQGI.md}.
-Le copie definitive potranno essere chiamate LQGI dopo tali correzioni
-e verifiche. Le nuove prove MATLAB restano distinte dalla validazione
-degli originali Simulink.
+L'ispezione ZIP/XML verifica segni, interfacce e varianze nei limiti di
+un controllo statico. Tutti gli otto file sono R2026a Update 4; i tentativi
+di caricamento con R2025b Update 4 falliscono per incompatibilità di
+release. Nessuna simulazione o esportazione grafica nuova degli SLX è
+accreditata. Per le figure e i dati Simulink sono predisposti comandi di
+validazione nella release corretta; i grafici di questo capitolo sono
+identificati esplicitamente come risultati MATLAB.

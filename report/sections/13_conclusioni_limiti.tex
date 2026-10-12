@@ -8,7 +8,7 @@ sovraelongata anche quando la norma è inferiore a uno.
 La vera sintesi 2-DoF, con riferimento e posizione misurata come ingressi
 del controllore e coppia disturbante lato link nella pianta, raggiunge
 norma \FinalGamma\ e tracking nominale senza overshoot. Tuttavia il
-margine RS circa 0.018 e lo 0/40 Monte Carlo impediscono di considerare
+margine RS circa 0.018 e i dieci impianti incerti instabili impediscono di considerare
 questa soluzione robusta. Anche la prova di rumore evidenzia un comando
 inaccettabilmente grande per una futura implementazione non protetta.
 Questo risultato negativo è parte della conclusione, non un dettaglio
@@ -16,7 +16,7 @@ omesso perché il gradino nominale appare migliore.
 
 La D--K iteration sullo stesso problema produce Kmu di ordine \FinalMuOrder.
 La post-analisi restituisce margini RS circa 1.80 e RP circa 1.68,
-con 40/40 campioni stabili. Kmu è quindi il candidato robusto del modello
+con dieci impianti incerti su dieci stabili. Kmu è quindi il candidato robusto del modello
 lineare incerto dichiarato; non soddisfa ancora tutti i target temporali.
 LQG mantiene il ruolo di riferimento nominale. I certificati Lyapunov,
 quando il controllo numerico riesce, riguardano il solo modello nominale.
@@ -31,10 +31,12 @@ nuova scelta dei pesi richiederà una nuova verifica della stessa catena.
 Matricole e data definitiva di consegna restano da completare sul frontespizio.
 
 
-La revisione LQGI conferma il feedback stimato e rigenera prove non lineari,
-rumore e sezione empirica RAS, senza ritoccare il progetto Kalman.
-La parte Simulink resta incompleta: i sei originali disponibili richiedono
-compatibilità di versione e interventi manuali sui collegamenti;
-manca l'originale del gruppo per Kmu. Le simulazioni MATLAB
-non colmano formalmente questo requisito della traccia. Le attività residue
-sono elencate nella Sezione~\ref{sec:originali}.
+LQGI usa feedback stimato e integratore dell'errore misurato; la sua
+reiezione asintotica del disturbo nel lineare si accompagna a tracking
+lento. Gli otto modelli Simulink sono presenti e conservati integralmente,
+ma la validazione dinamica richiede R2026a. Le simulazioni MATLAB non
+colmano automaticamente questo requisito della traccia. Il rumore rimane
+critico: l'osservazione del comando fra i campioni mostra impulsi molto
+maggiori di quelli visibili sulla sola griglia a 2 ms. Le regioni interne
+di Lyapunov sono dichiarate soltanto dove il controllo numerico riesce;
+le altre sezioni rimangono evidenze empiriche con limiti espliciti.

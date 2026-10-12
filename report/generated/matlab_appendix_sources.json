@@ -120,19 +120,29 @@
     "lastline": 51
   },
   {
-    "file": "analysis/robust/analyze_m12_manual_mu.m",
-    "firstline": 11,
-    "lastline": 15
+    "file": "analysis/run_practical_robustness.m",
+    "firstline": 12,
+    "lastline": 14
   },
   {
-    "file": "analysis/monte_carlo/generate_m16_uncertainty_samples.m",
-    "firstline": 9,
-    "lastline": 12
+    "file": "analysis/run_practical_robustness.m",
+    "firstline": 26,
+    "lastline": 28
   },
   {
-    "file": "analysis/run_hinf_final_monte_carlo.m",
-    "firstline": 11,
-    "lastline": 13
+    "file": "analysis/final_closure_loop.m",
+    "firstline": 5,
+    "lastline": 11
+  },
+  {
+    "file": "analysis/run_final_noise_diagnostics.m",
+    "firstline": 30,
+    "lastline": 39
+  },
+  {
+    "file": "analysis/run_final_noise_diagnostics.m",
+    "firstline": 61,
+    "lastline": 75
   },
   {
     "file": "src/model/sea_nonlinear_rhs_with_link_disturbance.m",
@@ -143,5 +153,15 @@
     "file": "analysis/nonlinear/simulate_hinf_final_nonlinear.m",
     "firstline": 34,
     "lastline": 39
+  },
+  {
+    "file": "analysis/run_final_ras_lyapunov.m",
+    "firstline": 25,
+    "lastline": 31
+  },
+  {
+    "file": "analysis/run_final_ras_lyapunov.m",
+    "firstline": 33,
+    "lastline": 41
   }
 ]

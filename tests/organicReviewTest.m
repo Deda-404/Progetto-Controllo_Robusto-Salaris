@@ -14,7 +14,7 @@ classdef organicReviewTest < matlab.unittest.TestCase
         function originalFilesUnchanged(t)
             folder=fullfile(t.Root,'simulink/originals');
             m=jsondecode(fileread(fullfile(folder,'manifest.json')));
-            files=dir(fullfile(t.Root,'simulink','**','*.slx'));
+            files=dir(fullfile(folder,'*.slx'));
             t.verifyEqual(numel(files),6);
             for k=1:numel(m)
                 f=fopen(fullfile(folder,m(k).file),'rb');

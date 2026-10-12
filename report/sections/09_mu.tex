@@ -345,7 +345,7 @@ insieme al risultato e riassunti nell'Appendice~\ref{app:matlab}.
 \begin{figure}[htbp]\centering
 \includegraphics[width=.85\textwidth]{figures/mu/dk_history.png}
 \caption{Picchi salvati di $\mu$ e delle rispettive approssimazioni
- dopo il fit. Non sono risultati Monte Carlo.}\label{fig:dkhistory}
+ dopo il fit. Sono risultati della sintesi e del fit degli scaling.}\label{fig:dkhistory}
 \end{figure}
 Il picco scende da circa 5.1412 a \FinalMuObjective;
 il controllore ottenuto ha ordine \FinalMuOrder.
@@ -395,14 +395,28 @@ Il prezzo è l'ordine 78 e un tracking ancora oltre il target:
 $T_s=1.522,1.478$ s; sul primo giunto l'errore statico è circa 6\%,
 sopra il 5\% richiesto. RP e requisiti temporali sono distinti.
 
-Il campionamento comune conferma empiricamente la differenza:
-$H_\infty$ è stabile in 0/40 impianti, $K_\mu$ in 40/40.
-I 120 attuatori dell'inviluppo e questi 40 impianti chiusi sono
-insiemi usati per scopi diversi. La Monte Carlo non sostituisce
- i margini e non ne dà un'interpretazione probabilistica.
-Il dettaglio dei campioni è nel Capitolo 11; le verifiche
-non lineari e di rumore nel Capitolo 10 non estendono RS/RP
-all'hardware o a fenomeni esclusi dal modello.
+La prova pratica del Capitolo 11 confronta il nominale e dieci impianti
+incerti comuni. L'inviluppo di 120 attuatori e questi impianti chiusi
+servono a scopi diversi: il primo costruisce il modello dinamico incerto,
+i secondi ne mostrano l'effetto in anello chiuso. Il campionamento non
+sostituisce i margini robusti. Le prove non lineari e di rumore non
+estendono RS/RP all'hardware o a fenomeni esclusi dal modello.
+
+\subsection{Perché i controllori $H_\infty$ e $\mu$ possono avere un ordine elevato}
+L'ordine è il numero degli stati interni, distinto dall'ampiezza del comando
+$u$. La pianta completa ha 14 stati e la pianta generalizzata aggiunge le
+dinamiche dei pesi e del modello desiderato. Nel problema 2-DoF adottato
+l'interconnessione ha 22 stati e il controllore $H_\infty$ selezionato ne
+ha 22; la sintesi a ordine pieno non riguarda soltanto gli otto stati
+meccanici. Per $K_\mu$ l'ordine finale verificato è 78: i fit dinamici degli
+scaling della D--K iteration aumentano la complessità del problema scalato.
+Il totale non va attribuito automaticamente ai soli parametri incerti.
+Un ordine elevato non implica un controllore instabile, ma richiede più
+memoria e calcolo e può peggiorare il condizionamento. In teoria si possono
+valutare riduzione bilanciata, eliminazione motivata di dinamiche
+trascurabili, approssimazioni ridotte, \texttt{hinfstruct} o scaling di
+ordine minore. Qui non applichiamo riduzioni: ogni variante richiederebbe
+nuove verifiche nominali, robuste e del rumore.
 
 \section{Riferimenti per i comandi MATLAB}
 Le convenzioni sono documentate da MathWorks per

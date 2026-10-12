@@ -476,8 +476,7 @@ $T_s=1.46$ s resta sopra il target originario di 0.8 s.
 La selezione è finita e riproducibile, non un ottimo globale.
 La soglia di confronto sul picco è 1.25 volte quello iniziale.
 Gli indicatori diagnostici più permissivi del codice non
-sostituiscono le specifiche M5. In questa revisione non
-abbiamo ritoccato pesi, target o controllori.
+sostituiscono le specifiche M5. Pesi, target e controllori restano quelli dichiarati nella sintesi.
 
 \section{Confronto finale dei controllori \texorpdfstring{$H_\infty$}{H infinity}}
 \label{sec:hinfconclusions}
@@ -588,11 +587,12 @@ prove MATLAB sulle equazioni non lineari SEA. I gradini di
 0.248\%, con picco di comando 0.868 N m. L'accordo locale
 non rende soddisfatto il target di assestamento.
 
-La prova di rumore evidenzia un limite più grave: il comando
-raggiunge circa 5685 N m, con RMS 118.2 N m. È l'esito della
-sequenza encoder salvata senza saturazioni, non un comando
-fisicamente erogabile. Il piccolo picco nel tracking privo
- di rumore non basta a valutare gli attuatori.
+La prova isolata di rumore encoder del Capitolo 10, con riferimento e
+disturbo nulli, rivela impulsi tra i campioni: il picco osservato è
+\NoiseHinfPeak\ N m e l'RMS integrato circa \NoiseHinfRms\ N m.
+Sono richieste del modello senza saturazioni, non coppie fisicamente
+erogabili. Una registrazione ogni 2 ms sottostima questi impulsi;
+il gradino pulito non basta a valutare l'impiego degli attuatori.
 
 Anche la regione di attrazione stimata è limitata: convergono
 27 dei 285 punti esplorati, con raggio massimo circa 6.98 gradi
@@ -606,8 +606,8 @@ certificata. La verifica numerica Lyapunov del candidato fallisce
  e non viene accreditata come certificato.
 
 I protocolli completi sono nel Capitolo 10. Le prove usano MATLAB;
-i sei originali Simulink hanno limiti di compatibilità e collegamento
- documentati e non validano questo controllore.
+gli otto modelli Simulink richiedono R2026a e la loro validazione dinamica
+resta distinta dalle prove MATLAB.
 Abbiamo quindi un buon comparatore nominale 2-DoF e strutture
 più semplici con compromessi misurabili. Restano assestamento
 lento, sensibilità al rumore e una RAS empirica ristretta.

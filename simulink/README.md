@@ -1,46 +1,11 @@
-# Modelli originali
+# Otto modelli Simulink studenti, immutabili
 
-La cartella `originals` conserva i sei SLX già archiviati, invariati:
-tre `Progetto_*_simulink.slx` e tre modelli lineari. `originals/manifest.json`
-registra SHA-256 e provenienza; i file `*_inventory.json` conservano l'ispezione XML.
+La fonte corrente è `student_originals/`: LQG, LQGI, H∞ e µ, ciascuno lineare e non lineare. Sono gli otto pacchetti scaricati dal Drive il 12 ottobre 2026, non diagrammi ricostruiti. `student_originals_manifest.json` registra ID Drive, data, dimensioni e tre SHA-256 identici per ciascun file.
 
-Il file chiamato LQR contiene osservatore e retroazione dello stato stimato (LQG).
-I modelli sono R2026a: R2025b ne blocca il caricamento. Nessuna simulazione originale è validata.
+Tutti richiedono R2026a Update 4. Otto tentativi di caricamento con R2025b Update 4 sono falliti per release; nessuna simulazione originale è validata. Non disabilitare il controllo di release e non esportare o convertire gli SLX.
 
-setup_original_models restituisce i dati MATLAB e il bus già richiesto dagli originali. Non modifica o salva gli SLX. Per Hinf interrompe il setup con un errore esplicito: l'originale usa un errore a due canali, il controllore finale ha quattro ingressi [r;q].
+`setup_student_originals(kind)` prepara esclusivamente variabili MATLAB e il bus già richiesto. `validate_student_originals(false)` carica in sola lettura, chiude senza salvare e verifica gli hash. In R2026a, `validate_student_originals(true)` usa SimulationInput e gli stessi parametri interni; gli output salvati devono essere esaminati. `export_student_schemes` prepara schermate reali nella release corretta senza salvataggi dei modelli.
 
-Vedere docs/organic_review/AUDIT.md per disturbo lato link, rumori, integratore e collegamenti da completare manualmente, e per i modelli Kmu/linearizzato mancanti. Non sono forniti generatori o modelli sostitutivi.
+La verifica dettagliata è in `../docs/REPORT_VERIFICA_SIMULINK.md`; l’inventario completo ZIP/XML in `../docs/INVENTARIO_XML_SIMULINK.md`. Le miniature originali sono conservate come materiale di audit: non sono leggibili alla scala della relazione.
 
-## Importazione del Drive del progetto — 10 ottobre 2026
-
-`drive_project/` riproduce integralmente i file della
-[cartella Drive condivisa](https://drive.google.com/drive/folders/1wDiaAQVR7cDDt7T8WUlyZ0vgEa-2LWLx).
-I dati sono stati scaricati in sola lettura e non modificati.
-
-| Elemento | Tipo | Risultato del confronto con `originals/` |
-| --- | --- | --- |
-| `LQG_linear_sim.slx` | Archivio SLX | Nuova versione, nome originale conservato |
-| `LQG_nonlinear_sim.slx` | Archivio SLX | Nuova versione, nome originale conservato |
-| `LQGI_linear_sim.slx` | Archivio SLX | Nuova versione, nome originale conservato |
-| `LQGI_nonlinear_sim.slx` | Archivio SLX | Nuova versione, nome originale conservato |
-| `Hinf_linear_sim.slx` | Archivio SLX | SHA-256 identico al file già archiviato |
-| `Hinf_nonlinear_sim.slx/` | Cartella con SLX estratto | 32/32 componenti identici a `Progetto_Hinf_simulink.slx` |
-
-Sul Drive, `Hinf_nonlinear_sim.slx` è realmente una **cartella**, con XML,
-Stateflow, thumbnail e altri componenti. La struttura estratta è mantenuta
-senza ricomprimerla o presentarla come un nuovo modello eseguibile. Per il
-medesimo contenuto in formato SLX è già disponibile
-`originals/Progetto_Hinf_simulink.slx`.
-
-`drive_project_manifest.json` registra URL/ID Drive, dimensione, data di
-modifica e SHA-256 di ciascuno dei 37 file. Le dimensioni corrispondono ai
-metadati Drive; i cinque archivi superano il controllo CRC ZIP. I sei originali
-precedenti conservano i propri SHA-256. `.gitattributes` preserva i byte dei
-file importati senza conversioni delle terminazioni di riga.
-
-La release registrata nei pacchetti è **R2026a Update 4**. Questo intervento
-verifica l'importazione e l'integrità statica: simulazione **NOT RUN**.
-`setup_original_models.m` riguarda ancora i modelli precedenti in `originals/`;
-non trasferisce automaticamente setup o certificazioni alle nuove versioni.
-Le istruzioni storiche in `docs/CORREZIONI_SIMULINK_LQGI.md` si riferiscono
-ai sei originali precedenti, non costituiscono un audit dei nuovi LQG/LQGI.
+`originals/` (sei file) e `drive_project/` (importazione del 10 ottobre, inclusa una cartella estratta) sono archivio conservato. Non applicare agli otto file correnti i vecchi suggerimenti di modificare l’integratore o l’interfaccia H∞. L’audit corrente mostra già l’errore LQGI misurato, il 2-DoF a quattro ingressi e i modelli µ presenti.

@@ -1,23 +1,79 @@
-\chapter{Monte Carlo sull'insieme incerto lineare}
-La campagna valuta i controllori sui medesimi 40 campioni, generati con seed 20260826 e \texttt{twister}. L'identità della sequenza
-è verificata con il dataset originario. Non vengono sostituiti campioni
-instabili. I parametri reali e i due blocchi dinamici sono condivisi tra le
-chiusure; il disturbo entra nella medesima meccanica fisica.
+\chapter{Verifica pratica della robustezza su impianti incerti}
+\section{Scopo e costruzione degli impianti}
+Per rendere concreto il significato di robustezza abbiamo generato dieci
+impianti dall'insieme incerto, oltre al nominale. Non stimiamo una
+probabilità di successo: osserviamo come lo stesso controllore reagisce
+quando parametri e dinamiche non coincidono con i valori nominali.
+La prova risponde al punto 5 della traccia del docente.
 
-La stabilità interna è controllata prima delle metriche temporali.
-Si mantengono gradini di 5 gradi su 4 s e coppie di 0.5 N m su 8 s,
-con passo 0.002 s. I casi instabili non ricevono metriche di prestazione
-finite che potrebbero essere scambiate per risultati accettabili.
+Si usa il modello incerto dei Capitoli 4--5: $k_1\in[45,55]$ e
+$k_2\in[36,44]$ N m/rad, $J_{m1}\in[0.009,0.011]$ kg m$^2$ e i due
+blocchi dinamici indipendenti $\Delta_{a1},\Delta_{a2}$ nell'inviluppo
+attuativo adottato. I parametri fisici cambiano nell'interconnessione
+incerta, senza perturbare arbitrariamente le matrici $A$ e $B$.
+\texttt{usample} con seed 20261012 e \texttt{twister} genera dieci
+realizzazioni nuove, condivise da $H_\infty$ 2-DoF e $K_\mu$.
+Il replay deve restituire esattamente le stesse realizzazioni.
+\input{generated/final_plants_table.tex}
+I due blocchi dinamici campionati hanno tre stati ciascuno e norma
+$H_\infty$ non superiore a uno. Le loro matrici complete sono salvate
+insieme alle piante; il campionamento è una scelta esplorativa entro il
+modello ammesso e non introduce nuovi intervalli di incertezza.
 
-H-infinity è stabile in \textbf{0/40} campioni, Kmu in
-\textbf{40/40}. LQG risulta stabile in 37/40 casi sulla stessa sequenza.
+\section{Stabilità interna prima delle prestazioni}
+Per ogni impianto si costruisce l'anello chiuso completo, senza riduzioni
+che possano cancellare modi interni. I poli sono verificati prima di
+simulare tracking e disturbi. $H_\infty$ 2-DoF stabilizza il nominale,
+ma nessuno dei dieci impianti incerti; $K_\mu$ stabilizza il nominale e
+tutti e dieci. Questi conteggi riguardano precisamente la campagna qui
+descritta, non una frequenza di affidabilità fisica.
 \begin{figure}[htbp]\centering
-\includegraphics[width=.75\textwidth]{figures/hinf_final/monte_carlo.png}
-\caption{Stabilità empirica sulla sequenza comune; LQG è il riferimento invariato.}
+\includegraphics[width=.94\textwidth]{figures/final_closure/practical_comparison.png}
+\caption{A sinistra il polo dominante di ogni chiusura; a destra il numero
+di impianti incerti stabili. Il caso 0 è nominale. I campioni instabili
+sono mostrati separatamente dalle risposte delle chiusure stabili.}
 \end{figure}
-La concordanza con la post-analisi robusta è significativa: la fragilità nominale di
-H-infinity si manifesta anche nel campione, mentre Kmu soddisfa sia il
-controllo sul modello incerto sia quello empirico. La frequenza di successo del
-campionamento non è una probabilità di affidabilità dell'impianto reale.
-Le matrici dei singoli campioni, i poli, le risposte e le metriche restano
-nel dataset indicato nell’Appendice B.
+
+\section{Tracking e accoppiamento tra giunti}
+Applichiamo due gradini separati di 5 gradi, con stato iniziale nullo,
+orizzonte di 4 s e passo di osservazione 2 ms. L'assestamento usa una fascia
+del 2\% dell'ampiezza del riferimento attorno al valore DC analitico;
+overshoot, errore finale e accoppiamento restano indicatori distinti.
+Un tempo finito attorno al valore DC non significa tracking esatto.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.95\textwidth]{figures/final_closure/practical_tracking.png}
+\caption{Tracking del nominale e dei dieci campioni stabili con $K_\mu$,
+confrontato con $H_\infty$ 2-DoF nominale. Le curve chiare sono i campioni;
+non sono presenti risposte temporali accreditate per $H_\infty$ instabile.}
+\end{figure}
+
+\section{Reiezione della coppia lato link}
+Il riferimento è nullo; a 1 s applichiamo una coppia costante di 0.5 N m
+su un link alla volta e osserviamo la risposta fino a 8 s. Il disturbo entra
+nell'equazione dei link e non viene confuso con un comando ai motori.
+Misuriamo deviazione massima, residuo finale, picco e RMS del comando.
+Il recupero è l'ingresso definitivo nella fascia $\pm0.5^\circ$ attorno
+all'equilibrio dopo l'applicazione della coppia: se non avviene entro
+l'orizzonte viene indicato come non raggiunto. Il residuo a 8 s non è un
+guadagno DC e un disturbo costante può lasciare uno scostamento.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.95\textwidth]{figures/final_closure/practical_disturbance.png}
+\caption{Deviazioni articolari con coppia link di 0.5 N m dal tempo 1 s.
+Nominali e campioni stabili usano gli stessi scenari e le stesse unità.}
+\end{figure}
+\input{generated/final_practical_table.tex}
+\input{generated/final_practical_disturbance_table.tex}
+
+\section{Interpretazione e collegamento con la $\mu$-analysis}
+Il confronto mette in evidenza il compromesso: sul nominale il controllore
+$H_\infty$ presenta una norma pesata e alcune risposte più favorevoli,
+ma non mantiene la stabilità quando l'impianto varia nella famiglia
+campionata. $K_\mu$ conserva la stabilità e mostra la dispersione delle
+prestazioni nelle figure; il rispetto dei target temporali va comunque
+letto nelle metriche, senza dedurlo dalla sola stabilità.
+
+Dieci impianti non coprono tutte le perturbazioni ammissibili. Il loro
+comportamento fornisce una verifica pratica, mentre i margini RS/RP del
+Capitolo 9 riguardano l'intero modello strutturato dichiarato. Il campione
+conferma l'utilità del confronto robusto, senza sostituire la post-analisi
+o estendere le garanzie a non linearità, saturazioni e fenomeni non modellati.

@@ -11,12 +11,13 @@ riscrittura del codice. Gli estratti richiedono gli argomenti, i dati
 e le funzioni del file completo; non sono script autonomi da incollare
 ed eseguire in sequenza.
 
-Per i Capitoli 8--9 la fonte corrente è la campagna
-\path{analysis/run_hinf_final_*.m} e i dati in
-\path{results/data/hinf_final_coherent}. Gli script didattici
-\path{progetto_hinf.m} e i dataset M9--M14 nella radice di
-\path{results/data} descrivono anche configurazioni precedenti:
-non ne trasferiamo pesi, ordini e risultati alla campagna finale.
+Le fonti didattiche sono i quattro script in
+\path{File_di_Funzioni_Progetto-Accorpati}. Modelli e controllori sono
+salvati in \path{results/data}; le prove del rumore isolato, della griglia
+RAS comune e degli impianti incerti sono in
+\path{analysis/run_final_noise_diagnostics.m},
+\path{analysis/run_final_ras_lyapunov.m} e
+\path{analysis/run_practical_robustness.m}.
 Le verifiche che non ripetono le sintesi sono nell'Appendice C.
 """]
 manifest = []
@@ -108,29 +109,29 @@ del guadagno attivi, \texttt{RandomStart=0}, \texttt{UseParallel=false},
 excerpt("analysis/run_hinf_final_robust.m", "a.K=K; a.CL=lft", "[a.RP,a.rpWorst,a.rpInfo]",
         "A controllore fissato ricalcola nominale, struttura LFT e margini RS/RP sulla pianta originale. La funzione successiva conserva l'intervallo RP invertito e ne registra l'esito non validato.")
 
-section("Calcolo diretto di mussv: procedura delle analisi precedenti")
-excerpt("analysis/robust/analyze_m12_manual_mu.m", "omega = config.muFrequencyGrid", "lower = squeeze",
-        "Calcola i limiti di $\\mu$ per il ritorno dell'incertezza su una griglia fissata. È una funzione delle analisi M12 precedenti, non la fonte dei margini finali di ordine 22 e 78. Un picco campionato non certifica da solo tutto l'asse delle frequenze.")
-
-section("Campioni comuni e verifica Monte Carlo")
-excerpt("analysis/monte_carlo/generate_m16_uncertainty_samples.m", "originalRng = rng", "[~, sampledValues] = usample",
-        "Genera la sequenza riproducibile M16, con seed 20260826 e 40 campioni. Lo stato del generatore è preservato; il file completo controlla range, norme e replay.")
-excerpt("analysis/run_hinf_final_monte_carlo.m", "old=load", "assert(isequaln(old.sampledValuesRaw",
-        "Ricarica e verifica i campioni comuni prima di valutarli con i controllori finali. Le configurazioni dei vecchi controllori nel file M16 non sono adottate come ordini dei nuovi controllori.")
+section("Campioni comuni e verifica pratica della robustezza")
+excerpt("analysis/run_practical_robustness.m", "rng(d.seed", "assert(isequaln(values",
+        "Genera dieci nuovi impianti della famiglia fisica incerta, seed 20261012, e verifica il replay esatto. Entrambi i controllori usano questi stessi oggetti.")
+excerpt("analysis/run_practical_robustness.m", "for k=1:2", "cl=final_closure_loop",
+        "Chiude ciascun controllore sul nominale e sui dieci campioni, mantenendo tutti gli stati interni e i canali di disturbo.")
+section("Rumore di misura e impulsi tra i campioni")
+excerpt("analysis/final_closure_loop.m", "loop.A=", "loop.sys=ss",
+        "Costruisce la chiusura nello stato completo, con riferimenti, coppie link, rumore encoder e rumori di processo separati.")
+excerpt("analysis/run_final_noise_diagnostics.m", "if ny==2", "discrete=c2d",
+        "Confronta la formula di feedback positivo con la realizzazione aumentata. Il segno negativo del regolatore è già contenuto in Ky.")
+excerpt("analysis/run_final_noise_diagnostics.m", "tau=unique", "item.intersampleRmsU=",
+        "Ricostruisce il comando durante ciascun intervallo di mantenimento e integra l'energia: i soli campioni ogni 2 ms non risolvono i modi più rapidi.")
 
 section("Dinamica non lineare e collegamento con il controllore")
 excerpt("src/model/sea_nonlinear_rhs_with_link_disturbance.m", "q = x(1:2)", "xdot =",
         "Valuta le otto equazioni meccaniche con coppia motore e disturbo positivo sulle accelerazioni dei link. Il caso senza disturbo è in \\path{sea_nonlinear_rhs.m}.")
 excerpt("analysis/nonlinear/simulate_hinf_final_nonlinear.m", "[ref,dist,nn]=signals(time)", "dz=[dm;",
         "Collega gli otto stati SEA, i sei stati attuativi e lo stato condiviso di $K$. Le posizioni misurate sono incrementali e possono contenere il rumore salvato; il simulatore usa \\texttt{ode23t}.")
-parts.append(r"""La RAS nominale è calcolata da
-\path{analysis/run_hinf_final_ras.m}, che richiama
-\path{analysis/ras/estimate_m15_robust_ras.m} con lo stesso simulatore,
-box, risoluzione e criteri del protocollo dichiarato. La chiamata
-usa i controllori salvati e produce una sezione empirica, non
-una certificazione globale. I risultati di questa relazione
-non richiedono nuove ricerche RAS per essere letti o verificati.
-""")
+section("Lyapunov e sezione comune dello stato aumentato")
+excerpt("analysis/run_final_ras_lyapunov.m", "n=size(cl.A", "rawP=lyap",
+        "Verifica positività, residuo assoluto e arrotondamento in coordinate bilanciate. Il fallimento numerico non autorizza un certificato.")
+excerpt("analysis/run_final_ras_lyapunov.m", "p=m3.mechanicalParams", "J=zeros",
+        "Maggiora analiticamente il resto cubico SEA e ricava un sottolivello interno nominale soltanto quando il controllo numerico è superato.")
 
 section("Formule di connessione e diagnosi del limite inferiore")
 parts.append(r"""Le due LFT usate nei capitoli hanno le forme

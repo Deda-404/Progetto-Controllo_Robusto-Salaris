@@ -2293,3 +2293,23 @@ precede la D-K e mantiene la stessa sequenza casuale verificata. Esiti
 negativi/inconclusivi RS/RP conservati. Approvazione del merge demandata
 alla revisione della PR; branch codex/refactoring-didattico-hinf-mu.
 Stato tecnico COMPLETE / PASS; parametri/scelte scientifiche invariati.
+
+## 2026-10-12 — Integrità degli otto modelli e audit corrente
+
+Branch codex/chiusura-definitiva-progetto-sea da main fa78e588ede9b8a136692c19aeb39b01b56cb502. Working tree iniziale pulito; checkout separato per conservare la copia Desktop. Recuperati gli otto SLX dalla cartella Drive 1wDiaAQVR7cDDt7T8WUlyZ0vgEa-2LWLx, conservati sotto simulink/student_originals. SHA-256 download/importazione/dopo caricamento identici 8/8; CRC ZIP validi. Nessuna modifica, conversione, set_param o salvataggio degli originali. I tentativi read-only falliscono in R2025b Update 4 perché gli SLX sono R2026a Update 4: simulazioni NOT RUN, non attribuite alle prove MATLAB. L'inventario XML corrente sostituisce le conclusioni su disponibilità e collegamenti delle copie datate.
+
+Primo runner: 111/112 PASS, un FAIL nel conteggio globale degli SLX di organicReviewTest; gli hash dei sei file storici restano identici. Il controllo viene circoscritto alla sua cartella originale e affiancato dalla verifica degli otto file attuali. Le campagne scientifiche e i documenti restano in lavorazione; nessuna dichiarazione di prontezza alla consegna. Gate integrità COMPLETE/PASS; gate Simulink PARTIAL/NOT RUN.
+
+## 2026-10-12 — Diagnosi conclusiva MATLAB e confini scientifici
+
+Branch codex/chiusura-definitiva-progetto-sea. Aggiunti runner esterni senza sintesi o riduzioni: sette scenari di rumore, propagazione ZOH fra campioni e doppia realizzazione; dieci nuovi impianti fisici incerti comuni più nominale, seed 20261012 e replay esatto; Lyapunov nello stato intero e griglia comune 150 punti. H∞ 2-DoF: picco encoder osservato 492784.658 N m, RMS integrato 13196.215; Kµ 87.096/8.288. Instabilità H∞ in 10/10 piante incerte, Kµ stabile 10/10. LQG/LQGI/Kµ 25/25 punti empirici; H∞1 23/25; H∞2 24 arresti numerici; PID 18 timeout del solver, tutti distinti da mancata convergenza fisica. Solo LQG/LQGI superano il gate numerico Lyapunov.
+
+141/141 test MATLAB PASS, inclusi hash otto originali, setup bus, esiti RAS ignoti e condizioni per i livelli Lyapunov. Quattro default didattici PASS, Code Analyzer senza messaggi; 80 artifact fisici/controllori congelati identici. Corrette asserzioni sul conteggio storico SLX e singleton finale delle ss-array. Setup Simulink esterno, originali mai modificati. Gate analisi/test COMPLETE/PASS; prestazioni operative rumore FAIL; validazione SLX PARTIAL/NOT RUN per release R2026a. Documento e PDF in consolidamento, nessun merge.
+
+## 2026-10-12 — Elaborati finali e manifest per revisione
+
+Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero errori, riferimenti indefiniti, destinazioni duplicate o contenuti fuori pagina. Esaminate tutte le slide e le pagine modificate dei Capitoli 9–11; sistemati colori delle esportazioni MATLAB e viste per l’orale. Scaletta verificata per somma: 17:50, 18:20 con slide autentica opzionale. Rimossa dal PDF la precedente campagna 40 campioni; nuovo Capitolo 11 con dieci impianti, nominale, tre figure e tabelle tracking/disturbo.
+
+Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
+
+Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.

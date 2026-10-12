@@ -1,0 +1,74 @@
+[
+  {
+    "name": "mu_linear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'mu_linear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "9d60a5b211c989f2c3324b47e6c218fc470d834d5633481c0d3c927c6eee078b",
+    "sha256_after": "9d60a5b211c989f2c3324b47e6c218fc470d834d5633481c0d3c927c6eee078b"
+  },
+  {
+    "name": "Hinf_linear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'Hinf_linear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "27b5132d581c2d220ef3d3c5cce1c66fb13f95a0c2f9c2a390127ecd1a1cda9d",
+    "sha256_after": "27b5132d581c2d220ef3d3c5cce1c66fb13f95a0c2f9c2a390127ecd1a1cda9d"
+  },
+  {
+    "name": "LQGI_linear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'LQGI_linear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "6c8248318c57d30853d345992dbf0d0e18256ca019c99a89107bd5729fa374dc",
+    "sha256_after": "6c8248318c57d30853d345992dbf0d0e18256ca019c99a89107bd5729fa374dc"
+  },
+  {
+    "name": "LQG_linear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'LQG_linear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "eb01cb8e66b919301181c647c931d9ffbaf48dac3b0fc5eb8d8df87da36f1ea9",
+    "sha256_after": "eb01cb8e66b919301181c647c931d9ffbaf48dac3b0fc5eb8d8df87da36f1ea9"
+  },
+  {
+    "name": "LQGI_nonlinear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'LQGI_nonlinear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "c1ceef864070be2afc5ae0dba9b3481f80c9378c05555e47f3d17f2a3152bcfe",
+    "sha256_after": "c1ceef864070be2afc5ae0dba9b3481f80c9378c05555e47f3d17f2a3152bcfe"
+  },
+  {
+    "name": "LQG_nonlinear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'LQG_nonlinear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "d628ed44dbba7bc6248340c0d1d94600e38b8f09984ff228b8201cf5bcbb0ff9",
+    "sha256_after": "d628ed44dbba7bc6248340c0d1d94600e38b8f09984ff228b8201cf5bcbb0ff9"
+  },
+  {
+    "name": "Hinf_nonlinear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'Hinf_nonlinear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "a8ddab01bf44e80597943b80c12667b1f9b6bb28fdc21a95cb69ee540e8e354c",
+    "sha256_after": "a8ddab01bf44e80597943b80c12667b1f9b6bb28fdc21a95cb69ee540e8e354c"
+  },
+  {
+    "name": "mu_nonlinear_sim",
+    "release": "2025b",
+    "loaded": false,
+    "simulation": "NOT RUN",
+    "error": "Error using load_system (line 23)\nModel 'mu_nonlinear_sim' was created with a newer version (R2026a) of Simulink\nTo disable this error message, use Simulink preferences.\nTo create a model that is compatible with this version of Simulink, load the model in Simulink R2026a and select Save > Export Model to > Previous Version.\n\nError in validate_student_originals (line 19)\n        load_system(file); % read-only inspection, no update/set_param/save.\n        ^^^^^^^^^^^^^^^^^^^^",
+    "sha256_before": "2c4043bc805fbddeff1357b6de5a02073f11729bfdb33007c98de71bbacb12de",
+    "sha256_after": "2c4043bc805fbddeff1357b6de5a02073f11729bfdb33007c98de71bbacb12de"
+  }
+]
