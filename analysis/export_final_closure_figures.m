@@ -14,7 +14,7 @@ for k=3:6
     plot(rr.time,rr.output(:,3:4)); grid on;
     xlabel('Tempo (s)');ylabel('Contributo encoder a u (N m)'); title(char(d.controllers(k).name));
 end
-exportgraphics(f,fullfile(figures,'noise_command.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'noise_command.png'));
 f=figure('Position',[50 50 950 430]); tiledlayout(1,2);
 nexttile; hold on;
 for k=3:6,loglog(noise.diagnostic(k).omega,noise.diagnostic(k).sigmaMaxTuv,'DisplayName',char(d.controllers(k).name));end
@@ -24,13 +24,13 @@ for k=3:6
     plot(noise.runs{k,2}.time,rad2deg(noise.runs{k,2}.output(:,1)),'DisplayName',char(d.controllers(k).name));
 end
 grid on;xlabel('Tempo (s)');ylabel('q_1 (gradi)');legend('Location','best');
-exportgraphics(f,fullfile(figures,'noise_frequency_position.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'noise_frequency_position.png'));
 f=figure('Position',[50 50 1000 650]);tiledlayout(2,2,'TileSpacing','compact');
 for k=3:6
     nexttile;plot(noise.runs{k,2}.time(1:end-1),noise.diagnostic(k).intersamplePeakPerInterval);
     grid on;xlabel('Tempo del campione (s)');ylabel('Massimo fra i campioni (N m)');title(char(d.controllers(k).name));
 end
-exportgraphics(f,fullfile(figures,'noise_intersample.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'noise_intersample.png'));
 practical=load(fullfile(folder,'practical_robustness.mat')); practical=practical.result;
 f=figure('Position',[50 50 1050 650]); tiledlayout(2,2,'TileSpacing','compact');
 for joint=1:2
@@ -47,7 +47,7 @@ for joint=1:2
         if joint==1 && output==1,legend('Location','best');end
     end
 end
-exportgraphics(f,fullfile(figures,'practical_tracking.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'practical_tracking.png'));
 f=figure('Position',[50 50 1050 650]); tiledlayout(2,2,'TileSpacing','compact');
 for joint=1:2
     for output=1:2
@@ -61,7 +61,7 @@ for joint=1:2
         if joint==1 && output==1,legend('Location','best');end
     end
 end
-exportgraphics(f,fullfile(figures,'practical_disturbance.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'practical_disturbance.png'));
 f=figure('Position',[50 50 1000 440]);tiledlayout(1,2);
 nexttile;hold on;
 for k=1:2
@@ -72,12 +72,12 @@ yline(0,':k','HandleVisibility','off');grid on;xlabel('Impianto (0 = nominale)')
 nexttile; counts=zeros(2,1);
 for k=1:2,counts(k)=sum(cellfun(@(r)r.stable,practical.runs(2:end,k)));end
 bar(categorical({'Hinf2','Kmu'}),counts);ylim([0 11]);ylabel('Impianti incerti stabili su 10');grid on;
-exportgraphics(f,fullfile(figures,'practical_comparison.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'practical_comparison.png'));
 % Less crowded views for the 20-minute talk, from the same responses.
 for scenario=["tracking","disturbance"]
-    f=figure('Position',[50 50 1100 340]);tiledlayout(1,2,'TileSpacing','compact');
+    f=figure('Position',[50 50 1100 260]);tiledlayout(1,2,'TileSpacing','compact');
     for joint=1:2
-        nexttile;hold on;set(gca,'FontSize',13);
+        nexttile;hold on;set(gca,'FontSize',15);
         if scenario=="tracking",tt=practical.runs{1,2}.trackingTime;else,tt=practical.runs{1,2}.disturbanceTime;end
         for p=2:11
             y=practical.runs{p,2}.(scenario){joint};
@@ -91,14 +91,14 @@ for scenario=["tracking","disturbance"]
         xlabel('Tempo (s)');ylabel('Posizione (gradi)');
         if joint==1,legend('Location','best');end
     end
-    exportgraphics(f,fullfile(figures,"slide_practical_"+scenario+".png"),'Resolution',200);
+    exportFigure(f,fullfile(figures,"slide_practical_"+scenario+".png"));
 end
 f=figure('Position',[50 50 750 450]);tiledlayout(2,1,'TileSpacing','compact');
 for k=[4 6]
     nexttile;plot(noise.runs{k,2}.time(1:end-1),noise.diagnostic(k).intersamplePeakPerInterval);
     title(char(d.controllers(k).name));grid on;xlabel('Tempo (s)');ylabel('Picco tra campioni (N m)');
 end
-exportgraphics(f,fullfile(figures,'slide_noise_intersample.png'),'Resolution',200);
+exportFigure(f,fullfile(figures,'slide_noise_intersample.png'));
 if isfile(fullfile(folder,'ras_metrics.csv'))
     ras=load(fullfile(folder,'ras_lyapunov.mat')); ras=ras.result;
     f=figure('Position',[50 50 1100 680]);tiledlayout(2,3,'TileSpacing','compact');
@@ -113,6 +113,14 @@ if isfile(fullfile(folder,'ras_metrics.csv'))
         title(char(d.controllers(k).name));xlabel('delta q_1 (gradi)');ylabel('delta q_2 (gradi)');
         if k==1,legend('Location','southoutside','FontSize',8);end
     end
-    exportgraphics(f,fullfile(figures,'ras_common_grid.png'),'Resolution',200);
+    exportFigure(f,fullfile(figures,'ras_common_grid.png'));
 end
+end
+
+function exportFigure(f,file)
+% Explicit colors also cover padding and labels in MATLAB dark themes.
+set(findall(f,'Type','axes'),'Color','white','XColor','black','YColor','black');
+set(findall(f,'Type','text'),'Color','black');
+set(findall(f,'Type','legend'),'Color','white','TextColor','black');
+exportgraphics(f,file,'Resolution',200,'BackgroundColor','white');
 end

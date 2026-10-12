@@ -1,70 +1,65 @@
 \chapter{Riproducibilità}
 \section{Verifiche senza ripetere le sintesi}
-Dalla radice del repository, in MATLAB:
+Dalla radice del repository, in MATLAB R2025b con Control System,
+Robust Control e Symbolic Math Toolbox:
 \begin{verbatim}
-setenv('CR_RUN_SCOPE','verify');
-run_all
+setenv('CR_RUN_SCOPE','verify'); run_all
 \end{verbatim}
-Il comando verifica modello fisico, equilibrio, linearizzazione, attuatori,
-incertezze, LQG, LQGI, limite inferiore $H_\infty$, coerenza della catena
-robusta e accordo locale non lineare. Sono incluse le verifiche di identità
-degli originali e della struttura LFT. Non vengono sintetizzati nuovi
-controllori, eseguite nuove Monte Carlo o ricostruiti diagrammi.
+Il runner verifica modello, equilibrio, Jacobiano, attuatori, incertezze,
+LQG/LQGI, struttura LFT, rumore, stabilità interna e integrità degli otto
+modelli. I risultati sono in
+\path{results/data/coherent_review/matlab_tests.csv}. Il successo dei test
+software non trasforma in soddisfatto un requisito prestazionale fallito.
+I quattro script didattici si eseguono direttamente dall'Editor MATLAB;
+\path{tools/verify_four_final_scripts.m} ne esegue le modalità predefinite
+e controlla l'identità dei modelli e dei controllori archiviati.
 
-I risultati del run sono in
-\path{results/data/coherent_review/matlab_tests.csv}. Un test software positivo
-non trasforma in soddisfatto un requisito prestazionale fallito.
+\section{Esperimenti conclusivi MATLAB}
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','closure'); run_all
+\end{verbatim}
+Il comando calcola sette scenari di rumore con seed 20261012, campiona
+dieci impianti nuovi condivisi dai controllori robusti, ricostruisce la
+griglia non lineare comune e verifica i candidati Lyapunov. Non richiama
+\texttt{hinfsyn}, \texttt{musyn} o riduzioni. La RAS salva checkpoint;
+la ripresa incompleta è ammessa soltanto per le stesse matrici e lo stesso
+protocollo. Un limite di tempo numerico per punto resta un esito ignoto,
+distinto dal mancato rispetto del criterio fisico a 12 s.
+Per leggere i dati già prodotti e rigenerare le figure:
+\begin{verbatim}
+setenv('CR_RUN_SCOPE','closure_export'); run_all
+\end{verbatim}
+Tabelle e listati si aggiornano con:
+\begin{verbatim}
+python tools/build_final_closure_tables.py
+python report/build_matlab_appendix.py
+\end{verbatim}
 
-\section{Audit degli originali}
+\section{Gli originali Simulink}
 \begin{verbatim}
-setenv('CR_RUN_SCOPE','originals');
-run_all
+setenv('CR_RUN_SCOPE','originals'); run_all
 \end{verbatim}
-Si tenta il caricamento e la compilazione, senza salvare modifiche agli SLX.
-L'esito è registrato in \path{original_models_audit.json} nella stessa
-cartella di risultati. Il codice non avvia simulazioni dei diagrammi
-incompleti e non altera l'interfaccia del controllore H-infinity originale.
-Servono Simulink e Control System Toolbox; per l'analisi incerta serve
-Robust Control Toolbox. Gli originali richiedono R2026a o una esportazione
-compatibile effettuata e verificata dal gruppo.
+L'audit legge gli originali senza salvare o convertire i file e confronta
+gli hash prima e dopo. Tutti gli otto richiedono R2026a; R2025b rifiuta il
+caricamento. Su R2026a si possono eseguire, senza modifiche interne:
+\begin{verbatim}
+addpath('simulink');
+validate_student_originals(true);
+export_student_schemes;
+\end{verbatim}
+Il setup esterno passa le variabili con
+\texttt{Simulink.SimulationInput.setVariable}. Le impostazioni interne,
+i solver, i rumori e i selettori conservano i valori degli originali.
+La funzione salva gli output; essi vanno poi esaminati prima di
+attribuire prestazioni validate ai diagrammi. Non è prevista conversione
+a una release precedente.
 
-\section{Figure, tabelle e PDF}
-La revisione LQGI e il confronto dei tre $M_o$ si riproducono senza
-nuova sintesi robusta. Dopo aver aggiunto i percorsi \path{src},
-\path{controllers} e \path{analysis} con \texttt{addpath(genpath(...))}:
-\begin{verbatim}
-validate_m7_lqg_integral; plot_lqgi_revision;
-run_lqgi_validation; run_lqgi_ras;
-export_hinf_readable_figures;
-\end{verbatim}
-I primi due comandi ricostruiscono i tre costi integrali a dati M6
-invariati; gli altri producono le nuove prove e figure da controllori
-salvati. \path{run_lqgi_ras} riusa checkpoint soltanto se controllore,
-pianta e protocollo coincidono. \path{export_hinf_readable_figures}
-ricalcola le risposte dei tre controllori 2-DoF, senza \texttt{hinfsyn}.
-L'ambito \texttt{export} legge gli artifact e rigenera le figure di audit:
-\begin{verbatim}
-setenv('CR_RUN_SCOPE','export');
-run_all
-\end{verbatim}
-Dopo l'esportazione, \path{python report/build_organic_tables.py}
-formatta le tabelle di confronto usando i JSON prodotti da MATLAB.
-\path{python report/build_didactic_tables.py} aggiorna il confronto
-del Capitolo 8 dagli stessi JSON consolidati.
-\path{python report/build_matlab_appendix.py} seleziona le righe
-dei sorgenti per l'Appendice~\ref{app:matlab}, senza modificarli.
-La compilazione dei documenti va eseguita nelle rispettive cartelle:
-\begin{verbatim}
-cd report
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-cd ../presentation
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-\end{verbatim}
-La compilazione verificata dei due nomi finali usa
-\path{tools/build_m18_latex.ps1}, senza l'opzione \texttt{-ReportOnly}.
-Il testo dei capitoli è mantenuto nei sorgenti LaTeX; gli script di
-esportazione dei dati non lo sovrascrivono. I file finali sono
-\path{report/Progetto_CR_Relazione_finale.pdf} e
+\section{Compilazione e consegna}
+\path{tools/build_m18_latex.ps1} compila relazione e presentazione con
+i nomi finali, verifica riferimenti, errori e fuoriuscite tipografiche.
+I PDF sono \path{report/Progetto_CR_Relazione_finale.pdf} e
 \path{presentation/Progetto_CR_Presentazione.pdf}.
-Matricole, data definitiva e prova orale cronometrata richiedono
-completamento da parte del gruppo.
+Le note orali indicano una durata prevista entro 20 minuti; la prova
+cronometrata deve essere effettuata dal gruppo. Il manifest in
+\path{delivery/manifest.json} seleziona i materiali di consegna e le loro
+dipendenze. Matricole e data definitiva restano da completare.

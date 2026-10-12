@@ -29,6 +29,7 @@
 \input{../report/generated/revision_values.tex}
 \input{../report/generated/hinf_final_values.tex}
 \input{generated/coherent_review_values.tex}
+\input{../report/generated/final_closure_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
 \subtitle{Modello, sintesi nominale e robustezza strutturata}
 \author{Alessio de Dato \and Valerio Rebechi}
@@ -311,72 +312,92 @@ RS/RP & non certificate & non soddisfatte & soddisfatte\\\bottomrule
 
 \end{frame}
 
-\begin{frame}{Verifiche complementari: campioni incerti e non linearità}
 
+\begin{frame}{Dieci impianti incerti: nominale e campioni comuni}
 \begin{columns}[T]
-\column{.42\textwidth}
-\small
-40 campioni comuni, seed 20260826:
+\column{.40\textwidth}\small
+Seed 20261012; stessi $k_1,k_2,J_{m1}$ e due blocchi dinamici ammissibili.
 \begin{itemize}
-\item LQG: 37/40 stabili;
-\item $H_\infty$: 0/40;
-\item $K_\mu$: 40/40.
+\item Nominale: entrambi stabili.
+\item $H_\infty$ 2-DoF: 0/10 stabili.
+\item $K_\mu$: 10/10 stabili.
 \end{itemize}
-MATLAB non lineare: equilibrio e accordo locale verificati anche per LQGI.
-\column{.56\textwidth}
-\includegraphics[width=\linewidth]{../report/figures/hinf_final/monte_carlo.png}
+Il campionamento è una verifica pratica; i margini RS/RP sono una verifica diversa.
+\column{.58\textwidth}
+\includegraphics[width=\linewidth]{../report/figures/final_closure/practical_comparison.png}
 \end{columns}
-\bad{La frequenza empirica non è una probabilità fisica né un certificato robusto.}
-
 \end{frame}
 
-\begin{frame}{Rumore, RAS e Lyapunov: limiti da dichiarare}
+\begin{frame}{Tracking e disturbi sugli impianti incerti}
+\includegraphics[width=\textwidth,height=.33\textheight,keepaspectratio]{../report/figures/final_closure/slide_practical_tracking.png}
+\includegraphics[width=\textwidth,height=.33\textheight,keepaspectratio]{../report/figures/final_closure/slide_practical_disturbance.png}
+\par\footnotesize Gradini $5^\circ$ in alto, coppie link 0.5 N m in basso.
+Curve chiare: i dieci campioni $K_\mu$ stabili.
+\par\small\bad{Disturbo: picco di posizione fino a $19.3^\circ$ nei campioni.}
+\end{frame}
 
+\begin{frame}{Il rumore encoder produce impulsi fra i campioni}
+\begin{columns}[T]
+\column{.41\textwidth}\small
+$r=d=0$, $\sigma_y=0.05^\circ$, $T_s=2$ ms.
+\[
+T_{uv}=(I-K_yG)^{-1}K_y
+\]
+{\setlength{\tabcolsep}{3pt}\footnotesize
+\begin{tabular}{lrr}\toprule
+ & Picco & RMS\\
+ & \multicolumn{2}{c}{N m, fra i campioni}\\\midrule
+$H_\infty$ 2-DoF & \NoiseHinfPeak & \NoiseHinfRms\\
+$K_\mu$ & \NoiseMuPeak & \NoiseMuRms\\\bottomrule
+\end{tabular}}
+\par\medskip Nessuna saturazione o attenuazione aggiunta.
+\column{.57\textwidth}
+\includegraphics[width=\linewidth]{../report/figures/final_closure/slide_noise_intersample.png}
+\end{columns}
+\par\small\bad{Registrare il comando ogni 2 ms nasconde i modi più rapidi.}
+\end{frame}
+
+\begin{frame}{RAS empirica e insieme interno di Lyapunov}
+\begin{columns}[T]
+\column{.33\textwidth}\small
+$V=z^TPz$, stato aumentato completo.
+\[
+\dot V=-z^TQz+2z^TP\phi(z)
+\]
+Griglia comune: $25$ punti, $\pm60^\circ$, $\delta\theta=\delta q$.
+\par\medskip Insiemi interni molto piccoli per LQG/LQGI; gli altri casi seguono il controllo numerico.
+\column{.65\textwidth}
+\includegraphics[width=\linewidth]{../report/figures/final_closure/ras_common_grid.png}
+\end{columns}
+\small Il bordo è il dominio esplorato. Arresti numerici: convergenza ignota.
+\end{frame}
+
+\begin{frame}{Gli otto Simulink originali degli studenti}
 \small
-\begin{tabular}{lrrr}\toprule
-Prova MATLAB & LQGI & $H_\infty$ & $K_\mu$\\\midrule
-Picco comando con rumore [N m] & \LqgiNoisePeak & 5685 & 8.12\\
-RMS comando [N m] & \LqgiNoiseRms & 118.2 & 1.934\\
-Punti RAS convergenti & \LqgiRasConvergent/\LqgiRasPoints & 27/285 & 57/57\\
-Raggio minimo risolto [gradi] & \LqgiRasMinimum & 0 & 60\\
-Residuo Lyapunov & non calcolato & 65.27 (FAIL) & 0.04493\\\bottomrule
+\begin{tabular}{lp{.72\textwidth}}\toprule
+Famiglia & Interfaccia riscontrata nell'audit XML\\\midrule
+LQG & Quattro encoder, Kalman, feedback stimato e riferimento.\\
+LQGI & Integratore dell'errore $r-q_{\rm mis}$ e osservatore.\\
+$H_\infty$ & 1-DoF su errore; 2-DoF/PID su $[r;q_{\rm mis}]$.\\
+$K_\mu$ & Ingresso $[r;q_{\rm mis}]$, realizzazione completa.\\\bottomrule
 \end{tabular}
-\par\footnotesize Rumore: quattro encoder LQGI, due per i controllori robusti; stesso riferimento di 5 gradi.
+\par\medskip Lineare e non lineare per ogni famiglia; SHA-256 invariati.
+\par\medskip Tutti R2026a: caricamento rifiutato in R2025b. Validazione e schermate autentiche da completare su R2026a, con setup esterno.
+\end{frame}
+
+\IfFileExists{../report/figures/student_exports/LQGI_linear_sim.png}{
+\begin{frame}{Schema Simulink autentico: LQGI lineare}
+\includegraphics[width=\textwidth,height=.76\textheight,keepaspectratio]{../report/figures/student_exports/LQGI_linear_sim.png}
+\end{frame}
+}{}
+
+\begin{frame}{Conclusioni e limiti verificati}
 \begin{itemize}
-\item LQGI e $K_\mu$: box esaurito, senza individuare la frontiera fisica.
-\item Comandi RAS senza saturazioni: LQGI \LqgiRasCommand\ N m; $K_\mu$ 2763 N m.
+\item LQG: riferimento nominale; LQGI: reiezione DC con tracking lento.
+\item $H_\infty$: buon nominale 2-DoF, ma fragile e sensibile al rumore.
+\item $K_\mu$: robusto nel modello dichiarato; ordine 78 e target temporali parziali.
+\item Validazione degli originali e figure Simulink richiedono R2026a.
 \end{itemize}
-
+\par\medskip\good{Le conclusioni seguono i dati, comprese le prestazioni negative.}
 \end{frame}
-
-\begin{frame}{Simulink: stato effettivo degli originali}
-
-\small
-\begin{tabular}{lp{.68\textwidth}}\toprule
-Originale & Stato e completamento manuale\\\midrule
-LQR/LQG & Lineare e non lineare presenti con osservatore; verificare disturbo e rumori.\\
-LQGI & Due originali: integratore da spostare su $r-q_{\rm mis}$; correggere processo e disturbo.\\
-H-infinity & Due originali a due ingressi; adattare al 2-DoF a quattro ingressi.\\
-$K_\mu$ & Nessun originale del gruppo disponibile.\\\bottomrule
-\end{tabular}
-\par\medskip
-Sei file R2026a: caricamento bloccato in R2025b. Istruzioni puntuali sui SID degli originali nel repository.
-\par\medskip
-\bad{La parte Simulink della traccia resta da completare manualmente.}
-
-\end{frame}
-
-\begin{frame}{Conclusioni: scelta per ruolo e attività residue}
-
-\begin{itemize}
-\item LQG: riferimento nominale; LQGI: reiezione asintotica del disturbo.
-\item $H_\infty$: il 2-DoF risolve l'overshoot nominale, ma resta fragile.
-\item $K_\mu$: candidato robusto del modello dichiarato, con ordine elevato e target temporali parziali.
-\item Completare gli originali Simulink e le verifiche richieste.
-\end{itemize}
-\par\medskip
-\good{Ogni conclusione è riferita a un modello, un protocollo e una verifica identificabili.}
-
-\end{frame}
-
 \end{document}

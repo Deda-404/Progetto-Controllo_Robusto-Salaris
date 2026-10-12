@@ -1,97 +1,64 @@
-# Controllo robusto di un manipolatore SEA
+# Controllo robusto di un manipolatore SEA a due giunti
 
-Modello planare a due giunti: 8 stati meccanici, 14 con attuatori. Confronto LQG/LQGI, H∞ 1-/2-DoF, sintesi strutturata e Kµ. Stato aggiornato al 6 ottobre 2026; questo repository è la fonte di verità.
+Revisione scientifica del 12 ottobre 2026. **141/141 test MATLAB PASS.** Branch `codex/chiusura-definitiva-progetto-sea`, base main `fa78e588`. Il branch è preparato per revisione e integrazione manuale; nessun merge automatico.
 
-## Documenti di consegna
+## Elaborati e verifica
 
-- [Relazione](report/Progetto_CR_Relazione_finale.pdf): 83 pagine, sorgenti LaTeX in report/.
-- [Presentazione](presentation/Progetto_CR_Presentazione.pdf): 19 slide, scaletta 17:45.
-- [Note orali](presentation/SPEAKER_NOTES.md).
-- [Resoconto in dieci punti e lista completa dei file](docs/RESOCONTO_REVISIONE_LQGI_HINF_MU.md).
-- [Correzioni manuali Simulink](docs/CORREZIONI_SIMULINK_LQGI.md).
-- [Stato, risultati e attività residue](docs/PROJECT_STATUS.md).
+- [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf), fonti LaTeX in `report/`.
+- [Presentazione PDF](presentation/Progetto_CR_Presentazione.pdf): 21 slide, stima 17:50.
+- [Note orali](presentation/SPEAKER_NOTES.md) e [tempi](presentation/OUTLINE_AND_TIMING.md).
+- [Chiusura e giudizio di consegna](docs/CHIUSURA_FINALE_PROGETTO.md).
+- [Verifica degli otto Simulink](docs/REPORT_VERIFICA_SIMULINK.md).
+- [Diagnosi del rumore](docs/ANALISI_RUMORE_MISURA.md).
+- [Checklist studenti](docs/CHECKLIST_CONSEGNA_STUDENTI.md).
+- [Manifest di consegna](delivery/manifest.json).
 
-## Risultati e stato
+Il modello ha 8 stati meccanici e 14 con attuatori. Sono conservati LQG (14 stati), LQGI (16), H∞ 1-DoF (18), H∞ 2-DoF (22), PID (4) e Kµ (78), senza riduzioni o nuova sintesi. I quattro script finali sono in `File_di_Funzioni_Progetto-Accorpati/`; il loro default è stato eseguito e verificato.
 
-**112/112 test MATLAB PASS**, sette nuovi controlli LQGI. Il servo usa `u=-Kx*xhat-Ki*xi`, `xi_dot=r-q_measured`; Kalman M6 e guadagni M7 invariati. Nuove prove lineari/non lineari, di rumore encoder/processo e RAS empirica LQGI: 57/57 punti convergenti nel box, senza saturazioni. Il tracking resta lento: 5.046 s nel confronto lineare M7.
+La nuova campagna del Capitolo 11 usa **dieci impianti incerti nuovi e comuni più il nominale**, seed 20261012: H∞ 2-DoF 0/10 stabili, Kµ 10/10. Entrambi stabilizzano il nominale. Tracking e disturbi sono accreditati solo nelle chiusure stabili. Il campione non è una probabilità né un certificato.
 
-Mo 2/3/4: tempi 2.918/1.944/1.460 s, norme 0.0305405/0.0312036/0.0474606. La scelta di 4 segue la minore violazione temporale, con compromessi su errore, comando e accoppiamento; non minimizza γ. Nessuno dei tre soddisfa 0.8 s.
+**Il rumore resta critico.** Con encoder σ=0.05 gradi e ZOH di 2 ms, riferimento/disturbo/processo nulli, i picchi osservati fra campioni sono circa 4.93×10^5 N m per H∞ 2-DoF e 87.1 N m per Kµ; RMS integrati circa 1.32×10^4 e 8.29 N m. La sola registrazione a 2 ms perde impulsi rapidi. Sono richieste del modello senza saturazioni; nessuna attenuazione è stata introdotta per nascondere il risultato.
 
-H∞ 2-DoF: ordine 22, NS/NP PASS, RS FAIL. Intervallo RP invertito non validato; RP esclusa dal fallimento RS. Kµ: ordine 78, norma nominale 0.63468, margini RS circa 1.80 e RP circa 1.68 nel modello dichiarato; target temporali parziali. Controllori robusti, pesi e incertezze invariati, senza ripetere le sintesi.
+La RAS usa lo stato aumentato completo e una griglia comune di 25 punti per ciascuno dei sei controllori. I risultati empirici, gli arresti numerici e gli insiemi interni Lyapunov sono distinti nel Capitolo 10 e nei dati. Il dominio ±60 gradi non è il confine della RAS; le prove non includono limiti hardware.
 
-**Simulink PARTIAL:** sei originali del gruppo conservati byte per byte, tre lineari e tre non lineari. Sei caricamenti falliti per R2026a su R2025b; nessuna simulazione degli originali validata. Audit statico e correzioni puntuali per integratore rumoroso, disturbo link, rumori e interfaccia H∞. Originale Kµ assente. I nomi SLX d'archivio restano provenienza, non versioni definitive LQGI.
+**Simulink PARTIAL / simulazioni NOT RUN:** tutti gli otto originali studenti sono in `simulink/student_originals/`, con SHA-256 sorgente/importazione/dopo verifica identici. Sono R2026a Update 4 e il caricamento è rifiutato in R2025b Update 4. Audit XML e setup esterno sono disponibili; mancano run e schermate autentiche nella release corretta. MATLAB non sostituisce questa verifica.
 
-## Esecuzione e rigenerazione
+## Esecuzione
 
-In MATLAB dalla radice:
-
-```matlab
-setenv('CR_RUN_SCOPE','verify'); run_all    % test senza nuova sintesi
-setenv('CR_RUN_SCOPE','originals'); run_all % audit senza salvare gli SLX
-setenv('CR_RUN_SCOPE','export'); run_all    % figure dai risultati correnti
-```
-
-Le suite che rigenerano internamente dati sono protette dal runner, che ripristina gli artifact iniziali. Test salvati in results/data/coherent_review/.
-
-Per ricalcolare la campagna LQGI, dopo run_all che configura i path:
+Dalla radice in MATLAB, con Control System, Robust Control e Symbolic Math Toolbox:
 
 ```matlab
-validate_m7_lqg_integral; plot_lqgi_revision;
-run_lqgi_validation; run_lqgi_ras;
-export_hinf_readable_figures;
+setenv('CR_RUN_SCOPE','verify'); run_all          % test, nessuna nuova sintesi
+setenv('CR_RUN_SCOPE','originals'); run_all       % sola lettura degli SLX
+setenv('CR_RUN_SCOPE','closure_export'); run_all  % figure dai dati conclusivi
+setenv('CR_RUN_SCOPE','closure'); run_all         % nuovi esperimenti e RAS
+addpath('tools'); verify_four_final_scripts      % quattro default e hash protetti
 ```
 
-La RAS usa checkpoint identificati anche dall'hash del simulatore. Per tabelle, appendice, macro della presentazione e audit, dalla radice:
+Le suite storiche sono conservate come regressioni; il runner ripristina i dati che rigenera durante i test. La nuova campagna non carica o riusa i vecchi 40 campioni. La RAS può richiedere diversi minuti e distingue il limite del solver dalla mancata convergenza fisica.
+
+Tabelle, listati e PDF:
 
 ```text
-python report/build_didactic_tables.py
+python tools/build_final_closure_tables.py
 python report/build_matlab_appendix.py
-python presentation/build_review_values.py
-python tools/audit_coherent_revision.py
+powershell -File tools/build_m18_latex.ps1
 ```
 
-`tools/build_m18_latex.ps1` compila e audita entrambi i PDF con i nomi di consegna; `-ReportOnly` compila la sola relazione. `tools/build_hinf_revision_report.py` è un generatore storico disabilitato nella CLI, per evitare di sovrascrivere i capitoli correnti con risultati di un problema precedente.
+Per la validazione su R2026a, senza cambiare gli originali:
 
-## Struttura e fonti
+```matlab
+addpath('simulink');
+validate_student_originals(true);
+export_student_schemes;
+```
 
-- src/, controllers/, analysis/, tests/: parametri, equazioni, controllori e verifiche.
-- results/data/hinf_final_coherent/: fonte dei controllori robusti adottati.
-- results/data/lqgi_validation/: traiettorie, rumore, metriche e RAS LQGI.
-- results/data/coherent_review/: confronto Mo, test e audit dei sei originali.
-- simulink/originals/: sei originali e manifest SHA-256.
-- docs/coherent_review/: inventario iniziale, dipendenze, integrità e occorrenze classificate.
-- report/, presentation/: sorgenti editabili e PDF.
+Il setup passa matrici e bus con `Simulink.SimulationInput.setVariable`; mantiene solver, collegamenti, rumori e selettori interni. Esaminare gli output prima di attribuire metriche validate agli SLX. Non convertire i modelli e non disabilitare il controllo di release.
 
-MATLAB, Control System Toolbox e Robust Control Toolbox sono necessari alle analisi; Simulink ai diagrammi e ai tipi del setup. Alcuni test simbolici richiedono Symbolic Math Toolbox, già usato nel progetto. Nessuna nuova dipendenza.
+## Fonti e cartelle
 
-Drive resta riferimento in sola lettura. Risultati robusti fuori dalla cartella adottata, vecchi manifest M18 e resoconti datati costituiscono cronologia. La PR #34 è integrata nella base 283193e; questa revisione usa `codex/revisione-lqgi-hinf-mu`, senza merge automatico su main.
+`results/data/hinf_final_coherent/` conserva i controllori robusti e i loro margini. `results/data/final_closure/` contiene la diagnosi del rumore, i dieci impianti campionati, la RAS e gli audit correnti; MAT, CSV e JSON rendono verificabili le figure. `src/`, `controllers/`, `analysis/` e `tests/` contengono le dipendenze scientifiche.
 
-## File MATLAB accorpati — 10 ottobre 2026
+Drive è stato consultato in sola lettura. `simulink/originals/`, `simulink/drive_project/` e resoconti datati restano archivio; per la consegna degli otto file usare esclusivamente `student_originals/` e il suo manifest. Le vecchie istruzioni di correzione dei modelli non si applicano automaticamente ai file correnti.
 
-La cartella `File_di_Funzioni_Progetto-Accorpati/` raccoglie i quattro script
-`progetto_lqg.m`, `progetto_lqgi.m`, `progetto_hinf_tre_controllori.m` e
-`progetto_mu.m`. Il README della cartella descrive contenuti, dipendenze e
-interruttori di analisi/sintesi. Aprire un file nell'Editor MATLAB e premere Run.
-
-Tutti gli script risolvono i percorsi rispetto al proprio file e richiedono il
-repository completo. LQG/LQGI conservano i sorgenti originali; H∞/µ caricano
-modelli, controllori e risultati dai MAT esistenti, con tredici passi didattici.
-Per ripetere il confronto con la versione precedente: `python
-tools/verify_didactic_refactor.py --fresh` (MATLAB nel PATH, oppure `--matlab`).
-I test scrivono solo sotto `tmp/refactor_didactic/`. Dettagli e provenienza:
-`docs/RESOCONTO_REFACTORING_DIDATTICO.md`.
-Branch di revisione: `codex/refactoring-didattico-hinf-mu`, base `main` 6133365
-con PR #36 e #37 integrate; nessun merge automatico.
-
-## Modelli Simulink dal Drive del progetto — 10 ottobre 2026
-
-`simulink/drive_project/` contiene la copia completa della cartella Drive
-condivisa: quattro nuove versioni LQG/LQGI lineari e non lineari, H∞ lineare,
-e i 32 componenti della cartella H∞ non lineare estratta. Il README Simulink
-chiarisce la distinzione fra file SLX e cartella; il manifest registra
-provenienza, dimensioni e SHA-256. Gli originali preesistenti sono conservati.
-
-Importazione e integrità statica COMPLETE / PASS, simulazioni NOT RUN.
-I pacchetti sono R2026a Update 4; nessuna conversione o modifica. Branch
-`codex/simulink-drive-aggiornamento`, basato su main a502609 con PR #36 integrata,
-proposto per revisione prima del merge.
+La consegna non è ancora verificata integralmente: occorrono R2026a per i run e le immagini degli originali, matricole/data e prova orale cronometrata. Rumore, target temporali falliti e limiti numerici sono risultati da discutere, non gate software da dichiarare superati.

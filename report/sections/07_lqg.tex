@@ -361,8 +361,7 @@ quel regolatore con Kalman, ricostruendo gli stati mancanti dalle quattro
 misure. LQGI aggiunge a LQG la memoria dell'errore: il regolatore è
 progettato sul sistema aumentato, ma utilizza sempre lo stato stimato.
 Questa è la configurazione richiesta dalla traccia come LQG con integratore.
-La precedente denominazione del servo era imprecisa per l'architettura
-MATLAB già realizzata: il feedback non usava il vero stato completo.
+Il feedback usa lo stato stimato, non lo stato vero completo.
 
 Le quattro misure rimangono quelle LQG:
 \[

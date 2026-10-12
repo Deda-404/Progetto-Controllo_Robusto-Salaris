@@ -51,3 +51,7 @@ tmp/
 # Intermediate PDF names; final deliverables are tracked
 /report/main.pdf
 /presentation/main.pdf
+
+# Python generated caches
+__pycache__/
+*.pyc
