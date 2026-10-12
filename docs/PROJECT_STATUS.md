@@ -66,3 +66,9 @@ Dettagli: docs/RESOCONTO_REFACTORING_DIDATTICO.md.
 ## 2026-10-12 — Chiusura scientifica in corso
 
 Otto originali correnti disponibili e integri. Audit ZIP/XML PASS; caricamento R2025b FAIL per release, simulazioni NOT RUN. Nuove prove MATLAB di rumore e dieci impianti incerti eseguite; consolidamento RAS, test e PDF in corso. Stato complessivo PARTIAL. Nessun merge su main.
+
+## 2026-10-12 — Diagnosi conclusiva MATLAB e confini scientifici
+
+Branch codex/chiusura-definitiva-progetto-sea. Aggiunti runner esterni senza sintesi o riduzioni: sette scenari di rumore, propagazione ZOH fra campioni e doppia realizzazione; dieci nuovi impianti fisici incerti comuni più nominale, seed 20261012 e replay esatto; Lyapunov nello stato intero e griglia comune 150 punti. H∞ 2-DoF: picco encoder osservato 492784.658 N m, RMS integrato 13196.215; Kµ 87.096/8.288. Instabilità H∞ in 10/10 piante incerte, Kµ stabile 10/10. LQG/LQGI/Kµ 25/25 punti empirici; H∞1 23/25; H∞2 24 arresti numerici; PID 18 timeout del solver, tutti distinti da mancata convergenza fisica. Solo LQG/LQGI superano il gate numerico Lyapunov.
+
+141/141 test MATLAB PASS, inclusi hash otto originali, setup bus, esiti RAS ignoti e condizioni per i livelli Lyapunov. Quattro default didattici PASS, Code Analyzer senza messaggi; 80 artifact fisici/controllori congelati identici. Corrette asserzioni sul conteggio storico SLX e singleton finale delle ss-array. Setup Simulink esterno, originali mai modificati. Gate analisi/test COMPLETE/PASS; prestazioni operative rumore FAIL; validazione SLX PARTIAL/NOT RUN per release R2026a. Documento e PDF in consolidamento, nessun merge.
