@@ -2,6 +2,8 @@
 
 Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.
 
+[PR #41 — revisione con rumore e orale finale](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza; ramo e otto nuovi oggetti Git LFS pubblicati, nessun merge.
+
 La baseline rimane predefinita. Tre nuovi H∞ di ordine 22 riducono il rumore ma falliscono RS/RP. Il nuovo μ, MuN1 di ordine 82, supera NS/NP/RS/RP e resta una proposta per la revisione degli studenti: nel Simulink non lineare il picco passa da 108.526 a 2.25091 N m e il massimo RMS per canale da 12.8223 a 1.35740 N m. I rapporti sono 48.21 e 9.446. Nel protocollo encoder isolato, picco e RMS migliorano oltre dieci volte in ciascuno dei tre seed.
 
 Il compromesso resta esplicito: il tracking μ ha Ts=1.558/1.482 s e offset 8.243%/2.192%; l'offset q1 peggiora rispetto alla baseline e la reiezione del disturbo è leggermente peggiore. RS è [1.84622,1.88174], RP [1.59634,1.60036], per il modello incerto dichiarato. I dieci impianti congelati sono stabili con MuN1; la griglia RAS ha 25 convergenze empiriche, senza certificato Lyapunov numericamente accreditato. Nessun limite di coppia hardware documentato consente una certificazione fisica.

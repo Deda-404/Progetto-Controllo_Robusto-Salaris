@@ -3038,3 +3038,9 @@ Stato del lavoro COMPLETE/PASS tecnico e documentale; accettazione scientifica P
 Prima della pubblicazione confrontati esattamente A/B/C/D dei Workspace di tutti gli otto run con i controllori dichiarati: anche un checkpoint riusato viene rifiutato se appartiene a matrici differenti. Sette test dedicati rieseguiti nel repository e nella copia autonoma: 7/7 PASS in entrambi, Code Analyzer senza messaggi. Il primo test aggiuntivo aveva usato il nome errato del campo metadati model invece di name; corretto e log conservato nella revisione interna. Nessun controllore o risultato scientifico modificato per correggere il test.
 
 Nuova consegna: 449 file copiati e compressi con SHA-256 verificati, otto SLX invariati, due TXT in preparazione_studenti. Il pacchetto precedente e il relativo ZIP restano conservati. Rigenerazione finale solo del nuovo pacchetto per includere il controllo dei checkpoint e gli esiti aggiornati.
+
+## 2026-10-13 — Pubblicazione dello studio e PR #41
+
+Pubblicati i commit 505f2da (sintesi, dati e verifiche) e abce30a (elaborati, orale e consegna) sul branch codex/sintesi-robusta-rumore-e-orale-finale. Upload 8/8 nuovi oggetti LFS, 232 MB. Aperta PR #41 in bozza: https://github.com/Deda-404/Progetto_CR/pull/41; verificati open, draft=true, merged=false e base main a4b3817. Adozione finale e merge riservati agli studenti.
+
+Manifest finale: 475 file selezionati, hash PASS. Pacchetto nuovo: 449 file, ZIP 687580148 byte, SHA-256 8b97fbad0d6c8a1102b03a78f980d48f5ea2e6d5a3993e9102eabff31cf9af8c, verifica dei contenuti compressi PASS. Originali SLX, 197 MAT/SLX precedenti, quattro script e codice fisico invariati; audit PDF e collaudi conservati. Il commit conclusivo registra soltanto pubblicazione e manifest: non altera PDF, controllori, dati o ZIP. Restano prova orale dal vivo, valutazione dei compromessi e verifica hardware con dati di targa reali.

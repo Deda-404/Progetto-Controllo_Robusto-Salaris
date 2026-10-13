@@ -8,7 +8,7 @@ R2026b locale: quattro script identici, 141/141 regressioni e 7/7 test dedicati 
 
 Relazione 108 pagine e 23 slide compilate/auditate; schemi autentici lineare/non lineare e confronto Scope. Due TXT completi, 2237 parole pronunciate, 18:47 stimati con cambi slide, Alessio 9:27 e Valerio 8:36. Prova dal vivo ancora necessaria. Nuovo pacchetto Consegna_SEA_Rumore_Orale_2026-10-13 con preparazione_studenti distinta; precedente consegna conservata.
 
-Branch codex/sintesi-robusta-rumore-e-orale-finale da main a4b3817, PR #40 già integrata. Nessun merge eseguito nella revisione. Prossimo passo degli studenti: revisionare evidenze e PR, decidere l'adozione, provare il discorso; servono dati di targa e dinamica reale dei motori per valutare l'hardware.
+Branch codex/sintesi-robusta-rumore-e-orale-finale da main a4b3817, PR #40 già integrata. [PR #41](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza, ramo pubblicato con otto oggetti LFS (232 MB). Nessun merge eseguito nella revisione. Prossimo passo degli studenti: revisionare evidenze e PR, decidere l'adozione, provare il discorso; servono dati di targa e dinamica reale dei motori per valutare l'hardware.
 
 ---
 

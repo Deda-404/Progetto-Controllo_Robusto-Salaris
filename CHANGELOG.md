@@ -13,6 +13,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Quattro script rieseguiti, 141 regressioni e sette test dedicati PASS. Audit Code Analyzer senza segnalazioni.
 - Relazione 108 pagine, 23 slide, tre nuovi grafici e schemi autentici; audit LaTeX e controllo visivo. Discorso di 2237 parole, 18:47 stimati, appendice di 25 risposte.
 - Due TXT completi, accettazione e consegna con preparazione studenti distinta. Pubblicazione del branch per revisione; adozione e merge riservati agli studenti.
+- Branch pubblicato con otto nuovi oggetti LFS (232 MB); [PR #41](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza per revisione, senza merge.
 
 ## 2026-10-13 — Collaudo finale MATLAB/Simulink
 
