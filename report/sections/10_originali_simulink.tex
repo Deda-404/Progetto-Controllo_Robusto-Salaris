@@ -37,6 +37,53 @@ singole traiettorie come se fossero la stessa realizzazione casuale.
 \caption{Sottosistema Kalman del diagramma LQGI: $\dot{\hat x}=A\hat x+Bu+L(y_{mis}-C\hat x)$. Gli ingressi sono il comando calcolato e le quattro misure.}
 \label{fig:simulink-kalman}\end{figure}
 
+La Figura~\ref{fig:simulink-lqgi-nonlinear} conserva l'architettura del
+servo e rende esplicita la sostituzione della pianta State-Space con le
+equazioni meccaniche non lineari. I dettagli delle
+Figure~\ref{fig:simulink-nonlinear-plant} e~\ref{fig:simulink-actuators}
+mostrano dove si calcolano le accelerazioni e dove il comando diventa
+coppia motrice. Il confronto usa la stessa famiglia LQGI, evitando di
+attribuire alla non linearità differenze dovute a controllori diversi.
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth,trim=0 0 580 110,clip]{figures/student_exports/LQGI_nonlinear_sim.png}
+\caption{Schema autentico LQGI non lineare: attuatori, coppia di equilibrio,
+equazioni SEA e integrazione degli otto stati meccanici. Le misure in
+deviazione chiudono sia l'osservatore sia l'integratore.}
+\label{fig:simulink-lqgi-nonlinear}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_nonlinear_plant.png}
+\caption{Dettaglio autentico della pianta non lineare: le equazioni del
+manipolatore ricevono lo stato, la coppia motrice e il disturbo lato link.}
+\label{fig:simulink-nonlinear-plant}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.75\textwidth]{figures/student_exports/LQGI_actuators.png}
+\caption{Attuatori del modello non lineare LQGI: due canali con secondo
+ordine e approssimazione Padé del ritardo. Il rumore sul comando attraversa
+questa dinamica prima di arrivare ai rotori.}
+\label{fig:simulink-actuators}\end{figure}
+
+Nella Figura~\ref{fig:simulink-hinf-interface} il ramo centrale mostra
+l'ingresso separato di riferimento e misura nel controllore 2-DoF.
+Lo schema lineare conserva il selettore sulle misure ideali;
+la presenza grafica del generatore encoder non certifica quindi una
+prova di attenuazione nel feedback. La
+Figura~\ref{fig:simulink-mu-interface} mostra invece l'interfaccia
+$[r_1;r_2;q_{1,mis};q_{2,mis}]$ del controllore $\mu$, con misure rumorose
+effettivamente selezionate. Le viste sono ritagli delle esportazioni
+originali; nessun blocco o collegamento è stato ridisegnato.
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth,trim=0 540 1380 510,clip]{figures/student_exports/Hinf_linear_sim.png}
+\caption{Dettaglio autentico del ramo H-infinity 2-DoF:
+il controllore dinamico riceve quattro ingressi e restituisce due comandi;
+nel modello lineare il feedback salvato usa le posizioni ideali.}
+\label{fig:simulink-hinf-interface}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth,trim=0 0 740 0,clip]{figures/student_exports/mu_linear_sim.png}
+\caption{Interfaccia autentica $\mu$ lineare: riferimento e misura entrano
+nel blocco di controllo; il comando alimenta la pianta con disturbi e
+rumori di processo. Le misure rumorose chiudono l'anello.}
+\label{fig:simulink-mu-interface}\end{figure}
+
 \subsection{Prove nella configurazione salvata}
 Abbiamo eseguito tutti gli otto diagrammi in MATLAB/Simulink R2026b,
 con le matrici dei controllori adottati. Caricamento, compilazione,

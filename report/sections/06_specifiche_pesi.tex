@@ -21,3 +21,12 @@ del peso sulla sensibilità: la scelta di quest'ultimo non modifica
 la scala di velocità impiegata nel costo LQR.
 La costruzione e l'interpretazione dei pesi sono raccolte nel
 Capitolo~\ref{cap:hinf}, nel contesto della mixed sensitivity.
+
+\section{Requisito aggiuntivo sul rumore encoder}
+Il rumore motiva un secondo problema di sintesi, senza cambiare target
+temporali, modello incerto o campioni ($0.05^\circ$, mantenimento 2 ms).
+La piccola campagna richiede una riduzione di almeno dieci volte di
+picco e RMS encoder isolati per ciascuno di tre seed comuni, insieme
+alla stabilità nominale. Una proposta robusta deve mantenere RS/RP.
+È un criterio progettuale: la scala di 12 N m non è il valore massimo
+documentato di un motore e non viene inventato un limite hardware.
