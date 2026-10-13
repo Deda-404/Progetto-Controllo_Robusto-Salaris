@@ -1,7 +1,8 @@
-function data = setup_student_originals(kind)
+function data = setup_student_originals(kind,selection)
 %SETUP_STUDENT_ORIGINALS External workspace data for unchanged student models.
 arguments
     kind (1,1) string {mustBeMember(kind,["LQG","LQGI","Hinf","mu"])}
+    selection (1,1) string {mustBeMember(selection,["baseline","noise_hinf1","noise_hinf2","noise_hinf3","noise_mu1"])} = "baseline"
 end
 root=fileparts(fileparts(mfilename('fullpath')));
 addpath(fullfile(root,'analysis'),fullfile(root,'File_di_Funzioni_Progetto-Accorpati'),'-begin');
@@ -18,6 +19,26 @@ one=d.study.one{d.study.selectedOne}.Kfeedback;
 [data.Ak1,data.Bk1,data.Ck1,data.Dk1]=ssdata(one);
 [data.Ak2,data.Bk2,data.Ck2,data.Dk2]=ssdata(d.controllers(4).K);
 data.Kpid=d.controllers(5).K; data.Kmu=d.controllers(6).K;
+data.controllerIdentity=struct('selection',selection,'source','baseline', ...
+    'hinfOrder',size(data.Ak2,1),'muOrder',order(data.Kmu));
+if selection~="baseline"
+    if startsWith(selection,"noise_hinf")
+        assert(kind=="Hinf",'StudentSetup:Selection','Selezione Hinf su modello incompatibile.');
+        file=fullfile(root,'results/data/noise_redesign',"hinf_noise_0"+extractAfter(selection,"noise_hinf")+".mat");
+    else
+        assert(kind=="mu",'StudentSetup:Selection','Selezione mu su modello incompatibile.');
+        file=fullfile(root,'results/data/noise_redesign/mu_noise_01.mat');
+    end
+    a=load(file,'candidate'); assert(a.candidate.status=="SYNTHESIZED");
+    assert(isequal(size(a.candidate.K),[2 4]) && isproper(a.candidate.K) && a.candidate.e.stable);
+    if kind=="Hinf"
+        [data.Ak2,data.Bk2,data.Ck2,data.Dk2]=ssdata(a.candidate.K);
+    else
+        data.Kmu=a.candidate.K;
+    end
+    data.controllerIdentity=struct('selection',selection,'source',char(file), ...
+        'hinfOrder',size(data.Ak2,1),'muOrder',order(data.Kmu));
+end
 % Explicit bus type for the embedded nominal-parameter function; no model edit.
 p=sea_params_nominal; fields=fieldnames(p);
 elements=repmat(Simulink.BusElement,numel(fields),1);

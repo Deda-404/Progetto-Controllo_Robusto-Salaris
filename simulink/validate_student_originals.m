@@ -1,12 +1,22 @@
-function results = validate_student_originals(runSimulation,modelFilter)
+function results = validate_student_originals(runSimulation,modelFilter,selection,outputFolder)
 %VALIDATE_STUDENT_ORIGINALS Read-only loading, optional unchanged simulation.
 arguments
     runSimulation (1,1) logical = false
     modelFilter (1,1) string = ""
+    selection (1,1) string = "baseline"
+    outputFolder (1,1) string = ""
 end
 root=fileparts(fileparts(mfilename('fullpath')));
 manifest=jsondecode(fileread(fullfile(root,'simulink/student_originals_manifest.json')));
 folder=fullfile(root,'results/data/final_simulink_validation');
+if outputFolder~="",folder=char(outputFolder);end
+if selection~="baseline"
+    assert(modelFilter~="" && outputFolder~="",'StudentValidation:CandidateOutput', ...
+        'Il candidato richiede un modello e una cartella separata dalla baseline.');
+    assert(~strcmpi(char(java.io.File(folder).getCanonicalPath), ...
+        char(java.io.File(fullfile(root,'results/data/final_simulink_validation')).getCanonicalPath)), ...
+        'StudentValidation:CandidateOutput','La cartella dei risultati consolidati e protetta.');
+end
 if ~isfolder(folder),mkdir(folder);end
 if modelFilter~=""
     manifest.models=manifest.models(strcmp(string({manifest.models.name}),modelFilter+".slx"));
@@ -52,12 +62,28 @@ for k=1:numel(results)
         item.scope_logging=[scopes{:}];
         if runSimulation
             phase='workspace';
-            kind=extractBefore(string(name),'_'); data=setup_student_originals(kind);
+            kind=extractBefore(string(name),'_'); data=setup_student_originals(kind,selection);
+            item.controller_identity=data.controllerIdentity;
+            if kind=="Hinf"
+                coefficients=struct('A',data.Ak2,'B',data.Bk2,'C',data.Ck2,'D',data.Dk2);
+            elseif kind=="mu"
+                [ca,cb,cc,cd]=ssdata(data.Kmu); coefficients=struct('A',ca,'B',cb,'C',cc,'D',cd);
+            else
+                coefficients=struct;
+            end
+            item.controller_identity.coefficient_hashes=struct;
+            for coefficient=string(fieldnames(coefficients))'
+                digest=java.security.MessageDigest.getInstance('SHA-256');
+                digest.update(typecast(coefficients.(coefficient)(:),'uint8'));
+                item.controller_identity.coefficient_hashes.(coefficient)=lower(reshape(dec2hex(typecast(digest.digest(),'uint8'),2).',1,[]));
+            end
+            save(fullfile(folder,name+"_workspace.mat"),'data','coefficients','-v7');
             in=Simulink.SimulationInput(name); fields=fieldnames(data);
             for j=1:numel(fields)
                 in=in.setVariable(fields{j},data.(fields{j}));
                 assignin('base',fields{j},data.(fields{j}));
             end
+            assertControllerIdentity(data,kind);
             phase='compile';item.compile='FAIL';
             feval(name,[],[],[],'compile');
             compilationCleanup=onCleanup(@()feval(name,[],[],[],'term'));
@@ -74,6 +100,7 @@ for k=1:numel(results)
             assert(strcmp(before,hashFile(file)));
             phase='simulation';item.simulation='FAIL';
             out=sim(in); % original solver, sample times, switches and logging.
+            assertControllerIdentity(data,kind);
             save(fullfile(folder,name+"_simulation.mat"),'out','-v7.3');
             scopeEvidence=acquire_student_scope_buffers(name,folder,out.get('tout'));
             item.scope_acquisition=scopeEvidence.status;
@@ -96,7 +123,7 @@ for k=1:numel(results)
             item.dynamic_validation='PARTIAL: inspect positions, references and commands';
             if strcmp(scopeEvidence.status,'ACQUISITION PASS')
                 item.signal_summary=scopeEvidence.summaries;
-                review=analyze_student_scope_results(name);
+                review=analyze_student_scope_results(name,outputFolder,data);
                 item.dynamic_validation=review.status;
             end
             if ~isempty(item.signal_summary) && any([item.signal_summary.nonfinite]>0)
@@ -117,6 +144,14 @@ end
 if modelFilter==""
     save(fullfile(folder,'slx_runtime_audit.mat'),'results','-v7');
     writeJson(fullfile(folder,'slx_runtime_audit.json'),[results{:}]);
+end
+end
+function assertControllerIdentity(data,kind)
+if kind=="Hinf"
+    names={'Ak2','Bk2','Ck2','Dk2'};
+    for j=1:numel(names),assert(isequaln(evalin('base',names{j}),data.(names{j})));end
+elseif kind=="mu"
+    assert(isequaln(evalin('base','Kmu'),data.Kmu));
 end
 end
 function item=switchRecord(block)

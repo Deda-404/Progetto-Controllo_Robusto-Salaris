@@ -14,3 +14,7 @@ run_final_student_validation(false);
 `analyze_student_scope_results` genera grafici e metriche dai campioni acquisiti. Picchi e RMS sono osservazioni sulla griglia del solver, non certificati continui o hardware. `export_student_schemes` produce otto viste generali autentiche e tre dettagli di sottosistemi senza salvare gli SLX. Il runner con `(false,true)` rielabora dati già registrati, ricontrollando gli hash; non conta come una nuova simulazione.
 
 Risultati: `../results/data/final_simulink_validation/`. Schemi: `../report/figures/student_exports/`. Grafici: `../report/figures/final_simulink/`. Il collaudo dettagliato è in `../docs/REPORT_VERIFICA_SIMULINK.md` nel checkout integrale. Le altre cartelle Simulink del repository sono archivio e non appartengono alla consegna selezionata.
+
+## Selezione esterna dei candidati con rumore
+
+La baseline resta predefinita. `setup_student_originals('Hinf','noise_hinf3')` carica Ak2/Bk2/Ck2/Dk2 nuovi e `setup_student_originals('mu','noise_mu1')` il nuovo Kmu. Il runner richiede una cartella separata per i candidati, registra le matrici fornite e verifica i coefficienti prima/dopo il run. `analysis/noise_redesign/run_noise_simulink.m` esegue o verifica gli otto checkpoint abbinati nei sottofolder baseline/noise_hinf3/noise_mu1 di results/data/noise_redesign/simulink. Nessun parametro interno viene modificato; consultare il README dello studio per criteri e compromessi.

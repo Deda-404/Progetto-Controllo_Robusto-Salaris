@@ -3012,3 +3012,29 @@ Pacchetto finale: 327 file, ZIP 392200933 byte, tutti gli SHA-256 copiati e comp
 ## 2026-10-13 — Pubblicazione del ramo e PR conclusiva
 
 Pubblicati i commit ca0f64d e 266782e sul branch codex/validazione-finale-matlab-simulink. Upload Git LFS completato 8/8, 171 MB. Aperta PR #40: https://github.com/Deda-404/Progetto_CR/pull/40; collegata alla chat del progetto. Verificati stato open, merged=false, mergeable=true, head 266782e13783f6db549e6fac94c75b89bd0b0ea6 e base main 14359392bd8cde5249fae91a050cfba8c79eacd4. Checkout pulito, 350 hash del manifest PASS, nessuna modifica a sorgenti fisiche, controllori, quattro script o otto originali rispetto alla base. Il commit conclusivo aggiorna soltanto la documentazione di pubblicazione e il manifest; PDF e ZIP restano invariati. Gate A–G COMPLETE/PASS, 7/7: 100% del collaudo richiesto; restano revisione umana, decisione sul merge e prova orale cronometrata. Nessun merge eseguito.
+
+## 2026-10-13 — Sintesi resistente al rumore e nuova validazione
+
+Da main a4b3817, con PR #40 integrata, creato codex/sintesi-robusta-rumore-e-orale-finale. Prima delle modifiche verificati otto SHA-256 e 197 MAT/SLX preesistenti; tutti rimangono identici dopo le prove. Disponibili MATLAB/Simulink R2026b 26.2.0.3386108 e toolbox richiesti. Quattro script, fisica, pesi consolidati, incertezze e otto SLX invariati.
+
+Pianta nominata con nu encoder esogeno, v=Wn*nu e interfaccia K 2×4; W1/W2/Mo conservati, nessuna duplicazione degli stati fisici. Tre hinfsyn per Wn=sigma_y*[1,5,20]I e una musyn consolidata per sigma_y I. Tutti nominalmente stabili; H∞ falliscono RS/RP e non sono promossi. MuN1: ordine 82, obiettivo 0.874392, RS [1.84622,1.88174], RP nuova [1.59634,1.60036], post-analisi precedente ripetuta. Primo intervallo RP H∞ numericamente invalido conservato prima del retry; nessuna certificazione trasferita dai controllori precedenti.
+
+Rumore MATLAB: tre seed, otto scenari, 144 confronti, identici sigma/Ts/ingressi/condizioni iniziali; propagazione ZOH, scansione finita fra campioni, quadratura e accordo delle coordinate. MuN1 supera la riduzione dieci volte in picco/RMS encoder in ciascun seed. Otto nuovi run Simulink abbinati su H∞/μ lineari/non lineari, matrici fornite salvate e hash prima/dopo, warning/errori vuoti. H∞ lineare conserva misura ideale. μ non lineare: picco 108.526404→2.250912 N m, massimo RMS 12.822342→1.357397, rapporti 48.2144/9.44627. Overshoot combinato q1 peggiora 10.67→35.60%, errore medio 0.2301→0.8529 gradi; distinto dal gradino nominale.
+
+Tracking nominale μ: Ts 1.558/1.482 s, errori 8.243/2.192%; q1 e reiezione del disturbo peggiori. Stessi dieci impianti: HinfN3 6/10 e MuN1 10/10 stabili. RAS intera 36/96 stati: HinfN3 13 convergenze, 12 arresti ignoti, gate nominale con rho=2.506e-12; MuN1 25 convergenze empiriche, Lyapunov FAIL. Prima integrazione HinfN3 ode23t incompleta per limite di tempo, conservata; campagna candidata completata con ode15s bilanciato e Jacobiano meccanico, senza cambiare solver SLX.
+
+Eseguiti nuovamente quattro script e 141/141 regressioni in copia isolata dei sorgenti finali; 7/7 test dedicati PASS, incluso rifiuto delle cartelle protette. Code Analyzer: 12 sorgenti senza segnalazioni. Verificati ancora 197 hash e manifest degli otto originali. Collaudo delle dipendenze selezionate con restoredefaultpath: 4/4 script e 7/7 test PASS. Due primi tentativi della copia ridotta avevano omesso cartelle di esportazione dei grafici; log conservati, tutte le directory dell'inventario ripristinate nella copia. Nessuna modifica scientifica per correggere il collaudo.
+
+## 2026-10-13 — Relazione, schemi autentici e discorso finale
+
+Capitoli 6,8–13 aggiornati distinguendo baseline e candidati. Tre nuove figure da dati reali, incluse mappe Tuv, tre seed e Scope abbinati. Nuovi dettagli autentici LQGI non lineare, pianta, attuatori, H∞ 2-DoF e μ; solo ritagli LaTeX delle immagini preesistenti. Relazione 108 pagine e 23 slide: audit LaTeX PASS, zero errori/riferimenti irrisolti/overflow/destinazioni duplicate; tutte le slide e le pagine modificate controllate visivamente, tabelle e schemi esaminati singolarmente.
+
+Creati i due TXT obbligatori: quaderno tecnico in dodici sezioni con numeri positivi/negativi e modifiche tracciate; discorso completo di 2237 parole, alternanza in blocchi di tre slide e appendice di 25 risposte. Stima 18:47 a 125 parole/minuto, 44 s di cambi slide, Alessio 9:27 e Valerio 8:36. La durata effettiva richiede prova dal vivo. Preparazione separata dagli allegati scientifici nel nuovo pacchetto; consegna precedente conservata.
+
+Stato del lavoro COMPLETE/PASS tecnico e documentale; accettazione scientifica PARTIAL. Baseline predefinita, H∞ respinti come soluzione robusta, MuN1 proposta da valutare. Nessun Umax inventato, nessuna certificazione hardware o massimo gaussiano assoluto. Adozione e merge spettano agli studenti. Pubblicazione autorizzata del branch e PR, senza merge.
+
+## 2026-10-13 — Controllo dei checkpoint e confezionamento
+
+Prima della pubblicazione confrontati esattamente A/B/C/D dei Workspace di tutti gli otto run con i controllori dichiarati: anche un checkpoint riusato viene rifiutato se appartiene a matrici differenti. Sette test dedicati rieseguiti nel repository e nella copia autonoma: 7/7 PASS in entrambi, Code Analyzer senza messaggi. Il primo test aggiuntivo aveva usato il nome errato del campo metadati model invece di name; corretto e log conservato nella revisione interna. Nessun controllore o risultato scientifico modificato per correggere il test.
+
+Nuova consegna: 449 file copiati e compressi con SHA-256 verificati, otto SLX invariati, due TXT in preparazione_studenti. Il pacchetto precedente e il relativo ZIP restano conservati. Rigenerazione finale solo del nuovo pacchetto per includere il controllo dei checkpoint e gli esiti aggiornati.

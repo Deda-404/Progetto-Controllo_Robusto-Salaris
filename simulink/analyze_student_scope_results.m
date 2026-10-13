@@ -1,8 +1,12 @@
-function review=analyze_student_scope_results(model)
+function review=analyze_student_scope_results(model,outputFolder,workspaceData)
 %ANALYZE_STUDENT_SCOPE_RESULTS Metrics and plots from authentic Scope buffers.
 root=fileparts(fileparts(mfilename('fullpath')));
 folder=fullfile(root,'results/data/final_simulink_validation');
+if nargin>=2 && strlength(string(outputFolder))>0,folder=char(outputFolder);end
 figures=fullfile(root,'report/figures/final_simulink');if ~isfolder(figures),mkdir(figures);end
+if nargin>=2 && strlength(string(outputFolder))>0
+    figures=fullfile(folder,'figures');if ~isfolder(figures),mkdir(figures);end
+end
 d=load(fullfile(folder,[model '_scope_buffers.mat']));records=d.records;
 review=struct('model',model,'status','PARTIAL','protocol','saved SLX: reference, disturbance and process noise combined', ...
     'acquisition_api','R2026b visual Scope buffers, read only','branches',[],'sources',[],'error','');
@@ -54,7 +58,8 @@ try
             noiseRms=sqrt(trapz(t,noise.^2)/(t(end)-t(1)))*180/pi;
             noiseCorrelation=corrcoef(noise);
             if startsWith(model,'Hinf') && labels(k)=="PID"
-                data=setup_student_originals('Hinf');[~,~,~,Dpid]=ssdata(data.Kpid);
+                if nargin>=3,data=workspaceData;else,data=setup_student_originals('Hinf');end
+                [~,~,~,Dpid]=ssdata(data.Kpid);
                 expected=Dpid*[reference(1,:).';Ym(1,1:2).'];
                 assert(norm(uk(1,:).'-expected)<1e-8*max(1,norm(expected)), ...
                     'DynamicReview:PIDInitial','Recorded PID feedthrough does not match the saved controller.');
