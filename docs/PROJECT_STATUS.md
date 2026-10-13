@@ -2,7 +2,7 @@
 
 **Collaudo tecnico A–F COMPLETE/PASS; gate repository G in pubblicazione.** R2026b 26.2.0.3386108 Windows locale, prodotti necessari installati. 141/141 test e quattro script PASS nelle due release R2025b/R2026b; 80 artifact congelati invariati. Otto SLX LOAD/COMPILE/SIMULATION/DYNAMIC VALIDATION PASS e SHA-256 invariati; 12 combinazioni verificate da dati Scope autentici.
 
-Relazione 100 pagine, presentazione 22 slide / 18:45 stimati, autori e matricole completi, data 13.10.2026. Audit PDF senza errori/overflow, tutte le pagine e le slide controllate. Pacchetto selezionato e ZIP con manifest/hash; documenti interni esclusi dalla consegna ordinaria.
+Relazione 100 pagine, presentazione 22 slide / 18:45 stimati, autori e matricole completi, data 13.10.2026. Audit PDF senza errori/overflow, tutte le pagine e le slide controllate. Pacchetto selezionato di 327 file e ZIP di 392200933 byte con manifest/hash, quattro default PASS anche da copia isolata; documenti interni esclusi dalla consegna ordinaria.
 
 Limiti scientifici conservati: H∞ RS FAIL, RP numerica non validata; μ RS≈1.80/RP≈1.68 nel modello dichiarato; target temporali parziali, RAS empiriche e arresti numerici separati. Rumore H∞ 2-DoF non lineare: picco Scope 733230 N m; μ circa 108/109 N m. Nessuna validazione hardware o certificato continuo del picco. H∞ lineare usa misure ideali, non lineare rumorose; encoder SLX correlati. I limiti numerici H∞ RS differiscono fra release e non sono dichiarati equivalenti.
 

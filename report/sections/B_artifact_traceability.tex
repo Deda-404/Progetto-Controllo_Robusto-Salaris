@@ -30,7 +30,6 @@ Dataset & Evidenza\\\midrule
 \path{ras_lyapunov.mat} & Stato aumentato, controlli Lyapunov e 150 condizioni iniziali\\
 \path{summary.json} & Esportazione numerica delle tabelle e dei conteggi\\
 \path{slx_static_audit.json} & Blocchi, connessioni, callback e impostazioni degli otto SLX\\
-\path{slx_runtime_audit.json} & Esiti reali di caricamento e hash prima/dopo\\
 \bottomrule\end{longtable}
 Le matrici campionate e le traiettorie sono salvate: i grafici non sono
 l'unica evidenza disponibile. Le prove nominali LQGI sono in
@@ -38,9 +37,9 @@ l'unica evidenza disponibile. Le prove nominali LQGI sono in
 sono in \path{results/data/coherent_review}.
 
 Gli otto modelli studenti sono in \path{simulink/student_originals}.
-Il manifest \path{simulink/student_originals_manifest.json} registra
-origine Drive, data, dimensione e SHA-256 della sorgente, dell'importazione
-e della verifica. Gli schemi matematici dei capitoli sono rappresentazioni
-delle interconnessioni. Le sole miniature incorporate negli SLX non hanno
-risoluzione sufficiente per essere accreditate come diagrammi leggibili.
-Il requisito delle schermate autentiche dipende dal caricamento R2026a.
+Il manifest \path{simulink/student_originals_manifest.json} permette
+di verificare l'integrità dei file mediante SHA-256. La cartella
+\path{results/data/final_simulink_validation} contiene gli esiti del
+collaudo locale e le verifiche dei quattro script. Gli schemi matematici
+dei capitoli rappresentano le interconnessioni, mentre una figura
+ricavata da Simulink deve provenire direttamente dal diagramma eseguito.

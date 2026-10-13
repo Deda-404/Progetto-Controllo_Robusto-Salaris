@@ -30,10 +30,11 @@
 \input{../report/generated/hinf_final_values.tex}
 \input{generated/coherent_review_values.tex}
 \input{../report/generated/final_closure_values.tex}
+\input{../report/generated/final_simulink_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
 \subtitle{Modello, sintesi nominale e robustezza strutturata}
-\author{Alessio de Dato \and Valerio Rebechi}
-\date{Data di consegna: da completare}
+\author{Alessio de Dato\\{\small Matricola 635256}\\[0.5em]Valerio Rebechi\\{\small Matricola 722224}}
+\date{13.10.2026}
 \begin{document}
 \begin{frame}[plain]
 \titlepage
@@ -71,7 +72,7 @@ G_a=\frac{40^2}{s^2+64s+40^2}
 \item Due incertezze dinamiche indipendenti.
 \end{itemize}
 \column{.55\textwidth}
-\includegraphics[width=\linewidth]{assets/m4_actuator_uncertainty_cover.png}
+\includegraphics[width=\linewidth]{../report/figures/student_baseline/actuator_uncertainty.png}
 \end{columns}
 \small Inviluppo verificato sulla famiglia di 120 attuatori; intervalli ingegneristici, non probabilità.
 
@@ -141,7 +142,7 @@ $R_n=(0.05\pi/180)^2I_4$.
 Covarianze assunte, non identificate.
 14 stati stimati; 28 stati in chiusura.
 \column{.53\textwidth}
-\includegraphics[width=\linewidth,height=.40\textheight,keepaspectratio]{assets/m6_lqg_reference_tracking.png}
+\includegraphics[width=\linewidth,height=.40\textheight,keepaspectratio]{../report/figures/student_baseline/lqg_tracking.png}
 \end{columns}
 \good{Il tracking nominale soddisfa i target; il prefiltro non elimina un disturbo costante.}
 
@@ -283,10 +284,10 @@ Nessuna garanzia di ottimo globale.
 
 \begin{frame}{La post-analisi cambia la scelta del controllore}
 
-\includegraphics[width=\textwidth,height=.53\textheight,keepaspectratio]{../report/figures/mu/robust_margins.png}
+\includegraphics[width=\textwidth,height=.53\textheight,keepaspectratio]{../report/figures/final_simulink/robust_margins_R2026b.png}
 \small
 \begin{itemize}
-\item $H_\infty$: RS circa 0.018; RP esclusa da RS, intervallo RP non valido.
+\item $H_\infty$: RS circa 0.026; RP esclusa da RS, intervallo RP non valido.
 \item $K_\mu$: RS $[1.7998,1.8044]$, RP $[1.6772,1.6807]$.
 \item Stessi pesi, intervalli, canali e modello fisico; nessuna riduzione.
 \end{itemize}
@@ -372,31 +373,25 @@ Griglia comune: $25$ punti, $\pm60^\circ$, $\delta\theta=\delta q$.
 \small Il bordo è il dominio esplorato. Arresti numerici: convergenza ignota.
 \end{frame}
 
-\begin{frame}{Gli otto Simulink originali degli studenti}
-\small
-\begin{tabular}{lp{.72\textwidth}}\toprule
-Famiglia & Interfaccia riscontrata nell'audit XML\\\midrule
-LQG & Quattro encoder, Kalman, feedback stimato e riferimento.\\
-LQGI & Integratore dell'errore $r-q_{\rm mis}$ e osservatore.\\
-$H_\infty$ & 1-DoF su errore; 2-DoF/PID su $[r;q_{\rm mis}]$.\\
-$K_\mu$ & Ingresso $[r;q_{\rm mis}]$, realizzazione completa.\\\bottomrule
-\end{tabular}
-\par\medskip Lineare e non lineare per ogni famiglia; SHA-256 invariati.
-\par\medskip Tutti R2026a: caricamento rifiutato in R2025b. Validazione e schermate autentiche da completare su R2026a, con setup esterno.
+\begin{frame}{Implementazioni Simulink}
+\includegraphics[width=\textwidth,height=.67\textheight,keepaspectratio,trim=0 0 606 265,clip]{../report/figures/student_exports/LQGI_linear_sim.png}
+\par\small LQGI lineare: integratore di $r-q_{mis}$, stato stimato, pianta e rumori.
+\par\medskip Otto modelli eseguiti in R2026b; posizioni e comandi acquisiti.
 \end{frame}
 
-\IfFileExists{../report/figures/student_exports/LQGI_linear_sim.png}{
-\begin{frame}{Schema Simulink autentico: LQGI lineare}
-\includegraphics[width=\textwidth,height=.76\textheight,keepaspectratio]{../report/figures/student_exports/LQGI_linear_sim.png}
+\begin{frame}{Simulink: posizioni regolari, comandi rumorosi}
+\includegraphics[width=\textwidth,height=.58\textheight,keepaspectratio]{../report/figures/final_simulink/slide_mu_linear_sim.png}
+\par\small $K_\mu$ lineare: picco registrato \SimMuLinPeak\ N m.
+\par\medskip $H_\infty$ 2-DoF non lineare: \SimHinfNLPeak\ N m, con feedback rumoroso.
+\par\medskip Riferimento e disturbo da 1 s; seed e selettori differiscono dalla prova MATLAB isolata. Picchi sui campioni Scope.
 \end{frame}
-}{}
 
 \begin{frame}{Conclusioni e limiti verificati}
 \begin{itemize}
 \item LQG: riferimento nominale; LQGI: reiezione DC con tracking lento.
 \item $H_\infty$: buon nominale 2-DoF, ma fragile e sensibile al rumore.
 \item $K_\mu$: robusto nel modello dichiarato; ordine 78 e target temporali parziali.
-\item Validazione degli originali e figure Simulink richiedono R2026a.
+\item Otto diagrammi verificati; rumore e richieste di coppia restano limiti implementativi.
 \end{itemize}
 \par\medskip\good{Le conclusioni seguono i dati, comprese le prestazioni negative.}
 \end{frame}

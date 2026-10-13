@@ -11,7 +11,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Decoder vettoriale Scope, runner con errore su verifiche incomplete, schemi autentici e dati completi con Git LFS; selettori/rumori correlati documentati.
 - Margini robusti R2026b, differenza quantitativa H∞ tra release esplicita, rumore critico e target negativi preservati.
 - Relazione 100 pagine e presentazione 22 slide/18:45, autori/matricole/data completi, grafici descrittivi senza cronologia, audit e controllo visivo PASS.
-- Manifest, dipendenze, istruzioni, pacchetto/ZIP con verifica esatta dei file copiati; dati e cronologia del repository preservati. Pubblicazione per revisione senza merge.
+- Manifest, dipendenze, istruzioni, pacchetto/ZIP di 327 file con verifica esatta dei file copiati e quattro default PASS da copia isolata; dati e cronologia del repository preservati. Pubblicazione per revisione senza merge.
 
 
 ### Importazione dei modelli Simulink dal Drive del progetto — 2026-10-10

@@ -5,5 +5,5 @@ UNRESOLVED_REFERENCES=0
 OVERFULL_HBOX=0
 OVERFULL_VBOX=0
 DUPLICATE_DESTINATIONS=0
-Pages:           21
-PDF=C:\Users\aless\OneDrive - University of Pisa\Documenti\ChatGPT\Progetto_CR&IS\Progetto_CR_chiusura\presentation\Progetto_CR_Presentazione.pdf
+Pages:           22
+PDF=C:\Users\aless\OneDrive - University of Pisa\Documenti\ChatGPT\Progetto_CR&IS\Progetto_CR_finale\presentation\Progetto_CR_Presentazione.pdf

@@ -8,7 +8,7 @@ sovraelongata anche quando la norma è inferiore a uno.
 La vera sintesi 2-DoF, con riferimento e posizione misurata come ingressi
 del controllore e coppia disturbante lato link nella pianta, raggiunge
 norma \FinalGamma\ e tracking nominale senza overshoot. Tuttavia il
-margine RS circa 0.018 e i dieci impianti incerti instabili impediscono di considerare
+margine RS circa 0.026 e i dieci impianti incerti instabili impediscono di considerare
 questa soluzione robusta. Anche la prova di rumore evidenzia un comando
 inaccettabilmente grande per una futura implementazione non protetta.
 Questo risultato negativo è parte della conclusione, non un dettaglio
@@ -25,17 +25,18 @@ Restano da studiare limiti reali di coppia e velocità, saturazioni,
 rate limit, attriti e ritardi misurati. Nessuno di questi dati è inventato.
 Il rumore e la fragilità ai modi elastici motivano un eventuale progetto
 successivo con richiesta esplicita di attenuazione delle misure e,
-se giustificato, un terzo peso. Non è stato aggiunto retroattivamente W3
-per alterare l'esito di questa campagna. Qualsiasi riduzione di Kmu o
-nuova scelta dei pesi richiederà una nuova verifica della stessa catena.
-Matricole e data definitiva di consegna restano da completare sul frontespizio.
+se giustificato, un terzo peso. La formulazione adottata usa due pesi.
+Una riduzione di Kmu o una diversa scelta dei pesi richiederà di verificare
+nuovamente prestazioni nominali, robustezza e sensibilità al rumore.
 
 
 LQGI usa feedback stimato e integratore dell'errore misurato; la sua
 reiezione asintotica del disturbo nel lineare si accompagna a tracking
-lento. Gli otto modelli Simulink sono presenti e conservati integralmente,
-ma la validazione dinamica richiede R2026a. Le simulazioni MATLAB non
-colmano automaticamente questo requisito della traccia. Il rumore rimane
+lento. Gli otto modelli Simulink sono stati eseguiti, conservando la loro
+configurazione, e i segnali acquisiti confermano le differenze fra offset,
+tracking e sforzo di controllo. Il diagramma $H_\infty$ lineare seleziona
+misure ideali, mentre quello non lineare include il rumore encoder nel
+feedback: questa differenza va considerata prima del confronto. Il rumore rimane
 critico: l'osservazione del comando fra i campioni mostra impulsi molto
 maggiori di quelli visibili sulla sola griglia a 2 ms. Le regioni interne
 di Lyapunov sono dichiarate soltanto dove il controllo numerico riesce;

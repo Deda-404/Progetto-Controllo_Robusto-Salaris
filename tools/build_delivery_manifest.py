@@ -31,7 +31,8 @@ def main():
         add(name,'student_handin_pdf')
     for name in ['README.md','presentation/SPEAKER_NOTES.md','presentation/OUTLINE_AND_TIMING.md',
                  'docs/CHECKLIST_CONSEGNA_STUDENTI.md','simulink/README.md',
-                 'simulink/student_originals_manifest.json','delivery/source_dependencies.json']:
+                 'simulink/student_originals_manifest.json','delivery/source_dependencies.json',
+                 'results/figures/README.md']:
         add(name,'reproduction_and_integrity_instructions')
     glob('simulink/student_originals/*.slx','immutable_student_original')
     dependencies=json.loads((ROOT/'delivery/source_dependencies.json').read_text(encoding='utf-8'))
@@ -41,15 +42,29 @@ def main():
     # Stored plant/controller data and cached calculations needed by the defaults.
     for name in ['m2_linearization_nominal','m3_nominal_actuated_plant','m4_uncertain_plant','m5_performance_specs',
                  'm6_lqg_no_integrator','m7_augmented_cost_feasibility','m7_lqg_integral',
-                 'm7_disturbance_comparison','lyapunov_ras_nominal','lyapunov_trajectories']:
+                 'm7_disturbance_comparison','lyapunov_ras_nominal',
+                 'm8_lqg_nonlinear_ras','m15_nonlinear_robust_validation']:
         add('results/data/'+name+'.mat','frozen_model_controller_or_default_cache')
     for name in ['nominal_study','selected_full_order','fixed_PID','fixed_study','m12','m13','m14',
                  'robust_study','nonlinear_study','ras_study']:
         add('results/data/hinf_final_coherent/'+name+'.mat','frozen_final_scientific_evidence')
-    glob('results/data/final_closure/*','new_final_scientific_evidence')
+    for p in (ROOT/'results/data/final_closure').iterdir():
+        if not p.is_file():continue
+        internal=p.name.startswith(('slx_','four_scripts_')) and p.name!='slx_static_audit.json'
+        role='internal_group_review_only' if internal else 'final_scientific_evidence'
+        add(p.relative_to(ROOT),role)
+    for p in (ROOT/'results/data/final_simulink_validation').iterdir():
+        if not p.is_file():continue
+        internal=('R2025b' in p.name or '_first.' in p.name or p.name=='release_robustness_comparison.json')
+        add(p.relative_to(ROOT),'internal_group_review_only' if internal else 'local_simulink_scientific_evidence')
+    glob('report/figures/student_exports/*.png','authentic_simulink_diagram')
+    glob('report/figures/final_simulink/*.png','authentic_simulink_results_or_current_robustness')
+    glob('report/figures/student_baseline/*.png','frozen_nominal_data_figure')
     glob('results/data/lqgi_validation/*','lqgi_nonlinear_scientific_evidence')
+    glob('results/data/coherent_review/omegaM_comparison.*','model_bandwidth_comparison_evidence')
     for name in ['tools/build_final_closure_tables.py','report/build_matlab_appendix.py','tools/build_m18_latex.ps1',
-                 'tools/build_delivery_manifest.py','delivery/README.md',
+                 'tools/build_delivery_manifest.py','tools/package_delivery.py','delivery/README.md',
+                 'tools/build_final_simulink_tables.py','tools/collect_final_dependencies.m',
                  'report/generated/matlab_appendix_sources.json','results/data/coherent_review/matlab_tests.csv',
                  'report/generated/report_latex_audit.txt','presentation/generated/presentation_latex_audit.txt']:
         add(name,'document_reproduction_or_build_audit')
@@ -57,14 +72,16 @@ def main():
     add('tests/finalClosureTest.m','focused_final_verification_source')
     for name in ['docs/REPORT_VERIFICA_SIMULINK.md','docs/ANALISI_RUMORE_MISURA.md','docs/CHIUSURA_FINALE_PROGETTO.md']:
         add(name,'internal_group_review_only')
+    for name in ['delivery/portable_scripts_audit.json','delivery/package_audit.json']:
+        if (ROOT/name).is_file():add(name,'internal_group_review_only')
     files=[]
     for p,roles in sorted(selected.items(),key=lambda item:item[0].as_posix().lower()):
         raw=p.read_bytes();data=raw.replace(b'\r\n',b'\n') if p.suffix.lower() in TEXT else raw
         files.append({'path':p.relative_to(ROOT).as_posix(),'roles':sorted(roles),
                       'size_bytes_recorded':len(raw),'sha256':hashlib.sha256(data).hexdigest(),
                       'hash_mode':'LF-normalized text' if p.suffix.lower() in TEXT else 'exact bytes'})
-    result={'date':'2026-10-12','branch':'codex/chiusura-definitiva-progetto-sea','base_commit':'fa78e588ede9b8a136692c19aeb39b01b56cb502',
-            'status':'PARTIAL: original SLX runtime and authentic diagrams require R2026a',
+    result={'date':'2026-10-13','branch':'codex/validazione-finale-matlab-simulink','base_commit':'14359392bd8cde5249fae91a050cfba8c79eacd4',
+            'status':'COMPLETE: MATLAB R2026b; 141 tests, four scripts and eight original SLX validated. Performance and hardware limits remain explicit.',
             'hash_policy':'Text uses LF-normalized SHA-256 for portable checkout; binary/SLX/PDF exact bytes.',
             'files':files,'products':dependencies['products'],
             'excluded_from_student_handin':['internal_group_review_only','tmp/','old Simulink originals/ and drive_project/','dated diary/review reports','old 40-sample campaign and figures'],

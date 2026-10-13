@@ -1,6 +1,6 @@
 # Scaletta e tempi
 
-21 slide; durata prevista **17:50**, margine **2:10** rispetto a 20 minuti. La slide autentica LQGI, se esportata su R2026a e inclusa, aggiunge 0:30: totale 18:20. Tempi da confermare con una prova orale.
+22 slide; durata prevista **18:45**, margine **1:15** rispetto a 20 minuti. Alessio espone le slide 1–10, Valerio le slide 11–22. Tempi da confermare con una prova orale.
 
 | Slide | Contenuto | Tempo |
 |---|---|---:|
@@ -23,5 +23,6 @@
 | 17 | Tracking e disturbi sugli impianti incerti | 1:00 |
 | 18 | Il rumore encoder produce impulsi fra i campioni | 1:15 |
 | 19 | RAS empirica e insieme interno di Lyapunov | 1:05 |
-| 20 | Gli otto Simulink originali degli studenti | 0:45 |
-| 21 | Conclusioni e limiti verificati | 0:40 |
+| 20 | Implementazioni Simulink: schema autentico LQGI | 0:45 |
+| 21 | Simulink: posizioni regolari, comandi rumorosi | 0:55 |
+| 22 | Conclusioni e limiti verificati | 0:40 |

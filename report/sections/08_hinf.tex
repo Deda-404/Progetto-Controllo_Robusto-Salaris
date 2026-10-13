@@ -188,7 +188,7 @@ minore di uno e overshoot nullo. Nessuno raggiunge però $T_s\le0.8$ s.
 Il criterio realmente usato in \path{run_hinf_final_nominal.m} ammette
 prima le chiusure stabili con norma propria inferiore a uno e comando
 entro 1.25 volte il picco della baseline 1-DoF. Ordina poi per numero
-di violazioni dei target M5 e per massima violazione normalizzata,
+di violazioni dei target temporali e per massima violazione normalizzata,
 prima di overshoot, errore statico, assestamento e altri indicatori.
 I tre candidati violano soltanto l'assestamento: $T_s/0.8$ vale
 3.6475, 2.43 e 1.825. È questo confronto a selezionare 4, non il minimo
@@ -277,8 +277,8 @@ La robustezza risultante deve comunque essere verificata: due rami
 non la garantiscono automaticamente.
 
 Con la coppia esterna valgono $q=Tr+SG_dd$ e $u=KSr-KSG_dd$.
-$d$ viene provato nella validazione, ma non è aggiunto retroattivamente
-all'obiettivo $w=r$ di \texttt{mixsyn}.
+$d$ viene provato nella validazione. L'obiettivo di \texttt{mixsyn} usa
+invece $w=r$.
 
 \section{Da \texttt{hinfsyn} alla struttura 2-DoF}
 \subsection{Costruire esplicitamente lo stesso problema 1-DoF}
@@ -407,7 +407,7 @@ generalizzata; fra 1-DoF e 2-DoF confrontiamo anche le stesse
 prove fisiche di tracking e disturbo.
 
 \section{Una struttura più semplice con \texttt{hinfstruct}}
-La sintesi precedente con \texttt{hinfsyn} lascia libera la dinamica
+La sintesi con \texttt{hinfsyn} lascia libera la dinamica
 del controllore: il miglioramento del tracking nasce dal nuovo errore
 prestazionale e dalla separazione dei due ingressi, non dal nome del
 comando MATLAB. Qui manteniamo la stessa pianta generalizzata e lo
@@ -476,7 +476,7 @@ $T_s=1.46$ s resta sopra il target originario di 0.8 s.
 La selezione è finita e riproducibile, non un ottimo globale.
 La soglia di confronto sul picco è 1.25 volte quello iniziale.
 Gli indicatori diagnostici più permissivi del codice non
-sostituiscono le specifiche M5. Pesi, target e controllori restano quelli dichiarati nella sintesi.
+sostituiscono le specifiche temporali. Pesi, target e controllori sono quelli dichiarati nella sintesi.
 
 \section{Confronto finale dei controllori \texorpdfstring{$H_\infty$}{H infinity}}
 \label{sec:hinfconclusions}
@@ -525,7 +525,7 @@ nominale. La lettura delle prime due mappe da sola non basta.}
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/tracking_2dof.png}
 \includegraphics[width=.92\textwidth,height=.23\textheight,keepaspectratio]{figures/hinf_final/command.png}
 \caption{Gradini nominali MATLAB: configurazione iniziale 1-DoF,
-2-DoF selezionato e relativo comando. Grafici dai risultati consolidati.}
+2-DoF selezionato e relativo comando, ottenuti dalle simulazioni MATLAB.}
 \end{figure}
 
 \subsection{Reiezione del disturbo fisico}
@@ -605,9 +605,9 @@ Il comando massimo nei casi convergenti è circa 61.1 N m.
 certificata. La verifica numerica Lyapunov del candidato fallisce
  e non viene accreditata come certificato.
 
-I protocolli completi sono nel Capitolo 10. Le prove usano MATLAB;
-gli otto modelli Simulink richiedono R2026a e la loro validazione dinamica
-resta distinta dalle prove MATLAB.
+I protocolli completi sono nel Capitolo 10. Le prove qui descritte usano
+MATLAB; il confronto con i diagrammi Simulink eseguiti mantiene distinte
+le condizioni di riferimento, disturbo, rumore e selezione delle misure.
 Abbiamo quindi un buon comparatore nominale 2-DoF e strutture
 più semplici con compromessi misurabili. Restano assestamento
 lento, sensibilità al rumore e una RAS empirica ristretta.

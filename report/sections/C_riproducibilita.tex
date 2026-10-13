@@ -1,6 +1,6 @@
 \chapter{Riproducibilità}
 \section{Verifiche senza ripetere le sintesi}
-Dalla radice del repository, in MATLAB R2025b con Control System,
+Dalla radice del repository, in MATLAB R2026b con Simulink, Control System,
 Robust Control e Symbolic Math Toolbox:
 \begin{verbatim}
 setenv('CR_RUN_SCOPE','verify'); run_all
@@ -14,12 +14,12 @@ I quattro script didattici si eseguono direttamente dall'Editor MATLAB;
 \path{tools/verify_four_final_scripts.m} ne esegue le modalità predefinite
 e controlla l'identità dei modelli e dei controllori archiviati.
 
-\section{Esperimenti conclusivi MATLAB}
+\section{Esperimenti MATLAB}
 \begin{verbatim}
 setenv('CR_RUN_SCOPE','closure'); run_all
 \end{verbatim}
 Il comando calcola sette scenari di rumore con seed 20261012, campiona
-dieci impianti nuovi condivisi dai controllori robusti, ricostruisce la
+dieci impianti condivisi dai controllori robusti, costruisce la
 griglia non lineare comune e verifica i candidati Lyapunov. Non richiama
 \texttt{hinfsyn}, \texttt{musyn} o riduzioni. La RAS salva checkpoint;
 la ripresa incompleta è ammessa soltanto per le stesse matrici e lo stesso
@@ -39,20 +39,30 @@ python report/build_matlab_appendix.py
 \begin{verbatim}
 setenv('CR_RUN_SCOPE','originals'); run_all
 \end{verbatim}
-L'audit legge gli originali senza salvare o convertire i file e confronta
-gli hash prima e dopo. Tutti gli otto richiedono R2026a; R2025b rifiuta il
-caricamento. Su R2026a si possono eseguire, senza modifiche interne:
+La verifica legge i diagrammi senza salvarli e confronta gli hash prima
+e dopo ogni operazione. I file richiedono Simulink R2026a o successivo,
+con Control System e Robust Control Toolbox installati. Il comando è:
 \begin{verbatim}
 addpath('simulink');
-validate_student_originals(true);
-export_student_schemes;
+addpath('tools');
+run_final_student_validation;
 \end{verbatim}
 Il setup esterno passa le variabili con
 \texttt{Simulink.SimulationInput.setVariable}. Le impostazioni interne,
 i solver, i rumori e i selettori conservano i valori degli originali.
-La funzione salva gli output; essi vanno poi esaminati prima di
-attribuire prestazioni validate ai diagrammi. Non è prevista conversione
-a una release precedente.
+La funzione registra separatamente caricamento, compilazione,
+simulazione, orizzonte e segnali disponibili. Restituisce errore quando
+una verifica obbligatoria fallisce o la valutazione dinamica è incompleta.
+La lettura dei buffer visivi è specifica di R2026b: non attiva il logging.
+Se l'API non è disponibile in un'altra release, la verifica resta parziale;
+gli Scope possono essere aperti dopo il run ed esportati con
+\textit{Print to Figure}, senza commutare selettori o salvare il modello.
+Per ricalcolare le metriche e le figure dai run acquisiti, dopo il
+controllo degli hash:
+\begin{verbatim}
+addpath('simulink','tools');
+run_final_student_validation(false,true);
+\end{verbatim}
 
 \section{Compilazione e consegna}
 \path{tools/build_m18_latex.ps1} compila relazione e presentazione con
@@ -62,4 +72,5 @@ I PDF sono \path{report/Progetto_CR_Relazione_finale.pdf} e
 Le note orali indicano una durata prevista entro 20 minuti; la prova
 cronometrata deve essere effettuata dal gruppo. Il manifest in
 \path{delivery/manifest.json} seleziona i materiali di consegna e le loro
-dipendenze. Matricole e data definitiva restano da completare.
+dipendenze. I risultati negativi sulle prestazioni rimangono parte della
+discussione scientifica.

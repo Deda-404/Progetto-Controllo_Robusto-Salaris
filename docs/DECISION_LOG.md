@@ -2324,3 +2324,7 @@ Conservare integralmente i controllori e gli otto SHA-256. Tolleranza del solo t
 I picchi Scope sono valori osservati e gli RMS quadrature sulla griglia effettiva. Non confrontarli come statistiche identiche con la propagazione MATLAB ZOH. Dichiarare H∞ lineare ideale, H∞ non lineare rumoroso e encoder originali correlati. Conservare il rumore critico e le prestazioni negative. H∞ RS quantitativo differisce fra release: riportare i valori R2026b nei PDF e conservare i precedenti dati senza attribuire equivalenza. Le conclusioni NS/NP/RS/RP e i limiti RAS restano separati.
 
 Gli elaborati sono testi autonomi del progetto, con autori/matricole/data forniti, figure autentiche e riferimenti tecnici dovuti. La consegna ordinaria contiene sorgenti e prove necessarie; il checkout GitHub integrale conserva le 141 regressioni e la cronologia. Pubblicare una PR per revisione; nessun merge automatico.
+
+## 2026-10-13 — Dipendenze del pacchetto ordinario
+
+Approvata entro il collaudo autorizzato la selezione dei dataset e delle cartelle richiesti dai quattro default. Incluso m8_lqg_nonlinear_ras.mat e m15_nonlinear_robust_validation.mat; grezzo lyapunov_trajectories.mat conservato nel repository, escluso dalla consegna perché non letto dai default. Motivazione verificata tramite lettura delle dipendenze ed esecuzione isolata 4/4 PASS. Nessuna modifica a script, controllori o SLX; le 141 regressioni restano disponibili nel checkout completo. Responsabile: Alessio. Stato: COMPLETE / PASS.
