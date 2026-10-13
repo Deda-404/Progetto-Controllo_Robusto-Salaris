@@ -1,0 +1,840 @@
+{
+  "name": "mu_linear_sim",
+  "release": "2026b",
+  "loaded": true,
+  "load": "LOAD PASS",
+  "compile": "COMPILE PASS",
+  "simulation": "SIMULATION PASS",
+  "dynamic_validation": "DYNAMIC VALIDATION PASS",
+  "error": "",
+  "error_identifier": "",
+  "error_phase": "",
+  "warning": "",
+  "warning_identifier": "",
+  "solver": "VariableStepAuto",
+  "stop_time": "10.0",
+  "simulated_duration": 10,
+  "outputs": [
+    "tout"
+  ],
+  "signal_summary": [
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.096510511827035836,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.0852980602295148,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel3",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.070528673825995675,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel4",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.083035998588725249,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel5",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel6",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Variabile di controllo/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 107.95970527014948,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Variabile di controllo/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 50.338246988661382,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.098142862343389231,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.08617451571686599,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel3",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.071583425755888469,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel4",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.083998549329809588,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel5",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel6",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    }
+  ],
+  "switches": {
+    "path": "mu_linear_sim/Manual Switch",
+    "sw": "0",
+    "selected_port": 2,
+    "selected_source": "mu_linear_sim/Mux3"
+  },
+  "scope_logging": [
+    {
+      "path": "mu_linear_sim/Uscita ideale",
+      "enabled": false,
+      "variable": "ScopeData1",
+      "limit_points": false,
+      "max_points": "5000",
+      "decimate": false,
+      "decimation": "2"
+    },
+    {
+      "path": "mu_linear_sim/Uscita misurata",
+      "enabled": false,
+      "variable": "ScopeData",
+      "limit_points": false,
+      "max_points": "5000",
+      "decimate": false,
+      "decimation": "2"
+    },
+    {
+      "path": "mu_linear_sim/Variabile di controllo",
+      "enabled": false,
+      "variable": "ScopeData2",
+      "limit_points": false,
+      "max_points": "5000",
+      "decimate": false,
+      "decimation": "2"
+    }
+  ],
+  "compiled_ports": [
+    {
+      "path": "mu_linear_sim/Constant1",
+      "type": "Constant",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Controllori mu",
+      "type": "SubSystem",
+      "widths": {
+        "Inport": 4,
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Demux",
+      "type": "Demux",
+      "widths": {
+        "Inport": 4,
+        "Outport": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Demux1",
+      "type": "Demux",
+      "widths": {
+        "Inport": 4,
+        "Outport": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Demux2",
+      "type": "Demux",
+      "widths": {
+        "Inport": 2,
+        "Outport": [
+          1,
+          1
+        ],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Demux3",
+      "type": "Demux",
+      "widths": {
+        "Inport": 2,
+        "Outport": [
+          1,
+          1
+        ],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Demux4",
+      "type": "Demux",
+      "widths": {
+        "Inport": 2,
+        "Outport": [
+          1,
+          1
+        ],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Disturbo di coppia",
+      "type": "Step",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/From",
+      "type": "From",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/From1",
+      "type": "From",
+      "widths": {
+        "Inport": [],
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/From2",
+      "type": "From",
+      "widths": {
+        "Inport": [],
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/From3",
+      "type": "From",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/From4",
+      "type": "From",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Goto3",
+      "type": "Goto",
+      "widths": {
+        "Inport": 2,
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Goto4",
+      "type": "Goto",
+      "widths": {
+        "Inport": 2,
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Goto5",
+      "type": "Goto",
+      "widths": {
+        "Inport": 4,
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Goto6",
+      "type": "Goto",
+      "widths": {
+        "Inport": 4,
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Linear plant",
+      "type": "StateSpace",
+      "widths": {
+        "Inport": 8,
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Manual Switch",
+      "type": "ManualSwitch",
+      "widths": {
+        "Inport": [
+          8,
+          8
+        ],
+        "Outport": 8,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Mux",
+      "type": "Mux",
+      "widths": {
+        "Inport": [
+          1,
+          1
+        ],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Mux2",
+      "type": "Mux",
+      "widths": {
+        "Inport": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "Outport": 8,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Mux3",
+      "type": "Mux",
+      "widths": {
+        "Inport": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "Outport": 8,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Mux4",
+      "type": "Mux",
+      "widths": {
+        "Inport": [
+          2,
+          2
+        ],
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Rumore di processo link",
+      "type": "RandomNumber",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Rumore di processo u",
+      "type": "RandomNumber",
+      "widths": {
+        "Inport": [],
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Rumori di misura",
+      "type": "RandomNumber",
+      "widths": {
+        "Inport": [],
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Selector1",
+      "type": "Selector",
+      "widths": {
+        "Inport": 4,
+        "Outport": 2,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Sum2",
+      "type": "Sum",
+      "widths": {
+        "Inport": [
+          4,
+          4
+        ],
+        "Outport": 4,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Uscita ideale",
+      "type": "Scope",
+      "widths": {
+        "Inport": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Uscita misurata",
+      "type": "Scope",
+      "widths": {
+        "Inport": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/Variabile di controllo",
+      "type": "Scope",
+      "widths": {
+        "Inport": [
+          1,
+          1
+        ],
+        "Outport": [],
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/r1",
+      "type": "Step",
+      "widths": {
+        "Inport": [],
+        "Outport": 1,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    },
+    {
+      "path": "mu_linear_sim/r2",
+      "type": "Step",
+      "widths": {
+        "Inport": [],
+        "Outport": 1,
+        "Enable": [],
+        "Trigger": [],
+        "State": [],
+        "LConn": [],
+        "RConn": [],
+        "Ifaction": [],
+        "Reset": [],
+        "Event": []
+      },
+      "active": "on"
+    }
+  ],
+  "scope_acquisition": "ACQUISITION PASS",
+  "solver_configuration": {
+    "relative_tolerance": "1e-3",
+    "absolute_tolerance": "auto",
+    "max_step": "auto"
+  },
+  "sha256_before": "9d60a5b211c989f2c3324b47e6c218fc470d834d5633481c0d3c927c6eee078b",
+  "sha256_after": "9d60a5b211c989f2c3324b47e6c218fc470d834d5633481c0d3c927c6eee078b"
+}

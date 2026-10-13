@@ -2313,3 +2313,14 @@ Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero erro
 Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
 
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
+
+
+## 2026-10-13 — Collaudo compatibile e integrità degli originali
+
+Stato: APPROVATO nel mandato di collaudo, COMPLETE/PASS tecnico. Responsabile: Alessio. Usare R2026b effettivamente disponibile per gli SLX R2026a Update 4, registrando esplicitamente release/prodotti. Fornire matrici e bus solo mediante setup esterno; compilare, simulare e leggere buffer Scope senza alterare logging, selettori, solver, blocchi o file. L'API visuale interna R2026b è documentata; su release diversa segnalare acquisizione incompleta e indicare Print to Figure.
+
+Conservare integralmente i controllori e gli otto SHA-256. Tolleranza del solo test K/L aggiornata a 1e−10 assoluto/relativo per precisione tra release, mantenendo test indipendenti di Riccati, residui e stabilità; il fallimento iniziale rimane registrato. Nessuna nuova sintesi, riduzione, filtro o saturazione autorizzata dal collaudo.
+
+I picchi Scope sono valori osservati e gli RMS quadrature sulla griglia effettiva. Non confrontarli come statistiche identiche con la propagazione MATLAB ZOH. Dichiarare H∞ lineare ideale, H∞ non lineare rumoroso e encoder originali correlati. Conservare il rumore critico e le prestazioni negative. H∞ RS quantitativo differisce fra release: riportare i valori R2026b nei PDF e conservare i precedenti dati senza attribuire equivalenza. Le conclusioni NS/NP/RS/RP e i limiti RAS restano separati.
+
+Gli elaborati sono testi autonomi del progetto, con autori/matricole/data forniti, figure autentiche e riferimenti tecnici dovuti. La consegna ordinaria contiene sorgenti e prove necessarie; il checkout GitHub integrale conserva le 141 regressioni e la cronologia. Pubblicare una PR per revisione; nessun merge automatico.

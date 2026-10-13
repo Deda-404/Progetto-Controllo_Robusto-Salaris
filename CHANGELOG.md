@@ -4,6 +4,16 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+## 2026-10-13 — Collaudo finale MATLAB/Simulink
+
+- Esecuzione locale R2026b degli otto SLX originali, compilazione e acquisizione Scope in sola lettura; 12 combinazioni validate, SHA-256 invariati.
+- 141 regressioni e quattro script PASS in R2025b/R2026b; solo tolleranza K/L del test portata a 1e−10. Primo fallimento conservato; 80 artifact congelati invariati.
+- Decoder vettoriale Scope, runner con errore su verifiche incomplete, schemi autentici e dati completi con Git LFS; selettori/rumori correlati documentati.
+- Margini robusti R2026b, differenza quantitativa H∞ tra release esplicita, rumore critico e target negativi preservati.
+- Relazione 100 pagine e presentazione 22 slide/18:45, autori/matricole/data completi, grafici descrittivi senza cronologia, audit e controllo visivo PASS.
+- Manifest, dipendenze, istruzioni, pacchetto/ZIP con verifica esatta dei file copiati; dati e cronologia del repository preservati. Pubblicazione per revisione senza merge.
+
+
 ### Importazione dei modelli Simulink dal Drive del progetto — 2026-10-10
 
 - Aggiunta `simulink/drive_project/` con i cinque SLX della cartella condivisa
