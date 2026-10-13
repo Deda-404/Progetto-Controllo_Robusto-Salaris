@@ -376,8 +376,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1492,
-      "sha256": "0edeedecc47ca4bc225750d4479c8b7ed9e3d37c7399fe93f60316fe79f4ce3c",
+      "size_bytes_recorded": 1570,
+      "sha256": "3e304ec49f9ae43dcc97d66f8e738b952eb8bd55533d56a5ee19f515ef0f6db9",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -385,8 +385,8 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 7466,
-      "sha256": "81cc3b3cfd1977e217b19d06283ffcc203c370f1a652107e79157523747fafcb",
+      "size_bytes_recorded": 7966,
+      "sha256": "7975f4afd68934bda48c08bf311e86eaf7755bf31e546c088d972b5419a4aa3a",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -529,8 +529,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 4163,
-      "sha256": "118747bb47fd2dac623dccb5b386db4535e2ff7f457107291101cf894256aa70",
+      "size_bytes_recorded": 4301,
+      "sha256": "9790556b4b8ab7c4a02c39f96dddbafb615901f73401b5871bb239e364654d69",
       "hash_mode": "LF-normalized text"
     },
     {

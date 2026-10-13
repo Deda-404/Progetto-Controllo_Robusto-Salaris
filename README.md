@@ -2,6 +2,8 @@
 
 Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Collaudo locale **COMPLETE / PASS** in MATLAB/Simulink R2026b 26.2.0.3386108: **141/141 test**, quattro script eseguiti e **otto originali SLX caricati, compilati, simulati e verificati**. SHA-256 degli otto file e 80 artifact congelati invariati. Branch `codex/validazione-finale-matlab-simulink`, base main `14359392`; revisione e merge a cura degli studenti.
 
+[PR #40 — collaudo conclusivo](https://github.com/Deda-404/Progetto_CR/pull/40) aperta per revisione; ramo pubblicato, nessun merge.
+
 ## Elaborati
 
 - [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf), 100 pagine; sorgenti in report/.

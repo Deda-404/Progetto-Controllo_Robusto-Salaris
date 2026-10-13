@@ -12,6 +12,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Margini robusti R2026b, differenza quantitativa H∞ tra release esplicita, rumore critico e target negativi preservati.
 - Relazione 100 pagine e presentazione 22 slide/18:45, autori/matricole/data completi, grafici descrittivi senza cronologia, audit e controllo visivo PASS.
 - Manifest, dipendenze, istruzioni, pacchetto/ZIP di 327 file con verifica esatta dei file copiati e quattro default PASS da copia isolata; dati e cronologia del repository preservati. Pubblicazione per revisione senza merge.
+- Gate G PASS: branch e otto oggetti LFS pubblicati, [PR #40](https://github.com/Deda-404/Progetto_CR/pull/40) aperta per revisione, senza merge.
 
 
 ### Importazione dei modelli Simulink dal Drive del progetto — 2026-10-10

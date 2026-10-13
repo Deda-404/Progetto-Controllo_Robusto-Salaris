@@ -13,6 +13,7 @@
 - [x] Relazione di 100 pagine e 22 slide compilate senza errori/overflow e controllate visivamente.
 - [x] Pacchetto autonomo: 327 file, hash ZIP e otto originali verificati; quattro default eseguiti da copia isolata.
 - [ ] Confermare il tempo con una prova orale comune; massimo 20 minuti.
+- [x] Ramo e otto oggetti LFS pubblicati; PR #40 aperta su main senza merge.
 - [ ] Revisionare la PR e decidere il merge manualmente.
 
 Prima dell’invio leggere gli audit PDF e usare la cartella selezionata da `delivery/manifest.json`, escludendo diari, resoconti interni e cache. Il superamento del collaudo non annulla il rumore critico o i target non rispettati. La coppia non saturata è una richiesta del modello, non una prova di fattibilità hardware.

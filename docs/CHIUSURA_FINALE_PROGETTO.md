@@ -30,9 +30,9 @@ Il Capitolo 11 conserva dieci impianti incerti comuni più nominale, seed 202610
 | D scienza | PASS con limiti prestazionali | rumore, RS/RP, RAS e dieci piante coerenti; differenze numeriche tra release dichiarate |
 | E relazione | PASS | 100 pagine, audit LaTeX senza errori/overflow e controllo visivo di tutte le pagine; schemi reali e dati Scope |
 | F presentazione | PASS | 22 slide controllate, audit senza errori/overflow, schema e curve autentiche, stima 18:45 |
-| G repository | verificato prima della pubblicazione | branch, manifest, integrità, commit; PR senza merge |
+| G repository | PASS | branch e otto oggetti LFS pubblicati; PR #40 aperta, 350 hash manifest PASS, nessun merge |
 
-La percentuale tecnica va dichiarata soltanto dopo gli audit PDF e la pubblicazione: 7/7 gate equivalgono al 100% del collaudo richiesto, non al soddisfacimento di tutti i target o alla validazione hardware.
+Sette gate su sette superati: 100% del collaudo richiesto, supportato da test, simulazioni, integrità, audit PDF e pubblicazione. Questa percentuale non esprime il soddisfacimento di tutti i target o una validazione hardware.
 
 ## Problemi risolti e limiti
 
@@ -51,3 +51,7 @@ Cartella e ZIP Consegna_SEA_2026-10-13: 327 file, 392200933 byte compressi. Veri
 Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224; data 13.10.2026. Relazione: `report/Progetto_CR_Relazione_finale.pdf`, 100 pagine. Presentazione: `presentation/Progetto_CR_Presentazione.pdf`, 22 slide, 18:45 stimati. Schemi autentici: otto viste generali e tre sottosistemi; curve complete di otto run e vista orale μ. Tutte le 100 pagine e le 22 slide sono state controllate visivamente; frontespizio, didascalie e grafici nominali rietichettati sono stati ricontrollati dopo la compilazione finale. Zero errori LaTeX, riferimenti irrisolti, overflow o destinazioni duplicate negli audit generated/*latex_audit.txt. Le 13 figure nominali sono rigenerate dai dati congelati con etichette descrittive, senza riferimenti a fasi pregresse.
 
 Restano la prova orale cronometrata, la revisione umana della PR e la decisione sul merge. Limiti scientifici da esporre: rumore H∞/μ, target temporali falliti, casi RAS ignoti e assenza di saturazioni/dati hardware. Nessun modello va modificato per presentare un esito più favorevole.
+
+## Pubblicazione conclusa
+
+PR #40: https://github.com/Deda-404/Progetto_CR/pull/40, aperta per revisione su main, senza merge. Branch codex/validazione-finale-matlab-simulink pubblicato con gli otto oggetti LFS (171 MB). Commit di collaudo ca0f64d e di elaborati/consegna 266782e. Stato remoto verificato sul secondo commit, PR senza conflitti e base 14359392 invariata; il commit di chiusura registra il gate G. ZIP e PDF finali restano identici agli audit di consegna.
