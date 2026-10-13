@@ -1,11 +1,16 @@
-# Otto modelli Simulink studenti, immutabili
+# Otto diagrammi Simulink
 
-La fonte corrente è `student_originals/`: LQG, LQGI, H∞ e µ, ciascuno lineare e non lineare. Sono gli otto pacchetti scaricati dal Drive il 12 ottobre 2026, non diagrammi ricostruiti. `student_originals_manifest.json` registra ID Drive, data, dimensioni e tre SHA-256 identici per ciascun file.
+`student_originals/` contiene i modelli LQG, LQGI, H∞ e μ, ciascuno lineare e non lineare. `student_originals_manifest.json` conserva i SHA-256 originali. Tutti gli otto hanno superato **LOAD, COMPILE, SIMULATION e DYNAMIC VALIDATION PASS** in MATLAB/Simulink R2026b 26.2.0.3386108 su Windows. I file provengono da R2026a Update 4; nessuna conversione o modifica è stata applicata.
 
-Tutti richiedono R2026a Update 4. Otto tentativi di caricamento con R2025b Update 4 sono falliti per release; nessuna simulazione originale è validata. Non disabilitare il controllo di release e non esportare o convertire gli SLX.
+Gli orizzonti salvati sono 10 s, salvo LQG non lineare 4 s. Sono stati acquisiti riferimenti, quattro posizioni, misure encoder e due comandi per ramo. I tre rami H∞ sono attivi in parallelo. H∞ lineare seleziona le misure ideali, quello non lineare le misure rumorose; μ usa misure rumorose in entrambi i casi. I quattro encoder originali sono correlati per seed/configurazione. Queste condizioni restano quelle salvate.
 
-`setup_student_originals(kind)` prepara esclusivamente variabili MATLAB e il bus già richiesto. `validate_student_originals(false)` carica in sola lettura, chiude senza salvare e verifica gli hash. In R2026a, `validate_student_originals(true)` usa SimulationInput e gli stessi parametri interni; gli output salvati devono essere esaminati. `export_student_schemes` prepara schermate reali nella release corretta senza salvataggi dei modelli.
+```matlab
+addpath('simulink','tools');
+run_final_student_validation(false);
+```
 
-La verifica dettagliata è in `../docs/REPORT_VERIFICA_SIMULINK.md`; l’inventario completo ZIP/XML in `../docs/INVENTARIO_XML_SIMULINK.md`. Le miniature originali sono conservate come materiale di audit: non sono leggibili alla scala della relazione.
+`setup_student_originals` fornisce esclusivamente matrici, bus e variabili esterne. `validate_student_originals(true)` compila ed esegue con SimulationInput, verifica porte, orizzonte, segnali finiti e hash, poi chiude senza salvare. `acquire_student_scope_buffers` legge i buffer visuali Scope senza attivare il logging; il decoder gestisce anche le porte vettoriali. L'API è interna e specifica di R2026b: se indisponibile, esportare gli Scope aperti dopo il run mediante Print to Figure; non cambiare selettori o parametri.
 
-`originals/` (sei file) e `drive_project/` (importazione del 10 ottobre, inclusa una cartella estratta) sono archivio conservato. Non applicare agli otto file correnti i vecchi suggerimenti di modificare l’integratore o l’interfaccia H∞. L’audit corrente mostra già l’errore LQGI misurato, il 2-DoF a quattro ingressi e i modelli µ presenti.
+`analyze_student_scope_results` genera grafici e metriche dai campioni acquisiti. Picchi e RMS sono osservazioni sulla griglia del solver, non certificati continui o hardware. `export_student_schemes` produce otto viste generali autentiche e tre dettagli di sottosistemi senza salvare gli SLX. Il runner con `(false,true)` rielabora dati già registrati, ricontrollando gli hash; non conta come una nuova simulazione.
+
+Risultati: `../results/data/final_simulink_validation/`. Schemi: `../report/figures/student_exports/`. Grafici: `../report/figures/final_simulink/`. Il collaudo dettagliato è in `../docs/REPORT_VERIFICA_SIMULINK.md` nel checkout integrale. Le altre cartelle Simulink del repository sono archivio e non appartengono alla consegna selezionata.

@@ -1,0 +1,35 @@
+{
+  "matlab": "26.2.0.3386108 (R2026b)",
+  "scripts": [
+    {
+      "name": "progetto_lqg.m",
+      "status": "EXECUTED PASS",
+      "seconds": 24.8275512,
+      "sourceHash": "fc54b998b84e132525c497a506c2fb616a7d8909397ac26f41b769850cfc9fd2",
+      "codeAnalyzer": []
+    },
+    {
+      "name": "progetto_lqgi.m",
+      "status": "EXECUTED PASS",
+      "seconds": 22.0299521,
+      "sourceHash": "076d351d130df4c815d799d5cd0391caced793eb6a269006cb4f296361f02e8f",
+      "codeAnalyzer": []
+    },
+    {
+      "name": "progetto_hinf_tre_controllori.m",
+      "status": "EXECUTED PASS",
+      "seconds": 7.4752927,
+      "sourceHash": "2dccb2d3528302713d8232c192d762410b63b5d2ef4b50ea550e850c25dda510",
+      "codeAnalyzer": []
+    },
+    {
+      "name": "progetto_mu.m",
+      "status": "EXECUTED PASS",
+      "seconds": 93.3460898,
+      "sourceHash": "3ec3b08e515ea4ef0cd46a21a56fe21b641d02a79c68896332a5d4661d981ac1",
+      "codeAnalyzer": []
+    }
+  ],
+  "protectedCount": 80,
+  "protectedHashesUnchanged": true
+}

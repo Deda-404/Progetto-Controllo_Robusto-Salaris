@@ -57,7 +57,7 @@ excerpt("src/uncertainty/build_m4_uncertain_plant.m", "DeltaAct1 =", "Gactuators
 
 section("LQR, filtro di Kalman e controllore LQG")
 excerpt("controllers/lqg/search_lqr_weights_m6.m", "[Ccost, Q, scales", "Nr = staticTrackingGain",
-        "Costruisce il costo del candidato, calcola il feedback LQR e il guadagno statico sul riferimento. La selezione finale deriva dalla ricerca e dalle verifiche M6, non dal solo frammento.")
+        "Costruisce il costo del candidato, calcola il feedback LQR e il guadagno statico sul riferimento. La selezione deriva dalla ricerca e dalle verifiche del controllore completo.")
 excerpt("controllers/lqg/design_kalman_m6.m", "A = m3Data.Afull", "L = lqe",
         "Calcola Kalman con disturbi lato link, errore del comando e quattro misure encoder. Le scale sono ipotesi progettuali, non dati sperimentali.")
 excerpt("controllers/lqg/build_lqg_no_integrator.m", "controllerA =", "controllerD =",
@@ -65,7 +65,7 @@ excerpt("controllers/lqg/build_lqg_no_integrator.m", "controllerA =", "controlle
 
 section("LQGI con osservatore e integratore dell'errore")
 excerpt("analysis/progetto_lqgi.m", "Aa=[A,zeros", "Bk=[zeros",
-        "Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \\texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.")
+        "Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con filtro di Kalman. Si carica il candidato all'indice \\texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.")
 excerpt("analysis/nonlinear/simulate_lqgi_nonlinear.m", "measured=[state(1:2)", "dz=[dm;",
         "Collega misure dei quattro encoder, stato stimato e memoria integrale alle equazioni SEA. Il rumore di processo entra solo nella pianta, mentre il Kalman conosce il comando calcolato.")
 excerpt("analysis/run_hinf_final_nominal.m", "candidates=[study.one", "[~,ix]=sortrows(ranking,1:10)",
@@ -111,7 +111,7 @@ excerpt("analysis/run_hinf_final_robust.m", "a.K=K; a.CL=lft", "[a.RP,a.rpWorst,
 
 section("Campioni comuni e verifica pratica della robustezza")
 excerpt("analysis/run_practical_robustness.m", "rng(d.seed", "assert(isequaln(values",
-        "Genera dieci nuovi impianti della famiglia fisica incerta, seed 20261012, e verifica il replay esatto. Entrambi i controllori usano questi stessi oggetti.")
+        "Genera dieci impianti della famiglia fisica incerta, seed 20261012, e verifica il replay esatto. Entrambi i controllori usano questi stessi oggetti.")
 excerpt("analysis/run_practical_robustness.m", "for k=1:2", "cl=final_closure_loop",
         "Chiude ciascun controllore sul nominale e sui dieci campioni, mantenendo tutti gli stati interni e i canali di disturbo.")
 section("Rumore di misura e impulsi tra i campioni")

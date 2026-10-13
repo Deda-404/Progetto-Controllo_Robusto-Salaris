@@ -1,3 +1,17 @@
+# Stato corrente — 13.10.2026
+
+**Collaudo completo A–G COMPLETE/PASS; PR #40 aperta per revisione.** R2026b 26.2.0.3386108 Windows locale, prodotti necessari installati. 141/141 test e quattro script PASS nelle due release R2025b/R2026b; 80 artifact congelati invariati. Otto SLX LOAD/COMPILE/SIMULATION/DYNAMIC VALIDATION PASS e SHA-256 invariati; 12 combinazioni verificate da dati Scope autentici.
+
+Relazione 100 pagine, presentazione 22 slide / 18:45 stimati, autori e matricole completi, data 13.10.2026. Audit PDF senza errori/overflow, tutte le pagine e le slide controllate. Pacchetto selezionato di 327 file e ZIP di 392200933 byte con manifest/hash, quattro default PASS anche da copia isolata; documenti interni esclusi dalla consegna ordinaria.
+
+Limiti scientifici conservati: H∞ RS FAIL, RP numerica non validata; μ RS≈1.80/RP≈1.68 nel modello dichiarato; target temporali parziali, RAS empiriche e arresti numerici separati. Rumore H∞ 2-DoF non lineare: picco Scope 733230 N m; μ circa 108/109 N m. Nessuna validazione hardware o certificato continuo del picco. H∞ lineare usa misure ideali, non lineare rumorose; encoder SLX correlati. I limiti numerici H∞ RS differiscono fra release e non sono dichiarati equivalenti.
+
+Branch `codex/validazione-finale-matlab-simulink`, base main `14359392`. PR: https://github.com/Deda-404/Progetto_CR/pull/40. Branch pubblicato con gli otto oggetti LFS. Prossimo passo organizzativo: revisionare la PR e decidere il merge manuale; prova orale cronometrata. Nessun intervento sui modelli per mascherare i limiti. Evidenze nei report conclusivi e in `results/data/final_simulink_validation/`.
+
+---
+
+## Stati registrati in precedenza
+
 # Stato del progetto — 6 ottobre 2026
 
 Branch `codex/revisione-lqgi-hinf-mu`, base origin/main 283193e con PR #34 integrata. Nessun merge automatico nella revisione corrente.

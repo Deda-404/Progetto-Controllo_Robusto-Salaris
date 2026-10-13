@@ -140,7 +140,7 @@ $w_q=2$, $w_v=1$, $w_\delta=0.1$, $r_u=0.10$ e
 $J_N=\MLqrSelectedScore$. Le matrici $Q,R,K,N_r$ sono i risultati della ricerca.
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.78\textwidth]{figures/m6_lqr_candidate_tradeoff.png}
+\includegraphics[width=0.78\textwidth]{figures/student_baseline/lqr_tradeoff.png}
 \caption{Ogni punto deriva dai due gradini nominali di un candidato LQR:
 ascissa $T_s$ peggiore, ordinata picco di coppia; il colore indica lo score dei
 candidati ammissibili e il simbolo evidenzia quello selezionato.
@@ -148,7 +148,7 @@ La linea a 12 N m è una scala, non una saturazione.}
 \label{fig:m6-lqr-search}
 \end{figure}
 \begin{figure}[H]\centering
-\includegraphics[width=0.70\textwidth]{figures/m6_lqr_selected_weights.png}
+\includegraphics[width=0.70\textwidth]{figures/student_baseline/lqr_selected_weights.png}
 \caption{Priorità adimensionali selezionate, da non confondere con le scale fisiche
 né con i singoli elementi della matrice non diagonale $Q$.}\label{fig:m6-lqr-weights}
 \end{figure}
@@ -249,7 +249,7 @@ Le colonne \texttt{RmsEstimationErrorFixedNoise} e
 \texttt{RmsControlFixedNoise} confrontano l'effetto della sola covarianza
 assunta, mantenendo identico il rumore applicato.
 \begin{figure}[H]\centering
-\includegraphics[width=0.84\textwidth]{figures/m6_kalman_sensitivity.png}
+\includegraphics[width=0.84\textwidth]{figures/student_baseline/kalman_sensitivity.png}
 \caption{A sinistra, rapidità relativa dello stimatore; a destra, RMS della
 variazione di coppia a rumore applicato identico. L'ascissa è il rapporto
 $Q_n/R_n$ relativo al progetto nominale, non un rapporto adimensionale
@@ -285,7 +285,7 @@ Si osservano rapidità del giunto comandato, picco del giunto non comandato e
 raggiungimento del valore finale. Il peggiore $T_s$ è \MControllerWorstTs\ s:
 LQG soddisfa i target nominali, pur senza disaccoppiamento perfetto.
 \begin{figure}[H]\centering
-\includegraphics[width=0.82\textwidth]{figures/m6_lqg_reference_tracking.png}
+\includegraphics[width=0.82\textwidth]{figures/student_baseline/lqg_tracking.png}
 \caption{Due prove di tracking nominale LQG a gradino di 5 gradi, senza disturbi
 o rumore e da condizioni iniziali nulle.}\label{fig:m6-tracking}
 \end{figure}
@@ -298,7 +298,7 @@ deviazioni di posizione in gradi nel tempo. L'offset non nullo non è un errore
 del grafico: il prefiltro corregge il guadagno statico sul riferimento,
 non introduce l'azione integrale necessaria alla reiezione esatta.
 \begin{figure}[H]\centering
-\includegraphics[width=0.82\textwidth]{figures/m6_lqg_disturbance_response.png}
+\includegraphics[width=0.82\textwidth]{figures/student_baseline/lqg_disturbance.png}
 \caption{Risposta ai due gradini di coppia lato link: il recupero resta stabile,
 ma permane un offset coerente con l'assenza di integratori.}\label{fig:m6-disturbo}
 \end{figure}
@@ -312,7 +312,7 @@ della prova rumorosa e quelle della stessa prova senza rumore, in N m.
 Non è quindi il comando totale. Le oscillazioni residue quantificano il
 compromesso fra inseguimento delle misure e filtraggio.
 \begin{figure}[H]\centering
-\includegraphics[width=0.82\textwidth]{figures/m6_lqg_estimation.png}
+\includegraphics[width=0.82\textwidth]{figures/student_baseline/lqg_estimation.png}
 \caption{Errore sui due stati di posizione stimati e incremento di coppia
 imputabile alla sequenza di rumore encoder, a riferimento identico.}\label{fig:m6-stima}
 \end{figure}
@@ -325,29 +325,28 @@ I simboli separano regolatore, stimatore e chiusura aumentata; la sovrapposizion
 verifica il principio di separazione e la posizione a sinistra dell'asse
 immaginario verifica la stabilità nominale.
 \begin{figure}[H]\centering
-\includegraphics[width=0.80\textwidth]{figures/m6_lqg_poles.png}
+\includegraphics[width=0.80\textwidth]{figures/student_baseline/lqg_poles.png}
 \caption{Spettri del regolatore, dello stimatore e della chiusura LQG completa,
 senza cancellazioni di stati.}\label{fig:m6-poli}
 \end{figure}
 Il comando full-state usato nella selezione ha picco peggiore
 \MLqrPeakControl\ N m e RMS \MLqrRmsControl\ N m.
 La stabilità locale non determina una regione di attrazione non lineare.
-Una RAS confrontabile dei modelli originali richiede il completamento
-manuale descritto nel Capitolo 10.
+La RAS richiede una prova non lineare con condizioni iniziali e criteri
+di convergenza espliciti, descritti nel Capitolo 10.
 
-\section{Relazione con i modelli Simulink originali}
+\section{Implementazione nei modelli Simulink}
 Il regolatore LQG e lo stimatore soddisfano
 \[
  \dot{\hat x}=(A-LC)\hat x+B\,\delta u+L\,\delta y,\qquad
  \delta u=-K\hat x+N_rr.
 \]
-Il file originale \path{Progetto_LQR_simulink.slx}, pur denominato LQR,
-contiene un osservatore e il feedback dello stato stimato. Il file
-\path{Progetto_LQRI_simulink.slx} aggiunge l'integratore.
-Questi diagrammi sono conservati senza modifiche funzionali; i limiti di
-compatibilità e di collegamento sono elencati nel Capitolo 10.
-Le verifiche MATLAB illustrate qui non dimostrano che i diagrammi originali
-realizzino già l'intera interconnessione richiesta.
+I modelli \path{LQG_linear_sim.slx} e \path{LQG_nonlinear_sim.slx}
+contengono l'osservatore e il feedback dello stato stimato. I corrispondenti
+modelli LQGI aggiungono due integratori sull'errore misurato.
+Il Capitolo 10 descrive ingressi, misure e dinamiche di queste implementazioni.
+Le prove MATLAB e il collaudo dinamico dei diagrammi costituiscono verifiche
+distinte: non trasferiamo ai diagrammi risultati che non sono stati acquisiti.
 
 \section{LQGI: azione integrale e stato stimato}
 \label{sec:lqgi}
@@ -553,18 +552,18 @@ L'offset asintotico deriva dall'equilibrio della chiusura completa,
 mentre il residuo a 8 s è riportato separatamente.
 
 \begin{figure}[p]\centering
-\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqgi_constant_disturbance.png}
+\includegraphics[width=0.88\textwidth]{figures/student_baseline/lqg_lqgi_disturbance.png}
 \caption{LQG e LQGI con identico Kalman sotto i due disturbi costanti.
 LQG conserva offset, mentre l'integratore LQGI lo elimina asintoticamente.
 Le posizioni sono espresse in gradi.}\label{fig:lqgi-disturbo}
 \par\medskip
-\includegraphics[width=0.88\textwidth]{figures/m7_lqg_lqgi_disturbance_control.png}
+\includegraphics[width=0.88\textwidth]{figures/student_baseline/lqg_lqgi_command.png}
 \caption{Coppie dei medesimi esperimenti. La memoria integrale consente
 il contributo permanente necessario a compensare il disturbo.
 Non sono applicate saturazioni o anti-windup.}\label{fig:lqgi-comando}
 \end{figure}
 \begin{figure}[!htbp]\centering
-\includegraphics[width=0.82\textwidth]{figures/m7_lqgi_reference_tracking.png}
+\includegraphics[width=0.82\textwidth]{figures/student_baseline/lqgi_tracking.png}
 \caption{Due gradini di riferimento separati: posizione del giunto
 comandato, entrambe le coppie e stati integrali LQGI.
 LQGI usa $\bar w_i=200$, $R=0.10I_2$ e nessun prefiltro.
@@ -587,18 +586,16 @@ non viene presentata come una soluzione prestazionale completa.
 In presenza di bias encoder l'integratore annullerebbe l'errore misurato,
 non necessariamente quello fisico. In presenza di saturazioni potrebbe
 accumulare errore non compensabile, richiedendo anti-windup.
-Le nuove prove di \path{run_lqgi_validation.m} integrano anche le
+Le prove di \path{run_lqgi_validation.m} integrano le
 equazioni non lineari SEA. Meccanica e attuatori partono dall'equilibrio
 assoluto; $\hat x(0)=0$ e $\xi(0)=0$ sono deviazioni nulle. Il comando
 fisico è $\bar\tau+u$; le misure sottraggono le posizioni di equilibrio.
 I quattro rumori encoder entrano sia nell'innovazione sia nell'integratore.
 I quattro canali ignoti di processo agiscono lato link e prima degli
 attuatori; allo stimatore è fornito soltanto il comando noto $u$.
-La realizzazione conserva $L,Q_n,R_n$ del progetto M6.
+La realizzazione usa gli stessi $L,Q_n,R_n$ del controllore LQG.
 
-Il Capitolo 10 riporta tracking, disturbo, rumore e sezione empirica RAS
-aggiornati. Sono verifiche MATLAB della LQGI effettivamente stimata,
-distinte dalla simulazione degli originali Simulink. Questi devono
-ancora ricevere le correzioni documentate e non sono accreditati con
-i risultati della nuova integrazione. Saturazioni e robustezza sul
-modello incerto restano fuori da queste prove.
+Il Capitolo 10 riporta tracking, disturbo, rumore e sezione empirica RAS.
+Le prove integrano in MATLAB la LQGI con stato stimato e mantengono
+distinta la provenienza dei dati dal collaudo dei diagrammi Simulink.
+Saturazioni e robustezza sul modello incerto restano fuori da queste prove.

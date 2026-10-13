@@ -1,0 +1,160 @@
+{
+  "status": "ACQUISITION PASS",
+  "summaries": [
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.096510511827035836,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.0852980602295148,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel3",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.070528673825995675,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel4",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.083035998588725249,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel5",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita ideale/channel6",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Variabile di controllo/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 107.95970527014948,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Variabile di controllo/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 50.338246988661382,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel1",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.098142862343389231,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel2",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.08617451571686599,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel3",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.071583425755888469,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel4",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.083998549329809588,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel5",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    },
+    {
+      "name": "mu_linear_sim/Uscita misurata/channel6",
+      "samples": 85355,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.00024084393874046484
+    }
+  ],
+  "error": ""
+}

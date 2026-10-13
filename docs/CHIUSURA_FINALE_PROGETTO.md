@@ -1,91 +1,57 @@
-# CHIUSURA FINALE PROGETTO
+# Chiusura finale del progetto SEA
 
-Revisione del 12 ottobre 2026 su `codex/chiusura-definitiva-progetto-sea`, base main fa78e588. Branch dedicato, nessun merge o force-push. GitHub è la fonte del progetto; Drive è stato letto senza scritture.
+Collaudo locale del 13.10.2026 sul branch `codex/validazione-finale-matlab-simulink`, basato su main `14359392bd8cde5249fae91a050cfba8c79eacd4`. Responsabile: Alessio. Nessun merge automatico.
 
-## Gate e prontezza
+## VALIDAZIONE SIMULINK R2026a — ESECUZIONE LOCALE
 
-| Ambito | Stato | Evidenza |
+I modelli R2026a Update 4 sono stati eseguiti nella release effettivamente installata, **R2026b 26.2.0.3386108**, Windows locale, `C:\Program Files\MATLAB\R2026b`. Simulink, Control System, Robust Control e Symbolic Math Toolbox 26.2 disponibili. Ambiente verificato da terminale, senza conversioni o mescolamento di toolbox tra release.
+
+Gli otto file hanno superato caricamento, compilazione, simulazione e valutazione dei segnali. Orizzonte 10 s, salvo LQG non lineare 4 s. I tre rami H∞ sono eseguiti in parallelo; nessun selettore è stato commutato. SHA-256 identici prima/dopo e al manifest, 8/8. Nessun warning numerico acquisito. Dettagli, hash, percorsi, metriche e sorgenti per ogni modello in `REPORT_VERIFICA_SIMULINK.md` e `results/data/final_simulink_validation/`.
+
+## Test e confronto scientifico
+
+141/141 test MATLAB PASS in R2025b e R2026b, nessuno incompleto. Quattro script consegnati eseguiti nelle due release; Code Analyzer dei quattro script senza messaggi e 80 file fisici/controllori congelati invariati. Il primo run R2026b ha prodotto 140/141: confronto K/L con tolleranza assoluta 1e−12, scarti di pochi 1e−11. Corretto soltanto quel test a AbsTol/RelTol 1e−10; restano verifiche di Riccati, residui, poli e dimensioni. Il fallimento è conservato in `matlab_tests_R2026b_first.csv/.mat`.
+
+LQG resta sotto disturbo con offset medio q1 circa 4.14° nel lineare. LQGI lo riduce a circa 0.0181° a tempo finito, con assestamento lento. H∞ lineare seleziona misure ideali: non è una prova del rumore encoder. H∞ non lineare seleziona misure rumorose e il 2-DoF registra circa 7.33×10^5 N m. Kμ registra circa 108 N m nel lineare e 109 N m nel non lineare. Posizioni relativamente regolari non implicano comando implementabile. Tutti i campioni acquisiti sono finiti; i picchi sono osservati, non massimi continui certificati.
+
+Il Capitolo 9 mantiene la distinzione ordine/ampiezza e NS/NP/RS/RP. I limiti numerici H∞ RS non coincidono tra release: circa [0.018129,0.018166] in R2025b, [0.026154,0.026207] nel run R2026b a precisione stampata. RS resta FAIL; l’intervallo RP invertito resta non validato. Non viene dichiarata equivalenza numerica di questi intervalli. I margini Kμ RS≈1.80 e RP≈1.68 e le conclusioni qualitative sono riprodotti. Gli artifact scientifici conservati non sono sovrascritti; gli elaborati usano i margini del collaudo R2026b quando riportano questa analisi.
+
+Il Capitolo 10 conserva lo stato aumentato completo, la RAS comune (25 punti per controllore) e gli esiti numericamente ignoti. LQG/LQGI superano il gate Lyapunov con insiemi interni molto piccoli; nessun certificato viene attribuito ai quattro casi con gate fallito. Nessuna nuova RAS fittizia viene attribuita agli SLX.
+
+Il Capitolo 11 conserva dieci impianti incerti comuni più nominale, seed 20261012: H∞ 0/10 stabili, Kμ 10/10. Le traiettorie instabili non ricevono metriche di tracking valide. Campionamento e incertezze invariati; Monte Carlo non è un certificato μ.
+
+## Gate
+
+| Gate | Esito tecnico | Evidenza |
 |---|---|---|
-| Otto originali | COMPLETE / PASS | CRC, byte e tre SHA-256 coincidenti |
-| Audit XML e setup | COMPLETE / PASS statico | Inventario, segni, interfacce, matrici e bus esterni |
-| Simulazione SLX | PARTIAL / NOT RUN | R2026a richiesto, R2025b rifiuta tutti gli otto |
-| Script didattici | COMPLETE / PASS | Quattro default eseguiti; 80 file scientifici protetti identici; Code Analyzer senza messaggi |
-| Test MATLAB | COMPLETE / PASS | 141/141 passati, nessuno incompleto |
-| Rumore | COMPLETE come diagnosi; requisito operativo FAIL | Picchi continui critici H∞ e sensibilità Kµ; nessuna attenuazione artificiale |
-| Dieci impianti incerti | COMPLETE / PASS come campagna | Replay, intervalli, blocchi normati; H∞ 0/10, Kµ 10/10 stabili |
-| RAS e Lyapunov | COMPLETE come audit; limiti numerici espliciti | Stato intero, 150 punti, distinzione empirico/analitico/ignoto |
-| Relazione e slide | Compilazione e ispezione in audit PDF | Capitoli 9–11 consolidati, slide 21, stima 17:50 |
-| Prontezza finale | PARTIAL | Validazione e schermate originali R2026a ancora essenziali |
+| A ambiente | PASS | R2026b compatibile, prodotti, quattro script e 141 test |
+| B otto SLX | PASS | load/compile/sim 8/8, porte, orizzonte, hash |
+| C dinamica | PASS | Scope autentici, 12 combinazioni, unità e limiti dichiarati |
+| D scienza | PASS con limiti prestazionali | rumore, RS/RP, RAS e dieci piante coerenti; differenze numeriche tra release dichiarate |
+| E relazione | PASS | 100 pagine, audit LaTeX senza errori/overflow e controllo visivo di tutte le pagine; schemi reali e dati Scope |
+| F presentazione | PASS | 22 slide controllate, audit senza errori/overflow, schema e curve autentiche, stima 18:45 |
+| G repository | PASS | branch e otto oggetti LFS pubblicati; PR #40 aperta, 350 hash manifest PASS, nessun merge |
 
-## Risultati conservati e nuove prove
+Sette gate su sette superati: 100% del collaudo richiesto, supportato da test, simulazioni, integrità, audit PDF e pubblicazione. Questa percentuale non esprime il soddisfacimento di tutti i target o una validazione hardware.
 
-Parametri, equilibrio, Padé, matrici nominali, pesi, incertezze, Kalman M6, LQG/LQGI e controllori robusti restano invariati. Le norme e i margini sono stati nuovamente verificati dal default dei quattro script, senza nuove sintesi. H∞ 2-DoF conserva ordine 22 e Kµ 78; tracking, rumore e robustezza pesata sono proprietà diverse.
+## Problemi risolti e limiti
 
-La nuova campagna pratica campiona dieci piante fisiche con usample, seed 20261012, e aggiunge il nominale. Le realizzazioni e i parametri sono salvati; nessun riuso dei quaranta campioni. H∞ nominale è stabile, tutti i suoi campioni instabili. Kµ è stabile in tutti gli undici. Per gli instabili i tempi e gli altri indicatori sono NaN; non si accreditano risposte divergenti come prestazioni. Gradini separati di 5 gradi, disturbo link 0.5 N m da 1 s; tempi finiti, DC, accoppiamento, comando e recupero ±0.5 gradi sono distinti.
+R2026b inizialmente conteneva solo MATLAB/Copilot: i test di licenza erano positivi ma i prodotti non erano installati. Installati localmente i quattro prodotti necessari; configurata una JVM esterna supportata. Il download della configurazione mpm ha restituito HTTP 403; utilizzato il contenuto della configurazione ufficiale già acquisito, dopo autorizzazione esplicita dell’utente.
 
-La diagnosi isolata encoder usa r=d=w=0, σ=0.05 gradi, ZOH 2 ms e 4 s. H∞ presenta picco fra campioni circa 492785 N m e RMS integrato 13196.2; Kµ 87.0963 e 8.28793. Il picco è osservato su scansione, non certificato globale. La doppia realizzazione e la quadratura raffinata concordano. Feedthrough H∞ nullo non elimina i modi molto rapidi.
+Il logging Scope rimane disattivato. Il lettore dei buffer ha inizialmente incontrato i segnali vettoriali a due componenti; il formato corretto è tempo contiguo e valori intercalati. Individuata una prima separazione delle componenti non corretta tramite il comando iniziale fisicamente impossibile del secondo canale. Corretto il decoder, recuperati gli stessi campioni originali senza modificare o risimulare inutilmente i modelli e verificato con stato iniziale nullo/feedthrough PID; effettuato anche un nuovo run H∞ lineare col lettore finale. I numeri intermedi non sono usati negli elaborati.
 
-## RAS comune e gate Lyapunov
+La API visuale è interna e specifica di R2026b; in altre release il runner restituisce errore e le istruzioni indicano Print to Figure. Il rumore attivo ha canali encoder correlati, a differenza della prova MATLAB isolata. Non sono aggiunti filtri, saturazioni, modifiche di pesi o nuove sintesi. L’RMS dei comandi da Scope dipende dalla quadratura dei campioni e non è un integrale continuo certificato.
 
-Griglia 5×5 su ±60 gradi, δtheta=δq, velocità/attuatori/controller nulli; 12 s e ultimo secondo entro 0.5 gradi, 0.02/0.05 rad/s. Arresti per ampiezza o solver non sono prove di divergenza. PID usa ode15s in coordinate bilanciate dopo difficoltà con ode23t/ode15s originali; gli altri ode23t. Ogni punto ha un budget di 60 s di calcolo, indipendente dal tempo fisico; superarlo lascia ignota la convergenza.
+## Consegna riproducibile
 
-| Controllore | Conv. / 25 | Criterio a 12 s fallito | Arresti/solver/tempo | Gate Lyapunov | Livello interno ρ |
-|---|---:|---:|---:|---|---:|
-| LQG | 25 | 0 | 0 | PASS | 1.01346e-12 |
-| LQGI | 25 | 0 | 0 | PASS | 8.21719e-13 |
-| Hinf1 | 23 | 2 | 0 | FAIL | -- |
-| Hinf2 | 1 | 0 | 24 | FAIL | -- |
-| PID | 3 | 4 | 18 | FAIL | -- |
-| Kmu | 25 | 0 | 0 | FAIL | -- |
+Cartella e ZIP Consegna_SEA_2026-10-13: 327 file, 392200933 byte compressi. Verifica SHA-256 di tutti i file copiati e dentro lo ZIP PASS; otto originali invariati. Audit in delivery/package_audit.json. Inclusi i dataset RAS letti dai default e results/figures; escluso il grezzo delle traiettorie Lyapunov inutilizzato. Quattro script eseguiti da copia isolata dei materiali selezionati: 4/4 PASS, Code Analyzer zero e 15 dataset protetti invariati. La verifica integrale separata protegge 80 artifact. Evidenza in delivery/portable_scripts_audit.json.
 
-La matrice Lyapunov è calcolata nello stato aumentato completo. Positività, residuo assoluto e margine prudente di arrotondamento precedono qualsiasi livello interno; il gate richiede residuo+allowance<1e−6. Il resto cubico SEA è maggiorato analiticamente. I livelli ammessi sono sufficienti per il nominale non limitato in double controllata, non prove intervallari o hardware. Gli insiemi LQG/LQGI sono molto piccoli e non sono ingranditi nel confronto grafico. Le ricerche radiali consolidate hanno un protocollo distinto; non si sommano ai nuovi 25 punti.
+## Elaborati e azioni degli studenti
 
-## Documenti e consegna
+Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224; data 13.10.2026. Relazione: `report/Progetto_CR_Relazione_finale.pdf`, 100 pagine. Presentazione: `presentation/Progetto_CR_Presentazione.pdf`, 22 slide, 18:45 stimati. Schemi autentici: otto viste generali e tre sottosistemi; curve complete di otto run e vista orale μ. Tutte le 100 pagine e le 22 slide sono state controllate visivamente; frontespizio, didascalie e grafici nominali rietichettati sono stati ricontrollati dopo la compilazione finale. Zero errori LaTeX, riferimenti irrisolti, overflow o destinazioni duplicate negli audit generated/*latex_audit.txt. Le 13 figure nominali sono rigenerate dai dati congelati con etichette descrittive, senza riferimenti a fasi pregresse.
 
-Il Capitolo 9 spiega l'ordine elevato, 14 stati di pianta più pesi/Mo e scaling D–K. Il Capitolo 10 presenta RAS, Lyapunov, gate e rumore fra campioni in modo didattico. Il Capitolo 11 sostituisce integralmente la precedente trattazione Monte Carlo con i dieci impianti: stabilità, tracking e disturbo, tre figure e tabelle dai risultati effettivi. Appendici e presentazione seguono gli stessi dati; non narrano lo sviluppo delle revisioni. I quattro script finali e i file storici scientificamente necessari sono conservati.
+Restano la prova orale cronometrata, la revisione umana della PR e la decisione sul merge. Limiti scientifici da esporre: rumore H∞/μ, target temporali falliti, casi RAS ignoti e assenza di saturazioni/dati hardware. Nessun modello va modificato per presentare un esito più favorevole.
 
-La presentazione ha 21 slide e stima 17:50. La slide autentica LQGI è condizionale all'esportazione R2026a e aggiunge 0:30. Note orali e scaletta sono aggiornate; il tempo effettivo richiede prova del gruppo. Le miniature SLX non leggibili sono materiale interno, non figure accreditate.
+## Pubblicazione conclusa
 
-`delivery/manifest.json` elenca i materiali correnti, le dipendenze e gli hash; i documenti interni non sono l'elaborato da inviare al docente. Le regressioni storiche mantengono dati necessari ai test: non sono risultati del nuovo Capitolo 11. La checklist elenca R2026a, verifica delle tracce, figure autentiche, matricole/data e prova orale.
-
-## Problemi incontrati e corretti
-
-Il primo test storico contava ricorsivamente anche i nuovi SLX invece dei soli sei d'archivio: limitato correttamente a originals/, con otto nuovi test SHA separati. La nuova asserzione sulla dimensione della ss-array non considerava il singleton finale restituito da MATLAB: verificati separatamente i due canali, i quattro ingressi e i dieci elementi. Entrambi i difetti di test sono corretti e il run finale passa.
-
-Il primo controllo d'integrità dei quattro script includeva anche il file derivato m7_disturbance_comparison rigenerato dal plotting: conservati separatamente i modelli/controllori congelati e ripristinati gli output derivati del run. Il controllo finale su 80 artifact scientifici è passato. Problemi iniziali di allocazione struct nei nuovi runner sono corretti; solo i run riusciti sostengono le conclusioni. PID non lineare resta numericamente difficile; timeout e arresti sono esiti ignoti, non classificazioni fisiche inventate.
-
-## Giudizio finale
-
-Il branch è pronto per revisione scientifica e integrazione manuale. Gli elaborati sono riproducibili nei limiti dichiarati e mantengono risultati negativi. Non si dichiara completata la validazione Simulink richiesta dalla traccia: servono gli otto run e le immagini reali su R2026a. Non si dichiara pronto il controllo per hardware: rumore, saturazioni non modellate e target temporali falliti sono limiti effettivi. La chiusura documentale non equivale al superamento di tutti i requisiti prestazionali.
-
-## Audit dei PDF compilati
-
-`report/generated/report_latex_audit.txt`:
-
-```text
-STATUS=PASS
-JOB=Progetto_CR_Relazione_finale
-ERRORS=0
-UNRESOLVED_REFERENCES=0
-OVERFULL_HBOX=0
-OVERFULL_VBOX=0
-DUPLICATE_DESTINATIONS=0
-Pages:           97
-PDF=C:\Users\aless\OneDrive - University of Pisa\Documenti\ChatGPT\Progetto_CR&IS\Progetto_CR_chiusura\report\Progetto_CR_Relazione_finale.pdf
-```
-
-`presentation/generated/presentation_latex_audit.txt`:
-
-```text
-STATUS=PASS
-JOB=Progetto_CR_Presentazione
-ERRORS=0
-UNRESOLVED_REFERENCES=0
-OVERFULL_HBOX=0
-OVERFULL_VBOX=0
-DUPLICATE_DESTINATIONS=0
-Pages:           21
-PDF=C:\Users\aless\OneDrive - University of Pisa\Documenti\ChatGPT\Progetto_CR&IS\Progetto_CR_chiusura\presentation\Progetto_CR_Presentazione.pdf
-```
-
-Controllate visivamente tutte le slide e le pagine modificate dei Capitoli 9–11. Corretti pannelli troppo fitti, fuoriuscite e colori esportati dal tema scuro MATLAB. Il testo estratto dal PDF non contiene i conteggi obsoleti 40/40, 0/40, 37/40 o la vecchia diagnosi combinata del rumore.
+PR #40: https://github.com/Deda-404/Progetto_CR/pull/40, aperta per revisione su main, senza merge. Branch codex/validazione-finale-matlab-simulink pubblicato con gli otto oggetti LFS (171 MB). Commit di collaudo ca0f64d e di elaborati/consegna 266782e. Stato remoto verificato sul secondo commit, PR senza conflitti e base 14359392 invariata; il commit di chiusura registra il gate G. ZIP e PDF finali restano identici agli audit di consegna.

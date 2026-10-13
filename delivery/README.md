@@ -1,25 +1,35 @@
-# Materiali di consegna e dipendenze
+# Consegna del progetto SEA
 
-`manifest.json` seleziona gli elaborati correnti, gli otto SLX e le dipendenze di calcolo. Ogni riga indica percorso, ruolo e SHA-256. I file binari e gli SLX sono verificati byte per byte; per i testi si normalizza CRLF/LF per consentire checkout Windows/Linux. Il manifest non altera i file.
+Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224. Data: 13.10.2026.
 
-Al docente: i due PDF, i quattro script MATLAB e support/, gli otto `simulink/student_originals/`, i tre script di setup/validazione/esportazione e le dipendenze scientifiche selezionate. I risultati MAT permettono di verificare numeri e figure. Le fonti LaTeX e le immagini realmente referenziate sono elencate per una compilazione autonoma.
+Gli elaborati sono `report/Progetto_CR_Relazione_finale.pdf` (100 pagine) e `presentation/Progetto_CR_Presentazione.pdf` (22 slide). Le note orali suddividono l'esposizione tra i due autori, con stima 18:45 da confermare mediante prova cronometrata.
 
-`source_dependencies.json` registra 30 dipendenze rilevate da MATLAB e i prodotti necessari. Il manifest aggiunge i path dinamici e le funzioni src/ richieste dalle funzioni embedded degli SLX: l’analizzatore statico non può risolverle tutte dal solo script. Non sono eliminati dal repository i dati scientifici necessari alle regressioni.
+La cartella e lo ZIP `Consegna_SEA_2026-10-13` contengono i PDF, le fonti LaTeX, le figure, i quattro script MATLAB, le funzioni necessarie, i dataset scientifici e gli otto originali Simulink. Sono esclusi cronologie, documenti interni, cache, log di debug e test intermedi. Il file `MANIFEST_CONSEGNA.json` del pacchetto verifica ogni file copiato mediante SHA-256 esatto; `delivery/manifest.json` nel repository registra anche i ruoli e la normalizzazione LF dei testi per checkout portabili.
 
-I tre documenti marcati `internal_group_review_only` sono per gli studenti, non costituiscono la relazione al docente. Diari, resoconti datati, vecchi SLX e la campagna precedente da 40 campioni sono esclusi dalla selezione ordinaria. Il file sorgente del Capitolo 11 conserva il nome tecnico esistente per non rompere i riferimenti delle regressioni, ma il suo contenuto è interamente la nuova verifica pratica di dieci impianti.
+## Esecuzione MATLAB/Simulink
 
-Per controllare la selezione dopo il checkout:
+Collaudo svolto in MATLAB/Simulink **R2026b 26.2.0.3386108**, Windows, con Control System, Robust Control e Symbolic Math Toolbox 26.2. Sono riusciti quattro script, 141 regressioni e otto simulazioni, con originali invariati. Dal MATLAB aperto nella radice del pacchetto:
 
-```text
-python tools/build_delivery_manifest.py --check
+```matlab
+addpath('tools','simulink');
+run_final_student_validation(false);       % esegue gli otto diagrammi e valuta gli Scope
+run_final_student_validation(false,true);  % verifica e rielabora i dati inclusi senza nuovi run
 ```
 
-Per rigenerarla dopo cambiamenti autorizzati a documenti/dati:
+I quattro script in `File_di_Funzioni_Progetto-Accorpati/` possono essere eseguiti singolarmente dall'Editor. `support/` e i dataset inclusi sono necessari ai default. Il runner completo senza argomenti esegue anche le 141 regressioni e richiede il checkout integrale GitHub, con Git LFS per i dati Scope. Il pacchetto ordinario riproduce i diagrammi e gli esperimenti selezionati senza i test intermedi.
+
+Il setup fornisce matrici e bus dall'esterno; solver, selettori, rumori, sample time e logging SLX restano invariati. Gli otto SHA-256 devono coincidere con `simulink/student_originals_manifest.json` prima e dopo. Il lettore dei buffer visuali Scope usa una API interna R2026b: in altre release, se indisponibile, esportare gli Scope dopo l'esecuzione tramite Print to Figure senza modificare il modello. Il runner segnala errore se l'acquisizione obbligatoria è incompleta.
+
+## Elaborati e dati
+
+Le fonti LaTeX conservano le immagini effettivamente utilizzate. Per ricompilare con una distribuzione TeX, latexmk e Poppler disponibili:
 
 ```text
-python tools/build_delivery_manifest.py
+python tools/build_final_simulink_tables.py
+python report/build_matlab_appendix.py
+powershell -File tools/build_m18_latex.ps1
 ```
 
-Il run completo di 141 test richiede il checkout integrale GitHub e conserva dipendenze storiche. Per gli esperimenti conclusivi sono elencati i runner `run_final_noise_diagnostics`, `run_practical_robustness`, `run_final_ras_lyapunov`, summary e figure. Nessuno di questi tre runner riusa i quaranta campioni.
+I MAT finali conservano controllori, campioni degli impianti incerti, dati Scope e prove di rumore/RAS. `delivery/source_dependencies.json` registra le dipendenze rilevate da MATLAB; il manifest integra i path dinamici e le funzioni embedded. L'inventario può essere verificato nel repository con `python tools/build_delivery_manifest.py --check`. Il pacchetto ha un manifest proprio perché sostituisce il README del repository con queste istruzioni e non include documentazione interna.
 
-Stato della consegna: PARTIAL sulla validazione dinamica e sulle immagini degli otto originali, che richiedono R2026a. La checklist documenta i passi sul computer degli studenti. Rumore critico e target temporali falliti sono dichiarati nei PDF.
+Il collaudo riuscito non elimina i target temporali falliti o il limite sul rumore. H∞ 2-DoF non lineare registra circa 733230 N m, μ circa 108/109 N m. Picchi Scope e RMS da quadratura non certificano valori continui; non sono prove hardware. H∞ lineare usa misure ideali, quello non lineare rumorose. Gli encoder SLX sono correlati e il protocollo differisce dalla prova MATLAB isolata. Le garanzie μ valgono per il modello dichiarato; RAS empirica, arresti numerici e certificati Lyapunov restano distinti.

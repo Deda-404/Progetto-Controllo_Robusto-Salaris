@@ -1,10 +1,12 @@
 # Note per l’esposizione
 
-Durata prevista 17:50. Prima della consegna fare una prova cronometrata. La lettura dei risultati segue modello, protocollo e limite della conclusione.
+Alessio de Dato, matricola 635256. Valerio Rebechi, matricola 722224.
+13.10.2026. Durata prevista 18:45, da verificare con una prova cronometrata.
+Alessio espone le slide 1–10 e Valerio le slide 11–22.
 
 ## 1. Titolo — 0:20
 
-Presentare il problema e anticipare la distinzione fra risultati MATLAB e stato dei modelli originali.
+Il nostro lavoro riguarda il controllo di un manipolatore planare con due giunti e trasmissione elastica. Partiamo dal modello meccanico, confrontiamo le leggi di controllo e discutiamo che cosa cambia in presenza di incertezza e rumore.
 
 ## 2. SEA: otto stati meccanici, due poli instabili — 0:45
 
@@ -30,7 +32,7 @@ Il controllo usa xhat, non lo stato completo disponibile nel simulatore. Qn e Rn
 
 LQGI = LQR + Kalman + integratore. L’integratore accumula l’errore misurato;
 Kx usa esclusivamente xhat. Il prefiltro LQG non reagisce al disturbo.
-Il grafico aggiornato viene dalle equazioni MATLAB non lineari; DC nullo è
+Il grafico viene dalle equazioni MATLAB non lineari; DC nullo è
 invece la verifica lineare. Il residuo a 8 s è distinto dal limite asintotico.
 
 ## 8. $H_\infty$: sensibilità mista e pesi adottati — 0:55
@@ -74,7 +76,7 @@ Ribadire che RP riguarda la norma pesata. Kmu rimane più lento di 0.8 s e il pr
 
 ## 16. Dieci impianti incerti: nominale e campioni comuni — 0:50
 
-Dire che abbiamo generato dieci realizzazioni nuove con seed 20261012. Entrambi i controllori usano le stesse piante: tre parametri reali e due perturbazioni dinamiche attuative. Il nominale è stabile per entrambi; H∞ è instabile in tutti i dieci campioni, Kµ stabile in tutti. Questi conteggi non sono probabilità e non sostituiscono robstab/robgain.
+Abbiamo generato dieci realizzazioni con seed 20261012. Entrambi i controllori usano le stesse piante: tre parametri reali e due perturbazioni dinamiche attuative. Il nominale è stabile per entrambi; H∞ è instabile in tutti i dieci campioni, Kµ stabile in tutti. Questi conteggi non sono probabilità e non sostituiscono robstab/robgain.
 
 ## 17. Tracking e disturbi sugli impianti incerti — 1:00
 
@@ -88,14 +90,14 @@ La prova isola il rumore: riferimento, disturbo e processo nulli. Sigma è 0.05 
 
 V è una distanza quadratica nello stato completo: pianta, attuatori e controllore, con osservatore/integratori quando presenti. La derivata contiene la parte lineare negativa e il resto non lineare. LQG e LQGI superano il gate numerico e forniscono insiemi interni molto piccoli. Per gli altri si legge la tabella della relazione. La griglia è identica, 25 punti nel box ±60 gradi: il bordo è solo il limite della ricerca. Verde significa criterio fisico rispettato nell’ultimo secondo di 12 s; rosso criterio non raggiunto; arancio solver o ampiezza numerica, convergenza ignota. Nessuna probabilità o garanzia hardware.
 
-## 20. Gli otto Simulink originali degli studenti — 0:45
+## 20. Implementazioni Simulink — 0:45
 
-Tutti gli otto modelli manuali sono presenti: LQG, LQGI, H∞ e µ, lineari e non lineari. I tre hash coincidono per ciascun file. L’audit XML mostra già errore misurato LQGI, quattro ingressi 2-DoF e Kµ presente; non si devono applicare istruzioni di correzione riferite ad altri file. L’ambiente R2025b rifiuta questi R2026a: simulazioni e immagini autentiche richiedono la release corretta. Il setup è esterno e i modelli restano invariati.
+Questo è il diagramma LQGI esportato da Simulink. Seguendo il segnale da sinistra, il riferimento viene confrontato con la posizione misurata; l’integratore conserva l’errore e il Kalman ricostruisce lo stato. Il comando combina feedback stimato e memoria integrale. Abbiamo eseguito gli otto diagrammi in R2026b mantenendo la configurazione salvata e acquisito posizioni e comandi.
 
-## 21. Conclusioni e limiti verificati — 0:40
+## 21. Simulink: posizioni regolari, comandi rumorosi — 0:55
 
-Concludere per ruolo: LQG è il riferimento nominale, LQGI annulla il disturbo DC con risposta lenta, H∞ mostra i benefici e i limiti del progetto nominale, Kµ conserva i margini robusti nel modello dichiarato. Il rumore e i target temporali restano problemi reali. Prima della consegna servono i run degli otto originali su R2026a, le schermate autentiche leggibili, matricole/data e prova orale. Non dichiarare il progetto pronto per l’hardware.
+Queste curve provengono dagli Scope del modello μ lineare. Il riferimento e il disturbo iniziano insieme a un secondo, con rumori attivi. Il primo giunto segue il riferimento con un errore medio contenuto, ma il comando raggiunge circa 108 N m e oscilla molto più della posizione. Nel modello H∞ non lineare, il 2-DoF richiede un picco registrato di circa 7.33×10^5 N m. Il diagramma H∞ lineare seleziona invece le misure ideali: non è una prova del rumore encoder. I seed e le correlazioni differiscono dalla prova MATLAB isolata, quindi confrontiamo il fenomeno senza pretendere gli stessi numeri. Sono picchi dei campioni Scope, non massimi continui certificati né coppie sicuramente erogabili.
 
-## Slide opzionale autentica — 0:30
+## 22. Conclusioni e limiti verificati — 0:40
 
-Se l’esportazione R2026a è disponibile, indicare il percorso r−q_mis, integratore, Kalman e comando stimato sul diagramma reale LQGI. Non presentare una miniatura illeggibile o uno schema ricostruito come schermata Simulink.
+LQG è il nostro riferimento nominale. LQGI annulla il disturbo costante nel limite asintotico, con una risposta più lenta. H∞ mostra i benefici del 2-DoF e i limiti del progetto nominale. Kµ conserva margini robusti maggiori di uno nel modello dichiarato. Gli otto diagrammi sono stati verificati. Il rumore, i target temporali e l’assenza di limiti hardware identificati restano limiti reali.

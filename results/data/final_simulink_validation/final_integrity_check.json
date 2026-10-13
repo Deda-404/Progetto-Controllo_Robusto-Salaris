@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-13",
+  "slx_exact_sha256": "8/8 PASS",
+  "matlab_regression": "141/141 PASS in R2025b and R2026b",
+  "four_scripts": "4/4 PASS in both releases",
+  "protected_binary_artifacts": "80/80 exact bytes match base commit",
+  "physical_controller_and_delivered_script_sources": "unchanged from base commit",
+  "report_pages": 100,
+  "presentation_slides": 22,
+  "author_and_date_checks": "PASS",
+  "visual_review": "All 100 report pages and all 22 slides reviewed; corrected cover/captions and regenerated nominal figure labels checked again."
+}

@@ -1,0 +1,53 @@
+{
+  "release": "2026b",
+  "sources": [
+    {
+      "file": "simulink\\acquire_student_scope_buffers.m",
+      "messages": []
+    },
+    {
+      "file": "simulink\\analyze_student_scope_results.m",
+      "messages": []
+    },
+    {
+      "file": "simulink\\export_student_schemes.m",
+      "messages": []
+    },
+    {
+      "file": "simulink\\setup_original_models.m",
+      "messages": []
+    },
+    {
+      "file": "simulink\\setup_student_originals.m",
+      "messages": []
+    },
+    {
+      "file": "simulink\\validate_student_originals.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\export_student_baseline_figures.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\finalize_student_validation.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\run_final_student_validation.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\probe_final_environment.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\capture_final_robustness.m",
+      "messages": []
+    },
+    {
+      "file": "tools\\collect_final_dependencies.m",
+      "messages": []
+    }
+  ]
+}

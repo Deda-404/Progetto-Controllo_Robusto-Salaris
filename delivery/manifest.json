@@ -1,8 +1,8 @@
 {
-  "date": "2026-10-12",
-  "branch": "codex/chiusura-definitiva-progetto-sea",
-  "base_commit": "fa78e588ede9b8a136692c19aeb39b01b56cb502",
-  "status": "PARTIAL: original SLX runtime and authentic diagrams require R2026a",
+  "date": "2026-10-13",
+  "branch": "codex/validazione-finale-matlab-simulink",
+  "base_commit": "14359392bd8cde5249fae91a050cfba8c79eacd4",
+  "status": "COMPLETE: MATLAB R2026b; 141 tests, four scripts and eight original SLX validated. Performance and hardware limits remain explicit.",
   "hash_policy": "Text uses LF-normalized SHA-256 for portable checkout; binary/SLX/PDF exact bytes.",
   "files": [
     {
@@ -24,6 +24,33 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "analysis/export_hinf_readable_figures.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 5462,
+      "sha256": "5a1559b7f3f8ecb3fdb767913d703630586d477792ad1bf493fa60948a922bad",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/export_lqgi_validation.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 8162,
+      "sha256": "ea334003303e5d18dfa004f488a559443fbb5aa2cfc6b58ecafe563de6a157c2",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/export_organic_audit.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 4566,
+      "sha256": "3213214ec6dbdd9f1d931beefb17934f7c773e4ade968251d5ffdde5423291f3",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "analysis/final_closure_load.m",
       "roles": [
         "matlab_detected_source_dependency"
@@ -38,7 +65,7 @@
         "literal_matlab_excerpt_source",
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 791,
+      "size_bytes_recorded": 807,
       "sha256": "4293f0f91443eb9952bf0637ccfad9162a91ba4b0f6ccd48bee5d0a69fee4336",
       "hash_mode": "LF-normalized text"
     },
@@ -85,6 +112,15 @@
       ],
       "size_bytes_recorded": 4765,
       "sha256": "12faab919f858de1c4cc401383181af930b02c65f1180239cbcb84359b9fa1c3",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/preserve_validation_outputs.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 1350,
+      "sha256": "935759677705accc3b741e7b2143141fcb52d5bc959919423c128eb9398453ce",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -157,7 +193,7 @@
         "literal_matlab_excerpt_source",
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 6953,
+      "size_bytes_recorded": 7079,
       "sha256": "044f5dc818baecacebe39b48e46b4a328248e95084be447439f5c53de69c89ef",
       "hash_mode": "LF-normalized text"
     },
@@ -199,6 +235,15 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "analysis/uncertainty/build_actuator_family.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 5334,
+      "sha256": "005fb681c4c59c58921b0d290151bfccea9a882ff1583f728ebaf8cb7a729e99",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "controllers/hinf/hinf_final_2dof_plant.m",
       "roles": [
         "literal_matlab_excerpt_source"
@@ -210,7 +255,8 @@
     {
       "path": "controllers/hinf/hinf_final_evaluate.m",
       "roles": [
-        "literal_matlab_excerpt_source"
+        "literal_matlab_excerpt_source",
+        "matlab_detected_source_dependency"
       ],
       "size_bytes_recorded": 2438,
       "sha256": "7b0d14ae5415fbc53b88ea2f9aa3488fd6054931cbeff26b71ac109698171e5e",
@@ -233,6 +279,15 @@
       ],
       "size_bytes_recorded": 478,
       "sha256": "d94608539adfa3c30b0cd372e5481344de485dd8810a4e8d9696b2f0455cb305",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "controllers/hinf/hinf_revision_tracking.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 802,
+      "sha256": "d5af0bfd9f7751c11682bf40bbd5b63d2447a9f2834afecff503a4b69afa4c67",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -272,12 +327,30 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "delivery/package_audit.json",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 526,
+      "sha256": "b170ebafb454bee8f898bf4ae49cc7c7742d5412bfda8c179873894809789893",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "delivery/portable_scripts_audit.json",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 1536,
+      "sha256": "5e8926b83d559f14ceeba133168462907ee6bd077a74cefae930dd9de09240bc",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "delivery/README.md",
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 2263,
-      "sha256": "5ae8449e931aaf4bfa5bcb93093ca469786137a24ccba67bad06d44667692da9",
+      "size_bytes_recorded": 3627,
+      "sha256": "e01fc3e469bd84dd3abc88230de44b47680653583c3c2a54af73f640a6ba0ce4",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -285,8 +358,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1898,
-      "sha256": "b9425e1646cd31167e27715752a0d54397095d94224050cb568a67f5eb16c275",
+      "size_bytes_recorded": 2899,
+      "sha256": "1b3b835e0db9f1ece58c6083db543a93ac9eb167ddef32202af5b8c2917219de",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -294,8 +367,8 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 6004,
-      "sha256": "dea425652ab7ab4d730dca23a0ed98d3f5ffd41f44a073fd0807396c1973b1fc",
+      "size_bytes_recorded": 8991,
+      "sha256": "a233516b39b5a5dab5e465ac8dabf584b1262bd13399362d2847dead4d0f6dae",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -303,8 +376,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 3055,
-      "sha256": "bd4e60a010d088907d26e16327edf289d9649f6c465c48aa70b88b90ff856bd4",
+      "size_bytes_recorded": 1570,
+      "sha256": "3e304ec49f9ae43dcc97d66f8e738b952eb8bd55533d56a5ee19f515ef0f6db9",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -312,8 +385,8 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 7882,
-      "sha256": "5c08fefbc53ebaca0c08bba0285e880f8b2dd5186a19a042a64c79d0e9fac4e9",
+      "size_bytes_recorded": 7966,
+      "sha256": "7975f4afd68934bda48c08bf311e86eaf7755bf31e546c088d972b5419a4aa3a",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -321,8 +394,8 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 31238,
-      "sha256": "e22f68d1253da409f94b6e8d272f15b35e3bc574d050e8310ef2dd56f7af1942",
+      "size_bytes_recorded": 20835,
+      "sha256": "7bd810c8e85747df8ec8d3f73e6be82f38ed6ce6cd2efd45b51c3c734a7447be",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -389,30 +462,12 @@
       "hash_mode": "LF-normalized text"
     },
     {
-      "path": "presentation/assets/m4_actuator_uncertainty_cover.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 207951,
-      "sha256": "d919fe189cfbb75e84bf8133179e36c97ea024fa51443a4baf15dba744345fd9",
-      "hash_mode": "exact bytes"
-    },
-    {
       "path": "presentation/assets/m5_spec_frequency_map.png",
       "roles": [
         "document_figure"
       ],
       "size_bytes_recorded": 55828,
       "sha256": "627c0b04bb61e21ff3a3e751121f23f4d0a1253d9aec7bf8b494c7173d938b25",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "presentation/assets/m6_lqg_reference_tracking.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 77584,
-      "sha256": "da4d01b6f91a768ad59aef765e5a02d8c68d64591f11fc040c0d0b031e34bb8a",
       "hash_mode": "exact bytes"
     },
     {
@@ -429,8 +484,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 310,
-      "sha256": "7b1d33c5c449572d83417facf8e2991915fac498838f70ae04b4e78ec1354b2c",
+      "size_bytes_recorded": 308,
+      "sha256": "f6db3c8e899a148bf978b945c00805fa1f0bfc4677c64b170dd66ce6aefb6b62",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -438,8 +493,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 13758,
-      "sha256": "918654b0d26feaf3d91bdea1e5533921730eed1f1730e0209ec5660963ef2708",
+      "size_bytes_recorded": 13825,
+      "sha256": "17c717a0ca507fe0894f61d1b429ec67b8515d74aee00b3efe96df2490feffd1",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -447,8 +502,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1546,
-      "sha256": "0600bfcca158b392fd33026564e9a5ee0841d9fae7e4e2795f82e73604149d55",
+      "size_bytes_recorded": 1585,
+      "sha256": "1a47868613155345bb89d020655d96bf897307cd799c099df5ae644f3484e0c4",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -456,8 +511,8 @@
       "roles": [
         "student_handin_pdf"
       ],
-      "size_bytes_recorded": 1345964,
-      "sha256": "3f8770017d939f59a8e92b759aa7d88eda34ddc8c81dd93afdb4ee8e3bcf6a6e",
+      "size_bytes_recorded": 1917904,
+      "sha256": "d107928b7ad46c4e9e00e480592eb1a0b2988e09dcdf656a1461c54ecdafdcba",
       "hash_mode": "exact bytes"
     },
     {
@@ -465,8 +520,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 7618,
-      "sha256": "fe2d34867c6aca3c0a824a691d19c0ab7f46f3dcf56dc431df9d794c97e0127c",
+      "size_bytes_recorded": 8152,
+      "sha256": "9556ae904d52c811305f6424e6187c61ed25771e69a2c834bef479b1b43c28f0",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -474,8 +529,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 5008,
-      "sha256": "07b6236db3c318d736187b097c7ca309988ef4e1f103af46fdda5544815593b8",
+      "size_bytes_recorded": 4301,
+      "sha256": "9790556b4b8ab7c4a02c39f96dddbafb615901f73401b5871bb239e364654d69",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -483,8 +538,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 12918,
-      "sha256": "88d9d0fb3c8f81f37f2cbf1d98732ddd2ddb218d80fe6726025f6082e0a26c78",
+      "size_bytes_recorded": 12902,
+      "sha256": "d846551de975ff5b691ebd0b6c3c79b472c654f06db415653496f3896371620d",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -566,6 +621,102 @@
       ],
       "size_bytes_recorded": 71546,
       "sha256": "2aad9f4b96e03dad1d437835f86e48269050ab206f101d7645f6d445b4cedae0",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/Hinf_linear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness"
+      ],
+      "size_bytes_recorded": 225915,
+      "sha256": "2fc57823641e5ffaa2e99b4b1d0b346ea711ec95df33e6a73d2053b825ddb5de",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/Hinf_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 211010,
+      "sha256": "c5c5a78b51d7dfb9d18f5e513af4a400819609adf682cfcc2c17f7f2fdc54914",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/LQG_linear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 163940,
+      "sha256": "870381cae50f2d4ad0aca947ebcff41f6d13965aac537adb2eee4c72b53ad251",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/LQG_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness"
+      ],
+      "size_bytes_recorded": 161494,
+      "sha256": "f3e675aabe3fdd98f5d12ef685b8aa1110729179ac9ae9d7ad2b7e8dd9cd86f8",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/LQGI_linear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness"
+      ],
+      "size_bytes_recorded": 174370,
+      "sha256": "72b60c42df9908cd98c8a3b15e481da5bbb5112f1fbf10a95ddc2ae23b03fac9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/LQGI_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 174811,
+      "sha256": "a3c4324c7343cd94f5cce18fb041cdbcf3598629d0f2e8ac70ab4c9d3be69503",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/mu_linear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 161476,
+      "sha256": "8cdb556d1ab173817e57a334f2b5e6def2699af3bcf106559511a27193514e7a",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/mu_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness"
+      ],
+      "size_bytes_recorded": 162714,
+      "sha256": "9e50ae3f12b66efb9b4f4093fd20cde01de8750ea46876a0059558d61a11b29e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/robust_margins_R2026b.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 44683,
+      "sha256": "1b1116203f724486dee6f2fdded2b58153530da7dba4e1f09ed4cc3105759c6a",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/final_simulink/slide_mu_linear_sim.png",
+      "roles": [
+        "authentic_simulink_results_or_current_robustness",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 84397,
+      "sha256": "ad3ca3cf134661dd446548f0bb2f7bfc97233afe7ece8b11ec2bc4b40532efa3",
       "hash_mode": "exact bytes"
     },
     {
@@ -677,138 +828,12 @@
       "hash_mode": "exact bytes"
     },
     {
-      "path": "report/figures/m2_open_loop_poles.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 60933,
-      "sha256": "a17b4329e0644f38ead91393b39c6f35caf311224b418985fe7305cce9a1b491",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m3_delay_pade_comparison.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 121225,
-      "sha256": "8ec0e5021d11f51dbc61c6d5fb03f51f6584772a1319f5f6e516afe973191199",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m4_actuator_uncertainty_cover.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 207951,
-      "sha256": "d919fe189cfbb75e84bf8133179e36c97ea024fa51443a4baf15dba744345fd9",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_kalman_sensitivity.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 117893,
-      "sha256": "8c97d4f9bf31ed154b2de0ceec8d9ef8bd8fb0114faf3725525c366e84b847ab",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqg_disturbance_response.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 83722,
-      "sha256": "58228f4cac0d668f23fe2a7116c2ca27151f2be0d23c1cb2d3a105506dee3576",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqg_estimation.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 200115,
-      "sha256": "7d63a6b0786bc90716042cce1e4a4e2dd0c7d617b6c55985620c3b1d144b8177",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqg_poles.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 66090,
-      "sha256": "f76115407d3154177d0799c8a923e4369bc38a1d88efa5f61945875558a0ec72",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqg_reference_tracking.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 77584,
-      "sha256": "da4d01b6f91a768ad59aef765e5a02d8c68d64591f11fc040c0d0b031e34bb8a",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqr_candidate_tradeoff.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 96745,
-      "sha256": "a70a6bff62ea68dbc74cee88a42afdaec54b0c6edfea23ddd6cc5f0460afcc80",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m6_lqr_selected_weights.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 38307,
-      "sha256": "3711dea42db6a09ba585926f813c9b6767c7c660f96916e3569eebcc27fd979c",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m7_lqg_lqgi_constant_disturbance.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 113665,
-      "sha256": "dd39906c7e8a3c37746d18b3653da21b6137e5d6dbce4e4b97472e262562520f",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m7_lqg_lqgi_disturbance_control.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 99164,
-      "sha256": "b918d18c0170c02dcd6dcc19f35599b8aee9e044cd6bdad2c199f9bb837457b7",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/m7_lqgi_reference_tracking.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 157001,
-      "sha256": "1502ffe3ab1ced4f4d272fe7d1db0f911d3270ec3bcb7d63fd98111e48efd354",
-      "hash_mode": "exact bytes"
-    },
-    {
       "path": "report/figures/mu/dk_history.png",
       "roles": [
         "document_figure"
       ],
       "size_bytes_recorded": 69560,
       "sha256": "641a722f719cf7dbe5f329bde18254fc16efe51cd53ce1f86debc7b1608193d7",
-      "hash_mode": "exact bytes"
-    },
-    {
-      "path": "report/figures/mu/robust_margins.png",
-      "roles": [
-        "document_figure"
-      ],
-      "size_bytes_recorded": 34774,
-      "sha256": "2ceadc7a55c4e6ea71717b317882060d9eeb4938bb22ff027b118a77a0a02bf4",
       "hash_mode": "exact bytes"
     },
     {
@@ -873,6 +898,237 @@
       "size_bytes_recorded": 956,
       "sha256": "7da0aa9638a5e7a2d59165d094d821b122c25f72de27470c1410e659479de001",
       "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/figures/student_baseline/actuator_uncertainty.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 189424,
+      "sha256": "b5d0e80ee87cf24b56142f940a73790bbd253d4fe11da2d938d54369163d4e92",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/delay_pade.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 110357,
+      "sha256": "f9221d0fe4f57d697068d3919314956c9676af55a3b8c0bdae245c88fcdd920a",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/kalman_sensitivity.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 108443,
+      "sha256": "75a9f652505cc65ed53b6736c8832a3f5071665ec8bfbcfff01b671b282cbabb",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_disturbance.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 76548,
+      "sha256": "1cd14d8fdaf6b6b5d82cb8f98d1370e652aab8e1bd786117fbc6b2b07763b484",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_estimation.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 197407,
+      "sha256": "da56f63cf828beadce9891bf33f028a1f3d29807905a680a029439375af0efa8",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_lqgi_command.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 91942,
+      "sha256": "80820d3431838ed09da395bb025edfb46f732a6aa6c33fb0b5a90a677dd39c9d",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_lqgi_disturbance.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 101750,
+      "sha256": "70e0e72ce66e954c2fc27edaed2b1f4406c5220e0537d66fd319a541296495ad",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_poles.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 64292,
+      "sha256": "260e68e58f8db6ce973969e45c8d73c5d320154c7aa1affe0101244cf42000e1",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqg_tracking.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 70211,
+      "sha256": "a2fe0fa5c1baef21b9b76b4f00fede582988306f9f7cc7f6118dd31af66e030c",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqgi_tracking.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 137914,
+      "sha256": "99d92b565e237f4c6e6e10ecfc8b38f285c99f698dec74342c5dfb1353ce2b7c",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqr_selected_weights.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 36739,
+      "sha256": "a57d0a9f9d77a65453b3942b70f08588cbdf23307d696df12b74029afd48097e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/lqr_tradeoff.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 94509,
+      "sha256": "134e98cb1ebbb5f799846755e6c7e83dbffca7bc19ce18ca1539776f1468ad41",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_baseline/mechanical_poles.png",
+      "roles": [
+        "document_figure",
+        "frozen_nominal_data_figure"
+      ],
+      "size_bytes_recorded": 59026,
+      "sha256": "bc6589e4c758f6456eb8e25d9031125b3a1130a26d82ad8785df1bdf243f1306",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/Hinf_linear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 627879,
+      "sha256": "bb2f311dff67b748c18740c52b4624b412ee346acd8560d1638fdc714ab85b15",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/Hinf_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 824040,
+      "sha256": "f8ca79bddfbea46e50d18a5591520b3416ee6c34dd9c9cac0c05195df67e6e2e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQG_linear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 236883,
+      "sha256": "500ad1add0bd8577bc8e14e08cecfb624c256d9d13473ff46a910c3eda278de4",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQG_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 386043,
+      "sha256": "c843f96b127a2f3e260794e277deeeaa9f99eb8f38f22097a1ac3c67ede0fb27",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQGI_actuators.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 20528,
+      "sha256": "c1994810ccfe26cf557b6c2ec308a0b0de6458716e28438af4b3caae7bc8c448",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQGI_Kalman.png",
+      "roles": [
+        "authentic_simulink_diagram",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 42588,
+      "sha256": "305e4c2b3e8cc807b8ea05f19093d2dcd6cf9d75256c7a61d86548318b49ce48",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQGI_linear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram",
+        "document_figure"
+      ],
+      "size_bytes_recorded": 646148,
+      "sha256": "ba1ba5603e341a8ff8dd6f8c2624a74b79b515ddf5c3429d32c73e19d5bd3337",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQGI_nonlinear_plant.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 37897,
+      "sha256": "b868d6e805d0a470b3efd6e871496eeb0aa3cabb3d63882b47b2b8b37ad3c1fe",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/LQGI_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 414032,
+      "sha256": "1e3fef26039ebd1531d1b21aeafeaa3b1f72d99e07a636d2d4a0f6be79b17b2f",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/mu_linear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 208147,
+      "sha256": "41ab7c4c9949323e3454abdec617724012e8279c9ecec555ad6cfa8e19e3fbcb",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/student_exports/mu_nonlinear_sim.png",
+      "roles": [
+        "authentic_simulink_diagram"
+      ],
+      "size_bytes_recorded": 255873,
+      "sha256": "f1d169bd087bf05b84680e63cd06cdf14fe298f55a1d57824f71f5bbe0128da5",
+      "hash_mode": "exact bytes"
     },
     {
       "path": "report/generated/didactic_hinf_comparison.tex",
@@ -953,6 +1209,24 @@
       ],
       "size_bytes_recorded": 964,
       "sha256": "b5e28fcbdfae900659e92e5efd8c37e25963cff3fb7d384c4cc57daa94322611",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/final_simulink_results.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 1516,
+      "sha256": "7fb8197916b5251b8fff1825593f997d3b0016fb4d667872df675702da9e23b3",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/final_simulink_values.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 504,
+      "sha256": "33c7947d0525c017c12e09785c933004c1c467d886bd17f8ab50809d0ba955ab",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1059,8 +1333,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 310,
-      "sha256": "49a9302b86d1105f6108d9502d2f922d06993d6111c62f3f083914f95c0b2a0f",
+      "size_bytes_recorded": 309,
+      "sha256": "6c257202cd47b9f94eb1ab28e86796a464c1dcda7f4534ffc90444e16d9e436d",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1077,8 +1351,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 3613,
-      "sha256": "8f1add1cd340b342b7263b76e848c02c3fe7d1975bfaf67c116dcc10967ed366",
+      "size_bytes_recorded": 3729,
+      "sha256": "6f109c948cbf7c3ee92e8d6cf0ffe0e66f0daad37dabfe15e4835173347277af",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1086,8 +1360,8 @@
       "roles": [
         "student_handin_pdf"
       ],
-      "size_bytes_recorded": 4687544,
-      "sha256": "ca9d70c21d626b3c102af96fb5565e916d7f41503ee0338dca4b26248841f21b",
+      "size_bytes_recorded": 5858596,
+      "sha256": "a7584e1d91ebb04812de466722cbbc27bf87a136bd0c9f768b689b848a644dff",
       "hash_mode": "exact bytes"
     },
     {
@@ -1113,8 +1387,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 4176,
-      "sha256": "89da1f3a22ecec8c7ea579bd2255d693441ca82b11ea4ebd1d46ad1273a8d502",
+      "size_bytes_recorded": 4191,
+      "sha256": "fd77a7fd3b1b2be6f2856f2b17402e3f0f77f0df10a4b1fd10230d2d515398c9",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1122,8 +1396,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 3095,
-      "sha256": "24061a56b4c66de774a39ad0084c78faf80707cf101ea069c7a280c1b3c575c6",
+      "size_bytes_recorded": 3098,
+      "sha256": "464025241639c8aa6ca699c27fd200d4f773633ecdf09d808db62f4a9655ff64",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1131,8 +1405,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 4954,
-      "sha256": "5d09655a293195ee5ac1fcbef35ecb5e72745df5a8341f1932dbc3aa004bc7b2",
+      "size_bytes_recorded": 4962,
+      "sha256": "d5fce376c327687d5eb3295b0576cb8929e8c155262b7469bd5599ab793885dc",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1149,8 +1423,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 31130,
-      "sha256": "1a6ded0b54cb13e5c5cb7ec04a02984bfeac1fcea7ba7145226db59eaa7b4f3d",
+      "size_bytes_recorded": 31094,
+      "sha256": "e5ccb3984fbc1426200b5ef991d13dd709dabe78e658e5c7310bc2054c78091a",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1158,8 +1432,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 32775,
-      "sha256": "b14453d5194ce2b23c5e8cdea206ca9f2bbe20d1007ae1acb80969d5fa155acc",
+      "size_bytes_recorded": 32790,
+      "sha256": "8747382614dc8e98283868e7d7dda29874ff931eff04ff9f3e1e5e6662dfef3f",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1167,8 +1441,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 23372,
-      "sha256": "a8c4ef96234dac9f40af3ff36661deddf2f7a19e4ac9eeb8eff3a05ed5cbdc9c",
+      "size_bytes_recorded": 23452,
+      "sha256": "432e2d12208d7b2c10149e5e11de7cd403007ebb9646fcb1679e4502e1c3cf76",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1176,8 +1450,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 1879,
-      "sha256": "22e60bc3b453c15641e3a24facd65f00189f633d49a09cd79ecb0a55c10b7451",
+      "size_bytes_recorded": 6865,
+      "sha256": "b2d415c9f87af89e9f04c216e15325ae1411e06beed809a3cae16abf9b0478fc",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1185,8 +1459,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 16244,
-      "sha256": "e91526e84374592bdc1b257a99497a6eefb8e22dcd87c388849e4da18b3a232f",
+      "size_bytes_recorded": 16258,
+      "sha256": "a845034d7150bd7187f587d231af89c238d6e5b332c54c5f68356b78e8f1e9e2",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1194,8 +1468,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 4789,
-      "sha256": "51460d878cf4199d768688b9524bbb53f2b691e6a1f5d394827dc1a9570cdd63",
+      "size_bytes_recorded": 4782,
+      "sha256": "82b69166dc8f28ac624e543a32126ddca4c19b2363f03aec84da89be095cbf0b",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1212,8 +1486,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 2659,
-      "sha256": "9d676bc9a8925b0f2679eebd07e6aa476f83bc0d58f7ed495c9092f3a47716e6",
+      "size_bytes_recorded": 2737,
+      "sha256": "4f5fe422e84706bdd3e1df0aed887285ef927cf8a7324736d0b60859d8e4f78b",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1230,8 +1504,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 2822,
-      "sha256": "55144c9d05c1b033e04c9e8fab9e31282ec12a327562747ef1f601fa387de6d5",
+      "size_bytes_recorded": 2719,
+      "sha256": "1f29c57268fcb867ec087009b9957d5c82d0d7e935fb6fb3ee100c2ff7894b14",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1239,8 +1513,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 3100,
-      "sha256": "8fd3759c432157e03f69c2f9c61bf58b5fb060893ff4558d622cbebab50496ce",
+      "size_bytes_recorded": 3650,
+      "sha256": "94eda2cac873f9802e218c97f2df6cf3dc21484b87c4abf4eb53ad5c81379d5e",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1248,8 +1522,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 16252,
-      "sha256": "dd79bfeb3edb685527ef653431947b78e637c296dead9d5329dd7f1f16c629c2",
+      "size_bytes_recorded": 16236,
+      "sha256": "9200017a6226eb7901330eb0c0682690ba66659744b3739c12865f73bfb91e2e",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1289,18 +1563,36 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "results/data/coherent_review/omegaM_comparison.csv",
+      "roles": [
+        "model_bandwidth_comparison_evidence"
+      ],
+      "size_bytes_recorded": 616,
+      "sha256": "9ab419aff04dffbccfff924ab54f5069c430dbcee6852f58793eee37566feb3c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/coherent_review/omegaM_comparison.mat",
+      "roles": [
+        "model_bandwidth_comparison_evidence"
+      ],
+      "size_bytes_recorded": 1787369,
+      "sha256": "e7d7574e3be3603b91b6a899b62c3d8f978edb71294d74b2c83774700e7bc509",
+      "hash_mode": "exact bytes"
+    },
+    {
       "path": "results/data/final_closure/code_analysis.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
-      "size_bytes_recorded": 933,
+      "size_bytes_recorded": 982,
       "sha256": "fb2c0fc5d54f715171dfeecd24c6ea3dc0b36567af37b430977b608d94dd1f71",
       "hash_mode": "LF-normalized text"
     },
     {
       "path": "results/data/final_closure/code_analysis.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 543,
       "sha256": "60dd917bcf3035220a5e805737fbd94d45db06d55ea61c6db59df1d1d723b984",
@@ -1309,16 +1601,16 @@
     {
       "path": "results/data/final_closure/four_scripts_execution.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "internal_group_review_only"
       ],
-      "size_bytes_recorded": 1025,
+      "size_bytes_recorded": 1059,
       "sha256": "985d2a41d2831dd293065e0a1727dd4400d8d3dfbe43ff595612d9b84b26e42a",
       "hash_mode": "LF-normalized text"
     },
     {
       "path": "results/data/final_closure/four_scripts_execution.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "internal_group_review_only"
       ],
       "size_bytes_recorded": 761,
       "sha256": "3cb2f5a4fe7f775c87ae754f05580c3f115c00d0722c6a77560bbe8e98859250",
@@ -1327,7 +1619,7 @@
     {
       "path": "results/data/final_closure/noise_diagnostics.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 4680395,
       "sha256": "1164ebe664cf4222cf7850ad84ae93e14cc006d14698be58a04bcf3c48118032",
@@ -1336,7 +1628,7 @@
     {
       "path": "results/data/final_closure/noise_metrics.csv",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 4723,
       "sha256": "06e3a7375b38c9b07ea4358fc8c7ce5f702bf3ecffc5fa3b588022b5d3e528cd",
@@ -1345,7 +1637,7 @@
     {
       "path": "results/data/final_closure/noise_sampling.csv",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 404,
       "sha256": "e5fa70afe87d31816fc50f9af0fc43e5b4c7d4d076b248ed3a6a5688213b03a9",
@@ -1354,7 +1646,7 @@
     {
       "path": "results/data/final_closure/practical_metrics.csv",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 5211,
       "sha256": "5088f98f51d41e18ddc24b762ca1f126372e3038ec0de6055577cee4f5190540",
@@ -1363,7 +1655,7 @@
     {
       "path": "results/data/final_closure/practical_plants.csv",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 1215,
       "sha256": "2f6bf58762899d9e7afb7b9a7dc4f88f7c76f840d58cba1998ac45a8726fea56",
@@ -1372,7 +1664,7 @@
     {
       "path": "results/data/final_closure/practical_robustness.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 4126457,
       "sha256": "fdcc8ebf224a82cb16344b0bb0dd38e222d27dbfb03f3e9f2087a8d3a1bc5959",
@@ -1381,7 +1673,7 @@
     {
       "path": "results/data/final_closure/ras_counts.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 1285,
       "sha256": "ecc9370362d3cf77b71eb86dad7caf513810792fb2413ddd98528f27a94048a1",
@@ -1390,7 +1682,7 @@
     {
       "path": "results/data/final_closure/ras_lyapunov.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 46523117,
       "sha256": "2a330f789499b3e04fbfc17a4c2a68f5b4bf9fb11b8058f215b106c8a379c729",
@@ -1399,7 +1691,7 @@
     {
       "path": "results/data/final_closure/ras_metrics.csv",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 20796,
       "sha256": "1b7220f1ad179dded886cc363b4772ea39e8dbaebd187d191306cd8d3bc3acc5",
@@ -1408,16 +1700,16 @@
     {
       "path": "results/data/final_closure/slx_runtime_audit.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "internal_group_review_only"
       ],
-      "size_bytes_recorded": 6342,
+      "size_bytes_recorded": 6415,
       "sha256": "b3ee5f499e33767770141a9b318eb7a4e1fd94e30c1a26a7a0e978c6d30a6a4e",
       "hash_mode": "LF-normalized text"
     },
     {
       "path": "results/data/final_closure/slx_runtime_audit.mat",
       "roles": [
-        "new_final_scientific_evidence"
+        "internal_group_review_only"
       ],
       "size_bytes_recorded": 1695,
       "sha256": "c4cd8412a8566c06dcd833b8dcd18b5d5bc7c9552a84a69a26d5896823213200",
@@ -1426,7 +1718,7 @@
     {
       "path": "results/data/final_closure/slx_static_audit.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
       "size_bytes_recorded": 487910,
       "sha256": "7d223c5b32c416da2958fe45e2d5fbecc1603be094bac361a555f6c51b461491",
@@ -1435,11 +1727,632 @@
     {
       "path": "results/data/final_closure/summary.json",
       "roles": [
-        "new_final_scientific_evidence"
+        "final_scientific_evidence"
       ],
-      "size_bytes_recorded": 679098,
+      "size_bytes_recorded": 702458,
       "sha256": "b156f69b062ec4b834c002ddfd733f2737cbd7adae928a610fa30d969b041bde",
       "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/code_analyzer_helpers.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1102,
+      "sha256": "b9861ddfeb672c13b1e98bd9b594c36c03008660304288e9de752cbe46a8c593",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/dynamic_metrics.csv",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1960,
+      "sha256": "8ea1c9ddefe569c24339ce70758d0805833119cf42826d4477f225b84ff824ac",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/environment_2026b.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 5006,
+      "sha256": "0e2dccf421b34882b196b1908e720f56c2b685e78ce77cefc082e959ef83a3c0",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/environment_2026b.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1570,
+      "sha256": "773655312ba1226dea324be9dfde499c201bf7455dc2be9c136e7d353de42254",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/final_integrity_check.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 572,
+      "sha256": "f6526b0080a6cb8cbbbedcf0fb9a2ed6ea8908d85d34fa541ff2a27bb98ae61c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/final_runner.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 353708,
+      "sha256": "6978d9511f88c6dfc00c268854c6f861b3ae19a9dc408f34fbb0eb14839d33a7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/four_scripts_R2025b.json",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 1025,
+      "sha256": "1f7b6ea2e4cebff1d70a9f619b57586c119af5af27b2e091d2453c57f55a3a91",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/four_scripts_R2025b.mat",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 757,
+      "sha256": "42adbeebf4ed432e1fe6ffece209c1c50503b8b48ecc31957018384410b205d4",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/four_scripts_R2026b.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1016,
+      "sha256": "c497b26e6dabd96f204280a571e8c99cded78e0c3ad71b275c527b801e36421c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/four_scripts_R2026b.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 753,
+      "sha256": "0164c9d6db62dace5e85a129684b30cc7777c59f7c5effaf44ed362c4b042be9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 50981,
+      "sha256": "c1fcf729d594c3f91bf2053764a9c918480edc83f0291537d9ed5f771c2bffc8",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 9764,
+      "sha256": "f30105e14600a44814a39a0a08b5e92da32a70e8321bef260f8cf74ed2dea1f1",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1953,
+      "sha256": "a64374b14fb84445de938afe22fcf530f7b0f5f6adf5c5ff6d4619793b4534eb",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 13009,
+      "sha256": "d870672bb227fe0c9eaef66578f61d4cd6d6a7f211fb16bbccc5cf6e863ea1cd",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 20760433,
+      "sha256": "e6dddfe10da64a2d5a9304c8dd0c0c0f0dbf9d8f3925e105bed3e753af16034d",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_linear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 311798,
+      "sha256": "c3f8fb33c1bf923ddf372ca0c9730b7da0f2074b075a2365d070ece311311b72",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 87577,
+      "sha256": "1e2e6fc82a581f013ebd2889df2cc277421d00335d9684c4c20ee8dd08bcc5a7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 10317,
+      "sha256": "843d87c6dbd0ef69f7962302c358fb999d16eaa37060c9d5da69a3a89784842b",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 2015,
+      "sha256": "29b0009803c18fd1ba2d40970c899d09bf43a879b9d6b834080d360f65f2b3a6",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 13174,
+      "sha256": "fa3d6f2a7ba17ba00dfd60b763a9ac471d25b647220311f04735faf10e3b6a2e",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 102893873,
+      "sha256": "608fc7f62b8bf200f99647d8c06279253c418b5781a32962fb7c455bdcd61dd3",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/Hinf_nonlinear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1391387,
+      "sha256": "55482b167869d14c0286688fc854165764f81aae22ac6e659aa23d3d3b266eb3",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 20592,
+      "sha256": "4bcf1760d81886d8dc3bb565003292291bf908cc0fe61926eb956cedcbd7916b",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3678,
+      "sha256": "9883c2a379f42e8114d2cc870809ab764a268157d7f4b67a88f5b36c1d8da351",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1287,
+      "sha256": "9d652041de7ad5e596a4319cb7b48e2f8a727c97579c27c3100a47dca0fa43f0",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4268,
+      "sha256": "51068fa5c58ca7473932e5af2d163e0ebc7fdd0c8f27fb9e886a29322b52241f",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 569765,
+      "sha256": "8b2b3908977c79b4d2377086ddb02ec7d421c671d1fbaa390cbf575dbc1d60f3",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_linear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 53997,
+      "sha256": "4c2b760ffc4789b2e0ea06273d4a5cd89efc981c23fdf939354558ed4965fbd5",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 33206,
+      "sha256": "68f4b122e4baf11e86c9db2d9847902616e6edab0f5fe3e50f45336a625f3e6e",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3670,
+      "sha256": "915e9950c15e813677a8db08995b3284ab938ee5f6d0d6a605390e85924ac108",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1285,
+      "sha256": "28d2cf5e874dcd787237e9af2865082f9091cc66c536e371ddb3f581652616c5",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4294,
+      "sha256": "032effb0d3e3d0edbb0d2cb4ee909f0373e79468ba60bc8265246d55915b6bf6",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4682568,
+      "sha256": "0b9415e98be58c6cc61001f0240875e23a6e8c0ed83313a017ae9b66ce9218ad",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQG_nonlinear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 234973,
+      "sha256": "db06a4fbe00030f247ded821743cff60c7598456ba0a4b068b9c31f00c15d684",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 21735,
+      "sha256": "05878bd591a5e6597d5e04b36a98b43db6cfedcc94ded482ad76b88d6091ac5b",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3541,
+      "sha256": "07533b2296df1548c45d08168782a6667486c4a7b7c3a894a1f3586a5a11c691",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1257,
+      "sha256": "20866f1c33ba1a4a7c9099f2b6ec8bab7c0cd56389bcbf5e3d053386519d933b",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4284,
+      "sha256": "2bbca4ecdfe4cfb05a8cc3a9a63a296f6965b6c0ee177d9e9c48d3bae2310819",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 576813,
+      "sha256": "31d1002b57a63ee7e207db5749668f70773cf1f3e77585a52b7c4ab7cfafcee7",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_linear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 54005,
+      "sha256": "15bad6f48a59cb33acece91ec0c3bcdae3073bc179afe9ddcc6f34c36a6a9a4e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 34308,
+      "sha256": "3eb4f62d241fe7a92f0e53982397dcf9881a888cb881da3943f7e39310c4727a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3600,
+      "sha256": "127c4684aaee960da7de767580c5857033210de8dd2df74ff98cbb80f2851375",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1281,
+      "sha256": "ba0201994e33e4a93d4425b603810d4d963bba8cd1f4d81ca83daf99ef279112",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4327,
+      "sha256": "f9f832ce03fedd074a41e1b971fd61bd527cc522302a9a6d5e928fb43b84f591",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 571194,
+      "sha256": "90cdc7eec45583a08a6c9e420c39c0bba51d768bc8bb5bda47cce27c4f6a9599",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/LQGI_nonlinear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 54013,
+      "sha256": "90220ce99fdb10cf64026fce6f8f076243947794441cac2749a410e4494fa4fa",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2025b.csv",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 10397,
+      "sha256": "04386681236c6d292a472bd9080cdbb6f9e714d4b03541e1777d9184d8494431",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2025b.mat",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 6281,
+      "sha256": "5ab83c7beca9c1f1b0d020acc942d172334e4db9d90235ea5f1409474a69d2b2",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2026b.csv",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 10397,
+      "sha256": "bb58dee0b9bc20e8ca70c1c32895eb9d901672ad07b1b022f2cf8e41d78588ec",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2026b.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 5871,
+      "sha256": "caf8017b255f8caf6ad04993bbcbf540cc8139143aa420d0fc551e4153a356c9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2026b_first.csv",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 10393,
+      "sha256": "749588b26d6eda08054095bd8199f15e59c6592899bb46ee456d8344186c464c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/matlab_tests_R2026b_first.mat",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 10055,
+      "sha256": "518347f26d21de5982d7f7a795095f1572a8c35cdf6e8fe6f62b57d09d7b4c51",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 17849,
+      "sha256": "9ab6fb1c2758aeb441e65d5095d0ff58481165633f409f8aa3d336ef383aad2c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3523,
+      "sha256": "93da0584abe1cd68593ad2dc03b61d712390c3bc3d8f7fe02f005571297523f1",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1275,
+      "sha256": "0ac346cf421ffc49c440f4f4ce2f1ba23e086ceec43868b854d1238663f68d50",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4283,
+      "sha256": "48b071b4fa4d76655916e28e79e185fc8afce773efbe1872a5c70a368679aa7e",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 13536249,
+      "sha256": "83707bf09a1e478c5f460b958b5a48586a199c2fc3f0214a485d67855e29fbc4",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_linear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 565364,
+      "sha256": "1e9047a7127426650f2bbc9ccb4ae3300baad1dea9d26490c0311d4dacb759da",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 29991,
+      "sha256": "cb0e29bb101f9e15516d1df47c91dcb2973aeafb40e615bad2641c5eb63f38f5",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 3621,
+      "sha256": "046afd3761d0b920f1be62b8f737a6258855f628488a16a6ae88f15a3c1b2e6a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1264,
+      "sha256": "63f9a15ef9238d085008fb0126ce46f48df91b91cf122da7c56f975dfcb274d6",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 4339,
+      "sha256": "615d2385345d1d0d102d88737ffb4351590dc9bc3eacf464c023868199ecc197",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 27201826,
+      "sha256": "ddce62afb51819ede2005cefaf0c5aae0c3b5a9ad08761f8580d62538377bbd6",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/mu_nonlinear_sim_simulation.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 1110912,
+      "sha256": "ec56c590553d68538984ab52ca4ddf9e0eb1c66c0ff77eaede0b3791a7b1dc2c",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/release_robustness_comparison.json",
+      "roles": [
+        "internal_group_review_only"
+      ],
+      "size_bytes_recorded": 726,
+      "sha256": "45b799bdaedcddbfb114695e061a41f9fec66e1d4939c546e1b34b491ef50eb9",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/robustness_R2026b.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 706,
+      "sha256": "d067dcd1344362ddfb3ac58cd3e5f3daabe9821c5cd1ba37883924e5c35f4f05",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/robustness_R2026b.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 6327,
+      "sha256": "6cd0026cb5e65078b38a763ddeb1f2dabc310b8d34d3935e862b0f1f77aa4475",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/final_simulink_validation/slx_runtime_audit.json",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 324089,
+      "sha256": "593e27f269553f9777fd5fdd8d9b315b86aa41be69ead2afc5c514368c370ef7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/final_simulink_validation/slx_runtime_audit.mat",
+      "roles": [
+        "local_simulink_scientific_evidence"
+      ],
+      "size_bytes_recorded": 44935,
+      "sha256": "c51885ef0bb43ae54157cec8644b08806ddac26b7903a7b0b4d6d54fa80bc935",
+      "hash_mode": "exact bytes"
     },
     {
       "path": "results/data/hinf_final_coherent/fixed_PID.mat",
@@ -1595,12 +2508,12 @@
       "hash_mode": "exact bytes"
     },
     {
-      "path": "results/data/lyapunov_trajectories.mat",
+      "path": "results/data/m15_nonlinear_robust_validation.mat",
       "roles": [
         "frozen_model_controller_or_default_cache"
       ],
-      "size_bytes_recorded": 264821038,
-      "sha256": "ac6455bfbf429c8deed5c31198b85643ceb64900ba22025e42a80fb714a81ab5",
+      "size_bytes_recorded": 12277368,
+      "sha256": "3578aa836d710e39009755c65b48cd1dfef0cc1a0b810fd64d198e6642643099",
       "hash_mode": "exact bytes"
     },
     {
@@ -1676,12 +2589,57 @@
       "hash_mode": "exact bytes"
     },
     {
+      "path": "results/data/m8_lqg_nonlinear_ras.mat",
+      "roles": [
+        "frozen_model_controller_or_default_cache"
+      ],
+      "size_bytes_recorded": 10810564,
+      "sha256": "6ea28f429b884c2fc8c47d976abf04cb82519cde268177ff4ff8b48b235ee3b0",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/figures/README.md",
+      "roles": [
+        "reproduction_and_integrity_instructions"
+      ],
+      "size_bytes_recorded": 197,
+      "sha256": "47809c3a414b006bac46ea30b5e8c21c558f3a2fb7d54b4ad45f1931fb21376d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "run_all.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 2163,
+      "sha256": "8947ab9ee6746f15122130cd3bc73db3d63d27ca3a550fb16b31839c463ce3be",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "simulink/acquire_student_scope_buffers.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 3084,
+      "sha256": "a02cd0723e0ecc88d30dda61545517472e8ed8ad045393f1165d23ce4a693c20",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "simulink/analyze_student_scope_results.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 7516,
+      "sha256": "acb8b205a6972dcd32f628d18f5573c2e5f2a8f71a8c6eef9fad99950c61086c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "simulink/export_student_schemes.m",
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 1251,
-      "sha256": "67251f73cf46f32d5a9069745e87ab5462587350bc5e2fdeea3395f9f405f613",
+      "size_bytes_recorded": 1652,
+      "sha256": "a065aeb03ecc4bcf74c7edadfcf6f4c71fb39bb083a6a96cd0f88c580d060a85",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1689,8 +2647,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1642,
-      "sha256": "c32812b60dbd16cc1ce918c0a4de45f284d533792aa218549486eba30991a5d5",
+      "size_bytes_recorded": 2230,
+      "sha256": "aa26f66b5e2cc915dcfd42966cefacd7775e91521aba26395a689a3858fdb695",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1698,7 +2656,7 @@
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 2006,
+      "size_bytes_recorded": 2046,
       "sha256": "7b5992f25ea7ee0d4b824fd78b1120b08ea878c105abc0d99b2778b714b3750b",
       "hash_mode": "LF-normalized text"
     },
@@ -1779,8 +2737,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 5935,
-      "sha256": "2b61a29535d013b97915f86d0c1a2bb872faebd2adce7b5554d118d98a9b0a2d",
+      "size_bytes_recorded": 8310,
+      "sha256": "c29269013996e39b6e64871886639a9e742c6c1275f7e077051def758ff2162f",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1788,14 +2746,15 @@
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 2446,
-      "sha256": "3b3235156185eae1c691a80b22b5b20f668695647dc1d679ec97ba5385dda8b5",
+      "size_bytes_recorded": 9142,
+      "sha256": "8c413353e84adf15e0c971eefdc30d8971d7917abdbb08426a7c4a4d0f8006cc",
       "hash_mode": "LF-normalized text"
     },
     {
       "path": "src/actuators/build_nominal_actuator.m",
       "roles": [
         "literal_matlab_excerpt_source",
+        "matlab_detected_source_dependency",
         "physical_model_and_embedded_slx_dependency"
       ],
       "size_bytes_recorded": 1561,
@@ -1931,6 +2890,7 @@
     {
       "path": "src/parameters/actuator_params_nominal.m",
       "roles": [
+        "matlab_detected_source_dependency",
         "physical_model_and_embedded_slx_dependency"
       ],
       "size_bytes_recorded": 373,
@@ -2087,6 +3047,7 @@
     {
       "path": "src/parameters/uncertainty_params_m4.m",
       "roles": [
+        "matlab_detected_source_dependency",
         "physical_model_and_embedded_slx_dependency"
       ],
       "size_bytes_recorded": 4477,
@@ -2127,7 +3088,7 @@
       "roles": [
         "focused_final_verification_source"
       ],
-      "size_bytes_recorded": 5813,
+      "size_bytes_recorded": 5914,
       "sha256": "c9288a1d9e2c9fc5b071b8a3b044bdd0818df08ef3c8d3ab5dc20650b1733cfa",
       "hash_mode": "LF-normalized text"
     },
@@ -2136,8 +3097,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 6188,
-      "sha256": "d9a225b09271be154db6f9f508721c42e45eb1caa1371275900c67a44c52a7b0",
+      "size_bytes_recorded": 7667,
+      "sha256": "0f6c5d1d16d38bef8dd9faafe018cc6b9c147ae36fae5fd0ba63e81f2bb6f97f",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2145,8 +3106,17 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 6253,
+      "size_bytes_recorded": 6328,
       "sha256": "d2acbc850cdfc8994c1d2037815cccd3a7ab3160471d0c172d3d99df5aaa16f8",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/build_final_simulink_tables.py",
+      "roles": [
+        "document_reproduction_or_build_audit"
+      ],
+      "size_bytes_recorded": 3723,
+      "sha256": "c8c2c658ce658612252c80283e9916a7c39b1d0056a9fcfa372ce279025dc9f9",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2157,30 +3127,102 @@
       "size_bytes_recorded": 3984,
       "sha256": "110d932ce8e5763e0b9e4228ef9efcd8e8f85705b03297483df8c9cf3ed19c61",
       "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/capture_final_robustness.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 1603,
+      "sha256": "22d2d1fe743753e440cac5f99c4b85675d79bfcf0cd96a7968cd2d3c57402425",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/collect_final_dependencies.m",
+      "roles": [
+        "document_reproduction_or_build_audit"
+      ],
+      "size_bytes_recorded": 1494,
+      "sha256": "03f836191de02d23f1a17ea87ddf4d132b2b3ed4d053947c7383919bf92cc6db",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/export_student_baseline_figures.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 17569,
+      "sha256": "e6e81186a081ac7ebe1531080281b22d6e7e0a743eb8432745671fd67b0581e4",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/finalize_student_validation.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 3542,
+      "sha256": "33376c69b69ac24788279d3829abf0bd9767270c074e2d3c1a437618777000af",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/package_delivery.py",
+      "roles": [
+        "document_reproduction_or_build_audit"
+      ],
+      "size_bytes_recorded": 5504,
+      "sha256": "ba03978e776543eb0c8270c0abd48500ec69102200719b2d9cf67b6e22db0b8a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/probe_final_environment.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 2241,
+      "sha256": "5d834eefce206b8a8347b16dfc1dfb59e9ab6efbfc8dbbe51b3dd12f3217a541",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/run_final_student_validation.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 1665,
+      "sha256": "5f093b529b0f6f0f2f18cbbb4dc0c98441b26fac1e25c704d3eee1adf32ff695",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/verify_four_final_scripts.m",
+      "roles": [
+        "matlab_detected_source_dependency"
+      ],
+      "size_bytes_recorded": 2204,
+      "sha256": "a0d6633bf06950403dded0580a527be3dff701ea1418afd5ed74595784176b24",
+      "hash_mode": "LF-normalized text"
     }
   ],
   "products": [
     {
       "Name": "MATLAB",
-      "Version": "25.2",
+      "Version": "26.2",
       "ProductNumber": 1,
       "Certain": true
     },
     {
       "Name": "Simulink",
-      "Version": "25.2",
+      "Version": "26.2",
       "ProductNumber": 2,
       "Certain": true
     },
     {
       "Name": "Control System Toolbox",
-      "Version": "25.2",
+      "Version": "26.2",
       "ProductNumber": 3,
       "Certain": true
     },
     {
       "Name": "Robust Control Toolbox",
-      "Version": "25.2",
+      "Version": "26.2",
       "ProductNumber": 5,
       "Certain": true
     }

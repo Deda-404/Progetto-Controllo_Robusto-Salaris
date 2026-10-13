@@ -1,0 +1,160 @@
+{
+  "status": "ACQUISITION PASS",
+  "summaries": [
+    {
+      "name": "LQGI_nonlinear_sim/Variabile di controllo/channel1",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 1.4788128625161359,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Variabile di controllo/channel2",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.50549384472883263,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel1",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.092330539653488281,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel2",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.032529724947688916,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel3",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.064815960222663241,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel4",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.0327380047111863,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel5",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita misurata/channel6",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel1",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.090242734318285667,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel2",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.031340947358584156,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel3",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.063649054718499576,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel4",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.031453450337930094,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel5",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0.087266462599716474,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    },
+    {
+      "name": "LQGI_nonlinear_sim/Uscita ideale/channel6",
+      "samples": 5006,
+      "channels": 1,
+      "start": 0,
+      "stop": 10,
+      "peak_abs": 0,
+      "nonfinite": 0,
+      "min_positive_step": 7.1054273576010019E-15,
+      "max_step": 0.0020000000000006679
+    }
+  ],
+  "error": ""
+}

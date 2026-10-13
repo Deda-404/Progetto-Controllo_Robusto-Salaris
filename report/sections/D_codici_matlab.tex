@@ -52,7 +52,7 @@ Le verifiche che non ripetono le sintesi sono nell'Appendice C.
 
 \section{LQR, filtro di Kalman e controllore LQG}
 
-\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/lqg/search_lqr_weights_m6.m}\par\noindent\textit{Scopo.} Costruisce il costo del candidato, calcola il feedback LQR e il guadagno statico sul riferimento. La selezione finale deriva dalla ricerca e dalle verifiche M6, non dal solo frammento.
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{controllers/lqg/search_lqr_weights_m6.m}\par\noindent\textit{Scopo.} Costruisce il costo del candidato, calcola il feedback LQR e il guadagno statico sul riferimento. La selezione deriva dalla ricerca e dalle verifiche del controllore completo.
 
 \lstinputlisting[firstline=56,lastline=65]{../controllers/lqg/search_lqr_weights_m6.m}\end{minipage}
 
@@ -66,7 +66,7 @@ Le verifiche che non ripetono le sintesi sono nell'Appendice C.
 
 \section{LQGI con osservatore e integratore dell'errore}
 
-\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqgi.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con Kalman M6. Si carica il candidato salvato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqgi.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con filtro di Kalman. Si carica il candidato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
 
 \lstinputlisting[firstline=17,lastline=34]{../analysis/progetto_lqgi.m}\end{minipage}
 
@@ -141,7 +141,7 @@ del guadagno attivi, \texttt{RandomStart=0}, \texttt{UseParallel=false},
 
 \section{Campioni comuni e verifica pratica della robustezza}
 
-\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_practical_robustness.m}\par\noindent\textit{Scopo.} Genera dieci nuovi impianti della famiglia fisica incerta, seed 20261012, e verifica il replay esatto. Entrambi i controllori usano questi stessi oggetti.
+\par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/run_practical_robustness.m}\par\noindent\textit{Scopo.} Genera dieci impianti della famiglia fisica incerta, seed 20261012, e verifica il replay esatto. Entrambi i controllori usano questi stessi oggetti.
 
 \lstinputlisting[firstline=12,lastline=14]{../analysis/run_practical_robustness.m}\end{minipage}
 

@@ -292,21 +292,21 @@ con l'inverso del picco di $\mu$ ottenuto scalando tutti i blocchi,
 compreso $\Delta_p$. Né RS né RP sono l'inverso della sola norma nominale.
 \texttt{mussv} fornisce una lettura diretta per frequenza; i comandi
 di alto livello organizzano le verifiche sul sistema incerto completo.
-Il calcolo diretto storico è documentato in appendice, con i propri
-controllori e senza trasferirne i numeri alla campagna finale.
+L'appendice riporta la definizione del problema LFT. I valori di questo
+capitolo si riferiscono alle realizzazioni dei controllori qui analizzati.
 
 \subsection{Esito del controllore nominale}
 Il controllore $H_\infty$ di ordine \FinalOrder\ supera NS e NP,
 ma il margine RS è
 \[
  m_{RS}\in[\FinalHRSLowerBound,\FinalHRSUpperBound],
- \qquad\omega_{\rm crit}\simeq70.32\ \mathrm{rad/s}.
+ \qquad\omega_{\rm crit}\simeq\FinalHRSFrequency\ \mathrm{rad/s}.
 \]
 Entrambi gli estremi sono molto minori di uno. La frequenza è
 vicina ai modi elastici: suggerisce una compensazione nominale
 fragile in quella zona, senza identificare da sola un parametro
 responsabile. L'intervallo RP restituito è invece invertito,
-circa $[0.0172543,0.0171945]$, anche dopo la ricerca rinforzata
+circa $[\FinalHRPLowerBound,\FinalHRPUpperBound]$, anche dopo la ricerca rinforzata
 \texttt{MussvOptions='m9'}. Non ne scambiamo gli estremi:
 la stima numerica del margine RP è non validata. RP è comunque
 esclusa dal fallimento RS, che è una sua condizione necessaria.
@@ -371,14 +371,14 @@ Margine RS & $[\FinalHRSLowerBound,\FinalHRSUpperBound]$ & $[\FinalMuRSLowerBoun
 Esito RS & non soddisfatta & soddisfatta\\
 Margine RP & intervallo non valido & $[\FinalMuRPLowerBound,\FinalMuRPUpperBound]$\\
 Esito RP & esclusa da RS & soddisfatta\\
-$\omega_{RS}$ [rad/s] & 70.32 & 61.96\\
+$\omega_{RS}$ [rad/s] & \FinalHRSFrequency & 61.96\\
 $\omega_{RP}$ [rad/s] & non accreditata & 9.85\\\bottomrule
 \end{tabular}
 \caption{Confronto sullo stesso modello incerto e sugli stessi pesi.
 Gli intervalli sono limiti del margine.}
 \end{table}
 \begin{figure}[htbp]\centering
-\includegraphics[width=.94\textwidth]{figures/mu/robust_margins.png}
+\includegraphics[width=.94\textwidth]{figures/final_simulink/robust_margins_R2026b.png}
 \caption{Margini rispetto alla soglia uno. L'intervallo RP non
 valido del controllore nominale non è disegnato come garanzia.}
 \end{figure}

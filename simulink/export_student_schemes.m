@@ -10,6 +10,12 @@ for k=1:numel(manifest.models)
     cleanup=onCleanup(@()closeWithoutSave(model));
     load_system(source);
     print(['-s',model],'-dpng','-r200',fullfile(folder,[model,'.png']));
+    if strcmp(model,'LQGI_linear_sim')
+        print(['-s',model,'/Kalman filter'],'-dpng','-r200',fullfile(folder,'LQGI_Kalman.png'));
+    elseif strcmp(model,'LQGI_nonlinear_sim')
+        print(['-s',model,'/Non linear plant'],'-dpng','-r200',fullfile(folder,'LQGI_nonlinear_plant.png'));
+        print(['-s',model,'/Actuators'],'-dpng','-r200',fullfile(folder,'LQGI_actuators.png'));
+    end
     clear cleanup
     assert(strcmp(before,hashFile(source)) && strcmp(before,manifest.models(k).sha256_source));
 end

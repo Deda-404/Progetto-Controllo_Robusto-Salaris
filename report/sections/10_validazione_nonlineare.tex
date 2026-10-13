@@ -146,10 +146,10 @@ con il controllore che le ha prodotte.
 
 \section{Tracking e disturbi del servo LQGI}
 La campagna \path{run_lqgi_validation.m} usa la stessa meccanica SEA,
-gli stessi attuatori M3 e il controllore M7 a 16 stati: 14 stime e
+gli stessi attuatori nominali e il controllore LQGI a 16 stati: 14 stime e
 due integratori. Il modello aumentato non lineare ha 30 stati.
 I gradini di 2, 5 e 8 gradi sono osservati per 8 s, come nel confronto
-lineare M7, per osservare il servo lento senza modificarne il peso.
+lineare, per osservare il servo lento senza modificarne il peso.
 I disturbi di 0.25, 0.5 e 1 N m usano 8 s; equilibrio e rumore usano 4 s.
 
 La Figura~\ref{fig:lqgi-nl-tracking} confronta le traiettorie a 5 gradi
@@ -157,7 +157,7 @@ con la chiusura lineare completa. L'accordo locale è verificato anche
 a piccolo segnale. L'overshoot è nullo nelle sei prove, ma la risposta
 resta lenta rispetto a 0.8 s. Il tempo non lineare della tabella è
 calcolato attorno alla media dell'ultimo 10\% della risposta; quello
-lineare M7 di 5.046 s usa il valore DC analitico. La piccola differenza
+lineare di 5.046 s usa il valore DC analitico. La piccola differenza
 non viene interpretata come un miglioramento del controllore.
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\textwidth]{figures/lqgi/tracking_linear_nonlinear.png}
@@ -179,7 +179,7 @@ l'equilibrio; i comandi mantengono la compensazione. L'ultimo campione
 non è un guadagno DC.}
 \end{figure}
 
-Le prove di rumore mantengono il Kalman M6 e $r_1=5^\circ$.
+Le prove di rumore usano il filtro di Kalman LQG e $r_1=5^\circ$.
 Confrontiamo assenza di rumore, quattro encoder indipendenti e la
 stessa sequenza encoder con quattro rumori di processo aggiunti.
 Le deviazioni standard dei campioni sono quelle assunte nel progetto:
@@ -200,7 +200,7 @@ e differenza di comando rispetto alla prova pulita in basso.
 L'integratore riceve l'errore encoder, senza sostituirlo con la posizione ideale.}
 \end{figure}
 
-La ricerca \path{run_lqgi_ras.m} usa i criteri di coda M8:
+La ricerca \path{run_lqgi_ras.m} usa i seguenti criteri di coda:
 posizioni link e motori entro 0.5 gradi, velocità rispettivamente
 entro 0.02 e 0.05 rad/s, traiettorie finite e limitate, senza crescita
 finale. Perturbiamo $q$ e $\theta$ della stessa quantità, con velocità

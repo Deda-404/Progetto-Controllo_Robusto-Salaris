@@ -1,6 +1,6 @@
 # ANALISI RUMORE MISURA
 
-Diagnosi del 12 ottobre 2026. Controllori archiviati invariati; nessuna nuova sintesi, riduzione, filtraggio, saturazione, anti-windup o modifica SLX. Le prove sono MATLAB, non Simulink.
+Diagnosi del 13 ottobre 2026. Controllori archiviati invariati; nessuna nuova sintesi, riduzione, filtraggio, saturazione, anti-windup o modifica SLX. La prova MATLAB isolata e il collaudo dei diagrammi Simulink sono distinti di seguito.
 
 ## Protocollo e formula
 
@@ -50,4 +50,24 @@ Lo studio Ts=1,2,5,10 ms conserva la varianza dei campioni: cambia la banda del 
 
 Nessuna correzione progettuale è stata adottata: le unità, i segni e le mappe risultano coerenti. Il limite è la formulazione e la risposta alle misure nel modello adottato; la simulazione non dimostra che quei comandi siano erogabili. Una futura sintesi potrebbe includere v e un vincolo pesato Tuv, oppure un filtraggio di misura motivato, verificando nuovamente tracking, disturbo, stabilità interna, RS/RP e rumore. Saturazioni, anti-windup e riduzione restano opzioni teoriche, non interventi applicati agli originali.
 
-Fonti: `noise_diagnostics.mat`, `noise_metrics.csv`, `noise_sampling.csv`; figure in `report/figures/final_closure/`. Differiscono dai precedenti esperimenti non lineari combinati per seed, ingresso e osservazione del comando: quei numeri non sono stati trasferiti al nuovo protocollo.
+Fonti della prova MATLAB isolata: `noise_diagnostics.mat`, `noise_metrics.csv`, `noise_sampling.csv`; figure in `report/figures/final_closure/`.
+
+## Confronto con gli otto Scope eseguiti in R2026b
+
+Tutti gli originali hanno completato caricamento, compilazione e simulazione locale. Gli Scope visuali sono stati letti senza attivare il logging o cambiare alcun parametro del modello. Il formato dei buffer è stato verificato anche sui segnali vettoriali: i due comandi di ciascun ramo H∞ sono intercalati per campione dopo il vettore dei tempi. I dati integrali, le sorgenti dei canali e le metriche sono in `results/data/final_simulink_validation/`.
+
+| Prova | Picco max comando registrato [N m] | RMS massimo tra i due canali [N m] | Feedback encoder selezionato |
+|---|---:|---:|---|
+| H∞ 2-DoF lineare | 1.72946 | 1.23 | ideale |
+| H∞ 2-DoF non lineare | 733230.334 | 21519.988 | rumoroso |
+| PID non lineare | 346.631 | 28.4 | rumoroso |
+| Kμ lineare | 107.960 | 12.8635 | rumoroso |
+| Kμ non lineare | 108.526 | 12.8223 | rumoroso |
+
+H∞ lineare conserva i selettori sulla posizione ideale; H∞ non lineare li conserva sulla misura rumorosa. Tutti e tre i rami H∞ sono attivi in parallelo. La differenza dei comandi tra queste due esecuzioni non misura il solo effetto della meccanica non lineare. I modelli μ usano misure rumorose in entrambi i casi. I selettori non sono stati commutati.
+
+Negli SLX σy=0.05° e Ts=2 ms restano identici al protocollo MATLAB, ma il seed è 20260826. I quattro canali encoder visualizzati contengono la stessa sequenza: correlazione circa uno e RMS vicino a 0.05°. Non vengono descritti come indipendenti. Nella prova MATLAB isolata le sequenze sono indipendenti e il seed è 20261012. Gli SLX applicano insieme riferimento [5°;0] e disturbo link [0.5;0] N m da 1 s, con rumori di processo attivi; la prova isolata usa r=d=w=0 per misurare il solo encoder. L'orizzonte SLX è 10 s, salvo LQG non lineare 4 s. Il confronto è quindi sul fenomeno e sui protocolli, non sull'identità dei valori di picco o RMS.
+
+Le griglie Scope sono non uniformi. H∞ non lineare registra 231384 campioni per segnale, con intervallo massimo circa 1.109 ms; μ usa la propria griglia del solver salvato. Questi campioni mostrano comandi critici, ma non certificano il massimo continuo: un intervallo massimo inferiore a 2 ms non garantisce di risolvere ogni impulso di poche decine di microsecondi. L'RMS Scope è la quadratura trapezoidale dei quadrati sulle durate registrate, per ciascun canale; l'RMS MATLAB della tabella precedente integra la propagazione ZOH e media i due comandi. Non sono la stessa statistica.
+
+Gli attuatori e la meccanica filtrano le richieste prima delle posizioni. Le curve articolari relativamente regolari, l'assenza di NaN/Inf e la stabilità nominale non rendono quei comandi erogabili. La diagnosi delle mappe Tuv/Tqv resta coerente con le simulazioni effettive: H∞ 2-DoF è fortemente sensibile al rumore, μ e PID conservano un limite significativo. Non sono state introdotte mitigazioni; filtraggio motivato, pesatura misura–comando, saturazioni/anti-windup o riduzione richiederebbero un nuovo progetto e nuove verifiche.

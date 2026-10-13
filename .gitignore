@@ -55,3 +55,7 @@ tmp/
 # Python generated caches
 __pycache__/
 *.pyc
+
+# Generated student package; sources and selected hashes are tracked
+/delivery/Consegna_SEA_2026-10-13/
+/delivery/Consegna_SEA_2026-10-13.zip

@@ -32,9 +32,11 @@
 \input{generated/revision_values.tex}
 \input{generated/hinf_final_values.tex}
 \input{generated/final_closure_values.tex}
+\input{generated/final_simulink_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
-\author{Alessio de Dato \\ Valerio Rebechi \\[0.8em]\small Matricole: da completare}
-\date{Data di consegna: da completare}
+\author{Alessio de Dato \\ \small Matricola 635256 \\[0.8em]
+Valerio Rebechi \\ \small Matricola 722224}
+\date{13.10.2026}
 \begin{document}
 \hypersetup{pageanchor=false}
 \maketitle
@@ -53,9 +55,10 @@ di stabilità e prestazione robusta maggiori di uno. Restano fallimenti su
 assestamento e offset, oltre ai limiti legati a rumore e coppie non saturate.
 Le simulazioni non lineari MATLAB, le sezioni empiriche di attrazione e i
 dieci impianti incerti sono distinti dalle garanzie del modello lineare.
-Gli otto modelli Simulink originali, quattro lineari e quattro non lineari, sono conservati e analizzati;
-le incompatibilità riscontrate impediscono di accreditarne la simulazione
-come validazione dei quattro controllori finali.
+Gli otto diagrammi Simulink sono stati eseguiti e le posizioni e i comandi
+acquisiti confermano offset, azione integrale e sensibilità al rumore.
+I diversi protocolli di misura e i selettori salvati sono esplicitati nel
+confronto con MATLAB; i picchi registrati non certificano il massimo continuo.
 \end{abstract}
 \tableofcontents
 \listoffigures

@@ -1,0 +1,159 @@
+{
+  "model": "mu_linear_sim",
+  "status": "DYNAMIC VALIDATION PASS",
+  "protocol": "saved SLX: reference, disturbance and process noise combined",
+  "acquisition_api": "R2026b visual Scope buffers, read only",
+  "branches": {
+    "controller": "mu",
+    "position_scope": "mu_linear_sim/Uscita ideale",
+    "command_scope": "mu_linear_sim/Variabile di controllo",
+    "reference_start_s": 1,
+    "duration_s": 10,
+    "samples_q": 85355,
+    "samples_u": 85355,
+    "tail_mean_error_deg": [
+      0.23194256881847766,
+      -0.557251610150247
+    ],
+    "tail_max_abs_error_deg": [
+      0.4451289883209934,
+      0.97159765793420649
+    ],
+    "observed_q1_overshoot_percent": 10.592900126731383,
+    "observed_settling_2percent_s": null,
+    "peak_q2_deg": 4.8872188518038966,
+    "peak_u_Nm": [
+      107.95970527014948,
+      50.338246988661382
+    ],
+    "rms_u_Nm": [
+      12.863527093505583,
+      3.3055101166874494
+    ],
+    "rms_encoder_noise_deg": [
+      0.049718620557279117,
+      0.049718620557279117,
+      0.049718620557279117,
+      0.049718620557279117
+    ],
+    "encoder_noise_correlation": [
+      [
+        1,
+        1,
+        0.99999999999999978,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0.99999999999999978,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "max_command_sample_gap_s": 0.00024084393874046484,
+    "peak_interpretation": "maximum of Scope samples; continuous intersample maximum is not certified"
+  },
+  "sources": [
+    {
+      "scope": "mu_linear_sim/Uscita ideale",
+      "sources": [
+        {
+          "block": "mu_linear_sim/Demux",
+          "port": 1,
+          "label": "Δq1"
+        },
+        {
+          "block": "mu_linear_sim/Demux",
+          "port": 2,
+          "label": "Δq2"
+        },
+        {
+          "block": "mu_linear_sim/Demux",
+          "port": 3,
+          "label": "Δtheta1"
+        },
+        {
+          "block": "mu_linear_sim/Demux",
+          "port": 4,
+          "label": "Δtheta2"
+        },
+        {
+          "block": "mu_linear_sim/Demux3",
+          "port": 1,
+          "label": "r1"
+        },
+        {
+          "block": "mu_linear_sim/Demux3",
+          "port": 2,
+          "label": "r2"
+        }
+      ],
+      "channels": 6
+    },
+    {
+      "scope": "mu_linear_sim/Variabile di controllo",
+      "sources": [
+        {
+          "block": "mu_linear_sim/Demux2",
+          "port": 1,
+          "label": "u1"
+        },
+        {
+          "block": "mu_linear_sim/Demux2",
+          "port": 2,
+          "label": "u2"
+        }
+      ],
+      "channels": 2
+    },
+    {
+      "scope": "mu_linear_sim/Uscita misurata",
+      "sources": [
+        {
+          "block": "mu_linear_sim/Demux1",
+          "port": 1,
+          "label": "Δq1 (misurata)"
+        },
+        {
+          "block": "mu_linear_sim/Demux1",
+          "port": 2,
+          "label": "Δq2 (misurata)"
+        },
+        {
+          "block": "mu_linear_sim/Demux1",
+          "port": 3,
+          "label": "Δtheta1 (misurata)"
+        },
+        {
+          "block": "mu_linear_sim/Demux1",
+          "port": 4,
+          "label": "Δtheta2 (misurata)"
+        },
+        {
+          "block": "mu_linear_sim/Demux4",
+          "port": 1,
+          "label": "r1"
+        },
+        {
+          "block": "mu_linear_sim/Demux4",
+          "port": 2,
+          "label": "r2"
+        }
+      ],
+      "channels": 6
+    }
+  ],
+  "error": ""
+}

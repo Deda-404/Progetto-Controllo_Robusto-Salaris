@@ -1,0 +1,159 @@
+{
+  "model": "LQGI_nonlinear_sim",
+  "status": "DYNAMIC VALIDATION PASS",
+  "protocol": "saved SLX: reference, disturbance and process noise combined",
+  "acquisition_api": "R2026b visual Scope buffers, read only",
+  "branches": {
+    "controller": "LQGI",
+    "position_scope": "LQGI_nonlinear_sim/Uscita ideale",
+    "command_scope": "LQGI_nonlinear_sim/Variabile di controllo",
+    "reference_start_s": 1,
+    "duration_s": 10,
+    "samples_q": 5006,
+    "samples_u": 5006,
+    "tail_mean_error_deg": [
+      0.017784378438992172,
+      -0.02610936995826112
+    ],
+    "tail_max_abs_error_deg": [
+      0.11018135461104971,
+      0.27356114264852938
+    ],
+    "observed_q1_overshoot_percent": 3.4105561631632613,
+    "observed_settling_2percent_s": 8.0080000000000009,
+    "peak_q2_deg": 1.7957040095885577,
+    "peak_u_Nm": [
+      1.4788128625161359,
+      0.50549384472883263
+    ],
+    "rms_u_Nm": [
+      1.2219093004709844,
+      0.20737579518162141
+    ],
+    "rms_encoder_noise_deg": [
+      0.0497376387908613,
+      0.0497376387908613,
+      0.0497376387908613,
+      0.049737638790861294
+    ],
+    "encoder_noise_correlation": [
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "max_command_sample_gap_s": 0.0020000000000006679,
+    "peak_interpretation": "maximum of Scope samples; continuous intersample maximum is not certified"
+  },
+  "sources": [
+    {
+      "scope": "LQGI_nonlinear_sim/Variabile di controllo",
+      "sources": [
+        {
+          "block": "LQGI_nonlinear_sim/Demux2",
+          "port": 1,
+          "label": "u1"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux2",
+          "port": 2,
+          "label": "u2"
+        }
+      ],
+      "channels": 2
+    },
+    {
+      "scope": "LQGI_nonlinear_sim/Uscita misurata",
+      "sources": [
+        {
+          "block": "LQGI_nonlinear_sim/Demux1",
+          "port": 1,
+          "label": "Δq1 (misurata)"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux1",
+          "port": 2,
+          "label": "Δq2 (misurata)"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux1",
+          "port": 3,
+          "label": "Δtheta1 (misurata)"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux1",
+          "port": 4,
+          "label": "Δtheta2 (misurata)"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux4",
+          "port": 1,
+          "label": "r1"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux4",
+          "port": 2,
+          "label": "r2"
+        }
+      ],
+      "channels": 6
+    },
+    {
+      "scope": "LQGI_nonlinear_sim/Uscita ideale",
+      "sources": [
+        {
+          "block": "LQGI_nonlinear_sim/Demux",
+          "port": 1,
+          "label": "Δq1"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux",
+          "port": 2,
+          "label": "Δq2"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux",
+          "port": 3,
+          "label": "Δtheta1"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux",
+          "port": 4,
+          "label": "Δtheta2"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux3",
+          "port": 1,
+          "label": "r1"
+        },
+        {
+          "block": "LQGI_nonlinear_sim/Demux3",
+          "port": 2,
+          "label": "r2"
+        }
+      ],
+      "channels": 6
+    }
+  ],
+  "error": ""
+}
