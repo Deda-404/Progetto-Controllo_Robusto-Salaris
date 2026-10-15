@@ -38,3 +38,18 @@ tutti i target temporali. La sezione radiale RAS MATLAB converge nei
 57 punti esplorati fino ai bordi del box, senza saturazioni e con
 comando massimo circa 240 N m. Non sono disponibili margini robusti
 LQGI o una RAS validata degli originali Simulink LQG/LQGI.
+
+\section{Scelta rispetto alla seconda formulazione}
+La tabella precedente identifica le baseline, tuttora predefinite.
+HinfN3 attenua molto il rumore e mantiene il tracking nominale, ma
+fallisce RS/RP: non è una soluzione robusta finale. MuN1 mantiene
+NS/NP/RS/RP e i dieci impianti stabili. Nel Simulink non lineare passa
+da 108.526 a 2.251 N m di picco e da 12.822 a 1.357 N m di massimo RMS
+per canale. La riduzione non richiede di cambiare il rumore.
+
+Il prezzo è l'ordine 82, l'offset q1 di 8.243\%, una reiezione del
+disturbo nominale moderatamente peggiore e RP inferiore alla baseline,
+pur sopra uno. La RAS candidata è empirica, senza certificato Lyapunov
+mu. Perciò MuN1 resta una proposta verificata; gli studenti decidono
+se il vantaggio sul rumore compensi questi limiti. Nessun target M5
+è allentato e nessuna coppia è dichiarata hardware certificata.

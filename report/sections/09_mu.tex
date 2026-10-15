@@ -402,13 +402,37 @@ i secondi ne mostrano l'effetto in anello chiuso. Il campionamento non
 sostituisce i margini robusti. Le prove non lineari e di rumore non
 estendono RS/RP all'hardware o a fenomeni esclusi dal modello.
 
+\section{Seconda D--K: la stessa famiglia con misura rumorosa}
+La nuova pianta usa $q+W_n\nu$. Il rumore è esogeno; rimangono le
+cinque incertezze originali. Una sola nuova \texttt{musyn(P,4,2)} usa
+$W_n=\sigma_y I_2$, seed 20261013 e opzioni consolidate: MixedMU,
+FullDG, FitOrder $[5,2]$, cinque iterazioni massime, tolleranza 0.01
+e la stessa griglia di 1201 frequenze.
+
+MuN1 ha ordine 82 e obiettivo D--K 0.87439. La post-analisi indipendente
+fornisce norma nominale 0.67346, RS $[1.84622,1.88174]$ e RP
+$[1.59634,1.60036]$. Sul problema precedente RP è
+$[1.59623,1.60042]$: nessun certificato del primo Kmu è trasferito.
+\texttt{mussv} usa il blocco fittizio di prestazione $6\times4$, con sei
+esogeni e quattro prestazioni. I massimi upper RS/RP sulla griglia sono
+0.53908/0.77503; i margini adattivi restano verifiche distinte.
+\input{generated/noise_redesign_synthesis.tex}
+
+L'attenuazione migliora molto, ma i target temporali restano parziali:
+$T_s=1.558,1.482$ s ed errori $8.243\%,2.192\%$. L'offset q1 peggiora
+rispetto a circa 6\% della baseline, insieme a una moderata perdita
+di reiezione nominale della coppia. RP resta sopra uno, pur diminuendo.
+MuN1 è una proposta robusta verificata con compromessi; la baseline
+resta predefinita e l'adozione finale spetta agli studenti.
+
 \subsection{Perché i controllori $H_\infty$ e $\mu$ possono avere un ordine elevato}
 L'ordine è il numero degli stati interni, distinto dall'ampiezza del comando
 $u$. La pianta completa ha 14 stati e la pianta generalizzata aggiunge le
 dinamiche dei pesi e del modello desiderato. Nel problema 2-DoF adottato
 l'interconnessione ha 22 stati e il controllore $H_\infty$ selezionato ne
 ha 22; la sintesi a ordine pieno non riguarda soltanto gli otto stati
-meccanici. Per $K_\mu$ l'ordine finale verificato è 78: i fit dinamici degli
+meccanici. Per $K_\mu$ l'ordine verificato è 78 nella prima formulazione e
+82 in MuN1: i fit dinamici degli
 scaling della D--K iteration aumentano la complessità del problema scalato.
 Il totale non va attribuito automaticamente ai soli parametri incerti.
 Un ordine elevato non implica un controllore instabile, ma richiede più

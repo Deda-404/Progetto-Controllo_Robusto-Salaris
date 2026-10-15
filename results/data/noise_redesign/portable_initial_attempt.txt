@@ -1,0 +1,212 @@
+START delivered script progetto_lqg.m
+Poli della pianta:
+   1.0e+02 *
+
+  -0.0068 + 0.7940i
+  -0.0068 - 0.7940i
+  -0.0096 + 0.6995i
+  -0.0096 - 0.6995i
+   0.0721 + 0.0000i
+   0.0404 + 0.0000i
+  -0.0789 + 0.0000i
+  -0.0407 + 0.0000i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+  -1.3333 + 0.0000i
+  -0.3200 + 0.2400i
+  -0.3200 - 0.2400i
+
+Ranghi [controllabilita osservabilita], grezzi e riscalati:
+    10    10
+    14    14
+
+                             matrix: [14×28 double]
+                     singularValues: [14×1 double]
+                          tolerance: 4.9258e+14
+                               rank: 10
+                    conditionNumber: 1.8508e+23
+                           pbhRanks: [2×1 double]
+           pbhMinimumSingularValues: [2×1 double]
+                      pbhTolerances: [2×1 double]
+                       stabilizable: 1
+                    allModePbhRanks: [14×1 double]
+    allModePbhMinimumSingularValues: [14×1 double]
+               allModePbhTolerances: [14×1 double]
+                    controllablePbh: 1
+
+                             matrix: [56×14 double]
+                     singularValues: [14×1 double]
+                          tolerance: 9.6207e+11
+                               rank: 10
+                    conditionNumber: 2.4767e+19
+                           pbhRanks: [2×1 double]
+           pbhMinimumSingularValues: [2×1 double]
+                      pbhTolerances: [2×1 double]
+                         detectable: 1
+                    allModePbhRanks: [14×1 double]
+    allModePbhMinimumSingularValues: [14×1 double]
+               allModePbhTolerances: [14×1 double]
+                      observablePbh: 1
+
+                         equilibrium: [2×1 double]
+      referenceAmplitudeScenariosDeg: [3×1 double]
+                  referenceAmplitude: 0.0873
+          disturbanceTorqueScenarios: [3×1 double]
+          disturbanceTorqueAmplitude: 0.5000
+                              omegaB: 12
+                             omegaW1: 8
+         bandwidthUnstableMultiplier: 1.5000
+           bandwidthActuatorFraction: 0.4000
+            bandwidthElasticFraction: 0.2000
+                                  As: 0.1500
+                                  Ms: 2.5000
+                              uScale: 12
+                   controlWeightGain: 0.0500
+                              omegaU: 60
+                  controlWeightAlpha: 6
+         controlOnsetElasticFraction: 0.5000
+                  settlingTimeTarget: 0.8000
+                     overshootTarget: 10
+           steadyStateTrackingTarget: 0.0500
+                 crossCouplingTarget: 0.2500
+                 crossCouplingStatus: "preliminary"
+                 disturbanceLocation: "link-side joint torque"
+           controlEffortScaleMeaning: "performance normalization; not a certified actuator saturation"
+                    weightsSymmetric: 1
+                               useW3: 0
+          controllerSynthesisAllowed: 0
+                  robustnessLanguage: [4×1 string]
+      futureRobustStabilityCriterion: "mu upper bound < 1"
+    futureRobustPerformanceCriterion: "augmented-problem mu upper bound < 1"
+
+Scale degli stati [qs qds ds tds]:
+    0.0873    1.0472    0.0125    1.0472
+
+LQR30: 9/36 ammissibili, score 0.395044898
+Q finale:
+  902.6245         0         0         0 -640.0000         0         0         0         0         0         0         0         0         0
+         0  902.6245         0         0         0 -640.0000         0         0         0         0         0         0         0         0
+         0         0    0.9119         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0    0.9119         0         0         0         0         0         0         0         0         0         0
+ -640.0000         0         0         0  640.0000         0         0         0         0         0         0         0         0         0
+         0 -640.0000         0         0         0  640.0000         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0    0.9119         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0    0.9119         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+         0         0         0         0         0         0         0         0         0         0         0         0         0         0
+
+ru e R:
+    0.1000
+
+    0.1000         0
+         0    0.1000
+
+K finale (2x14):
+  254.3340   15.8582   18.8631    3.8087 -166.2826  -12.9481   -1.2986   -0.9176   11.5551   22.0162   42.3101   -0.9738   -2.3552  -13.4834
+   14.9301  213.7537    4.6969    7.3299   -5.5370 -143.4595   -0.6453    1.3209   -0.9738   -2.2227  -10.9075   14.3309   28.5411   79.9065
+
+Nr:
+   54.3884   -1.2770
+    3.4068   51.6920
+
+Residuo CARE 4.18e-10; errore K 9.82e-12; max Re poli -6.21853
+   1.0e+02 *
+
+  -0.0622 + 0.0364i
+  -0.0622 - 0.0364i
+  -0.1187 + 0.0000i
+  -0.2446 + 0.8705i
+  -0.2446 - 0.8705i
+  -0.2723 + 0.4424i
+  -0.2723 - 0.4424i
+  -0.2890 + 0.8528i
+  -0.2890 - 0.8528i
+  -0.3010 + 0.0000i
+  -0.5516 + 0.0000i
+  -0.6833 + 0.0000i
+  -1.3333 + 0.0000i
+  -1.3333 + 0.0000i
+
+Qn, Rn:
+    0.0100         0         0         0
+         0    0.0100         0         0
+         0         0    0.0100         0
+         0         0         0    0.0100
+
+   1.0e-06 *
+
+    0.7615         0         0         0
+         0    0.7615         0         0
+         0         0    0.7615         0
+         0         0         0    0.7615
+
+L finale (14x4):
+   1.0e+03 *
+
+    0.0227   -0.0218    0.0090   -0.0055
+   -0.0218    0.0856   -0.0069    0.0235
+    0.5515   -1.2744    0.2333   -0.3494
+   -1.2784    4.2009   -0.3816    1.2106
+    0.0090   -0.0069    0.0644   -0.0034
+   -0.0055    0.0235   -0.0034    0.0792
+    0.7241   -0.9341    2.1431   -0.3134
+   -0.7559    2.8015   -0.3903    3.4326
+   -0.0004   -0.0023   -0.0351   -0.0017
+    0.0243    0.0144   -0.0921   -0.0003
+   -0.0301   -0.0127    0.2078    0.0048
+   -0.0020    0.0048   -0.0017   -0.0300
+    0.0115   -0.0092    0.0014   -0.1020
+   -0.0098   -0.0006    0.0026    0.2074
+
+Poli A-LC:
+   1.0e+02 *
+
+  -0.2202 + 0.8478i
+  -0.2202 - 0.8478i
+  -0.1613 + 0.7818i
+  -0.1613 - 0.7818i
+  -0.0932 + 0.1172i
+  -0.0932 - 0.1172i
+  -0.4487 + 0.5174i
+  -0.4487 - 0.5174i
+  -0.4767 + 0.2945i
+  -0.4767 - 0.2945i
+  -0.5193 + 0.3253i
+  -0.5193 - 0.3253i
+  -1.3333 + 0.0000i
+  -1.3333 - 0.0000i
+
+    fattori    velocita    erroreRms     comandoRms    normaH2
+    _______    ________    __________    __________    _______
+
+      0.5       2.0962     0.00029595      0.14991     1065.8
+        1       1.4985     0.00023377      0.08195     718.29
+        2       1.1833     0.00018109     0.042779     486.49
+
+eig(P)=[0.00170723 744.564], residuo 9.66e-10, c=18893, rho interno=5.93882958e-09
+rho campionato 1.1944993, max Vdot/||z||^2 indipendente -0.990049
+{Error using exportgraphics
+The value of 'destination' is invalid. Unable to create output file
+'C:\Users\aless\AppData\Local\Temp\sea_noise_portable_final\results\figures\lyapunov_ras_comparison.png', No such file or directory.
+
+Error in plot_lyapunov_ras (line 46)
+    exportgraphics(f,fullfile(root,'results','figures',nome),'Resolution',180);
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in progetto_lqg (line 286)
+plot_lyapunov_ras(archivio.risultati,radice);
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in run (line 100)
+evalin('caller', strcat(scriptStem, ';'));
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in verify_four_final_scripts>executeScript (line 29)
+run(file);
+^^^^^^^^^
+Error in verify_four_final_scripts (line 15)
+    executeScript(file);
+    ^^^^^^^^^^^^^^^^^^^
+}

@@ -220,3 +220,7 @@ Dalla radice: `addpath('simulink','tools'); run_final_student_validation;`. Il r
 La lettura del buffer usa un’API interna specifica di R2026b. In una release che non la espone, il fallback è manuale: preparare il Workspace con i campi di `setup_student_originals(kind)`, aprire il modello, eseguire senza cambiare parametri, aprire gli Scope `Uscita ideale`, `Uscita misurata` e `Variabile/i di controllo`; scegliere Print → Print to Figure. Nella figura MATLAB salvare FIG e PNG, leggendo XData/YData delle curve per i dati. Non fare doppio clic sui Manual Switch: li commuta. Chiudere il modello senza salvare e ricontrollare SHA-256. La sola schermata non certifica picchi più rapidi della griglia.
 
 Documentazione ufficiale: [Scope](https://www.mathworks.com/help/simulink/slref/scope.html), [Manual Switch](https://www.mathworks.com/help/simulink/slref/manualswitch.html). Inventario completo: `docs/INVENTARIO_XML_SIMULINK.md`.
+
+## Studio successivo con rumore esplicito — 13.10.2026
+
+I risultati sopra descrivono la baseline e restano validi per quella formulazione. La revisione separata è documentata in Prova_di_Soluzione_Rumore_di_Misura.txt e ACCETTAZIONE_RUMORE_E_ORALE.md, con dati in results/data/noise_redesign. Tre H∞ non superano RS/RP; MuN1 riduce molto il comando e mantiene RS/RP, con offset q1 peggiore e target temporali parziali. Gli otto nuovi run abbinati non sostituiscono quelli precedenti. Baseline predefinita; decisione sull'adozione agli studenti. Il nuovo discorso completo è in presentation/Presentazione_orale.txt.

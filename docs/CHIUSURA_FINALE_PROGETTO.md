@@ -55,3 +55,7 @@ Restano la prova orale cronometrata, la revisione umana della PR e la decisione 
 ## Pubblicazione conclusa
 
 PR #40: https://github.com/Deda-404/Progetto_CR/pull/40, aperta per revisione su main, senza merge. Branch codex/validazione-finale-matlab-simulink pubblicato con gli otto oggetti LFS (171 MB). Commit di collaudo ca0f64d e di elaborati/consegna 266782e. Stato remoto verificato sul secondo commit, PR senza conflitti e base 14359392 invariata; il commit di chiusura registra il gate G. ZIP e PDF finali restano identici agli audit di consegna.
+
+## Studio successivo con rumore esplicito — 13.10.2026
+
+I risultati sopra descrivono la baseline e restano validi per quella formulazione. La revisione separata è documentata in Prova_di_Soluzione_Rumore_di_Misura.txt e ACCETTAZIONE_RUMORE_E_ORALE.md, con dati in results/data/noise_redesign. Tre H∞ non superano RS/RP; MuN1 riduce molto il comando e mantiene RS/RP, con offset q1 peggiore e target temporali parziali. Gli otto nuovi run abbinati non sostituiscono quelli precedenti. Baseline predefinita; decisione sull'adozione agli studenti. Il nuovo discorso completo è in presentation/Presentazione_orale.txt.

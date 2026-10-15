@@ -59,6 +59,13 @@ Gli otto diagrammi Simulink sono stati eseguiti e le posizioni e i comandi
 acquisiti confermano offset, azione integrale e sensibilità al rumore.
 I diversi protocolli di misura e i selettori salvati sono esplicitati nel
 confronto con MATLAB; i picchi registrati non certificano il massimo continuo.
+Una seconda formulazione inserisce il rumore nella pianta generalizzata,
+con pesi e incertezze fisiche invariati. I nuovi H-infinity migliorano
+il comando ma falliscono la stabilità robusta. Un nuovo mu a 82 stati
+mantiene RS/RP e riduce il picco non lineare da circa 108.53 a 2.25 N m,
+con un peggioramento dell'offset nominale sul primo giunto. I candidati
+restano separati e la baseline predefinita; l'adozione finale considera
+questi compromessi e i limiti hardware ancora non documentati.
 \end{abstract}
 \tableofcontents
 \listoffigures

@@ -612,3 +612,35 @@ Abbiamo quindi un buon comparatore nominale 2-DoF e strutture
 più semplici con compromessi misurabili. Restano assestamento
 lento, sensibilità al rumore e una RAS empirica ristretta.
 Passiamo ora alla verifica rispetto alle incertezze dei parametri.
+
+\section{Seconda formulazione: rumore esplicito nella sintesi}
+I risultati precedenti restano quelli della prima formulazione.
+Gli impulsi encoder motivano una richiesta ulteriore:
+\[
+w=[r;d;\nu],\quad v=W_n\nu,\quad q_{mis}=q+v,
+\qquad z=[W_1(q-M_or);W_2u],\quad y_K=[r;q_{mis}].
+\]
+L'errore pesa la posizione fisica; la misura rumorosa alimenta il
+controllore. La pianta nominata è $8\times8$ e
+\texttt{hinfsyn(P,4,2)} restituisce ancora un controllore $2\times4$.
+Una sola istanza dei 14 stati fisici, pesi e modello desiderato
+completano i 22 stati del problema, senza duplicazioni.
+
+Conserviamo $W_1,W_2,M_o$ e proviamo soltanto $W_n=c\sigma_y I_2$,
+$c=1,5,20$, $\sigma_y=0.05\pi/180$ rad. È una scala deterministica
+dell'ingresso normalizzato, distinta dalla varianza di un processo
+gaussiano continuo. Il fattore 20 aumenta la penalizzazione nella
+sintesi; il rumore simulato resta $0.05^\circ$. Non aggiungiamo $W_3$,
+saturazioni o filtri esterni.
+
+HinfN1/N2/N3 sono propri, di ordine 22 e nominalmente stabili.
+La norma $T_{uv}$ scende a circa 5430, 1917 e 486 N m/rad.
+L'assestamento resta 1.46 s senza overshoot. HinfN3 migliora l'offset,
+ma peggiora la deviazione sotto disturbo. La sua norma nuova è 0.1163,
+distinta da 0.08499 sul problema precedente: gamma di problemi diversi
+non costituiscono una graduatoria universale.
+
+HinfN3 è approfondito in Simulink per la migliore attenuazione osservata,
+ma RS $[0.09217,0.09276]$ resta sotto uno e soltanto sei dei dieci
+impianti congelati sono stabili. Non è adottato come soluzione robusta.
+N1/N2 restano tentativi esplorativi, anch'essi con RS fallita.

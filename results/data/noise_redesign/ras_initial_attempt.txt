@@ -1,0 +1,5 @@
+HinfN3 Lyapunov n=36 raw residual=1.21676e-08 balanced=2.98019e-10 allowance=6.08946e-08 gate=1 rho=2.506e-12
+HinfN3 common-grid point 1/25: SOLVER_WALL_TIME_LIMIT
+HinfN3 common-grid point 2/25: CONVERGENT_BY_TAIL_CRITERIA
+HinfN3 common-grid point 3/25: NUMERIC_LIMIT_TERMINATION
+HinfN3 common-grid point 4/25: NUMERIC_LIMIT_TERMINATION

@@ -23,11 +23,16 @@ quando il controllo numerico riesce, riguardano il solo modello nominale.
 
 Restano da studiare limiti reali di coppia e velocità, saturazioni,
 rate limit, attriti e ritardi misurati. Nessuno di questi dati è inventato.
-Il rumore e la fragilità ai modi elastici motivano un eventuale progetto
-successivo con richiesta esplicita di attenuazione delle misure e,
-se giustificato, un terzo peso. La formulazione adottata usa due pesi.
-Una riduzione di Kmu o una diversa scelta dei pesi richiederà di verificare
-nuovamente prestazioni nominali, robustezza e sensibilità al rumore.
+La seconda formulazione include il rumore come esogeno, conservando
+i due pesi e la famiglia incerta. I nuovi H-infinity attenuano il comando,
+ma restano non robusti. MuN1 di ordine 82 supera RS/RP, mantiene dieci
+impianti stabili e riduce il picco Simulink non lineare da 108.526 a
+2.251 N m. La mitigazione è verificata in tre seed MATLAB e negli
+originali, senza alterarne rumori o parametri. Rimangono l'offset q1
+di 8.243\%, target temporali parziali e un gate Lyapunov mu fallito.
+MuN1 è una proposta per gli studenti; la baseline rimane predefinita.
+Il miglioramento progettuale non certifica un limite hardware o un
+massimo assoluto per un rumore gaussiano non limitato.
 
 
 LQGI usa feedback stimato e integratore dell'errore misurato; la sua
@@ -36,8 +41,10 @@ lento. Gli otto modelli Simulink sono stati eseguiti, conservando la loro
 configurazione, e i segnali acquisiti confermano le differenze fra offset,
 tracking e sforzo di controllo. Il diagramma $H_\infty$ lineare seleziona
 misure ideali, mentre quello non lineare include il rumore encoder nel
-feedback: questa differenza va considerata prima del confronto. Il rumore rimane
-critico: l'osservazione del comando fra i campioni mostra impulsi molto
-maggiori di quelli visibili sulla sola griglia a 2 ms. Le regioni interne
+feedback: questa differenza va considerata prima del confronto. Nella
+prima formulazione gli impulsi fra campioni superano molto quelli
+visibili sulla sola griglia a 2 ms. Le nuove verifiche mantengono
+questa distinzione e confrontano tutte le statistiche sullo stesso
+protocollo. Le regioni interne
 di Lyapunov sono dichiarate soltanto dove il controllo numerico riesce;
 le altre sezioni rimangono evidenze empiriche con limiti espliciti.

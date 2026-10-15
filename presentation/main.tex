@@ -351,11 +351,31 @@ T_{uv}=(I-K_yG)^{-1}K_y
 $H_\infty$ 2-DoF & \NoiseHinfPeak & \NoiseHinfRms\\
 $K_\mu$ & \NoiseMuPeak & \NoiseMuRms\\\bottomrule
 \end{tabular}}
-\par\medskip Nessuna saturazione o attenuazione aggiunta.
+\par\medskip Prima formulazione: rumore encoder assente dalla sintesi.
 \column{.57\textwidth}
 \includegraphics[width=\linewidth]{../report/figures/final_closure/slide_noise_intersample.png}
 \end{columns}
 \par\small\bad{Registrare il comando ogni 2 ms nasconde i modi più rapidi.}
+\end{frame}
+
+\begin{frame}{Risultati della sintesi con rumore esplicito}
+\small
+\[
+w=[r;d;\nu],\quad q_{mis}=q+W_n\nu,\quad
+z=[W_1(q-M_or);W_2u]
+\]
+\centering
+\begin{tabular}{lrrr}\toprule
+Simulink non lineare & Picco prima & Picco dopo & RMS dopo\\
+ & \multicolumn{3}{c}{N m, scenario combinato salvato}\\\midrule
+$H_\infty$ N3 & 733230.33 & 1.768 & 1.230\\
+$\mu$ N1 & 108.526 & 2.251 & 1.357\\\bottomrule
+\end{tabular}
+\par\medskip\small
+$W_1,W_2,M_o$ invariati; $W_n=20\sigma_yI$ per N3, $\sigma_yI$ per $\mu$ N1.
+\par\small $H_\infty$ N3: RS FAIL. $\mu$ N1: RS $[1.846,1.882]$, RP $[1.596,1.600]$.
+\par\small\bad{$\mu$ N1: ordine 82, errore statico $q_1=8.24\%$; target temporali parziali.}
+\par\small Baseline predefinita; candidati separati e scelta finale degli studenti.
 \end{frame}
 
 \begin{frame}{RAS empirica e insieme interno di Lyapunov}
@@ -373,17 +393,18 @@ Griglia comune: $25$ punti, $\pm60^\circ$, $\delta\theta=\delta q$.
 \small Il bordo è il dominio esplorato. Arresti numerici: convergenza ignota.
 \end{frame}
 
-\begin{frame}{Implementazioni Simulink}
+\begin{frame}{Simulink lineare: servo LQGI}
 \includegraphics[width=\textwidth,height=.67\textheight,keepaspectratio,trim=0 0 606 265,clip]{../report/figures/student_exports/LQGI_linear_sim.png}
 \par\small LQGI lineare: integratore di $r-q_{mis}$, stato stimato, pianta e rumori.
-\par\medskip Otto modelli eseguiti in R2026b; posizioni e comandi acquisiti.
+\par\small Il riferimento entra a sinistra; lo State-Space rappresenta i 14 stati fisici.
+\par\small Disturbi e rumori di processo agiscono sulla pianta; Kalman usa comando e misure.
 \end{frame}
 
-\begin{frame}{Simulink: posizioni regolari, comandi rumorosi}
-\includegraphics[width=\textwidth,height=.58\textheight,keepaspectratio]{../report/figures/final_simulink/slide_mu_linear_sim.png}
-\par\small $K_\mu$ lineare: picco registrato \SimMuLinPeak\ N m.
-\par\medskip $H_\infty$ 2-DoF non lineare: \SimHinfNLPeak\ N m, con feedback rumoroso.
-\par\medskip Riferimento e disturbo da 1 s; seed e selettori differiscono dalla prova MATLAB isolata. Picchi sui campioni Scope.
+\begin{frame}{Simulink non lineare: la stessa architettura LQGI}
+\includegraphics[width=\textwidth,height=.57\textheight,keepaspectratio,trim=0 0 580 110,clip]{../report/figures/student_exports/LQGI_nonlinear_sim.png}
+\par\small Il comando attraversa gli attuatori; la pianta calcola le equazioni SEA e integra lo stato.
+\par\small Disturbo lato link, misure in deviazione e feedback rumoroso conservano il significato fisico.
+\par\small La coppia LQGI permette di spiegare il cambio della pianta con la stessa legge di controllo.
 \end{frame}
 
 \begin{frame}{Conclusioni e limiti verificati}
@@ -391,7 +412,8 @@ Griglia comune: $25$ punti, $\pm60^\circ$, $\delta\theta=\delta q$.
 \item LQG: riferimento nominale; LQGI: reiezione DC con tracking lento.
 \item $H_\infty$: buon nominale 2-DoF, ma fragile e sensibile al rumore.
 \item $K_\mu$: robusto nel modello dichiarato; ordine 78 e target temporali parziali.
-\item Otto diagrammi verificati; rumore e richieste di coppia restano limiti implementativi.
+\item Rumore esplicito: mu N1 riduce il comando e mantiene RS/RP, con offset q1 peggiore.
+\item Baseline predefinita; proposta N1 separata e limiti hardware da documentare.
 \end{itemize}
 \par\medskip\good{Le conclusioni seguono i dati, comprese le prestazioni negative.}
 \end{frame}

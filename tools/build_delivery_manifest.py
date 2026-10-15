@@ -62,6 +62,18 @@ def main():
     glob('report/figures/student_baseline/*.png','frozen_nominal_data_figure')
     glob('results/data/lqgi_validation/*','lqgi_nonlinear_scientific_evidence')
     glob('results/data/coherent_review/omegaM_comparison.*','model_bandwidth_comparison_evidence')
+    glob('analysis/noise_redesign/*','noise_synthesis_and_validation_source')
+    glob('results/data/noise_redesign/**/*','noise_synthesis_and_validation_evidence')
+    for name in ['portable_initial_attempt.txt','portable_second_attempt.txt','identity_test_initial_attempt.txt']:
+        if (ROOT/'results/data/noise_redesign'/name).is_file():
+            add('results/data/noise_redesign/'+name,'internal_group_review_only')
+    add('analysis/run_final_ras_lyapunov.m','full_state_ras_validation_source')
+    add('docs/Prova_di_Soluzione_Rumore_di_Misura.txt','student_preparation')
+    add('presentation/Presentazione_orale.txt','student_preparation')
+    add('docs/ACCETTAZIONE_RUMORE_E_ORALE.md','student_preparation')
+    for name in ['tools/build_noise_redesign_documents.py','tools/audit_oral_timing.py']:
+        add(name,'document_reproduction_or_build_audit')
+    add('tests/noiseRedesignTest.m','noise_verification_source')
     for name in ['tools/build_final_closure_tables.py','report/build_matlab_appendix.py','tools/build_m18_latex.ps1',
                  'tools/build_delivery_manifest.py','tools/package_delivery.py','delivery/README.md',
                  'tools/build_final_simulink_tables.py','tools/collect_final_dependencies.m',
@@ -80,8 +92,8 @@ def main():
         files.append({'path':p.relative_to(ROOT).as_posix(),'roles':sorted(roles),
                       'size_bytes_recorded':len(raw),'sha256':hashlib.sha256(data).hexdigest(),
                       'hash_mode':'LF-normalized text' if p.suffix.lower() in TEXT else 'exact bytes'})
-    result={'date':'2026-10-13','branch':'codex/validazione-finale-matlab-simulink','base_commit':'14359392bd8cde5249fae91a050cfba8c79eacd4',
-            'status':'COMPLETE: MATLAB R2026b; 141 tests, four scripts and eight original SLX validated. Performance and hardware limits remain explicit.',
+    result={'date':'2026-10-13','branch':'codex/sintesi-robusta-rumore-e-orale-finale','base_commit':'a4b381756582d51a5e68d0b861fdf39010486d67',
+            'status':'COMPLETE validation: R2026b, 141 regression tests, 7 dedicated tests, four unchanged scripts and eight paired runs. Hinf noise candidates fail RS/RP; MuN1 passes NS/NP/RS/RP with partial tracking. Baseline remains default; adoption awaits student review.',
             'hash_policy':'Text uses LF-normalized SHA-256 for portable checkout; binary/SLX/PDF exact bytes.',
             'files':files,'products':dependencies['products'],
             'excluded_from_student_handin':['internal_group_review_only','tmp/','old Simulink originals/ and drive_project/','dated diary/review reports','old 40-sample campaign and figures'],

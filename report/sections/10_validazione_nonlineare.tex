@@ -272,10 +272,81 @@ comandi a un errore di unità quando le matrici e i segnali sono coerenti.
 La presenza di impulsi molto grandi non dimostra da sola instabilità
 interna: i poli nominali sono verificati separatamente.
 
-Una possibile sintesi successiva dovrebbe includere esplicitamente il
-canale misura--comando o limitarne la risposta in alta frequenza, ripetendo
-poi la post-analisi robusta. Filtri, saturazione, anti-windup e riduzione
-d'ordine sono possibilità teoriche; non vengono introdotti nei modelli
-originali né adottati senza una nuova verifica. Il problema del rumore
-rimane quindi un limite della configurazione studiata.
+La diagnosi motiva la nuova sintesi dei Capitoli 8 e 9. Le prestazioni
+appena riportate restano quelle della prima formulazione e non vengono
+trasferite ai candidati. Filtri esterni, saturazione, anti-windup e
+riduzione d'ordine non sono introdotti.
 \input{sections/10_originali_simulink}
+
+\section{Verifiche dedicate dei candidati con rumore}
+HinfN3/MuN1 affrontano la stessa pianta, equilibrio, condizioni iniziali,
+riferimento, disturbo e rumore delle rispettive baseline. Il protocollo
+MATLAB usa 4 s e seed 20261012/13/14. Otto scenari distinguono assenza
+di rumore, solo q1/q2, encoder indipendenti/correlati, sola coppia,
+solo processo e ingressi combinati. Varianza e $T_s=2$ ms sono invariati.
+La propagazione ZOH fra campioni controlla quadratura e accordo delle
+coordinate entro $10^{-4}$ relativo. La norma nominale $T_{uv}$ è
+complementare ai massimi temporali osservati.
+\input{generated/noise_redesign_isolated.tex}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth]{figures/noise_redesign/noise_before_after.png}
+\caption{Solo encoder indipendenti: tre seed, stessa pianta e varianza.
+La scala logaritmica mostra gli ordini di grandezza prima/dopo.}
+\label{fig:noise-redesign-comparison}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth]{figures/noise_redesign/frequency_and_command.png}
+\caption{Mappe misura--comando e dettaglio dei campioni a 2 ms di mu.
+I campioni completano la lettura dei picchi fra campioni.}
+\label{fig:noise-redesign-frequency}\end{figure}
+Le Figure~\ref{fig:noise-redesign-comparison} e
+\ref{fig:noise-redesign-frequency} mostrano un miglioramento derivato
+dal controllore. Nel primo seed mu passa da 87.096 a 1.418 N m di picco
+e da 8.288 a 0.2753 N m di RMS integrato; entrambi migliorano di oltre
+dieci volte in ogni seed. I massimi finiti non garantiscono un limite
+continuo assoluto per ogni realizzazione gaussiana.
+\input{generated/noise_redesign_tracking.tex}
+
+\subsection{Otto nuove esecuzioni Simulink abbinate}
+I quattro originali H-infinity/mu lineari e non lineari sono eseguiti
+con baseline e candidato in R2026b, in cartelle distinte. Il setup
+seleziona soltanto $A_{k2},B_{k2},C_{k2},D_{k2}$ oppure Kmu, verificati
+prima/dopo e salvati nel Workspace con hash per matrice. La baseline è
+predefinita. Nessun parametro, selettore, solver, rumore o callback SLX
+cambia. Tutti gli otto run completano compilazione, simulazione e lettura
+dei segnali; gli otto SHA-256 originali restano identici.
+
+Il protocollo salvato usa encoder correlati, seed 20260826, riferimento
+e disturbo da 1 s, processo e orizzonte 10 s. H-infinity lineare mantiene
+feedback ideale: verifica interfaccia e comportamento, senza certificare
+attenuazione encoder. Il non lineare e i due mu ricevono misure rumorose.
+\input{generated/noise_redesign_simulink.tex}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/noise_redesign/simulink_before_after.png}
+\caption{Confronto dai nuovi Scope non lineari: posizione del primo giunto
+e modulo del comando in scala logaritmica da $10^{-4}$ N m. Lo scenario combinato è identico
+per baseline e candidato. La tabella usa entrambi gli attuatori e tutti i
+campioni registrati; il grafico non certifica il massimo continuo.}
+\end{figure}
+Mu non lineare migliora 48.21 volte sul picco e 9.446 sul massimo RMS
+per canale. Quest'ultimo comprende anche riferimento, disturbo e processo:
+è diverso dall'RMS encoder isolato. I dati Scope non certificano il
+massimo continuo o la compatibilità con un motore non documentato.
+Il compromesso è visibile anche nella posizione: nello scenario combinato
+mu non lineare ha overshoot q1 $10.67\%$ prima e $35.60\%$ dopo; l'errore
+medio q1 negli ultimi 1 s passa da $0.2301$ a $0.8529$ gradi.
+Queste metriche includono il disturbo simultaneo e non sono l'overshoot
+del gradino nominale isolato della Tabella~\ref{tab:noise-redesign-tracking}.
+
+\subsection{Attrazione e stato aumentato dei candidati}
+Ripetiamo griglia e Lyapunov nominale con 36 stati per HinfN3 e 96 per
+MuN1. I candidati usano coordinate bilanciate, \texttt{ode15s} e Jacobiano
+meccanico, con criteri di coda e orizzonte 12 s invariati. Il primo
+tentativo HinfN3 in \texttt{ode23t} incontra il limite di tempo ed è
+conservato come incompleto. I solver SLX restano invariati.
+\input{generated/noise_redesign_ras.tex}
+HinfN3 supera Lyapunov con un livello nominale molto piccolo,
+$\rho=2.506\,10^{-12}$, che non gli attribuisce robustezza. Dodici arresti
+lasciano la convergenza ignota. MuN1 converge nei 25 punti, ma il gate
+Lyapunov fallisce: residuo e arrotondamento non consentono un livello
+certificato. La regione osservata resta empirica.

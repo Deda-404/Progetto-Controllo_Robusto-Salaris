@@ -2328,3 +2328,13 @@ Gli elaborati sono testi autonomi del progetto, con autori/matricole/data fornit
 ## 2026-10-13 — Dipendenze del pacchetto ordinario
 
 Approvata entro il collaudo autorizzato la selezione dei dataset e delle cartelle richiesti dai quattro default. Incluso m8_lqg_nonlinear_ras.mat e m15_nonlinear_robust_validation.mat; grezzo lyapunov_trajectories.mat conservato nel repository, escluso dalla consegna perché non letto dai default. Motivazione verificata tramite lettura delle dipendenze ed esecuzione isolata 4/4 PASS. Nessuna modifica a script, controllori o SLX; le 141 regressioni restano disponibili nel checkout completo. Responsabile: Alessio. Stato: COMPLETE / PASS.
+
+## 2026-10-13 — Rumore esogeno e candidati separati
+
+Stato: studio e verifiche APPROVATI dal nuovo mandato; adozione finale PROPOSTA, da decidere dagli studenti. Responsabile: Alessio. Conservare fisica a 14 stati, equilibrio, W1/W2/Mo, cinque incertezze e interfaccia K 2×4. Integrare nu esogeno e Wn nella sola pianta di sintesi, senza modificare gli SLX né introdurre saturazioni. Tre livelli ordinati Wn=sigma_y*[1,5,20]I per H∞ e una D-K consolidata con Wn=sigma_y I per μ.
+
+Criterio di riduzione encoder: almeno dieci volte picco/RMS per ciascuno dei tre seed, verifiche nominali e RS/RP per una proposta robusta; i target M5 restano invariati. H∞: attenuazione forte ma RS/RP FAIL, nessuna promozione. MuN1: NS/NP/RS/RP PASS, rumore fortemente ridotto, offset q1 e disturbo peggiori; accettazione complessiva PARTIAL. Baseline sempre predefinita e candidati salvati separatamente.
+
+Riutilizzare i dieci impianti congelati. RAS applicata allo stato completo dei candidati, con coordinate bilanciate e ode15s/Jacobiano soltanto nello studio MATLAB per superare limiti numerici: primo HinfN3 ode23t incompleto conservato. μ: 25 convergenze, gate Lyapunov FAIL; nessun certificato attribuito. Arresti H∞ restano ignoti, non non convergenti.
+
+PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliati mediante ritagli LaTeX, senza ridisegnare connessioni. Due TXT nella preparazione studenti del nuovo pacchetto. Nessun Umax documentato: risultati progettuali/statistici, nessuna certificazione hardware. Pubblicare branch e PR per revisione, senza merge.

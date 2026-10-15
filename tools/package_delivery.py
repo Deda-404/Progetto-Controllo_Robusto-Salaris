@@ -2,7 +2,8 @@
 from pathlib import Path
 import hashlib,json,shutil,zipfile,sys
 ROOT=Path(__file__).resolve().parents[1]
-NAME='Consegna_SEA_2026-10-13'
+NAME='Consegna_SEA_Rumore_Orale_2026-10-13'
+AUDIT='delivery/noise_package_audit.json'
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -38,11 +39,13 @@ def main():
             # Full regression/build inventory is available in the complete repository.
             # The probe and script verifier are required even when regression is false.
             if relative not in {'tools/probe_final_environment.m','tools/verify_four_final_scripts.m'}:continue
-        src=ROOT/relative;dst=folder/relative
+        destination=('preparazione_studenti/'+Path(relative).name
+                     if 'student_preparation' in record['roles'] else relative)
+        src=ROOT/relative;dst=folder/destination
         assert dst.resolve().is_relative_to(folder.resolve())
         dst.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(src,dst)
         assert digest(dst)==digest(src),relative
-        records.append({'path':relative,'size_bytes':dst.stat().st_size,'sha256':digest(dst)})
+        records.append({'path':destination,'source':relative,'size_bytes':dst.stat().st_size,'sha256':digest(dst)})
     shutil.copyfile(ROOT/'delivery/README.md',folder/'README.md')
     records.append({'path':'README.md','size_bytes':(folder/'README.md').stat().st_size,'sha256':digest(folder/'README.md')})
     retained={record['path'] for record in records}
@@ -65,7 +68,7 @@ def main():
     archive=ROOT/'delivery'/(NAME+'.zip')
     if archive.exists():
         assert '--refresh' in sys.argv,'Existing ZIP requires --refresh.'
-        old_audit=json.loads((ROOT/'delivery/package_audit.json').read_text(encoding='utf-8'))
+        old_audit=json.loads((ROOT/AUDIT).read_text(encoding='utf-8'))
         assert archive.resolve()==Path(old_audit['zip']).resolve()
         assert digest(archive)==old_audit['zip_sha256'],'Modified ZIP: preserve it.'
     pending=archive.with_suffix('.zip.pending')
@@ -82,7 +85,7 @@ def main():
     evidence={'folder':str(folder),'zip':str(archive),'file_count':len(records),
               'zip_size_bytes':archive.stat().st_size,'zip_sha256':digest(archive),
               'all_copied_and_zipped_hashes':'PASS','original_slx_count':8}
-    (ROOT/'delivery/package_audit.json').write_text(json.dumps(evidence,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    (ROOT/AUDIT).write_text(json.dumps(evidence,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(json.dumps(evidence,ensure_ascii=False))
 
 if __name__=='__main__':main()

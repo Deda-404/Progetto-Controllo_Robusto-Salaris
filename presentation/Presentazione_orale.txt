@@ -1,0 +1,249 @@
+PRESENTAZIONE ORALE — MANIPOLATORE PLANARE 2-DoF CON SEA
+Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224.
+
+VERSIONE PRINCIPALE
+Le indicazioni di regia e i titoli non vanno letti. I tempi sono calcolati
+sulle parole effettivamente pronunciate; il prospetto verificato si trova
+in OUTLINE_AND_TIMING.md. L'appendice è esclusa dall'esposizione.
+Le slide 2–18 descrivono i controllori della prima formulazione.
+La slide 19 distingue i candidati con rumore esplicito e i loro limiti.
+La baseline rimane predefinita; l'adozione finale spetta agli studenti.
+
+SLIDE 1 — Controllo robusto di un manipolatore planare 2-DoF con SEA
+Studente: Alessio
+Tempo previsto: 0:17 (34 parole a 125 parole/min)
+Testo da pronunciare:
+Buongiorno. Presentiamo il controllo di un manipolatore planare con due giunti e attuatori elastici in serie. Dal modello fisico arriviamo alla sintesi e alle verifiche con incertezze e rumore, distinguendo proprietà garantite e compromessi.
+Regia: mostrare il titolo; restare sulla slide durante l'introduzione.
+
+SLIDE 2 — SEA: otto stati meccanici, due poli instabili
+Studente: Alessio
+Tempo previsto: 0:47 (96 parole a 125 parole/min)
+Testo da pronunciare:
+Un SEA collega il motore al link attraverso un elemento elastico. Per questo distinguiamo la posizione del rotore, theta, da quella del link, q. La differenza produce la coppia elastica. L'elasticità può rendere più cedevole l'interazione, ma introduce oscillazioni da controllare. Con due giunti abbiamo quattro posizioni e quattro velocità: gli stati meccanici sono otto. Lavoriamo attorno alla configurazione q uno uguale a pi greco mezzi e q due nullo, con velocità nulle. Le equazioni di equilibrio fissano anche le posizioni dei rotori e le coppie. La linearizzazione ha due poli positivi: dobbiamo stabilizzare questo equilibrio.
+Regia: indicare theta e q nelle due equazioni, poi l'equilibrio.
+
+SLIDE 3 — Sei stati di attuatore completano il modello
+Studente: Alessio
+Tempo previsto: 0:47 (96 parole a 125 parole/min)
+Testo da pronunciare:
+La linearizzazione descrive le piccole variazioni attorno all'equilibrio e permette di usare strumenti lineari di sintesi. Conserviamo poi le equazioni non lineari per verificarne i limiti. Il comando non diventa immediatamente coppia: ogni attuatore ha una dinamica del secondo ordine e un ritardo. Approssimiamo il ritardo con Padé di ordine uno, così otteniamo tre stati per canale. Aggiungendo questi sei stati agli otto meccanici arriviamo a quattordici. Introduciamo inoltre incertezze del dieci per cento su due rigidezze e su un'inerzia motrice, più due blocchi dinamici degli attuatori. Valerio illustra ora come traducono queste difficoltà nelle specifiche.
+Regia: indicare il modello dell'attuatore e l'inviluppo d'incertezza. Passaggio a Valerio.
+
+SLIDE 4 — Specifiche: norma pesata e tracking sono verifiche diverse
+Studente: Valerio
+Tempo previsto: 0:47 (96 parole a 125 parole/min)
+Testo da pronunciare:
+Le incertezze rappresentano variazioni ammesse del modello, non rumori casuali sui sensori. Manteniamo lo stesso insieme durante i confronti. Per il tracking usiamo gradini di cinque gradi, con obiettivi su assestamento, sovraelongazione, errore statico e accoppiamento. L'assestamento richiesto è entro zero virgola otto secondi. Il disturbo è una coppia di mezzo newton metro sul link. La scelta della banda deve confrontarsi con poli instabili, ritardo ed elasticità. La scala di dodici newton metro presente nel progetto aiuta a pesare il comando; non è il limite documentato di un motore reale. Questa distinzione tornerà nell'analisi del rumore.
+Regia: indicare la tabella delle specifiche; distinguere la scala del comando dal limite hardware.
+
+SLIDE 5 — LQR: il costo deriva dalle grandezze fisiche
+Studente: Valerio
+Tempo previsto: 0:48 (98 parole a 125 parole/min)
+Testo da pronunciare:
+Il primo progetto parte dal controllo ottimo LQR. Il costo penalizza lo scostamento dello stato e lo sforzo di controllo. Nel nostro caso lo stato contiene anche la deformazione elastica: penalizzare theta meno q introduce termini incrociati nella matrice del costo. Quindi i pesi hanno un significato fisico, oltre che numerico. Un comando più costoso porta a risposte meno energiche; chiedere maggiore rapidità può avvicinare la chiusura alle dinamiche elastiche e attuative più delicate. Il problema pratico è che non misuriamo tutte le velocità e gli stati degli attuatori. Per applicare questo feedback serve una stima dello stato.
+Regia: indicare i termini elastici del costo e la legge di feedback.
+
+SLIDE 6 — LQG: quattro encoder e stato stimato
+Studente: Valerio
+Tempo previsto: 0:49 (102 parole a 125 parole/min)
+Testo da pronunciare:
+Il filtro di Kalman combina il modello con quattro misure di posizione: due dei link e due dei rotori. Predice lo stato usando il comando e corregge la previsione con la differenza fra misura e uscita prevista. Le covarianze esprimono la fiducia relativa nel modello e nei sensori. Il controllore usa lo stato stimato, non quello esatto disponibile nel simulatore. LQG combina quindi LQR e Kalman. Il principio di separazione aiuta a progettare il caso nominale, ma non certifica automaticamente la robustezza. Il tracking nominale soddisfa le richieste; una coppia costante lascia però un offset. Alessio mostra come abbiamo affrontato questo limite.
+Regia: seguire misura, innovazione e stato stimato. Passaggio ad Alessio.
+
+SLIDE 7 — LQGI: memoria dell'errore misurato
+Studente: Alessio
+Tempo previsto: 0:48 (100 parole a 125 parole/min)
+Testo da pronunciare:
+LQGI aggiunge due integratori dell'errore fra riferimento e posizione misurata. Se persiste uno scostamento, la memoria integrale continua a modificare il comando. Il feedback usa sempre lo stato stimato da Kalman; l'integratore riceve invece l'errore encoder. Il suo ruolo è eliminare il residuo sotto disturbo costante. Nel modello lineare verifichiamo un guadagno statico nullo dal disturbo alla posizione. Nella simulazione non lineare osserviamo il recupero a tempo finito, che è una verifica diversa. Il prezzo della scelta è il tracking più lento: l'assestamento peggiore è circa cinque secondi. Non abbiamo introdotto saturazioni o anti-windup per modificare artificialmente questo confronto.
+Regia: indicare il recupero dopo il disturbo nel grafico.
+
+SLIDE 8 — H-infinity: sensibilità mista e pesi adottati
+Studente: Alessio
+Tempo previsto: 0:50 (104 parole a 125 parole/min)
+Testo da pronunciare:
+Passiamo a H-infinity per esprimere obiettivi in frequenza sulle mappe chiuse. Il primo peso penalizza l'errore; il secondo penalizza il comando. I pesi sono più severi nelle bande dove desideriamo maggior controllo della rispettiva grandezza. Nel problema a un grado di libertà, mixsyn costruisce la sensibilità mista, mentre hinfsyn risolve la pianta generalizzata costruita esplicitamente. Il confronto didattico verifica che rappresentino lo stesso problema. Gamma è la norma massima della mappa pesata dagli ingressi alle prestazioni: inferiore a uno significa rispettare quella richiesta. Non significa automaticamente rispettare overshoot o assestamento. Infatti le soluzioni nominali a un grado di libertà mantengono sovraelongazioni molto elevate.
+Regia: indicare separatamente W1 e W2 e il significato di gamma.
+
+SLIDE 9 — Due gradi di libertà, stati condivisi
+Studente: Alessio
+Tempo previsto: 0:49 (102 parole a 125 parole/min)
+Testo da pronunciare:
+Per gestire meglio il tracking separiamo riferimento e misura. Il controllore riceve quattro ingressi e genera due comandi; le due parti condividono la stessa dinamica interna. Il modello desiderato Mo entra nel costo attraverso la differenza fra posizione reale e posizione desiderata. Non è un prefiltro aggiunto dopo la sintesi. Hinfsyn usa quattro misure e due comandi. La prima formulazione produce un controllore di ordine ventidue, senza overshoot nominale e con assestamento di uno virgola quarantasei secondi. Miglioriamo quindi la forma della risposta, ma il target di zero virgola otto secondi resta fallito. Valerio confronta ora questo risultato con strutture più semplici.
+Regia: seguire i rami Kr e Ky. Passaggio a Valerio.
+
+SLIDE 10 — Ordine completo e ordine fissato: il compromesso rimane
+Studente: Valerio
+Tempo previsto: 0:38 (79 parole a 125 parole/min)
+Testo da pronunciare:
+Abbiamo usato hinfstruct per ottimizzare strutture definite prima della sintesi, fra cui PID e realizzazioni State-Space di ordine fissato. Una soluzione di ordine due rispetta la norma nominale, ma ha sovraelongazione circa del ventitré per cento. Il minimo ordine trovato riguarda soltanto le famiglie e gli avvii provati, senza garanzia di ottimo globale. Ridurre l'ordine cambia la dinamica di chiusura e richiede nuove verifiche. Una buona risposta nominale può inoltre essere fragile quando rigidezze, inerzia e attuatori cambiano.
+Regia: confrontare le due righe della tabella, senza equiparare i loro certificati.
+
+SLIDE 11 — Mu-analysis: separare controllore e incertezza
+Studente: Valerio
+Tempo previsto: 0:48 (100 parole a 125 parole/min)
+Testo da pronunciare:
+Per analizzare questa fragilità usiamo la rappresentazione a frazione lineare, o LFT. Separiamo una parte nota dai blocchi di incertezza, raccolti in Delta. Ogni parametro reale mantiene la propria identità in tutte le sue occorrenze. I due blocchi dinamici degli attuatori restano indipendenti e limitati in norma. La mu-analysis valuta un controllore già assegnato su questa struttura. Non costruisce un nuovo controllore. La struttura conta: consentire perturbazioni arbitrarie ignorando quali canali possono variare descriverebbe un problema diverso. La normalizzazione permette di leggere il dominio dichiarato come incertezza di raggio unitario e di interpretare i margini rispetto alla soglia uno.
+Regia: indicare il blocco Delta e la parte nota della LFT.
+
+SLIDE 12 — Mu: valore singolare strutturato
+Studente: Valerio
+Tempo previsto: 0:48 (100 parole a 125 parole/min)
+Testo da pronunciare:
+Mu misura quanto piccola può essere una perturbazione strutturata capace di rendere singolare la chiusura. Mu grande segnala fragilità; non è una probabilità di guasto. Distinguiamo quattro proprietà: stabilità nominale, prestazione nominale, stabilità robusta e prestazione robusta. Robstab valuta la stabilità dell'insieme incerto; robgain valuta anche una soglia sulla norma pesata. Mussv calcola limiti di mu su una griglia di frequenze. Nei margini robusti, un limite inferiore maggiore di uno certifica la proprietà sull'insieme dichiarato; un limite superiore minore di uno la esclude. Un intervallo che attraversa uno resta inconclusivo. Alessio spiega ora come usiamo questa analisi durante la sintesi.
+Regia: leggere NS, NP, RS e RP. Passaggio ad Alessio.
+
+SLIDE 13 — D-K iteration: sintesi, analisi, fit degli scaling
+Studente: Alessio
+Tempo previsto: 0:52 (107 parole a 125 parole/min)
+Testo da pronunciare:
+La mu-synthesis cerca un controllore tenendo conto della struttura incerta. Nella D-K iteration alterniamo una sintesi H-infinity con l'analisi di mu e la costruzione degli scaling. Gli scaling cambiano il problema pesato del passo successivo, facendo emergere le direzioni più critiche. Nel caso misto usiamo anche il contributo G per i blocchi reali. Il fit razionale degli scaling aggiunge dinamiche: questo spiega perché il controllore può crescere d'ordine. La prima campagna usa al massimo cinque iterazioni e produce K mu di ordine settantotto. La procedura è non convessa: l'obiettivo di sintesi va controllato con una post-analisi indipendente, senza considerarlo una garanzia da solo.
+Regia: seguire il ciclo D-K e il grafico della storia delle iterazioni.
+
+SLIDE 14 — La post-analisi cambia la scelta del controllore
+Studente: Alessio
+Tempo previsto: 0:50 (103 parole a 125 parole/min)
+Testo da pronunciare:
+La post-analisi mostra una differenza netta. Il primo H-infinity ha stabilità e prestazione nominali, ma il margine di stabilità robusta è molto sotto uno. Non possiamo considerarlo un controllore robusto per la famiglia scelta. Anche il calcolo del suo margine di prestazione presenta un intervallo numericamente incoerente, che non accreditiamo. Per il primo K mu, invece, i limiti inferiori sono circa uno virgola ottanta per stabilità e uno virgola sessantotto per prestazione. Entrambi superano uno. La conclusione vale per il modello lineare incerto dichiarato: non include automaticamente attriti, saturazioni o ritardi diversi da quelli modellati, né garantisce prestazioni non lineari globali.
+Regia: confrontare i margini con la soglia uno. Specificare che sono i controllori della prima formulazione.
+
+SLIDE 15 — Robustezza pesata e requisiti temporali non coincidono
+Studente: Alessio
+Tempo previsto: 0:49 (102 parole a 125 parole/min)
+Testo da pronunciare:
+Il vantaggio robusto di K mu ha un costo. Il tracking nominale è più lento del target, e sul primo giunto l'errore statico è circa il sei per cento, sopra il cinque per cento richiesto. La norma pesata descrive una combinazione di mappe in frequenza, mentre i requisiti temporali misurano proprietà specifiche delle traiettorie. Per questo le due verifiche possono dare esiti diversi. Il controllore robusto protegge la famiglia modellata, ma non è automaticamente più rapido e non attenua ogni rumore non incluso nel problema. Valerio mostra adesso che cosa osserviamo su impianti incerti concreti, mantenendo queste garanzie distinte dalle prove pratiche.
+Regia: indicare le righe tracking e RS/RP. Passaggio a Valerio.
+
+SLIDE 16 — Dieci impianti incerti: nominale e campioni comuni
+Studente: Valerio
+Tempo previsto: 0:39 (80 parole a 125 parole/min)
+Testo da pronunciare:
+Abbiamo congelato dieci impianti, con parametri, blocchi dinamici e seed, per confrontare i controllori sulle stesse variazioni. Il nominale è stabile con entrambi i controllori iniziali. Il primo H-infinity non stabilizza nessuno dei campioni; K mu li stabilizza tutti. Osserviamo così la fragilità individuata dall'analisi robusta. Dieci risultati favorevoli non dimostrerebbero però la robustezza sull'intero insieme: una perturbazione critica può non comparire nel campione. Le simulazioni illustrano casi concreti; la garanzia viene dai limiti robusti calcolati sul modello incerto.
+Regia: indicare nominale e campioni, ricordando che sono comuni e congelati.
+
+SLIDE 17 — Tracking e disturbi sugli impianti incerti
+Studente: Valerio
+Tempo previsto: 0:49 (101 parole a 125 parole/min)
+Testo da pronunciare:
+Le curve mostrano anche quanto le prestazioni possano variare pur mantenendo la stabilità. In alto confrontiamo i gradini articolari; in basso applichiamo la coppia disturbante ai link. Il disturbo può produrre spostamenti molto maggiori di quelli nominali, fino a circa diciannove gradi nei campioni del primo K mu. Stabilità significa che la chiusura mantiene la proprietà richiesta, non che ogni deviazione sia piccola secondo tutti gli indicatori. Per gli impianti instabili non presentiamo tempi di assestamento come se fossero prestazioni valide. Questa attenzione è necessaria anche nel problema successivo: una posizione apparentemente regolare può nascondere un comando estremamente sensibile al rumore.
+Regia: indicare le bande di traiettorie, poi il disturbo.
+
+SLIDE 18 — Il rumore encoder produce impulsi fra i campioni
+Studente: Valerio
+Tempo previsto: 0:50 (104 parole a 125 parole/min)
+Testo da pronunciare:
+Il rumore encoder attraversa il feedback prima degli attuatori. La mappa T u v tiene conto anche della chiusura con la pianta. Con la prima formulazione H-infinity osserviamo impulsi enormi subito dopo il cambio dei campioni, anche se la trasmissione diretta è nulla. Gli attuatori e la meccanica filtrano questi comandi: la posizione può restare relativamente regolare. Registrare soltanto ogni due millisecondi perde gran parte del transitorio. Abbiamo quindi propagato esattamente gli stati fra campioni. Distinguiamo questa prova isolata dalle simulazioni Simulink, che usano rumori correlati, un altro seed e riferimento e disturbo insieme. Alessio presenta la nuova formulazione motivata da questa diagnosi.
+Regia: indicare picchi fra campioni e formula Tuv. Passaggio ad Alessio.
+
+SLIDE 19 — Risultati della sintesi con rumore esplicito
+Studente: Alessio
+Tempo previsto: 0:57 (117 parole a 125 parole/min)
+Testo da pronunciare:
+Abbiamo aggiunto il rumore come ingresso esogeno, conservando modello, incertezze, pesi sull'errore e sul comando. La misura diventa q più W n per nu. W n è una scala deterministica, non la varianza di un rumore continuo. Tre profili H-infinity e una nuova D-K riducono molto il comando. Negli stessi Simulink non lineari, H-infinity passa da circa settecentotrentatremila a uno virgola settantasette newton metro; mu da centootto virgola cinquantatré a due virgola venticinque. H-infinity fallisce ancora la stabilità robusta. Il nuovo mu mantiene RS e RP, ma arriva a ottantadue stati e all'otto virgola ventiquattro per cento di errore nominale sul primo giunto. È una proposta robusta con compromessi, lasciando la baseline predefinita.
+Regia: tabella Scope prima/dopo; precisare che lo scenario è combinato e la scelta finale resta agli studenti.
+
+SLIDE 20 — RAS empirica e insieme interno di Lyapunov
+Studente: Alessio
+Tempo previsto: 0:52 (108 parole a 125 parole/min)
+Testo da pronunciare:
+La regione di attrazione riguarda gli stati iniziali da cui il sistema torna all'equilibrio. Una griglia di simulazioni esplora una sezione: nel nostro caso perturbiamo link e rotori insieme, lasciando nulli gli altri stati incrementali. Punti convergenti non certificano tutti i punti intermedi. Per un insieme interno usiamo una funzione di Lyapunov nello stato aumentato, includendo controllore e attuatori. Occorre verificare positività e diminuzione della funzione, con un limite sul residuo non lineare e controlli numerici affidabili. Il certificato è nominale e può essere molto piccolo. Un arresto del solver lascia la convergenza ignota. Anche i nuovi controllori richiedono verifiche proprie: non ereditano le regioni della prima formulazione.
+Regia: la figura mostra la griglia baseline; i risultati dei candidati sono distinti nella relazione.
+
+SLIDE 21 — Simulink lineare: servo LQGI
+Studente: Alessio
+Tempo previsto: 0:49 (102 parole a 125 parole/min)
+Testo da pronunciare:
+Questo è lo schema Simulink autentico del servo LQGI lineare. A sinistra entra il riferimento. La differenza con la misura alimenta l'integratore, mentre il filtro di Kalman restituisce lo stato stimato per il feedback. Il comando arriva alla pianta State-Space, che contiene già i quattordici stati fisici. Disturbo e rumori di processo entrano attraverso i rispettivi canali della pianta; il rumore encoder si aggiunge alle uscite. Gli Scope osservano posizioni, riferimento e comandi. Non abbiamo cambiato gli originali per ottenere i nuovi risultati: sostituiamo soltanto le variabili dei controllori dall'esterno. Valerio mostra ora come cambia la rappresentazione della pianta non lineare.
+Regia: seguire riferimento, controllore, pianta e ritorno delle misure. Passaggio a Valerio.
+
+SLIDE 22 — Simulink non lineare: la stessa architettura LQGI
+Studente: Valerio
+Tempo previsto: 0:48 (99 parole a 125 parole/min)
+Testo da pronunciare:
+La coppia di schemi usa la stessa famiglia di controllo e rende chiara la differenza. Qui il comando attraversa gli attuatori, si somma alla coppia di equilibrio e raggiunge il blocco delle equazioni SEA. Il blocco calcola le derivate degli otto stati meccanici, che vengono integrate. Il disturbo agisce sui link. Le misure sono riportate in deviazione dall'equilibrio prima di chiudere osservatore e integratore. Nel confronto H-infinity occorre un'ulteriore cautela: il modello lineare originale seleziona misure ideali, quello non lineare rumorose. I selettori restano salvati come sono; quella differenza non può essere attribuita interamente alla meccanica non lineare.
+Regia: indicare attuatori, pianta non lineare, integratore dello stato e misure.
+
+SLIDE 23 — Conclusioni e limiti verificati
+Studente: Valerio
+Tempo previsto: 0:52 (107 parole a 125 parole/min)
+Testo da pronunciare:
+Il confronto distingue i ruoli. LQG soddisfa il tracking nominale; LQGI migliora la reiezione del disturbo costante con un transitorio lento. H-infinity mostra il vantaggio dei due gradi di libertà, ma resta fragile alle incertezze. Mu conserva le garanzie robuste nel modello scelto. La sintesi con rumore esplicito riduce molto le richieste di comando, con risultati verificati anche nei diagrammi originali. Rimangono requisiti temporali parziali e il compromesso sull'offset del nuovo mu. Senza limiti reali di coppia e velocità non certifichiamo l'hardware. I picchi osservati non sono limiti assoluti per ogni rumore gaussiano. La scelta finale deve quindi seguire queste evidenze e le priorità del progetto.
+Regia: lasciare la conclusione visibile; entrambi possono rispondere alle domande.
+
+APPENDICE — POSSIBILI DOMANDE E RISPOSTE
+Questa sezione serve alla preparazione e non rientra nei 20 minuti.
+
+1. Perché scegliere un SEA?
+L'elemento elastico separa rotore e link e permette una trasmissione cedevole. Può essere utile nell'interazione e nella misura della coppia tramite deformazione. Nel progetto studiamo il costo dinamico di questa scelta: modi elastici, accoppiamento e distinzione fra posizione motrice e articolare. Non abbiamo verificato sperimentalmente benefici di sicurezza su hardware.
+
+2. Come viene scelto il punto di equilibrio?
+Fissiamo qbar=[pi/2;0] e velocità nulle. Le equazioni statiche determinano deformazione elastica, posizione dei rotori e coppia di equilibrio. Verifichiamo il residuo delle equazioni prima della linearizzazione. Gli stati e i comandi dei controllori sono variazioni rispetto a questo equilibrio, mentre la meccanica non lineare usa coordinate assolute.
+
+3. Perché il sistema linearizzato è instabile?
+La configurazione scelta non è passivamente stabilizzata dalla gravità e dall'elasticità. Il Jacobiano verificato ha due poli reali positivi, circa 7.21 e 4.04 s^-1. È un risultato del modello attorno a quell'equilibrio; non significa che ogni configurazione del manipolatore sia instabile.
+
+4. Perché usiamo Padé?
+Il ritardo puro non ha una realizzazione razionale finita. Padé di ordine uno fornisce un'approssimazione utilizzabile nella sintesi State-Space. Introduce un polo stabile e uno zero a parte reale positiva; non elimina i limiti di fase del ritardo. I tre stati di ciascun attuatore includono il secondo ordine e questa approssimazione.
+
+5. Perché Kalman?
+Non misuriamo tutte le componenti dello stato. Kalman ricostruisce anche velocità e stati attuativi usando modello, comando e quattro encoder. L'innovazione corregge la previsione. La scelta delle covarianze è un'ipotesi progettuale, da distinguere dal protocollo discreto dei rumori simulati.
+
+6. Perché aggiungere l'integratore? Qual è la differenza LQG/LQGI?
+Il prefiltro di riferimento LQG non accumula l'errore dovuto a una coppia costante. LQGI aggiunge due stati integrali dell'errore misurato e modifica il servo ottimo. Nel lineare elimina il residuo DC del disturbo. La configurazione selezionata è però più lenta: assestamento peggiore circa 5.046 s. Il residuo a un tempo finito non coincide con il valore asintotico.
+
+7. Qual è la differenza mixsyn/hinfsyn?
+Mixsyn costruisce il problema standard di sensibilità mista. Hinfsyn accetta la pianta generalizzata esplicita e separa uscite prestazionali e misure. Nel confronto 1-DoF usiamo formulazioni equivalenti. Il 2-DoF con model following, coppia link e rumore esplicito viene costruito con segnali nominati e risolto con hinfsyn(P,4,2).
+
+8. Perché H-infinity non garantisce tutte le incertezze?
+La sintesi nominale minimizza la norma di una mappa nominale. La robustezza richiede di verificare una famiglia e la sua struttura di perturbazioni. Nel nostro caso tutti i candidati H-infinity con rumore mantengono RS inferiore a uno. Un buon gradino o gamma piccolo non correggono questo fallimento.
+
+9. Che cosa significa gamma?
+È la norma H-infinity della mappa pesata chiusa, che limita il rapporto di energia per ingressi deterministici a energia finita. Non è una varianza, un picco di coppia o un tempo di assestamento. Se cambiano ingressi e pesi del problema, cambia anche il significato del valore: non confrontiamo i gamma delle due formulazioni come una graduatoria universale.
+
+10. Come scegliete W1, W2 e Wn?
+W1=(s/3+2)/(s+0.3) I pesa l'errore di model following. W2=0.003(s+80)/(s/6+80) I pesa il comando. Mo=16/(s^2+8s+16) I rimane invariato. Per il rumore proviamo Wn=c*sigma_y*I con c=1,5,20. La scala sigma_y collega il progetto all'encoder; c aumenta la protezione deterministica. Non riduciamo la deviazione standard dei campioni reali. Non aggiungiamo W3.
+
+11. Che cos'è la LFT?
+È una rappresentazione dell'interconnessione come chiusura fra una parte nota e una parte variabile. La LFT P-K chiude il controllore sulla pianta generalizzata. La decomposizione N-Delta separa invece le incertezze normalizzate. I due usi hanno scopi e partizioni diversi.
+
+12. Che cosa rappresenta mu?
+L'inverso della più piccola perturbazione strutturata che rende singolare una matrice di ritorno. Per la stabilità studiamo il ritorno fra canali incerti. Per la prestazione aggiungiamo un blocco fittizio che chiude uscite prestazionali e ingressi esogeni. Questo blocco non è una nuova incertezza fisica. Mussv restituisce bound, non necessariamente il valore esatto.
+
+13. Come funziona D-K iteration?
+Un passo K sintetizza il controllore sul problema scalato; il passo D/G valuta mu e aggiorna gli scaling, poi li approssima con modelli razionali. Ripetiamo al massimo cinque volte con le opzioni consolidate. I risultati non sono monotoni in tutte le quantità: PeakMu, gamma scalata e qualità del fit descrivono grandezze diverse. La soluzione migliore va nuovamente analizzata.
+
+14. Qual è la differenza robstab/robgain?
+Robstab calcola un margine di stabilità rispetto alla scala delle incertezze. Robgain(CL,1) calcola il margine entro il quale la chiusura resta stabile e la norma della mappa considerata resta sotto uno. La prestazione riguarda esattamente i canali e i pesi di CL. Intervalli invertiti non vengono riordinati per farli apparire validi.
+
+15. Perché Kmu ha ordine elevato?
+La pianta generalizzata contiene fisica, pesi e modello desiderato. Gli scaling dinamici della D-K aumentano ulteriormente l'ordine dei problemi sintetizzati. Il primo Kmu ha 78 stati, quello con rumore 82. L'ordine non determina da solo il guadagno sul rumore. Una riduzione richiederebbe nuove verifiche; qui conserviamo le realizzazioni a ordine pieno.
+
+16. Perché il comando amplifica il rumore anche con Dy=0?
+Dy=0 annulla soltanto il salto istantaneo diretto. Una dinamica strettamente propria può avere guadagno molto alto a frequenze finite e produrre un impulso rapido dopo una variazione della misura. Il primo H-infinity raggiunge circa 492785 N m nella scansione fra campioni della prova MATLAB isolata, pur avendo Dy nullo.
+
+17. Perché la posizione può restare regolare?
+Il comando attraversa gli attuatori e poi la meccanica, che attenuano componenti rapide. Tqv=G*Tuv può quindi essere molto più piccola di Tuv. Un'uscita regolare non dimostra un comando erogabile; servono metriche separate per posizione e richiesta agli attuatori.
+
+18. Come avete tentato di risolvere il problema?
+Abbiamo inserito v=Wn*nu e qmis=q+v nella pianta generalizzata, conservando z=[W1(q-Mo*r);W2*u]. Hinfsyn e musyn devono così considerare anche le prestazioni dovute al rumore. Non abbiamo filtrato artificialmente i dati, ridotto il rumore, cambiato gli SLX o aggiunto saturazioni. Le prove usano gli stessi ingressi per ogni confronto baseline/candidato.
+
+19. Quali compromessi introduce la soluzione?
+HinfN3 riduce enormemente il comando ma mantiene RS FAIL; non è una soluzione robusta finale. MuN1 mantiene RS/RP PASS e riduce il rumore, ma porta l'ordine da 78 a 82 e l'errore nominale q1 da circa 6% a 8.24%. Il suo assestamento q1 passa circa da 1.522 a 1.558 s. I target originali non vengono allentati per chiamarlo pienamente conforme. Nel Simulink non lineare combinato, con disturbo simultaneo, l’overshoot q1 passa da 10.67% a 35.60% e l’errore medio finale da 0.2301 a 0.8529 gradi. Sono metriche diverse dal gradino nominale isolato.
+
+20. Quanto migliora il rumore?
+Nella prova isolata, seed 20261012, il picco mu fra campioni passa da 87.096 a 1.418 N m e l'RMS integrato da 8.288 a 0.275 N m. Tre seed confermano l'attenuazione. Nel Simulink non lineare combinato il picco passa da 108.526 a 2.251 N m e il massimo RMS per canale da 12.822 a 1.357 N m. Le statistiche dei due protocolli restano distinte.
+
+21. Perché dieci impianti non garantiscono robustezza?
+Un insieme incerto contiene molte più perturbazioni di un campione finito. Per MuN1 i dieci impianti congelati restano stabili, ma la garanzia RS viene dal modello strutturato e dalla post-analisi. HinfN3 ne stabilizza sei e mantiene RS FAIL: questo esempio mostra concretamente il limite del campionamento.
+
+22. Che cos'è la RAS?
+L'insieme degli stati iniziali che convergono all'equilibrio in assenza degli ingressi perturbanti del test. La nostra griglia è una sezione con delta theta uguale a delta q e gli altri stati fissati. Non è una proiezione di tutti gli stati possibili e non include automaticamente limiti degli attuatori.
+
+23. Che cosa certifica Lyapunov?
+Una funzione positiva con derivata negativa in un insieme invariante dimostra la convergenza in quell'insieme. Usiamo lo stato aumentato completo e un limite analitico del residuo non lineare. Il certificato riguarda il modello nominale deterministico dichiarato. Campionare la derivata in un numero finito di punti fornisce un controllo numerico diverso da una prova valida ovunque.
+
+24. Perché alcuni certificati non sono stati ottenuti?
+Stabilità lineare e affidabilità della soluzione numerica di Lyapunov sono controlli distinti. Residui, positività e stime di arrotondamento devono superare il gate. Se questo fallisce non accreditiamo un livello certificato. Anche un timeout o un arresto numerico della simulazione lascia la convergenza fisica ignota: non lo trasformiamo in una prova di divergenza.
+
+25. Quali sono i limiti fisici del progetto?
+Mancano limiti hardware documentati di coppia, velocità e variazione del comando. La scala progettuale di 12 N m non li sostituisce. La famiglia incerta non comprende qualsiasi attrito o saturazione reale. Il rumore gaussiano non è limitato, quindi i massimi di tre seed non garantiscono un limite assoluto per tutte le realizzazioni. Servono specifiche del motore e della trasmissione e una validazione sperimentale per completare la verifica hardware.

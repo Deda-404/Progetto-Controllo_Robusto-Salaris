@@ -1,12 +1,14 @@
-# Stato corrente — 13.10.2026
+# Stato corrente — 13.10.2026, revisione con rumore
 
-**Collaudo completo A–G COMPLETE/PASS; PR #40 aperta per revisione.** R2026b 26.2.0.3386108 Windows locale, prodotti necessari installati. 141/141 test e quattro script PASS nelle due release R2025b/R2026b; 80 artifact congelati invariati. Otto SLX LOAD/COMPILE/SIMULATION/DYNAMIC VALIDATION PASS e SHA-256 invariati; 12 combinazioni verificate da dati Scope autentici.
+Implementazione, collaudo ed elaborati COMPLETE/PASS; accettazione scientifica PARTIAL. Tre H∞ con rumore esplicito nominalmente stabili ma RS/RP FAIL, nessuna promozione. MuN1 (82 stati) mantiene NS/NP/RS/RP: RS [1.84622,1.88174], RP [1.59634,1.60036]. Picco μ non lineare 108.526→2.25091 N m (48.21 volte), RMS 12.8223→1.35740 (9.446 volte). Rumore encoder isolato: oltre dieci volte in picco/RMS in tutti i tre seed.
 
-Relazione 100 pagine, presentazione 22 slide / 18:45 stimati, autori e matricole completi, data 13.10.2026. Audit PDF senza errori/overflow, tutte le pagine e le slide controllate. Pacchetto selezionato di 327 file e ZIP di 392200933 byte con manifest/hash, quattro default PASS anche da copia isolata; documenti interni esclusi dalla consegna ordinaria.
+Baseline predefinita; MuN1 è una proposta separata. Target temporali ancora parziali, offset q1 8.243% peggiore, reiezione della coppia moderatamente peggiore. Dieci impianti originali: HinfN3 6/10, MuN1 10/10 stabili. RAS MuN1 25/25 convergenze empiriche; gate Lyapunov FAIL. HinfN3 13 convergenze e 12 arresti numerici; solo un livello nominale minimo accreditato.
 
-Limiti scientifici conservati: H∞ RS FAIL, RP numerica non validata; μ RS≈1.80/RP≈1.68 nel modello dichiarato; target temporali parziali, RAS empiriche e arresti numerici separati. Rumore H∞ 2-DoF non lineare: picco Scope 733230 N m; μ circa 108/109 N m. Nessuna validazione hardware o certificato continuo del picco. H∞ lineare usa misure ideali, non lineare rumorose; encoder SLX correlati. I limiti numerici H∞ RS differiscono fra release e non sono dichiarati equivalenti.
+R2026b locale: quattro script identici, 141/141 regressioni e 7/7 test dedicati PASS; otto run baseline/candidato sui quattro SLX interessati. Identità del Workspace salvata e controllata; 197 MAT/SLX precedenti e otto hash di provenienza invariati. I run baseline storici restano intatti. Nuove evidenze in results/data/noise_redesign/.
 
-Branch `codex/validazione-finale-matlab-simulink`, base main `14359392`. PR: https://github.com/Deda-404/Progetto_CR/pull/40. Branch pubblicato con gli otto oggetti LFS. Prossimo passo organizzativo: revisionare la PR e decidere il merge manuale; prova orale cronometrata. Nessun intervento sui modelli per mascherare i limiti. Evidenze nei report conclusivi e in `results/data/final_simulink_validation/`.
+Relazione 108 pagine e 23 slide compilate/auditate; schemi autentici lineare/non lineare e confronto Scope. Due TXT completi, 2237 parole pronunciate, 18:47 stimati con cambi slide, Alessio 9:27 e Valerio 8:36. Prova dal vivo ancora necessaria. Nuovo pacchetto Consegna_SEA_Rumore_Orale_2026-10-13 con preparazione_studenti distinta; precedente consegna conservata.
+
+Branch codex/sintesi-robusta-rumore-e-orale-finale da main a4b3817, PR #40 già integrata. [PR #41](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza, ramo pubblicato con otto oggetti LFS (232 MB). Nessun merge eseguito nella revisione. Prossimo passo degli studenti: revisionare evidenze e PR, decidere l'adozione, provare il discorso; servono dati di targa e dinamica reale dei motori per valutare l'hardware.
 
 ---
 

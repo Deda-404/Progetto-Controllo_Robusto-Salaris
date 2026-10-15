@@ -1,19 +1,19 @@
-# Checklist di consegna
+# Checklist di consegna della revisione con rumore
 
-- [x] MATLAB/Simulink R2026b locale e quattro toolbox necessari disponibili.
-- [x] Quattro script eseguiti, 141/141 test PASS, 80 artifact protetti invariati.
-- [x] Otto originali: LOAD, COMPILE, SIMULATION e DYNAMIC VALIDATION PASS; hash invariati.
-- [x] Segnali Scope autentici, unità, riferimenti, comando, rumori e selettori esaminati.
-- [x] H∞ lineare con misura ideale distinto da H∞ non lineare rumoroso; nessuna commutazione.
-- [x] Correlazione dei rumori encoder e limiti della registrazione dichiarati.
-- [x] Schemi autentici e grafici Simulink integrati negli elaborati.
-- [x] RAS/Lyapunov e dieci impianti incerti preservati con esiti negativi espliciti.
-- [x] Nomi, matricole e data 13.10.2026 inseriti.
-- [x] Note orali e scaletta: 22 slide, 18:45 stimati.
-- [x] Relazione di 100 pagine e 22 slide compilate senza errori/overflow e controllate visivamente.
-- [x] Pacchetto autonomo: 327 file, hash ZIP e otto originali verificati; quattro default eseguiti da copia isolata.
-- [ ] Confermare il tempo con una prova orale comune; massimo 20 minuti.
-- [x] Ramo e otto oggetti LFS pubblicati; PR #40 aperta su main senza merge.
-- [ ] Revisionare la PR e decidere il merge manualmente.
+- [x] MATLAB/Simulink R2026b e toolbox disponibili; sintesi realmente eseguite.
+- [x] Tre H∞ e una μ salvati separatamente, fisica/pesi/incertezze originali conservati.
+- [x] NS/NP/RS/RP ricalcolate; H∞ FAIL robusto e compromessi μ espliciti.
+- [x] Tre seed, otto scenari, stessi ingressi e varianza; picchi fra campioni e RMS con verifiche numeriche.
+- [x] Dieci impianti congelati e stato completo RAS; certificato μ non ottenuto dichiarato.
+- [x] Otto run abbinati sui quattro SLX, Workspace effettivi e coefficienti identificati.
+- [x] Otto SHA-256 SLX e 197 MAT/SLX preesistenti invariati.
+- [x] Quattro script identici rieseguiti, 141 regressioni e sette test dedicati PASS.
+- [x] Relazione 108 pagine e presentazione 23 slide; audit LaTeX e controllo visivo.
+- [x] Schemi autentici lineare/non lineare, grafici e tabelle prima/dopo coerenti.
+- [x] Quaderno rumore e discorso completo TXT, 25 risposte in appendice.
+- [x] Stima 18:47 da 2237 parole, alternanza ed equilibrio dei due autori.
+- [x] Sorgenti, dati e allegati selezionati, preparazione studenti distinta, hash del nuovo pacchetto/ZIP verificati.
+- [ ] Confermare con prova orale dal vivo il limite di 20 minuti.
+- [ ] Revisionare la nuova PR, decidere adozione e merge manualmente.
 
-Prima dell’invio leggere gli audit PDF e usare la cartella selezionata da `delivery/manifest.json`, escludendo diari, resoconti interni e cache. Il superamento del collaudo non annulla il rumore critico o i target non rispettati. La coppia non saturata è una richiesta del modello, non una prova di fattibilità hardware.
+Baseline predefinita. Superare test e simulazioni non elimina i target temporali falliti né certifica coppie hardware. Leggere docs/ACCETTAZIONE_RUMORE_E_ORALE.md, gli audit PDF e delivery/README.md prima dell'invio.

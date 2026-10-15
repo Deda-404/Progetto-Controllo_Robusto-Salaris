@@ -1,43 +1,54 @@
 # Controllo robusto di un manipolatore SEA a due giunti
 
-Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Collaudo locale **COMPLETE / PASS** in MATLAB/Simulink R2026b 26.2.0.3386108: **141/141 test**, quattro script eseguiti e **otto originali SLX caricati, compilati, simulati e verificati**. SHA-256 degli otto file e 80 artifact congelati invariati. Branch `codex/validazione-finale-matlab-simulink`, base main `14359392`; revisione e merge a cura degli studenti.
+Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.
 
-[PR #40 — collaudo conclusivo](https://github.com/Deda-404/Progetto_CR/pull/40) aperta per revisione; ramo pubblicato, nessun merge.
+[PR #41 — revisione con rumore e orale finale](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza; ramo e otto nuovi oggetti Git LFS pubblicati, nessun merge.
 
-## Elaborati
+La baseline rimane predefinita. Tre nuovi H∞ di ordine 22 riducono il rumore ma falliscono RS/RP. Il nuovo μ, MuN1 di ordine 82, supera NS/NP/RS/RP e resta una proposta per la revisione degli studenti: nel Simulink non lineare il picco passa da 108.526 a 2.25091 N m e il massimo RMS per canale da 12.8223 a 1.35740 N m. I rapporti sono 48.21 e 9.446. Nel protocollo encoder isolato, picco e RMS migliorano oltre dieci volte in ciascuno dei tre seed.
 
-- [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf), 100 pagine; sorgenti in report/.
-- [Presentazione PDF](presentation/Progetto_CR_Presentazione.pdf), 22 slide; durata stimata 18:45.
-- [Note orali](presentation/SPEAKER_NOTES.md) e [scaletta](presentation/OUTLINE_AND_TIMING.md).
-- [Istruzioni e manifest di consegna](delivery/README.md).
-- [Collaudo modello per modello](docs/REPORT_VERIFICA_SIMULINK.md), [rumore](docs/ANALISI_RUMORE_MISURA.md), [chiusura](docs/CHIUSURA_FINALE_PROGETTO.md) e [checklist](docs/CHECKLIST_CONSEGNA_STUDENTI.md).
+Il compromesso resta esplicito: il tracking μ ha Ts=1.558/1.482 s e offset 8.243%/2.192%; l'offset q1 peggiora rispetto alla baseline e la reiezione del disturbo è leggermente peggiore. RS è [1.84622,1.88174], RP [1.59634,1.60036], per il modello incerto dichiarato. I dieci impianti congelati sono stabili con MuN1; la griglia RAS ha 25 convergenze empiriche, senza certificato Lyapunov numericamente accreditato. Nessun limite di coppia hardware documentato consente una certificazione fisica.
 
-Il modello ha 8 stati meccanici e 14 con attuatori. I controllori sono LQG (14 stati), LQGI (16), H∞ 1-DoF (18), H∞ 2-DoF (22), PID (4) e Kμ (78). I quattro script didattici sono in `File_di_Funzioni_Progetto-Accorpati/`. Il collaudo conserva guadagni, costi, pesi, incertezze, parametri fisici e configurazioni SLX.
+## Elaborati e preparazione
 
-**Il successo del collaudo non equivale al rispetto di tutti i target.** LQG conserva offset sotto disturbo, LQGI lo riduce con tracking lento. H∞ 2-DoF conserva NS/NP ma fallisce RS; RP numerica non validata. In R2026b RS è circa [0.026154,0.026207], con estremi differenti da R2025b. Kμ conserva RS≈1.80 e RP≈1.68, ordine 78 e target temporali parziali. I dieci impianti incerti comuni del Capitolo 11, seed 20261012, danno H∞ 0/10 stabili e Kμ 10/10; il campione non è un certificato.
+- [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf), 108 pagine; [sorgente](report/main.tex).
+- [Presentazione PDF](presentation/Progetto_CR_Presentazione.pdf), 23 slide con schemi Simulink autentici lineare e non lineare.
+- [Discorso completo](presentation/Presentazione_orale.txt): 2237 parole, alternanza Alessio/Valerio e 25 domande in appendice; 18:47 stimati a 125 parole/minuto inclusi 44 s di cambi slide.
+- [Quaderno dello studio del rumore](docs/Prova_di_Soluzione_Rumore_di_Misura.txt) e [tabella di accettazione](docs/ACCETTAZIONE_RUMORE_E_ORALE.md).
+- [Note di regia](presentation/SPEAKER_NOTES.md), [tempi](presentation/OUTLINE_AND_TIMING.md) e [istruzioni di consegna](delivery/README.md).
 
-Il rumore encoder resta critico. Gli Scope H∞ non lineari registrano 733230 N m nel ramo 2-DoF; μ circa 108/109 N m nei due modelli. Sono richieste senza saturazioni, non coppie hardware validate. H∞ lineare usa misure ideali e non è una prova encoder; H∞ non lineare e μ usano misure rumorose. I canali encoder degli originali sono correlati, a differenza della prova MATLAB isolata. Picchi Scope e RMS da quadratura non certificano il massimo o l'integrale continuo. La RAS empirica, gli arresti numerici e gli insiemi interni Lyapunov restano distinti.
+I due TXT sono materiali di preparazione degli studenti; il pacchetto li colloca in `preparazione_studenti/`. Gli allegati scientifici rimangono PDF, sorgenti, dati e modelli. Il pacchetto precedente resta conservato.
+
+## Modelli, controllori e prove
+
+Il modello ha otto stati meccanici e 14 con attuatori. La baseline comprende LQG (14), LQGI (16), H∞ 1-DoF (18), H∞ 2-DoF (22), PID (4) e Kμ (78). I quattro script didattici in `File_di_Funzioni_Progetto-Accorpati/` conservano i default e i dati consolidati.
+
+Lo studio separato è in `analysis/noise_redesign/`, con [istruzioni riproducibili](analysis/noise_redesign/README.md). Usa W1, W2, Mo, fisica e incertezze originali, aggiungendo soltanto gli ingressi encoder esogeni e Wn. I candidati, i nuovi margini, i tre seed/otto scenari e gli otto run sono in `results/data/noise_redesign/`. Le tre figure di confronto sono in `report/figures/noise_redesign/`; gli schemi autentici provengono da `report/figures/student_exports/`.
+
+H∞ lineare mantiene feedback ideale: verifica l'interfaccia e non certifica attenuazione encoder. H∞ non lineare e i due μ ricevono misure rumorose. Encoder SLX correlati, seed 20260826; studio MATLAB indipendente con tre seed diversi. Picchi Scope, picchi su scansione fra campioni e RMS dei due protocolli conservano significati distinti. Gaussiane non limitate e prove finite non garantiscono un massimo universale.
 
 ## Esecuzione
 
-Dalla radice, con MATLAB, Simulink, Control System, Robust Control e Symbolic Math Toolbox R2026b:
+Servono MATLAB/Simulink R2026b, Control System, Robust Control e Symbolic Math Toolbox. Dalla radice:
 
 ```matlab
-addpath('tools','simulink');
-run_final_student_validation;              % regressioni, quattro script, otto run e figure
-run_final_student_validation(false);       % soltanto collaudo degli otto originali
-run_final_student_validation(false,true);  % rilegge dati registrati e hash; non esegue nuove simulazioni
+addpath(genpath('analysis'),genpath('controllers'),genpath('src'),'simulink');
+run_noise_synthesis('hinf');
+run_noise_synthesis('mu');
+validate_noise_candidates;
+audit_noise_robustness;
+run_noise_simulink;
+validate_noise_plants;
+export_noise_redesign;
+r=runtests('tests/noiseRedesignTest.m'); assertSuccess(r);
 ```
 
-Il lettore dei buffer Scope usa una API interna R2026b in sola lettura; su altra release può richiedere l'esportazione manuale Print to Figure. Il runner restituisce errore se manca una verifica obbligatoria. Solver, logging, switch, rumori e collegamenti interni non vengono modificati; i modelli sono chiusi senza salvare.
+Le sintesi e le simulazioni riusano i checkpoint verificati; la RAS ha istruzioni dedicate nel README dello studio. `setup_student_originals('mu','noise_mu1')` e l'analogo H∞ selezionano i candidati solo tramite variabili esterne; senza secondo argomento si carica la baseline. Per ripetere i quattro default e l'intera regressione senza sovrascrivere i MAT storici usare una copia isolata del checkout, come nel collaudo registrato in `results/data/noise_redesign/regression/`.
 
 ```text
-python tools/build_final_simulink_tables.py
-python report/build_matlab_appendix.py
+python tools/build_noise_redesign_documents.py
+python tools/audit_oral_timing.py
 powershell -File tools/build_m18_latex.ps1
 python tools/build_delivery_manifest.py --check
 ```
 
-`results/data/final_simulink_validation/` contiene i dati Scope, gli esiti runtime e le verifiche numeriche locali. I dataset `hinf_final_coherent/`, `final_closure/` e `lqgi_validation/` supportano robustezza, rumore isolato, RAS e prove sugli impianti incerti. Le figure Simulink e i diagrammi autentici sono in `report/figures/final_simulink/` e `student_exports/`.
-
-Drive è in sola lettura. Per consegnare i modelli usare esclusivamente `simulink/student_originals/` e il suo manifest. La cartella delivery seleziona materiali riproducibili, escludendo diari, documenti interni, cache e duplicati. Le 141 regressioni richiedono il checkout integrale GitHub. Restano la prova orale cronometrata e la revisione della PR.
+Gli otto SLX devono coincidere sempre con `simulink/student_originals_manifest.json`. Nessun blocco, selettore, solver, rumore o callback è stato modificato. L'acquisizione Scope usa una API interna R2026b; su altra release può servire Print to Figure. Git LFS è necessario per i buffer Scope voluminosi. Drive rimane in sola lettura. Restano revisione degli studenti, decisione sull'adozione e prova orale dal vivo.

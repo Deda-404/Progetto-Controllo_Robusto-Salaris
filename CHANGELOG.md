@@ -4,6 +4,17 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+## 2026-10-13 — Sintesi con rumore e orale finale
+
+- Nuova pianta nominata con encoder esogeni, tre H∞ e una μ separati; W1/W2/Mo, fisica e cinque incertezze conservati.
+- Rumore su tre seed/otto scenari, picchi fra campioni e RMS integrato; nuovi robstab/robgain/mussv sui problemi nuovo e precedente.
+- Otto run Simulink abbinati con identità dei coefficienti salvata; nessuna modifica degli originali. MuN1: picco non lineare ridotto 48.21 volte e RMS 9.446 volte, con RS/RP mantenute e offset q1 peggiore. H∞ respinti come soluzioni robuste.
+- Stessi dieci impianti, RAS completa dei candidati e fallimento numerico Lyapunov μ esplicito; baseline e 197 MAT/SLX preesistenti invariati.
+- Quattro script rieseguiti, 141 regressioni e sette test dedicati PASS. Audit Code Analyzer senza segnalazioni.
+- Relazione 108 pagine, 23 slide, tre nuovi grafici e schemi autentici; audit LaTeX e controllo visivo. Discorso di 2237 parole, 18:47 stimati, appendice di 25 risposte.
+- Due TXT completi, accettazione e consegna con preparazione studenti distinta. Pubblicazione del branch per revisione; adozione e merge riservati agli studenti.
+- Branch pubblicato con otto nuovi oggetti LFS (232 MB); [PR #41](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza per revisione, senza merge.
+
 ## 2026-10-13 — Collaudo finale MATLAB/Simulink
 
 - Esecuzione locale R2026b degli otto SLX originali, compilazione e acquisizione Scope in sola lettura; 12 combinazioni validate, SHA-256 invariati.

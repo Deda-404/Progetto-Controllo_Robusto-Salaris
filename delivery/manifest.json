@@ -1,8 +1,8 @@
 {
   "date": "2026-10-13",
-  "branch": "codex/validazione-finale-matlab-simulink",
-  "base_commit": "14359392bd8cde5249fae91a050cfba8c79eacd4",
-  "status": "COMPLETE: MATLAB R2026b; 141 tests, four scripts and eight original SLX validated. Performance and hardware limits remain explicit.",
+  "branch": "codex/sintesi-robusta-rumore-e-orale-finale",
+  "base_commit": "a4b381756582d51a5e68d0b861fdf39010486d67",
+  "status": "COMPLETE validation: R2026b, 141 regression tests, 7 dedicated tests, four unchanged scripts and eight paired runs. Hinf noise candidates fail RS/RP; MuN1 passes NS/NP/RS/RP with partial tracking. Baseline remains default; adoption awaits student review.",
   "hash_policy": "Text uses LF-normalized SHA-256 for portable checkout; binary/SLX/PDF exact bytes.",
   "files": [
     {
@@ -67,6 +67,78 @@
       ],
       "size_bytes_recorded": 807,
       "sha256": "4293f0f91443eb9952bf0637ccfad9162a91ba4b0f6ccd48bee5d0a69fee4336",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/audit_noise_robustness.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 3315,
+      "sha256": "49e9a8d3ffd2ee8bf960ebd4ba8cbcb3966d4c98c64630d7350ffb042580217a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/export_noise_redesign.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 6705,
+      "sha256": "e66af1d26bbba583f3c493b7c70b441c8282d1d24b5e2461ce96e2fcef451644",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/noise_generalized_plant.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 1036,
+      "sha256": "8ed7110caf009cc41f5626fb3640bc25afe19556cb027a490ec6aadc89d0b09d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/README.md",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 3013,
+      "sha256": "6edd4f603679899626e34551110c339253153a89bd5cdbe42b23e9fda1182099",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/run_noise_simulink.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 1945,
+      "sha256": "daa1f3307cbe3a7058d7713c8d1fd2465d6072c23e48b3188373f48ece4b6c9a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/run_noise_synthesis.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 5287,
+      "sha256": "e5916e7546123ade9426aa13fe63b3b4e2de2b3c5f6907b4e0004d8d69d2c5ab",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/validate_noise_candidates.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 5430,
+      "sha256": "7df46e0f1b7386ae1613c5a7398dc2eaabc6cc5292529353b772f27d90cc3383",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "analysis/noise_redesign/validate_noise_plants.m",
+      "roles": [
+        "noise_synthesis_and_validation_source"
+      ],
+      "size_bytes_recorded": 2696,
+      "sha256": "ad9dc457885fc079c0fadbc7d7ffaf0d55db4323a056b1969150e889d4911ea4",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -190,11 +262,12 @@
     {
       "path": "analysis/run_final_ras_lyapunov.m",
       "roles": [
+        "full_state_ras_validation_source",
         "literal_matlab_excerpt_source",
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 7079,
-      "sha256": "044f5dc818baecacebe39b48e46b4a328248e95084be447439f5c53de69c89ef",
+      "size_bytes_recorded": 7833,
+      "sha256": "bc472abad73732e26860ad7cd76b68f3490597bf7f78ddeca09695838533b682",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -349,8 +422,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 3627,
-      "sha256": "e01fc3e469bd84dd3abc88230de44b47680653583c3c2a54af73f640a6ba0ce4",
+      "size_bytes_recorded": 3866,
+      "sha256": "2ea522cc2658d6123f358a5bcf21bee5a296af6b3c45490a31a5f172549ed743",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -363,12 +436,21 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "docs/ACCETTAZIONE_RUMORE_E_ORALE.md",
+      "roles": [
+        "student_preparation"
+      ],
+      "size_bytes_recorded": 3355,
+      "sha256": "65c3ce952ce59fad11242af7a9275500cf18b2163aedd54d03801d2a8c0a6e2d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "docs/ANALISI_RUMORE_MISURA.md",
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 8991,
-      "sha256": "a233516b39b5a5dab5e465ac8dabf584b1262bd13399362d2847dead4d0f6dae",
+      "size_bytes_recorded": 9617,
+      "sha256": "b8362074722a37e2910ac8a8300d940de6a1de81298268246719071afc15620e",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -376,8 +458,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1570,
-      "sha256": "3e304ec49f9ae43dcc97d66f8e738b952eb8bd55533d56a5ee19f515ef0f6db9",
+      "size_bytes_recorded": 1548,
+      "sha256": "183fbc8d98f5bcd5c0599f11a458ae86c04168fa88481a365f50919da72dea56",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -385,8 +467,17 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 7966,
-      "sha256": "7975f4afd68934bda48c08bf311e86eaf7755bf31e546c088d972b5419a4aa3a",
+      "size_bytes_recorded": 8592,
+      "sha256": "901e0d5d6572987da84d9eb2e2ba1d4fd193d8b8a39f3c9541cca50b940f12ab",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "docs/Prova_di_Soluzione_Rumore_di_Misura.txt",
+      "roles": [
+        "student_preparation"
+      ],
+      "size_bytes_recorded": 14589,
+      "sha256": "3f2573948660b3b72dae20aa77ca9bf51e51d570b28d91669de764331255b4f9",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -394,8 +485,8 @@
       "roles": [
         "internal_group_review_only"
       ],
-      "size_bytes_recorded": 20835,
-      "sha256": "7bd810c8e85747df8ec8d3f73e6be82f38ed6ce6cd2efd45b51c3c734a7447be",
+      "size_bytes_recorded": 21461,
+      "sha256": "c9cb15ae08c6374bd5dd0abc5cc26a5af0cee4f9af5b6439c7439c7196aab66b",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -484,8 +575,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 308,
-      "sha256": "f6db3c8e899a148bf978b945c00805fa1f0bfc4677c64b170dd66ce6aefb6b62",
+      "size_bytes_recorded": 295,
+      "sha256": "9ea4dfa9affe40b58ea33f63131fefe277e6610dd522c44c7b40ed909c5abeed",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -493,8 +584,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 13825,
-      "sha256": "17c717a0ca507fe0894f61d1b429ec67b8515d74aee00b3efe96df2490feffd1",
+      "size_bytes_recorded": 14886,
+      "sha256": "02acb21051a90ba9bf1b5c9f5c291e63f69c33eb3afe2eb746b9dda66ec2f19d",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -502,8 +593,17 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 1585,
-      "sha256": "1a47868613155345bb89d020655d96bf897307cd799c099df5ae644f3484e0c4",
+      "size_bytes_recorded": 2730,
+      "sha256": "8c98487baecb90da4bb017c8d7954b1fa83dbc8d513e7857f05f5dfd6783a881",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "presentation/Presentazione_orale.txt",
+      "roles": [
+        "student_preparation"
+      ],
+      "size_bytes_recorded": 31274,
+      "sha256": "ade693418129b5fcdfd246009c089bdc2308121ae919fdf2be5c8d785c41cb72",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -511,8 +611,8 @@
       "roles": [
         "student_handin_pdf"
       ],
-      "size_bytes_recorded": 1917904,
-      "sha256": "d107928b7ad46c4e9e00e480592eb1a0b2988e09dcdf656a1461c54ecdafdcba",
+      "size_bytes_recorded": 2178862,
+      "sha256": "d9934f4e10ae18d4188f94c8ed9a6f360c8ec7ec8b5029c5bfb52b286ff72d83",
       "hash_mode": "exact bytes"
     },
     {
@@ -520,8 +620,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 8152,
-      "sha256": "9556ae904d52c811305f6424e6187c61ed25771e69a2c834bef479b1b43c28f0",
+      "size_bytes_recorded": 3933,
+      "sha256": "42fe2da0bf97fdd8ecc4cf5f760e70463935532b9c36942eaef45038a8474438",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -529,8 +629,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 4301,
-      "sha256": "9790556b4b8ab7c4a02c39f96dddbafb615901f73401b5871bb239e364654d69",
+      "size_bytes_recorded": 5358,
+      "sha256": "2fd0e420188c51748288b1e30dbd64c6a5d816b1d88a1f4b06b7e63b357376e1",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -712,8 +812,7 @@
     {
       "path": "report/figures/final_simulink/slide_mu_linear_sim.png",
       "roles": [
-        "authentic_simulink_results_or_current_robustness",
-        "document_figure"
+        "authentic_simulink_results_or_current_robustness"
       ],
       "size_bytes_recorded": 84397,
       "sha256": "ad3ca3cf134661dd446548f0bb2f7bfc97233afe7ece8b11ec2bc4b40532efa3",
@@ -834,6 +933,33 @@
       ],
       "size_bytes_recorded": 69560,
       "sha256": "641a722f719cf7dbe5f329bde18254fc16efe51cd53ce1f86debc7b1608193d7",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/noise_redesign/frequency_and_command.png",
+      "roles": [
+        "document_figure"
+      ],
+      "size_bytes_recorded": 135929,
+      "sha256": "bf87b480515c569d005867aa4e9ab9d6b76c1d36034574d3bd6a449a32d0df25",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/noise_redesign/noise_before_after.png",
+      "roles": [
+        "document_figure"
+      ],
+      "size_bytes_recorded": 94689,
+      "sha256": "3751c5f4d89bd7d20d7e021ea7eff6340b3950a3721238818adfbae5d8043111",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "report/figures/noise_redesign/simulink_before_after.png",
+      "roles": [
+        "document_figure"
+      ],
+      "size_bytes_recorded": 265892,
+      "sha256": "11a573a0faa92544f7d7b3fcbdf16884c39d0d338d59e8ad453675f99918159e",
       "hash_mode": "exact bytes"
     },
     {
@@ -1032,7 +1158,8 @@
     {
       "path": "report/figures/student_exports/Hinf_linear_sim.png",
       "roles": [
-        "authentic_simulink_diagram"
+        "authentic_simulink_diagram",
+        "document_figure"
       ],
       "size_bytes_recorded": 627879,
       "sha256": "bb2f311dff67b748c18740c52b4624b412ee346acd8560d1638fdc714ab85b15",
@@ -1068,7 +1195,8 @@
     {
       "path": "report/figures/student_exports/LQGI_actuators.png",
       "roles": [
-        "authentic_simulink_diagram"
+        "authentic_simulink_diagram",
+        "document_figure"
       ],
       "size_bytes_recorded": 20528,
       "sha256": "c1994810ccfe26cf557b6c2ec308a0b0de6458716e28438af4b3caae7bc8c448",
@@ -1097,7 +1225,8 @@
     {
       "path": "report/figures/student_exports/LQGI_nonlinear_plant.png",
       "roles": [
-        "authentic_simulink_diagram"
+        "authentic_simulink_diagram",
+        "document_figure"
       ],
       "size_bytes_recorded": 37897,
       "sha256": "b868d6e805d0a470b3efd6e871496eeb0aa3cabb3d63882b47b2b8b37ad3c1fe",
@@ -1106,7 +1235,8 @@
     {
       "path": "report/figures/student_exports/LQGI_nonlinear_sim.png",
       "roles": [
-        "authentic_simulink_diagram"
+        "authentic_simulink_diagram",
+        "document_figure"
       ],
       "size_bytes_recorded": 414032,
       "sha256": "1e3fef26039ebd1531d1b21aeafeaa3b1f72d99e07a636d2d4a0f6be79b17b2f",
@@ -1115,7 +1245,8 @@
     {
       "path": "report/figures/student_exports/mu_linear_sim.png",
       "roles": [
-        "authentic_simulink_diagram"
+        "authentic_simulink_diagram",
+        "document_figure"
       ],
       "size_bytes_recorded": 208147,
       "sha256": "41ab7c4c9949323e3454abdec617724012e8279c9ecec555ad6cfa8e19e3fbcb",
@@ -1320,6 +1451,51 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "report/generated/noise_redesign_isolated.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 717,
+      "sha256": "d7224fe4b790635221ad44f0b0de7e56451dccb063785b7776ae52c5f511ad85",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/noise_redesign_ras.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 668,
+      "sha256": "6d3659880dd158471b279b77ab615c88b643781c2828bbdbf5c694a21b79827f",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/noise_redesign_simulink.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 796,
+      "sha256": "24ee95de1ba241892cc5acbb5340067b52f4ba16dcde8bd54c44872bcc38707d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/noise_redesign_synthesis.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 793,
+      "sha256": "c766e10f47f83adef328271fadf9920fb6d6c507bec6c841a4ef9330705acdda",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "report/generated/noise_redesign_tracking.tex",
+      "roles": [
+        "editable_document_source"
+      ],
+      "size_bytes_recorded": 1050,
+      "sha256": "9170f724a6e39606b51cb5db72b3285b0fe7b1d10ee0523a2a91e0df7a4c56ec",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "report/generated/omegaM_comparison.tex",
       "roles": [
         "editable_document_source"
@@ -1334,7 +1510,7 @@
         "document_reproduction_or_build_audit"
       ],
       "size_bytes_recorded": 309,
-      "sha256": "6c257202cd47b9f94eb1ab28e86796a464c1dcda7f4534ffc90444e16d9e436d",
+      "sha256": "ac018e4b7cf8069b1ce01987aab14e88602ce108b0d88052e5238f63fc9f981e",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1351,8 +1527,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 3729,
-      "sha256": "6f109c948cbf7c3ee92e8d6cf0ffe0e66f0daad37dabfe15e4835173347277af",
+      "size_bytes_recorded": 4231,
+      "sha256": "8402c4426c633ee58051a85b451f36038b5f1323b658f4a32b03c43c84ae62aa",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1360,8 +1536,8 @@
       "roles": [
         "student_handin_pdf"
       ],
-      "size_bytes_recorded": 5858596,
-      "sha256": "a7584e1d91ebb04812de466722cbbc27bf87a136bd0c9f768b689b848a644dff",
+      "size_bytes_recorded": 7534195,
+      "sha256": "9016dc56ede6d48a4054b7628fab3527853b847b83ff5b5d697a4a96a1bca69c",
       "hash_mode": "exact bytes"
     },
     {
@@ -1414,8 +1590,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 1800,
-      "sha256": "53d51e750d1ea3a2e3f6e253a971a36ee1eff49a725928a27e7041b43d26d6f9",
+      "size_bytes_recorded": 2349,
+      "sha256": "d60f1c7d3417880e0997bfbe60bfb4dc6af3f638dd2a20b12a079ee68c9a1b24",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1432,8 +1608,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 32790,
-      "sha256": "8747382614dc8e98283868e7d7dda29874ff931eff04ff9f3e1e5e6662dfef3f",
+      "size_bytes_recorded": 34443,
+      "sha256": "378d6ff750ce594ee5756c20c60619bc6d04ae13f95d6268b3501b8037401c22",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1441,8 +1617,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 23452,
-      "sha256": "432e2d12208d7b2c10149e5e11de7cd403007ebb9646fcb1679e4502e1c3cf76",
+      "size_bytes_recorded": 24804,
+      "sha256": "1e804e9fd3ef33118baaff8924f32a762328468fdafe29388a19b9869450cbe1",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1450,8 +1626,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 6865,
-      "sha256": "b2d415c9f87af89e9f04c216e15325ae1411e06beed809a3cae16abf9b0478fc",
+      "size_bytes_recorded": 9789,
+      "sha256": "d3caa777944243f2c2cd45b261ea36a6a9e9ec873ccf3175c605fa48f9d26093",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1459,8 +1635,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 16258,
-      "sha256": "a845034d7150bd7187f587d231af89c238d6e5b332c54c5f68356b78e8f1e9e2",
+      "size_bytes_recorded": 20559,
+      "sha256": "03977656f69894a2ea1f939c19fd2b3e49582a863995ac2b9ce8f5afb490d890",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1468,8 +1644,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 4782,
-      "sha256": "82b69166dc8f28ac624e543a32126ddca4c19b2363f03aec84da89be095cbf0b",
+      "size_bytes_recorded": 5424,
+      "sha256": "b5c3c049e8c91ff8e91b39314ba00772ab87718c6ffb858609cb8f5c1eb4ca12",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1477,8 +1653,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 2235,
-      "sha256": "727b77e6e6c9d90a92ff958111ad3c2b6108b2a6c05e7fbf5c4ca34d1a5b51e8",
+      "size_bytes_recorded": 3123,
+      "sha256": "eaa70a74b3c842686b3588a0889360a08baa3e24cb57cf292046ab7593d5346d",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -1486,8 +1662,8 @@
       "roles": [
         "editable_document_source"
       ],
-      "size_bytes_recorded": 2737,
-      "sha256": "4f5fe422e84706bdd3e1df0aed887285ef927cf8a7324736d0b60859d8e4f78b",
+      "size_bytes_recorded": 3139,
+      "sha256": "266ff0bf250402824a603123b1a8a497ce4faa22ab31591ac5ca9d381d381386",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2598,6 +2774,936 @@
       "hash_mode": "exact bytes"
     },
     {
+      "path": "results/data/noise_redesign/code_analysis.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 820,
+      "sha256": "4ecd64cdc1578f8838b9337602e5453d1a54a5c0d00c2c2e7cce8dbdd844a7a9",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/dedicated_tests.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 568,
+      "sha256": "6e039d44b0ae23f987d8ed9e500d83e92db94a434008bc06f9e4ff4f86c2e5c8",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/dedicated_tests.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1677,
+      "sha256": "9b373d3a624f3f108633fe2481bbe5bf039684b909e018acc8721fd941853ce9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/final_integrity.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 270,
+      "sha256": "a4a3be7f47abbe712cacd78b9c6482888e5362f886a35922af25e8d524333dd0",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_01.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 664514,
+      "sha256": "1de7504379625c0e66fe7edb6c90fc124e944c5439784d80271b94527317c1fd",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_01_robust.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 113621,
+      "sha256": "e08048d1163454dd9d1fd873ecedee8414853e74b6b8e7d7bb967e481874daee",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_02.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 660793,
+      "sha256": "362992c94fcf57e8678ec8c5bcaa9200c0327212fbd128d29523cd60fb217f91",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_02_robust.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 113703,
+      "sha256": "0557e032a01d6b729ba1c2695381fbebadd0046727ac6daf8889f5a87810fb8e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_03.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 660432,
+      "sha256": "bf7ce2bdebcdc4b226c794cbf4fc655c90e463415096f7da189a511c46df5ecd",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/hinf_noise_03_robust.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 112511,
+      "sha256": "5874dfd7c9fa3c145ac7e714f37cd7d63845d6a8e28e91c6e81a2324f3d230b9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/identity_test_initial_attempt.txt",
+      "roles": [
+        "internal_group_review_only",
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1426,
+      "sha256": "2399e015b81f7116bb9bc7f37f45a5dfaa312c2c28411c22f64254a3a6b369f0",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/initial_integrity.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 34412,
+      "sha256": "bc18023b8ef48104d855884036fc535defc5486510f96b1c4c0c8f98a8f5d592",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/mu_noise_01.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 2893544,
+      "sha256": "0a805ad45c98178806fff25dbd90dda0339f36b9b342ac9f9da2e8ee63089fd9",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/mu_noise_01_robust.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 276800,
+      "sha256": "2e8bbf8649e44d5bccfc04734a53d7362f8af4939f7212bf3e07686cc6ca1d3a",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/noise_metrics.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 21873,
+      "sha256": "d5a1e32b59d2d2a3804660380fd99a7332f2155d5397d74545e0de9f61423ea3",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/noise_validation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 11392522,
+      "sha256": "8317ce521204296ebf45702830971a38613f54ef5b4823577e446ce0934281f6",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/oral_timing.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 6195,
+      "sha256": "556b88ac2c7ac4708d1f1522019a37ee1e6dcbdd0dbcc7d06a74becbd7b3e167",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/pdf_visual_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1060,
+      "sha256": "a4bef3857c454fc59a6331dc7e6c536285295485e5e218337213f677d7a971ae",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/plants_metrics.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 8479,
+      "sha256": "d6af4899b4cafb2aea70a6abcdb11ab81331aec3109235f58d9bfab15e80867d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/plants_validation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 9303805,
+      "sha256": "63a632cbb85b2ad19d67a1abb8ed77de3496e26cf7798948aa1b380d4031ad6e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/portable/four_scripts_execution.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1015,
+      "sha256": "1ec47b8c957f00b60ac189e1475da83ca4950c7ba082bfe0eb0fc45d7d0680e1",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/portable/four_scripts_execution.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 753,
+      "sha256": "2647c63902c3359d0b3e4d158419edc8dea7dc6ccc9e52ea54fadef58b561ddb",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/portable/portable_dedicated_tests.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 570,
+      "sha256": "e3cab9deb15a62c11dd3bf1cf1a179ae8e660c879d62ca78d1804b157b6054a1",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/portable/provenance.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 16184,
+      "sha256": "d29bbafd02142d5edf914c2b57a0486095d3041340afcb72a7a0ca861b64f077",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/portable_initial_attempt.txt",
+      "roles": [
+        "internal_group_review_only",
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 8811,
+      "sha256": "c6f0c3f01ca9c84cb1d448accdd99d2a817591bfd8f3d12653418b10383c7422",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/portable_second_attempt.txt",
+      "roles": [
+        "internal_group_review_only",
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 9870,
+      "sha256": "c9110904ca9399c990763abbcbbffc99ca9876d368a0824230d1df2fb7393221",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/ras/ras_lyapunov.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 28522705,
+      "sha256": "227e87a6ba02716a235901622668cc11ab63cfa0225d36bd311ab6afbe9c346d",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/ras/ras_metrics.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 7485,
+      "sha256": "2dfa7e44eb335e38e2ced46ac1473800b865c5e49421b44427e27aad8511e0b7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/ras_initial_attempt.txt",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 337,
+      "sha256": "cd261dc4763bb396f9933c829e090d60fce8effec2843d03b2139ac52d095ea7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/regression/four_scripts_execution.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1015,
+      "sha256": "c79941ce235b414ab13cb13d74fa5aec1928c0416260fcbc7db3e60a9658e31c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/regression/four_scripts_execution.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 753,
+      "sha256": "1ea7bfdce19044042f2c69afd3f78f00b964100485b7b8309dff3571700b6dcc",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/regression/matlab_tests.csv",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 10398,
+      "sha256": "d414154061c1b58791d77845d2ba4b6a90ea44d8ec6b11d541221e23724e4cd7",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/regression/matlab_tests.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 5869,
+      "sha256": "540949f5a091345b75495023681d97869ab9646c479bb707e5978c8581ae8fcc",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/regression/provenance.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1153,
+      "sha256": "8d5b1b8e71b6f4a973d6e017c3e948d1e133898510255c6c428bf868b42a0391",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/robustness_validation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 610491,
+      "sha256": "508e7785a95fe9dafdca9350dd7cde288bdb9adceb18d0a63135dafb0d853f64",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/figures/Hinf_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 225923,
+      "sha256": "9c5a4839b09b23a6482e5cf539a57103237054c7acf91b22f5b190fbd4563605",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/figures/Hinf_nonlinear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 211027,
+      "sha256": "0e3ca8b5404879c5637c04ac7ab0d7eedeaf261e5a6eb3b11e504d3329f12bb0",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/figures/mu_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 161497,
+      "sha256": "c41f64be45b196ea31bd2582706668098cc782aa2d3f47fcdff8beede6892f1d",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/figures/mu_nonlinear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 162730,
+      "sha256": "6e9017fc9c2c7a3f7e92552f7c204d5eb51b404edaec0af04831df19ad135cb5",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/figures/slide_mu_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 84391,
+      "sha256": "3cddcd0d59f32a7b192e9115bdd93250181cc74f5c9b0058e1d4c51df48f9626",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 51457,
+      "sha256": "b2c24f705ee3023c4eec5d483a4b3aa1e67114adb8ec431b26f50e14e11e6c50",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 9764,
+      "sha256": "7af3270ee61ece18c6c5acccfe22e1da640eff282448bfd88e0d0c893cff0209",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1941,
+      "sha256": "6ad9c45ef0b55be02cccc70b8cce402c56040d7b51fa0d2db6a038acedaee573",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 13009,
+      "sha256": "bae72d16fe0bdf1b9a01115f74e6cb9d693e5ce702bd0a02f6aa7ad40ada174b",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 20759718,
+      "sha256": "7828122261cf198d3ae9ac7ab387b766586b135e6b116e49e048325f71b72ece",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 311798,
+      "sha256": "0e954540e94a0d174aa15987ee56b13575900f0f56da3fd399ce940786d4417b",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_linear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 68489,
+      "sha256": "d0980b0e063e4eef39aa4984e8e3e88f80d034722ac52a5d9600b058756b4499",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 88053,
+      "sha256": "261ea6d0f696ef26c4a54020d4c97283f967e1eccd9db70cdf5d5f6498b66cfe",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 10317,
+      "sha256": "b2727fdbe9e06065a558c9938e3bf38847320b936d4695ef3fb2094d1274936c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 2045,
+      "sha256": "fd8278a04dcd0bbccf1752e0758b842ea39f96d6fb356d232c3d4ef614017918",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 13174,
+      "sha256": "30ce3f3c37969163fe1cef2c07868dd3d2d95141c749277e31c3ccea714ab02d",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 102894926,
+      "sha256": "c4c39fc20aa551e2392369d465cf14b8bb261bc625aa686602021c4fce9992f3",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1391387,
+      "sha256": "14fe47a18141aecfa5eb8f19de0ebd2d9528a909d7f29bb148980eb9007f0e61",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/Hinf_nonlinear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 68489,
+      "sha256": "91a2e2b089aa63626f06e625254039e3b402908805132e1ec784daec6b2b6f46",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 18325,
+      "sha256": "397f6d9126d1cd856f597ca9b15c5d1129561253344c80675ca01e783f616dc8",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 3523,
+      "sha256": "e95959ee3750f056daa61fee1cb10b6f2b1d1fade9a09d4870833b489b34d185",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1270,
+      "sha256": "808c881fc44618e120a48a76bd89aa6561579097cf80914259e1f606e721e714",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 4283,
+      "sha256": "c10d7d5c0f25a33abcaa04b16debc87e2949fa3b7ef6331a2874f87335b97fee",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 13535914,
+      "sha256": "7e216ebb30e917a081eda5ca6d19f0248dbc3b5aefd25c1c4809a839f5435970",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 565364,
+      "sha256": "682f05d26ac140c01300298d260e614ddba88268105bd5b39199823f1d5fcc17",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_linear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 115313,
+      "sha256": "5d15321682cf15d11a68c027d640fccf7a487ef14adcc74e032a8faf8dbd7427",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 30467,
+      "sha256": "523850d4674fb922a5c00b813e43d198eb98cb9b04df96e27eb5d6b01e5c3257",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 3621,
+      "sha256": "4152078df65475ee7edbcf8e034fef457608952de21c51ff0b56466dd3078dfd",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1261,
+      "sha256": "c468b0db55d5db4b9782c5dff23bae20b112c6a186faf50e76404c653fa4b9f6",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 4339,
+      "sha256": "64f7e184fc8b2919c41b90b46fc282d7c30a96e5dbd3bbd9ec4ab6df14f69fc4",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 27202089,
+      "sha256": "9adc63fc72bef55ae3912acf63b6244e65eb4b07132129eb7655a3a67dfee19a",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1110912,
+      "sha256": "4c6f583fb98f193a77fe7b1d0495ef7fd0fce42170005b7ed3cff8821271b646",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/baseline/mu_nonlinear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 115313,
+      "sha256": "007cfa4f41b77abc34b6d149a61163b037eeb73d1a8275bb837975da17105240",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/figures/Hinf_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 207483,
+      "sha256": "15898cf6f1c16d3dfe47ec48043d29e1e6f589eea1867985575fcf5f3403f842",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/figures/Hinf_nonlinear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 226758,
+      "sha256": "d130bc8c969320a2fa05e81afe53373eedd1cae8a76ab011e52ae90e2318207b",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 51608,
+      "sha256": "66e374c6300b6cd20ba2b027277a9dd0f62ee8d1f2c495cfbb806fc0b14bfeac",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 9766,
+      "sha256": "7d211057dda83b2b17a141e6126f3cb215db080c5ff277e46654525a92b19bc3",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1888,
+      "sha256": "077fa43d2ef19e88d922e34205193dec739f100560aae71cbb6d56f052f76f2e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 13012,
+      "sha256": "266d7860a321eb55a59c59ca81110bbc072afe269f74ae7b25271136202d9216",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 10131049,
+      "sha256": "f03548ca59c3947d148a2044ab900448a820d74bf5f8f02e7aa26e7ab5ffcac2",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 172743,
+      "sha256": "76c565ee6e9f16981eea2b21a71ab4af8e6fcb55e71b6cca52decd295e3aac85",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_linear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 68325,
+      "sha256": "112342742c34248f251b5000c66171999821f52b7285fb6b4bbd92aff0854b03",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 88201,
+      "sha256": "328278fee25800d05d2c171d2a62b8f02628f648d3c6916933f921fd2824f854",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 10478,
+      "sha256": "34bddc2e1fdad17b6d855fda62125d90916895e75db41534226630615fdbd211",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 2053,
+      "sha256": "11f82b40f093f13b12f7584a8f715470f16253e2e81df8dce6b5ba1ea07692dd",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 13174,
+      "sha256": "466fb69fbcc70736832cd476a6c8cfed8a26032ef69ccc99197bf752f1ed1d1c",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 54401766,
+      "sha256": "227828aff264da1a42c95274c72ee9fee61a6cc8874ad7917cf05d37a3765266",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 756790,
+      "sha256": "5935723fe4bad1d75277f77e89e5be7caeca828ee380b257f48b044d34ce1bbd",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_hinf3/Hinf_nonlinear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 68325,
+      "sha256": "76263b73700fe4ced3032bc295ad66c04b784e0261cc42a9b4bb91dcd070d391",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/figures/mu_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 163497,
+      "sha256": "f890fdc1295fabfc9aa6bd6e46fb233d6675e933d18be9da034a03b41ac5bf6c",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/figures/mu_nonlinear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 164120,
+      "sha256": "76be663e88342bcebf862e010866bf1bb5ce0df5255744e35d134bb19e9039a2",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/figures/slide_mu_linear_sim.png",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 88654,
+      "sha256": "233c5f023414be96b5e66e298f7deaec4fefe349f3fde2b5ef411a99c32fc740",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 18441,
+      "sha256": "9479063835cffbc571eb8635f8cbdb913ecebc2bfccd04610f6b95ce612720d4",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 3522,
+      "sha256": "f6bbe37e3abcb746e6d2cf8b53526274753e72aaf03490443ec36fe196c32eb9",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1274,
+      "sha256": "b881412382a22e79da619aaff3841dfd5ba7c969f1ff727b2999149d6428bc60",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 4255,
+      "sha256": "425e1cbb05d0019e29c6dc8e0987f422214f8e836e9095583119c224a4fe23eb",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1475984,
+      "sha256": "a9a2bb679d0516bc73cb8c0dbec00e86a9c8f5d2f375ea4b286c5aa5cda77a31",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 95284,
+      "sha256": "0bc4084ece63bcf2dab8dafd1ac5f31ac8fe085b14d3f3a646208772887fea87",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_linear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 126066,
+      "sha256": "fc12b7849ff2d8182c0bbf407c1bdb23b60a1970a964d9348b34ef346d4ff5e3",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_audit.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 30567,
+      "sha256": "6fe5e488dc482d30604917f266df68cf177c556981417f483188fe9ad561731f",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_dynamic_review.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 3614,
+      "sha256": "cbfc9cccddf5f6f9779f1cd49b2af41e6e165387b8eee44661b02fcf8b4ea48a",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_dynamic_review.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1267,
+      "sha256": "5342f8d33f6d724755b08289daf4b5e30866141df89a718442e42dd83197fe53",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_scope_acquisition.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 4295,
+      "sha256": "54ce2aea24acfa36f39e329ed6b75401180ed3e355894adcc5f320e5ed3fbab8",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_scope_buffers.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 1467201,
+      "sha256": "37dfb442d32233f6e165db10034dc670a335938d37f5bd0922454197e70f6946",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_simulation.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 95363,
+      "sha256": "64b3255ba6d931c5bb4ba400d87b480354051b562501ed72e3c010a98428e51c",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/noise_mu1/mu_nonlinear_sim_workspace.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 126066,
+      "sha256": "955a4ae00a321227fb627475afa9ffc02440e3d3552791acd83d423c00e8c34d",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/simulink/paired_runs.mat",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 56001,
+      "sha256": "898200c23aaf79fa182fc05d449eb4f6a209d9c4ae4d26f61044eb0ab18da29e",
+      "hash_mode": "exact bytes"
+    },
+    {
+      "path": "results/data/noise_redesign/summary.json",
+      "roles": [
+        "noise_synthesis_and_validation_evidence"
+      ],
+      "size_bytes_recorded": 162705,
+      "sha256": "e3c9bd0979c559dee52c523585a11f5be6be8e3d158dbf49b59d53363e7cd63b",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "results/figures/README.md",
       "roles": [
         "reproduction_and_integrity_instructions"
@@ -2629,8 +3735,8 @@
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 7516,
-      "sha256": "acb8b205a6972dcd32f628d18f5573c2e5f2a8f71a8c6eef9fad99950c61086c",
+      "size_bytes_recorded": 7814,
+      "sha256": "0bfb0c0a5ad3d3804bd1b9413d95615a2cddee8a7a39834b67614ca23b24eb9a",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2647,8 +3753,8 @@
       "roles": [
         "reproduction_and_integrity_instructions"
       ],
-      "size_bytes_recorded": 2230,
-      "sha256": "aa26f66b5e2cc915dcfd42966cefacd7775e91521aba26395a689a3858fdb695",
+      "size_bytes_recorded": 2867,
+      "sha256": "e4912b298816c7e4219a6fc0f3c9a8db4c12e4f2d6f2e847eb62c41e1ccbc7cb",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2656,8 +3762,8 @@
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 2046,
-      "sha256": "7b5992f25ea7ee0d4b824fd78b1120b08ea878c105abc0d99b2778b714b3750b",
+      "size_bytes_recorded": 3279,
+      "sha256": "5197578c8a097d452190a7a4db315df8b38a7372ba8bf26c47e74950a07f5189",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -2746,8 +3852,8 @@
       "roles": [
         "matlab_detected_source_dependency"
       ],
-      "size_bytes_recorded": 9142,
-      "sha256": "8c413353e84adf15e0c971eefdc30d8971d7917abdbb08426a7c4a4d0f8006cc",
+      "size_bytes_recorded": 11095,
+      "sha256": "ca3b80f17525449791d51c465e8ba6d1b4b5bae762e8bb662169d3b4f1357685",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -3093,12 +4199,30 @@
       "hash_mode": "LF-normalized text"
     },
     {
+      "path": "tests/noiseRedesignTest.m",
+      "roles": [
+        "noise_verification_source"
+      ],
+      "size_bytes_recorded": 6334,
+      "sha256": "ebb0b440834e694889c7576bb8e779d42af9805537e633e3781be518148449a9",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/audit_oral_timing.py",
+      "roles": [
+        "document_reproduction_or_build_audit"
+      ],
+      "size_bytes_recorded": 4818,
+      "sha256": "0323f28c4b96126598e40872ee3a4d6f320578542b8b84843e06949671e100f0",
+      "hash_mode": "LF-normalized text"
+    },
+    {
       "path": "tools/build_delivery_manifest.py",
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 7667,
-      "sha256": "0f6c5d1d16d38bef8dd9faafe018cc6b9c147ae36fae5fd0ba63e81f2bb6f97f",
+      "size_bytes_recorded": 8741,
+      "sha256": "4a2ee4022026fec14882cc2c723c901e872c5516095cfd08b9025c0b43cbe3cb",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -3126,6 +4250,15 @@
       ],
       "size_bytes_recorded": 3984,
       "sha256": "110d932ce8e5763e0b9e4228ef9efcd8e8f85705b03297483df8c9cf3ed19c61",
+      "hash_mode": "LF-normalized text"
+    },
+    {
+      "path": "tools/build_noise_redesign_documents.py",
+      "roles": [
+        "document_reproduction_or_build_audit"
+      ],
+      "size_bytes_recorded": 19835,
+      "sha256": "692687d4cfb4bdea8e9fc320fd45f8ae9543ebd9cc82a46aaf7b09ebf25458b7",
       "hash_mode": "LF-normalized text"
     },
     {
@@ -3169,8 +4302,8 @@
       "roles": [
         "document_reproduction_or_build_audit"
       ],
-      "size_bytes_recorded": 5504,
-      "sha256": "ba03978e776543eb0c8270c0abd48500ec69102200719b2d9cf67b6e22db0b8a",
+      "size_bytes_recorded": 5681,
+      "sha256": "96dad63405441cc87609549f47e20c622ae2758e5722068e7c53aa7edd5d9365",
       "hash_mode": "LF-normalized text"
     },
     {

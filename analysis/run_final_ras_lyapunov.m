@@ -1,10 +1,23 @@
-function result = run_final_ras_lyapunov
+function result = run_final_ras_lyapunov(controllerSet,outputFolder)
 %RUN_FINAL_RAS_LYAPUNOV Full-state Lyapunov gates and paired nonlinear section.
+arguments
+    controllerSet struct = struct([])
+    outputFolder (1,1) string = ""
+end
 d=final_closure_load; folder=fullfile(d.root,'results/data/final_closure'); m3=d.m3;
+if ~isempty(controllerSet)
+    assert(outputFolder~="",'FinalRAS:CandidateOutput','I candidati richiedono una cartella distinta.');
+    assert(~strcmpi(char(java.io.File(char(outputFolder)).getCanonicalPath), ...
+        char(java.io.File(folder).getCanonicalPath)), ...
+        'FinalRAS:CandidateOutput','La cartella RAS consolidata e protetta.');
+    d.controllers=controllerSet;
+end
+if outputFolder~="",folder=char(outputFolder);if ~isfolder(folder),mkdir(folder);end,end
+nControllers=numel(d.controllers);
 [Aa,Ba,Ca,Da]=ssdata(m3.GactuatorsMimo);
 % Same physical initial conditions for every controller, no persistent inputs.
 [q1,q2]=ndgrid(deg2rad([-60 -30 0 30 60])); points=[q1(:),q2(:)];
-rows=cell(0,14); proofs=cell(6,1); trajectories=cell(6,25); start=1;
+rows=cell(0,14); proofs=cell(nControllers,1); trajectories=cell(nControllers,25); start=1;
 checkpoint=fullfile(folder,'ras_lyapunov.mat');
 if isfile(checkpoint)
     saved=load(checkpoint,'result');
@@ -17,10 +30,10 @@ if isfile(checkpoint)
             assert(isequal(proofs{existing}.Acl,current.A),'FinalRAS:CheckpointController','Checkpoint closed-loop matrix differs.');
         end
         start=find(cellfun(@isempty,proofs),1);
-        if isempty(start),start=6;end
+        if isempty(start),start=nControllers;end
     end
 end
-for k=start:6
+for k=start:nControllers
     cc=d.controllers(k); cl=final_closure_loop(m3.Afull,m3.Bfull,d.m5.BdFull,m3.CfullQ,cc);
     n=size(cl.A,1); [T,Ab]=balance(cl.A); E=zeros(n,2); E(3:4,:)=eye(2);
     Pb=lyap(Ab',eye(n)); Pb=(Pb+Pb')/2;
@@ -53,7 +66,7 @@ for k=start:6
         status="FINITE_HORIZON_NONCONVERGENT"; converged=false; peakU=NaN; tailQ=NaN; tailTheta=NaN; tailV=NaN; tailVtheta=NaN;
         try
             solver="ode23t";
-            if k==5
+            if cc.name=="PID" || outputFolder~=""
                 solver="ode15s balanced coordinates";
                 options=odeset(options,'Jacobian',@balancedJacobian, ...
                     'AbsTol',1e-8./sum(abs(T),1)', 'Events',@balancedLimit);
@@ -85,7 +98,7 @@ for k=start:6
     end
     result=struct('proofs',{proofs},'trajectories',{trajectories},'pointsRad',points,'rows',{rows}, ...
         'horizon',12,'tailStart',11,'wallTimeBudgetPerPoint',60, ...
-        'engine','MATLAB ode23t; PID balanced ode15s with mechanical Jacobian; not Simulink');
+        'engine','MATLAB ode23t baseline; PID and separate candidate runs use balanced ode15s with mechanical Jacobian; not Simulink');
     save(fullfile(folder,'ras_lyapunov.mat'),'result','-v7');
 end
 result.metrics=cell2table(rows,'VariableNames',{'Controller','Q1deg','Q2deg','Converged','Status','PeakU', ...
