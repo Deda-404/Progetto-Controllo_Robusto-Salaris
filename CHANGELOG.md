@@ -630,3 +630,13 @@ Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini aute
 - Aggiunti A pieno, variante diagonale e B parametrico, con residuo Padé separato.
 - Verificata equivalenza ingresso-uscita: cinque test R2026b PASS.
 - Banca controllori, intervalli fisici e modelli Simulink conservati.
+
+## 2026-10-24 — Confronto A/B e specifiche rilassate
+
+- Eseguite 18 analisi con controllori congelati, tre sintesi nominali comuni
+  e sei D-K; post-analisi incrociata su A/B e limiti di guadagno 1,3,10.
+- Aggiunte 60 prove su impianti parametrici e 60 prove RAS LIN/NL,
+  tre studi Q/R, verifica Kalman lunga e riduzioni 82/70/60.
+- 39 test PASS; 17 sorgenti senza segnalazioni; preservati 259 MAT/SLX
+  preesistenti. Nuovo scope esplicito salaris in run_all.
+- Esiti negativi, timeout e stime inconclusive conservati e documentati.

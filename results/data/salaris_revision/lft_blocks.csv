@@ -1,0 +1,15 @@
+Model,Block,Type,ElementarySize,Occurrences
+Meccanica automatica,Jm1,ureal,1,1
+Meccanica automatica,k1,ureal,1,1
+Meccanica automatica,k2,ureal,1,1
+Meccanica manuale,dJm1,ureal,1,1
+Meccanica manuale,dk1,ureal,1,1
+Meccanica manuale,dk2,ureal,1,1
+Attuatore automatico,Dres1,ultidyn,1,1
+Attuatore automatico,tau1,ureal,1,1
+Attuatore automatico,wn1,ureal,1,5
+Attuatore automatico,zeta1,ureal,1,1
+Attuatore manuale,Dres1,ultidyn,1,1
+Attuatore manuale,dtau1,ureal,1,1
+Attuatore manuale,dwn1,ureal,1,2
+Attuatore manuale,dzeta1,ureal,1,1

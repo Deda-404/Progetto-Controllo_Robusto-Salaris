@@ -1,3 +1,32 @@
+# Stato del 24 ottobre 2026 — revisione Salaris
+
+Implementazione e collaudo COMPLETE / PASS; accettazione scientifica PARTIAL.
+Branch codex/revisione-focus-incertezze-salaris da main 0ed5611, nessun merge.
+LFT manuali di meccanica e attuatori; A pieno, A diagonale e B parametrico
+con residuo Padé additivo e inclusione analitica degli insiemi.
+
+39/39 test MATLAB R2026b PASS; Code Analyzer su 17 file senza messaggi.
+259 MAT/SLX e 258 sorgenti MATLAB precedenti invariati; solo run_all è
+esteso con uno scope esplicito. I quattro script principali e i tre helper
+della raccolta didattica, le equazioni e gli otto SLX sono conservati.
+
+B raggiunge RS/RP con limite di amplificazione rilassato a 3, banda 1.574
+rad/s, Ts 2.405 s ed errore DC 37.716%; i target temporali restano violati.
+Nessuna sintesi A raggiunge RS nei tre livelli e nel budget dichiarato.
+Due stime quantitative Hinf2 restano inconclusive. Dieci impianti comuni;
+RAS 52 convergenze, 5 non convergenze, 3 esiti ignoti su 60 tentativi.
+Kalman teorico/empirico coerente; riduzione MuN1 82->60 conserva RS/RP su M4,
+mentre la nuova famiglia B resta senza garanzia per entrambi gli ordini.
+
+Relazione 23 pagine, presentazione 18 slide; scaletta 18:34 pianificati.
+PDF compilati con zero errori, riferimenti irrisolti, duplicati o overflow;
+verifica visiva completata. Sei schemi TikZ e sette figure MATLAB.
+Resoconto: docs/RESOCONTO_REVISIONE_SALARIS.md. Restano revisione del branch,
+scelta dei candidati, prova orale dal vivo e, prima dell'adozione di nuovi
+controllori, il loro collaudo non lineare/Simulink. Nessuna sostituzione
+silenziosa della baseline e nessuna certificazione hardware.
+
+---
 # Revisione del 24 ottobre 2026 — modellazione COMPLETE / PASS
 
 Branch codex/revisione-focus-incertezze-salaris da origin/main 0ed5611.
@@ -111,4 +140,5 @@ Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero erro
 Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
 
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
+
 

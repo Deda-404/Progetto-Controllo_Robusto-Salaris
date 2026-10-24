@@ -3065,3 +3065,35 @@ log temporanei e non sono accreditati come risultati finali.
 
 Gate modellazione COMPLETE / PASS. Nuovi modelli proposti per revisione nel
 branch; l'adozione definitiva rimane agli studenti. Responsabile: Alessio.
+
+## 2026-10-24 — Confronto robusto, prove e collaudo conclusi
+
+Eseguite le analisi dei sei controllori su A pieno, A diagonale e B,
+le tre sintesi H-infinity comuni e le sei D-K A/B con fattori dinamici
+1, 0.3, 0.1. Il tentativo con DG pieni è stato interrotto per costo di calcolo;
+la campagna accreditata usa DG diagonali e quattro iterazioni per caso.
+B a fattore 1 raggiunge RS inferiore 1.30865 e RP inferiore 1.29882 con
+limite di amplificazione rilassato a 3; banda 1.57372 rad/s. Restano Ts
+2.405 s ed errore DC 37.716%, oltre i target M5. Nessuna sintesi A raggiunge
+RS nella campagna limitata; nessuna prova di impossibilità o banda ottima.
+Due stime Hinf2 incompatibili con le inclusioni sono marcate inconclusive.
+
+Dieci impianti parametrici comuni: LQG/LQGI/Kmu 10/10 stabili, Hinf1 6/10,
+PID 4/10, Hinf2 0/10. Sessanta prove RAS: 52 convergenze, 5 non convergenze
+nell'orizzonte, 3 timeout ignoti; 24 punti soddisfano anche J<=0.5 gradi.
+Kalman 600 s con rumore continuo campionato esattamente, 60 s scartati;
+varianze empiriche entro circa 1.5% dalle rispettive teoriche.
+
+Riduzione MuN1 da 82 a 60 stati: errore relativo H-infinity 2.424e-8;
+M4 conserva RS [1.84535,1.88178] e RP [1.59624,1.60043]. I nuovi A/B non
+ereditano tali certificati. Nessun controllore sostituito o promosso.
+39/39 test R2026b PASS, 17 file Code Analyzer senza messaggi. Il test M3
+ha rigenerato un MAT e tre figure: ripristinati dalla base, aggiunta la
+conservazione automatica degli output al nuovo runner. Integrità Git PASS:
+259 MAT/SLX, 258 sorgenti MATLAB precedenti e sette sorgenti della raccolta
+didattica invariati, escluso il runner run_all aggiornato esplicitamente.
+
+Gate implementazione/analisi COMPLETE / PASS; accettazione scientifica
+PARTIAL. Le nuove sintesi e il controllore ridotto richiedono collaudo
+non lineare/Simulink prima della promozione. Risultati e limiti nel
+resoconto dedicato e nei CSV. Responsabile: Alessio.

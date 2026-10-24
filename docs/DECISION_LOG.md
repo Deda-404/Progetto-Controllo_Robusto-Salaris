@@ -2355,3 +2355,19 @@ usa una maggiorazione analitica, volutamente dichiarata e controllata sui
 campioni. I confronti devono distinguere questo inviluppo dalla sola struttura.
 La costruzione manuale impiega forze interne e parametri normalizzati; lftdata
 è usato per verifica, non per derivare la versione manuale.
+
+## 2026-10-24 — Criteri del confronto e promozione dei candidati
+
+Usare DG diagonali, analisi mista dei parametri reali e lo stesso budget
+D-K A/B. Provare solo i tre fattori 1,0.3,0.1; riportare poi i livelli comuni
+1,3,10 della norma pesata. Un livello rilassato non equivale al requisito
+originario. Confrontare banda misurata, assestamento, errore DC e disturbo;
+non dichiarare una perdita di una decade senza dati pertinenti.
+
+Una violazione numerica della monotonia imposta dalle inclusioni rende il
+margine quantitativo inconclusivo; non è una scoperta fisica a favore di un
+modello. Conservare dati grezzi e stato dell'esito. Classificare separatamente
+convergenza, soglia J ed errori del solver. Non ricorrere a Lyapunov per la
+nuova RAS. La riduzione a 60 conserva M4 ma resta una proposta, da verificare
+in non lineare/Simulink prima dell'adozione. Stato: studio APPROVATO dal
+mandato, adozione PROPOSTA alla revisione degli studenti.

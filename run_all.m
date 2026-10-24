@@ -21,6 +21,8 @@ if isempty(scope) || strcmp(scope,'verify')
     save(fullfile(folder,'matlab_tests.mat'),'verification');
     writetable(verification(:,1:5),fullfile(folder,'matlab_tests.csv'));
     assertSuccess(testResults);
+elseif strcmp(scope,'salaris')
+    run_salaris_revision('all');
 elseif strcmp(scope,'originals')
     validate_student_originals(false);
 elseif strcmp(scope,'closure')
@@ -39,6 +41,6 @@ elseif strcmp(scope,'export')
     savedRas=load(fullfile(projectRoot,'results/data/lqgi_validation/ras.mat'));
     export_lqgi_validation(data.result,projectRoot,savedRas.ras);
 else
-    error('RunAll:Scope','Usare verify, originals, closure, closure_export oppure export.');
+    error('RunAll:Scope','Usare verify, salaris, originals, closure, closure_export oppure export.');
 end
 end
