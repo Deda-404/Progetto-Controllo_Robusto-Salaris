@@ -3128,3 +3128,5 @@ esito PASS come scaletta, non come prova dal vivo. Rimossi unicamente spazi
 finali del TXT; nessun numero o PDF modificato in questa registrazione.
 Delivery README identifica correttamente i pacchetti storici del 13 ottobre.
 Revisione dei candidati e integrazione nel main rimangono agli studenti.
+
+Controllo finale di formato: rimossa una riga vuota finale dall'esportatore grafico; nessuna modifica funzionale o numerica. Diff senza errori di whitespace, working tree pulito dopo pubblicazione.

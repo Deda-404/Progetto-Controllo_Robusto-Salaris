@@ -80,4 +80,3 @@ end
         exportgraphics(fig,fullfile(destination,name+".png"),'Resolution',170);close(fig);
     end
 end
-
