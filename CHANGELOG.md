@@ -648,3 +648,9 @@ Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini aute
 - Copione e scaletta per due studenti: 18:34 pianificati, prova dal vivo da fare.
 - Due PDF compilati, auditati senza errori/overflow e controllati visivamente.
 - Resoconto esplicito di risultati negativi, limiti e collaudi prima dell'adozione.
+
+## 2026-10-24 — Pubblicazione e audit orale
+
+- Branch pubblicato e PR #43 aperta in bozza, senza merge.
+- Audit del nuovo copione: 18 slide, 1503 parole, scaletta pianificata 18:34.
+- Identificati esplicitamente come archivio i pacchetti di consegna del 13 ottobre.

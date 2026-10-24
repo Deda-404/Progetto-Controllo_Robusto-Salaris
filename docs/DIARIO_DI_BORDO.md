@@ -3116,3 +3116,15 @@ per correggere l'impaginazione.
 README, resoconto, stato e decisioni aggiornati. Controllori originali e SLX
 conservati; i candidati nuovi e la riduzione restano distinti. Gate editoriale
 COMPLETE / PASS; promozione dei candidati e merge riservati agli studenti.
+
+## 2026-10-24 — Branch pubblicato e PR #43
+
+Pubblicati separatamente modellazione (558c3a1), analisi e prove (0bdc6e0),
+elaborati (13710df). PR #43 aperta in bozza e collegata alla revisione:
+https://github.com/Deda-404/Progetto_CR/pull/43. Main 0ed5611 invariato.
+L'audit orale ora riconosce anche il nuovo formato a 18 slide, preservando
+il percorso del vecchio copione: 1503 parole, 1080 s pianificati + 34 s cambi,
+esito PASS come scaletta, non come prova dal vivo. Rimossi unicamente spazi
+finali del TXT; nessun numero o PDF modificato in questa registrazione.
+Delivery README identifica correttamente i pacchetti storici del 13 ottobre.
+Revisione dei candidati e integrazione nel main rimangono agli studenti.

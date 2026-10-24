@@ -188,4 +188,3 @@ DOMANDE DI RIPASSO
 - Che cosa si può concludere se quattro iterazioni D-K non trovano RP?
 - Perché una prova RAS può convergere e fallire la soglia J?
 - Quali varianze si possono confrontare con la soluzione Riccati di Kalman?
-

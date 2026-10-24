@@ -6,10 +6,40 @@ ROOT=Path(__file__).resolve().parents[1]
 SPEED=125  # parole al minuto; ipotesi di esposizione tecnica chiara
 CHANGE=2   # secondi riservati a ogni cambio slide
 
+def audit_uncertainty_revision(raw):
+    """Verifica la scaletta a 18 slide senza riscrivere copione e note."""
+    official=raw.split('DOMANDE DI RIPASSO')[0]
+    speech=list(re.finditer(r'^SLIDE (\d+) - (ALESSIO|VALERIO)\n(.*?)(?=^SLIDE|\Z)',official,re.M|re.S))
+    outline=(ROOT/'presentation/OUTLINE_AND_TIMING.md').read_text(encoding='utf-8-sig')
+    slots=re.findall(r'^\|\s*(\d+)\s*\|[^|]+\|\s*(Alessio|Valerio)\s*\|\s*(\d+)\s*\|',outline,re.M)
+    assert [int(m[0]) for m in slots]==list(range(1,19))
+    assert [int(m.group(1)) for m in speech]==list(range(1,19))
+    source=(ROOT/'presentation/main.tex').read_text(encoding='utf-8-sig')
+    assert source.count(r'\begin{frame}')==18
+    records=[]
+    for match,slot in zip(speech,slots):
+        assert match.group(2).title()==slot[1]
+        words=len(re.findall(r"\b\w+(?:['’]\w+)*\b",match.group(3)))
+        records.append(dict(slide=int(slot[0]),speaker=slot[1],words=words,
+                            estimated_speech_seconds=math.ceil(60*words/SPEED),planned_seconds=int(slot[2])))
+    total=sum(r['planned_seconds'] for r in records)+17*CHANGE
+    spoken=sum(r['estimated_speech_seconds'] for r in records)
+    assert spoken<=sum(r['planned_seconds'] for r in records) and total<=1200
+    evidence=dict(slides=18,words=sum(r['words'] for r in records),speed_words_per_minute=SPEED,
+                  estimated_speech_seconds=spoken,planned_total_seconds=total,
+                  speaker_seconds={s:sum(r['planned_seconds'] for r in records if r['speaker']==s) for s in ['Alessio','Valerio']},
+                  records=records,status='PASS: planned timing; live rehearsal required')
+    target=ROOT/'results/data/salaris_revision/oral_timing.json'
+    target.write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print(f"18 slide, {evidence['words']} parole; scaletta {total//60}:{total%60:02d}; prova dal vivo da effettuare.")
+
 def main():
     path=ROOT/'presentation/Presentazione_orale.txt'
     if not path.exists():path=ROOT/'preparazione_studenti/Presentazione_orale.txt'
     raw=path.read_text(encoding='utf-8')
+    if 'SLIDE 1 - ALESSIO' in raw:
+        audit_uncertainty_revision(raw)
+        return
     official=raw.split('APPENDICE — POSSIBILI DOMANDE E RISPOSTE')[0]
     pattern=r'SLIDE (\d+) — ([^\n]+)\nStudente: (Alessio|Valerio)\nTempo previsto: [^\n]+\nTesto da pronunciare:\n(.*?)\nRegia: ([^\n]+)'
     records=[]

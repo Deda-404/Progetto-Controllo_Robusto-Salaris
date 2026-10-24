@@ -142,3 +142,7 @@ Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGET
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
 
 
+
+Pubblicazione 24 ottobre: PR #43 in bozza
+(https://github.com/Deda-404/Progetto_CR/pull/43), main 0ed5611 invariato.
+Audit orale riproducibile: 1503 parole su 18 slide, 18:34 pianificati.

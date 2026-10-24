@@ -118,3 +118,15 @@ sintesi A/B o il controllore ridotto al posto degli originali occorrono anche
 le rispettive prove non lineari/Simulink: questa revisione non trasferisce
 loro il collaudo degli SLX originali. Le coppie restano non saturate e non
 sono disponibili limiti hardware identificati.
+
+## Pubblicazione per revisione
+
+PR in bozza: https://github.com/Deda-404/Progetto_CR/pull/43.
+Tre commit scientifici/editoriali distinti: 558c3a1, 0bdc6e0, 13710df.
+Main rimane alla base 0ed5611; nessun merge eseguito.
+
+L'audit del copione conta 1503 parole di parlato su 18 slide. La scaletta
+riserva 1080 s ai contenuti, inclusa la spiegazione dei diagrammi, e 34 s
+ai cambi: 18:34 pianificati. Evidenza in oral_timing.json. Il manifest e gli
+archivi in delivery/ si riferiscono al pacchetto storico del 13 ottobre;
+questa revisione usa i sorgenti, i PDF e le evidenze correnti del branch.

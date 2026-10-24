@@ -1,3 +1,12 @@
+# Archivio della consegna del 13 ottobre 2026
+
+Questo documento e i pacchetti descritti si riferiscono alla consegna del 13 ottobre.
+La revisione del 24 ottobre è descritta nel README principale e in
+docs/RESOCONTO_REVISIONE_SALARIS.md; i PDF correnti sono in report/ e presentation/.
+Il manifest di questa cartella registra il pacchetto storico del 13 ottobre.
+
+---
+
 # Consegna del progetto SEA con studio del rumore
 
 Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224. Data: 13.10.2026.

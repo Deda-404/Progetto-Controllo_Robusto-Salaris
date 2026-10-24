@@ -60,3 +60,5 @@ la precedente versione integrale è disponibile nella cronologia Git.
 
 Il branch `codex/revisione-focus-incertezze-salaris` è dedicato alla revisione
 degli studenti. Main non viene modificato. Drive rimane in sola lettura.
+
+Revisione su GitHub: [PR #43 in bozza](https://github.com/Deda-404/Progetto_CR/pull/43).

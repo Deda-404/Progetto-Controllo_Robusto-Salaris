@@ -1,0 +1,140 @@
+{
+  "slides": 18,
+  "words": 1503,
+  "speed_words_per_minute": 125,
+  "estimated_speech_seconds": 731,
+  "planned_total_seconds": 1114,
+  "speaker_seconds": {
+    "Alessio": 530,
+    "Valerio": 550
+  },
+  "records": [
+    {
+      "slide": 1,
+      "speaker": "Alessio",
+      "words": 48,
+      "estimated_speech_seconds": 24,
+      "planned_seconds": 20
+    },
+    {
+      "slide": 2,
+      "speaker": "Valerio",
+      "words": 89,
+      "estimated_speech_seconds": 43,
+      "planned_seconds": 55
+    },
+    {
+      "slide": 3,
+      "speaker": "Alessio",
+      "words": 84,
+      "estimated_speech_seconds": 41,
+      "planned_seconds": 55
+    },
+    {
+      "slide": 4,
+      "speaker": "Alessio",
+      "words": 105,
+      "estimated_speech_seconds": 51,
+      "planned_seconds": 80
+    },
+    {
+      "slide": 5,
+      "speaker": "Valerio",
+      "words": 100,
+      "estimated_speech_seconds": 48,
+      "planned_seconds": 80
+    },
+    {
+      "slide": 6,
+      "speaker": "Alessio",
+      "words": 119,
+      "estimated_speech_seconds": 58,
+      "planned_seconds": 100
+    },
+    {
+      "slide": 7,
+      "speaker": "Valerio",
+      "words": 100,
+      "estimated_speech_seconds": 48,
+      "planned_seconds": 75
+    },
+    {
+      "slide": 8,
+      "speaker": "Alessio",
+      "words": 94,
+      "estimated_speech_seconds": 46,
+      "planned_seconds": 80
+    },
+    {
+      "slide": 9,
+      "speaker": "Valerio",
+      "words": 64,
+      "estimated_speech_seconds": 31,
+      "planned_seconds": 50
+    },
+    {
+      "slide": 10,
+      "speaker": "Valerio",
+      "words": 97,
+      "estimated_speech_seconds": 47,
+      "planned_seconds": 65
+    },
+    {
+      "slide": 11,
+      "speaker": "Alessio",
+      "words": 89,
+      "estimated_speech_seconds": 43,
+      "planned_seconds": 65
+    },
+    {
+      "slide": 12,
+      "speaker": "Valerio",
+      "words": 113,
+      "estimated_speech_seconds": 55,
+      "planned_seconds": 90
+    },
+    {
+      "slide": 13,
+      "speaker": "Alessio",
+      "words": 70,
+      "estimated_speech_seconds": 34,
+      "planned_seconds": 50
+    },
+    {
+      "slide": 14,
+      "speaker": "Valerio",
+      "words": 61,
+      "estimated_speech_seconds": 30,
+      "planned_seconds": 50
+    },
+    {
+      "slide": 15,
+      "speaker": "Valerio",
+      "words": 82,
+      "estimated_speech_seconds": 40,
+      "planned_seconds": 50
+    },
+    {
+      "slide": 16,
+      "speaker": "Alessio",
+      "words": 65,
+      "estimated_speech_seconds": 32,
+      "planned_seconds": 45
+    },
+    {
+      "slide": 17,
+      "speaker": "Valerio",
+      "words": 67,
+      "estimated_speech_seconds": 33,
+      "planned_seconds": 35
+    },
+    {
+      "slide": 18,
+      "speaker": "Alessio",
+      "words": 56,
+      "estimated_speech_seconds": 27,
+      "planned_seconds": 35
+    }
+  ],
+  "status": "PASS: planned timing; live rehearsal required"
+}
