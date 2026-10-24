@@ -1,37 +1,28 @@
-# Scaletta e tempi
+# Presentazione del 24 ottobre: 18 slide, 18 minuti + 34 secondi di cambi
 
-23 slide; **2237 parole** di parlato a **125 parole/minuto**.
-Tempo di parlato 18:03; 22 cambi da 2 s portano la stima a **18:47**. Margine rispetto a 20 minuti: **1:13**.
-Si tratta di una stima basata sul testo; la durata effettiva richiede una prova orale cronometrata.
+| Slide | Tema | Studente | Secondi |
+|---|---|---|---:|
+| 1 | Domanda scientifica | Alessio | 20 |
+| 2 | Sistema fisico | Valerio | 55 |
+| 3 | Parametri meccanici | Alessio | 55 |
+| 4 | LFT manuale | Alessio | 80 |
+| 5 | Ritardo e residuo | Valerio | 80 |
+| 6 | Modello B | Alessio | 100 |
+| 7 | Modello A | Valerio | 75 |
+| 8 | Inclusioni e peso | Alessio | 80 |
+| 9 | Modello complessivo | Valerio | 50 |
+| 10 | Controllori e pianta generalizzata | Valerio | 65 |
+| 11 | Confronto NS/NP/RS/RP | Alessio | 65 |
+| 12 | Sintesi e prestazioni | Valerio | 90 |
+| 13 | Dieci impianti | Alessio | 50 |
+| 14 | Dieci condizioni iniziali | Valerio | 50 |
+| 15 | Indice LIN/NL | Valerio | 50 |
+| 16 | Q/R e Kalman | Alessio | 45 |
+| 17 | Ordine mu | Valerio | 35 |
+| 18 | Conclusioni | Alessio | 35 |
 
-Alessio: 9:27; Valerio: 8:36. Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.
-
-| Slide | Titolo | Studente | Parole | Parlato |
-|---|---|---|---:|---:|
-| 1 | Controllo robusto di un manipolatore planare 2-DoF con SEA | Alessio | 34 | 0:17 |
-| 2 | SEA: otto stati meccanici, due poli instabili | Alessio | 96 | 0:47 |
-| 3 | Sei stati di attuatore completano il modello | Alessio | 96 | 0:47 |
-| 4 | Specifiche: norma pesata e tracking sono verifiche diverse | Valerio | 96 | 0:47 |
-| 5 | LQR: il costo deriva dalle grandezze fisiche | Valerio | 98 | 0:48 |
-| 6 | LQG: quattro encoder e stato stimato | Valerio | 102 | 0:49 |
-| 7 | LQGI: memoria dell'errore misurato | Alessio | 100 | 0:48 |
-| 8 | H-infinity: sensibilità mista e pesi adottati | Alessio | 104 | 0:50 |
-| 9 | Due gradi di libertà, stati condivisi | Alessio | 102 | 0:49 |
-| 10 | Ordine completo e ordine fissato: il compromesso rimane | Valerio | 79 | 0:38 |
-| 11 | Mu-analysis: separare controllore e incertezza | Valerio | 100 | 0:48 |
-| 12 | Mu: valore singolare strutturato | Valerio | 100 | 0:48 |
-| 13 | D-K iteration: sintesi, analisi, fit degli scaling | Alessio | 107 | 0:52 |
-| 14 | La post-analisi cambia la scelta del controllore | Alessio | 103 | 0:50 |
-| 15 | Robustezza pesata e requisiti temporali non coincidono | Alessio | 102 | 0:49 |
-| 16 | Dieci impianti incerti: nominale e campioni comuni | Valerio | 80 | 0:39 |
-| 17 | Tracking e disturbi sugli impianti incerti | Valerio | 101 | 0:49 |
-| 18 | Il rumore encoder produce impulsi fra i campioni | Valerio | 104 | 0:50 |
-| 19 | Risultati della sintesi con rumore esplicito | Alessio | 117 | 0:57 |
-| 20 | RAS empirica e insieme interno di Lyapunov | Alessio | 108 | 0:52 |
-| 21 | Simulink lineare: servo LQGI | Alessio | 102 | 0:49 |
-| 22 | Simulink non lineare: la stessa architettura LQGI | Valerio | 99 | 0:48 |
-| 23 | Conclusioni e limiti verificati | Valerio | 107 | 0:52 |
-
-Le slide 2–18 trattano la prima formulazione. La 19 distingue i nuovi candidati, con compromessi e baseline predefinita. Le figure della RAS e dei dieci impianti restano identificate come baseline; i risultati dei candidati sono separati nella relazione.
-
-Gli schemi LQGI lineare/non lineare usano la stessa famiglia di controllo. Le viste autentiche rendono leggibili il cambio della pianta, l’osservatore e l’integratore.
+Totale contenuti 1080 s. Alessio 530 s, Valerio 550 s. Aggiungendo 2 s per
+ciascuno dei 17 cambi: 18:34. Margine sul limite di 20 minuti: 86 s.
+È una scaletta progettata, non il tempo di una prova dal vivo. La prova
+cronometrata rimane necessaria. Le slide 3-9 dedicano 8:40 alla modellazione.
+Le domande dopo l'esposizione non rientrano nella scaletta.

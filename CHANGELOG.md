@@ -640,3 +640,11 @@ Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini aute
 - 39 test PASS; 17 sorgenti senza segnalazioni; preservati 259 MAT/SLX
   preesistenti. Nuovo scope esplicito salaris in run_all.
 - Esiti negativi, timeout e stime inconclusive conservati e documentati.
+
+## 2026-10-24 — Elaborati sulle incertezze
+
+- Relazione principale ridotta a 23 pagine, presentazione a 18 slide.
+- Sei schemi TikZ, sette grafici MATLAB e tabelle derivate dai CSV.
+- Copione e scaletta per due studenti: 18:34 pianificati, prova dal vivo da fare.
+- Due PDF compilati, auditati senza errori/overflow e controllati visivamente.
+- Resoconto esplicito di risultati negativi, limiti e collaudi prima dell'adozione.

@@ -1,0 +1,19 @@
+\begin{tikzpicture}[>=Latex,block/.style={draw,minimum height=9mm,align=center,font=\small},font=\small]
+\node[block] (ga) at (0,0) {$G_a(s)$};
+\node[draw,circle,inner sep=1pt] (sm) at (2,0) {$\Sigma$};
+\node[block] (rot) at (4,0) {Motori\\$(J_ms^2+B_ms)^{-1}$};
+\node[block] (ks) at (6,-1.8) {$K_s$};
+\node[draw,circle,inner sep=1pt] (df) at (8,-1.8) {$\Sigma$};
+\node[block] (link) at (4,-3.5) {Link\\$M(q)\ddot q+C(q,\dot q)\dot q$\\$+G(q)=\tau_s+d$};
+\draw[->] (-1.5,0)--node[above]{$u$}(ga);
+\draw[->] (ga)--node[above]{$\tau$}(sm);
+\draw[->] (sm)--node[above]{$+$}(rot);
+\draw[->] (rot)--(8,0) node[above]{$\theta$}--node[right]{$+$}(df);
+\draw[->] (df)--node[above]{$\theta-q$}(ks);
+\draw[->] (ks.west)-|(sm.south) node[pos=.9,left]{$-$};
+\draw[->] (ks.south)--(6,-2.5)--(7.2,-2.5)--(7.2,-3.5)--node[above]{$\tau_s$}(link.east);
+\draw[->] (link.west)--(0,-3.5) node[left]{$q$};
+\draw[->] (1,-3.5)--(1,-4.4)--(8,-4.4)--(df.south) node[pos=.95,right]{$-$};
+\draw[->] (4,-2.2)--node[right]{$d$}(link.north);
+\node at (0,-1.4) {Misure: $y=[q;\theta]+v$};
+\end{tikzpicture}

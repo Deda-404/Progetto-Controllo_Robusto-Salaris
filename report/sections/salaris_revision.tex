@@ -1,0 +1,424 @@
+\chapter{Sistema fisico e domanda del progetto}
+\section{Manipolatore e attuatori}
+La traccia assegna un manipolatore planare 2R con attuazione elastica in
+serie. Le coordinate dei link sono $q=[q_1,q_2]^T$, quelle dei rotori
+$\theta=[\theta_1,\theta_2]^T$. La deformazione delle molle è $\theta-q$.
+Le equazioni, con disturbo fisico di coppia $d$ sui link, sono
+\begin{align}
+M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q)+d,\\
+J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).
+\end{align}
+Con masse concentrate alle estremità,
+\begin{align*}
+M_{11}&=(m_1+m_2)l_1^2+m_2l_2^2+2m_2l_1l_2\cos q_2,\\
+M_{12}=M_{21}&=m_2l_2^2+m_2l_1l_2\cos q_2,\qquad M_{22}=m_2l_2^2,\\
+C&=m_2l_1l_2\sin q_2\begin{bmatrix}-\dot q_2&-\dot q_1-\dot q_2\\\dot q_1&0\end{bmatrix},\\
+G&=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
+\end{align*}
+Il comando $u$ passa attraverso la dinamica degli azionamenti prima di
+diventare coppia motore $\tau$. Questa dinamica è distinta da inerzia e
+smorzamento dei rotori, già presenti nelle equazioni meccaniche.
+\scheme{sea_physical}{Sistema SEA. La coppia elastica agisce con segni opposti su link e rotori; il disturbo entra sui link.}
+\begin{table}[htbp]\centering
+\begin{tabular}{llll}\toprule
+Parametro&Valore&Parametro&Valore\\\midrule
+$m_1,m_2$&$1,\ 0.8$ kg&$l_1,l_2$&$0.4,\ 0.3$ m\\
+$J_{m1},J_{m2}$&$0.01$ kg m$^2$&$B_{m1},B_{m2}$&$0.02$ N m s/rad\\
+$k_1,k_2$&$50,\ 40$ N m/rad&$g$&$9.81$ m/s$^2$\\
+$\omega_{n0},\zeta_0$&$40$ rad/s, $0.8$&$\tau_0$&$0.015$ s\\\bottomrule
+\end{tabular}
+\caption{Meccanica della traccia e scelte nominali degli attuatori già adottate.}
+\end{table}
+\section{Equilibrio e coordinate}
+Manteniamo $\bar q=[\pi/2,0]^T$, con velocità nulle,
+$\bar\tau=G(\bar q)$ e $\bar\theta=\bar q+K_s^{-1}G(\bar q)$.
+In questa configurazione $G(\bar q)=0$ analiticamente, quindi
+$\bar\theta=\bar q$: piccoli residui numerici del coseno non costituiscono
+una deformazione fisica. Lo stato meccanico è
+$x_m=[q;\dot q;\theta;\dot\theta]$. La linearizzazione usa deviazioni
+rispetto a $\bar x_m$ e ha otto stati; gli attuatori nominali ne aggiungono sei.
+L'uscita di controllo robusto è $q$, mentre LQG/LQGI usano quattro encoder
+$y=[q;\theta]$ con velocità stimate. Non modifichiamo queste architetture.
+\section{Che cosa vogliamo confrontare}
+La domanda centrale è se conservare la struttura fisica dell'incertezza
+permetta di ottenere prestazioni robuste diverse da quelle ottenibili con
+una descrizione concentrata. Il confronto richiede lo stesso nominale, gli
+stessi intervalli fisici, gli stessi disturbi e pesi. Una differenza dei
+margini può dipendere sia dall'inviluppo usato sia dagli accoppiamenti
+aggiunti: nel seguito separiamo questi effetti.
+
+\chapter{Incertezze meccaniche e costruzione manuale della LFT}
+\section{Scelte e normalizzazione}
+Manteniamo incerti soltanto $k_1,k_2,J_{m1}$, con variazione indipendente
+del $\pm10\%$. Le rigidezze spostano i modi elastici; l'inerzia riflessa
+modifica la dinamica del primo rotore. Gli intervalli sono ipotesi
+ingegneristiche, non tolleranze identificate. Masse, lunghezze, $J_{m2}$,
+smorzamenti e gravità restano noti nel modello. Aggiungere altri parametri
+senza dati renderebbe meno interpretabile il confronto.
+Per un parametro simmetrico scriviamo
+\[
+p=p_0(1+r_p\delta_p),\qquad \delta_p\in[-1,1].
+\]
+MATLAB usa \texttt{ureal} per il parametro fisico. L'oggetto normalizzato
+$\delta_p$ è invece adimensionale. Le occorrenze dello stesso parametro
+non sono perturbazioni indipendenti: devono utilizzare lo stesso scalare.
+\section{Convenzione LFT e segnali}
+Adottiamo l'interconnessione superiore
+\[
+\begin{bmatrix}z\\y\end{bmatrix}=
+\begin{bmatrix}M_{11}&M_{12}\\M_{21}&M_{22}\end{bmatrix}
+\begin{bmatrix}w\\u\end{bmatrix},\quad w=\Delta z,
+\]
+da cui
+\[
+F_u(M,\Delta)=M_{22}+M_{21}\Delta(I-M_{11}\Delta)^{-1}M_{12}.
+\]
+Con questo ordinamento MATLAB ricompone il modello con
+\texttt{lft(Delta,M)}. Il comando \texttt{lftdata} restituisce una coppia
+ricomponibile in questo modo. Per la sintesi, invece, $F_l(P,K)$ chiude
+il controllore sulle ultime porte della pianta generalizzata: i due usi
+della LFT hanno segnali e significati differenti.
+\scheme{manual_mechanics}{LFT superiore della meccanica: $z$ è prodotto dalla parte nominale e $w$ è la forza restituita dall'incertezza.}
+\section{Derivazione dalle forze elastiche}
+Poniamo $e_s=\Delta\theta-\Delta q$ e introduciamo
+\[
+z_{k_i}=r_k k_{i0}e_{s,i},\quad w_{k_i}=\delta_{k_i}z_{k_i}.
+\]
+La coppia elastica è $K_{s0}e_s+w_k$. Lo stesso $w_k$ entra con segno
+positivo nell'accelerazione dei link e negativo in quella dei rotori.
+Non occorrono due incertezze indipendenti per descrivere i due effetti.
+Per l'inerzia del primo motore spostiamo la parte incerta a destra:
+\[
+J_{10}\Delta\ddot\theta_1=\tau_1-\tau_{s,1}-B_{10}\Delta\dot\theta_1+w_J,
+\quad z_J=-r_JJ_{10}\Delta\ddot\theta_1,\quad w_J=\delta_Jz_J.
+\]
+Il segnale $z_J$ contiene anche un termine diretto in $w_J$. Questo
+feedback algebrico realizza la divisione per $1+r_J\delta_J$;
+è ben posto perché tale quantità è almeno $0.9$.
+Se $A_0,B_0$ sono le matrici nominali, la costruzione è
+\[
+\dot x=A_0x+B_0\tau+B_ww,\qquad
+B_w=\begin{bmatrix}0&0\\M_0^{-1}&0\\0&0\\-J_0^{-1}&J_0^{-1}e_1\end{bmatrix}.
+\]
+La prima colonna a blocchi comprende i due canali elastici e l'ultima
+il canale inerziale. Le righe di $z$ seguono direttamente le equazioni sopra.
+\texttt{build\_manual\_mechanical\_lft.m} costruisce $M_m$ da queste matrici;
+nessuna decomposizione automatica è usata per costruirlo.
+\section{Verifica riproducibile}
+I test impongono gli stessi valori fisici a modello manuale e modello
+\texttt{ureal}, inclusi nominale, estremi e un punto interno. Confrontano
+le risposte frequenziali, con tolleranza assoluta $10^{-7}$, e verificano
+la ricomposizione automatica. Non richiediamo matrici $M$ uguali:
+realizzazioni e numero di ripetizioni possono essere diversi pur descrivendo
+la stessa mappa ingresso--uscita. Gli esiti sono salvati nella cartella
+della revisione.
+\IfFileExists{generated/salaris_blocks.tex}{\input{generated/salaris_blocks.tex}}{}
+
+\chapter{Due rappresentazioni degli attuatori}
+\section{Nominale e parametri fisici}
+Per ciascun canale definiamo
+\[
+H(s;\omega_n,\zeta)=\frac{\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2},\quad
+D_p(s;\tau)=\frac{1-\tau s/2}{1+\tau s/2}.
+\]
+Le ipotesi precedenti sono conservate: $\omega_n\in[36,44]$ rad/s,
+$\zeta\in[0.72,0.88]$, $\tau\in[0.012,0.018]$ s. I due attuatori
+hanno lo stesso nominale e parametri indipendenti; non introduciamo una
+correlazione comune non documentata.
+\section{Il residuo di Padé non è il parametro del ritardo}
+Padé1 ha uno zero in $+2/\tau$. Di conseguenza
+$e^{-\tau s}/D_p-1$ non è in generale una perturbazione stabile.
+Un grafico del solo modulo non risolve questo problema. La precedente
+famiglia moltiplicativa M4 resta una famiglia razionale legittima;
+l'inclusione automatica di tutti i ritardi esatti non segue da quel grafico.
+Usiamo invece il residuo additivo al fattore di ritardo:
+\[
+D=e^{-\tau s}=D_p(\tau)+W_{res}\Delta_{res},\quad
+W_{res}=2f\left(\frac{\tau_{max}s}{0.5+\tau_{max}s}\right)^3,
+\qquad f=1.08.
+\]
+$\delta_\tau$ è reale e costante; $\Delta_{res}$ è un sistema dinamico
+stabile con norma al più uno. Per verificare il peso poniamo $x=\omega\tau$.
+Dalla fase di Padé si ricava
+\[
+|e^{-jx}-D_p(j\omega;\tau)|
+=2\left|\sin\frac{x-2\arctan(x/2)}2\right|
+\le\min(2,x^3/12).
+\]
+Il peso domina questa maggiorazione per $\tau\le\tau_{max}$: il rapporto
+massimo dei due rami si trova in $x=\sqrt[3]{24}$ ed è minore di uno.
+I tre zeri del peso nell'origine sono cancellati dai tre zeri del residuo
+esatto; non compaiono poli instabili nella perturbazione normalizzata.
+La famiglia dinamica ammette comunque residui che non corrispondono ad alcun
+ritardo fisico: è un ampliamento da dichiarare anche per B.
+\section{Modello B: parametri separati e LFT manuale}
+Il modello parametrico è
+\[
+G_{Bi}=H(\omega_i,\zeta_i)\,[D_p(\tau_i)+W_{res}\Delta_{res,i}].
+\]
+La costruzione manuale usa tre stati ausiliari $x,v,h$:
+\begin{align*}
+e&=u-x,& t&=\omega_0e+r_\omega\omega_0w_{\omega1},\\
+z_{\omega1}&=e,& z_{\omega2}&=t-2(\zeta_0v+r_\zeta\zeta_0w_\zeta),\\
+\dot x&=v,&\dot v&=\omega_0z_{\omega2}+r_\omega\omega_0w_{\omega2},\\
+z_\zeta&=v,&\dot h&=(x-h)/(\tau_0/2)-r_\tau w_\tau,\\
+z_\tau&=\dot h,&z_{res}&=x,\\
+\tau_{out}&=2h-x+W_{res}w_{res}.&&
+\end{align*}
+Chiudiamo $w_{\omega1}=\delta_\omega z_{\omega1}$ e
+$w_{\omega2}=\delta_\omega z_{\omega2}$ con lo \emph{stesso} parametro.
+Inoltre $w_\zeta=\delta_\zeta z_\zeta$, $w_\tau=\delta_\tau z_\tau$ e
+$w_{res}=\Delta_{res}z_{res}$. Pertanto
+\[
+\Delta_i=\operatorname{diag}(\delta_{\omega i}I_2,\delta_{\zeta i},\delta_{\tau i},\Delta_{res,i}).
+\]
+La ripetizione di $\delta_\omega$ conserva la relazione fra numeratore,
+denominatore e smorzamento. Rendere indipendenti le due occorrenze
+cambierebbe l'insieme fisico. Il peso residuo aggiunge tre stati nominali
+per canale; non cambia la risposta nominale esterna per $\Delta_{res}=0$.
+La costruzione è ripetuta per entrambi i canali SISO senza \texttt{lftdata}
+nel percorso manuale. Una seconda implementazione automatica serve soltanto
+al confronto, verificato anche con un residuo dinamico non nullo.
+\scheme{actuator_parametric}{LFT manuale di ciascun attuatore B. Cinque segnali di interconnessione, tre parametri reali indipendenti e un residuo dinamico.}
+\section{Modello A: un unico blocco pieno}
+Scegliamo
+\[
+G_A=H_0\,[D_{p0}I_2+W_A\Delta_A],\qquad
+\Delta_A\in\mathcal{H}_\infty^{2\times2},\quad\|\Delta_A\|_\infty\le1.
+\]
+``Un unico blocco'' significa un blocco complesso pieno $2\times2$,
+non uno scalare comune e non una diagonale. Può descrivere accoppiamenti
+incrociati assenti nei due attuatori SISO. La perturbazione è additiva
+rispetto al fattore Padé, con $H_0$ comune: non si inverte lo zero instabile
+di Padé. $H_0$ mantiene il decadimento ad alta frequenza.
+\scheme{actuator_concentrated}{Attuatori concentrati. La variante diagonale cambia soltanto la struttura di $\Delta_A$, mantenendo il peso identico.}
+\section{Inclusione degli insiemi e costo dell'inviluppo}
+La copertura non è affidata soltanto a un fit di campioni. Con
+$a=1/\tau_{max}$ scegliamo $W_A=C_A s/(s+a)$. Ponendo
+$R=H/H_0$, $\alpha=\omega_n^2/\omega_0^2-1$ e
+$\beta=2\zeta_0\omega_n^2/\omega_0-2\zeta\omega_n$, otteniamo
+\[
+R-1=\frac{\alpha s^2+\beta s}{s^2+2\zeta\omega_ns+\omega_n^2}.
+\]
+La disuguaglianza
+$|s^2+2\zeta\omega_ns+\omega_n^2|_{s=j\omega}
+\ge\zeta_{min}(\omega^2+\omega_n^2)$ permette le maggiorazioni
+\begin{align*}
+B_R&=1+\frac{\alpha_{max}+\beta_{max}/(2\omega_{min})}{\zeta_{min}},\\
+B_{QR}&=\frac{\sqrt{\alpha_{max}^2+(\beta_{max}/\omega_{min})^2}}{\zeta_{min}}
+\max(1,a/\omega_{min}),\\
+B_{QD}&=\max|\tau-\tau_0|\max(a,2/\tau_{min}),\\
+C_A&=B_{QR}+B_{QD}+2fB_R\sqrt{12/(2.25)^3}.
+\end{align*}
+Infatti $Q_R=(R-1)(s+a)/s$ è stabile e proprio; il termine
+$(D_p-D_{p0})(s+a)/s$ ha norma al più $B_{QD}$.
+Il rapporto $W_{res}(s+a)/s$ ha norma $2f\sqrt{12/(2.25)^3}$.
+La disuguaglianza triangolare dà così $\|\Delta_{Ai}\|_\infty\le1$
+per ogni membro di B. Segue
+\[
+\mathcal B\subseteq\mathcal A_{diag}\subseteq\mathcal A_{full}.
+\]
+La costruzione è verificabile, ma la disuguaglianza triangolare può essere
+larga. I campioni mostrano quanto il peso sovrastimi l'inviluppo; non sono
+usati per proclamare una prova globale. B--A diagonale misura insieme
+perdita di struttura fisica e maggiorazione del peso. A diagonale--A pieno
+isola gli accoppiamenti, perché il peso è esattamente lo stesso.
+\resultfigure{coverage}{Peso analitico A, inviluppo campionato di B e peso del residuo.}
+\section{Interconnessione con il manipolatore}
+Le incertezze meccaniche sono identiche nelle tre formulazioni. Gli ingressi
+fisici sono $[u;d]$; il disturbo non attraversa l'attuatore. La composizione
+mantiene separati $\Delta_m$ e $\Delta_a$. La verifica del nominale confronta
+direttamente le risposte di tutti e tre i modelli.
+\scheme{combined_uncertainty}{Modello complessivo: cambia la rappresentazione degli attuatori, mentre meccanica e porte fisiche restano comuni.}
+
+\chapter{Controllori e confronto robusto}
+\section{Specifiche comuni e controllori conservati}
+I target temporali M5 restano: assestamento entro 0.8 s, overshoot entro
+10\%, errore statico relativo entro 5\% e cross-coupling entro 0.25
+(quest'ultimo è un obiettivo preliminare). La scala di coppia 12 N m
+non è una saturazione hardware. Non cambiamo questi target per far passare
+un candidato e distinguiamo il loro esito da quello della norma pesata.
+Manteniamo la banca sviluppata: LQG, LQGI, $H_\infty$ a uno e due gradi
+di libertà, PID ottenuto con \texttt{hinfstruct} e $K_\mu$. La formulazione
+a un grado di libertà deriva da sensibilità mista; il progetto esplicito
+a due gradi di libertà è ottenuto con \texttt{hinfsyn}. Gli script di
+sintesi e le matrici dei controllori sono conservati.
+Per un confronto omogeneo valutiamo per tutti
+\[
+w=[r;d],\quad z_p=[W_e(q-M_or);W_uu],\quad u=K_rr+K_yy.
+\]
+Usiamo i pesi del controllore nominale finale. Questa NP comune non coincide
+necessariamente con il costo proprio di LQG o la precedente sensibilità
+mista a un grado di libertà. Un fallimento di questa NP non invalida
+le verifiche originarie su un obiettivo diverso.
+\IfFileExists{generated/salaris_nominal.tex}{\input{generated/salaris_nominal.tex}}{}
+\scheme{synthesis_analysis}{Pianta generalizzata e controllore. Il circuito superiore descrive l'incertezza; quello inferiore chiude il controllo. $z_p$ è distinto da $z_\Delta$.}
+\section{NS, NP, RS e RP}
+NS richiede stabilità interna del nominale; NP richiede inoltre
+$\|T_{wz_p}(0)\|_\infty<1$, dove $(0)$ indica incertezze nulle e non
+frequenza nulla. RS riguarda tutte le perturbazioni ammesse; RP richiede
+anche la prestazione pesata per tutte le perturbazioni.
+Un limite inferiore del margine maggiore di uno significa PASS; un limite
+superiore minore di uno significa FAIL; un intervallo che contiene uno
+resta inconclusivo. RP implica RS. Se RS fallisce prima del raggio uno,
+usiamo $[0,\mathrm{RS}_{upper}]$ come sola maggiorazione del margine RP.
+Non accreditiamo intervalli numericamente invertiti di \texttt{robgain}.
+Se NP fallisce al nominale, il margine RP è zero.
+\IfFileExists{generated/salaris_comparison.tex}{\input{generated/salaris_comparison.tex}}{Analisi comparativa NON VALIDATA.}
+\resultfigure{rs_comparison}{Margini inferiori RS per gli stessi controllori. La soglia è uno.}
+\IfFileExists{generated/salaris_findings.tex}{\input{generated/salaris_findings.tex}}{}
+\section{Sintesi sulle due rappresentazioni}
+Una sintesi $H_\infty$ ordinaria usa il nominale comune: non avrebbe senso
+presentare due controllori diversi soltanto cambiando l'etichetta
+dell'incertezza. Per ogni livello eseguiamo una sintesi nominale comune
+e due D--K, una su A pieno e una su B. Ogni candidato viene analizzato
+su entrambi i modelli.
+La campagna ha un massimo di quattro iterazioni, ordine di fit $D/G$
+pari a $[2,1]$, scalature diagonali e seed 20261024. I parametri reali
+rimangono reali nell'analisi mista. Sono limiti computazionali, non prove di
+ottimalità. Se il problema originale non raggiunge RS/RP, proviamo fattori
+$b=0.3$ e poi $b=0.1$, sostituendo $W_e(s)$ e $M_o(s)$ con
+$W_e(s/b)$ e $M_o(s/b)$. La richiesta DC resta uguale, mentre la dinamica
+richiesta è più lenta. $W_u$ non cambia. La campagna termina quando
+entrambe le sintesi superano RS/RP; i candidati non sostituiscono la baseline.
+\IfFileExists{generated/salaris_synthesis.tex}{\input{generated/salaris_synthesis.tex}}{Sintesi A/B NON VALIDATA.}
+La banda è il minimo dei due canali diagonali di tracking, misurata a
+$-3$ dB rispetto al proprio valore DC. Non coincide con il fattore $b$,
+né certifica il tempo di assestamento. Una decade di perdita può essere
+dichiarata soltanto se emerge dalle bande misurate.
+Per i candidati D--K verifichiamo inoltre i livelli comuni
+$\|T_{wz_p}\|_\infty<\gamma_{req}$ con $\gamma_{req}=1,3,10$.
+Questo equivale a dividere entrambi i pesi per $\gamma_{req}$: non richiede
+una nuova ottimizzazione e non cambia la risposta nominale del candidato.
+Si rilassa il limite di amplificazione pesata, non si attribuisce una
+banda differente al medesimo controllore. RS resta un requisito separato.
+\IfFileExists{generated/salaris_relaxation.tex}{\input{generated/salaris_relaxation.tex}}{}
+\IfFileExists{generated/salaris_synthesis_temporal.tex}{\input{generated/salaris_synthesis_temporal.tex}}{}
+
+\chapter{Prove rappresentative e integrazioni mirate}
+\section{Dieci impianti fisici incerti}
+Con seed 20261024 estraiamo dieci vettori di nove parametri normalizzati:
+tre meccanici e tre per ciascun attuatore. Simuliamo B con residui dinamici
+nulli: è variabilità parametrica Padé, non un campionamento esaustivo di
+A o dei residui ammessi da B. Gli stessi impianti sono usati per tutti
+i controllori. Un riferimento di 5 gradi e un disturbo lato link di
+0.5 N m servono a misurare stabilità osservata, assestamento, errore DC,
+picco articolare da disturbo e sforzo. L'orizzonte è 12 s; un assestamento
+non osservato è indicato come infinito, non sostituito con 12 s.
+\IfFileExists{generated/salaris_samples.tex}{\input{generated/salaris_samples.tex}}{Simulazioni campionarie NON VALIDATE.}
+\section{Dieci condizioni iniziali e confronto lineare/non lineare}
+La RAS è esplorata variando lo stato iniziale, non i parametri.
+Usiamo lo stesso controllore nominale su lineare e non lineare,
+senza riferimenti, disturbi o rumore. Velocità, stati degli attuatori e
+del controllore sono inizialmente nulli. Impostiamo $\Delta\theta=\Delta q$:
+nel non lineare aggiungiamo $\bar x_m$; nel lineare usiamo le deviazioni.
+Le dieci coppie, in gradi, sono
+\[
+(0,0),(5,0),(15,0),(30,0),(0,5),(0,15),(0,30),
+(15,15),(-15,-15),(30,-30).
+\]
+Nell'ultimo secondo di una simulazione di 12 s richiediamo posizioni
+entro 0.5 gradi e velocità entro 0.02 rad/s. Separatamente misuriamo
+\[
+J(x_0)=\max_{t\in[0,12]}\|q_{NL}(t;x_0)-q_{LIN}(t;x_0)\|_\infty,
+\quad \varepsilon=0.5^\circ.
+\]
+La soglia è il 10\% del riferimento di prova: indica una discrepanza
+transitoria contenuta rispetto al movimento richiesto. Un campione può
+convergere senza soddisfare $J\le\varepsilon$. Un errore o timeout del
+solver è un esito numerico ignoto, distinto dalla mancata convergenza
+in un'integrazione completata. Nessuna funzione di Lyapunov è necessaria.
+\IfFileExists{generated/salaris_ras.tex}{\input{generated/salaris_ras.tex}}{RAS e confronto LIN/NL NON VALIDATI.}
+\resultfigure{ras_points}{Verde: convergenza e soglia rispettata; arancio: convergenza con scarto eccessivo; croce rossa: non convergente nell'orizzonte; quadrato grigio: esito numerico ignoto. Il segno nero è l'equilibrio in deviazione.}
+\resultfigure{linear_nonlinear_error}{Indice $J$ rispetto alla distanza iniziale. Convergenza e fedeltà al lineare sono criteri distinti.}
+\resultfigure{paired_responses}{Esempi LIN/NL con $K_\mu$ e condizioni iniziali fisicamente equivalenti.}
+\section{Q/R e Kalman}
+Mostriamo soltanto tre moltiplicatori di $Q$ ($0.5,1,2$) con $R$ invariata,
+in una prova LQR a stato completo che isola il costo dal filtro.
+Il prefiltro garantisce lo stesso tracking DC. I grafici sovrapposti
+mostrano risposta e comando; non selezioniamo un nuovo controllore.
+\resultfigure{qr}{Compromesso risposta--comando al variare del peso sugli stati.}
+Per il filtro confrontiamo grandezze statisticamente omogenee.
+$Q_n=0.1^2I_4$ descrive i quattro ingressi di coppia di processo;
+$R_n=(0.05\pi/180)^2I_4$ descrive i quattro encoder. Sono scale progettuali,
+non dati identificati. LQR minimizza $\int(x^TQx+u^TRu)dt$; la matrice
+$Q$ deriva dalle scale di posizione, velocità e deformazione già adottate,
+mentre $R$ penalizza direttamente la coppia. Kalman stima gli stati non
+misurati; LQGI aggiunge due stati che integrano l'errore di posizione.
+$Q_n,R_n$ sono intensità di rumore bianco continuo, non varianze di
+campioni ZOH. Costruiamo la covarianza stazionaria del sistema congiunto
+pianta--stimatore e simuliamo esattamente il processo campionato usando
+$\Phi=e^{A\Delta t}$ e $Q_d=P-\Phi P\Phi^T$.
+Il periodo è 0.01 s, la durata 600 s e i primi 60 s sono scartati.
+La covarianza di $x-\hat x$ è confrontata con Riccati di \texttt{lqe};
+la varianza dell'uscita è confrontata con la propria covarianza di Lyapunov.
+\IfFileExists{generated/salaris_kalman.tex}{\input{generated/salaris_kalman.tex}}{Verifica statistica NON VALIDATA.}
+LQG con prefiltro è un servo senza modello interno del disturbo costante.
+LQGI integra l'errore misurato; $r=0$ dà la corrispondente regolazione.
+I robusti a due gradi di libertà ricevono separatamente $r$ e $q$.
+Le medesime interfacce sono usate sul non lineare, senza sostituire
+lo stato reale alle misure dei controllori.
+\section{Riduzione del controllore a 82 stati}
+Il controllore MuN1 del precedente studio sul rumore è conservato.
+Confrontiamo soltanto riduzioni bilanciate a 70 e 60 stati, riportando
+errore relativo $H_\infty$, stabilità, norma pesata, RS/RP, banda,
+reiezione del disturbo e amplificazione del rumore encoder sul comando.
+Quest'ultima è una norma indotta, non un picco gaussiano simulato.
+Nessun ordine inferiore viene promosso automaticamente.
+\IfFileExists{generated/salaris_cancellations.tex}{\input{generated/salaris_cancellations.tex}}{}
+\IfFileExists{generated/salaris_reduction.tex}{\input{generated/salaris_reduction.tex}}{Riduzione d'ordine NON VALIDATA.}
+\IfFileExists{generated/salaris_legacy_reduction.tex}{\input{generated/salaris_legacy_reduction.tex}}{}
+Verifichiamo anche la famiglia storica M4: conservare i suoi margini è
+necessario per confrontare la riduzione con il precedente risultato a
+82 stati. Una conferma su M4 non costituisce una garanzia sui nuovi A/B.
+
+\chapter{Conclusioni, limiti e riproducibilità}
+B conserva parametri reali, ripetizioni e indipendenza dei due attuatori.
+A rende più semplice la struttura di $\Delta$, ampliando l'insieme.
+Le inclusioni sono dimostrate per i pesi adottati, ma non ogni differenza
+numerica misura soltanto la struttura: anche la maggiorazione del peso
+contribuisce alla conservatività. La variante diagonale chiarisce questa distinzione.
+Per descrivere i due attuatori SISO con intervalli fisici assegnati, B è
+la rappresentazione più informativa. A è utile per studiare anche dinamiche
+incrociate non descritte da quei parametri, purché l'ampiezza del peso sia
+giustificata. Nel nostro confronto il peso analitico è largo: i risultati
+non dimostrano che ogni possibile modello concentrato sia necessariamente
+peggiore di ogni modello parametrico.
+\IfFileExists{generated/salaris_conclusions.tex}{\input{generated/salaris_conclusions.tex}}{}
+Le garanzie riguardano il modello lineare incerto. Le simulazioni fisiche
+e le condizioni iniziali danno evidenza empirica, non certificazioni
+della RAS. Le coppie sono non saturate e non sono disponibili limiti
+hardware identificati. Gli otto modelli Simulink e gli script accorpati
+sono conservati con le precedenti verifiche: non attribuiamo ai nuovi
+modelli incerti un collaudo Simulink non effettuato.
+Le nuove sintesi A/B sono candidati verificati sul modello lineare. La
+RAS e le prove non lineari di questa revisione riguardano la banca
+consolidata; la promozione dei nuovi candidati richiede anche il loro
+collaudo non lineare e Simulink.
+\section{Esecuzione e provenienza dei risultati}
+Servono MATLAB R2026b, Control System Toolbox e Robust Control Toolbox;
+la regressione simbolica usa Symbolic Math Toolbox. Dalla radice:
+\begin{lstlisting}
+addpath(genpath('analysis'));
+run_salaris_revision('models');
+run_salaris_revision('analysis');
+run_salaris_revision('synthesis');
+run_salaris_revision('simulations');
+run_salaris_revision('secondary');
+\end{lstlisting}
+Le fasi sono sequenziali e salvano in
+\texttt{results/data/salaris\_revision/}. I checkpoint evitano di ripetere
+sintesi già eseguite; cambiare modelli o specifiche richiede una nuova
+cartella dei risultati. \texttt{python tools/build\_salaris\_documents.py}
+genera le tabelle dai CSV; il compilatore del repository genera i PDF.
+Il branch è una proposta da revisionare e integrare personalmente.
+Le trattazioni precedenti e i dati consolidati restano nel repository;
+il percorso principale è stato sostituito per ridurre il volume.
+I dettagli storici sono nelle altre sezioni di \texttt{report/sections/}
+e nella versione precedente in Git.
+\section{Riferimenti essenziali}
+\emph{Traccia 2 -- Manipolatore SEA}, corso di Controllo Robusto 2026.
+Indicazioni del ricevimento del 22 ottobre 2026 riportate nel mandato.
+Documentazione MathWorks:
+\href{https://www.mathworks.com/help/robust/ref/inputoutputmodel.lftdata.html}{lftdata},
+\href{https://www.mathworks.com/help/control/ref/dynamicsystem.pade.html}{Padé}.

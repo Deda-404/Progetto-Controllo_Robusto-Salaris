@@ -3097,3 +3097,22 @@ Gate implementazione/analisi COMPLETE / PASS; accettazione scientifica
 PARTIAL. Le nuove sintesi e il controllore ridotto richiedono collaudo
 non lineare/Simulink prima della promozione. Risultati e limiti nel
 resoconto dedicato e nei CSV. Responsabile: Alessio.
+
+## 2026-10-24 — Elaborati rifocalizzati e verifica visiva
+
+Percorso principale della relazione sostituito: 23 pagine rispetto alle 108
+precedenti. Conservati i vecchi sorgenti e la cronologia. Sei schemi TikZ
+scientifici e sette grafici MATLAB con sfondo chiaro; tabelle generate soltanto
+dai CSV. Presentazione di 18 slide con copione dei due studenti e scaletta
+18:34 (1080 s di contenuti + 34 s di cambi). Prova dal vivo ancora necessaria.
+
+Compilazione e audit dei due PDF PASS: zero errori, riferimenti irrisolti,
+overflow o destinazioni duplicate. Visionate tutte le slide e il report;
+corretti gli allineamenti dei segnali degli schemi e i colori delle figure
+per la lettura su carta. Verificati in dettaglio gli schemi SEA e attuatore
+parametrico dopo le ultime correzioni. Nessun dato scientifico modificato
+per correggere l'impaginazione.
+
+README, resoconto, stato e decisioni aggiornati. Controllori originali e SLX
+conservati; i candidati nuovi e la riduzione restano distinti. Gate editoriale
+COMPLETE / PASS; promozione dei candidati e merge riservati agli studenti.

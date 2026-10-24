@@ -2,92 +2,23 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
-\usepackage{amsmath,amssymb}
-\usepackage{mathtools}
-\usepackage{siunitx}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{geometry}
-\usepackage{hyperref}
-\usepackage{xcolor}
-\usepackage{float}
-\usepackage{tikz}
-\usepackage{listings}
-\lstset{language=Matlab,basicstyle=\ttfamily\footnotesize,
-  columns=fullflexible,keepspaces=true,breaklines=true,
-  showstringspaces=false,tabsize=2,frame=single,
-  rulecolor=\color{black!20},commentstyle=\color{black!60},
-  keywordstyle=\color{blue!45!black},aboveskip=.7em,belowskip=.7em}
-\usepackage[protrusion=true,expansion=false]{microtype}
-\geometry{top=2.5cm,bottom=2.5cm,left=2.7cm,right=2.3cm}
-\hypersetup{hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!55!black,pdftitle={Controllo robusto di un manipolatore planare 2-DoF con SEA},pdfauthor={Alessio de Dato; Valerio Rebechi}}
+\usepackage{amsmath,amssymb,mathtools,graphicx,booktabs,longtable,array,geometry,hyperref,xcolor,tikz,listings}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\geometry{top=2.4cm,bottom=2.4cm,left=2.5cm,right=2.3cm}
+\hypersetup{hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!55!black,pdftitle={SEA: modellazione delle incertezze e confronto robusto},pdfauthor={Alessio de Dato; Valerio Rebechi}}
 \setlength{\emergencystretch}{3em}
-\setlength{\parindent}{1.2em}
 \renewcommand{\arraystretch}{1.12}
-\newcommand{\status}[1]{\texttt{#1}}
-\newcommand{\artifact}[1]{\texttt{#1}}
-\input{generated/m18_values.tex}
-\input{generated/revision_values.tex}
-\input{generated/hinf_final_values.tex}
-\input{generated/final_closure_values.tex}
-\input{generated/final_simulink_values.tex}
-\title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
-\author{Alessio de Dato \\ \small Matricola 635256 \\[0.8em]
-Valerio Rebechi \\ \small Matricola 722224}
-\date{13.10.2026}
+\lstset{language=Matlab,basicstyle=\ttfamily\small,breaklines=true,frame=single}
+\newcommand{\scheme}[2]{\begin{figure}[htbp]\centering\resizebox{.96\linewidth}{!}{\input{figures/schemes/#1}}\caption{#2}\end{figure}}
+\newcommand{\resultfigure}[2]{\IfFileExists{figures/salaris_revision/#1.png}{\begin{figure}[htbp]\centering\includegraphics[width=.94\linewidth]{figures/salaris_revision/#1.png}\caption{#2}\end{figure}}{}}
+\title{Manipolatore SEA a due giunti\\\large Modellazione delle incertezze e conseguenze sul controllo robusto}
+\author{Alessio de Dato -- matricola 635256\\Valerio Rebechi -- matricola 722224}
+\date{24 ottobre 2026}
 \begin{document}
-\hypersetup{pageanchor=false}
 \maketitle
-\hypersetup{pageanchor=true}
-\pagenumbering{roman}
 \begin{abstract}
-Si studia il controllo di un manipolatore planare SEA a due giunti, a partire
-dalle equazioni non lineari e dalla linearizzazione con attuatori a 14 stati.
-LQG e LQGI illustrano il compromesso fra tracking e reiezione dei disturbi.
-La sensibilità mista e la sintesi $H_\infty$ a due gradi di libertà mostrano
-che una buona norma pesata non garantisce tutte le specifiche temporali.
-Il controllore nominale selezionato ha norma \FinalGamma\ e overshoot nullo,
-ma è fragile rispetto alle incertezze dichiarate. La $\mu$-synthesis sullo
-stesso problema produce un controllore di ordine \FinalMuOrder\ con margini
-di stabilità e prestazione robusta maggiori di uno. Restano fallimenti su
-assestamento e offset, oltre ai limiti legati a rumore e coppie non saturate.
-Le simulazioni non lineari MATLAB, le sezioni empiriche di attrazione e i
-dieci impianti incerti sono distinti dalle garanzie del modello lineare.
-Gli otto diagrammi Simulink sono stati eseguiti e le posizioni e i comandi
-acquisiti confermano offset, azione integrale e sensibilità al rumore.
-I diversi protocolli di misura e i selettori salvati sono esplicitati nel
-confronto con MATLAB; i picchi registrati non certificano il massimo continuo.
-Una seconda formulazione inserisce il rumore nella pianta generalizzata,
-con pesi e incertezze fisiche invariati. I nuovi H-infinity migliorano
-il comando ma falliscono la stabilità robusta. Un nuovo mu a 82 stati
-mantiene RS/RP e riduce il picco non lineare da circa 108.53 a 2.25 N m,
-con un peggioramento dell'offset nominale sul primo giunto. I candidati
-restano separati e la baseline predefinita; l'adozione finale considera
-questi compromessi e i limiti hardware ancora non documentati.
+Studiamo come cambia il controllo robusto quando le incertezze degli attuatori sono descritte con un blocco dinamico concentrato oppure con parametri fisici reali separati. Manteniamo il manipolatore, il punto di equilibrio e i controllori già sviluppati. Costruiamo manualmente le LFT della meccanica e dei due attuatori e ne verifichiamo l'equivalenza con i modelli automatici. Separiamo la variazione reale del ritardo dall'errore dinamico di Padé. Il modello concentrato contiene la famiglia parametrica attraverso una maggiorazione esplicita; una variante diagonale permette di isolare l'effetto degli accoppiamenti aggiunti dal blocco pieno. Confrontiamo NS, NP, RS e RP, quindi sintesi D--K con specifiche comuni e rilassamenti dichiarati. Completiamo lo studio con dieci impianti fisici, dieci condizioni iniziali, confronto lineare/non lineare e verifiche mirate di Q/R, Kalman e ordine del controllore. Le conclusioni distinguono garanzie sul modello, risultati campionari e limiti numerici.
 \end{abstract}
 \tableofcontents
-\listoffigures
-\listoftables
-\clearpage
-\pagenumbering{arabic}
-\input{sections/01_introduzione}
-\input{sections/02_modello_dinamico}
-\input{sections/03_equilibrio_linearizzazione}
-\input{sections/04_attuatori}
-\input{sections/05_incertezze}
-\input{sections/06_specifiche_pesi}
-\input{sections/07_lqg}
-\input{sections/08_hinf}
-\input{sections/09_mu}
-\input{sections/10_validazione_nonlineare}
-\input{sections/11_monte_carlo}
-\input{sections/12_confronto_finale}
-\input{sections/13_conclusioni_limiti}
-\appendix
-\input{sections/A_parametri}
-\input{sections/B_artifact_traceability}
-\input{sections/C_riproducibilita}
-\input{sections/D_codici_matlab}
+\input{sections/salaris_revision}
 \end{document}

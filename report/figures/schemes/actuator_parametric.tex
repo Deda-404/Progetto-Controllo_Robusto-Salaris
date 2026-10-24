@@ -1,0 +1,9 @@
+\begin{tikzpicture}[>=Latex,font=\small,block/.style={draw,align=center,minimum height=1cm,minimum width=5.6cm}]
+\node[block] (m) at (0,0) {$M_{ai}$ nominale: oscillatore, Padé, $W_{res}$\\$x,v,h,x_W$; ingressi $[w_i;u_i]$, uscite $[z_i;\tau_i]$};
+\node[block] (d) at (0,2.4) {$\Delta_i=\operatorname{diag}(\delta_{\omega i}I_2,\delta_{\zeta i},\delta_{\tau i},\Delta_{res,i})$\\tre parametri reali; un residuo dinamico complesso};
+\draw[->] (-4.3,0)--node[above]{$u_i$}(m);
+\draw[->] (m)--node[above]{$\tau_i$}(4.3,0);
+\draw[->] (m.north east)--(4.6,.9)--node[right]{$z_i$}(4.6,2.4)--(d.east);
+\draw[->] (d.west)--(-4.6,2.4)--node[left]{$w_i$}(-4.6,.9)--(m.north west);
+\node[align=center] at (0,-1.5) {Due copie SISO con parametri indipendenti: $G_B=\operatorname{diag}(G_{B1},G_{B2})$\\$G_{Bi}=H(\omega_i,\zeta_i)\,[D_p(\tau_i)+W_{res}\Delta_{res,i}]$};
+\end{tikzpicture}

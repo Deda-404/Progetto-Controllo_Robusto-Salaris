@@ -1,0 +1,8 @@
+\begin{tikzpicture}[>=Latex,font=\small,block/.style={draw,align=center,minimum width=4.1cm,minimum height=1cm}]
+\node[block] (m) at (0,0) {$M_m$ nominale\\ingressi $[w;\tau]$, uscite $[z;y]$};
+\node[block] (delta) at (0,2.2) {$\Delta_m=\operatorname{diag}(\delta_{k1},\delta_{k2},\delta_J)$};
+\draw[->] (-4,0)--node[above]{$\tau$}(m.west);
+\draw[->] (m.east)--node[above]{$y=[q;\theta]$}(4.5,0);
+\draw[->] (m.north east)--(2.8,.8)--node[right]{$z$}(2.8,2.2)--(delta.east);
+\draw[->] (delta.west)--(-2.8,2.2)--node[left]{$w$}(-2.8,.8)--(m.north west);
+\end{tikzpicture}

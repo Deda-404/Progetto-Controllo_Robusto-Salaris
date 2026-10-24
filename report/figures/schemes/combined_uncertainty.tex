@@ -1,0 +1,15 @@
+\begin{tikzpicture}[>=Latex,font=\small,block/.style={draw,align=center,minimum height=1cm,minimum width=3cm}]
+\node[block] (a) at (0,0) {Attuatori\\$M_a$};
+\node[block] (m) at (5,0) {Meccanica SEA\\$M_m$};
+\node[block] (da) at (0,2.2) {$\Delta_a$: A oppure B};
+\node[block] (dm) at (5,2.2) {$\Delta_m$};
+\draw[->] (-2.8,0)--node[above]{$u$}(a);
+\draw[->] (a)--node[above]{$\tau$}(m);
+\draw[->] (m)--node[above]{$y$}(7.8,0);
+\draw[->] (a.north east)--(2,.8)--(2,2.2)--node[above]{$z_a$}(da.east);
+\draw[->] (da.west)--(-2,2.2)--(-2,.8)--node[above]{$w_a$}(a.north west);
+\draw[->] (m.north east)--(7,.8)--(7,2.2)--node[above]{$z_m$}(dm.east);
+\draw[->] (dm.west)--(3,2.2)--(3,.8)--node[above]{$w_m$}(m.north west);
+\draw[->] (5,-1.4)--node[right]{$d$}(m);
+\node at (2.5,-2) {$\Delta_{tot}=\operatorname{diag}(\Delta_a,\Delta_m)$};
+\end{tikzpicture}

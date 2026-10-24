@@ -1,0 +1,11 @@
+\begin{tikzpicture}[>=Latex,font=\small,block/.style={draw,align=center,minimum width=4cm,minimum height=1cm}]
+\node[block] (p) at (0,0) {$P$ generalizzata\\pianta, $W_e,W_u,M_o$};
+\node[block] (d) at (0,2.5) {$\Delta_{tot}$};
+\node[block] (k) at (0,-2.5) {$K$};
+\draw[->] (-4,0)--node[above]{$w=[r;d]$}(p);
+\draw[->] (p)--node[above]{$z_p=[W_e(q-M_or);W_uu]$}(6,0);
+\draw[->] (p.north east)--(2.8,1)--(2.8,2.5)--node[above]{$z_\Delta$}(d.east);
+\draw[->] (d.west)--(-2.8,2.5)--(-2.8,1)--node[above]{$w_\Delta$}(p.north west);
+\draw[->] (p.south east)--(2.8,-1)--(2.8,-2.5)--node[below]{$y_K=[r;y]$}(k.east);
+\draw[->] (k.west)--(-2.8,-2.5)--(-2.8,-1)--node[above]{$u$}(p.south west);
+\end{tikzpicture}
