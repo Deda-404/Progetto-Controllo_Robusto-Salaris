@@ -2338,3 +2338,20 @@ Criterio di riduzione encoder: almeno dieci volte picco/RMS per ciascuno dei tre
 Riutilizzare i dieci impianti congelati. RAS applicata allo stato completo dei candidati, con coordinate bilanciate e ode15s/Jacobiano soltanto nello studio MATLAB per superare limiti numerici: primo HinfN3 ode23t incompleto conservato. μ: 25 convergenze, gate Lyapunov FAIL; nessun certificato attribuito. Arresti H∞ restano ignoti, non non convergenti.
 
 PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliati mediante ritagli LaTeX, senza ridisegnare connessioni. Due TXT nella preparazione studenti del nuovo pacchetto. Nessun Umax documentato: risultati progettuali/statistici, nessuna certificazione hardware. Pubblicare branch e PR per revisione, senza merge.
+
+## 2026-10-24 — Due modelli degli attuatori e residuo Padé
+
+Stato: implementazione e studio autorizzati dal mandato di revisione;
+adozione definitiva PROPOSTA nel branch dedicato. Responsabile: Alessio.
+Manteniamo k1, k2, Jm1 ±10%, wn/zeta ±10%, tau ±20% e la banca consolidata.
+A è un singolo blocco dinamico pieno 2x2 additivo al fattore Padé, filtrato
+da H0. B conserva sei parametri reali attuativi e due residui dinamici SISO.
+Una variante A diagonale isola l'effetto degli accoppiamenti.
+
+Il residuo è additivo perché il rapporto rispetto a Padé1 inverte uno zero
+nel semipiano destro. Il vecchio modello M4 è conservato: i relativi certificati
+non sono trasferiti automaticamente a tutti i ritardi esatti. Il peso comune A
+usa una maggiorazione analitica, volutamente dichiarata e controllata sui
+campioni. I confronti devono distinguere questo inviluppo dalla sola struttura.
+La costruzione manuale impiega forze interne e parametri normalizzati; lftdata
+è usato per verifica, non per derivare la versione manuale.

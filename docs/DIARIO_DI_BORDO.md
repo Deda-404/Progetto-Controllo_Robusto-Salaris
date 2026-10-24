@@ -3044,3 +3044,24 @@ Nuova consegna: 449 file copiati e compressi con SHA-256 verificati, otto SLX in
 Pubblicati i commit 505f2da (sintesi, dati e verifiche) e abce30a (elaborati, orale e consegna) sul branch codex/sintesi-robusta-rumore-e-orale-finale. Upload 8/8 nuovi oggetti LFS, 232 MB. Aperta PR #41 in bozza: https://github.com/Deda-404/Progetto_CR/pull/41; verificati open, draft=true, merged=false e base main a4b3817. Adozione finale e merge riservati agli studenti.
 
 Manifest finale: 475 file selezionati, hash PASS. Pacchetto nuovo: 449 file, ZIP 687580148 byte, SHA-256 8b97fbad0d6c8a1102b03a78f980d48f5ea2e6d5a3993e9102eabff31cf9af8c, verifica dei contenuti compressi PASS. Originali SLX, 197 MAT/SLX precedenti, quattro script e codice fisico invariati; audit PDF e collaudi conservati. Il commit conclusivo registra soltanto pubblicazione e manifest: non altera PDF, controllori, dati o ZIP. Restano prova orale dal vivo, valutazione dei compromessi e verifica hardware con dati di targa reali.
+
+## 2026-10-24 — Audit e LFT manuali richieste al ricevimento
+
+Base origin/main 0ed5611, PR #42 integrata. Creato il branch
+codex/revisione-focus-incertezze-salaris; main non modificato. Riletta la traccia
+ufficiale attraverso Drive in sola lettura e applicato il mandato del gruppo.
+Audit in docs/AUDIT_REVISIONE_SALARIS.md. Controllori, fisica, intervalli e SLX
+consolidati conservati.
+
+Costruite manualmente la LFT delle forze elastiche e dell'inerzia e quella dei
+due attuatori SISO. Realizzati A pieno, A diagonale e B parametrico con nominale
+comune. Residuo Padé additivo, distinto dal ritardo reale; maggiorazione
+analitica che dimostra B contenuto in A diagonale contenuto in A pieno.
+Cinque test MATLAB R2026b PASS. Il primo run falliva per un percorso relativo
+nel test: corretto e ripetuto con successo. La prima copertura residua lineare,
+più larga a bassa frequenza, è stata sostituita prima della campagna finale
+con un peso cubico coerente con l'errore di Padé1; i tentativi sono rimasti nei
+log temporanei e non sono accreditati come risultati finali.
+
+Gate modellazione COMPLETE / PASS. Nuovi modelli proposti per revisione nel
+branch; l'adozione definitiva rimane agli studenti. Responsabile: Alessio.

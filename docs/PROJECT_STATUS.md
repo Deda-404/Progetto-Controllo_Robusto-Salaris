@@ -1,3 +1,18 @@
+# Revisione del 24 ottobre 2026 — modellazione COMPLETE / PASS
+
+Branch codex/revisione-focus-incertezze-salaris da origin/main 0ed5611.
+LFT manuali meccanica/attuatori e famiglie A pieno, A diagonale, B parametrico:
+5/5 verifiche R2026b PASS. Fisica, intervalli, banca controllori e SLX conservati.
+Audit mirato in docs/AUDIT_REVISIONE_SALARIS.md. Adozione dei nuovi modelli
+PROPOSTA per revisione degli studenti; nessun merge su main.
+
+Analisi e tre livelli di sintesi A/B eseguiti, simulazioni e integrazioni
+secondarie in collaudo. I nuovi margini non sostituiscono quelli del vecchio
+modello M4. Valori Hinf2 con violazioni numeriche delle inclusioni restano
+quantitativamente inconclusivi. Elaborati in preparazione; stato globale
+PARTIAL fino alla conclusione dei gate e della revisione scientifica.
+
+---
 # Stato corrente — 13.10.2026, revisione con rumore
 
 Implementazione, collaudo ed elaborati COMPLETE/PASS; accettazione scientifica PARTIAL. Tre H∞ con rumore esplicito nominalmente stabili ma RS/RP FAIL, nessuna promozione. MuN1 (82 stati) mantiene NS/NP/RS/RP: RS [1.84622,1.88174], RP [1.59634,1.60036]. Picco μ non lineare 108.526→2.25091 N m (48.21 volte), RMS 12.8223→1.35740 (9.446 volte). Rumore encoder isolato: oltre dieci volte in picco/RMS in tutti i tre seed.
@@ -96,3 +111,4 @@ Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero erro
 Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
 
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
+

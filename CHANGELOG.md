@@ -623,3 +623,10 @@ Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero erro
 Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
 
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
+
+## 2026-10-24 — Modellazione delle incertezze, fase iniziale
+
+- Aggiunte LFT manuali della meccanica e dei due attuatori.
+- Aggiunti A pieno, variante diagonale e B parametrico, con residuo Padé separato.
+- Verificata equivalenza ingresso-uscita: cinque test R2026b PASS.
+- Banca controllori, intervalli fisici e modelli Simulink conservati.
