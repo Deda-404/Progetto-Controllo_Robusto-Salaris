@@ -1,5 +1,13 @@
 # Controllo robusto di un manipolatore SEA a due giunti
 
+Aggiornamento 25.10.2026: audit della ristrutturazione didattica completato sul
+branch `codex/ristrutturazione-didattica-sea`, da main `0ed5611`. Sono passati
+78 test della baseline e cinque test LFT della PR #43. La proposta scientifica
+S1 attende approvazione; sei nuovi script, confronto semplificato e nuovo ZIP
+non sono ancora implementati. Baseline, controllori e SLX sono conservati.
+Vedere [report e proposta](docs/REPORT_RISTRUTTURAZIONE_DIDATTICA.md).
+Le informazioni seguenti descrivono la consegna storica del 13 ottobre.
+
 Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.
 
 [PR #41 — revisione con rumore e orale finale](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza; ramo e otto nuovi oggetti Git LFS pubblicati, nessun merge.

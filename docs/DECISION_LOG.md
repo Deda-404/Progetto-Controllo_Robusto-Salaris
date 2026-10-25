@@ -2338,3 +2338,26 @@ Criterio di riduzione encoder: almeno dieci volte picco/RMS per ciascuno dei tre
 Riutilizzare i dieci impianti congelati. RAS applicata allo stato completo dei candidati, con coordinate bilanciate e ode15s/Jacobiano soltanto nello studio MATLAB per superare limiti numerici: primo HinfN3 ode23t incompleto conservato. μ: 25 convergenze, gate Lyapunov FAIL; nessun certificato attribuito. Arresti H∞ restano ignoti, non non convergenti.
 
 PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliati mediante ritagli LaTeX, senza ridisegnare connessioni. Due TXT nella preparazione studenti del nuovo pacchetto. Nessun Umax documentato: risultati progettuali/statistici, nessuna certificazione hardware. Pubblicare branch e PR per revisione, senza merge.
+
+## 2026-10-25 - Proposta S1 per il confronto didattico degli attuatori
+
+Stato: PROPOSTA, DA APPROVARE; nessuna modifica scientifica implementata.
+Responsabile: Alessio. Branch codex/ristrutturazione-didattica-sea, base
+main 0ed5611. Il nuovo mandato autorizza audit e riorganizzazione, ma richiede
+una decisione esplicita prima di restringere gli insiemi di incertezza.
+
+S1 propone wn/zeta indipendenti per ciascun attuatore, entrambi ±10%;
+tau noto a 15 ms, Padé1 senza residuo; meccanica nominale nel confronto
+centrale. M4 e le sue incertezze meccaniche restano conservati come baseline
+storica. A indica il parametrico, B il concentrato diagonale con due ultidyn
+SISO indipendenti, secondo il mandato corrente (lettere inverse nella PR43).
+La costruzione proposta di WI è la maggiorazione analitica di ordine uno
+specificata al §6 di REPORT_RISTRUTTURAZIONE_DIDATTICA.md.
+
+Alternative esaminate: solo wn, wn/zeta, wn/tau, zeta/tau; cinque valori
+per parametro e nessuna griglia cartesiana. Questi studi preliminari non
+costituiscono una selezione finale né una validazione robusta del nuovo
+insieme. Conservati nominali, equilibrio, misure, pesi, obiettivi e banca
+dei sei controllori. Nessun nuovo rilassamento, controllore ridotto o
+candidato con rumore viene adottato. Accorpamento e pacchetto seguono solo
+la decisione degli studenti. Nessun merge e nessuna modifica degli SLX.

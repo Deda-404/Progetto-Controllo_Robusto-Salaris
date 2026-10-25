@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-25 - Audit della ristrutturazione didattica SEA
+
+- Branch dedicato da main 0ed5611; PR43 letta criticamente, senza merge.
+- Inventario di 1275 file main/PR43, duplicati, grafo di riferimenti e 21
+  dipendenze MATLAB statiche dei quattro ingressi.
+- 78 regressioni baseline e cinque verifiche LFT PR43 PASS in R2026b;
+  Code Analyzer su 259 sorgenti. Tentativi iniziali falliti conservati.
+- Report richiesto, proposta scientifica S1 e tracciabilità completa della
+  traccia. Adozione di wn/zeta, meccanica nominale e B diagonale DA APPROVARE.
+- Nessuna modifica dei sorgenti scientifici, dei controllori, dei MAT/SLX o
+  dei PDF precedenti. Nuovo pacchetto, analisi A/B e ZIP NOT RUN.
+
 Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo file.
 
 ## Unreleased

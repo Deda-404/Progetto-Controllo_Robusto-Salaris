@@ -1,0 +1,11 @@
+Dipendenze progetto_lqg.m: 14 file
+Dipendenze progetto_lqgi.m: 3 file
+Dipendenze progetto_hinf_tre_controllori.m: 4 file
+Dipendenze progetto_mu.m: 1 file
+{Error using uss
+Too many input arguments.
+
+Error in audit_ristrutturazione_didattica (line 70)
+    Dp=uss(-2/tau,2/tau,2,-1); G=H*Dp;
+       ^^^^^^^^^^^^^^^^^^^^^^
+}

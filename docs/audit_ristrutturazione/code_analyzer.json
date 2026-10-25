@@ -1,0 +1,1318 @@
+[
+  {
+    "file": "Es_MatlabSimulink_Salaris/Analisi e sintesi robusta/DK_Iteration_musyn.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 1,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "ASGLU",
+        "message": "Value assigned to variable might be unused. Consider replacing the variable with ~ instead.",
+        "fix": 1,
+        "line": 52,
+        "column": [
+          14,
+          17
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 52,
+        "column": [
+          34,
+          36
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Analisi e sintesi robusta/Mu_Analisys_commented.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 20,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 119,
+        "column": [
+          37,
+          39
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Analisi e sintesi robusta/Robust_Synthesis_Analisys.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 24,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 135,
+        "column": [
+          42,
+          44
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 163,
+        "column": [
+          50,
+          52
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Calcolo Norme/CalcoloNorme.m",
+    "messages": []
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Esercitazione_RCSToolbox.m",
+    "messages": {
+      "id": "CLALL",
+      "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+      "fix": 0,
+      "line": 1,
+      "column": [
+        7,
+        9
+      ]
+    }
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/LQG and H2 synthesis/LQGreg_Synthesis.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 11,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "UNRCH",
+        "message": "This statement (and possibly following ones) cannot be reached.",
+        "fix": 0,
+        "line": 117,
+        "column": [
+          1,
+          11
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/LQG and H2 synthesis/LQGservo_Synthesis.m",
+    "messages": {
+      "id": "CLALL",
+      "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+      "fix": 0,
+      "line": 20,
+      "column": [
+        7,
+        9
+      ]
+    }
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/MixSyn-Connect-lft/MixedSensitivity_MIMO_RHZEffects.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 13,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 130,
+        "column": [
+          13,
+          15
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 131,
+        "column": [
+          15,
+          17
+        ]
+      },
+      {
+        "id": "MINV",
+        "message": "INV(A)*b can be slower and less accurate than A\\b. Consider using A\\b for INV(A)*b or b/A for b*INV(A).",
+        "fix": 0,
+        "line": 176,
+        "column": [
+          51,
+          54
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/MixSyn-Connect-lft/MixedSensitivity_SISO_1dof.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 12,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "NASGU",
+        "message": "Value assigned to variable might be unused.",
+        "fix": 0,
+        "line": 114,
+        "column": [
+          1,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Modelli di Incertezza/ConfrontoModelliIncertezza.m",
+    "messages": {
+      "id": "CLALL",
+      "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+      "fix": 0,
+      "line": 2,
+      "column": [
+        7,
+        9
+      ]
+    }
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Modelli di Incertezza/PesoIncertezzaConcentrata_ginput.m",
+    "messages": [
+      {
+        "id": "CLALL",
+        "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+        "fix": 0,
+        "line": 2,
+        "column": [
+          7,
+          9
+        ]
+      },
+      {
+        "id": "SAGROW",
+        "message": "Variable appears to change size on every loop iteration (within a script). Consider preallocating for speed.",
+        "fix": 0,
+        "line": 54,
+        "column": [
+          5,
+          8
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Modelli di Incertezza/PesoIncertezzaConcentrata_ucover.m",
+    "messages": {
+      "id": "CLALL",
+      "message": "Using 'clear' with the 'all' option usually decreases code performance and is often unnecessary.",
+      "fix": 0,
+      "line": 2,
+      "column": [
+        7,
+        9
+      ]
+    }
+  },
+  {
+    "file": "Es_MatlabSimulink_Salaris/Modelli di Incertezza/VisualizzazioneBandeDiIncertezzaParametrica.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/support/parametri_pid_hinf.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/support/seleziona_pid_hinf.m",
+    "messages": []
+  },
+  {
+    "file": "File_di_Funzioni_Progetto-Accorpati/support/valuta_avvio_hinf.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/audit_original_models.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/comparison/build_m17_master_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/comparison/evaluate_m17_controller_roles.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/comparison/load_m17_frozen_evidence.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/comparison/plot_m17_final_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/comparison/validate_m17_final_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_final_closure_figures.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_final_closure_summary.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_hinf_final_results.m",
+    "messages": {
+      "id": "AGROW",
+      "message": "Variable appears to change size on every loop iteration. Consider preallocating for speed.",
+      "fix": 0,
+      "line": 11,
+      "column": [
+        21,
+        24
+      ]
+    }
+  },
+  {
+    "file": "analysis/export_hinf_readable_figures.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_hinf_revision.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_lqgi_validation.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/export_organic_audit.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/extend_hinf_revision_2dof.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/final_closure_load.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/final_closure_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_direct_weights_summary.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_m18_figure_manifest.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_m18_presentation_assets.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_m18_report_tables.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_m18_report_values.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/build_technical_revision_tables.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/load_m18_validated_artifacts.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/validate_m18_deliverables.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/finalization/validate_m18_traceability.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/hinf_final_nonlinear_setup.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/modellazione_linearizzazione_controllo.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/build_m16_sample_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/build_m16_sampled_physical_plant.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/evaluate_m16_sample.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/generate_m16_uncertainty_samples.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/load_m16_frozen_controllers.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/plot_m16_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/summarize_m16_monte_carlo.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/monte_carlo/validate_m16_monte_carlo.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/audit_noise_robustness.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/export_noise_redesign.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/noise_generalized_plant.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/run_noise_simulink.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/run_noise_synthesis.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/validate_noise_candidates.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/noise_redesign/validate_noise_plants.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/analyze_m2_structure.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/analyze_m3_structure.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/build_m11_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_lqgi_candidate.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_lqgi_noise.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_m10_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_m11_candidate.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_m11_representatives.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_m6_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/evaluate_m9_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/finite_difference_jacobian.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_hinf_revision.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_lqgi_revision.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_m10_lower_lft_diagram.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_m10_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_m11_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/plot_m9_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/select_m11_pareto_candidates.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/set_scientific_figure_style.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/study_hinf_weights.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m10_hinfsyn.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m11_hinfstruct.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m1_nonlinear_model.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m2_equilibrium_linearization.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m3_nominal_actuated_plant.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m5_performance_specs.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m6_lqg_no_integrator.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m7_lqg_integral.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nominal/validate_m9_hinf_mixsyn.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nonlinear/load_m15_robust_controllers.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nonlinear/plot_m15_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nonlinear/simulate_hinf_final_nonlinear.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/nonlinear/simulate_lqgi_nonlinear.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/preserve_validation_outputs.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/progetto_hinf.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/progetto_lqg.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/progetto_lqgi.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/build_common_ras_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/estimate_lqg_ras.m",
+    "messages": {
+      "id": "STOUT",
+      "message": "Function return value might be unset.",
+      "fix": 0,
+      "line": 218,
+      "column": [
+        10,
+        18
+      ]
+    }
+  },
+  {
+    "file": "analysis/ras/estimate_m15_robust_ras.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/evaluate_m15_convergence.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/evaluate_m8_convergence.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/lyapunov_cubic_bound.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/lyapunov_sample_ratios.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/plot_lyapunov_ras.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/run_hinf_final_lyapunov.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/sea_closed_loop_rhs.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/validate_lyapunov_ras.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/ras/validate_lyapunov_trajectories.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/analyze_m12_manual_mu.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/analyze_m12_robust_performance.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/analyze_m12_robust_stability.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/audit_m12_nominal_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/audit_m13_nominal_controller.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/audit_m14_nominal_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/build_m12_uncertain_generalized_plant.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/build_m14_critical_block_table.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/compare_m14_a5_kmu_robustness.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/decompose_m12_ndelta.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/load_m14_kmu_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/plot_m12_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/plot_m13_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/plot_m14_results.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/validate_m12_mu_analysis.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/validate_m13_mu_synthesis.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/robust/validate_m14_final_mu_analysis.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_final_noise_diagnostics.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_final_ras_lyapunov.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_fixed.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_monte_carlo.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_noise.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_nominal.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_nonlinear.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_pipeline.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_ras.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_final_robust.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_revision.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_hinf_revision_fixed.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_lqgi_ras.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_lqgi_validation.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/run_practical_robustness.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/uncertainty/build_actuator_family.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/uncertainty/fit_actuator_uncertainty_weight.m",
+    "messages": []
+  },
+  {
+    "file": "analysis/uncertainty/validate_m4_uncertainty_model.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/build_m10_generalized_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/build_m11_structured_controller.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/build_m11_tunable_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/build_m9_nominal_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/extract_m11_tuned_controller.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_final_2dof_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_final_config.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_final_evaluate.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_final_uncertain.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_config.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_evaluate.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_lower_bound.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_tracking.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/hinf_revision_weights.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/load_m12_a5_controller.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/reconstruct_m10_closed_loop.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/reconstruct_m9_mixed_sensitivity.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/run_m11_hinfstruct_campaign.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/synthesize_m10_hinfsyn.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/synthesize_m9_mixsyn.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/hinf/validate_m10_generalized_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/analyze_kalman_sensitivity_m6.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/build_lqg_no_integrator.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/build_lqgi_augmented_cost.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/build_lqr_state_cost.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/design_kalman_m6.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/design_lqr_m6.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/lqg/search_lqr_weights_m6.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/mu/extract_m13_dk_history.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/mu/load_m13_uncertain_generalized_plant.m",
+    "messages": []
+  },
+  {
+    "file": "controllers/mu/run_m13_musyn.m",
+    "messages": []
+  },
+  {
+    "file": "run_all.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/acquire_student_scope_buffers.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/analyze_student_scope_results.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/export_student_schemes.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/setup_original_models.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/setup_student_originals.m",
+    "messages": []
+  },
+  {
+    "file": "simulink/validate_student_originals.m",
+    "messages": []
+  },
+  {
+    "file": "src/actuators/build_nominal_actuator.m",
+    "messages": []
+  },
+  {
+    "file": "src/actuators/build_nominal_actuator_bank.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/build_joint_torque_disturbance_input.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/build_m3_full_plant.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_coriolis.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_elastic_torque.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_gravity.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_linearize_static_equilibrium_analytic.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_linearize_symbolic.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_link_inertia.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_nonlinear_rhs.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_nonlinear_rhs_with_link_disturbance.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_output_matrices.m",
+    "messages": []
+  },
+  {
+    "file": "src/model/sea_static_equilibrium.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/actuator_params_nominal.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/final_comparison_specs_m17.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/finalization_specs_m18.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/hinf_specs_m10.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/hinf_specs_m9.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/hinfstruct_specs_m11.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/lqg_specs_m6.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/lqg_specs_m7.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/lqgi_validation_specs.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/m15_specs.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/m8_specs.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/monte_carlo_specs_m16.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/mu_analysis_specs_m12.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/mu_analysis_specs_m14.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/mu_synthesis_specs_m13.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/performance_specs_m5.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/sea_params_nominal.m",
+    "messages": []
+  },
+  {
+    "file": "src/parameters/uncertainty_params_m4.m",
+    "messages": []
+  },
+  {
+    "file": "src/performance/build_m5_weights.m",
+    "messages": []
+  },
+  {
+    "file": "src/uncertainty/build_m4_uncertain_plant.m",
+    "messages": []
+  },
+  {
+    "file": "src/uncertainty/build_uncertain_mechanical_plant.m",
+    "messages": []
+  },
+  {
+    "file": "tests/didactic_refactor/prepare_baseline.m",
+    "messages": []
+  },
+  {
+    "file": "tests/didactic_refactor/run_capture.m",
+    "messages": []
+  },
+  {
+    "file": "tests/didactic_refactor/verify_final.m",
+    "messages": [
+      {
+        "id": "ALIGN",
+        "message": "This keyword might not be aligned with its matching END on line 59.",
+        "fix": 0,
+        "line": 57,
+        "column": [
+          5,
+          7
+        ]
+      },
+      {
+        "id": "NOCOMMA",
+        "message": "Extra comma is unnecessary.",
+        "fix": 1,
+        "line": 57,
+        "column": [
+          8,
+          8
+        ]
+      }
+    ]
+  },
+  {
+    "file": "tests/didactic_refactor/verify_hinf.m",
+    "messages": {
+      "id": "AGROW",
+      "message": "Variable appears to change size on every loop iteration. Consider preallocating for speed.",
+      "fix": 0,
+      "line": 30,
+      "column": [
+        5,
+        7
+      ]
+    }
+  },
+  {
+    "file": "tests/didactic_refactor/verify_mu.m",
+    "messages": {
+      "id": "AGROW",
+      "message": "Variable appears to change size on every loop iteration. Consider preallocating for speed.",
+      "fix": 0,
+      "line": 20,
+      "column": [
+        9,
+        11
+      ]
+    }
+  },
+  {
+    "file": "tests/finalClosureTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/hinfFinalCoherenceTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/hinfFinalDownstreamTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/hinfLowerBoundTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/lqgiValidationTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/noiseRedesignTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/organicReviewTest.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_didactic_entry_points.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_hinf_targeted_revision.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_lyapunov_ras.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m0_workspace.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m10_hinfsyn.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m11_hinfstruct.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m12_mu_analysis.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m13_mu_synthesis.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m14_final_mu_analysis.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m16_monte_carlo.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m17_final_controller_comparison.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m18_final_deliverables.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m1_nonlinear_model.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m2_equilibrium_linearization.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m3_actuator_dynamics.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m4_uncertainty_model.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m5_performance_specs.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m6_lqg_no_integrator.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m7_lqg_integral.m",
+    "messages": []
+  },
+  {
+    "file": "tests/test_m9_hinf_mixsyn.m",
+    "messages": []
+  },
+  {
+    "file": "tools/capture_final_robustness.m",
+    "messages": []
+  },
+  {
+    "file": "tools/collect_final_dependencies.m",
+    "messages": []
+  },
+  {
+    "file": "tools/export_student_baseline_figures.m",
+    "messages": []
+  },
+  {
+    "file": "tools/finalize_student_validation.m",
+    "messages": []
+  },
+  {
+    "file": "tools/probe_final_environment.m",
+    "messages": []
+  },
+  {
+    "file": "tools/run_final_student_validation.m",
+    "messages": []
+  },
+  {
+    "file": "tools/verify_four_final_scripts.m",
+    "messages": []
+  }
+]

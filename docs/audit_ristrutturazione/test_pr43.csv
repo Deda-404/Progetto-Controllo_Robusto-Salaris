@@ -1,0 +1,6 @@
+Name,Passed,Failed,Incomplete,Duration
+salarisModelsTest/mechanicalReconstruction,1,0,0,1.5791645
+salarisModelsTest/actuatorReconstruction,1,0,0,0.7149659
+salarisModelsTest/automaticLftRoundTrip,1,0,0,0.2686695
+salarisModelsTest/nominalAndStructures,1,0,0,1.7323601
+salarisModelsTest/delayResidualBound,1,0,0,0.1189834

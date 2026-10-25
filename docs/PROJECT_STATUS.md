@@ -1,4 +1,22 @@
-# Stato corrente — 13.10.2026, revisione con rumore
+# Stato corrente - 25.10.2026, ristrutturazione didattica
+
+FASE 0 COMPLETE / PASS; FASE 1 PARTIAL, approvazione S1 richiesta.
+Branch codex/ristrutturazione-didattica-sea da main 0ed5611; nessun merge.
+Audit di tutti i 1125 file main e dei 1275 file dell'unione con PR43;
+21 dipendenze MATLAB statiche dei quattro ingressi e duplicati identificati.
+78/78 regressioni baseline e 5/5 test LFT PR43 PASS in R2026b.
+259 MAT/SLX e 259 sorgenti MATLAB preesistenti conservati byte per byte.
+
+Proposta ancora da approvare: wn/zeta ±10% per attuatore, ritardo noto
+15 ms con Padé1, meccanica nominale nel confronto centrale, A parametrico
+e B concentrato con due blocchi SISO indipendenti. Baseline M4 conservata.
+Sei nuovi script, analisi A/B, RAS e ZIP autonomo NOT RUN.
+Report e tabella di tracciabilità: REPORT_RISTRUTTURAZIONE_DIDATTICA.md.
+Prossimo passo: decisione raggruppata degli studenti su S1 (§6 del report).
+
+---
+
+# Stato precedente — 13.10.2026, revisione con rumore
 
 Implementazione, collaudo ed elaborati COMPLETE/PASS; accettazione scientifica PARTIAL. Tre H∞ con rumore esplicito nominalmente stabili ma RS/RP FAIL, nessuna promozione. MuN1 (82 stati) mantiene NS/NP/RS/RP: RS [1.84622,1.88174], RP [1.59634,1.60036]. Picco μ non lineare 108.526→2.25091 N m (48.21 volte), RMS 12.8223→1.35740 (9.446 volte). Rumore encoder isolato: oltre dieci volte in picco/RMS in tutti i tre seed.
 

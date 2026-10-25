@@ -1,0 +1,197 @@
+[
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "nominal_study.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "selected_full_order.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "fixed_PID.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "nominal_study.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "selected_full_order.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "fixed_PID.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "controllori_Hinf.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "controllori_Hinf.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+    "literal": "hinf_noise_03.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "m3_nominal_actuated_plant.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "m5_performance_specs.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "m6_lqg_no_integrator.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "lyapunov_ras_nominal.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "lyapunov_ras_nominal.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+    "literal": "didactic_lqg_calculations.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m",
+    "literal": "m3_nominal_actuated_plant.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m",
+    "literal": "m6_lqg_no_integrator.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m",
+    "literal": "m7_augmented_cost_feasibility.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "selected_full_order.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "m13.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "m12.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "m14.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "robust_study.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "m4_uncertain_plant.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "controllori_Hinf.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "controllori_Hinf.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "controllori_Mu.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "literal": "mu_noise_01.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/nominal/plot_lqgi_revision.m",
+    "literal": "m5_performance_specs.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/nominal/plot_lqgi_revision.m",
+    "literal": "m6_lqg_no_integrator.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/nominal/plot_lqgi_revision.m",
+    "literal": "m7_augmented_cost_feasibility.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/nominal/plot_lqgi_revision.m",
+    "literal": "m7_disturbance_comparison.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/plot_lyapunov_ras.m",
+    "literal": "m8_lqg_nonlinear_ras.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/plot_lyapunov_ras.m",
+    "literal": "m15_nonlinear_robust_validation.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/validate_lyapunov_ras.m",
+    "literal": "m3_nominal_actuated_plant.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/validate_lyapunov_ras.m",
+    "literal": "m6_lqg_no_integrator.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/validate_lyapunov_ras.m",
+    "literal": "m10_hinfsyn_nominal.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/validate_lyapunov_ras.m",
+    "literal": "m13_musyn_dk.mat",
+    "certainty": "literal; inspect load/save and branch"
+  },
+  {
+    "source": "analysis/ras/validate_lyapunov_ras.m",
+    "literal": "lyapunov_ras_nominal.mat",
+    "certainty": "literal; inspect load/save and branch"
+  }
+]

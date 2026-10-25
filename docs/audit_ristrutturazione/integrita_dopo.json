@@ -1,0 +1,23 @@
+{
+  "checked": 1125,
+  "changed": [
+    "CHANGELOG.md",
+    "README.md",
+    "docs/DECISION_LOG.md",
+    "docs/DIARIO_DI_BORDO.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "authorized_documentation_changes": [
+    "CHANGELOG.md",
+    "README.md",
+    "docs/DECISION_LOG.md",
+    "docs/DIARIO_DI_BORDO.md",
+    "docs/PROJECT_STATUS.md"
+  ],
+  "unexpected_changes": [],
+  "unexpected_git_changes": [],
+  "mat_slx_checked": 259,
+  "all_slx_checked": 19,
+  "scientific_matlab_checked": 259,
+  "pass": true
+}

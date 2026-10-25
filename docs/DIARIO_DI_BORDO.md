@@ -3044,3 +3044,39 @@ Nuova consegna: 449 file copiati e compressi con SHA-256 verificati, otto SLX in
 Pubblicati i commit 505f2da (sintesi, dati e verifiche) e abce30a (elaborati, orale e consegna) sul branch codex/sintesi-robusta-rumore-e-orale-finale. Upload 8/8 nuovi oggetti LFS, 232 MB. Aperta PR #41 in bozza: https://github.com/Deda-404/Progetto_CR/pull/41; verificati open, draft=true, merged=false e base main a4b3817. Adozione finale e merge riservati agli studenti.
 
 Manifest finale: 475 file selezionati, hash PASS. Pacchetto nuovo: 449 file, ZIP 687580148 byte, SHA-256 8b97fbad0d6c8a1102b03a78f980d48f5ea2e6d5a3993e9102eabff31cf9af8c, verifica dei contenuti compressi PASS. Originali SLX, 197 MAT/SLX precedenti, quattro script e codice fisico invariati; audit PDF e collaudi conservati. Il commit conclusivo registra soltanto pubblicazione e manifest: non altera PDF, controllori, dati o ZIP. Restano prova orale dal vivo, valutazione dei compromessi e verifica hardware con dati di targa reali.
+
+## 2026-10-25 - Audit preliminare e proposta di ristrutturazione didattica
+
+Responsabile: Alessio. Riletto integralmente il mandato allegato; consultati
+traccia SEA dal Drive, regole, main, decisioni, quattro ingressi, dipendenze,
+controllori, elaborati e PR43. Drive esclusivamente in lettura. Origin/main
+verificato a 0ed5611; PR43 aperta in bozza a d3074e9, senza commenti di
+approvazione. Creato codex/ristrutturazione-didattica-sea dalla baseline.
+
+Inventariati 1125 file di main e 1275 dell'unione main/PR43; classificazione
+proposta per ogni file, duplicati e grafo lessicale. Analisi MATLAB delle
+quattro chiusure statiche: 21 sorgenti distinti; MAT e percorsi dinamici
+registrati separatamente. Nessuna rimozione basata soltanto sul grafo.
+
+Eseguiti 78 test baseline M1-M7 in MATLAB R2026b 26.2.0.3386108: PASS,
+zero incomplete. Il primo avvio dello strumento di audit si fermava per
+uss con coefficienti tutti numerici; corretto con ss, log conservato.
+Cinque test LFT PR43: primo tentativo 4/5 per MAT M5 mancante nell'area
+temporanea; fornita copia byte-identica della dipendenza, secondo tentativo
+5/5 PASS. Log e CSV di entrambi conservati. Nessuna nuova sintesi o analisi
+robusta. Code Analyzer su 259 MATLAB di main: 243 senza messaggi, 16 con
+segnalazioni preesistenti; quattro ingressi e nuovo audit senza messaggi.
+
+Verificate stabilità interna e interfacce dei sei controllori consolidati.
+Studiati cinque valori ciascuno di wn/zeta/tau e quattro selezioni candidate,
+solo come preliminari per la proposta. Il ripristino degli output M3/M5 è
+stato seguito da confronto hash; MAT, SLX, sorgenti scientifici e PDF
+preesistenti conservati. Nessun SLX aperto, simulato, modificato o risalvato.
+
+Prodotto REPORT_RISTRUTTURAZIONE_DIDATTICA.md con audit, proposta S1,
+struttura a sei numerati, riuso critico PR43, limiti, gate e tracciabilità
+di tutta la traccia. La PR43 usa A/B al contrario del mandato attuale:
+necessaria legenda, nessuna rinomina dei risultati storici.
+FASE 0 COMPLETE/PASS; FASE 1 PARTIAL/decisione S1 richiesta; FASE 2-8
+NOT RUN. ZIP ristrutturato non prodotto né validato. Restano da approvare
+insieme fisico e rappresentazioni prima dell'implementazione.

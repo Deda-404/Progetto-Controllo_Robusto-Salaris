@@ -1,0 +1,103 @@
+[
+  {
+    "parameters": "wn",
+    "blocks": {
+      "Name": "wn",
+      "Size": [
+        1,
+        1
+      ],
+      "Type": "ureal",
+      "Occurrences": 5,
+      "Simplify": 2
+    },
+    "nominalError": 6.6613381477509392E-16
+  },
+  {
+    "parameters": [
+      "wn",
+      "zeta"
+    ],
+    "blocks": [
+      {
+        "Name": "wn",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 5,
+        "Simplify": 2
+      },
+      {
+        "Name": "zeta",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      }
+    ],
+    "nominalError": 6.6613381477509392E-16
+  },
+  {
+    "parameters": [
+      "wn",
+      "delay"
+    ],
+    "blocks": [
+      {
+        "Name": "tau",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "wn",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 5,
+        "Simplify": 2
+      }
+    ],
+    "nominalError": 6.6613381477509392E-16
+  },
+  {
+    "parameters": [
+      "zeta",
+      "delay"
+    ],
+    "blocks": [
+      {
+        "Name": "tau",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "zeta",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      }
+    ],
+    "nominalError": 6.6613381477509392E-16
+  }
+]

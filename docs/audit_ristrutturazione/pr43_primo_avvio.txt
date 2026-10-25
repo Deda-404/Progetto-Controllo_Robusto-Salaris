@@ -1,0 +1,37 @@
+Running salarisModelsTest
+...
+================================================================================
+Error occurred in salarisModelsTest/nominalAndStructures and it did not run to completion.
+    ---------
+    Error ID:
+    ---------
+    'MATLAB:load:couldNotReadFile'
+    --------------
+    Error Details:
+    --------------
+    Error using load
+    Unable to find file or directory "C:\Users\aless\AppData\Local\Temp\sea_audit_20261025_pr43\results\data\m5_performance_specs.mat".
+
+    Error in build_salaris_models (line 48)
+    m5=load(fullfile(root,'results/data/m5_performance_specs.mat'),'BdFull');
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    Error in salarisModelsTest/nominalAndStructures (line 46)
+                m=build_salaris_models; nominal=m.plants{1}.NominalValue; err=0;
+                  ^^^^^^^^^^^^^^^^^^^^
+================================================================================
+..
+Done salarisModelsTest
+__________
+
+Failure Summary:
+
+     Name                                    Failed  Incomplete  Reason(s)
+    =======================================================================
+     salarisModelsTest/nominalAndStructures    X         X       Errored.
+{Error using assert
+At least one test failed in the test session.
+
+Error in matlab.unittest.internal.BaseTestResult/assertSuccess (line 126)
+             assert(~any([resultArray.Failed]),message('MATLAB:unittest:TestResult:UnsuccessfulRun'));
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}

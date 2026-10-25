@@ -1,0 +1,21 @@
+{
+  "baseline": "0ed5611fdbb9c46475543f87eba68d9799b07bc5",
+  "pr43": "d3074e941c85917ae85e41e4762f91eb8417a55a",
+  "main_files": 1125,
+  "pr_files": 1275,
+  "union_files": 1275,
+  "main_matlab": 259,
+  "main_mat": 240,
+  "main_slx": 19,
+  "changed_pr_files": 167,
+  "actions": {
+    "ARCHIVIATO": 1110,
+    "CONSERVATO": 84,
+    "ACCORPATO": 33,
+    "SEMPLIFICATO": 48
+  },
+  "static_dependency_union": 21,
+  "lexical_edges": 688,
+  "no_deletion": true,
+  "classification_status": "PROPOSTA, nessuna operazione sui file storici"
+}

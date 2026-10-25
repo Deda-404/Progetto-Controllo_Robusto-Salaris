@@ -1,0 +1,45 @@
+{
+  "version": "26.2.0.3386108 (R2026b)",
+  "release": "2026b",
+  "products": [
+    {
+      "Name": "Control System Toolbox",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    },
+    {
+      "Name": "MATLAB",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    },
+    {
+      "Name": "MATLAB Copilot",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    },
+    {
+      "Name": "Robust Control Toolbox",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    },
+    {
+      "Name": "Simulink",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    },
+    {
+      "Name": "Symbolic Math Toolbox",
+      "Version": "26.2",
+      "Release": "(R2026b)",
+      "Date": "22-May-2026"
+    }
+  ],
+  "date": "2026-10-25",
+  "newSynthesis": false,
+  "slxModified": false
+}

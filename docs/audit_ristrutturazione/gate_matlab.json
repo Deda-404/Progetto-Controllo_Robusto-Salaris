@@ -1,0 +1,9 @@
+{
+  "passed": 78,
+  "failed": 0,
+  "incomplete": 0,
+  "entriesExecuted": false,
+  "robustSynthesisExecuted": false,
+  "newABRobustnessValidated": false,
+  "newZipTested": false
+}

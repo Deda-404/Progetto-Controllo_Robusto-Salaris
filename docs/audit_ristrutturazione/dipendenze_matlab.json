@@ -1,0 +1,110 @@
+[
+  {
+    "entry": "progetto_lqg.m",
+    "files": [
+      "File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m",
+      "analysis/nominal/evaluate_m6_closed_loop.m",
+      "analysis/nominal/set_scientific_figure_style.m",
+      "analysis/ras/lyapunov_cubic_bound.m",
+      "analysis/ras/lyapunov_sample_ratios.m",
+      "analysis/ras/plot_lyapunov_ras.m",
+      "analysis/ras/sea_closed_loop_rhs.m",
+      "analysis/ras/validate_lyapunov_ras.m",
+      "src/model/sea_coriolis.m",
+      "src/model/sea_elastic_torque.m",
+      "src/model/sea_gravity.m",
+      "src/model/sea_link_inertia.m",
+      "src/model/sea_nonlinear_rhs.m",
+      "src/parameters/lqg_specs_m6.m"
+    ],
+    "products": [
+      {
+        "Name": "MATLAB",
+        "Version": "26.2",
+        "ProductNumber": 1,
+        "Certain": true
+      },
+      {
+        "Name": "Control System Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 3,
+        "Certain": true
+      }
+    ]
+  },
+  {
+    "entry": "progetto_lqgi.m",
+    "files": [
+      "File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m",
+      "analysis/nominal/plot_lqgi_revision.m",
+      "analysis/nominal/set_scientific_figure_style.m"
+    ],
+    "products": [
+      {
+        "Name": "MATLAB",
+        "Version": "26.2",
+        "ProductNumber": 1,
+        "Certain": true
+      },
+      {
+        "Name": "Control System Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 3,
+        "Certain": true
+      }
+    ]
+  },
+  {
+    "entry": "progetto_hinf_tre_controllori.m",
+    "files": [
+      "File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m",
+      "File_di_Funzioni_Progetto-Accorpati/support/parametri_pid_hinf.m",
+      "File_di_Funzioni_Progetto-Accorpati/support/seleziona_pid_hinf.m",
+      "File_di_Funzioni_Progetto-Accorpati/support/valuta_avvio_hinf.m"
+    ],
+    "products": [
+      {
+        "Name": "MATLAB",
+        "Version": "26.2",
+        "ProductNumber": 1,
+        "Certain": true
+      },
+      {
+        "Name": "Control System Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 3,
+        "Certain": true
+      },
+      {
+        "Name": "Robust Control Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 5,
+        "Certain": true
+      }
+    ]
+  },
+  {
+    "entry": "progetto_mu.m",
+    "files": "File_di_Funzioni_Progetto-Accorpati/progetto_mu.m",
+    "products": [
+      {
+        "Name": "MATLAB",
+        "Version": "26.2",
+        "ProductNumber": 1,
+        "Certain": true
+      },
+      {
+        "Name": "Control System Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 3,
+        "Certain": true
+      },
+      {
+        "Name": "Robust Control Toolbox",
+        "Version": "26.2",
+        "ProductNumber": 5,
+        "Certain": true
+      }
+    ]
+  }
+]
