@@ -1,0 +1,26 @@
+{
+  "mode": "rapida",
+  "seconds": 32.0397994,
+  "MATLAB": "26.2.0.3386108 (R2026b)",
+  "passed": 50,
+  "failed": 0,
+  "incomplete": 0,
+  "externalDirectory": "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_7j5bgswi\\Progetto_SEA_Consegna",
+  "controllerNames": [
+    "LQG",
+    "LQGI",
+    "Hinf1",
+    "Hinf2",
+    "PID",
+    "Kmu",
+    "Mu_A",
+    "Mu_B"
+  ],
+  "zipSHA256": "ebc5bb045d15bc2490a0e8c8c471798dec4862f63dd65fd86e701e0afec8f759",
+  "scientificFunctionFiles": [
+    "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_7j5bgswi\\Progetto_SEA_Consegna\\parametri_sea.m",
+    "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_7j5bgswi\\Progetto_SEA_Consegna\\dinamica_sea.m",
+    "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_7j5bgswi\\Progetto_SEA_Consegna\\simula_sea.m"
+  ],
+  "loadedRepositoryPaths": false
+}

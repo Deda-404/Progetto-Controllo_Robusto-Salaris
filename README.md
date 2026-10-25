@@ -1,11 +1,25 @@
 # Controllo robusto di un manipolatore SEA a due giunti
 
-Aggiornamento 25.10.2026: audit della ristrutturazione didattica completato sul
-branch `codex/ristrutturazione-didattica-sea`, da main `0ed5611`. Sono passati
-78 test della baseline e cinque test LFT della PR #43. La proposta scientifica
-S1 attende approvazione; sei nuovi script, confronto semplificato e nuovo ZIP
-non sono ancora implementati. Baseline, controllori e SLX sono conservati.
-Vedere [report e proposta](docs/REPORT_RISTRUTTURAZIONE_DIDATTICA.md).
+Aggiornamento 25.10.2026: ristrutturazione S1 approvata e realizzata sul
+branch `codex/ristrutturazione-didattica-sea`, da main `0ed5611`, senza merge.
+Il [pacchetto autonomo](Progetto_SEA_Consegna/LEGGIMI.md) ha sei script
+principali, tre ausiliari, otto MAT e due modalità. Avvio:
+`SEA_00_AVVIO_PROGETTO.m`. Non richiede la struttura storica del repository.
+
+Confronto A parametrico/B concentrato con wn/zeta ±10%, tau noto 15 ms e
+meccanica nominale. Due nuove D-K a 88/32 stati, pesi invariati e analisi
+incrociate; controllori originali conservati. Relazione di 33 pagine,
+18 slide, 13 schemi. Restano target temporali/rumore parziali e nuova
+integrazione Simulink NOT RUN, in attesa degli SLX definitivi degli studenti.
+
+50 test dedicati PASS; modalità rapida e completa realmente eseguite dopo
+estrazione fuori repository, 50/50 test ciascuna. Banca scientifica precedente
+invariata. [Report finale](docs/REPORT_RISTRUTTURAZIONE_DIDATTICA.md),
+[tracciabilità](Progetto_SEA_Consegna/documenti/TRACCIABILITA.md),
+[manifest/hash ZIP](delivery/manifest_S1.json). Lo ZIP locale è
+`delivery/Progetto_SEA_Consegna.zip`; si ricrea dal checkout con
+`python tools/package_s1.py`, senza necessità di ricompilare gli elaborati.
+
 Le informazioni seguenti descrivono la consegna storica del 13 ottobre.
 
 Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.

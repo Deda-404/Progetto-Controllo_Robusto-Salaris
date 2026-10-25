@@ -1,0 +1,12 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b,minimum width=48mm,minimum height=20mm](p) at (0,0) {$P$: SEA, $M_o,W_1,W_2$};
+\node[b,minimum width=35mm](k) at (0,-2.3) {$K=[K_r\ K_y]$};
+\draw[->](-5,.5)--node[above]{$w=[r;d]$}(-2.4,.5);
+\draw[->](2.4,.5)--node[above]{$z=[W_1(q-M_or);W_2u]$}(7,.5);
+\draw[->](2.4,-.5)--(3.8,-.5)--(3.8,-2.3)--node[above]{$y=[r;q]$}(k.east);
+\draw[->](k.west)--(-3.8,-2.3)--(-3.8,-.5)--node[above]{$u$}(-2.4,-.5);
+
+\end{tikzpicture}

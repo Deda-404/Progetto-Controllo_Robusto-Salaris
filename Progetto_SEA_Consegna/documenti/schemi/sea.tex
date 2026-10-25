@@ -1,0 +1,17 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b] (a) at (0,2) {$G_{a,i}$};\node[s] (sm) at (2,2) {$\Sigma$};
+\node[b] (motor) at (4,2) {Motore\\$J_m,B_m$};
+\node[s] (es) at (7,2) {$\Sigma$};\node[b] (ks) at (7,0) {$K_s$};
+\node[s] (sl) at (5,0) {$\Sigma$};\node[b] (link) at (2.5,0) {Link\\$M,C,G$};
+\draw[->](-1.8,2)--node[above]{$u$}(a);\draw[->](a)--node[above]{$\tau$}(sm);
+\draw[->](sm)--node[above]{$+$}(motor);\draw[->](motor)--node[above]{$\theta\ (+)$}(es);
+\draw[->](es)--node[right]{$\theta-q$}(ks);\draw[->](ks)--node[below]{$\tau_{el}$}(sl);
+\draw[->](sl)--(link);\draw[->](link)--node[above]{$q$}(.5,0);
+\draw[->](.8,0)--(.8,-1.8)--(8.2,-1.8)--(8.2,2)--node[above]{$-$}(es);
+\draw[->](5.8,0)--(5.8,.9)--(2,.9)--node[right]{$-$}(sm);
+\draw[->](5,-1.2)--node[right]{$d$}(sl);
+
+\end{tikzpicture}

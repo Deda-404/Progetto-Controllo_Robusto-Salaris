@@ -1,0 +1,565 @@
+\documentclass[11pt,a4paper,oneside]{report}
+\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\usepackage[italian]{babel}
+\usepackage{amsmath,amssymb,mathtools,graphicx,booktabs,longtable,array,geometry,hyperref,xcolor,tikz,listings,float}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\geometry{margin=2.35cm}\setlength{\emergencystretch}{3em}
+\hypersetup{hypertexnames=false,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!55!black}
+\lstset{language=Matlab,basicstyle=\ttfamily\footnotesize,breaklines=true,columns=fullflexible,frame=single}
+\newcommand{\schema}[2]{\begin{figure}[htbp]\centering\resizebox{.95\linewidth}{!}{\input{../schemi/#1}}\caption{#2}\end{figure}}
+\newcommand{\grafico}[2]{\begin{figure}[htbp]\centering\includegraphics[width=.98\linewidth]{../../figure/#1}\caption{#2}\end{figure}}
+\title{Manipolatore SEA a due giunti\\\large Incertezza parametrica e concentrata degli attuatori}
+\author{Alessio de Dato -- matricola 635256\\Valerio Rebechi -- matricola 722224}
+\date{25 ottobre 2026}
+\setcounter{tocdepth}{0}
+\begin{document}\maketitle
+\begin{abstract}
+Confrontiamo due rappresentazioni della variabilita degli attuatori di un
+manipolatore SEA: quattro parametri reali indipendenti e due blocchi dinamici
+SISO concentrati. Conserviamo il nominale, i sei controllori consolidati e
+i pesi prestazionali. Mostriamo una LFT manuale e una maggiorazione analitica
+dell'errore relativo che contiene l'intero box parametrico. L'analisi dello
+stesso controllore sui due insiemi e separata dalle due sintesi D--K dedicate.
+Il concentrato riduce alcuni margini dei controllori fissi, ma la sua sintesi
+dedicata produce in questa campagna un candidato a 32 stati, rispetto agli
+88 del candidato parametrico, con garanzie su entrambi i modelli. Restano
+requisiti temporali non soddisfatti e sensibilita al rumore. Dieci impianti
+fisici e quindici condizioni iniziali comuni completano il confronto,
+distinguendo convergenza, mancata convergenza nell'orizzonte ed esiti numerici
+inconcludenti. Le verifiche Simulink precedenti sono conservate come storia;
+la nuova integrazione e riservata ai modelli che saranno forniti dagli studenti.
+\end{abstract}\tableofcontents
+
+\chapter{Introduzione e problema SEA}
+La domanda del progetto e come cambino le conclusioni di robustezza quando
+la stessa variabilita attuativa viene rappresentata conservandone i parametri
+fisici oppure tramite un inviluppo dinamico. I controllori servono a rendere
+visibili le conseguenze delle due descrizioni. Non confrontiamo due impianti
+nominali differenti e non attribuiamo a un insieme le garanzie calcolate su un altro.
+
+La traccia richiede LQG con e senza integratore, sensibilita mista con
+\texttt{mixsyn}/\texttt{hinfsyn}, esplorazione \texttt{hinfstruct}, sintesi D--K,
+analisi $\mu$, simulazioni lineari/non lineari e RAS. Tutti questi metodi
+restano nel percorso. I valori nominali e le scelte consolidate sono
+conservati; e stata approvata la semplificazione S1 delle sole incertezze.
+\schema{confronto}{Confronto diretto: stesso controllore e stessi pesi. Le sintesi dedicate vengono considerate separatamente.}
+
+\chapter{Modello fisico e linearizzazione}
+\section{Coordinate e struttura meccanica}
+Il manipolatore è costituito da due link planari con giunti rotoidali. La coordinata $q_1$ individua l'orientamento del primo link, mentre $q_2$ è relativa al primo e determina quindi l'orientamento assoluto del secondo attraverso $q_1+q_2$. Le masse sono concentrate secondo il modello fornito dalla traccia. La matrice di inerzia dipende da $q_2$, perciò il movimento di un giunto modifica l'energia cinetica associata all'altro.
+
+Ogni giunto è azionato da un motore con inerzia $J_{mi}$ e smorzamento viscoso $B_{mi}$. Fra rotore e link è interposta una molla torsionale di rigidezza $k_i$. Definiamo
+\[
+\delta=\theta-q,\qquad \tau_{el}=K_s\delta,\qquad
+K_s=\operatorname{diag}(k_1,k_2).
+\]
+Il segno di $\delta$ è scelto in modo che una coordinata motore maggiore della corrispondente coordinata link produca una coppia positiva sul link. La stessa coppia compare con segno opposto nell'equazione del motore, rispettando il principio di azione e reazione.
+
+\section{Equazioni del lato link e del lato motore}
+La dinamica assegnata si scrive
+\begin{align}
+M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q)+d,\\
+J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).
+\end{align}
+La prima equazione raccoglie inerzia, termini di Coriolis e centrifughi e gravità del braccio. La seconda descrive la dinamica dei rotori: la coppia comandata $\tau=[\tau_1,\tau_2]^T$ viene impiegata sia per accelerare i motori sia per deformare le molle. Non viene introdotto uno smorzamento viscoso lato link perché non compare nella traccia; $B_m$ agisce esclusivamente sulle velocità dei rotori.
+
+La matrice di inerzia è
+\[
+M(q)=\begin{bmatrix}
+(m_1+m_2)l_1^2+m_2l_2^2+2m_2l_1l_2\cos q_2&m_2l_2^2+m_2l_1l_2\cos q_2\\
+m_2l_2^2+m_2l_1l_2\cos q_2&m_2l_2^2
+\end{bmatrix}.
+\]
+La simmetria di $M(q)$ deriva dall'energia cinetica. Per parametri fisici positivi il determinante si riduce a
+\[
+\det M(q)=m_2l_1^2l_2^2\left(m_1+m_2\sin^2 q_2\right)>0,
+\]
+e $m_{11}$ è positivo; il criterio di Sylvester garantisce pertanto che $M(q)$ sia definita positiva per ogni configurazione. Questa proprietà consente di ottenere le accelerazioni risolvendo sistemi lineari, senza ricorrere all'inversa esplicita.
+
+Con $h=m_2l_1l_2\sin q_2$, i termini rimanenti sono
+\[
+C(q,\dot q)=\begin{bmatrix}-h\dot q_2&-h(\dot q_1+\dot q_2)\\h\dot q_1&0\end{bmatrix},\quad
+G(q)=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
+\]
+La struttura di $C$ è coerente con la proprietà di passività del manipolatore: la parte simmetrica di $\dot M-2C$ è nulla. Il vettore $G(q)$ usa la convenzione angolare della traccia, nella quale i contributi gravitazionali sono proporzionali ai coseni degli angoli assoluti dei link.
+
+\section{Stato, ingressi e uscite}
+Lo stato meccanico a otto componenti è ordinato come
+\[
+x=\begin{bmatrix}q^T&\dot q^T&\theta^T&\dot\theta^T\end{bmatrix}^T.
+\]
+Con questa convenzione le equazioni del primo ordine sono
+\begin{align}
+\dot q&=\dot q,\\
+\ddot q&=M(q)\backslash\left[K_s(\theta-q)-C(q,\dot q)\dot q-G(q)+d\right],\\
+\dot\theta&=\dot\theta,\\
+\ddot\theta&=J_m\backslash\left[\tau-B_m\dot\theta-K_s(\theta-q)\right].
+\end{align}
+L'uscita primaria di prestazione è $q$, perché la consegna richiede la regolazione delle articolazioni. Per l'osservatore sono disponibili le quattro posizioni $[q^T,\theta^T]^T$, ottenibili con encoder lato link e lato motore; non assumiamo misure dirette delle velocità. La disponibilità di entrambe le posizioni consente inoltre di ricavare direttamente la deformazione elastica.
+
+
+\schema{sea}{Interazione motore--molla--link. Il comando attraversa il drive; il disturbo esterno e applicato ai link.}
+\section{Equilibrio, modello incrementale e stato completo}
+Manteniamo $\bar q=[\pi/2,0]^T$, $\bar\tau=G(\bar q)$ e
+$\bar\theta=\bar q+K_s^{-1}G(\bar q)$. Analiticamente $G(\bar q)=0$;
+i residui floating-point non rappresentano deformazioni fisiche.
+Le coordinate di lavoro sono deviazioni da questo equilibrio.
+Il modello meccanico ha due modi instabili, circa $+7.2094$ e $+4.0408$
+s$^{-1}$, e modi elastici attorno a 70--80 rad/s.
+
+Posto $M_0=M(\bar q)$ e $K_g=\partial G/\partial q|_{\bar q}$,
+\[
+A_m=\begin{bmatrix}0&I&0&0\\-M_0^{-1}(K_s+K_g)&0&M_0^{-1}K_s&0\\
+0&0&0&I\\J_m^{-1}K_s&0&-J_m^{-1}K_s&-J_m^{-1}B_m\end{bmatrix}.
+\]
+Il disturbo entra con $B_d=[0;M_0^{-1};0;0]$, mentre la coppia motore entra
+nell'accelerazione dei rotori. Un Jacobiano numerico indipendente della
+nuova funzione non lineare verifica questa linearizzazione e il canale del
+disturbo. Le potenze di $A$ sono mal condizionate: le verifiche storiche di
+controllabilita e osservabilita usano anche PBH e riscalamento del tempo.
+La pianta nominale completa ha 14 stati: otto meccanici e sei dei drive.
+La sua realizzazione conservata e usata senza trasformare le coordinate
+interne degli osservatori LQG/LQGI.
+
+\chapter{Attuatori e scelta dei parametri}
+\section{Nominale e significato fisico}
+Per ciascun attuatore
+\[
+G_{a0}(s)=H_0(s)D_{p0}(s),\quad
+H_0=\frac{40^2}{s^2+2(0.8)(40)s+40^2},\quad
+D_{p0}=\frac{1-0.015s/2}{1+0.015s/2}.
+\]
+$\omega_n$ governa la scala dinamica del drive; $\zeta$ ne cambia smorzamento
+e forma; $\tau$ sottrae fase. Inerzia e smorzamento dei rotori sono gia
+nella meccanica e non vengono duplicati nel drive.
+La banda nominale storicamente verificata e circa 34.78 rad/s: sopra i
+modi instabili, sotto i modi elastici. I nominali sono assunzioni progettuali,
+non dati identificati. Padé1 ha polo $-133.33$ e zero $+133.33$ s$^{-1}$.
+\schema{nominale}{Secondo ordine e Padé1 nominali, uguali nei due modelli incerti.}
+\section{Selezione limitata e decisione S1}
+Il preliminare ha considerato solo $\omega_n$, oppure le coppie
+$\omega_n/\zeta$, $\omega_n/\tau$ e $\zeta/\tau$. Cinque valori per parametro
+sono stati esaminati uno alla volta. I nominali consolidati non sono stati
+nuovamente ottimizzati. I valori provati sono
+\[
+\omega_n=\{36,38,40,42,44\},\quad
+\zeta=\{.72,.76,.8,.84,.88\},\quad
+\tau=\{12,13.5,15,16.5,18\}\ \mathrm{ms}.
+\]
+Fino a 40 rad/s il massimo scostamento relativo complesso del drive e
+16.41\%, 11.11\% e 11.18\% rispettivamente. Sono sensibilita del blocco,
+non margini robusti del manipolatore. Il ritardo non e trascurabile:
+sceglierlo noto e una restrizione dichiarata del problema.
+
+S1 adotta due parametri per attuatore, $\omega_n\in[36,44]$ e
+$\zeta\in[.72,.88]$, indipendenti fra canali; $\tau=15$ ms e noto.
+Meccanica e altre grandezze restano nominali nel confronto principale.
+Questa scelta isola rapidita e smorzamento e mantiene comune il Padé.
+La precedente famiglia M4 resta distinta: comprendeva $k_1,k_2,J_{m1}$
+incerti e un altro inviluppo attuativo, anche per variabilita del ritardo.
+
+\chapter{Costruzione delle incertezze}
+\section{A: quattro parametri reali e occorrenze correlate}
+\[
+\omega_{ni}=40(1+.1\delta_{\omega i}),\quad
+\zeta_i=.8(1+.1\delta_{\zeta i}),\quad\delta\in[-1,1].
+\]
+Ogni nome identifica un parametro reale costante; le sue ripetizioni non
+sono indipendenti. Ponendo $d_\omega=4$, $d_\zeta=.08$, la LFT manuale
+dell'oscillatore usa
+\begin{align*}
+z_1&=u-x,& z_2&=40(u-x)-1.6v+4w_1-.16w_\zeta,& z_3&=v,\\
+\dot x&=v,&\dot v&=1600(u-x)-64v+160w_1+4w_2-6.4w_\zeta.
+\end{align*}
+Chiudendo $w_1=\delta_\omega z_1$, $w_2=\delta_\omega z_2$ e
+$w_\zeta=\delta_\zeta z_3$ si ottiene esattamente
+$\ddot x+2\zeta\omega_n\dot x+\omega_n^2x=\omega_n^2u$.
+Segue il Padé fisso. La struttura totale e
+\[
+\Delta_A=\operatorname{diag}(\delta_{\omega1}I_2,\delta_{\zeta1},
+\delta_{\omega2}I_2,\delta_{\zeta2}).
+\]
+Sono sei porte ma quattro parametri. La costruzione automatica esaminata
+nel preliminare ripeteva $\omega_n$ cinque volte: ridurre le occorrenze
+della realizzazione non cambia il numero di parametri fisici.
+\schema{parametrico}{LFT manuale di un attuatore A. I due canali usano parametri indipendenti.}
+\schema{lft}{Convenzione della LFT superiore: $w_\Delta=\Delta z_\Delta$.}
+\section{B: due blocchi dinamici concentrati}
+\[
+G_B=G_{a0}\operatorname{diag}(1+W_I\Delta_1,1+W_I\Delta_2),\quad
+\Delta_i\in\mathcal H_\infty,\quad\|\Delta_i\|_\infty\le1.
+\]
+I blocchi sono stabili e propri, indipendenti. Non si introduce un blocco
+pieno $2\times2$: gli accoppiamenti aggiunti non hanno una motivazione
+fisica nei due drive SISO. Il modello concentra la dispersione del secondo
+ordine; non aggiunge un errore del ritardo esatto.
+\schema{concentrato}{Modello B per ciascun canale. Il ramo incerto e scalare e indipendente dall'altro attuatore.}
+\section{Peso analitico valido per tutto il box}
+Il Padé comune si cancella nel rapporto. Con $H=\omega_n^2/(s^2+2\zeta\omega_ns+\omega_n^2)$,
+\[
+E=\frac H{H_0}-1=\frac{\alpha s^2+\beta s}{s^2+2\zeta\omega_ns+\omega_n^2},\quad
+\alpha=\frac{\omega_n^2}{40^2}-1,\quad
+\beta=\frac{1.6\omega_n^2}{40}-2\zeta\omega_n.
+\]
+Sul box $|\alpha|\le.21$, $|\beta|\le14.08$ rad/s. Per $0<\zeta\le1$,
+\[
+|{-\omega^2}+2\zeta\omega_nj\omega+\omega_n^2|
+\ge\zeta(\omega^2+\omega_n^2).
+\]
+Si sceglie il peso di ordine uno
+\[
+W_I=c\frac{s}{s+36},\qquad
+c=\frac{\sqrt{.21^2+(14.08/36)^2}}{.72}=.6165601466.
+\]
+Infatti $E/W_I=(\alpha s+\beta)(s+36)/[c(s^2+2\zeta\omega_ns+\omega_n^2)]$
+e stabile e proprio. I due zeri in origine si cancellano per continuita;
+la disuguaglianza precedente e Cauchy--Schwarz maggiorano il modulo con uno
+su tutto l'asse immaginario, per tutto il box. Il peso non deriva da un fit
+su pochi campioni. Le 25 coppie della verifica hanno massimo osservato
+$\|E/W_I\|_\infty=0.559738$: servono a controllare il codice e a mostrare
+lo scarto della maggiorazione, senza sostituire la dimostrazione.
+\grafico{01_attuatori.png}{Famiglia fisica campionata e confronto fra inviluppo campionato e maggiorazione analitica.}
+
+\chapter{Confronto delle rappresentazioni}
+Nel box dichiarato ogni modello A e un modello B, scegliendo
+$\Delta_i=E_i/W_I$: pertanto $\mathcal A\subseteq\mathcal B$.
+Il viceversa non vale in generale: B ammette perturbazioni dinamiche che
+non corrispondono a nessuna coppia costante $\omega_n,\zeta$.
+Il concentrato perde la struttura fisica e l'inviluppo analitico aggiunge
+conservativita. Questi due effetti contribuiscono insieme alle differenze;
+non si attribuisce tutto alla sola etichetta parametrico/concentrato.
+
+\textbf{Portata dell'inclusione.} La prova riguarda il box unitario S1.
+Le espansioni normalizzate oltre quel box non sono identiche: la dipendenza
+del drive dai parametri reali e non lineare. Non imponiamo quindi un ordine
+universale dei margini scalati soltanto dall'inclusione unitaria.
+RS/RP sul B unitario implicano le corrispondenti proprieta su A unitario.
+Un intervallo diretto numericamente incoerente non viene riordinato.
+
+Per A sono immediati significato fisico, normalizzazione e campionamento,
+ma i blocchi reali ripetuti rendono piu articolate l'analisi mista e le
+scalature D/G. B ha due blocchi dinamici e un peso semplice; la perdita di
+struttura puo rendere peggiori le garanzie dei controllori fissi, ma una
+sintesi su B puo risultare piu semplice. Questo sara un risultato della
+campagna finita, non una proprieta generale di tutti gli algoritmi.
+
+\chapter{Specifiche, segnali e pesi}
+I test usano riferimenti separati di 5 gradi e disturbi ai link di 0.5 N m.
+Restano i target consolidati: $T_s\le0.8$ s, overshoot $\le10\%$,
+errore DC relativo $\le5\%$, banda desiderata 12 rad/s.
+La scala di 12 N m non e una saturazione hardware.
+Il confronto comune usa
+\[
+W_1=\frac{s/3+2}{s+.3}I_2,\quad
+W_2=.003\frac{s+80}{s/6+80}I_2,\quad
+M_o=\frac{16}{s^2+8s+16}I_2.
+\]
+$W_1$ pesa l'errore di inseguimento del modello, $W_2$ penalizza il comando,
+$M_o$ e parte del costo del 2-DoF. Non e un prefiltro aggiunto dopo la sintesi.
+$W_1(0)=6.667$, $W_1(\infty)=1/3$; $W_2(0)=.003$ e
+$W_2(\infty)=.018$. Non e aggiunto $W_3$ ne un nuovo peso di rumore.
+\[
+w=[r;d],\quad z_p=[W_1(q-M_or);W_2u],\quad y_K=[r;q].
+\]
+Il disturbo non attraversa il drive. LQG/LQGI mantengono quattro encoder;
+i robusti ne usano due. Queste architetture preesistenti restano diverse,
+mentre per ciascun K il passaggio A/B conserva le stesse misure.
+\schema{generalizzata}{Pianta generalizzata 2-DoF. Le porte prestazionali e le misure del controllore sono distinte.}
+
+\chapter{LQG e LQGI}
+\section{Costo fisico, Riccati e osservatore}
+Il regolatore usa $u=-K\hat x+N_rr$; $\hat x$ e stimato dai quattro encoder.
+Il prefiltro rende unitario il guadagno statico nominale riferimento--q,
+ma non contiene un modello interno del disturbo costante.
+Il costo e $J=\int_0^\infty(x^TQx+u^TRu)dt$.
+Le scale fisiche conservate sono $q_s=5\pi/180$, $\dot q_s=12q_s$,
+$\delta_s=.5/40=.0125$, $\dot\theta_s=\dot q_s$.
+
+Introduciamo le otto uscite fisiche del costo:
+\[
+v=Fx=\begin{bmatrix}\Delta q\\\Delta\dot q\\
+\Delta\theta-\Delta q\\\Delta\dot\theta\end{bmatrix},\qquad
+F=\begin{bmatrix}
+I_2&0&0&0&0\\0&I_2&0&0&0\\-I_2&0&I_2&0&0\\0&0&0&I_2&0
+\end{bmatrix}.
+\]
+L'ultima colonna a blocchi ha sei colonne scalari. Le posizioni sono quindi
+penalizzate sia come errore articolare sia come parte della deformazione.
+Definiamo
+\[
+S_x=\operatorname{diag}(q_sI_2,\dot q_sI_2,\delta_sI_2,\dot\theta_sI_2),
+\quad \tilde v=S_x^{-1}Fx,\quad
+W_q=\operatorname{diag}(w_qI_2,w_vI_2,w_\delta I_2,w_vI_2).
+\]
+Qui $S_x$ è $8\times8$ perché normalizza le uscite del costo, non uno stato
+trasformato invertibile di dimensione 14. Ne segue esattamente
+\[
+x^TQx=\tilde v^TW_q\tilde v,\qquad
+Q=F^TS_x^{-T}W_qS_x^{-1}F=C_{cost}^TC_{cost},\quad
+C_{cost}=W_q^{1/2}S_x^{-1}F.
+\]
+Per ogni uscita normalizzata il coefficiente è $w_i/s_i^2$.
+Espandendo il termine elastico compaiono coefficienti incrociati negativi fra
+$q_i$ e $\theta_i$. Pertanto scrivere semplicemente $Q=\operatorname{diag}(q_i)$
+sarebbe errato per questo progetto. $Q$ è semidefinita positiva: il blocco
+attuativo nullo non implica assenza degli attuatori dalla dinamica ottimizzata.
+
+
+Le matrici finali restano quelle consolidate, con $R=.1I_2$;
+la selezione storica confrontava 36 configurazioni. Non la ripetiamo per
+cercare una nuova soluzione. Il piccolo studio a cinque fattori verifica
+la sensibilita attorno al punto adottato, senza promuovere una taratura diversa.
+La prima parte delle colonne seguenti varia $Q$ a $R$ fisso; la seconda
+varia soltanto $R_n$ assunto dal filtro, mantenendo il rumore fisico identico.
+\input{lqg}
+L'errore RMS di stima deriva dalla covarianza stazionaria continua, non
+da una simulazione ZOH con varianze interpretate come intensita bianche.
+\[
+Q_n=.01I_4,\quad R_n=(.05\pi/180)^2I_4,\quad G_w=[B_d\ B_u],
+\]
+\[
+\dot{\hat x}=A\hat x+B_uu+L(y_{mis}-C\hat x).
+\]
+Sono ipotesi di rumore, non dati di targa di un encoder identificato.
+Le intensita hanno la convenzione temporale continua gia documentata.
+Il principio di separazione richiede stabilita di $A-BK$ e $A-LC$;
+il nuovo script verifica i residui Riccati e l'identita col controllore salvato.
+\schema{lqg}{Retroazione LQG con comando noto allo stimatore e quattro misure rumorose.}
+\section{Integratore dell'errore misurato}
+Con $\dot\xi=r-q_{mis}$ si usa
+\[
+A_a=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix},\quad
+B_a=\begin{bmatrix}B_u\\0\end{bmatrix},\quad
+Q_a=\operatorname{diag}(Q,200I_2),\quad R_a=.1I_2.
+\]
+Il costo integrale e quello consolidato, non un nuovo optimum.
+$[K_x\ K_i]=R_a^{-1}B_a^TP_a$ proviene da un'unica Riccati.
+La realizzazione ha 16 stati $[\hat x;\xi]$ e legge
+$[r;q_{mis};\theta_{mis}]$. L'anello chiuso ha 30 stati e usa
+$u=-K_x\hat x-K_i\xi$: non si applica il feedback allo stato vero simulato.
+\schema{lqgi}{LQGI: l'integratore riceve q misurato; Kalman riceve gli stessi encoder e il comando effettivo.}
+Il residuo DC del disturbo costante e nullo nel lineare, ma il candidato
+LQGI ha $T_s=5.05$ s e non soddisfa il target temporale. LQG resta il
+riferimento rapido nominale. I risultati robusti sui due insiemi sono
+riportati al Capitolo 10: un costo comune 2-DoF non coincide con il costo LQR.
+
+\chapter{Controllo H-infinity}
+\section{Stesso problema 1-DoF per mixsyn e hinfsyn}
+Per $u=K_e(r-q)$,
+\[
+S=(I+GK_e)^{-1},\quad T=I-S,\quad
+\gamma=\left\|\begin{bmatrix}W_1S\\W_2K_eS\end{bmatrix}\right\|_\infty.
+\]
+La pianta esplicita e
+\[
+P_1=\begin{bmatrix}W_1&-W_1G\\0&W_2\\I&-G\end{bmatrix}.
+\]
+\texttt{connect} evita copie separate dei modi instabili di G.
+\texttt{mixsyn(G,W1,W2,[])} e \texttt{hinfsyn(P1,2,2)} risolvono
+lo stesso costo; si confrontano norme ricostruite dalle mappe, non soltanto
+il valore restituito dal solver.
+\schema{mixsyn}{Sensibilita mista: errore e comando sono pesati separatamente.}
+\section{Due gradi di liberta e PID strutturato}
+Per $u=K_rr+K_yq$ la pianta P2 include r e d e il modello desiderato Mo.
+$K_y$ contiene il segno della retroazione; gli stati di $K_r,K_y$ sono
+condivisi nella realizzazione del controllore.
+\schema{due_dof}{Canali del 2-DoF: rappresentazione dei trasferimenti, con una sola realizzazione di K.}
+La struttura PID per ciascun giunto e
+\[
+u_i=K_{pi}(b_ir_i-q_i)+\frac{K_{ii}}s(r_i-q_i)
++\frac{K_{di}s}{1+T_{fi}s}(c_ir_i-q_i).
+\]
+Una nuova chiamata \texttt{hinfstruct} parte dal PID consolidato, con un
+solo avvio e 100 iterazioni massime. Il fine e mostrare la sintesi, senza
+ripetere una grande ottimizzazione. Le realizzazioni originali restano nella banca.
+\input{hinf}
+Le ultime due righe hanno un costo diverso dalle prime due; non si interpreta
+la riduzione di gamma come un miglioramento percentuale dello stesso problema.
+Hinf2 mostra tracking nominale senza overshoot ma fallisce RS anche su A.
+Una piccola norma pesata non garantisce robustezza o rispetto di tutti i target.
+\grafico{03_hinf.png}{Pesi usati e sensibilita delle due sintesi dello stesso problema 1-DoF.}
+
+\chapter{Mu-sintesi e iterazioni D-K}
+\section{LFT, valore singolare strutturato e scalature}
+Dopo chiusura di K, la parte nota N e collegata a Delta attraverso
+$w_\Delta=\Delta z_\Delta$. RS dipende dal blocco $N_{11}$ fra queste porte.
+La grandezza strutturata e
+\[
+\mu_\Delta(M)=\left[\min_{\Delta}\{\|\Delta\|:\det(I-M\Delta)=0\}\right]^{-1}.
+\]
+I parametri reali ripetuti devono restare reali e correlati. I bounds di
+\texttt{mussv} sono distinti: upper consente una garanzia, lower individua
+una perturbazione destabilizzante. I bounds su una griglia finita non
+sostituiscono da soli l'analisi adattiva \texttt{robstab}.
+\schema{dk}{D-K: sintesi scalata, analisi strutturata e fit delle scalature, con budget identico.}
+Per ciascuna famiglia eseguiamo una sola D-K con quattro iterazioni massime,
+fit [2,1], scalature diagonali, MixedMU attivo, stessa griglia e seed.
+I pesi non sono cambiati. Nessuna riduzione o cancellazione e adottata.
+Il candidato parametrico ha 88 stati e quello concentrato 32: l'ordine
+del primo e un costo concreto, non una necessita teorica dimostrata.
+Le post-analisi sullo stesso K e le analisi incrociate rimangono separate.
+\grafico{04_robustezza.png}{Margini inferiori RS e storia D-K effettivamente eseguita. Il picco riportato dalla sintesi non sostituisce la post-analisi.}
+
+\chapter{Analisi robusta comparativa}
+\section{NS, NP, RS e RP}
+NS e stabilita interna del nominale. NP aggiunge la norma pesata comune
+minore di uno. RS chiede stabilita per tutte le perturbazioni ammesse;
+RP aggiunge il requisito prestazionale. Il margine e riferito alla
+normalizzazione dichiarata: un limite inferiore sopra uno certifica il
+requisito, un superiore sotto uno ne dimostra il fallimento.
+\schema{robusta}{Chiusura N--Delta. Per RP si considera il problema aumentato con il blocco fittizio di prestazione.}
+\section{Stessi controllori, modelli diversi}
+\input{robustezza}
+Tutti i nominali sono stabili. Per LQG/LQGI/Hinf1 NP sul costo comune
+fallisce: cio non contraddice i loro costi originari. In questo caso il
+margine RP comune e zero gia al nominale. Dove RS fallisce, RP fallisce
+e [0,RS upper] e soltanto un limite dedotto, non una nuova chiamata riuscita
+di \texttt{robgain}. Gli intervalli completi e la loro origine sono nei CSV.
+
+$^*$Per Kmu su A la chiamata diretta a \texttt{robgain} produce un
+intervallo invertito, anche ripetendo con opzioni m9. Entrambi gli esiti
+grezzi sono conservati. L'intervallo riportato [1,RS upper] e un altro
+bound: RP sul B unitario implica RP su A unitario; non si riordinano i
+numeri incoerenti e non si trasferisce il valore del margine oltre uno.
+
+LQG e LQGI superano RS su A ma la falliscono di poco su B. Hinf1 supera
+RS in entrambi i modelli, pur non soddisfacendo il costo comune. Hinf2 e
+PID falliscono RS in entrambi. Kmu storico mantiene RS e RP su B e, per
+inclusione, su A. Questi sono risultati nuovi per S1: i certificati M4
+non sono stati riutilizzati per ottenerli.
+\section{Risintesi dedicate e conservativita}
+Mu\_A e Mu\_B superano NS/NP/RS/RP su entrambe le famiglie senza rilassare
+i pesi. Mu\_B raggiunge margini inferiori RS/RP su B circa 3.011/2.625,
+con 32 stati; Mu\_A circa 2.385/2.030, con 88 stati.
+Il concentrato offre quindi in questa campagna una sintesi piu contenuta,
+anche se le garanzie dei controllori fissi sono spesso meno favorevoli.
+Il risultato dipende da pesi, inizializzazione, fit e budget finito;
+non dimostra una superiorita universale del modello o dell'algoritmo.
+
+\chapter{Campionamento, simulazioni e RAS}
+\section{Dieci impianti fisici comuni}
+Il primo campione e nominale; seguono estremi e punti interni deterministici
+dei quattro parametri. Sono gli stessi per tutti gli otto K. Non si campionano
+dinamiche arbitrarie di B chiamandole impianti fisici: i dieci appartengono
+alla famiglia parametrica A, contenuta in B. Lo stato di stabilita interna
+precede le metriche: per gli instabili i valori temporali sono NaN.
+\input{ras}
+Hinf2 e stabile solo in tre campioni e PID in sette; gli altri in tutti
+e dieci. Questo e coerente con le garanzie/fallimenti, ma dieci successi
+non dimostrano RS. La prova non sostituisce la $\mu$-analysis.
+\grafico{05_dieci_impianti.png}{Tracking q1 nei soli campioni stabili. Nero: nominale; azzurro: altri impianti. Le assenze non sono risposte nascoste, ma chiusure instabili escluse dalle metriche.}
+\section{Nominale, disturbo e sforzo di controllo}
+\input{nominale}
+\input{disturbi}
+$T_s$ e misurato nella banda del 2\% dell'ampiezza del riferimento attorno
+al proprio valore DC. L'errore DC e riportato separatamente: un buon
+assestamento al valore finale non garantisce tracking unitario. Overshoot
+e riferito al comando. Picchi e RMS sono misurati sulla griglia di 5 ms,
+su 12 s, prendendo il caso peggiore fra i due giunti; RMS massimo per
+canale, integrato nel tempo. Non sono massimi continui certificati.
+
+Le norme rumore--comando rivelano un limite ulteriore: il costo usato non
+penalizza esplicitamente gli encoder. Mu\_A e Mu\_B hanno rispettivamente
+circa $5.00\cdot10^7$ e $1.36\cdot10^6$ di guadagno H-infinity da v a u,
+contro $2.94\cdot10^4$ di Kmu. Non sono automaticamente candidati operativi
+preferibili: i miglioramenti di robustezza pesata hanno un prezzo.
+Nessun nuovo peso di rumore viene introdotto silenziosamente.
+\section{Confronto lineare/non lineare}
+Per ciascuno degli otto controllori sono state eseguite quattro prove
+non lineari: gradino su r1/r2, disturbo su d1/d2. Tutte le 32 integrazioni
+raggiungono 12 s. Il confronto usa l'intero controllore e i sei stati
+dei drive; non si sostituisce lo stato stimato con quello vero.
+Le differenze massime LIN/NL e i comandi sono registrati nel CSV dedicato.
+\grafico{05_lin_nl_1.png}{Gradino r1: tratteggio lineare, continuo non lineare; stesso colore per lo stesso giunto.}
+\grafico{05_lin_nl_2.png}{Disturbo d1 da t=1 s: confronto lineare/non lineare senza modificare K.}
+\section{Sezione empirica di attrazione}
+Si usano quindici coppie iniziali comuni nel piano Delta q1/Delta q2,
+con Delta theta = Delta q. Velocita, stati drive e controllore sono nulli;
+riferimento, disturbo e rumore nulli. Per l'ultimo secondo entro 12 s,
+richiediamo posizioni link/rotori entro 0.5 gradi e velocita entro .02 rad/s.
+E un criterio fisico di convergenza osservata, non una prova asintotica.
+
+Su 120 punti: 96 convergenze, 16 integrazioni completate senza convergenza
+e 8 inconcludenti. Hinf2 e PID hanno quattro arresti numerici ciascuno.
+Mu\_A converge solo in sei punti, Mu\_B in quindici. Cio mostra che una
+garanzia sul modello lineare non determina la sezione non lineare.
+Il limite numerico di 35 s per integrazione evita blocchi del solver;
+un timeout non e instabilita matematica. Non si interpola un bordo della RAS.
+\grafico{05_ras.png}{Verde: convergenza osservata; croce rossa: non convergenza nell'orizzonte; grigio: risultato numericamente inconcludente. Nessun contorno certificato.}
+
+\chapter{Confronto finale e conclusioni}
+Per i controllori fissi A consente qui garanzie piu favorevoli di B:
+LQG/LQGI passano da RS verificata a RS fallita. Il significato non e che
+l'impianto fisico cambi: B ammette piu perturbazioni e l'inviluppo e
+conservativo. A e piu interpretabile fisicamente; B e piu compatto nella
+struttura incerta e nella sintesi dedicata osservata.
+
+Con pesi identici, la sintesi B a 32 stati offre margini robusti elevati
+su entrambi i modelli e quindici convergenze empiriche. Rimangono
+$T_s=1.985$ s contro .8 s richiesti, errore DC 5.454\% contro 5\% e forte
+amplificazione del rumore. La sintesi A ha errore DC 4.284\% e
+$T_s=1.485$ s, ma ordine 88, amplificazione ancora maggiore e solo sei
+convergenze RAS. I due nuovi K sono strumenti di confronto, non sostituti
+automatici della banca consolidata.
+
+La scelta del modello dipende quindi dallo scopo: conservare informazione
+fisica o ottenere una descrizione dinamica semplice che la contenga.
+Un margine numerico maggiore va letto insieme all'insieme coperto, al costo
+del controllo, al rumore e ai requisiti temporali. Il problema pesato ha
+soluzioni robuste S1 senza nuovi rilassamenti; non tutti i target originali
+sono pero raggiunti. Limiti hardware, saturazioni e ritardi misurati restano
+fuori dal modello approvato. La nuova validazione Simulink attende gli SLX
+che gli studenti decideranno di integrare.
+
+\appendix
+\chapter{Matrici e codici essenziali}
+Le matrici seguenti sono quelle consolidate, conservate anche nel MAT
+portabile; il codice ricalcola Riccati e guadagni e ne verifica l'identita.
+\input{matrici_lqr}\input{matrici_kalman}
+Le istruzioni principali sono leggibili nei sei file numerati. Il prefisso
+SEA e necessario perche i nomi MATLAB devono iniziare con una lettera.
+\lstinputlisting[firstline=25,lastline=47]{../../SEA_01_MODELLI_INCERTEZZE.m}
+\lstinputlisting[firstline=10,lastline=27]{../../SEA_02_LQG_LQGI.m}
+\lstinputlisting[firstline=17,lastline=36]{../../SEA_04_MU_SINTESI.m}
+
+\chapter{Risultati storici conservati e Simulink}
+Il precedente M4 comprendeva incertezze meccaniche e una diversa famiglia
+dinamica: i suoi certificati rimangono validi per quella famiglia razionale,
+non sono prova per tutti i ritardi esatti. In particolare il rapporto fra
+ritardo esatto e Padé nominale puo avere un polo RHP: un fit del solo modulo
+non basta a dimostrare appartenenza a un blocco dinamico stabile.
+
+La seconda formulazione storica introduceva rumore encoder esogeno nella
+sintesi. MuN1, 82 stati, conservava RS/RP M4 e riduceva molto il comando,
+con peggioramento dell'offset q1 e target temporali parziali. Queste
+evidenze restano significative e separate dai nuovi candidati S1.
+\input{rumore_storico_sintesi}\input{rumore_storico_simulink}
+\grafico{rumore_storico.png}{Studio del rumore precedente: fonte e famiglia M4, non nuove simulazioni S1.}
+Gli otto SLX precedenti e le loro prove sono conservati nel progetto
+storico senza modifiche. Non sono dichiarati i modelli definitivi della
+nuova consegna. Le interfacce numeriche dei controllori sono disponibili
+in dati/interfacce\_simulink.mat e descritte nel documento allegato.
+Un collegamento futuro deve rispettare ordine delle misure, segni, unita
+e condizioni iniziali; i nuovi SLX non sono ancora validati.
+
+\chapter{Riproducibilita e tracciabilita}
+Estrarre lo ZIP e avviare SEA\_00\_AVVIO\_PROGETTO in MATLAB. La modalita
+rapida carica le sintesi/analisi eseguite e mostra grafici e tabelle;
+ricostruisce modelli e LQG/LQGI. La completa ripete anche le sintesi,
+le analisi robuste, i dieci impianti e la RAS. I file letti e salvati sono
+relativi alla cartella estratta, senza Git, Drive, Symbolic Toolbox o
+addpath manuali. Ambiente accreditato: MATLAB R2026b, Control System e
+Robust Control Toolbox. Simulink non serve per la riproduzione MATLAB.
+
+I dati numerici della relazione provengono dai CSV in dati/: quadro\_finale,
+confronto\_robusto, dieci\_impianti, lineare\_nonlineare, ras\_empirica,
+confronto\_hinf e scelte\_lqg. Cinquanta test dedicati verificano fisica,
+Jacobiani, LFT, nominali, interfacce, costi e classificazione delle evidenze.
+I tentativi numerici falliti e gli intervalli incoerenti sono conservati
+nel report tecnico di ristrutturazione, senza nasconderli nelle conclusioni.
+La tabella di tracciabilita completa e allegata in forma Markdown.
+\begin{thebibliography}{9}
+\bibitem{traccia} P. Salaris, Traccia 2: Manipolatore planare 2 DoF con SEA, testo ufficiale del corso.
+\bibitem{main} A. de Dato, V. Rebechi, Relazione e sorgenti consolidati del progetto SEA, 13 ottobre 2026. Fisica, Q/R, Kalman, controllori e risultati storici preservati.
+\bibitem{mw} MathWorks, Robust Control Toolbox: documentazione di ureal, lftdata, mixsyn, hinfsyn, hinfstruct, musyn, robstab, robgain e mussv.
+\end{thebibliography}
+\end{document}

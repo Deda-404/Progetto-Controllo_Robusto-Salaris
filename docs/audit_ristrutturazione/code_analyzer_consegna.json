@@ -1,0 +1,38 @@
+[
+  {
+    "file": "SEA_00_AVVIO_PROGETTO.m",
+    "messages": []
+  },
+  {
+    "file": "SEA_01_MODELLI_INCERTEZZE.m",
+    "messages": []
+  },
+  {
+    "file": "SEA_02_LQG_LQGI.m",
+    "messages": []
+  },
+  {
+    "file": "SEA_03_HINF.m",
+    "messages": []
+  },
+  {
+    "file": "SEA_04_MU_SINTESI.m",
+    "messages": []
+  },
+  {
+    "file": "SEA_05_CONFRONTO_FINALE_RAS.m",
+    "messages": []
+  },
+  {
+    "file": "dinamica_sea.m",
+    "messages": []
+  },
+  {
+    "file": "parametri_sea.m",
+    "messages": []
+  },
+  {
+    "file": "simula_sea.m",
+    "messages": []
+  }
+]

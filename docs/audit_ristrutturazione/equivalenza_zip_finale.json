@@ -1,0 +1,12 @@
+{
+  "tested_complete_zip_sha256": "bd158f679c9d2032e7d8ec5e1354de4ec9f84c524612dc4bfdbb46041a49c4b1",
+  "final_zip_sha256": "ebc5bb045d15bc2490a0e8c8c471798dec4862f63dd65fd86e701e0afec8f759",
+  "science_files_compared": 27,
+  "science_files_byte_identical": 26,
+  "only_trailing_whitespace_changed": [
+    "parametri_sea.m"
+  ],
+  "equivalent_logic": true,
+  "other_changes": "Etichetta xi TikZ/PDF; rimozione di una riga vuota finale, nessuna variazione scientifica",
+  "normalized_mode_and_eof_comparison_pass": true
+}

@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-25 - Consegna autonoma S1 approvata e collaudata
+
+- Sei script SEA_00--SEA_05, tre ausiliari e banca portabile, senza dipendenze
+  dalla struttura storica. Prefisso richiesto dai nomi MATLAB validi.
+- A parametrico e B concentrato diagonale, wn/zeta ±10%, ritardo noto 15 ms,
+  meccanica nominale e peso analitico approvati; baseline M4 conservata.
+- Due D-K dedicate 88/32 stati, NS/NP/RS/RP incrociate, dieci impianti,
+  32 prove LIN/NL e 15 punti RAS per otto K. Limiti e inconcludenti conservati.
+- 50 test dedicati PASS; rapido e completo realmente eseguiti dopo estrazione,
+  50/50 test ciascuno. ZIP 69 file/otto MAT, CRC/hash PASS.
+- Relazione 33 pagine da main riorganizzato, 18 slide e 13 schemi; PDF verificati.
+- 830 file scientifici precedenti invariati, inclusi 259 MATLAB e 259 MAT/SLX.
+  Nessun nuovo collaudo SLX né merge; prestazioni operative ancora parziali.
+
 ## 2026-10-25 - Audit della ristrutturazione didattica SEA
 
 - Branch dedicato da main 0ed5611; PR43 letta criticamente, senza merge.

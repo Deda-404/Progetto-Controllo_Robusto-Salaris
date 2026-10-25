@@ -1,0 +1,5 @@
+Metodo,Ordine,GammaProprioProblema
+mixsyn,18,0.95929530289957
+hinfsyn stesso P1,18,0.955559353221028
+hinfsyn P2,22,0.0475849377512414
+hinfstruct PID P2,4,0.800896386422211

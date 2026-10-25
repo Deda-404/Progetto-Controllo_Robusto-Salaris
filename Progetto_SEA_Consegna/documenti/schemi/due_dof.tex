@@ -1,0 +1,11 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b](kr) at (0,1) {$K_r$};\node[s](sum) at (3,1) {$\Sigma$};\node[b](g) at (6,1) {$G$};
+\node[b](ky) at (3,-1) {$K_y$};\draw[->](-3,1)--node[above]{$r$}(kr);
+\draw[->](kr)--(sum);\draw[->](sum)--node[above]{$u$}(g);\draw[->](g)--node[above]{$q$}(9,1);
+\draw[->](8,1)--(8,-1)--node[above]{$q_{mis}$}(ky);\draw[->](ky)--node[right]{$+$}(sum);
+\node[align=center] at (3,-2.2) {$K_y$ contiene il segno; $K_r,K_y$ condividono lo stesso $x_c$.};
+
+\end{tikzpicture}

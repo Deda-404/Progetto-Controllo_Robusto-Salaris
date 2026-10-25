@@ -1,0 +1,15 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b](nr) at (-2,1) {$N_r$};\node[s](sum) at (0,1) {$\Sigma$};
+\node[b](p) at (3,1) {SEA nominale};\node[b](kal) at (3,-1) {Kalman\\$A-LC,B,L$};
+\node[b](kk) at (0,-1) {$K$};\node[s](ym) at (6,1) {$\Sigma$};
+\draw[->](-4,1)--node[above]{$r$}(nr);\draw[->](nr)--(sum);\draw[->](sum)--node[above]{$u$}(p);
+\draw[->](p)--node[above]{$[q;\theta]$}(ym);\draw[->](6,2)--node[right]{$v$}(ym);
+\draw[->](ym)--(7,1)--(7,-1)--node[above]{$y_{mis}$}(kal.east);
+\draw[->](1,1)--(1,0)--(3,0)--(kal.north);
+\draw[->](kal)--node[above]{$\hat x$}(kk);\draw[->](kk)--node[right]{$-$}(sum);
+\draw[->](3,2)--node[right]{$d$}(p);
+
+\end{tikzpicture}

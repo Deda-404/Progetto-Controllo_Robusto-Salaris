@@ -1,0 +1,12 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b,minimum width=45mm,minimum height=18mm](m) at (0,0) {$M$ certo};
+\node[b,minimum width=30mm](d) at (0,2) {$\Delta$ normalizzata};
+\draw[->](-4,-.3)--node[above]{$u$}(m.west);\draw[->](m.east)--node[above]{$y$}(4,-.3);
+\draw[->](m.north east)--(2.8,.9)--(2.8,2)--node[above]{$z_\Delta$}(d.east);
+\draw[->](d.west)--(-2.8,2)--(-2.8,.9)--node[above]{$w_\Delta$}(m.north west);
+\node at (0,-1.3) {$G=F_u(M,\Delta)=\texttt{lft(Delta,M)}$};
+
+\end{tikzpicture}

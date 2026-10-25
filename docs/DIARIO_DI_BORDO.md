@@ -3080,3 +3080,51 @@ necessaria legenda, nessuna rinomina dei risultati storici.
 FASE 0 COMPLETE/PASS; FASE 1 PARTIAL/decisione S1 richiesta; FASE 2-8
 NOT RUN. ZIP ristrutturato non prodotto né validato. Restano da approvare
 insieme fisico e rappresentazioni prima dell'implementazione.
+
+## 2026-10-25 - Ristrutturazione S1 dopo approvazione e consegna autonoma
+
+Responsabile: Alessio. Il messaggio «approvo, continua nell'esecuzione» ha
+approvato S1. Realizzati sei script SEA_00--SEA_05 e tre soli ausiliari;
+parametri centralizzati, LFT manuale, B diagonale con peso analitico,
+ricostruzione LQG/LQGI e quattro metodi H-infinity espliciti. Il prefisso
+SEA corregge i nomi con cifra iniziale rifiutati realmente da MATLAB.
+
+Eseguite due D-K dedicate con quattro iterazioni massime, stessi pesi e
+fit [2,1], più analisi incrociate per otto controllori. Nuovi ordini A/B
+88/32, garanzie NS/NP/RS/RP raggiunte; target temporali/rumore ancora parziali.
+Bound RP Kmu/A invertito anche dopo m9: esiti grezzi preservati, garanzia
+unitaria per inclusione da B senza trasferire il margine oltre uno.
+Nessuna riduzione, nuovo rilassamento, saturazione o promozione automatica.
+
+Dieci impianti comuni, 32 prove LIN/NL completate e 120 punti RAS:
+96 convergenti, 16 non convergenti nell'orizzonte, 8 inconcludenti. Mu_A6/15,
+Mu_B15/15. Salvataggi compatti di q/u e indicatori; intero stato integrato.
+Creati 13 schemi TikZ, relazione di 33 pagine da main riorganizzato,
+presentazione 18 slide e scaletta 19:19 pianificati. Studio rumore precedente
+conservato nelle appendici. PDF compilati con MiKTeX, zero errori/overflow o
+riferimenti irrisolti; pagine e slide renderizzate e controllate visivamente.
+Il compilatore integrato aveva timeout da download pacchetti e progetto
+stale durante l'editing: quei tentativi non sono accreditati come successi.
+
+50/50 test S1 PASS. ZIP di 69 file, nove MATLAB, otto MAT, privo di
+cartelle storiche, cache e strumenti di sviluppo. CRC/hash dopo chiusura
+PASS; il primo controllo prematuro sullo ZIP aperto in scrittura aveva
+fallito ed è stato corretto. Due modalità realmente eseguite fuori repository
+dopo restoredefaultpath: 50/50 test per ciascuna; completa circa 396 s.
+Una successiva correzione della sola etichetta xi nel disegno è seguita da
+nuova compilazione, confronto byte-identico dei 27 file scientifici e
+nuovo test della rapida estratta. Evidenze in docs/audit_ristrutturazione.
+
+Hash di 259 MATLAB e 259 MAT/SLX precedenti, oltre a PDF/TEX/figure,
+invariati. Gli SLX non sono stati aperti, simulati, modificati o riordinati.
+Fasi autorizzate COMPLETE/PASS tecnico; nuova integrazione Simulink NOT RUN,
+target operativi PARTIAL e prova orale dal vivo ancora necessaria.
+Nessun merge. Report finale in REPORT_RISTRUTTURAZIONE_DIDATTICA.md;
+manifest e hash dello ZIP in delivery/manifest_S1.json.
+
+Controllo finale di confezionamento: dopo la correzione grafica è stata
+rimossa solo una riga vuota finale da parametri_sea per il gate whitespace.
+Confronto con la copia collaudata completa: 26 file scientifici byte-identici;
+parametri_sea identico normalizzando la selezione rapida/completa e il solo
+fine-file. Nessuna modifica matematica. Nuovo ZIP e nuovo collaudo rapido
+50/50 PASS; hash definitivo nel manifest versionato.

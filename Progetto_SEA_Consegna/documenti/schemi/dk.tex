@@ -1,0 +1,10 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b](k) at (0,1) {K-step\\$H_\infty$ scalata};\node[b](mu) at (4,1) {Analisi $\mu$\\sulla LFT};
+\node[b](fit) at (4,-1) {Fit razionale\\delle scalature};\node[b](d) at (0,-1) {D-step\\$D,G$ diagonali};
+\draw[->](k)--node[above]{$K_j$}(mu);\draw[->](mu)--node[right]{bounds}(fit);
+\draw[->](fit)--(d);\draw[->](d)--node[left]{$D_j,G_j$}(k);
+
+\end{tikzpicture}

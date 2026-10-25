@@ -1,0 +1,357 @@
+{
+  "file_count": 69,
+  "matlab_files": 9,
+  "mat_files": 8,
+  "zip_bytes": 32582050,
+  "zip_sha256": "ebc5bb045d15bc2490a0e8c8c471798dec4862f63dd65fd86e701e0afec8f759",
+  "crc_pass": true,
+  "extraction_hashes_pass": true,
+  "isolated_directory": "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_7j5bgswi\\Progetto_SEA_Consegna",
+  "files": [
+    {
+      "path": "dati/banca_consolidata.mat",
+      "bytes": 447970,
+      "sha256": "e5f4bc66a15fabfc3af48f3ec1b520548e9eccc0044f9ef29f9bc8005f91b5d8"
+    },
+    {
+      "path": "dati/confronto_finale.mat",
+      "bytes": 28688616,
+      "sha256": "54c59c5cb2027b4aed2346ce72e610b4ae6475ef71237bb0b5a65d3f3622499e"
+    },
+    {
+      "path": "dati/confronto_hinf.csv",
+      "bytes": 177,
+      "sha256": "7ae8383ba2a8c2d2903026d2c27b03aa1fb6f57087d098a1896a71a7737dda90"
+    },
+    {
+      "path": "dati/confronto_robusto.csv",
+      "bytes": 2319,
+      "sha256": "d527338ffac6c9173368b44cd0c68de9a36825ac923918010816416cc663794a"
+    },
+    {
+      "path": "dati/dieci_impianti.csv",
+      "bytes": 10873,
+      "sha256": "1fa10fceebb712b6f663e1a79630146a1eed4e4fc0fbbcf4bc96b2a7b622e908"
+    },
+    {
+      "path": "dati/dk_1.csv",
+      "bytes": 203,
+      "sha256": "76f6641e4eb652215f148e4712cc5e97ad95dafd964aae95a46568a6b7edd56c"
+    },
+    {
+      "path": "dati/dk_2.csv",
+      "bytes": 203,
+      "sha256": "13b5f63f9ea1cdcae46e762ef9504275942e0f881a8171244dcee3206166a081"
+    },
+    {
+      "path": "dati/interfacce_simulink.mat",
+      "bytes": 138560,
+      "sha256": "95a2ac32b716001918a73f6282ac2c86e28d8749b98c61b102fb0803c0955aae"
+    },
+    {
+      "path": "dati/lineare_nonlineare.csv",
+      "bytes": 1994,
+      "sha256": "a255107c6536889fc459fb2c7ef31b985f0195650dbbe4aaccedf548d94c4301"
+    },
+    {
+      "path": "dati/lqg_lqgi.mat",
+      "bytes": 5815,
+      "sha256": "13be595b574923300a9feb6d6c0a46d0d067fb25c0b264e5f4b2ea5366aaad45"
+    },
+    {
+      "path": "dati/modelli_S1.mat",
+      "bytes": 9969,
+      "sha256": "2d9f93a967693bdcf7582505e0dfb6b2b321e3d15a0d1395860890dc7e91d8b2"
+    },
+    {
+      "path": "dati/mu_sintesi_S1.mat",
+      "bytes": 1137943,
+      "sha256": "6e140fbd64136f5d38a3290f862a948ac88926694bc3b3821907db0bf67e5049"
+    },
+    {
+      "path": "dati/parametri_verificati.json",
+      "bytes": 3764,
+      "sha256": "af921bfd2e4abdab8c049bcf6223d352487b062ee49808b7eeb48d7e4060a59f"
+    },
+    {
+      "path": "dati/quadro_finale.csv",
+      "bytes": 1219,
+      "sha256": "1d4bac8c74627ddfc586b47490328d66f92f3f5aba1d5136225a6770d7796fb2"
+    },
+    {
+      "path": "dati/ras_empirica.csv",
+      "bytes": 5399,
+      "sha256": "ba7632501e59f87c83e9007de10bb6d0c443a0f0c9c2f8e88e0315fb35f67f34"
+    },
+    {
+      "path": "dati/robustezza_S1.mat",
+      "bytes": 158563,
+      "sha256": "d690f033ed60189e28accabf178b1c7638e2fd26a3871f9de0b5179c77a264ff"
+    },
+    {
+      "path": "dati/scelte_lqg.csv",
+      "bytes": 453,
+      "sha256": "ec299192fb7b947d9ebf4125dded0903a081ebeb4624c807f94296c6c9373b6a"
+    },
+    {
+      "path": "dati/sintesi_hinf.mat",
+      "bytes": 14570,
+      "sha256": "b2be84ed7ffeadbd6f6c70d0f6f9791daad15af7fc1c13ad74081a7e9b4fb7c5"
+    },
+    {
+      "path": "dinamica_sea.m",
+      "bytes": 562,
+      "sha256": "a5a9e2fa4de9491d2cec705be986716c0638cef5fc7d49df6b0925f98fdce2b6"
+    },
+    {
+      "path": "documenti/INTERFACCIA_SIMULINK.md",
+      "bytes": 3044,
+      "sha256": "d8e6cff2033e3e4bdf1f8995050fd967fdedf27634c79634150af10e7586f1c7"
+    },
+    {
+      "path": "documenti/ORIGINE_CONTENUTI.md",
+      "bytes": 812,
+      "sha256": "c7bbe246d12a04bbe640844e38ae53093b3daf61c453f542124a26c13ef8c822"
+    },
+    {
+      "path": "documenti/presentazione/main.tex",
+      "bytes": 6460,
+      "sha256": "7bacbbfec5ef563beb00f6c65f0535699b8ce91070a494528f75712a246b2207"
+    },
+    {
+      "path": "documenti/presentazione/Presentazione_SEA.pdf",
+      "bytes": 519352,
+      "sha256": "153fe49b8f3d5355fd7ef3b80ca663eb3bb78dc9850ba7eaf070fe01a40f346f"
+    },
+    {
+      "path": "documenti/PRESENTAZIONE_NOTE.md",
+      "bytes": 4198,
+      "sha256": "c951739d7657d0fe1d3ddf4332a0edd96be8291214d6ddd9f588ff34adc229bf"
+    },
+    {
+      "path": "documenti/relazione/disturbi.tex",
+      "bytes": 531,
+      "sha256": "ccbf2cb22e2ff8af6e14ace2d1f090370c8420f3083615a2e140b25900315632"
+    },
+    {
+      "path": "documenti/relazione/hinf.tex",
+      "bytes": 272,
+      "sha256": "2dc149cd313b71cc547716abfb2f921ce9cb84e30542f65f8ae1e78d62f81107"
+    },
+    {
+      "path": "documenti/relazione/lqg.tex",
+      "bytes": 404,
+      "sha256": "b153055560d8b030e6650ed040005163fe5e97393815154749f1e07904455c10"
+    },
+    {
+      "path": "documenti/relazione/main.tex",
+      "bytes": 33156,
+      "sha256": "5b3f18cfc8bb434f63a676145db44781361316dc7d6f97698d4cca2402450b94"
+    },
+    {
+      "path": "documenti/relazione/matrici_kalman.tex",
+      "bytes": 614,
+      "sha256": "4b51be03d921a27149756e40128dc345de3819af026325559d24708c7c26df0e"
+    },
+    {
+      "path": "documenti/relazione/matrici_lqr.tex",
+      "bytes": 1016,
+      "sha256": "923e49427de3a90e9d878f4ee42093ebf39fb2cec22ebfbee6182eadfaa5cd5b"
+    },
+    {
+      "path": "documenti/relazione/nominale.tex",
+      "bytes": 572,
+      "sha256": "7aa26fea331800991d29bbff291b5d7c1fce84eac504cd152c211274aeba9da4"
+    },
+    {
+      "path": "documenti/relazione/ras.tex",
+      "bytes": 374,
+      "sha256": "a8c5c2d803e572da9a4ff5a742cb7e5acb6523de0bea7fe564db44526e0aad34"
+    },
+    {
+      "path": "documenti/relazione/Relazione_SEA.pdf",
+      "bytes": 1206536,
+      "sha256": "0058a773840eebe416b533a35e48d1656021b517453c21797e9b46bad726912e"
+    },
+    {
+      "path": "documenti/relazione/robustezza.tex",
+      "bytes": 854,
+      "sha256": "b00351d30d8710ef3e7a3a0e3a89dfcfee67e8891b5d4484d4d1de77c42927c2"
+    },
+    {
+      "path": "documenti/relazione/rumore_storico_simulink.tex",
+      "bytes": 796,
+      "sha256": "917e70c62d50b856fa7e8c830d229032bf459b97d771a3a7ab51b27859445b22"
+    },
+    {
+      "path": "documenti/relazione/rumore_storico_sintesi.tex",
+      "bytes": 793,
+      "sha256": "7be9a10a2da18aae87b0c13818950a468d0e55dc93bd2fe2a28738f0d87db02e"
+    },
+    {
+      "path": "documenti/schemi/concentrato.tex",
+      "bytes": 668,
+      "sha256": "2988fd8ee1e547a97baf8845414a05784e71cf2e186ca8f0798a391e695fa8e4"
+    },
+    {
+      "path": "documenti/schemi/confronto.tex",
+      "bytes": 610,
+      "sha256": "5b05e176c2d53af259305037a32eff6fb1d699c6a92dfad130422e071ac35e01"
+    },
+    {
+      "path": "documenti/schemi/dk.tex",
+      "bytes": 566,
+      "sha256": "6c5346ef606e307565ebb64ff310d63388d7a2ae80fd7125887e7f7497497fbb"
+    },
+    {
+      "path": "documenti/schemi/due_dof.tex",
+      "bytes": 667,
+      "sha256": "032e57bd589d6be27b87da1d3f4cbd9d69a486588106984575040a869d93a349"
+    },
+    {
+      "path": "documenti/schemi/generalizzata.tex",
+      "bytes": 632,
+      "sha256": "d54e58dc6852c0cda32a39c41804df0c6cc49a4484b630d6e044ce766a99f4b9"
+    },
+    {
+      "path": "documenti/schemi/lft.tex",
+      "bytes": 667,
+      "sha256": "d388d273fd63eb05de03dc08585d04e06d728f1690afd52ab68d6dda78050781"
+    },
+    {
+      "path": "documenti/schemi/lqg.tex",
+      "bytes": 840,
+      "sha256": "e4637458395ab977c062730d29d867bb33aab851cba3b07537fc3bb96069cc7a"
+    },
+    {
+      "path": "documenti/schemi/lqgi.tex",
+      "bytes": 974,
+      "sha256": "af2a5a86ff0939a0b2a277b80a5a4b8c343fc0eac61460fc318514bdff6600a7"
+    },
+    {
+      "path": "documenti/schemi/mixsyn.tex",
+      "bytes": 719,
+      "sha256": "daa504722a97fad719f694d86a112c9419193126ddf058606ad2e633c1dc38c8"
+    },
+    {
+      "path": "documenti/schemi/nominale.tex",
+      "bytes": 434,
+      "sha256": "550fd4e07f6e7847b7f33b994ecafad3bc19a8ca3c3d165f035dae8fa105cd1a"
+    },
+    {
+      "path": "documenti/schemi/parametrico.tex",
+      "bytes": 818,
+      "sha256": "e0c927856b7c9dcdffea7a83487634fbdd4e28b6f45dbcb6b2772465b9bd0b14"
+    },
+    {
+      "path": "documenti/schemi/robusta.tex",
+      "bytes": 734,
+      "sha256": "bc52526cd99d98b470aa663da5d0d7d3766a7ac6dbcc1e9e8efe4f85b5548bbc"
+    },
+    {
+      "path": "documenti/schemi/sea.tex",
+      "bytes": 977,
+      "sha256": "f9ef7fb6d2cdaaa1b757a29154ab45ba83e0e1211b367b72662f6ca991a55861"
+    },
+    {
+      "path": "documenti/TRACCIABILITA.md",
+      "bytes": 2901,
+      "sha256": "001c02154b5b0f8c0046afec8d547782b2d1fd7771e1f90d797431b23a8c2f44"
+    },
+    {
+      "path": "figure/01_attuatori.png",
+      "bytes": 119085,
+      "sha256": "a5b355ecb1d28c12be44e834c034d52e41d5e37d09da542a4ffa16c91a81b23f"
+    },
+    {
+      "path": "figure/03_hinf.png",
+      "bytes": 116152,
+      "sha256": "5eee7bc71f59d9140b3893197b5dbda5424e3f5da791ee2c3d5c5ad86aae4408"
+    },
+    {
+      "path": "figure/04_robustezza.png",
+      "bytes": 78104,
+      "sha256": "6ec2ef72dfda90ee14d715ea50418155fc9b3a61fe10b96265eb8236590685e1"
+    },
+    {
+      "path": "figure/05_dieci_impianti.png",
+      "bytes": 96243,
+      "sha256": "a84e705f8fb108b80bc7dbf9a42056c769f8e57f21338522bede744f64523833"
+    },
+    {
+      "path": "figure/05_lin_nl_1.png",
+      "bytes": 90103,
+      "sha256": "0005f57421211cc6334d9ad673edc9f86631be971f052afee6c64ce20538cc88"
+    },
+    {
+      "path": "figure/05_lin_nl_2.png",
+      "bytes": 117529,
+      "sha256": "ac595dcef1db5100e2c90f74c074716a1b22ca99a726ad931f3187bcd0d49d75"
+    },
+    {
+      "path": "figure/05_ras.png",
+      "bytes": 60084,
+      "sha256": "b17ada0eeaf6bf5af99d038e5b2801f6e76cf83623c3de0e4b2688342f6e9959"
+    },
+    {
+      "path": "figure/orale_impianti.png",
+      "bytes": 55136,
+      "sha256": "4d93635f3ede29c1e39dc47d85aa597765f8b29ca010a56630641694157d7516"
+    },
+    {
+      "path": "figure/orale_ras.png",
+      "bytes": 50510,
+      "sha256": "d8f36512674f64a74509d961f8ad70f6a4f2c854c5b72101ee633975111002f3"
+    },
+    {
+      "path": "figure/rumore_storico.png",
+      "bytes": 94689,
+      "sha256": "3751c5f4d89bd7d20d7e021ea7eff6340b3950a3721238818adfbae5d8043111"
+    },
+    {
+      "path": "LEGGIMI.md",
+      "bytes": 4568,
+      "sha256": "45f1494da3cb3caf2c23e863906df326e96f2b75f85b7b1f6e075e872481b905"
+    },
+    {
+      "path": "parametri_sea.m",
+      "bytes": 1724,
+      "sha256": "5c0f4fc4d44f65b22fc4101ec8f95e5d469a85e298823f4e7deba4266576ac20"
+    },
+    {
+      "path": "SEA_00_AVVIO_PROGETTO.m",
+      "bytes": 1042,
+      "sha256": "b4a1b9da9fe0f67ac61526e035cbc16f7fe1cda6004b3829a272a1b921bdb067"
+    },
+    {
+      "path": "SEA_01_MODELLI_INCERTEZZE.m",
+      "bytes": 5178,
+      "sha256": "5e56d25685078faec11027ca5d84dc2af372a6914ebac527baa265ed79deb5cc"
+    },
+    {
+      "path": "SEA_02_LQG_LQGI.m",
+      "bytes": 3168,
+      "sha256": "d24df7ac0ef4c5fde65918525f2c6229fb82712038e8403010cbf653fda649ec"
+    },
+    {
+      "path": "SEA_03_HINF.m",
+      "bytes": 4484,
+      "sha256": "9f44b763acc0878290bb12cdc5403fd00e0fe88842c7f24e1e3e7a6a79d66fae"
+    },
+    {
+      "path": "SEA_04_MU_SINTESI.m",
+      "bytes": 8851,
+      "sha256": "7e2334e756b815411287cfb2ee92d8bce7170af557f18be654cc063701780d76"
+    },
+    {
+      "path": "SEA_05_CONFRONTO_FINALE_RAS.m",
+      "bytes": 10970,
+      "sha256": "c3540b7e2fbf90fb94129f65c77012b9b4fab797697e45db8fdb38833e34320d"
+    },
+    {
+      "path": "simula_sea.m",
+      "bytes": 1742,
+      "sha256": "5d158106f8130779c92e89c46b57f7261111968ef930a08c22098b548b0c78a5"
+    }
+  ]
+}

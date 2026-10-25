@@ -1,0 +1,14 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b,minimum width=40mm,minimum height=14mm](m) at (0,0) {$M_{osc}$\\$(x,v)$};
+\node[b,minimum width=45mm](delta) at (0,2) {$\delta_{\omega i} I_2,\ \delta_{\zeta i}$};
+\node[b](dp) at (4,0) {$D_{p0}$};
+\draw[->](-3.8,0)--node[above]{$u_i$}(m);\draw[->](m)--node[above]{$x_i$}(dp);
+\draw[->](dp)--node[above]{$\tau_i$}(6.5,0);
+\draw[->](m.north east)--(2.8,.7)--(2.8,2)--node[above]{$z_\Delta$}(delta.east);
+\draw[->](delta.west)--(-2.8,2)--(-2.8,.7)--node[above]{$w_\Delta$}(m.north west);
+\node[align=center] at (0,-1.2) {$w_\Delta=\Delta_i z_\Delta$; tre porte, due parametri fisici.};
+
+\end{tikzpicture}

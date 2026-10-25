@@ -1,0 +1,12 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b](a) at (0,1) {$F_l(P_A,K)$};\node[b](b) at (0,-1) {$F_l(P_B,K)$};
+\node[b](r) at (5,0) {NS/NP/RS/RP\\con stessi pesi};
+\draw[->](-4,0)--(-3,0)--(-3,1)--node[above]{$r,d$}(a);
+\draw[->](-3,0)--(-3,-1)--(b);\draw[->](a)--(3,1)--(r);
+\draw[->](b)--(3,-1)--(r);\draw[->](r)--node[above]{confronto}(8,0);
+\node at (0,-2) {Analisi: stesso $K$. Sintesi dedicata: $K_A,K_B$ separati.};
+
+\end{tikzpicture}

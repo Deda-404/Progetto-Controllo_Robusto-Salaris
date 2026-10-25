@@ -1,0 +1,125 @@
+\documentclass[aspectratio=169,12pt]{beamer}
+\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}\usepackage[italian]{babel}
+\usepackage{amsmath,graphicx,booktabs,tikz}\usetikzlibrary{arrows.meta,positioning,calc}
+\definecolor{deepblue}{RGB}{20,52,92}\setbeamercolor{structure}{fg=deepblue}
+\setbeamercolor{frametitle}{fg=white,bg=deepblue}\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber\hspace{1em}\vskip.5em}
+\hypersetup{pdfauthor={Alessio de Dato; Valerio Rebechi},pdftitle={SEA: incertezze parametriche e concentrate}}
+\newcommand{\diagram}[1]{\centering\resizebox{.86\linewidth}{!}{\input{../schemi/#1}}\par}
+\newcommand{\plotdata}[1]{\centering\includegraphics[height=.64\textheight,width=.94\linewidth,keepaspectratio]{../../figure/#1}\par}
+\title{Manipolatore SEA a due giunti}\subtitle{Due rappresentazioni dell'incertezza degli attuatori}
+\author{Alessio de Dato -- 635256\\Valerio Rebechi -- 722224}\date{25 ottobre 2026}
+\begin{document}\begin{frame}[plain]\titlepage\end{frame}
+\begin{frame}{Sistema SEA ed equilibrio}
+\diagram{sea}
+\small $\bar q=[\pi/2,0]^T$, 8 stati meccanici + 6 drive. Encoder link/rotori per LQG; q per i robusti.
+\end{frame}
+\begin{frame}{Attuatore nominale}
+\diagram{nominale}
+\[G_{a0}=\frac{40^2}{s^2+64s+1600}\frac{1-.015s/2}{1+.015s/2}\]
+\small Banda 34.78 rad/s; zero Padé a +133.33 s$^{-1}$. Nessuna duplicazione di Jm/Bm.
+\end{frame}
+\begin{frame}{Scelta di pochi parametri incerti}
+\small
+\begin{center}\begin{tabular}{lrr}\toprule
+Parametro&Intervallo&Scost. max a 40 rad/s\\\midrule
+$\omega_n$&36--44 rad/s&16.41\%\\$\zeta$&.72--.88&11.11\%\\$\tau$&12--18 ms&11.18\%\\\bottomrule\end{tabular}\end{center}
+Cinque valori per parametro, uno alla volta. S1 approvato: wn/zeta incerti,
+tau noto a 15 ms; meccanica nominale nel confronto centrale. M4 conservato separatamente.
+\end{frame}
+\begin{frame}{A parametrico e LFT manuale}
+\diagram{parametrico}
+\[\Delta_A=\operatorname{diag}(\delta_{\omega1}I_2,\delta_{\zeta1},\delta_{\omega2}I_2,\delta_{\zeta2})\]
+\small Quattro parametri reali indipendenti; sei porte. Le ripetizioni di wn sono correlate.
+\end{frame}
+\begin{frame}{B concentrato diagonale}
+\diagram{concentrato}
+\[W_I=.6165601\frac{s}{s+36},\quad \|\Delta_i\|_\infty\le1\]
+\small Due dinamiche SISO indipendenti. Il blocco pieno aggiungerebbe accoppiamenti non previsti.
+\end{frame}
+\begin{frame}{Copertura e conservativita}
+\plotdata{01_attuatori.png}
+\small Prova analitica sul box: $\mathcal A\subseteq\mathcal B$. Massimo campionato $\|E/W_I\|_\infty=.559738$.
+L'inclusione unitaria non ordina automaticamente tutte le espansioni dei margini.
+\end{frame}
+\begin{frame}{Segnali e pianta generalizzata}
+\diagram{generalizzata}
+\small Stessi W1, W2 e Mo per A/B; d e una coppia sui link. Norma pesata e target temporali restano distinti.
+\end{frame}
+\begin{frame}{LQG e integratore misurato}
+\diagram{lqgi}
+\small LQG: $u=-K\hat x+N_rr$. LQGI: $\dot\xi=r-q_{mis}$, $u=-K_x\hat x-K_i\xi$.
+Stesso Kalman; Q/R e covarianze consolidate. LQG Ts=.675 s; LQGI Ts=5.05 s con reiezione DC del disturbo.
+\end{frame}
+\begin{frame}{H-infinity: metodi e problemi}
+\begin{center}\small\begin{tabular}{lrr}\toprule
+Metodo & Ordine & Norma proprio problema\\\midrule
+mixsyn & 18 & 0.959295\\
+hinfsyn stesso P1 & 18 & 0.955559\\
+hinfsyn P2 & 22 & 0.0475849\\
+hinfstruct PID P2 & 4 & 0.800896\\
+\bottomrule\end{tabular}
+\end{center}
+\small Le prime due righe risolvono lo stesso P1.
+Il 2-DoF e il PID usano P2: gamma di problemi diversi non costituisce una classifica.
+\end{frame}
+\begin{frame}{NS, NP, RS e RP}
+\diagram{robusta}
+\small NS: nominale internamente stabile. NP: norma comune sotto uno.
+RS: stabilita sull'intera famiglia. RP: anche prestazione.
+Un risultato campionario non certifica RS/RP.
+\end{frame}
+\begin{frame}{Stessi controllori, rappresentazione diversa}
+\begin{center}\small\begin{tabular}{lrr}\toprule
+K & RS lower A & RS lower B\\\midrule
+LQG & 1.728 & 0.9914\\
+LQGI & 1.68 & 0.957\\
+Hinf1 & 2.586 & 1.046\\
+Hinf2 & 0.5655 & 0.0332\\
+PID & 0.2945 & 0.1252\\
+Kmu & 3.353 & 1.898\\
+\bottomrule\end{tabular}
+\end{center}
+\small LQG/LQGI: PASS su A, FAIL su B. Hinf2/PID fragili in entrambi.
+Kmu conserva RS/RP. Il concentrato copre un insieme piu ampio del box fisico.
+\end{frame}
+\begin{frame}{Due D-K dedicate, stessi pesi}
+\plotdata{04_robustezza.png}
+\small Quattro iterazioni massime e stesso fit [2,1]. Il K-step non sostituisce la post-analisi.
+\end{frame}
+\begin{frame}{Sintesi e verifica incrociata}
+\begin{center}\small\begin{tabular}{lrrr}\toprule
+K & Ordine & RP lower A & RP lower B\\\midrule
+Kmu & 78 & 1 & 1.448\\
+Mu\_A & 88 & 3.873 & 2.03\\
+Mu\_B & 32 & 4.226 & 2.625\\
+\bottomrule\end{tabular}
+\end{center}
+\small Kmu su A: bound da inclusione, margine diretto inconcludente.
+Mu\_B ha ordine 32 contro 88 di Mu\_A; nessuna riduzione adottata.
+\end{frame}
+\begin{frame}{Dieci impianti fisici comuni}
+\plotdata{orale_impianti.png}
+\small Hinf2 stabile 3/10, PID 7/10; gli altri 10/10. Stessi campioni per tutti. Solo le risposte stabili sono tracciate.
+\end{frame}
+\begin{frame}{Sezione empirica di attrazione}
+\plotdata{orale_ras.png}
+\small Quindici punti per K; Delta theta=Delta q, altri stati nulli. Verde convergente, rosso non convergente entro T, grigio inconcludente.
+Mu\_A: 6/15; Mu\_B: 15/15. Nessun bordo certificato.
+\end{frame}
+\begin{frame}{Rumore e risultati conservati}
+\small I nuovi K non penalizzano esplicitamente gli encoder:
+\[\|T_{uv}\|_\infty:\quad K_\mu\simeq2.94\,10^4,\quad K_{\mu B}\simeq1.36\,10^6.\]
+La formulazione storica con rumore produceva MuN1 a 82 stati: RS/RP su M4,
+picco Simulink non lineare 108.526 $\to$ 2.251 N m, ma offset q1 peggiore.
+\medskip\par Famiglie, pesi ed evidenze restano distinti. I nuovi SLX saranno forniti dagli studenti.
+\end{frame}
+\begin{frame}{Conclusioni del confronto A/B}
+\begin{itemize}
+\item A conserva significato fisico e correlazioni; B aggiunge dinamiche ammesse e conservativita.
+\item Su K fissi, B riduce qui diverse garanzie. Nella sintesi finita, B produce il candidato piu compatto.
+\item Mu\_B supera RS/RP su A/B; Ts=1.985 s e DC=5.454\% non rispettano tutti i target.
+\item Rumore, ordine e comportamento non lineare impediscono una scelta basata solo sui margini.
+\end{itemize}
+\end{frame}
+\end{document}

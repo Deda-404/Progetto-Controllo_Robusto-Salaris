@@ -1,0 +1,22 @@
+[
+  {
+    "artifact": "Progetto_SEA_Consegna\\documenti\\relazione\\Relazione_SEA.pdf",
+    "pages": 33,
+    "overfull_hbox": 0,
+    "overfull_vbox": 0,
+    "unresolved": 0,
+    "latex_errors": 0,
+    "duplicate_destinations": 0,
+    "technical_pass": true
+  },
+  {
+    "artifact": "Progetto_SEA_Consegna\\documenti\\presentazione\\Presentazione_SEA.pdf",
+    "pages": 18,
+    "overfull_hbox": 0,
+    "overfull_vbox": 0,
+    "unresolved": 0,
+    "latex_errors": 0,
+    "duplicate_destinations": 0,
+    "technical_pass": true
+  }
+]

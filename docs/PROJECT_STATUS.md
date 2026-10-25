@@ -1,4 +1,30 @@
-# Stato corrente - 25.10.2026, ristrutturazione didattica
+# Stato corrente - 25.10.2026, S1 approvato ed eseguito
+
+Fasi autorizzate COMPLETE/PASS tecnico. Prestazioni PARTIAL; nuova integrazione
+Simulink NOT RUN, in attesa dei modelli definitivi degli studenti.
+Branch codex/ristrutturazione-didattica-sea da main 0ed5611, nessun merge.
+Consegna autonoma: sei SEA_00--SEA_05 e tre soli ausiliari, otto MAT,
+69 file nello ZIP. A parametrico/B concentrato con wn/zeta ±10%, tau noto
+15 ms, meccanica nominale. Nominali e LFT verificati, pesi e banca conservati.
+
+Nuove D-K A/B 88/32 stati e garanzie incrociate NS/NP/RS/RP, nessun
+rilassamento o promozione automatica. Target temporali e rumore ancora parziali.
+Dieci impianti comuni; 32 prove LIN/NL e 120 punti RAS, con 96 convergenze,
+16 non convergenze nell'orizzonte e 8 inconcludenti. Nessun nuovo Lyapunov.
+Relazione 33 pagine, 18 slide e 13 schemi TikZ, audit PDF/visivo PASS.
+
+50 test S1 PASS; ZIP estratto e provato in entrambe le modalità dopo
+restoredefaultpath, 50/50 test ciascuna. Completa circa 396 s. Una modifica
+grafica finale è seguita da confronto dei 27 file scientifici (26 identici
+byte per byte, solo una riga vuota finale rimossa in parametri_sea) e
+nuovo collaudo rapido del ZIP finale. 259 MATLAB e 259 MAT/SLX precedenti
+conservati byte per byte. Report: REPORT_RISTRUTTURAZIONE_DIDATTICA.md.
+Prossimo passo degli studenti: revisione dei compromessi, SLX definitivi e
+prova orale dal vivo. Nessun merge automatico.
+
+---
+
+# Audit iniziale - 25.10.2026, prima dell'approvazione S1
 
 FASE 0 COMPLETE / PASS; FASE 1 PARTIAL, approvazione S1 richiesta.
 Branch codex/ristrutturazione-didattica-sea da main 0ed5611; nessun merge.

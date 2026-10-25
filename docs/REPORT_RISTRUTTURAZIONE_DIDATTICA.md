@@ -1,438 +1,280 @@
-# Ristrutturazione didattica SEA: audit e proposta scientifica
+# Report finale della ristrutturazione didattica SEA
 
-Data: 25 ottobre 2026. Responsabile: Alessio.
-Branch: `codex/ristrutturazione-didattica-sea`.
-Base verificata dopo fetch: `origin/main`, commit
-`0ed5611fdbb9c46475543f87eba68d9799b07bc5`.
-PR esaminata: [#43](https://github.com/Deda-404/Progetto_CR/pull/43), head
-`d3074e941c85917ae85e41e4762f91eb8417a55a`, aperta in bozza e senza commenti
-di approvazione alla data della verifica.
+25 ottobre 2026. Responsabile: Alessio.
+Branch `codex/ristrutturazione-didattica-sea`, base main
+`0ed5611fdbb9c46475543f87eba68d9799b07bc5`. Nessun merge.
 
-**Stato: FASE 0 COMPLETE / PASS; FASE 1 PARTIAL / decisione richiesta.
-FASE 2-8 NOT RUN. Il progetto ristrutturato e il relativo ZIP non sono ancora
-prodotti o validati.** Questo documento è il primo avanzamento del report
-richiesto, da completare dopo l'approvazione delle scelte scientifiche.
+**Fasi 0-8 del mandato corrente: COMPLETE / PASS tecnico**, entro il confine
+Simulink stabilito dagli studenti. S1 è stata approvata esplicitamente con
+«approvo, continua nell'esecuzione». Non sono stati adottati nuovi pesi,
+rilassamenti, saturazioni, riduzioni o modifiche SLX. La conformità alle
+prestazioni resta **PARTIAL**: diversi target temporali e il comportamento
+in presenza di rumore non sono soddisfatti. La nuova integrazione Simulink
+resta **NOT RUN**, in attesa degli SLX definitivi degli studenti.
 
-## 1. Fonti e confini dell'autorizzazione
+## 1. Stato iniziale e fonti
 
-Sono stati consultati la [traccia ufficiale SEA](https://drive.google.com/file/d/1-oXYqX_l1EJ7Tsd0Lubur3a1zqEi7ro7/view),
-`AGENTS.md`, decisioni e diario, sorgenti e dati di main, relazione e
-presentazione di main, sorgenti/CSV/elaborati della PR #43 e le due cartelle
-Drive indicate nel mandato. Drive è stato usato esclusivamente in lettura.
-La traccia lascia libere la selezione dei pochi parametri incerti e le relative
-percentuali; non impone di mantenere i tre parametri meccanici M4 incerti.
-Richiede comunque LQG con/senza integratore, mixsyn/hinfsyn e confronto,
-esplorazione hinfstruct, D-K, post-analisi robusta, implementazioni lineari e
-non lineari MATLAB/Simulink, RAS e circa dieci impianti campionati.
+Main coincideva con il commit indicato nel mandato. La PR #43, head
+`d3074e941c85917ae85e41e4762f91eb8417a55a`, era aperta in bozza, senza
+approvazione registrata dei suoi nuovi modelli. Sono stati letti traccia SEA,
+AGENTS, decisioni, script, controllori, dati, relazione e presentazione di
+main e materiale della PR43. Drive è rimasto in sola lettura.
+Non è stata inventata una trascrizione del ricevimento: sono state usate
+soltanto le indicazioni scritte disponibili.
 
-Le indicazioni del ricevimento effettivamente disponibili sono i resoconti
-scritti del 24 ottobre nella PR #43. Non è stata individuata nel materiale
-consultato una trascrizione autonoma dell'audio: non si attribuiscono al docente
-contenuti ulteriori. Il mandato corrente prevale sulle precedenti preferenze
-organizzative e chiede espressamente approvazione prima della semplificazione
-scientifica.
+Main ha 1125 file, 259 sorgenti MATLAB, 240 MAT e 19 SLX. L'unione con PR43
+ha 1275 file. La cartella di lavoro valida è Progetto_CR_finale; la directory
+superiore della chat contieneva un Git vuoto e non è stata usata come repository.
 
-Le scelte già approvate e implementate sono distinte dalla proposta nuova:
+## 2. Audit file per file e dipendenze
 
-| Elemento | Stato e trattamento |
-|---|---|
-| Meccanica della traccia e stato a 8 coordinate | Conservati |
-| Equilibrio qbar = [pi/2;0], theta coerente, velocità nulle | Approvato D-0003, conservato |
-| Attuatori nominali wn = 40 rad/s, zeta = 0.8, tau = 15 ms, Padé1 | Approvato D-0006, conservato |
-| Encoder [q;theta] per LQG/LQGI; q per i robusti | Conservati senza cambiare le architetture |
-| M4: k1,k2,Jm1 ±10%; dispersioni wn/zeta ±10%, tau ±20% nel peso | Famiglia storica conservata con i propri certificati |
-| Q/R, Kalman, W1/W2/Mo e sei controllori consolidati | Conservati; nessuna nuova selezione o promozione |
-| MuN1 a 82 stati e candidati con rumore | Restano candidati separati; nessuna adozione implicita |
-| Modelli della PR43 e riduzione a 60 stati | Studio esistente, adozione ancora proposta |
-| Nuova riduzione delle incertezze S1 | **DA APPROVARE**, descritta al §6 |
+`audit_ristrutturazione/inventario_file.csv` classifica tutti i 1275 file in
+CONSERVATO / ACCORPATO / SEMPLIFICATO / ARCHIVIATO, con motivazione, origine,
+blob e destinazione. Non sono necessarie cancellazioni: ELIMINATO ha zero
+voci. ARCHIVIATO significa conservato nel repository ed escluso dalla nuova
+consegna, non spostato o distrutto. Il grafo lessicale conservativo ha 688
+archi candidati; non viene interpretato come prova automatica di inutilità.
 
-## 2. Stato iniziale e inventario completo
+Le quattro chiusure MATLAB statiche comprendevano 21 file distinti: 14 per
+LQG, 3 per LQGI, 4 per H∞ e 1 per μ, con sovrapposizione. I MAT caricati
+e i percorsi dinamici richiedevano altre parti del repository. Sono esatti
+duplicati i due LQG/LQGI in analysis e nella raccolta accorpata; risultano
+duplicate anche checklist e numerose figure. Il pacchetto nuovo non dipende
+da nessuna di queste copie o cartelle storiche.
 
-L'inventario copre tutti i **1125 file tracciati di main** e tutti i **1275
-file dell'unione main/PR43**. Main contiene 259 sorgenti MATLAB, 240 MAT e
-19 file SLX: gli otto in `simulink/student_originals/` sono un sottoinsieme
-distinto dalle copie storiche. La PR modifica o aggiunge 167 file; 150 sono
-aggiunte, senza rimuovere file di main.
+## 3. File recuperati e accorpamenti effettivi
 
-Ogni file ha una riga in
-[`audit_ristrutturazione/inventario_file.csv`](audit_ristrutturazione/inventario_file.csv),
-con origine, blob Git delle due versioni, dimensione, azione proposta,
-motivazione e destinazione. Le azioni riguardano la **futura consegna**:
-ARCHIVIATO significa conservato nel repository, escluso dal percorso minimo.
-Nessun file storico è stato spostato, eliminato o riscritto scientificamente.
-Nessuna voce richiede ELIMINATO: le copie superflue saranno escluse dallo ZIP,
-senza distruggere la storia.
-
-La classificazione è una proposta ragionata, non una prova automatica di
-inutilità. Il grafo lessicale contiene riferimenti candidati, anche in commenti:
-assenza di un arco non autorizza a cancellare una funzione. Le dipendenze
-MATLAB effettive e i caricamenti sono registrati separatamente.
-
-### Punti di ingresso e dipendenze reali
-
-| Ingresso | Dipendenze MATLAB statiche, incluso l'ingresso | Criticità concreta |
-|---|---:|---|
-| progetto_lqg.m | 14 | Ricerca LQR, Lyapunov e grafici richiamano altre cartelle; scrive un MAT e può rigenerare una validazione mancante |
-| progetto_lqgi.m | 3 | Il grafico richiamato carica altri MAT e produce output nel repository |
-| progetto_hinf_tre_controllori.m | 4 | Tre helper e MAT esterni; esportazione dei candidati con rumore attiva nel default |
-| progetto_mu.m | 1 | Procedimento interno al file, ma più MAT esterni; ricalcola l'analisi robusta nel default |
-| run_all.m | Ingresso di verifica e scope storici | Non è l'avvio semplice del futuro pacchetto |
-
-L'unione delle quattro chiusure statiche comprende **21 file MATLAB**.
-Fonte: `audit_ristrutturazione/dipendenze_matlab.json`, prodotto da
-`matlab.codetools.requiredFilesAndProducts` in R2026b. Non comprende tutti i
-caricamenti a runtime: `riferimenti_mat.json` elenca i letterali trovati nei
-sorgenti, inclusi riferimenti commentati e scritture da distinguere manualmente.
-
-I MAT letti dagli ingressi includono M3, M5, M6, M7, M4 e gli archivi
-`nominal_study`, `selected_full_order`, `fixed_PID`, `m12`, `m13`, `m14`,
-`robust_study`; i grafici storici aggiungono archivi M8/M15/Lyapunov. Le
-sezioni sul rumore leggono anche `hinf_noise_03` e `mu_noise_01`. La nuova banca
-portabile dovrà estrarre solo le variabili usate, conservando gli archivi
-originali e verificando l'identità delle realizzazioni. Non è sufficiente
-copiare la sola cartella dei quattro script.
-
-Duplicati MATLAB esatti verificati:
-
-- `analysis/progetto_lqg.m` e la copia accorpata;
-- `analysis/progetto_lqgi.m` e la copia accorpata.
-
-Sono duplicati anche due checklist e numerose figure fra results/report/assets;
-l'elenco esatto è in `audit_ristrutturazione/duplicati.json`. I duplicati degli
-SLX sono solo riferimenti da conservare, senza riorganizzarli. La directory
-iniziale della chat contiene un Git vuoto; il repository valido è questa
-cartella `Progetto_CR_finale`. La vecchia copia `Progetto_CR_chiusura` ha un
-collegamento worktree non più risolvibile: non viene usata come fonte corrente.
-
-## 3. Riuso critico della PR #43
-
-| Materiale | Esito dell'audit |
-|---|---|
-| LFT manuale meccanica e attuatori | Da conservare come derivazione verificata; adattamento solo dopo approvazione |
-| Correlazione delle occorrenze di wn | Da conservare: due occorrenze nella costruzione manuale, cinque in quella automatica esaminata |
-| Residuo additivo del ritardo | Correzione concettuale utile; nel percorso semplificato proposto non serve modellare il ritardo esatto |
-| A pieno, A diagonale, B parametrico | Troppi casi per il nuovo percorso principale; restano studio storico |
-| Sei schemi TikZ | Recuperabili, con segnali e convenzioni da riallineare |
-| NS/NP/RS/RP e controlli di monotonia | Riutilizzare la logica di verifica e gli esiti inconclusivi espliciti |
-| Dieci impianti e dieci condizioni iniziali | Metodo riutilizzabile; i nuovi campioni devono corrispondere al nuovo insieme approvato |
-| Catena salaris_*.m | Non importare come nuova architettura; integrare il ragionamento nei numerati |
-| CSV e MAT PR43 | Evidenze delle sole famiglie PR43, senza trasferirne margini ai nuovi modelli |
-| Risintesi A/B e riduzioni 82/70/60 | Conservare risultati; non ripetere la campagna né promuovere candidati automaticamente |
-
-**Convenzione da correggere:** il mandato attuale chiama **A il parametrico**
-e **B il concentrato**. La PR43 usa le lettere al contrario. Nei nuovi script
-si useranno i nomi estesi insieme alla lettera; i CSV storici manterranno i
-propri nomi originali, con una legenda, senza rinominarli silenziosamente.
-
-Due intervalli Hinf2 della PR43 violano la monotonia attesa rispetto
-all'inclusione degli insiemi e sono già marcati inconclusivi. La nuova analisi
-non li userà come evidenza di superiorità di un modello. Le prestazioni
-rilassate della PR43 non saranno presentate come rispetto dei target M5.
-
-## 4. Relazione e presentazione da preservare
-
-Il PDF di main ha **108 pagine** e la presentazione **23 slide**; la PR43 ha
-23 pagine e 18 slide. Il nuovo `report/main.tex` della PR43 include soltanto
-`sections/salaris_revision`: le precedenti sezioni restano nel repository ma
-non vengono più compilate nel documento principale.
-
-Sono stati fortemente ridotti nel nuovo percorso il progetto esplicito di Q,
-la sintesi e la realizzazione LQGI, il confronto mixsyn/hinfsyn sullo stesso
-problema 1-DoF, gli schemi autentici Simulink e lo studio del rumore con i suoi
-vantaggi e peggioramenti. Questi risultati significativi devono essere
-recuperati da main in forma compatta; non basta una menzione dei nomi dei
-controllori. Non si sostituirà integralmente la relazione di main con quella
-della PR43. Le parti molto estese di ricerca/Lyapunov resteranno accessibili
-come storia, separando risultati scientifici utili e dettagli di sviluppo.
-
-Il nuovo indice seguirà i dodici capitoli del mandato, con più spazio per
-attuatori, rappresentazioni, confronto robusto e conclusioni. L'orale conserverà
-un budget inferiore a venti minuti e tutti i metodi richiesti; durata reale da
-verificare con prova cronometrata. Nessun nuovo PDF è stato prodotto in questa fase.
-
-## 5. Alternative scientifiche studiate
-
-Sono state valutate quattro selezioni di parametri per attuatore, senza
-adottarne nessuna: wn; wn/zeta; wn/tau; zeta/tau. Per ogni parametro sono
-stati esaminati cinque valori normalizzati [-1,-0.5,0,0.5,1], variando un solo
-parametro alla volta negli intervalli storici. Non è una griglia cartesiana
-né un'ottimizzazione di robustezza. Sono stati confrontati errore relativo
-complesso e fase, con il nominale e lo stesso Padé1.
-
-| Parametro variato | Valori provati | max errore relativo fino a 12 rad/s | fino a 40 rad/s | max variazione di fase fino a 40 rad/s |
-|---|---|---:|---:|---:|
-| wn [rad/s] | 36,38,40,42,44 | 5.53% | 16.41% | 7.54 gradi |
-| zeta | 0.72,0.76,0.8,0.84,0.88 | 4.77% | 11.11% | 3.02 gradi |
-| tau [ms] | 12,13.5,15,16.5,18 | 3.58% | 11.18% | 6.41 gradi |
-
-Fonte numerica: `audit_ristrutturazione/sensibilita_attuatori.csv`.
-Queste misure riguardano il blocco attuatore, non il margine robusto del SEA.
-Il ritardo resta rilevante: la sua esclusione dalla variabilità richiede una
-decisione di scopo, non discende da una presunta trascurabilità fisica.
-
-| Selezione | Vantaggio | Costo o informazione persa |
+| Materiale precedente | Destinazione effettiva | Trattamento |
 |---|---|---|
-| Solo wn | Un solo parametro fisico per canale | Non varia smorzamento né latenza |
-| wn/zeta | Varia rapidità e forma del secondo ordine; Padé comune | Non varia latenza; wn è ripetuta nella LFT |
-| wn/tau | Varia rapidità e fase del ritardo | Smorzamento fisso; rapporto fra Padé differenti non è automaticamente stabile |
-| zeta/tau | Poche occorrenze reali nella costruzione esaminata | Frequenza naturale fissa; stessa attenzione al rapporto dei Padé |
+| Quattro ingressi accorpati | Sei SEA_00--SEA_05 | Procedimento ridistribuito per ordine didattico |
+| Modello, parametri, attuatori | SEA_01 e parametri_sea | Formule e matrici esplicite; unica fonte di ipotesi |
+| Cinque funzioni fisiche SEA | dinamica_sea | Stesse equazioni in un solo ausiliario numerico |
+| LQR, Kalman, LQGI e helper di grafico | SEA_02 e SEA_05 | Riccati, guadagni e integratore visibili |
+| H∞ e tre helper PID | SEA_03 | P1/P2, pesi e chiamate di sintesi nel file |
+| μ-analysis e D-K | SEA_04 | Due famiglie, stessi pesi e post-analisi incrociata |
+| RHS, prove non lineari e RAS | simula_sea e SEA_05 | Stato completo, quindici punti, tre esiti |
+| Controllori MAT consolidati | dati/banca_consolidata.mat | Realizzazioni originali, senza minreal o riduzioni |
+| LFT manuale utile della PR43 | SEA_01 | Adattata allo S1 approvato, senza importare runner o residui |
+| Equazioni fisiche e derivazione di Q di main | Nuova relazione cap.2/7 | Testo e formule recuperati e riorganizzati |
+| Matrici LQR/Kalman e risultati rumore di main | Appendici e tabelle della nuova relazione | Fonti precedenti conservate e dichiarate |
 
-Gli errori nominali fra le quattro costruzioni candidate e il nominale sono
-inferiori a 7e-16 sulla griglia esaminata. Le occorrenze automatiche sono
-5 per wn e 1 ciascuna per zeta/tau: sono proprietà della realizzazione,
-non numeri di parametri fisici indipendenti. La LFT manuale della PR43
-mostra che wn può essere conservata come lo stesso scalare ripetuto due volte.
+Le funzioni Lyapunov e i vecchi esportatori non sono inutili in assoluto:
+restano disponibili per riprodurre gli studi storici. Non sono necessari
+al nuovo percorso empirico e sono esclusi dallo ZIP. Nessun sorgente
+scientifico preesistente è stato cancellato o sovrascritto.
 
-## 6. Proposta S1 da approvare integralmente o correggere
+## 4. Nuova struttura reale
 
-**Nessuno dei seguenti punti è stato adottato o inserito nei parametri di produzione.**
+La cartella Progetto_SEA_Consegna contiene sei script principali:
+SEA_00_AVVIO_PROGETTO, SEA_01_MODELLI_INCERTEZZE, SEA_02_LQG_LQGI,
+SEA_03_HINF, SEA_04_MU_SINTESI, SEA_05_CONFRONTO_FINALE_RAS.
+Gli unici tre ausiliari sono parametri_sea, dinamica_sea e simula_sea.
+Non ci sono classi, factory, wrapper o framework nella consegna.
 
-1. Conservare i nominali, l'equilibrio, le misure, i disturbi, i pesi e la
-   banca consolidata. Usare come unico confronto principale **wn e zeta
-   indipendenti per ciascun attuatore, entrambi ±10%**. Il ritardo resta
-   **noto a 15 ms, rappresentato con Padé1**, senza residuo dinamico aggiuntivo.
-2. Tenere **nominali i parametri meccanici nel nuovo confronto centrale**,
-   per isolare l'effetto della rappresentazione attuativa. Conservare M4,
-   incertezze k1/k2/Jm1 e relativi risultati in una sezione storica esplicita.
-   È una restrizione dell'insieme del problema, non una equivalenza con M4
-   né una dichiarazione di assenza delle dispersioni reali.
-3. Costruire **A parametrico** con quattro scalari reali indipendenti:
-   wn_i = 40(1+0.1 delta_wn_i), zeta_i = 0.8(1+0.1 delta_zeta_i).
-   La struttura manuale proposta è
-   Delta_A = diag(delta_wn1 I2, delta_zeta1, delta_wn2 I2, delta_zeta2).
-   Le ripetizioni di wn restano correlate; i due attuatori restano indipendenti.
-4. Costruire **B concentrato diagonale** con due blocchi dinamici SISO
-   indipendenti: G_B = G_0 diag(1+WI Delta_1,1+WI Delta_2),
-   con Delta_i stabile, proprio e norma H-infinity non superiore a uno.
-   Escludere il blocco pieno 2x2 dal percorso principale perché aggiunge
-   accoppiamenti non presenti nei due drive SISO.
-5. Per WI usare la maggiorazione analitica di primo ordine descritta sotto,
-   da verificare in codice dopo approvazione. Non riprendere il peso M4:
-   copre una diversa dispersione. I pesi **prestazionali** rimangono quelli
-   consolidati; eventuali loro rilassamenti successivi richiedono una
-   proposta esplicita con l'elenco dei requisiti persi.
+**Correzione tecnica necessaria:** MATLAB rifiuta i nomi che iniziano con
+una cifra, come confermato da run e Code Analyzer. Il prefisso SEA conserva
+la numerazione e permette Run nativo, evitando caricatori basati su eval.
+Ogni ingresso inizializza parametri e dati realmente usati. Nessuna variabile
+di un precedente Base Workspace è richiesta. I soli percorsi sono derivati
+dalla posizione del file. Gli strumenti Python/PowerShell di sviluppo non
+sono inclusi né necessari per eseguire il pacchetto.
 
-La scelta wn/zeta conserva due effetti fisici distinti con un Padé nominale
-comune e permette una spiegazione semplice dell'inviluppo concentrato.
-L'alternativa con tau incerto resta scientificamente legittima, ma richiede
-un'altra scelta coerente di rappresentazione del ritardo.
+## 5. Parametri approvati e motivazioni
 
-### Costruzione proposta di WI e inclusione degli insiemi
+Nominali ed equilibrio invariati: wn=40 rad/s, zeta=.8, tau=.015 s,
+qbar=[pi/2;0], meccanica della traccia. S1 conserva soltanto wn/zeta ±10%
+per attuatore, indipendenti fra canali. Tau è noto e rappresentato con
+Padé1, senza residuo aggiuntivo. La meccanica è nominale nel confronto
+centrale; M4 e le sue incertezze meccaniche sono conservati come storia.
+È una restrizione dichiarata del problema, non una equivalenza con M4.
 
-Posto H = wn^2/(s^2+2 zeta wn s+wn^2), il Padé fisso è comune e si cancella
-algebricamente nel rapporto G_A/G_0. L'errore relativo è
+Sono state studiate le alternative wn, wn/zeta, wn/tau e zeta/tau e cinque
+valori per parametro, variando un parametro alla volta. La selezione wn/zeta
+conserva effetti distinti di rapidità e smorzamento con un Padé comune.
+Il ritardo resta fisicamente rilevante: la sua esclusione dalla variabilità
+è una decisione di scopo approvata. Il piccolo studio LQG/Kalman usa cinque
+fattori, mantenendo come scelta i costi e le covarianze consolidate.
 
-    E = H/H0 - 1 = (alpha s^2 + beta s)/(s^2+2 zeta wn s+wn^2)
-    alpha = wn^2/40^2 - 1
-    beta  = 2*0.8*wn^2/40 - 2*zeta*wn
+## 6. Modelli A/B e verifiche
 
-Su wn in [36,44], zeta in [0.72,0.88], risultano |alpha| <= 0.21 e
-|beta| <= 14.08 rad/s. Per 0 < zeta <= 1 vale
+A è il parametrico: quattro scalari reali, wn ripetuta due volte per
+canale nella LFT manuale, sei porte totali. B è il concentrato: due ultidyn
+SISO indipendenti, nessun accoppiamento pieno 2×2. La convenzione è quella
+del mandato corrente; la PR43 chiamava A/B al contrario.
 
-    |(j omega)^2+2 zeta wn j omega+wn^2| >= zeta*(omega^2+wn^2).
+Il peso approvato è WI=.6165601466*s/(s+36). La dimostrazione su tutto
+il box usa l'errore relativo E=(alpha*s²+beta*s)/(s²+2*zeta*wn*s+wn²),
+|alpha|≤.21, |beta|≤14.08. E/WI è stabile/proprio e ha norma ≤1.
+Pertanto A è contenuto nel B unitario; B include anche perturbazioni
+dinamiche non riconducibili a parametri fisici costanti.
 
-Quindi una scelta analiticamente sufficiente, proposta e non ancora
-implementata nel nuovo modello, è
+Nominali A/B contro la banca: errori circa 8.37e-15 e 6.81e-15.
+LFT manuale contro le formule dirette: errore sotto 1e-15 sulle prove.
+Massimo osservato ||E/WI|| sulle 25 coppie: .559738. La griglia controlla
+l'implementazione; la copertura globale deriva dalla dimostrazione.
+L'inclusione del box unitario non giustifica un ordine universale dei
+margini nelle espansioni oltre il box: la dipendenza parametrica è non lineare.
 
-    WI(s) = c*s/(s+36),
-    c = hypot(0.21,14.08/36)/0.72 = 0.6165601466349685.
+## 7. Controllori, sintesi e garanzie
 
-Infatti E/WI = (alpha s+beta)(s+36)/(c*(s^2+2 zeta wn s+wn^2))
-è stabile e proprio e ha modulo non superiore a uno sull'asse immaginario
-per tutto il box. Il valore all'origine è definito per continuità: E e WI
-hanno entrambi uno zero in zero. Si ottiene così A contenuto in B per i
-due canali indipendenti. Il viceversa non segue: B ammette dinamiche non
-parametriche. La maggiorazione può essere conservativa; non dimostra che
-B sia una scelta peggiore per ogni scopo o che una D-K troverà una soluzione.
+Sono conservati LQG 14, LQGI 16, Hinf1 18, Hinf2 22, PID 4 e Kmu 78 stati.
+La ricostruzione LQR/Kalman/LQGI verifica residui Riccati e identità dei
+guadagni. La modalità completa esegue mixsyn e hinfsyn sullo stesso P1,
+hinfsyn P2, un avvio hinfstruct dal PID consolidato e due D-K dedicate.
+I ricalcoli H∞ non sovrascrivono la banca. I nuovi Mu_A/Mu_B sono strumenti
+di confronto, non controllori promossi automaticamente.
 
-La giustificazione usa il Padé identico: non garantisce tutti i ritardi
-esatti. Con tau incerto, il rapporto dei Padé diversi può lasciare un polo
-RHP dal denominatore nominale; un fit del solo modulo non basta a costruire
-una perturbazione stabile. È il motivo per cui la scelta di scopo va resa
-esplicita e approvata, anziché nasconderla nel peso.
+W1/W2/Mo, costi, covarianze e target restano invariati. Le D-K usano lo
+stesso budget di quattro iterazioni e fit [2,1], scalature diagonali e
+MixedMU attivo. Non sono richiesti nuovi rilassamenti per raggiungere RP S1.
+Il costo comune 2-DoF è distinto dal costo proprio LQR o mixed sensitivity.
 
-## 7. Struttura proposta e riuso dei controllori
+| K | Ordine | RS A lower | RS B lower | RP A lower | RP B lower | Stabili/10 | RAS converge/15 | RAS inconcl. |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| LQG | 14 | 1.728 | 0.9914 | 0 | 0 | 10 | 15 | 0 |
+| LQGI | 16 | 1.68 | 0.957 | 0 | 0 | 10 | 15 | 0 |
+| Hinf1 | 18 | 2.586 | 1.046 | 0 | 0 | 10 | 15 | 0 |
+| Hinf2 | 22 | 0.5655 | 0.0332 | 0 | 0 | 3 | 11 | 4 |
+| PID | 4 | 0.2945 | 0.1252 | 0 | 0 | 7 | 4 | 4 |
+| Kmu | 78 | 3.353 | 1.898 | 1 | 1.448 | 10 | 15 | 0 |
+| Mu_A | 88 | 4.415 | 2.385 | 3.873 | 2.03 | 10 | 6 | 0 |
+| Mu_B | 32 | 4.326 | 3.011 | 4.226 | 2.625 | 10 | 15 | 0 |
 
-    Progetto_SEA_Consegna/
-      00_AVVIO_PROGETTO.m
-      01_MODELLI_INCERTEZZE.m
-      02_LQG_LQGI.m
-      03_HINF.m
-      04_MU_SINTESI.m
-      05_CONFRONTO_FINALE_RAS.m
-      parametri_sea.m
-      dinamica_sea.m
-      simula_sea.m
-      dati/          banca compatta verificata e risultati essenziali
-      figure/        sole figure necessarie
-      documenti/     relazione, presentazione, schemi e interfacce
-      LEGGIMI.md
+Per LQG/LQGI/Hinf1 il costo comune fallisce già NP e RP è zero. Per Hinf2/PID
+il fallimento RS esclude RP; gli upper RP dedotti sono marcati come tali.
+Per Kmu su A il bound diretto RP è invertito anche con opzioni m9: entrambi
+gli esiti grezzi sono conservati. La garanzia unitaria deriva da RP su B;
+il bound riportato è [1,RS_A upper], non un riordinamento dell'esito né
+un trasferimento del margine oltre uno.
 
-Questa è una struttura progettata, **non un pacchetto già creato**. Il numero
-effettivo degli ausiliari matematici andrà confermato nell'accorpamento.
-`parametri_sea` sarà l'unica fonte leggibile di parametri/ipotesi; ciascuno
-script mostrerà all'inizio le parti realmente usate. Formule, matrici,
-connessioni, pesi e chiamate di sintesi resteranno visibili nei numerati.
-`dinamica_sea` conserverà la fisica non lineare; `simula_sea` servirà
-all'integrazione dello stato completo. Nessun framework o dipendenza Git/Drive.
+B è più conservativo per diversi K fissi, ma la D-K su B produce qui
+ordine 32 contro 88 su A, con migliori garanzie incrociate sul B. Il
+risultato riguarda questa campagna finita e questi pesi, non un optimum
+universale. Non è stata eseguita una campagna di riduzioni d'ordine.
 
-Modalità rapida: carica realizzazioni e risultati verificati, ricostruisce
-risposte essenziali, indica ciò che è caricato e ciò che è calcolato.
-Non avvia D-K né analisi robuste costose. Modalità completa: ricostruisce
-modelli, esegue sintesi e post-analisi con seed espliciti. I controllori
-archiviati non vengono sovrascritti da una risintesi.
+## 8. Simulazioni e RAS
 
-Le sei realizzazioni consolidate caricate in questo audit sono internamente
-stabili sul nominale; ordini 14,16,18,22,4,78 e ingressi rispettivamente
-6,6,4,4,4,4, con due uscite. Le verifiche sono in
-`audit_ristrutturazione/controllori_baseline.csv`. LQG/LQGI ricevono
-[r1,r2,q1,q2,theta1,theta2]; i robusti [r1,r2,q1,q2]. Le uscite sono
-comandi di coppia in N m. Posizioni in rad, velocità in rad/s; gli stati
-attuativi sono coordinate della realizzazione, non angoli fisici aggiuntivi.
-Lo stato LQGI include due integrali in rad*s dell'errore **misurato**.
-Segni e stati di ciascuna realizzazione devono restare quelli degli archivi.
+Dieci impianti fisici comuni includono nominale, estremi e punti interni.
+Sono campioni di A, contenuto in B; non sono campioni dinamici arbitrari
+presentati come impianti fisici. Si verifica stabilità interna prima delle
+metriche: per gli instabili i valori prestazionali restano NaN.
+Tutti gli otto controllori hanno due tracking e due disturbi nominali
+non lineari: 32 integrazioni completate. Picchi/RMS sono osservazioni
+sulla griglia dichiarata, non massimi continui certificati.
 
-I controllori saranno prima analizzati invariati su A/B. Solo per la
-mu-sintesi sono pertinenti due progettazioni dedicate, con gli stessi pesi
-e lo stesso budget. mixsyn e hinfsyn dovranno essere confrontati sul medesimo
-problema 1-DoF, conservando inoltre il 2-DoF già significativo.
+La RAS integra l'intero stato: dq/dtheta iniziali uguali, velocità, drive
+e controllori nulli, r=d=v=0. Quindici punti comuni; ultimo secondo entro
+12 s, soglie .5 gradi e .02 rad/s. Su 120 prove: 96 convergenze, 16
+completate senza convergenza, 8 inconcludenti (quattro Hinf2, quattro PID).
+Non convergere entro T non è instabilità matematica. Non si costruiscono
+nuovi studi Lyapunov o contorni certificati. I MAT conservano q/u e gli
+indicatori necessari; tutti gli stati sono comunque integrati.
 
-La NP comune del confronto userà i pesi finali già archiviati
-(profilo [2,0.15,3,0.003,80], alpha=6, omegaM=4); il costo originario
-di ciascun controllore resterà distinto. Il vecchio documento M5 descrive
-anche un precedente set di pesi: non deve diventare una seconda fonte
-silenziosa. I target temporali restano 0.8 s, overshoot 10%, errore DC 5%.
-Q/R e covarianze saranno quelle salvate: Qn = 0.01 I4,
-Rn = (0.05*pi/180)^2 I4, nella convenzione continua documentata.
+## 9. Schemi ed elaborati
 
-## 8. Campioni, RAS, schemi e Simulink
-
-Dopo approvazione si useranno circa dieci impianti fisici comuni con nominale,
-estremi e punti interni, dichiarando quali canali variano. La tabella finale
-riporterà NS, NP, intervalli RS/RP di A/B, differenze, ordine, tracking,
-assestamento, overshoot, errore DC, disturbo e comando. Nessun margine verrà
-trasferito dalla famiglia storica. La prova empirica resta distinta dalla
-garanzia robusta.
-
-La RAS userà lo stesso insieme di 10-20 punti per ciascun controllore:
-coordinate Delta q1/Delta q2, Delta theta = Delta q, velocità, stati dei
-drive e dei controllori nulli, riferimento/disturbo/rumore nulli. Il criterio
-di convergenza e l'orizzonte saranno espliciti; integrazione incompleta
-significherà esito numerico inconcludente. Nessun nuovo studio Lyapunov;
-nessun contorno verrà dichiarato bordo certificato della RAS.
-
-Schemi nuovi prodotti in questa fase: **nessuno**. Sono stati esaminati i
-sei TikZ della PR43. Il piano richiede schemi per SEA, nominale attuativo,
+Prodotti 13 schemi TikZ riproducibili: SEA fisico, nominale attuativo,
 A parametrico, B concentrato, LFT, pianta generalizzata, LQG/Kalman,
-LQGI/integratore, mix-sensitivity, 2-DoF, D-K, N-Delta e confronto A/B.
-Si riutilizzeranno le fonti di main e le parti pertinenti della PR43,
-allineandole alle equazioni effettivamente eseguite.
+LQGI/integratore misurato, mix-sensitivity, 2-DoF con stati condivisi,
+D-K, N-Delta e confronto A/B. Sono allineati a equazioni, segnali e codice.
 
-Gli SLX esistenti restano intatti, nella loro organizzazione originale.
-Nessun SLX è stato aperto, modificato, risalvato o simulato nell'audit.
-`setup_student_originals.m` documenta già molte variabili esterne: sarà
-usato come riferimento per un'interfaccia esplicita. Gli studenti forniranno
-i nuovi SLX definitivi; fino ad allora la nuova integrazione Simulink resta
-**NOT RUN**, senza ereditare le vecchie validazioni.
-La loro eventuale inclusione nello ZIP va concordata quando saranno forniti:
-nessuna riorganizzazione autonoma dei modelli è prevista dalla struttura sopra.
+La relazione di main è stata riorganizzata in dodici capitoli e appendici,
+con **33 pagine**. Non è stata sostituita dalla relazione PR43:
+sono recuperati fisica, derivazione Q, matrici e risultati precedenti
+significativi, incluso il rumore. La presentazione ha **18 slide**, con
+19:19 pianificati; la durata reale richiede una prova orale cronometrata.
+PDF compilati con MiKTeX: zero errori, riferimenti irrisolti, destinazioni
+duplicate e overflow. Pagine e slide sono state renderizzate e controllate.
 
-## 9. Verifiche realmente eseguite e limiti
+Il compilatore integrato dell'editor ha inizialmente avuto timeout durante
+il download dei pacchetti e un progetto stale mentre cambiavano i sorgenti;
+questi tentativi non sono accreditati. I PDF consegnati derivano dalle
+compilazioni locali effettivamente riuscite e dal controllo tecnico/visivo.
 
-Ambiente: MATLAB **R2026b 26.2.0.3386108**, Control System, Robust Control,
-Symbolic Math e Simulink disponibili, rilevati in `ambiente.json`.
+## 10. Protezione della baseline e gate
 
-| Verifica | Esito di questo audit | Evidenza |
+Verificati SHA-256 di 830 file scientifici preesistenti:
+**259 MATLAB e 259 MAT/SLX, inclusi tutti i 19 SLX, invariati byte per byte**.
+Restano intatti anche i precedenti sorgenti LaTeX, PDF e figure. Nessuno
+SLX è stato creato, aperto, simulato, risalvato o riorganizzato per S1.
+Il MAT portabile conserva la banca originale senza trasformazioni di stato.
+
+| Gate | Esito |
+|---|---|
+| Audit baseline e PR43 | 78 test baseline + 5 LFT PR43 PASS |
+| Nuovi test S1 | 50/50 PASS |
+| Estrazione ZIP e modalità rapida | 50/50 PASS, esecuzione reale indipendente |
+| Estrazione ZIP e modalità completa | 50/50 PASS, nuove sintesi e simulazioni reali |
+| Dipendenze | Nove MATLAB nella consegna; nessuna funzione scientifica del repository richiesta |
+| Integrità baseline | PASS, nessun byte scientifico preesistente alterato |
+| PDF | PASS tecnico e visivo |
+| Target temporali/rumore | PARTIAL, fallimenti conservati e discussi |
+| Nuova integrazione Simulink | NOT RUN, modelli definitivi attesi |
+
+Fallimenti tecnici iniziali conservati: costruttore uss numerico corretto
+con ss nell'audit; MAT M5 mancante nella copia di test PR43 poi fornito;
+nomi MATLAB numerici rifiutati e corretti con prefisso SEA; controllo CRC
+chiamato prima della chiusura dello ZIP, ripetuto correttamente dopo
+chiusura. Nessun tentativo fallito è dichiarato validato. Il bound RP
+incoerente resta una limitazione numerica esplicita.
+
+## 11. ZIP e riproduzione indipendente
+
+Archivio `delivery/Progetto_SEA_Consegna.zip`: **69 file**,
+sei principali + tre ausiliari MATLAB, **otto MAT**, CSV essenziali, figure,
+relazione, presentazione, sorgenti TikZ/LaTeX e LEGGIMI.
+Dimensione 32582050 byte; SHA-256
+`ebc5bb045d15bc2490a0e8c8c471798dec4862f63dd65fd86e701e0afec8f759`. CRC e hash dei file estratti PASS.
+
+Entrambe le modalità sono state eseguite realmente in una cartella
+temporanea esterna, dopo restoredefaultpath e senza percorsi scientifici
+del repository. La rapida carica le analisi robuste; la completa ripete
+sintesi, post-analisi, campionamento, non lineare e RAS. La banca originale
+non è riscritta. I file di sviluppo e i checkpoint storici non sono nello ZIP.
+
+## 12. Risultati non validati e problemi aperti
+
+Nuovi SLX S1 e relativa integrazione MATLAB/Simulink: non validati, per
+esplicito rinvio agli studenti. Non è certificato l'hardware, non sono
+identificati limiti di coppia, saturazioni o ritardi reali. La sezione RAS
+è empirica. Il margine diretto RP di Kmu su A resta inconcludente; la
+garanzia unitaria è giustificata separatamente per inclusione.
+
+Mu_B raggiunge RS/RP ma ha Ts=1.985 s e DC=5.454%, oltre i target .8 s e
+5%; il guadagno rumore-comando circa 1.36e6 è peggiore del Kmu storico
+(circa 2.94e4). Mu_A ha ordine 88 e solo sei convergenze RAS. Non viene
+quindi dichiarato un vincitore operativo né occultato un peggioramento.
+Non servono ulteriori approvazioni per la struttura eseguita; eventuali
+future variazioni scientifiche o adozioni operative richiederanno una
+decisione specifica. Restano la scelta dei modelli Simulink definitivi e
+la prova orale dal vivo. Nessun merge automatico.
+
+## 13. Tabella finale di tracciabilità della traccia
+
+| Requisito | Implementazione | Evidenza e stato |
 |---|---|---|
-| Fisica, equilibrio/Jacobiani, attuatori, M4, M5, LQG/LQGI | **78/78 PASS**, zero incomplete | test_baseline.csv/MAT |
-| Cinque test LFT della PR43, senza cambiare i sorgenti | **5/5 PASS** | test_pr43.csv |
-| Stabilità interna e interfacce dei sei controllori congelati | **PASS** | controllori_baseline.csv |
-| Code Analyzer su tutti i 259 MATLAB di main | 243 file senza messaggi; 16 con segnalazioni preesistenti | code_analyzer.json |
-| Quattro ingressi principali al Code Analyzer | Nessun messaggio | stesso JSON |
-| Code Analyzer del nuovo strumento di audit MATLAB | Nessun messaggio | code_analyzer_audit.json |
-| Integrità MAT/SLX e sorgenti scientifici preesistenti | **PASS**, byte invariati | integrita_prima.json / integrita_dopo.json |
-| Nuovi A/B, robustezza e risintesi del pacchetto | **NOT RUN / NON VALIDATI** | decisione S1 pendente |
-| Nuovi campioni, nuova RAS, nuovi SLX | **NOT RUN / NON VALIDATI** | fasi successive |
-| Nuovo ZIP estratto fuori repository | **NOT RUN / NON VALIDATO** | pacchetto non ancora costruito |
+| Fisica SEA, parametri e unità | dinamica_sea, parametri_sea; SEA_01 | Equilibrio, Jacobiani e canale disturbo verificati |
+| Linearizzazione e misure | SEA_01, banca nominale | A/B nominalmente uguali; quattro encoder LQG, q per robusti |
+| Secondo ordine con Padé1 | SEA_01 | Nominali conservati, tau noto 15 ms |
+| Pochi parametri incerti motivati | SEA_01; relazione cap.3-5 | S1 approvata; LFT manuale e inclusione analitica |
+| Specifiche e pesi dichiarati | parametri_sea, SEA_03 | Target invariati, pesi espliciti, nessun nuovo rilassamento |
+| 1. LQG senza integratore | SEA_02 | lqr/lqe, Q/R, covarianze e identità del controllore |
+| 1. LQG con integratore | SEA_02 | Sistema aumentato, Riccati, xi_dot=r-q_mis |
+| 1. Lineare/non lineare e RAS | SEA_05 | Due tracking + due disturbi, 15 condizioni iniziali per K |
+| 1. Simulink | Interfaccia numerica esportata | Nuovi SLX S1 NOT RUN; precedenti risultati conservati |
+| 2. mixsyn e hinfsyn con confronto | SEA_03 | Stesso P1; norme ricostruite e nominali stabili |
+| 2. hinfstruct/PID | SEA_03 | Un avvio dal PID consolidato, stessa P2 |
+| 2. H∞ lineare/non lineare e RAS | SEA_05 | Prove reali; esiti inconcludenti conservati |
+| 2. μ-analysis con incertezze e attuatori | SEA_04 | RS/RP adattive e N11/mussv su A/B; campioni distinti |
+| 3. μ-synthesis D-K | SEA_04 | Due D-K dedicate, quattro iterazioni ciascuna, stessi pesi |
+| 3. Post-analisi μ | SEA_04 | Analisi incrociata di Mu_A/Mu_B su entrambe le famiglie |
+| 3. Eventuale rilassamento | Non necessario per RP S1 | Entrambe le sintesi raggiungono RP; target temporali ancora parziali |
+| 3. μ lineare/non lineare e RAS | SEA_05 | Ordini 88/32; RAS 6/15 e 15/15, con limiti espliciti |
+| 4. Confronto H∞/μ in RS/RP | SEA_04/05 | confronto_robusto.csv, quadro_finale.csv, relazione cap.10/12 |
+| 5. Circa dieci impianti comuni | SEA_05 | 10 impianti fisici, stessi per tutti; metriche degli instabili NaN |
+| Relazione, grafici, codice e controllori | documenti/relazione, nove .m, dati/ | Relazione riorganizzata dalla base consolidata; sorgenti inclusi |
+| Presentazione ≤20 minuti | documenti/presentazione, PRESENTAZIONE_NOTE | 18 slide, 19:19 pianificati; prova dal vivo ancora necessaria |
+| Riproduzione autonoma | SEA_00, LEGGIMI | Due modalità; nessuna dipendenza da repository o servizi online |
 
-Le 16 segnalazioni riguardano 11 file di esempi didattici del docente e
-cinque file del progetto, principalmente esportatori/test storici; vi è
-anche un ritorno potenzialmente non assegnato in `estimate_lqg_ras.m`.
-Non sono state corrette alterando la baseline; nessuna equivalenza o
-inutilità è dedotta dal solo Code Analyzer. Il controllo manuale ha inoltre
-verificato path, clearvars, caricamenti, scritture, callback e interfacce dei
-punti di ingresso, oltre alle equazioni rilevanti della PR43.
-
-Sono registrati anche gli avvii non riusciti:
-
-- Il primo audit si è fermato prima delle regressioni per un uso numerico
-  del costruttore uss nello strumento nuovo: corretto usando ss per il Padé
-  certo; il log iniziale è conservato. Nessun sorgente di produzione coinvolto.
-- Il primo collaudo PR43 in area temporanea era 4/5: mancava il MAT M5,
-  letto da build_salaris_models. Fornita una copia esatta del MAT baseline,
-  il collaudo è 5/5. Sono conservati CSV e log del primo tentativo: è una
-  dipendenza del test, non una nuova scoperta sul modello.
-
-Le suite M3/M5 riscrivono alcuni risultati durante l'esecuzione. Il meccanismo
-esistente `preserve_validation_outputs` li ha salvati e ripristinati, poi
-sono stati confrontati gli hash. Non si sono eseguite nuove mixsyn, hinfsyn,
-hinfstruct, musyn, robstab, robgain o campagne RAS/Monte Carlo.
-
-Ripetibilità da una copia del checkout con MATLAB e i dati disponibili:
-
-    python tools/inventario_ristrutturazione.py snapshot
-    matlab -batch "addpath('tools'); audit_ristrutturazione_didattica"
-    python tools/inventario_ristrutturazione.py finalize
-
-L'inventario usa Git per l'audit dello sviluppo; questi strumenti non saranno
-dipendenze dell'esecuzione dello ZIP. Il controllo dei cinque test PR43 è
-ripetibile dalla branch PR43 con le dipendenze main presenti. Le directory
-temporanee dell'audit non costituiscono un pacchetto consegnabile.
-
-Riferimenti di sintassi consultati: documentazione ufficiale MathWorks
-[ureal](https://www.mathworks.com/help/robust/ref/ureal.html) e
-[lftdata](https://www.mathworks.com/help/robust/ref/inputoutputmodel.lftdata.html).
-Le formule della proposta sono derivate sopra e non attribuite alla
-documentazione né al progetto dei colleghi.
-
-## 10. Tracciabilità verso tutta la traccia ufficiale
-
-PASS storico indica evidenza preesistente conservata; non certifica
-automaticamente il nuovo pacchetto. Questa tabella dimostra la mappatura di
-tutti i requisiti e rende esplicite le coperture ancora pendenti.
-
-| Requisito della traccia | Fonte conservata in main | Nuova collocazione prevista | Stato corrente |
-|---|---|---|---|
-| Equazioni meccaniche e parametri nominali | src/model, sea_params_nominal; report cap.2 | 01, dinamica_sea; cap.2 | 78 regressioni includono fisica PASS |
-| Scelta equilibrio e linearizzazione | M2; report cap.3 | 01; cap.2 | Regressioni PASS, scelta invariata |
-| Attuatori secondo ordine e Padé1 | M3; report cap.4 | 01; cap.3 | Regressioni PASS |
-| Pochi parametri incerti motivati | M4, decisioni D-0007 e successive | 01; cap.3-5 | Storico conservato; S1 da approvare |
-| Misure e obiettivi quantitativi | M2/M5, specifiche, uscite C | parametri_sea, 01; cap.2/6 | Conservati, nessuna nuova taratura |
-| 1: LQG senza integratore, rumori e covarianze | M6, progetto_lqg; report cap.7 | 02; cap.7 | Regressioni PASS |
-| 1: LQG con integratore e motivazione | M7, progetto_lqgi; report cap.7 | 02; cap.7 | Regressioni PASS |
-| 1: MATLAB lineare/non lineare e RAS | m8, lqgi_validation, final_closure | 02/05; cap.11 | Storico conservato; nuova RAS NOT RUN |
-| 1: Simulink lineare/non lineare | student_originals, final_simulink_validation | interfacce; cap.11 | Storico conservato; nuovi SLX attesi |
-| 2: mixsyn e hinfsyn, stesso problema e confronto | script Hinf sezioni 5-8, campagne finali | 03; cap.8 | Sintesi storiche conservate |
-| 2: esplorazione hinfstruct/PID | fixed_PID e campagna m11 | 03; cap.8 | Conservati, nessuna nuova sintesi |
-| 2: robustezza parametrica e dinamica attuativa | m12/m14 e PR43 | 01/04; cap.10 | Nuovo confronto A/B NOT RUN |
-| 2: MATLAB/Simulink e RAS H-infinity | m15, final_closure, originali | 03/05, interfacce; cap.11 | Storico conservato; nuovo collaudo NOT RUN |
-| 3: mu-synthesis con D-K iteration | m13 e storia D-K | 04; cap.9 | Banca conservata; sintesi S1 NOT RUN |
-| 3: post-analisi mu | m14, audit robusti | 04; cap.10 | Storico conservato; A/B NOT RUN |
-| 3: eventuale rilassamento motivato | PR43, evidenze separate | 04; cap.9-10 | Nessun nuovo rilassamento approvato |
-| 3: MATLAB/Simulink non lineare e RAS mu | originali, final_closure, noise_redesign | 04/05, interfacce; cap.11 | Storico conservato; nuovo collaudo NOT RUN |
-| 4: confronto H-infinity/mu dei margini RS/RP | report cap.9/12; PR43 comparison.csv | 04/05; cap.10/12 | Nuova tabella A/B NOT RUN |
-| 5: circa dieci impianti comuni e metriche | final_closure/practical_robustness, PR43 | 05; cap.11 | Campioni storici conservati; nuovi NOT RUN |
-| Relazione con grafici, frammenti di codice e controllori | report di main e appendici | documenti/; dodici capitoli | Base protetta; riorganizzazione NOT RUN |
-| Codice MATLAB/Simulink consegnabile | quattro script, dati, SLX originali | sei numerati e ZIP autonomo | Struttura proposta; ZIP NOT RUN |
-| Presentazione di massimo 20 minuti | 23 slide/18:47 stimati main; PR43 separata | documenti/; nuovo focus | Da aggiornare e provare dal vivo |
-
-## 11. Prossimo passo e problemi aperti
-
-È richiesta una sola decisione raggruppata su **S1 (§6)**. Se approvata,
-le fasi 2-8 procederanno con i sei numerati, conservazione della baseline,
-verifiche A/B e collaudo dello ZIP estratto in un percorso indipendente.
-Se modificata, cambieranno soltanto le parti scientifiche indicate dagli studenti.
-
-Restano aperti: scelta scientifica S1, nuovi margini robusti, eventuali
-rilassamenti, collaudo del pacchetto, nuovi SLX degli studenti e prova orale.
-Nessun successo numerico futuro viene anticipato. Nessun merge eseguito.
+NS/NP/RS/RP restano proprietà separate. Il passaggio A/B cambia l'insieme
+ammesso, mentre la risintesi cambia K: le due operazioni sono riportate
+separatamente. I margini precedenti M4 e i nuovi S1 non sono intercambiabili.

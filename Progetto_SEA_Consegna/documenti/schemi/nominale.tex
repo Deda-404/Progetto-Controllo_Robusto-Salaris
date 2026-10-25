@@ -1,0 +1,10 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b](h) at (0,0) {$H_0(s)$\\$\omega_n=40,\ \zeta=0.8$};
+\node[b](d) at (4,0) {$D_{p0}(s)$\\$\tau_0=15$ ms};
+\draw[->](-3,0)--node[above]{$u_i$}(h);\draw[->](h)--(d);
+\draw[->](d)--node[above]{$\tau_i$}(7,0);
+
+\end{tikzpicture}

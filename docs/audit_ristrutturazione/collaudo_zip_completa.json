@@ -1,0 +1,20 @@
+{
+  "mode": "completa",
+  "seconds": 396.1955692,
+  "MATLAB": "26.2.0.3386108 (R2026b)",
+  "passed": 50,
+  "failed": 0,
+  "incomplete": 0,
+  "externalDirectory": "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_S1_collaudo_h_augzsa\\Progetto_SEA_Consegna",
+  "controllerNames": [
+    "LQG",
+    "LQGI",
+    "Hinf1",
+    "Hinf2",
+    "PID",
+    "Kmu",
+    "Mu_A",
+    "Mu_B"
+  ],
+  "loadedRepositoryPaths": false
+}

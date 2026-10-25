@@ -61,3 +61,6 @@ __pycache__/
 /delivery/Consegna_SEA_2026-10-13.zip
 /delivery/Consegna_SEA_Rumore_Orale_2026-10-13/
 /delivery/Consegna_SEA_Rumore_Orale_2026-10-13.zip
+
+# ZIP autonomo S1: sorgenti, dati e manifest sono versionati separatamente
+/delivery/Progetto_SEA_Consegna.zip

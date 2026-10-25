@@ -2361,3 +2361,37 @@ insieme. Conservati nominali, equilibrio, misure, pesi, obiettivi e banca
 dei sei controllori. Nessun nuovo rilassamento, controllore ridotto o
 candidato con rumore viene adottato. Accorpamento e pacchetto seguono solo
 la decisione degli studenti. Nessun merge e nessuna modifica degli SLX.
+
+## 2026-10-25 - Approvazione esplicita S1 e prosecuzione
+
+Stato: APPROVATA. Il messaggio degli studenti «approvo, continua
+nell'esecuzione» autorizza integralmente S1 (§6 del report del 25 ottobre):
+wn/zeta ±10% indipendenti per attuatore, tau noto 15 ms con Padé1 senza
+residuo aggiuntivo, meccanica nominale nel confronto principale, A
+parametrico e B concentrato diagonale, WI analitico specificato. Conservati
+baseline M4 e controllori. Autorizzati accorpamento, verifiche MATLAB,
+confronti, documentazione e collaudo dello ZIP autonomo. Nessun merge
+né modifica/riorganizzazione degli SLX. Eventuali nuovi rilassamenti
+scientifici sostanziali non sono inclusi nell'approvazione.
+
+## 2026-10-25 - S1 eseguito, sintesi separate e limiti conservati
+
+Stato: COMPLETE/PASS tecnico per la ristrutturazione autorizzata; prestazioni
+PARTIAL, nuova integrazione Simulink NOT RUN. Conservati Q/R, covarianze,
+equilibrio, misure, W1/W2/Mo e banca originale. La nuova D-K A ha ordine 88,
+la B ordine 32: entrambe superano NS/NP/RS/RP nei due modelli S1, senza
+rilassamenti. Restano candidati di studio; non vengono promossi al posto
+della banca. B è più conservativo per diversi K fissi ma qui più semplice
+nella sintesi finita. Non è una superiorità universale o un minimo globale.
+
+L'inclusione è provata sul box unitario. Non si impone un ordine universale
+dei margini oltre quel box. Il bound RP diretto Kmu/A resta invertito anche
+con m9, entrambi gli esiti conservati: la proprietà unitaria deriva da B,
+con solo lower=1 e upper da RS_A, senza riordinare i valori incoerenti.
+Mu_B mantiene Ts=1.985 s, DC=5.454% e guadagno rumore-comando circa 1.36e6:
+non soddisfa tutti i target e non è una soluzione operativa automaticamente
+preferita. Mu_A ha 6/15 convergenze RAS contro 15/15 di Mu_B.
+
+Il prefisso SEA è una correzione tecnica necessaria ai nomi MATLAB proposti
+con cifra iniziale. Nove file MATLAB totali, sei principali e tre ausiliari.
+Nuovi SLX riservati agli studenti; nessuna modifica agli originali.

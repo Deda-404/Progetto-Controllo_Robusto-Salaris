@@ -1,0 +1,12 @@
+\begin{tikzpicture}[>=Latex,thick,
+ b/.style={draw,rounded corners=1pt,minimum height=9mm,minimum width=18mm,align=center},
+ s/.style={draw,circle,inner sep=1pt,minimum size=5mm},font=\small]
+
+\node[b,minimum width=45mm,minimum height=18mm](n) at (0,0) {$N=F_l(P,K)$};
+\node[b,minimum width=38mm](d) at (0,2) {$\Delta_A$ oppure $\Delta_B$};
+\draw[->](n.north east)--(2.8,.9)--(2.8,2)--node[above]{$z_\Delta$}(d.east);
+\draw[->](d.west)--(-2.8,2)--(-2.8,.9)--node[above]{$w_\Delta$}(n.north west);
+\draw[->](-5,-.3)--node[above]{$w=[r;d]$}(n.west);\draw[->](n.east)--node[above]{$z_p$}(5,-.3);
+\node[align=center] at (0,-1.4) {RS: $\mu_\Delta(N_{11})$; RP: aggiunta del blocco fittizio di prestazione.};
+
+\end{tikzpicture}
