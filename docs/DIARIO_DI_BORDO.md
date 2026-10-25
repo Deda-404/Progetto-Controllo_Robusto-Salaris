@@ -3128,3 +3128,13 @@ Confronto con la copia collaudata completa: 26 file scientifici byte-identici;
 parametri_sea identico normalizzando la selezione rapida/completa e il solo
 fine-file. Nessuna modifica matematica. Nuovo ZIP e nuovo collaudo rapido
 50/50 PASS; hash definitivo nel manifest versionato.
+
+## 2026-10-25 - Pubblicazione per revisione, nessun merge
+
+Commit 60a7b39 pubblicato sul branch codex/ristrutturazione-didattica-sea.
+PR in bozza: https://github.com/Deda-404/Progetto_CR/pull/44. Main verificato
+ancora a 0ed5611. La PR43 resta una fonte precedente distinta, senza merge
+né chiusura automatica. Consegna ZIP locale definitiva: 32582050 byte,
+SHA-256 ebc5bb045d15bc2490a0e8c8c471798dec4862f63dd65fd86e701e0afec8f759.
+Sorgenti, dati, PDF, manifest e prove sono versionati. Nessuna nuova modifica
+scientifica o simulazione in questa registrazione conclusiva.
