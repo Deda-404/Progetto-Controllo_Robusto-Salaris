@@ -53,3 +53,19 @@ pur sopra uno. La RAS candidata è empirica, senza certificato Lyapunov
 mu. Perciò MuN1 resta una proposta verificata; gli studenti decidono
 se il vantaggio sul rumore compensi questi limiti. Nessun target M5
 è allentato e nessuna coppia è dichiarata hardware certificata.
+
+\medskip\noindent\textbf{Ambito delle garanzie dopo il confronto delle incertezze.}
+Gli esiti RS/RP delle baseline nelle tabelle precedenti restano riferiti
+al modello moltiplicativo storico. Il confronto aggiuntivo del Capitolo 9
+mantiene i tre controllori e il nominale: $H_\infty$ fallisce RS in
+entrambe le nuove rappresentazioni; $K_\mu$ e MuN1 mantengono NS/NP/RS/RP
+nel modello parametrico B, ma falliscono RS nell'inviluppo additivo A.
+Il risultato evidenzia la conservatività della concentrazione, non un
+peggioramento delle risposte nominali o dei controllori archiviati.
+La costruzione B include i ritardi costanti esatti entro gli intervalli
+dichiarati tramite un residuo dinamico stabile maggiorato analiticamente.
+Non estende la garanzia a jitter variabile, non linearità o saturazioni.
+Le bande nominali rimangono identiche fra A e B; nessun aumento della
+prestazione ottenibile è dimostrato senza nuove sintesi. Le scelte per
+ruolo, le criticità temporali e la decisione finale degli studenti
+restano accompagnate da questi limiti espliciti.

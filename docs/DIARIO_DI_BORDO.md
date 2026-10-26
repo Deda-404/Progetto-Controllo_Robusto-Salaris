@@ -3059,3 +3059,12 @@ Problemi preliminari corretti prima della validazione: percorsi relativi del run
 Quality gate implementazione: COMPLETE / PASS. Risultati negativi e intervallo RP non valido preservati. I dati sono separati; relazione e pubblicazione completate nel commit documentale successivo.
 
 Controllo supplementare prima del commit: le perturbazioni dinamiche critiche restituite da robstab/robgain sono stabili e proprie; le norme dei testimoni RS rispettano il relativo limite superiore. La suite dedicata passa da otto a nove test: 9/9 PASS, zero fallimenti o incompleti.
+
+
+## 2026-10-26 — Relazione conservativa e consegna del branch
+
+Il commit cbfec18 contiene implementazione, analisi, regressioni ed evidenze. Sono stati aggiunti ai soli capitoli 5, 9 e 12 derivazioni, due schemi non numerati e confronto dei controllori. Due frasi sulla copertura storica sono circoscritte ai campioni/frequenze e all'ammissibilità stabile. Ogni contenuto preesistente, compresi i risultati negativi, resta presente.
+
+Compilazione MiKTeX/latexmk del nuovo PDF separato: 111 pagine contro 108 della stessa base ricompilata. main.tex è identico; titoli, ordine, didascalie precedenti e 68 etichette numerate sono invariati. Un overflow iniziale nel nuovo paragrafo RP è stato corretto. Esito finale: zero overflow, zero riferimenti irrisolti o etichette duplicate; dieci avvisi hyperref su formule nei titoli erano già presenti nella base e non sono stati eliminati modificando i titoli. Controllo visivo delle pagine interessate PASS. Il PDF storico rimane identico.
+
+report/build_sea_uncertainty_table.py ricava le tabelle dai dati MATLAB; latex_audit.json registra i controlli. Quality gate relazione COMPLETE / PASS. La revisione resta una proposta sul branch dedicato: nessun merge e nessuna nuova sintesi. La pubblicazione è accompagnata dalla verifica dello SHA remoto.

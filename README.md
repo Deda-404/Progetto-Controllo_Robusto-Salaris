@@ -6,6 +6,8 @@ Fase A implementata sul branch codex/sea-incertezze-revisione-conservativa, dall
 
 MATLAB R2026b: 9 test dedicati e 16 regressioni PASS; default storico rieseguito. Mu78 e MuN1_82 mantengono RS/RP sul modello parametrico B e falliscono sul concentrato A; Hinf22 fallisce RS in entrambi. Il margine RP Hinf22/B ha estremi invertiti e non è accreditato. Nessuna nuova sintesi o promessa di aumento della banda.
 
+[Relazione aggiornata separata](report/Progetto_CR_Revisione_conservativa.pdf), 111 pagine: integrazioni nei capitoli 5, 9 e 12, titoli e numerazione preservati. [Branch per revisione](https://github.com/Deda-404/Progetto_CR/tree/codex/sea-incertezze-revisione-conservativa).
+
 261 archivi MAT/SLX/PDF preesistenti invariati; nuove evidenze separate in results/data/sea_incertezze_conservativa. Implementazione e verifica COMPLETE / PASS; accettazione scientifica circoscritta agli esiti e alle ipotesi dei singoli modelli. Nessun merge.
 
 ## Stato della revisione precedente con rumore

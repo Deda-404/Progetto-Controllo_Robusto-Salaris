@@ -2349,3 +2349,8 @@ Si conserva la base main 0ed5611, il modello moltiplicativo e ogni archivio. Si 
 B include il dominio fisico e A include B al raggio unitario; il residuo indipendente e la concentrazione aggiungono conservatività. Non si trasferiscono certificati dal modello storico né si identificano le scale dei margini con percentuali fisiche comuni. Le due µ superano RS/RP su B ma falliscono su A; si mantiene questo risultato senza tuning opportunistico. Hinf fallisce RS; il suo RP/B invertito resta non valido dopo retry.
 
 Il confronto mantiene K, nominale, pesi e protocollo esogeno per ciascun controllore. Nessuna nuova sintesi, modifica SLX, riduzione d'ordine o fase B. La banda nominale resta uguale: la migliore banda ottenibile richiederebbe un nuovo studio. Il default e le sezioni precedenti rimangono identici; il nuovo ramo è opzionale e i risultati sono separati.
+
+
+## 2026-10-26 — Conservazione della struttura editoriale
+
+Stato: IMPLEMENTATA / PASS. Gli approfondimenti restano nei paragrafi esistenti di 5, 9 e 12, con schemi e tabelle aggiuntivi non numerati. Si mantiene main.tex, compresa la data del frontespizio e le impostazioni; il PDF di revisione ha un nome distinto. La base e la revisione sono state compilate con lo stesso ambiente per confrontare numerazione e avvisi. Non si correggono i dieci warning hyperref preesistenti alterando titoli fuori perimetro. Il confronto delle etichette e l'audit visivo sostengono la conservazione dell'impostazione.

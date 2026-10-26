@@ -57,7 +57,7 @@ La classe dedicata confronta il corpo storico con il commit base tramite Git; il
 
 ## Quality gate
 
-- PASS: 8/9 test dedicati, 9/9 regressioni M4 e 7/7 regressioni rumore. La regressione dinamica dello script confronta coefficienti, controllori, tracking e risultati archiviati con la base.
+- PASS: 9/9 test dedicati, 9/9 regressioni M4 e 7/7 regressioni rumore. La regressione dinamica dello script confronta coefficienti, controllori, tracking e risultati archiviati con la base.
 - PASS: esecuzione reale del default, robstab/robgain e mussv storici, tre figure attese e RNG ripristinato. RS Hinf circa [0.026154,0.026207]; Mu78 RS [1.79980,1.80442], RP [1.67717,1.68066]. Non sono stati riscritti i MAT di origine.
 - PASS: nominale comune (scarto 1.05e-14); LFT meccanica (1.71e-14), attuative (1.44e-15), otto corner e 24 punti interni per verifica; perturbazione dinamica stabile non nulla e condivisa fra le costruzioni indipendenti.
 - PASS: pesi stabili/propri, zeri ammissibili, identità spettrale (errore 1.05e-14), bound analitico del ritardo. I rapporti campionati massimi 0.8848 e 0.3383 sono evidenza numerica e non la dimostrazione della copertura continua.
@@ -70,7 +70,7 @@ La classe dedicata confronta il corpo storico con il commit base tramite Git; il
 
 comparison.mat contiene modelli, pesi, sonde, controlli e audit completi; comparison.csv e validation.json sono i riepiloghi leggibili. I sei MAT individuali conservano gli output grezzi delle analisi, inclusi primo tentativo RP e retry; per la classificazione di validità dei limiti usare r.audits in comparison.mat. default_run.mat conserva il nuovo run storico separato. tests.csv, regression.csv, integrity.json e code_analyzer.json documentano i gate.
 
-Gli approfondimenti sono aggiunti soltanto ai capitoli 5, 9 e 12, senza nuovi titoli numerati o cambiamenti a main.tex. Il generatore report/build_sea_uncertainty_table.py legge i risultati MATLAB. Il PDF aggiornato è separato dal PDF storico; dettagli di compilazione e controllo visivo sono registrati nella voce successiva del diario.
+Gli approfondimenti sono aggiunti soltanto ai capitoli 5, 9 e 12, senza nuovi titoli numerati o cambiamenti a main.tex. Il generatore report/build_sea_uncertainty_table.py legge i risultati MATLAB. Il PDF aggiornato report/Progetto_CR_Revisione_conservativa.pdf è separato dal PDF storico: 111 pagine contro 108 della base ricompilata, zero overflow o riferimenti irrisolti, 68 etichette numerate invariate. I dieci avvisi hyperref su formule nei titoli sono identici alla base. Controllo visivo PASS sulle pagine modificate; dettagli in latex_audit.json e nel diario.
 
 Per rigenerare la tabella e compilare senza sovrascrivere l'elaborato storico:
 

@@ -1,0 +1,26 @@
+{
+  "pdf_pages": 111,
+  "baseline_source_pages": 108,
+  "stored_historical_pdf_pages": 108,
+  "historical_labels_unchanged": 68,
+  "overfull_boxes": 0,
+  "unresolved_references": 0,
+  "hyperref_warnings": 10,
+  "baseline_hyperref_warnings": 10,
+  "note": "Existing warnings about math in heading PDF bookmarks are unchanged; main.tex and headings preserved.",
+  "visually_reviewed_pdf_pages": [
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    65,
+    66,
+    67,
+    68,
+    93,
+    94,
+    95
+  ]
+}

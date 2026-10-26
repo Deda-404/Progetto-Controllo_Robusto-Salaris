@@ -10,6 +10,7 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 - Sei analisi robuste a controllori fissi: Mu78/MuN1 PASS su B, FAIL su A; Hinf FAIL su entrambi. RP Hinf/B numericamente non valido e segnalato.
 - 9 test dedicati, 16 regressioni e run storico reale PASS; 261 archivi immutati, nessuna sintesi o modifica Simulink.
 - Evidenze in una cartella separata, audit di integrità riproducibile e istruzioni di esecuzione.
+- Approfondimenti e schemi nei soli capitoli 5/9/12; tabella generata dai CSV MATLAB, PDF separato di 111 pagine. Titoli, indice e 68 etichette numerate invariati; zero overflow/riferimenti irrisolti. Dieci avvisi hyperref preesistenti identici alla compilazione della base.
 
 ## 2026-10-13 — Sintesi con rumore e orale finale
 

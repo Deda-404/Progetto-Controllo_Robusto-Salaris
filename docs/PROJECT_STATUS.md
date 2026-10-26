@@ -4,9 +4,9 @@ Implementazione e collaudo COMPLETE / PASS. Base main remoto 0ed5611; branch cod
 
 Risultati: NS/NP PASS per tutti; Mu78 e MuN1_82 PASS RS/RP su B parametrico (margini circa 1.26), FAIL su A concentrato. Hinf22 FAIL RS su entrambi; RP/B numerico NON VALIDATO per limiti invertiti, RP esclusa da RS. Bande nominali identiche. I certificati storici restano riferiti al modello moltiplicativo.
 
-8/9 test dedicati e 16/16 regressioni PASS; default µ reale eseguito con tre figure e RNG ripristinato. 261 archivi precedenti invariati. Code Analyzer: solo avviso di ramo opzionale disattivato, effettivamente collaudato. Accettazione scientifica PARTIAL rispetto a tutti gli insiemi e ai target preesistenti, senza occultare i FAIL.
+9/9 test dedicati e 16/16 regressioni PASS; default µ reale eseguito con tre figure e RNG ripristinato. 261 archivi precedenti invariati. Code Analyzer: solo avviso di ramo opzionale disattivato, effettivamente collaudato. Accettazione scientifica PARTIAL rispetto a tutti gli insiemi e ai target preesistenti, senza occultare i FAIL.
 
-Dettagli: docs/REVISIONE_SEA_INCERTEZZE.md. Dati: results/data/sea_incertezze_conservativa/. Relazione aggiornata e pubblicazione nel commit successivo; decisione sull'integrazione riservata agli studenti.
+Dettagli: docs/REVISIONE_SEA_INCERTEZZE.md. Dati: results/data/sea_incertezze_conservativa/. Relazione aggiornata separata: report/Progetto_CR_Revisione_conservativa.pdf, 111 pagine, compilazione e controllo visivo PASS. Main.tex, titoli e 68 etichette numerate invariati; dieci avvisi hyperref già presenti nella base, nessun nuovo overflow o riferimento irrisolto. Branch pronto per revisione; decisione sull’integrazione riservata agli studenti.
 
 ---
 

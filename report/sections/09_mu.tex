@@ -70,7 +70,9 @@ La rappresentazione finale per ciascun canale è
 $\Delta_{ai}$ è una dinamica scalare stabile ignota, rappresentata
 con \texttt{ultidyn}. I due canali sono indipendenti.
 Nell'analisi robusta si considera tutto questo insieme matematico,
-più ampio della sola lista di attuatori usata per il fit.
+definito dai blocchi stabili ammessi. La copertura dei moduli sulla griglia
+non basta a includervi i ritardi esatti: il limite dovuto allo zero
+di Pad\'e e la sua correzione additiva sono esplicitati nel Capitolo 5.
 
 \section{Raccogliere le incertezze in \texorpdfstring{$\Delta$}{Delta}}
 Le incertezze descritte hanno unità e natura diverse: una rigidezza
@@ -424,6 +426,67 @@ rispetto a circa 6\% della baseline, insieme a una moderata perdita
 di reiezione nominale della coppia. RP resta sopra uno, pur diminuendo.
 MuN1 è una proposta robusta verificata con compromessi; la baseline
 resta predefinita e l'adozione finale spetta agli studenti.
+
+
+\medskip\noindent\textbf{Confronto aggiuntivo delle rappresentazioni A e B.}
+Ricolleghiamo i tre controllori archiviati ai modelli del Capitolo 5:
+A concentrato additivo e B parametrico con residuo di Pad\'e.
+Non viene eseguita una nuova sintesi. Nominale, $W_e,W_u,M_o$,
+disturbo lato link e architettura 2-DoF rimangono gli stessi.
+Per $H_\infty$ e $K_\mu$ a 78 stati la mappa è
+$[r;d]\mapsto[z_e;z_u]$; per MuN1 conserviamo anche il suo $W_n$ e
+la mappa $[r;d;\nu]\mapsto[z_e;z_u]$. Il confronto A/B è quindi
+abbinato per ciascun controllore; le norme fra protocolli diversi
+non costituiscono una graduatoria omogenea.
+
+Le verifiche effettive \texttt{robstab} e \texttt{robgain(CL,1)}
+sono state eseguite in R2026b, con seed 20261026. Gli intervalli
+seguenti riguardano esclusivamente i due nuovi insiemi; non
+sostituiscono i margini storici riportati sopra.
+\input{generated/sea_uncertainty_comparison.tex}
+Le bande sono in rad/s, a $-3$ dB rispetto al guadagno DC della
+rispettiva diagonale nominale $r_i\mapsto q_i$; non sono bande
+multivariabili certificate in robustezza. Fra A e B la differenza
+massima è inferiore a $2\cdot10^{-9}$ rad/s. Cambiare rappresentazione
+dell'incertezza senza cambiare controllore non aumenta la banda nominale.
+
+Per $H_\infty$ parametrico, \texttt{robgain} restituisce limiti
+invertiti anche nel secondo tentativo. Quest'ultimo usa
+\texttt{MussvOptions='m9'} e fornisce
+$[0.0189754,0.0183284]$. Tale intervallo è conservato nei dati come
+\texttt{INCONCLUSIVE\_NUMERICAL}, non interpretato come margine;
+RP è comunque esclusa dal fallimento RS. Per le altre righe gli
+intervalli hanno estremi ordinati. I risultati negativi non sono
+corretti mediante tuning dei pesi o variazione delle specifiche.
+
+Entrambi i controllori $\mu$ certificano RS e RP su B, mentre su A
+il limite superiore RS è minore di uno. L'inviluppo concentrato
+ammette dinamiche che perdono le dipendenze fisiche fra parametri
+e residuo: il suo fallimento non dimostra instabilità della famiglia
+fisica, contenuta in B. Viceversa il PASS di B certifica la famiglia
+fisica lineare con ritardi costanti entro gli intervalli dichiarati,
+sotto le ipotesi di stabilità interna e ben posizione della LFT.
+Il modello moltiplicativo storico resta un insieme diverso, senza
+un'inclusione dedotta dal solo fit in modulo. Non confrontiamo i
+margini dei tre insiemi come percentuali fisiche equivalenti.
+
+Nello schema $N$--$\Delta$ già introdotto, A usa cinque porte incerte;
+B ne usa tredici, conservando due occorrenze condivise per ciascuna
+frequenza naturale. Per il protocollo senza rumore $N$ passa quindi
+da $9\times9$ a $17\times17$; per MuN1 le sei porte esogene danno
+rispettivamente $9\times11$ e $17\times19$. I blocchi fittizi di
+prestazione restano rispettivamente $4\times4$ e $6\times4$.
+Un maggiore numero di porte non equivale a una maggiore incertezza
+fisica: conta quali perturbazioni e correlazioni sono ammesse.
+
+Il calcolo dimostra la differenza fra le garanzie dei controllori
+fissati. Non quantifica la migliore prestazione ottenibile risintetizzando
+su A o B, né un eventuale guadagno di una decade nella banda:
+per affermarlo servirebbero nuove sintesi e nuove verifiche, escluse
+da questa fase. I target temporali e i limiti hardware preesistenti
+rimangono quelli documentati. Le evidenze sono separate in
+\path{results/data/sea_incertezze_conservativa/}; la sezione opzionale
+15 di \path{progetto_mu.m} ricostruisce modelli, verifiche e confronto.
 
 \subsection{Perché i controllori $H_\infty$ e $\mu$ possono avere un ordine elevato}
 L'ordine è il numero degli stati interni, distinto dall'ampiezza del comando
