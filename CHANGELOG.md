@@ -4,6 +4,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+## 2026-10-26 — Fase A: confronto conservativo delle incertezze
+
+- Aggiunta opzionale delle LFT manuali, residuo Padé analitico e peso additivo; default e corpo storico preservati.
+- Sei analisi robuste a controllori fissi: Mu78/MuN1 PASS su B, FAIL su A; Hinf FAIL su entrambi. RP Hinf/B numericamente non valido e segnalato.
+- 9 test dedicati, 16 regressioni e run storico reale PASS; 261 archivi immutati, nessuna sintesi o modifica Simulink.
+- Evidenze in una cartella separata, audit di integrità riproducibile e istruzioni di esecuzione.
+
 ## 2026-10-13 — Sintesi con rumore e orale finale
 
 - Nuova pianta nominata con encoder esogeni, tre H∞ e una μ separati; W1/W2/Mo, fisica e cinque incertezze conservati.

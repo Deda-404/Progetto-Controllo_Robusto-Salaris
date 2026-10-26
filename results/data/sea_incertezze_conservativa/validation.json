@@ -1,0 +1,304 @@
+{
+  "seed": 2.0261026E+7,
+  "release": "2026b",
+  "checks": {
+    "mechanicalNominal": 0,
+    "actuatorNominal": 8.8818011376440415E-16,
+    "commonNominal": 1.0465466360167443E-14,
+    "mechanicalSize": [
+      5,
+      7
+    ],
+    "actuatorSize": [
+      6,
+      6
+    ],
+    "factorRelativeError": 1.0455227765759487E-14,
+    "mechanicalMax": 1.7097434582517671E-14,
+    "actuatorMax": 1.4433027026067941E-15,
+    "sampledResidualRatio": 0.88482028174062577,
+    "sampledConcentratedRatio": 0.33825623640554564,
+    "mechanicalWellPosedMinimum": 0.9,
+    "delayWellPosedMinimum": 0.8,
+    "padeRHPZero": 133.33333333333334,
+    "multiplicativeResidue": -36.089408863096722,
+    "blocksA": [
+      {
+        "Name": "Delta_A1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ultidyn",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "Delta_A2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ultidyn",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "Jm1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "k1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "k2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      }
+    ],
+    "blocksB": [
+      {
+        "Name": "Delta_R1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ultidyn",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "Delta_R2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ultidyn",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "Jm1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "dT1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "dT2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "dw1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 2,
+        "Simplify": 2
+      },
+      {
+        "Name": "dw2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 2,
+        "Simplify": 2
+      },
+      {
+        "Name": "dz1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "dz2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "k1",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      },
+      {
+        "Name": "k2",
+        "Size": [
+          1,
+          1
+        ],
+        "Type": "ureal",
+        "Occurrences": 1,
+        "Simplify": 2
+      }
+    ],
+    "deltaSizes": [
+      [
+        5,
+        5
+      ],
+      [
+        13,
+        13
+      ]
+    ]
+  },
+  "comparison": [
+    {
+      "Controller": "Hinf22",
+      "Model": "A_concentrato",
+      "Protocol": "r,d -> ze,zu",
+      "Order": 22,
+      "NS": true,
+      "NominalNorm": 0.047460581255854506,
+      "NP": true,
+      "RS_lower": 0.0063316717911645545,
+      "RS_upper": 0.0063443465565878867,
+      "RS": "FAIL",
+      "RP_lower": 0.00603461012872442,
+      "RP_upper": 0.0060749495106729307,
+      "RP": "FAIL_FROM_RS",
+      "Bandwidth1": 2.6896220720294934,
+      "Bandwidth2": 2.6365166981833918
+    },
+    {
+      "Controller": "Hinf22",
+      "Model": "B_parametrico",
+      "Protocol": "r,d -> ze,zu",
+      "Order": 22,
+      "NS": true,
+      "NominalNorm": 0.047460581528339749,
+      "NP": true,
+      "RS_lower": 0.028877547873072815,
+      "RS_upper": 0.028968715181458764,
+      "RS": "FAIL",
+      "RP_lower": 0.018975409054472172,
+      "RP_upper": 0.018328401263652594,
+      "RP": "FAIL_FROM_RS; MARGIN_INVALID",
+      "Bandwidth1": 2.6896220713234613,
+      "Bandwidth2": 2.63651669744411
+    },
+    {
+      "Controller": "Mu78",
+      "Model": "A_concentrato",
+      "Protocol": "r,d -> ze,zu",
+      "Order": 78,
+      "NS": true,
+      "NominalNorm": 0.63467962757307561,
+      "NP": true,
+      "RS_lower": 0.60851053064969673,
+      "RS_upper": 0.61028622369692509,
+      "RS": "FAIL",
+      "RP_lower": 0.6071295127953561,
+      "RP_upper": 0.61070048611595751,
+      "RP": "FAIL_FROM_RS",
+      "Bandwidth1": 2.3932992901417318,
+      "Bandwidth2": 2.5694472446461218
+    },
+    {
+      "Controller": "Mu78",
+      "Model": "B_parametrico",
+      "Protocol": "r,d -> ze,zu",
+      "Order": 78,
+      "NS": true,
+      "NominalNorm": 0.63467962744283923,
+      "NP": true,
+      "RS_lower": 1.2657918872301281,
+      "RS_upper": 1.27360860495112,
+      "RS": "PASS",
+      "RP_lower": 1.2646792896961003,
+      "RP_upper": 1.2723846577032465,
+      "RP": "PASS",
+      "Bandwidth1": 2.3932992913022328,
+      "Bandwidth2": 2.5694472463652138
+    },
+    {
+      "Controller": "MuN1_82",
+      "Model": "A_concentrato",
+      "Protocol": "r,d,nu -> ze,zu",
+      "Order": 82,
+      "NS": true,
+      "NominalNorm": 0.67345798420844138,
+      "NP": true,
+      "RS_lower": 0.68375398725991976,
+      "RS_upper": 0.68775610290681477,
+      "RS": "FAIL",
+      "RP_lower": 0.63832545846423516,
+      "RP_upper": 0.64000481849567481,
+      "RP": "FAIL_FROM_RS",
+      "Bandwidth1": 2.3250172908096078,
+      "Bandwidth2": 2.5942480966108463
+    },
+    {
+      "Controller": "MuN1_82",
+      "Model": "B_parametrico",
+      "Protocol": "r,d,nu -> ze,zu",
+      "Order": 82,
+      "NS": true,
+      "NominalNorm": 0.67345798420942138,
+      "NP": true,
+      "RS_lower": 1.2650173465447325,
+      "RS_upper": 1.2699911138506539,
+      "RS": "PASS",
+      "RP_lower": 1.2637454950315676,
+      "RP_upper": 1.2677508440280869,
+      "RP": "PASS",
+      "Bandwidth1": 2.325017290817708,
+      "Bandwidth2": 2.5942480966116026
+    }
+  ]
+}

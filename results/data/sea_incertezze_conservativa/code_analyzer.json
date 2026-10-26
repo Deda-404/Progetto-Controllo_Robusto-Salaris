@@ -1,0 +1,14 @@
+{
+  "file1": {
+    "id": "UNRCH",
+    "message": "This statement (and possibly following ones) cannot be reached.",
+    "fix": 0,
+    "line": 527,
+    "column": [
+      5,
+      73
+    ]
+  },
+  "file2": [],
+  "file3": []
+}

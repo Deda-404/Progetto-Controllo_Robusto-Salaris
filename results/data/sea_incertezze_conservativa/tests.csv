@@ -1,0 +1,10 @@
+Name,Passed,Failed,Incomplete,Duration,Details
+test_sea_uncertainty_comparison/mechanicalLFT,1,0,0,21.0525947,
+test_sea_uncertainty_comparison/actuatorLFT,1,0,0,0.1671102,
+test_sea_uncertainty_comparison/commonNominalAndConnections,1,0,0,0.1313509,
+test_sea_uncertainty_comparison/analyticWeights,1,0,0,0.3735438,
+test_sea_uncertainty_comparison/physicalSamplesAndDelayLimits,1,0,0,0.0296422,
+test_sea_uncertainty_comparison/historicalExecutionUnchanged,1,0,0,0.0577858,
+test_sea_uncertainty_comparison/fixedControllerResults,1,0,0,0.1852048,
+test_sea_uncertainty_comparison/criticalDynamicPerturbationsAdmissible,1,0,0,0.203697,
+test_sea_uncertainty_comparison/invalidPerformanceIntervalNotCertified,1,0,0,0.3203131,

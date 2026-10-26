@@ -1,0 +1,117 @@
+Prima esecuzione adattiva. La classificazione esplicita del margine RP invertito e riportata nel riepilogo finale comparison.csv/comparison.mat; gli intervalli grezzi qui sono conservati.
+
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058117.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                           OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    _________________________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018125    0.018162    "FAIL"    0.017254    0.017194    "FAIL DA RS; MARGINE RP NON VALIDATO"    "ARCHIVIATA DEL PROGETTO"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "ARCHIVIATA DEL PROGETTO"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+
+Simulink: Mu precedente (Kmu), ordine 78; MuN1, ordine 82.
+Precedente: A 78x78, B 78x4, C 2x78, D 2x4, x0 78x1.
+MuN1: A 82x82, B 82x4, C 2x82, D 2x4, x0 82x1.
+State-Space precedente: A_Mu_precedente, B_Mu_precedente, C_Mu_precedente, D_Mu_precedente; IC x0_Mu_precedente.
+State-Space MuN1: A_Mu_rumore, B_Mu_rumore, C_Mu_rumore, D_Mu_rumore; IC x0_Mu_rumore.
+Ingressi [r1;r2;qmis1;qmis2] (rad), uscite [u1;u2] (N m); feedback gia incluso.
+MuN1: margini RS/RP archiviati >1; compromessi di tracking e target M5 parziali.
+SEA comparison Hinf22 / A_concentrato: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [0.00633167,0.00634435] FAIL; RP [0.00603461,0.00607495] FAIL_FROM_RS
+SEA comparison Hinf22 / B_parametrico: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [0.0288775,0.0289687] FAIL; RP [0.0189754,0.0183284] FAIL_FROM_RS
+SEA comparison Mu78 / A_concentrato: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [0.608511,0.610286] FAIL; RP [0.60713,0.6107] FAIL_FROM_RS
+SEA comparison Mu78 / B_parametrico: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [1.26579,1.27361] PASS; RP [1.26468,1.27238] PASS
+SEA comparison MuN1_82 / A_concentrato: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [0.683754,0.687756] FAIL; RP [0.638325,0.640005] FAIL_FROM_RS
+SEA comparison MuN1_82 / B_parametrico: starting adaptive analysis.
+[Warning: The following block inputs are not used: d1,d2.]
+[> In DynamicSystem/connect (line 199)
+In run_comparison_script>confrontoIncertezzeSEA (line 661)
+In run_comparison_script (line 527)
+In run (line 100)
+In run_capture (line 3)
+In run_comparison (line 2)
+In run (line 100)]
+RS [1.26502,1.26999] PASS; RP [1.26375,1.26775] PASS
+    Controller           Model               Protocol          Order     NS      NominalNorm     NP      RS_lower     RS_upper        RS       RP_lower     RP_upper            RP           Bandwidth1    Bandwidth2
+    ___________    _________________    ___________________    _____    _____    ___________    _____    _________    _________    ________    _________    _________    ________________    __________    __________
+
+    {'Hinf22' }    {'A_concentrato'}    {'r,d -> ze,zu'   }     22      true      0.047461      true     0.0063317    0.0063443    {'FAIL'}    0.0060346    0.0060749    {'FAIL_FROM_RS'}      2.6896        2.6365
+    {'Hinf22' }    {'B_parametrico'}    {'r,d -> ze,zu'   }     22      true      0.047461      true      0.028878     0.028969    {'FAIL'}     0.018975     0.018328    {'FAIL_FROM_RS'}      2.6896        2.6365
+    {'Mu78'   }    {'A_concentrato'}    {'r,d -> ze,zu'   }     78      true       0.63468      true       0.60851      0.61029    {'FAIL'}      0.60713       0.6107    {'FAIL_FROM_RS'}      2.3933        2.5694
+    {'Mu78'   }    {'B_parametrico'}    {'r,d -> ze,zu'   }     78      true       0.63468      true        1.2658       1.2736    {'PASS'}       1.2647       1.2724    {'PASS'        }      2.3933        2.5694
+    {'MuN1_82'}    {'A_concentrato'}    {'r,d,nu -> ze,zu'}     82      true       0.67346      true       0.68375      0.68776    {'FAIL'}      0.63833         0.64    {'FAIL_FROM_RS'}       2.325        2.5942
+    {'MuN1_82'}    {'B_parametrico'}    {'r,d,nu -> ze,zu'}     82      true       0.67346      true         1.265         1.27    {'PASS'}       1.2637       1.2678    {'PASS'        }       2.325        2.5942

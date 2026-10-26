@@ -3044,3 +3044,18 @@ Nuova consegna: 449 file copiati e compressi con SHA-256 verificati, otto SLX in
 Pubblicati i commit 505f2da (sintesi, dati e verifiche) e abce30a (elaborati, orale e consegna) sul branch codex/sintesi-robusta-rumore-e-orale-finale. Upload 8/8 nuovi oggetti LFS, 232 MB. Aperta PR #41 in bozza: https://github.com/Deda-404/Progetto_CR/pull/41; verificati open, draft=true, merged=false e base main a4b3817. Adozione finale e merge riservati agli studenti.
 
 Manifest finale: 475 file selezionati, hash PASS. Pacchetto nuovo: 449 file, ZIP 687580148 byte, SHA-256 8b97fbad0d6c8a1102b03a78f980d48f5ea2e6d5a3993e9102eabff31cf9af8c, verifica dei contenuti compressi PASS. Originali SLX, 197 MAT/SLX precedenti, quattro script e codice fisico invariati; audit PDF e collaudi conservati. Il commit conclusivo registra soltanto pubblicazione e manifest: non altera PDF, controllori, dati o ZIP. Restano prova orale dal vivo, valutazione dei compromessi e verifica hardware con dati di targa reali.
+
+
+## 2026-10-26 — Revisione SEA fase A: implementazione e verifica
+
+Autorizzazione esplicita a implementare, committare e pubblicare senza merge. Base remoto 0ed5611, checkout iniziale pulito; nuovo branch codex/sea-incertezze-revisione-conservativa. L'archivio non tracciato delivery/Progetto_SEA_Consegna.zip, comparso durante il lavoro, è estraneo alla revisione e resta intatto.
+
+Sono state aggiunte le due LFT manuali, le rappresentazioni A/B e i pesi analitici nello script µ e nel costruttore del peso esistente. Il ramo è disattivato per default. Sei nuove analisi a controllori fissi, seed 20261026, R2026b: Mu78 e MuN1 PASS RS/RP su B e FAIL su A; Hinf FAIL su entrambi. RP Hinf/B ha limiti invertiti anche con retry m9: margine NON VALIDATO, esito RP escluso dal FAIL RS. Non è stata eseguita musyn.
+
+Controlli di nominale, porte, occorrenze ripetute, pesi e campioni PASS; scarto meccanico massimo 1.71e-14, attuativo 1.44e-15. Otto test dedicati e sedici regressioni PASS. Default storico rieseguito con tre figure, RNG ripristinato e margini consolidati confermati. Il confronto in modalità archiviata con la base conserva esattamente coefficienti, controllori, tracking e risultati. I 240 MAT, 19 SLX e 2 PDF precedenti sono identici alla base Git/LFS.
+
+Problemi preliminari corretti prima della validazione: percorsi relativi del runner temporaneo, sostituzioni dei flag non coincidenti con gli spazi del sorgente e due stringhe fprintf con newline letterali. Le prime prove si sono fermate senza produrre risultati scientifici. Il controllo del PDF ha richiesto UTF-8 esplicito nella console Python. Le segnalazioni iniziali Code Analyzer di crescita di un array sono state eliminate; rimane il solo UNRCH previsto per il flag opzionale falso, ramo effettivamente eseguito dai test. Nessuno di questi avvii preliminari è accreditato come validazione.
+
+Quality gate implementazione: COMPLETE / PASS. Risultati negativi e intervallo RP non valido preservati. I dati sono separati; relazione e pubblicazione completate nel commit documentale successivo.
+
+Controllo supplementare prima del commit: le perturbazioni dinamiche critiche restituite da robstab/robgain sono stabili e proprie; le norme dei testimoni RS rispettano il relativo limite superiore. La suite dedicata passa da otto a nove test: 9/9 PASS, zero fallimenti o incompleti.

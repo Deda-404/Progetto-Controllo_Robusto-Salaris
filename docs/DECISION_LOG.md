@@ -2338,3 +2338,14 @@ Criterio di riduzione encoder: almeno dieci volte picco/RMS per ciascuno dei tre
 Riutilizzare i dieci impianti congelati. RAS applicata allo stato completo dei candidati, con coordinate bilanciate e ode15s/Jacobiano soltanto nello studio MATLAB per superare limiti numerici: primo HinfN3 ode23t incompleto conservato. μ: 25 convergenze, gate Lyapunov FAIL; nessun certificato attribuito. Arresti H∞ restano ignoti, non non convergenti.
 
 PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliati mediante ritagli LaTeX, senza ridisegnare connessioni. Due TXT nella preparazione studenti del nuovo pacchetto. Nessun Umax documentato: risultati progettuali/statistici, nessuna certificazione hardware. Pubblicare branch e PR per revisione, senza merge.
+
+
+## 2026-10-26 — LFT manuali e confronto A/B a controllori fissati
+
+Stato: APPROVATA dall'autorizzazione alla fase A; implementata e verificata. Responsabile: Alessio.
+
+Si conserva la base main 0ed5611, il modello moltiplicativo e ogni archivio. Si affiancano una LFT manuale della meccanica e una degli attuatori con frequenza naturale ripetuta, smorzamento, ritardo costante e residuo Padé stabile. La concentrazione additiva A risolve il problema di ammissibilità introdotto dall'inversione dello zero RHP del Padé. I pesi provengono da disuguaglianze sull'intero box; i campioni verificano il codice senza sostituire la prova analitica.
+
+B include il dominio fisico e A include B al raggio unitario; il residuo indipendente e la concentrazione aggiungono conservatività. Non si trasferiscono certificati dal modello storico né si identificano le scale dei margini con percentuali fisiche comuni. Le due µ superano RS/RP su B ma falliscono su A; si mantiene questo risultato senza tuning opportunistico. Hinf fallisce RS; il suo RP/B invertito resta non valido dopo retry.
+
+Il confronto mantiene K, nominale, pesi e protocollo esogeno per ciascun controllore. Nessuna nuova sintesi, modifica SLX, riduzione d'ordine o fase B. La banda nominale resta uguale: la migliore banda ottenibile richiederebbe un nuovo studio. Il default e le sezioni precedenti rimangono identici; il nuovo ramo è opzionale e i risultati sono separati.

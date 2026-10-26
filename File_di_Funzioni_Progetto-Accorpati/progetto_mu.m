@@ -6,6 +6,8 @@ ricalcolaAnalisi=true;  % robstab, robgain e mussv: puo richiedere alcuni minuti
 ricalcolaSintesi=false; % true: nuova musyn, con le 5 iterazioni del progetto
 mostraFigure=true;
 esportaControlloriRumore=true; % false: salta soltanto la nuova sezione 14
+confrontaIncertezze=false; % true: sezione 15, nuovi modelli e analisi separate
+analizzaConfrontoIncertezze=true; % false: sole verifiche dei nuovi modelli
 % UNRCH annota soltanto rami disattivati dai flag iniziali;
 % le modalita alternativa e di risintesi sono verificate separatamente.
 % Default: analisi effettiva dei due controllori gia ottenuti nel progetto.
@@ -517,6 +519,15 @@ if esportaControlloriRumore
     fprintf('MuN1: margini RS/RP archiviati >1; compromessi di tracking e target M5 parziali.\n');
 end
 
+%% 15 - Confronto conservativo concentrato/parametrico (opzionale)
+% Le sezioni precedenti e i loro risultati restano la baseline moltiplicativa.
+% Nessuna sintesi: si leggono Khinf, Kmu e MuN1 gia archiviati.
+% I nuovi MAT/CSV sono separati; il default non costruisce i nuovi modelli.
+if confrontaIncertezze
+    risultatiConfrontoIncertezze=confrontoIncertezzeSEA(radice,Gmech, ... %#ok<UNRCH>
+        Khinf,Kmu,W1,W2,Mo,analizzaConfrontoIncertezze);
+end
+
 %% Funzioni locali: verifiche ausiliarie e tabella delle iterazioni
 function errore=erroreMappe(a,b,w)
 errore=max(abs(freqresp(a,w)-freqresp(b,w)),[],'all');
@@ -540,4 +551,211 @@ for k=1:n
 end
 storia=array2table(dati,'VariableNames', ...
     {'Iterazione','PeakMu','GammaScalata','PeakMuFit','OrdineK','OrdineFitMassimo'});
+end
+
+function r=confrontoIncertezzeSEA(root,Gmech,Kh,Km,W1,W2,Mo,runAnalysis) %#ok<DEFNU>
+% Independent manual LFTs and common physical box. No historical MAT writes.
+oldPath=path; pathCleanup=onCleanup(@()path(oldPath));
+addpath(genpath(fullfile(root,'src')),fullfile(root,'analysis/uncertainty'), ...
+    fullfile(root,'controllers/hinf'),fullfile(root,'analysis/noise_redesign'));
+oldRng=rng; rngCleanup=onCleanup(@()rng(oldRng)); seed=20261026; rng(seed,'twister');
+u=uncertainty_params_m4; weights=fit_actuator_uncertainty_weight([],u,"additiveComparison");
+w=logspace(-4,5,1601);
+[Mm,Dm,Gmanual]=meccanicaManualeSEA(Gmech);
+[M1,D1,B1,auto1]=attuatoreManualeSEA(1,weights);
+[M2,D2,B2,auto2]=attuatoreManualeSEA(2,weights);
+GA=append(weights.H0*ss(tf([-weights.nominal(3)/2 1],[weights.nominal(3)/2 1])) ...
+    +weights.WA*ultidyn('Delta_A1',[1 1]), ...
+    weights.H0*ss(tf([-weights.nominal(3)/2 1],[weights.nominal(3)/2 1])) ...
+    +weights.WA*ultidyn('Delta_A2',[1 1]));
+GB=append(B1,B2); plants=cell(2,1);
+for j=1:2
+    if j==1, act=GA; else, act=GB; end
+    act.InputName={'u1','u2'}; act.OutputName={'tau1','tau2'};
+    plants{j}=connect(Gmech,act,{'u1','u2','d1','d2'},{'q1','q2'});
+end
+% Both views retain the original disturbance location and common nominal.
+P={hinf_final_2dof_plant(plants{1},W1,W2,Mo), ...
+   hinf_final_2dof_plant(plants{2},W1,W2,Mo)};
+checks=struct('mechanicalNominal',erroreRelativoSEA(Gmanual.NominalValue,Gmech.NominalValue,w), ...
+    'actuatorNominal',erroreRelativoSEA(B1.NominalValue,auto1.NominalValue,w), ...
+    'commonNominal',erroreRelativoSEA(P{1}.NominalValue,P{2}.NominalValue,w), ...
+    'mechanicalSize',size(Mm),'actuatorSize',size(M1),'factorRelativeError',weights.factorRelativeError);
+% Corners plus common seeded physical probes; no comparison of realization entries.
+mechProbes=[2*(dec2bin(0:7,3)-'0')-1;2*rand(24,3)-1]; mechError=zeros(size(mechProbes,1),1);
+for j=1:size(mechProbes,1)
+    v=mechProbes(j,:);
+    a=usubs(Gmanual,'dk1',v(1),'dk2',v(2),'dJ',v(3));
+    b=usubs(Gmech,'k1',50*(1+.1*v(1)),'k2',40*(1+.1*v(2)),'Jm1',.01*(1+.1*v(3)));
+    mechError(j)=erroreRelativoSEA(a,b,w);
+end
+actProbes=[2*(dec2bin(0:7,3)-'0')-1;2*rand(24,3)-1]; actError=zeros(size(actProbes,1),2);
+residualRatio=zeros(size(actProbes,1),1); concentratedRatio=residualRatio;
+for j=1:size(actProbes,1)
+    v=actProbes(j,:); pp=weights.nominal.*(1+[.1 .1 .2].*v);
+    % Same physical parameters in the independently constructed state equations.
+    for i=1:2
+        if i==1, manual=B1; automatic=auto1; else, manual=B2; automatic=auto2; end
+        probe=struct; probe.(sprintf('dw%d',i))=v(1); probe.(sprintf('dz%d',i))=v(2);
+        probe.(sprintf('dT%d',i))=v(3); probe.(sprintf('Delta_R%d',i))=tf(.4,[.02 1]);
+        physicalProbe=struct; physicalProbe.(sprintf('wn%d',i))=pp(1);
+        physicalProbe.(sprintf('zeta%d',i))=pp(2); physicalProbe.(sprintf('Td%d',i))=pp(3);
+        physicalProbe.(sprintf('Delta_R%d',i))=probe.(sprintf('Delta_R%d',i));
+        actError(j,i)=erroreRelativoSEA(usubs(manual,probe),usubs(automatic,physicalProbe),w);
+    end
+    z=1i*w; H=pp(1)^2./(z.^2+2*pp(2)*pp(1)*z+pp(1)^2);
+    delay=exp(-pp(3)*z); pade=(1-pp(3)*z/2)./(1+pp(3)*z/2);
+    wr=reshape(freqresp(weights.WR,w),1,[]); wa=reshape(freqresp(weights.WA,w),1,[]);
+    nominal=reshape(freqresp(GA.NominalValue(1,1),w),1,[]);
+    % Below 1e-2 rad/s the exact cubic limit avoids subtractive cancellation.
+    good=w>=1e-2;
+    residualRatio(j)=max(abs((delay(good)-pade(good))./wr(good)));
+    concentratedRatio(j)=max(abs((H.*delay-nominal)./wa));
+end
+checks.mechanicalMax=max(mechError); checks.actuatorMax=max(actError,[],'all');
+checks.sampledResidualRatio=max(residualRatio); checks.sampledConcentratedRatio=max(concentratedRatio);
+checks.mechanicalWellPosedMinimum=.9; checks.delayWellPosedMinimum=.8;
+checks.padeRHPZero=2/weights.nominal(3);
+checks.multiplicativeResidue=-2*checks.padeRHPZero*exp(-2);
+assert(max([checks.mechanicalNominal checks.actuatorNominal checks.commonNominal ...
+    checks.mechanicalMax checks.actuatorMax])<1e-8,'SEACompare:Equivalence','LFT equivalence failed.');
+assert(checks.sampledResidualRatio<=1+1e-8 && checks.sampledConcentratedRatio<=1+1e-8);
+assert(isequal(size(Mm),[5 7]) && isequal(size(M1),[6 6]) && isequal(size(M2),[6 6]));
+[~,DA,blocksA]=lftdata(P{1}); [~,DB,blocksB]=lftdata(P{2});
+checks.blocksA=blocksA; checks.blocksB=blocksB; checks.deltaSizes={size(DA),size(DB)};
+assert(sum(string({blocksB.Type})=="ureal")==9 && sum(string({blocksB.Type})=="ultidyn")==2);
+r=struct('seed',seed,'release',version('-release'),'weights',weights,'checks',checks, ...
+    'mechanicalLFT',Mm,'mechanicalDelta',Dm,'actuatorLFTs',{{M1,M2}}, ...
+    'actuatorDeltas',{{D1,D2}},'plants',{plants},'P',{P}, ...
+    'mechanicalProbes',mechProbes,'actuatorProbes',actProbes, ...
+    'mechanicalErrors',mechError,'actuatorErrors',actError,'audits',{{}}, ...
+    'scope','Fixed controllers, common nominal and performance maps; no synthesis; constant delays');
+if ~runAnalysis, disp(checks); return; end
+folder=fullfile(root,'results/data/sea_incertezze_conservativa');
+if ~isfolder(folder),mkdir(folder);end
+noise=load(fullfile(root,'results/data/noise_redesign/mu_noise_01.mat'),'candidate');
+controllers={Kh,Km,noise.candidate.K}; names=["Hinf22","Mu78","MuN1_82"];
+forms=["A_concentrato","B_parametrico"]; rows=cell(0,15); audits=cell(3,2);
+for k=1:3
+    for j=1:2
+        problem=P{j}; protocol="r,d -> ze,zu";
+        if k==3
+            problem=noise_generalized_plant(plants{j},W1,W2,Mo,noise.candidate.Wn);
+            protocol="r,d,nu -> ze,zu";
+        end
+        file=fullfile(folder,names(k)+"_"+forms(j)+".mat");
+        if isfile(file)
+            saved=load(file,'audit'); audit=saved.audit;
+            assert(isequaln(audit.K,controllers{k}) && isequaln(audit.P,problem) ...
+                && audit.seed==seed && strcmp(audit.release,version('-release')), ...
+                'SEACompare:Checkpoint','Checkpoint differs; do not overwrite.');
+        else
+            fprintf('SEA comparison %s / %s: starting adaptive analysis.\n',names(k),forms(j));
+            audit=analisiFissataSEA(problem,controllers{k},seed);
+            save(file,'audit','-v7');
+        end
+        audit.RPBoundsOutcome=esitoVerificatoSEA(audit.RP);
+        if audit.RPBoundsOutcome=="INCONCLUSIVE_NUMERICAL"
+            audit.RPOutcome="INCONCLUSIVE_NUMERICAL";
+            if audit.RSOutcome=="FAIL",audit.RPOutcome="FAIL_FROM_RS; MARGIN_INVALID";end
+        end
+        audits{k,j}=audit;
+        % Same nominal map for both models; -3dB relative to each DC diagonal gain.
+        nominal=plants{j}.NominalValue; nominal.InputName={'u1','u2','d1','d2'};
+        K=controllers{k}; K.InputName={'r1','r2','q1','q2'}; K.OutputName={'u1','u2'};
+        T=connect(nominal,K,{'r1','r2','d1','d2'},{'q1','q2'});
+        T=T(:,1:2);
+        bw=[bandwidth(T(1,1)) bandwidth(T(2,2))];
+        rows(end+1,:)={char(names(k)),char(forms(j)),char(protocol),order(controllers{k}), ...
+            audit.NS,audit.nominalNorm,audit.NP,audit.RS.LowerBound,audit.RS.UpperBound, ...
+            char(audit.RSOutcome),audit.RP.LowerBound,audit.RP.UpperBound,char(audit.RPOutcome),bw(1),bw(2)}; %#ok<AGROW>
+        fprintf('RS [%g,%g] %s; RP [%g,%g] %s\n',audit.RS.LowerBound,audit.RS.UpperBound, ...
+            audit.RSOutcome,audit.RP.LowerBound,audit.RP.UpperBound,audit.RPOutcome);
+    end
+end
+r.audits=audits;
+r.comparison=cell2table(rows,'VariableNames',{'Controller','Model','Protocol','Order','NS','NominalNorm','NP', ...
+    'RS_lower','RS_upper','RS','RP_lower','RP_upper','RP','Bandwidth1','Bandwidth2'});
+assert(max(abs(r.comparison.NominalNorm(1:2:end)-r.comparison.NominalNorm(2:2:end)))<1e-6);
+assert(max(abs(r.comparison.Bandwidth1(1:2:end)-r.comparison.Bandwidth1(2:2:end)))<1e-6);
+assert(max(abs(r.comparison.Bandwidth2(1:2:end)-r.comparison.Bandwidth2(2:2:end)))<1e-6);
+save(fullfile(folder,'comparison.mat'),'r','-v7');
+writetable(r.comparison,fullfile(folder,'comparison.csv'));
+summary=struct('seed',seed,'release',r.release,'checks',checks,'comparison',table2struct(r.comparison));
+fid=fopen(fullfile(folder,'validation.json'),'w'); cleanup=onCleanup(@()fclose(fid));
+fprintf(fid,'%s',jsonencode(summary,PrettyPrint=true)); disp(r.comparison);
+end
+
+function [M,Delta,G]=meccanicaManualeSEA(reference)
+p=sea_params_nominal; nominal=reference.NominalValue;
+A=nominal.A; B=nominal.B; C=nominal.C;
+qbar=[pi/2;0]; coupling=p.m2*p.l1*p.l2*cos(qbar(2)); distal=p.m2*p.l2^2;
+Mass=[(p.m1+p.m2)*p.l1^2+distal+2*coupling,distal+coupling;distal+coupling,distal];
+Kr=.1*p.Ks; Jr=.1*p.Jm(1,1)*[1;0];
+Bw=[zeros(2,3);Mass\[Kr zeros(2,1)];zeros(2,3);-p.Jm\[Kr Jr]];
+Cv=[-eye(2),zeros(2),eye(2),zeros(2);A(7,:)];
+Dvw=[zeros(2,3);Bw(7,:)]; Dvu=[zeros(2,4);B(7,:)];
+M=ss(A,[Bw B],[Cv;C],[Dvw Dvu;zeros(2,7)]);
+Delta=blkdiag(ureal('dk1',0,'Range',[-1 1]),ureal('dk2',0,'Range',[-1 1]),ureal('dJ',0,'Range',[-1 1]));
+G=lft(Delta,M);
+end
+
+function [M,Delta,G,automatic]=attuatoreManualeSEA(i,f)
+w0=f.nominal(1); z0=f.nominal(2); T0=f.nominal(3);
+% Row coordinates [x_a,v_a,h,w_w1,w_w2,w_z,w_T,u].
+E=eye(8); x=E(1,:); v=E(2,:); h=E(3,:); u=E(8,:);
+a=w0*(u-x+.1*E(4,:)); b=a-2*z0*(v+.1*E(6,:));
+vdot=w0*(b+.1*E(5,:)); hdot=2/T0*(x-h)-.2*E(7,:);
+dx=[v;vdot;hdot]; outputs=[u-x;b;v;hdot;x;2*h-x];
+core=ss(dx(:,1:3),dx(:,4:8),outputs(:,1:3),outputs(:,4:8));
+core.InputName={'ww1','ww2','wz','wT','u'};
+core.OutputName={'vw1','vw2','vz','vT','vR','yp'};
+res=f.WR;res.InputName={'wR'};res.OutputName={'er'};
+M=connect(core,res,sumblk('y = yp + er'),{'ww1','ww2','wz','wT','wR','u'}, ...
+    {'vw1','vw2','vz','vT','vR','y'});
+dw=ureal(sprintf('dw%d',i),0,'Range',[-1 1]);
+dz=ureal(sprintf('dz%d',i),0,'Range',[-1 1]);
+dT=ureal(sprintf('dT%d',i),0,'Range',[-1 1]);
+dR=ultidyn(sprintf('Delta_R%d',i),[1 1]);
+Delta=blkdiag(dw,dw,dz,dT,dR); G=lft(Delta,M);
+wn=ureal(sprintf('wn%d',i),w0,'Percentage',10);
+zeta=ureal(sprintf('zeta%d',i),z0,'Percentage',10);
+Td=ureal(sprintf('Td%d',i),T0,'Percentage',20);
+H=uss([0 1;-wn^2 -2*zeta*wn],[0;wn^2],[1 0],0);
+Pade=uss(-2/Td,2/Td,2,-1);
+automatic=H*(Pade+f.WR*dR);
+end
+
+function e=erroreRelativoSEA(a,b,w)
+x=freqresp(a,w); y=freqresp(b,w);
+e=max(abs(x-y),[],'all')/max(1,max(abs(y),[],'all'));
+end
+
+function a=analisiFissataSEA(P,K,seed)
+a=struct('P',P,'K',K,'seed',seed,'release',version('-release'));
+a.CL=lft(P,K); a.NS=isstable(a.CL.NominalValue);
+a.nominalNorm=norm(a.CL.NominalValue,inf); a.NP=a.NS && a.nominalNorm<1;
+rng(seed,'twister'); timer=tic;
+[a.RS,a.rsWorst,a.rsInfo]=robstab(a.CL);
+a.rsSeconds=toc(timer); timer=tic;
+[a.RP,a.rpWorst,a.rpInfo]=robgain(a.CL,1);
+if a.RP.LowerBound>a.RP.UpperBound
+    a.rpInitial=a.RP; rng(seed,'twister');
+    [a.RP,a.rpWorst,a.rpInfo]=robgain(a.CL,1,robOptions('MussvOptions','m9'));
+end
+a.rpSeconds=toc(timer);
+a.RSOutcome=esitoVerificatoSEA(a.RS); a.RPOutcome=esitoVerificatoSEA(a.RP);
+if a.RSOutcome=="FAIL",a.RPOutcome="FAIL_FROM_RS";end
+[M,D,blocks]=lftdata(a.CL); a.blocks=blocks; a.deltaSize=size(D);
+a.nominalLFTError=erroreRelativoSEA(lft(D,M).NominalValue,a.CL.NominalValue,logspace(-4,5,801));
+a.rsWitnessStable=isstable(usubs(a.CL,a.rsWorst));
+a.rpWitnessNorm=norm(usubs(a.CL,a.rpWorst),inf);
+end
+
+function s=esitoVerificatoSEA(m)
+if ~isfinite(m.LowerBound) || isnan(m.UpperBound) || m.LowerBound>m.UpperBound
+    s="INCONCLUSIVE_NUMERICAL";
+else
+    s=esitoMargine(m);
+end
 end

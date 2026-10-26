@@ -1,0 +1,130 @@
+Running test_sea_uncertainty_comparison
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058117.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                           OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    _________________________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018125    0.018162    "FAIL"    0.017254    0.017194    "FAIL DA RS; MARGINE RP NON VALIDATO"    "ARCHIVIATA DEL PROGETTO"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "ARCHIVIATA DEL PROGETTO"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+
+Simulink: Mu precedente (Kmu), ordine 78; MuN1, ordine 82.
+Precedente: A 78x78, B 78x4, C 2x78, D 2x4, x0 78x1.
+MuN1: A 82x82, B 82x4, C 2x82, D 2x4, x0 82x1.
+State-Space precedente: A_Mu_precedente, B_Mu_precedente, C_Mu_precedente, D_Mu_precedente; IC x0_Mu_precedente.
+State-Space MuN1: A_Mu_rumore, B_Mu_rumore, C_Mu_rumore, D_Mu_rumore; IC x0_Mu_rumore.
+Ingressi [r1;r2;qmis1;qmis2] (rad), uscite [u1;u2] (N m); feedback gia incluso.
+MuN1: margini RS/RP archiviati >1; compromessi di tracking e target M5 parziali.
+Incertezze fisiche dichiarate M4:
+    Parametro    Nominale    Minimo    Massimo
+    _________    ________    ______    _______
+
+      "k1"           50         45         55
+      "k2"           40         36         44
+      "Jm1"        0.01      0.009      0.011
+
+Pianta: 16 stati nominali, cinque blocchi incerti; scarto 0.
+Hinf: NS=1, NP=1, norma nominale 0.04746058117.
+Struttura normalizzata:
+       Blocco         Tipo       Occorrenze
+    ____________    _________    __________
+
+    "Delta_act1"    "ultidyn"        1
+    "Delta_act2"    "ultidyn"        1
+    "Jm1"           "ureal"          1
+    "k1"            "ureal"          1
+    "k2"            "ureal"          1
+
+MUSYN ARCHIVIATA DEL PROGETTO: ordine 78, obiettivo 0.8838095576.
+    Iterazione    PeakMu     GammaScalata    PeakMuFit    OrdineK    OrdineFitMassimo
+    __________    _______    ____________    _________    _______    ________________
+
+        1          5.1412       5.7186         5.1953       24              36
+        2          1.7042       3.1706         2.2735       76              32
+        3         0.91369       2.2159         1.2488       72              32
+        4         0.89969       1.2343          1.075       76              34
+        5         0.88381       1.0718        0.95897       78              32
+
+Migliore PeakMu 0.8838095576, iterazione 5 su 5.
+    Controllore     Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper                     RP                           OrigineAnalisi
+    ____________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    _____________________________________    _________________________
+
+    "Hinf 2 DoF"      22      true       0.047461       true     0.018125    0.018162    "FAIL"    0.017254    0.017194    "FAIL DA RS; MARGINE RP NON VALIDATO"    "ARCHIVIATA DEL PROGETTO"
+    "Mu 2 DoF"        78      true        0.63468       true       1.7998      1.8044    "PASS"      1.6772      1.6807    "PASS"                                   "ARCHIVIATA DEL PROGETTO"
+
+Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.
+
+Simulink: Mu precedente (Kmu), ordine 78; MuN1, ordine 82.
+Precedente: A 78x78, B 78x4, C 2x78, D 2x4, x0 78x1.
+MuN1: A 82x82, B 82x4, C 2x82, D 2x4, x0 82x1.
+State-Space precedente: A_Mu_precedente, B_Mu_precedente, C_Mu_precedente, D_Mu_precedente; IC x0_Mu_precedente.
+State-Space MuN1: A_Mu_rumore, B_Mu_rumore, C_Mu_rumore, D_Mu_rumore; IC x0_Mu_rumore.
+Ingressi [r1;r2;qmis1;qmis2] (rad), uscite [u1;u2] (N m); feedback gia incluso.
+MuN1: margini RS/RP archiviati >1; compromessi di tracking e target M5 parziali.
+             mechanicalNominal: 0
+               actuatorNominal: 8.8818e-16
+                 commonNominal: 1.0465e-14
+                mechanicalSize: [5 7]
+                  actuatorSize: [6 6]
+           factorRelativeError: 1.0455e-14
+                 mechanicalMax: 1.7097e-14
+                   actuatorMax: 1.4433e-15
+          sampledResidualRatio: 0.8848
+      sampledConcentratedRatio: 0.3383
+    mechanicalWellPosedMinimum: 0.9000
+         delayWellPosedMinimum: 0.8000
+                   padeRHPZero: 133.3333
+         multiplicativeResidue: -36.0894
+                       blocksA: [5×1 struct]
+                       blocksB: [11×1 struct]
+                    deltaSizes: {[5 5]  [13 13]}
+
+.........
+Done test_sea_uncertainty_comparison
+__________
+
+
+ans =
+
+  1×9 TestResult array with properties:
+
+    Name
+    Passed
+    Failed
+    Incomplete
+    Duration
+    Details
+
+Totals:
+   9 Passed, 0 Failed, 0 Incomplete.
+   22.5212 seconds testing time.

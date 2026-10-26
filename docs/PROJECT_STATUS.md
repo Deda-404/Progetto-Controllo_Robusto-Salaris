@@ -1,3 +1,15 @@
+# Stato corrente — 26.10.2026, revisione conservativa SEA fase A
+
+Implementazione e collaudo COMPLETE / PASS. Base main remoto 0ed5611; branch codex/sea-incertezze-revisione-conservativa. LFT manuali meccanica/attuatori, pesi analitici e sei analisi robuste implementati come ramo opzionale; nessuna nuova sintesi, nessuna fase B, nessun merge.
+
+Risultati: NS/NP PASS per tutti; Mu78 e MuN1_82 PASS RS/RP su B parametrico (margini circa 1.26), FAIL su A concentrato. Hinf22 FAIL RS su entrambi; RP/B numerico NON VALIDATO per limiti invertiti, RP esclusa da RS. Bande nominali identiche. I certificati storici restano riferiti al modello moltiplicativo.
+
+8/9 test dedicati e 16/16 regressioni PASS; default µ reale eseguito con tre figure e RNG ripristinato. 261 archivi precedenti invariati. Code Analyzer: solo avviso di ramo opzionale disattivato, effettivamente collaudato. Accettazione scientifica PARTIAL rispetto a tutti gli insiemi e ai target preesistenti, senza occultare i FAIL.
+
+Dettagli: docs/REVISIONE_SEA_INCERTEZZE.md. Dati: results/data/sea_incertezze_conservativa/. Relazione aggiornata e pubblicazione nel commit successivo; decisione sull'integrazione riservata agli studenti.
+
+---
+
 # Stato corrente — 13.10.2026, revisione con rumore
 
 Implementazione, collaudo ed elaborati COMPLETE/PASS; accettazione scientifica PARTIAL. Tre H∞ con rumore esplicito nominalmente stabili ma RS/RP FAIL, nessuna promozione. MuN1 (82 stati) mantiene NS/NP/RS/RP: RS [1.84622,1.88174], RP [1.59634,1.60036]. Picco μ non lineare 108.526→2.25091 N m (48.21 volte), RMS 12.8223→1.35740 (9.446 volte). Rumore encoder isolato: oltre dieci volte in picco/RMS in tutti i tre seed.

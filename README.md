@@ -1,5 +1,15 @@
 # Controllo robusto di un manipolatore SEA a due giunti
 
+## Revisione conservativa delle incertezze — 26.10.2026
+
+Fase A implementata sul branch codex/sea-incertezze-revisione-conservativa, dalla base main 0ed5611. LFT manuale meccanica e attuativa, modello concentrato additivo e confronto a controllori fissati sono nella sezione opzionale 15 di progetto_mu.m. Il default resta invariato. [Istruzioni, risultati e limiti](docs/REVISIONE_SEA_INCERTEZZE.md).
+
+MATLAB R2026b: 9 test dedicati e 16 regressioni PASS; default storico rieseguito. Mu78 e MuN1_82 mantengono RS/RP sul modello parametrico B e falliscono sul concentrato A; Hinf22 fallisce RS in entrambi. Il margine RP Hinf22/B ha estremi invertiti e non è accreditato. Nessuna nuova sintesi o promessa di aumento della banda.
+
+261 archivi MAT/SLX/PDF preesistenti invariati; nuove evidenze separate in results/data/sea_incertezze_conservativa. Implementazione e verifica COMPLETE / PASS; accettazione scientifica circoscritta agli esiti e alle ipotesi dei singoli modelli. Nessun merge.
+
+## Stato della revisione precedente con rumore
+
 Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.
 
 [PR #41 — revisione con rumore e orale finale](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza; ramo e otto nuovi oggetti Git LFS pubblicati, nessun merge.
