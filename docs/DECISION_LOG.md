@@ -2338,3 +2338,7 @@ Criterio di riduzione encoder: almeno dieci volte picco/RMS per ciascuno dei tre
 Riutilizzare i dieci impianti congelati. RAS applicata allo stato completo dei candidati, con coordinate bilanciate e ode15s/Jacobiano soltanto nello studio MATLAB per superare limiti numerici: primo HinfN3 ode23t incompleto conservato. μ: 25 convergenze, gate Lyapunov FAIL; nessun certificato attribuito. Arresti H∞ restano ignoti, non non convergenti.
 
 PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliati mediante ritagli LaTeX, senza ridisegnare connessioni. Due TXT nella preparazione studenti del nuovo pacchetto. Nessun Umax documentato: risultati progettuali/statistici, nessuna certificazione hardware. Pubblicare branch e PR per revisione, senza merge.
+
+## 2026-10-31 — A/B attuativi e percorso didattico unico
+
+Accettata nell'incarico la riduzione alle due tipologie wn/zeta, indipendenti per giunto, ±10%. Ritardo noto e Padé comune: restrizione esplicita, non una conclusione sperimentale. Pesi prestazionali e nominale conservati. Scelto fitting di ordine minimo con copertura continua dei campioni e limite all'eccesso; non si assume inclusione globale A in B. I quattro script originali diventano il percorso autorevole con tre script didattici aggiuntivi e helper riusati. La consegna copia questi sorgenti. I risultati precedenti restano storici. Motivazioni e alternative in REVISIONE_DEFINITIVA.md.

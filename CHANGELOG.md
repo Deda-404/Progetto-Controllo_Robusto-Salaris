@@ -4,6 +4,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+## 2026-10-31 — Revisione definitiva A/B, primo consolidamento
+
+- Modellazione attuativa parametrica e concentrata nello stesso percorso accorpato, nominale e controllori originali conservati.
+- Campioni comuni, LFT esplicita, fitting e copertura dinamica continua dei casi provati; nessuna inclusione globale presunta.
+- Sintesi e confronti separati dai risultati storici; limiti e fallimenti registrati in docs/REVISIONE_DEFINITIVA.md.
+- Relazione, collaudo integrato e consegna in completamento sul medesimo branch.
+
 ## 2026-10-13 — Sintesi con rumore e orale finale
 
 - Nuova pianta nominata con encoder esogeni, tre H∞ e una μ separati; W1/W2/Mo, fisica e cinque incertezze conservati.
