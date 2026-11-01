@@ -655,3 +655,20 @@ energia Coriolis, contributo mEE*J'*J e gravita mEE*g*Jy').
 Gate meccanica COMPLETE/PASS. Il primo fit additivo non soddisfa il criterio
 di conservativita: lavoro A/B PARTIAL, errore conservato in log di sviluppo;
 nessuna garanzia precedente trasferita.
+
+## 2026-11-01 — Ritardi reali e modello concentrato additivo
+
+Sei ureal attuativi indipendenti: wn 40 rad/s ±10%, zeta 0.8 ±10%,
+td 15 ms ±20%; stesso ureal m_EE in A/B. Padé a uno stato,
+ordine della pianta A fisso a 14. Candidati ritardo ±10/20/30%:
+scarti additivi 0.0344/0.0683/0.1016 e di fase a 40 rad/s 3.1/6.2/9.2 gradi.
+Scelto ±20%: variazione sensibile ma moderata, ipotesi non misurata.
+Con td=18 ms gli errori moltiplicativi diretto/inverso hanno poli RHP
++133.3/+111.1; forma additiva stabile/propria. Peso dal fit su 29 drive
+(20 dai dieci manipolatori, 8 vertici SISO, nominale); hold-out 30 campioni.
+Un'inversione in spazio di stato del peso strettamente proprio ha introdotto
+artefatti numerici: corretta eseguendo la normalizzazione in forma razionale.
+Nessun rilassamento del criterio di copertura o di eccesso mediano 1.6.
+Ordine selezionato 3: copertura 0.98037, eccesso mediano 1.0205,
+hold-out 0.8788; LFT e ricostruzione B dei campioni completate senza errori.
+Gate modellazione COMPLETE/PASS; copertura globale non dimostrata.
