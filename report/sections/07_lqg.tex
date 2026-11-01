@@ -1,5 +1,17 @@
 \chapter{Controllo LQG e LQGI}
 \section{Obiettivo e architettura}
+
+\paragraph*{Attuatori incerti: esito corrente.}
+Le CARE e il principio di separazione riproducono i coefficienti di main.
+Il confronto A/B valuta gli stessi LQG/LQGI con quattro encoder:
+entrambi superano RS nei due modelli, ma falliscono NP e dunque RP
+sul costo comune 2-DoF. Questo non contraddice il progetto LQR.
+Le covarianze assunte dallo stimatore vengono confrontate su cinque
+valori con la stessa sequenza fisica di rumore; aumentare il peso
+del rumore di misura rallenta lo stimatore e riduce qui il comando RMS.
+I disturbi costanti e le piante fisiche condivise sono confrontati
+nei Capitoli 10--12, mantenendo esplicita la misura rumorosa integrata.
+
 Il regolatore usa il modello nominale completo a 14 stati e le quattro misure encoder
 $y=[\Delta q^T,\Delta\theta^T]^T$. Le velocità e gli stati interni degli attuatori
 non sono misurati. LQR progetta il feedback supponendo lo stato disponibile;

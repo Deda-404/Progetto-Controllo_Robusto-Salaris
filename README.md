@@ -1,54 +1,94 @@
 # Controllo robusto di un manipolatore SEA a due giunti
 
-Alessio de Dato (635256) e Valerio Rebechi (722224), 13.10.2026. Revisione con rumore esplicito completata in MATLAB/Simulink R2026b 26.2.0.3386108: 141 regressioni, sette test dedicati, quattro script invariati e otto nuovi run abbinati PASS. I 197 MAT/SLX preesistenti restano identici. Branch `codex/sintesi-robusta-rumore-e-orale-finale`, da main `a4b3817` dopo il merge della PR #40; nessun merge nella revisione corrente.
-
-[PR #41 — revisione con rumore e orale finale](https://github.com/Deda-404/Progetto_CR/pull/41) aperta in bozza; ramo e otto nuovi oggetti Git LFS pubblicati, nessun merge.
-
-La baseline rimane predefinita. Tre nuovi H∞ di ordine 22 riducono il rumore ma falliscono RS/RP. Il nuovo μ, MuN1 di ordine 82, supera NS/NP/RS/RP e resta una proposta per la revisione degli studenti: nel Simulink non lineare il picco passa da 108.526 a 2.25091 N m e il massimo RMS per canale da 12.8223 a 1.35740 N m. I rapporti sono 48.21 e 9.446. Nel protocollo encoder isolato, picco e RMS migliorano oltre dieci volte in ciascuno dei tre seed.
-
-Il compromesso resta esplicito: il tracking μ ha Ts=1.558/1.482 s e offset 8.243%/2.192%; l'offset q1 peggiora rispetto alla baseline e la reiezione del disturbo è leggermente peggiore. RS è [1.84622,1.88174], RP [1.59634,1.60036], per il modello incerto dichiarato. I dieci impianti congelati sono stabili con MuN1; la griglia RAS ha 25 convergenze empiriche, senza certificato Lyapunov numericamente accreditato. Nessun limite di coppia hardware documentato consente una certificazione fisica.
-
-## Elaborati e preparazione
-
-- [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf), 108 pagine; [sorgente](report/main.tex).
-- [Presentazione PDF](presentation/Progetto_CR_Presentazione.pdf), 23 slide con schemi Simulink autentici lineare e non lineare.
-- [Discorso completo](presentation/Presentazione_orale.txt): 2237 parole, alternanza Alessio/Valerio e 25 domande in appendice; 18:47 stimati a 125 parole/minuto inclusi 44 s di cambi slide.
-- [Quaderno dello studio del rumore](docs/Prova_di_Soluzione_Rumore_di_Misura.txt) e [tabella di accettazione](docs/ACCETTAZIONE_RUMORE_E_ORALE.md).
-- [Note di regia](presentation/SPEAKER_NOTES.md), [tempi](presentation/OUTLINE_AND_TIMING.md) e [istruzioni di consegna](delivery/README.md).
-
-I due TXT sono materiali di preparazione degli studenti; il pacchetto li colloca in `preparazione_studenti/`. Gli allegati scientifici rimangono PDF, sorgenti, dati e modelli. Il pacchetto precedente resta conservato.
-
-## Modelli, controllori e prove
-
-Il modello ha otto stati meccanici e 14 con attuatori. La baseline comprende LQG (14), LQGI (16), H∞ 1-DoF (18), H∞ 2-DoF (22), PID (4) e Kμ (78). I quattro script didattici in `File_di_Funzioni_Progetto-Accorpati/` conservano i default e i dati consolidati.
-
-Lo studio separato è in `analysis/noise_redesign/`, con [istruzioni riproducibili](analysis/noise_redesign/README.md). Usa W1, W2, Mo, fisica e incertezze originali, aggiungendo soltanto gli ingressi encoder esogeni e Wn. I candidati, i nuovi margini, i tre seed/otto scenari e gli otto run sono in `results/data/noise_redesign/`. Le tre figure di confronto sono in `report/figures/noise_redesign/`; gli schemi autentici provengono da `report/figures/student_exports/`.
-
-H∞ lineare mantiene feedback ideale: verifica l'interfaccia e non certifica attenuazione encoder. H∞ non lineare e i due μ ricevono misure rumorose. Encoder SLX correlati, seed 20260826; studio MATLAB indipendente con tre seed diversi. Picchi Scope, picchi su scansione fra campioni e RMS dei due protocolli conservano significati distinti. Gaussiane non limitate e prove finite non garantiscono un massimo universale.
+Alessio de Dato (635256) e Valerio Rebechi (722224). Revisione definitiva A/B,
+1 novembre 2026. Il progetto conserva modello nominale, controllori originali,
+indice della relazione e otto modelli Simulink; concentra lo studio sulle
+incertezze dei due attuatori.
 
 ## Esecuzione
 
-Servono MATLAB/Simulink R2026b, Control System, Robust Control e Symbolic Math Toolbox. Dalla radice:
+MATLAB R2026b 26.2.0.3386108, Control System Toolbox e Robust Control Toolbox.
+Per gli SLX serve Simulink. Dalla radice:
 
 ```matlab
-addpath(genpath('analysis'),genpath('controllers'),genpath('src'),'simulink');
-run_noise_synthesis('hinf');
-run_noise_synthesis('mu');
-validate_noise_candidates;
-audit_noise_robustness;
-run_noise_simulink;
-validate_noise_plants;
-export_noise_redesign;
-r=runtests('tests/noiseRedesignTest.m'); assertSuccess(r);
+run_all                 % verifica rapida; sintesi e campagne onerose caricate
+run_all('completa')      % rigenera sintesi, analisi, 150 prove RAS e 28 run SLX
 ```
 
-Le sintesi e le simulazioni riusano i checkpoint verificati; la RAS ha istruzioni dedicate nel README dello studio. `setup_student_originals('mu','noise_mu1')` e l'analogo H∞ selezionano i candidati solo tramite variabili esterne; senza secondo argomento si carica la baseline. Per ripetere i quattro default e l'intera regressione senza sovrascrivere i MAT storici usare una copia isolata del checkout, come nel collaudo registrato in `results/data/noise_redesign/regression/`.
+Non servono Symbolic Math Toolbox né un Workspace preparato manualmente.
+La rapida dichiara i dati caricati e ripete modello, fitting, CARE, campioni,
+risposte, rumore e una verifica RAS locale. La completa richiede diversi minuti.
+I PASS software e i FAIL scientifici sono distinti nei risultati.
 
-```text
-python tools/build_noise_redesign_documents.py
-python tools/audit_oral_timing.py
-powershell -File tools/build_m18_latex.ps1
-python tools/build_delivery_manifest.py --check
-```
+## Percorso operativo unico
 
-Gli otto SLX devono coincidere sempre con `simulink/student_originals_manifest.json`. Nessun blocco, selettore, solver, rumore o callback è stato modificato. L'acquisizione Scope usa una API interna R2026b; su altra release può servire Print to Figure. Git LFS è necessario per i buffer Scope voluminosi. Drive rimane in sola lettura. Restano revisione degli studenti, decisione sull'adozione e prova orale dal vivo.
+| Componente | Funzione |
+|---|---|
+| run_all.m | Unico ingresso corrente, sette script in ordine |
+| File_di_Funzioni_Progetto-Accorpati/modello_sea.m | Equilibrio, meccanica, drive, confronto con main |
+| incertezze_attuatori.m | A/B, campioni, LFT, scostamenti, peso |
+| progetto_lqg.m; progetto_lqgi.m | CARE, osservatore, integratore e verifiche |
+| progetto_hinf_tre_controllori.m | Sensibilità mista, 2-DoF e PID |
+| progetto_mu.m | Due D–K e post-analisi a K fissato |
+| confronto_ras.m | Dieci impianti comuni, rumore, non lineare e RAS |
+| parametri_sea.m | Configurazione unica |
+| interconnessione_sea.m; dinamica_sea.m; simula_sea.m | Tre funzioni condivise per i calcoli |
+| verifica_sea.m; collaudo_simulink.m | Verifiche scientifiche e SLX |
+| dati/banca_validata.mat | Coefficienti originali, provenienza in tools/prepara_banca_definitiva.m |
+| risultati/ | Evidenze e grafici del percorso corrente |
+
+I nomi abbreviati della tabella appartengono alla cartella degli script accorpati.
+Le funzioni condivise evitano duplicazioni delle equazioni e delle connessioni.
+Non si aggiungono al path i vecchi alberi analysis, controllers e src.
+Essi conservano campagne M4 e approfondimenti storici, citati come tali nella
+relazione; non sono ingressi alternativi del progetto corrente.
+Solo quattro helper meccanici di src/model sono richiesti dai MATLAB Function
+degli SLX e vengono copiati nella consegna.
+
+## Risultati e limiti
+
+A: frequenza naturale e smorzamento ±10%, indipendenti fra i due attuatori,
+quattro ureal. B: due ultidyn SISO indipendenti con peso ricavato dalla stessa
+famiglia. Meccanica nominale, ritardo noto 15 ms e Padé comune di ordine uno.
+Il fitting di ordine uno copre dinamicamente i 25 casi SISO provati
+(max norma normalizzata 0.980392); non dimostra inclusione dell'intero box.
+
+LQG/LQGI mantengono RS su A e B, ma falliscono il costo prestazionale comune.
+Hinf2 e i PID falliscono RS. Kmu e MuN1 superano RS/RP su entrambi i modelli.
+La D–K A limitata a tre iterazioni fallisce NP; la D–K B supera RS/RP ma
+amplifica fortemente il rumore. Non si conclude che cambiare descrizione
+migliori fisicamente un controllore fissato.
+
+RAS: 150 prove, 117 convergenze empiriche, 24 mancate convergenze,
+9 divergenze osservate, nessun timeout o errore numerico nella campagna finale.
+Sono sezioni finite della regione di attrazione, non certificati globali.
+I picchi fra campioni mostrano limiti che il solo campionamento a 2 ms nasconde.
+Nessuna saturazione hardware è stata inventata.
+
+## Elaborati, consegna e verifiche
+
+- [Relazione PDF](report/Progetto_CR_Relazione_finale.pdf) e [sorgente](report/main.tex).
+- [Presentazione PDF](presentation/Progetto_CR_Presentazione.pdf), 23 slide.
+- [Discorso aggiornato](presentation/Presentazione_orale.txt) e [tempi stimati](presentation/OUTLINE_AND_TIMING.md).
+- [Consegna autonoma ZIP](delivery/Consegna_Progetto_SEA.zip): estrarre e lanciare run_all.
+- [Metodo, fonti, risultati e matrice R01–R20](docs/REVISIONE_DEFINITIVA.md).
+- [Stato](docs/PROJECT_STATUS.md), [diario](docs/DIARIO_DI_BORDO.md) e [decisioni](docs/DECISION_LOG.md).
+
+Gli otto SLX originali sono invariati. collaudo_simulink assegna il Model
+Workspace in memoria, esclude le callback che ripristinerebbero il nominale
+e acquisisce gli Scope; chiude senza salvare. Il test corrente dura 2 s
+per combinazione. Non equivale a una certificazione hardware o a tutti
+gli esperimenti MATLAB. Gli estratti Scope sono diradati; i picchi salvati
+e il controllo di finitezza usano l'acquisizione integrale.
+
+Rigenerazione degli elaborati: python tools/esporta_definitiva.py, quindi
+pdflatex su report/main.tex e presentation/main.tex (due passaggi), copiando
+i PDF ai nomi finali già presenti. python tools/consegna_definitiva.py
+confeziona gli stessi sorgenti e verifica SHA-256 e ZIP. Python e LaTeX
+servono per modificare gli elaborati, non per usare la consegna.
+
+Drive resta in sola lettura. [Branch pubblicato](https://github.com/Deda-404/Progetto_CR/tree/codex/revisione-definitiva-sea-salaris)
+e [PR #46](https://github.com/Deda-404/Progetto_CR/pull/46) raccolgono il
+lavoro eseguito. Tutti i requisiti R01–R20 sono PASS; i FAIL prestazionali
+e le verifiche fuori ambito rimangono distinti. PR pronta per revisione,
+senza merge.

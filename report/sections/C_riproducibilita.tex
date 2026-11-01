@@ -1,76 +1,57 @@
 \chapter{Riproducibilità}
 \section{Verifiche senza ripetere le sintesi}
-Dalla radice del repository, in MATLAB R2026b con Simulink, Control System,
-Robust Control e Symbolic Math Toolbox:
+Dalla radice oppure dalla cartella estratta, in MATLAB R2026b:
 \begin{verbatim}
-setenv('CR_RUN_SCOPE','verify'); run_all
+run_all
+% oppure:
+run_all('rapida')
 \end{verbatim}
-Il runner verifica modello, equilibrio, Jacobiano, attuatori, incertezze,
-LQG/LQGI, struttura LFT, rumore, stabilità interna e integrità degli otto
-modelli. I risultati sono in
-\path{results/data/coherent_review/matlab_tests.csv}. Il successo dei test
-software non trasforma in soddisfatto un requisito prestazionale fallito.
-I quattro script didattici si eseguono direttamente dall'Editor MATLAB;
-\path{tools/verify_four_final_scripts.m} ne esegue le modalità predefinite
-e controlla l'identità dei modelli e dei controllori archiviati.
+Servono Control System Toolbox e Robust Control Toolbox; il collaudo SLX
+richiede Simulink. La modalita rapida carica i controllori congelati e
+le analisi robuste/RAS della campagna completa, dichiarandolo nel log.
+Ricalcola nominale, campioni, peso, CARE, controlli essenziali e confronti.
+Le matrici non dipendono da un Workspace preparato manualmente.
 
 \section{Esperimenti MATLAB}
 \begin{verbatim}
-setenv('CR_RUN_SCOPE','closure'); run_all
+run_all('completa')
 \end{verbatim}
-Il comando calcola sette scenari di rumore con seed 20261012, campiona
-dieci impianti condivisi dai controllori robusti, costruisce la
-griglia non lineare comune e verifica i candidati Lyapunov. Non richiama
-\texttt{hinfsyn}, \texttt{musyn} o riduzioni. La RAS salva checkpoint;
-la ripresa incompleta è ammessa soltanto per le stesse matrici e lo stesso
-protocollo. Un limite di tempo numerico per punto resta un esito ignoto,
-distinto dal mancato rispetto del criterio fisico a 12 s.
-Per leggere i dati già prodotti e rigenerare le figure:
-\begin{verbatim}
-setenv('CR_RUN_SCOPE','closure_export'); run_all
-\end{verbatim}
-Tabelle e listati si aggiornano con:
-\begin{verbatim}
-python tools/build_final_closure_tables.py
-python report/build_matlab_appendix.py
-\end{verbatim}
+Rigenera le sintesi H-infinity, il PID con tre avvii, le due D--K con
+tre iterazioni, la post-analisi A/B, le prove non lineari, la RAS e
+il collaudo Simulink. I parametri e il seme sono in
+\path{parametri_sea.m}; ogni script accorpato e eseguibile direttamente.
+La banca storica non viene sovrascritta. I CSV distinguono i fallimenti
+scientifici da errori software e da prove non eseguite.
 
 \section{Gli originali Simulink}
 \begin{verbatim}
-setenv('CR_RUN_SCOPE','originals'); run_all
+addpath('File_di_Funzioni_Progetto-Accorpati')
+collaudo_simulink
 \end{verbatim}
-La verifica legge i diagrammi senza salvarli e confronta gli hash prima
-e dopo ogni operazione. I file richiedono Simulink R2026a o successivo,
-con Control System e Robust Control Toolbox installati. Il comando è:
-\begin{verbatim}
-addpath('simulink');
-addpath('tools');
-run_final_student_validation;
-\end{verbatim}
-Il setup esterno passa le variabili con
-\texttt{Simulink.SimulationInput.setVariable}. Le impostazioni interne,
-i solver, i rumori e i selettori conservano i valori degli originali.
-La funzione registra separatamente caricamento, compilazione,
-simulazione, orizzonte e segnali disponibili. Restituisce errore quando
-una verifica obbligatoria fallisce o la valutazione dinamica è incompleta.
-La lettura dei buffer visivi è specifica di R2026b: non attiva il logging.
-Se l'API non è disponibile in un'altra release, la verifica resta parziale;
-gli Scope possono essere aperti dopo il run ed esportati con
-\textit{Print to Figure}, senza commutare selettori o salvare il modello.
-Per ricalcolare le metriche e le figure dai run acquisiti, dopo il
-controllo degli hash:
-\begin{verbatim}
-addpath('simulink','tools');
-run_final_student_validation(false,true);
-\end{verbatim}
+Nella consegna gli script sono gia nella radice.
+Gli otto SLX sono mantenuti; il Model Workspace riceve matrici e
+controllori in memoria prima della compilazione. \texttt{SimulationInput}
+fornisce il bus ed esclude la callback che reimposterebbe il nominale
+e seleziona separatamente i due attuatori. Gli override appartengono alla
+prova e non riscrivono gli SLX. Il collaudo registra configurazione,
+orizzonte e segnali, distinguendo il modello lineare dal non lineare.
+Sono stati eseguiti 28 run di 2 s, con stati finiti e Scope acquisiti:
+nominale e primo campione per gli otto SLX, piu MuN1, Mu\_A e Mu\_B
+nei due modelli mu. Le curve archiviate sono estratti fino a 2000 punti;
+picchi e controllo di finitezza usano i campioni integrali.
+Il modello H-infinity lineare conserva il feedback ideale degli originali;
+non certifica l'attenuazione del rumore encoder. I protocolli Scope e
+MATLAB non vanno confrontati come se avessero gli stessi ingressi.
 
 \section{Compilazione e consegna}
-\path{tools/build_m18_latex.ps1} compila relazione e presentazione con
-i nomi finali, verifica riferimenti, errori e fuoriuscite tipografiche.
-I PDF sono \path{report/Progetto_CR_Relazione_finale.pdf} e
-\path{presentation/Progetto_CR_Presentazione.pdf}.
-Le note orali indicano una durata prevista entro 20 minuti; la prova
-cronometrata deve essere effettuata dal gruppo. Il manifest in
-\path{delivery/manifest.json} seleziona i materiali di consegna e le loro
-dipendenze. I risultati negativi sulle prestazioni rimangono parte della
-discussione scientifica.
+\path{tools/esporta_definitiva.py} genera tabelle dalle evidenze reali
+e copia le figure negli elaborati. I PDF mantengono i nomi originali.
+\path{tools/consegna_definitiva.py} seleziona gli stessi sorgenti,
+i dati indispensabili, gli otto SLX e i due PDF; genera cartella e ZIP.
+Il collaudo da estrazione esterna al repository verifica l'autonomia.
+I sorgenti storici in \path{src}, \path{analysis}, \path{controllers}
+e i risultati M4 sono conservati come archivio, fuori dal percorso
+operativo e dalla consegna. Non costituiscono una seconda implementazione
+da eseguire. La durata orale prevista resta entro 20 minuti;
+la stima testuale e 17:42 inclusi i cambi slide. La verifica dal vivo
+rimane \texttt{NOT RUN}.

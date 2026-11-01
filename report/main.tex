@@ -36,36 +36,31 @@
 \title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
 \author{Alessio de Dato \\ \small Matricola 635256 \\[0.8em]
 Valerio Rebechi \\ \small Matricola 722224}
-\date{13.10.2026}
+\date{01.11.2026}
 \begin{document}
 \hypersetup{pageanchor=false}
 \maketitle
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \begin{abstract}
-Si studia il controllo di un manipolatore planare SEA a due giunti, a partire
-dalle equazioni non lineari e dalla linearizzazione con attuatori a 14 stati.
-LQG e LQGI illustrano il compromesso fra tracking e reiezione dei disturbi.
-La sensibilità mista e la sintesi $H_\infty$ a due gradi di libertà mostrano
-che una buona norma pesata non garantisce tutte le specifiche temporali.
-Il controllore nominale selezionato ha norma \FinalGamma\ e overshoot nullo,
-ma è fragile rispetto alle incertezze dichiarate. La $\mu$-synthesis sullo
-stesso problema produce un controllore di ordine \FinalMuOrder\ con margini
-di stabilità e prestazione robusta maggiori di uno. Restano fallimenti su
-assestamento e offset, oltre ai limiti legati a rumore e coppie non saturate.
-Le simulazioni non lineari MATLAB, le sezioni empiriche di attrazione e i
-dieci impianti incerti sono distinti dalle garanzie del modello lineare.
-Gli otto diagrammi Simulink sono stati eseguiti e le posizioni e i comandi
-acquisiti confermano offset, azione integrale e sensibilità al rumore.
-I diversi protocolli di misura e i selettori salvati sono esplicitati nel
-confronto con MATLAB; i picchi registrati non certificano il massimo continuo.
-Una seconda formulazione inserisce il rumore nella pianta generalizzata,
-con pesi e incertezze fisiche invariati. I nuovi H-infinity migliorano
-il comando ma falliscono la stabilità robusta. Un nuovo mu a 82 stati
-mantiene RS/RP e riduce il picco non lineare da circa 108.53 a 2.25 N m,
-con un peggioramento dell'offset nominale sul primo giunto. I candidati
-restano separati e la baseline predefinita; l'adozione finale considera
-questi compromessi e i limiti hardware ancora non documentati.
+Si conserva il progetto del manipolatore planare SEA a due giunti, dalle
+equazioni non lineari alla linearizzazione a 14 stati, concentrando lo
+studio sulle incertezze dei due attuatori SISO. La stessa famiglia fisica,
+con frequenza naturale e smorzamento indipendenti nei due canali, viene
+descritta mediante parametri reali e mediante un peso dinamico concentrato.
+Il confronto segue il procedimento del corso: campionamento, scostamenti,
+inviluppo, fitting, perturbazioni normalizzate e LFT.
+LQG, LQGI, sensibilita mista, controllo a due gradi di liberta, PID
+strutturato e D--K rimangono strumenti per interpretare gli effetti
+dell'incertezza. Si distinguono analisi a controllore fissato e sintesi
+dedicate, verificandole sugli stessi dieci impianti fisici.
+I margini robusti non sostituiscono i target temporali e non risolvono
+l'amplificazione del rumore: i picchi fra campioni sono analizzati
+esplicitamente. Le sezioni empiriche RAS usano quindici condizioni iniziali,
+separando convergenza, mancata convergenza e limiti numerici.
+I risultati storici M4 sono conservati e identificati; nessuna garanzia
+viene trasferita al nuovo insieme senza una nuova analisi. Il percorso
+operativo accorpa i sorgenti esistenti e genera una consegna autonoma.
 \end{abstract}
 \tableofcontents
 \listoffigures

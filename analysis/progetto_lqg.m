@@ -1,3 +1,4 @@
+% ARCHIVIO M4: il percorso corrente e run_all.m e usa gli script accorpati.
 %% 1 - Pulizia e caricamento dati: LQR -> Kalman -> LQG -> Lyapunov
 % Si ricostruisce la griglia approvata: criteri invariati, tre pesi R diretti.
 clearvars; clc; close all;

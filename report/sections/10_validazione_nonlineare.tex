@@ -1,5 +1,43 @@
 \chapter{Simulazioni, rumore e regione di attrazione}
 \section{Perché verifichiamo il comportamento non lineare}
+
+\paragraph*{RAS corrente semplificata.}
+Si usano cinque direzioni nel piano $(\delta q_1(0),\delta q_2(0))$,
+a distanze 5, 15 e 30 gradi dall'equilibrio: quindici condizioni per
+controllore, identiche per il confronto. Si pone
+$\delta\theta(0)=\delta q(0)$, conservando la deformazione elastica;
+le velocita e le deviazioni degli stati attuativi sono nulle.
+Gli stati dei controllori sono nulli, inclusi osservatori e integratori:
+lo stimatore parte dal modello di equilibrio e deve ricostruire
+lo spostamento iniziale non noto.
+Si integrano le equazioni non lineari per 15 s. Nell'ultimo secondo
+si richiedono posizioni sotto $0.5^\circ$, velocita sotto
+$0.5^\circ$/s e comando sotto 0.05 N m. Queste soglie non sono una
+dimostrazione della convergenza asintotica.
+Il grafico distingue convergenza (cerchio verde), mancata convergenza
+(quadrato rosso), superamento delle soglie di divergenza osservata
+(croce rossa), timeout (rombo magenta) ed errore numerico (piu nero).
+Timeout ed errori non sono classificati come instabilita fisica.
+Una similitudine numerica del controllore e il Jacobiano completo
+aiutano il solver stiff senza ridurre l'ordine. Nella campagna finale
+le 150 prove danno 117 convergenze, 24 mancate convergenze e 9
+divergenze osservate, senza timeout o errori numerici. I 20 esperimenti
+non lineari separati di tracking e disturbo terminano regolarmente.
+\input{generated/definitiva_ras.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{figures/definitiva/ras.png}
+\caption{Sezioni empiriche RAS e traiettorie. Origine: equilibrio
+$\bar q=[\pi/2,0]^T$. Nessuna frontiera rigorosa viene interpolata.}
+\end{figure}
+Tracking e disturbo sono simulati separatamente, con controllore e
+drive inclusi nello stato. Il rumore viene misurato anche fra campioni
+mediante propagazione ZOH: una griglia a 2 ms puo perdere impulsi veloci.
+\input{generated/definitiva_rumore.tex}
+\paragraph*{Approfondimenti originali e campagne storiche.}
+Le sezioni seguenti conservano i protocolli preesistenti, incluso
+Lyapunov. Non sono dipendenze del nuovo studio RAS e non trasferiscono
+garanzie ai nuovi controllori.
+
 La sintesi usa una linearizzazione attorno alla postura verticale. Vicino
 all'equilibrio questa approssimazione descrive bene le variazioni piccole,
 ma non rappresenta esattamente gravità, inerzia e termini di Coriolis

@@ -1,0 +1,58 @@
+[
+  {
+    "file": "collaudo_simulink.m",
+    "messaggi": []
+  },
+  {
+    "file": "confronto_ras.m",
+    "messaggi": []
+  },
+  {
+    "file": "dinamica_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "incertezze_attuatori.m",
+    "messaggi": []
+  },
+  {
+    "file": "interconnessione_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "modello_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "parametri_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "progetto_hinf_tre_controllori.m",
+    "messaggi": []
+  },
+  {
+    "file": "progetto_lqg.m",
+    "messaggi": []
+  },
+  {
+    "file": "progetto_lqgi.m",
+    "messaggi": []
+  },
+  {
+    "file": "progetto_mu.m",
+    "messaggi": []
+  },
+  {
+    "file": "simula_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "verifica_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "run_all.m",
+    "messaggi": []
+  }
+]

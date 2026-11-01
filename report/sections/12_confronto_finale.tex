@@ -1,4 +1,30 @@
 \chapter{Confronto finale e scelta per ruolo}
+
+\paragraph*{Confronto corrente delle due rappresentazioni.}
+A e la descrizione piu diretta delle variazioni fisiche: quattro scalari
+reali mantengono frequenza naturale, smorzamento e dipendenze ripetute.
+B offre una descrizione compatta con due blocchi dinamici SISO e un
+peso semplice, ma ammette dinamiche non fisiche e la copertura globale
+del box non e stata dimostrata. E utile per la sintesi e per leggere
+il ruolo della frequenza; A rimane il riferimento fisico della campagna.
+
+A controllore fissato, nominale e risposte sui medesimi impianti sono
+identici. Cambiano i margini e la famiglia rispetto alla quale valgono.
+Hinf2 e PID storici sono fragili in entrambi; LQG e LQGI sono RS ma
+non soddisfano il costo NP comune; Kmu e MuN1 superano RS/RP.
+Per le sintesi dedicate il candidato A non raggiunge NP nel budget
+dichiarato, mentre B raggiunge RP, con ordine inferiore. Il comando
+rumoroso di B e pero molto elevato. La maggiore garanzia pesata non
+e quindi un miglioramento operativo generale.
+
+MuN1 conserva un compromesso utile fra robustezza e rumore; Kmu rimane
+il comparatore robusto consolidato e LQG quello nominale. Le tabelle
+dei Capitoli 9--11 permettono di scegliere secondo l'esigenza,
+senza una classifica universale e senza allentare i target M5.
+\paragraph*{Confronto storico M4, con il proprio dominio di validita.}
+La tabella e la discussione seguenti conservano i risultati precedenti.
+I conteggi e i margini qui citati non sono quelli della nuova campagna.
+
 La scelta finale distingue prestazioni nominali, robustezza rispetto al
 modello incerto e fattibilità implementativa. Un'unica classifica basata sulla
 norma pesata nasconderebbe proprio il limite emerso nel progetto.

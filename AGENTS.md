@@ -52,6 +52,10 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 
 ## Documentazione obbligatoria
 
+- Semplicita didattica prioritaria: pochi ingressi e funzioni locali; funzioni esterne solo per correttezza, riuso effettivo o leggibilita. Evitare proliferazione di file e cache.
+- Il percorso corrente e `run_all.m` con gli script accorpati. I runner storici in `analysis/`, `src/`, `controllers/` restano archivio di provenienza, fuori dal percorso operativo.
+- La consegna deriva dagli stessi sorgenti. Tracciabilita, seed e test reali restano obbligatori; non richiedono infrastrutture sproporzionate.
+
 - `README.md`: scopo, struttura, prerequisiti, esecuzione e stato sintetico; non è un diario.
 - `docs/DIARIO_DI_BORDO.md`: cronologia append-only di ogni attività significativa, inclusi fallimenti e verifiche.
 - `CHANGELOG.md`: sintesi tecnica delle modifiche.
@@ -85,7 +89,7 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 1. Leggere la traccia e queste regole.
 2. Controllare `docs/PROJECT_STATUS.md` e le decisioni esistenti.
 3. Consultare soltanto il materiale di riferimento pertinente.
-4. Implementare una versione originale e modulare.
+4. Migliorare il percorso esistente con codice originale, semplice e leggibile.
 5. Eseguire test reali e conservare gli output necessari.
 6. Documentare esiti positivi, negativi e limiti.
 7. Aggiornare diario, changelog, decision log e relazione quando applicabile.

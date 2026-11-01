@@ -1,6 +1,44 @@
 \chapter{\texorpdfstring{Robustezza alle incertezze: analisi e sintesi con $\mu$}{Robustezza alle incertezze: analisi e sintesi con mu}}
 \label{cap:mu}
 \section{Dalle prove nominali alle incertezze fisiche}
+
+\paragraph*{Campagna corrente: due strutture e stesso controllore.}
+La tabella seguente proviene dalle nuove esecuzioni, con meccanica
+nominale e incertezze attuative del Capitolo 5. Per ciascun K si chiudono
+le due piante e si calcolano NS, NP, \texttt{robstab} e
+\texttt{robgain} a livello uno. I limiti invertiti o che attraversano
+uno rimangono inconcludenti. Quando NP fallisce, RP fallisce gia al
+nominale; quando RS fallisce, RP non puo essere garantita.
+\input{generated/definitiva_robustezza.tex}
+\texttt{lftdata} estrae $N$ e $\Delta$ dalla mappa pesata chiusa.
+Il blocco $N_{11}$ collega uscita e ingresso delle perturbazioni:
+\texttt{mussv(frd(N11,omega),blocchi)} fornisce limiti su $\mu$
+sulla griglia. La griglia e un controllo didattico, distinto dalle
+stime continue dei margini. Il piccolo guadagno ignora parte della
+struttura; $\mu$ conserva blocchi e ripetizioni.
+Per RP il blocco fittizio prestazionale chiude $w$ e $z$; non e una
+nuova incertezza fisica. Le architetture N--$\Delta$ e D--K sviluppate
+di seguito valgono anche per A/B, cambiando la struttura $\Delta$.
+
+\paragraph*{Sintesi dedicata senza cambiare il problema.}
+Sono state eseguite tre iterazioni per A e tre per B, con gli stessi
+$W_e,W_u,M_o$ e seme. Il candidato A della campagna limitata fallisce
+NP; non viene rilassato il costo per nasconderlo. Il candidato B
+supera RS/RP nelle due post-analisi. Questo risultato dipende anche
+dalla ricerca non convessa e dai fit degli scaling: non dimostra
+superiorita universale di B. Ordini, storie D--K, campioni comuni e
+rumore sono parte del confronto; un controllore robusto in norma
+puo avere un comando rumoroso inaccettabile.
+\begin{figure}[H]\centering
+\includegraphics[width=.95\textwidth]{figures/definitiva/robustezza.png}
+\caption{Margini inferiori RS a K fissato e storia delle due D--K.
+L'espansione oltre il raggio unitario non identifica la stessa famiglia.}
+\end{figure}
+
+\paragraph*{Derivazione e risultati del precedente modello M4.}
+Il resto del capitolo conserva lo sviluppo originale. Rigidezze,
+inerzia e ritardo variabile citati qui appartengono a M4, non ad A/B.
+
 Dopo aver verificato il comportamento nominale, dobbiamo chiederci
 se il manipolatore conservi stabilità e prestazioni quando rigidezze,
 inerzie e attuatori differiscono dal modello usato nella sintesi.

@@ -1,8 +1,86 @@
 \chapter{Modello delle incertezze}
 \section{Obiettivo e principio di modellazione}
-Il modello incerto deve mantenere i fenomeni fisici rilevanti senza rendere opaca la struttura $\Delta$. Definiamo quindi un solo insieme di progetto. Non esistono scenari gerarchici: ogni percentuale è un'ipotesi ingegneristica, non una tolleranza misurata o un intervallo di confidenza.
+
+La meccanica rimane nominale. Per ciascun drive scegliamo
+$\omega_{n,i}\in[36,44]$ rad/s e $\zeta_i\in[0.72,0.88]$, con
+$\tau_d=0.015$ s noto e Pad\'e di ordine uno comune. Le due tipologie
+producono quattro scalari indipendenti: nessuna correlazione artificiale
+fra giunti. Il $\pm10\%$ conserva l'ampiezza gia adottata per questi
+parametri; e un'ipotesi ingegneristica, non una tolleranza sperimentale.
+Frequenza naturale e smorzamento spostano le dinamiche del drive nella
+banda rilevante, come mostra il confronto del Capitolo 4.
+I nuovi script eliminano dall'insieme corrente $k_1,k_2,J_{m1}$ incerti.
+Questa riduzione cambia il dominio delle garanzie: non migliora fisicamente
+alcun controllore e non copre errori meccanici o jitter esclusi.
+
+Il modello incerto deve mantenere i fenomeni fisici rilevanti senza rendere opaca la struttura $\Delta$. Il confronto corrente usa due rappresentazioni della stessa famiglia
+attuativa di partenza. La precedente famiglia mista M4 viene conservata
+come risultato storico e non costituisce una terza opzione operativa: ogni percentuale è un'ipotesi ingegneristica, non una tolleranza misurata o un intervallo di confidenza.
 
 \section{Parametri reali \texttt{ureal}}
+
+\paragraph*{Modello A corrente.}
+Per $\alpha=\omega_n,\zeta$ scriviamo
+\[
+ \alpha_i=\bar\alpha(1+r_\alpha\delta_{\alpha_i}),\qquad
+ r_\alpha=0.1,\quad -1\leq\delta_{\alpha_i}\leq1.
+\]
+Una singola istanza \texttt{ureal} e riusata in tutte le occorrenze.
+Il secondo ordine si realizza direttamente con due stati:
+\[
+ \dot x_i=v_i,\qquad
+ \dot v_i=\omega_{n,i}^2(u_i-x_i)-2\zeta_i\omega_{n,i}v_i .
+\]
+Segue il medesimo Pad\'e. Questa realizzazione evita gli stati ridondanti
+prodotti concatenando piu funzioni di trasferimento intermedie.
+\begin{lstlisting}
+wn = ureal('wn1',40,'Percentage',10);
+zeta = ureal('zeta1',.8,'Percentage',10);
+H = ss([0 1;-wn^2 -2*zeta*wn],[0;wn^2],[1 0],0);
+G = H*Dp;
+\end{lstlisting}
+Dieci estrazioni \texttt{usample} del sistema diagonale sono condivise da
+tutti i controllori. I due canali forniscono venti casi SISO; aggiungiamo
+i quattro vertici e il nominale per costruire il peso. \texttt{usubs}
+consente di reinserire gli stessi valori e verificarne le risposte.
+\begin{figure}[H]\centering
+\includegraphics[width=.95\textwidth]{figures/definitiva/famiglia_attuatori.png}
+\caption{Famiglia fisica: modulo, fase, poli e risposta al gradino.
+La curva nera identifica il nominale.}
+\end{figure}
+
+\paragraph*{Pulling out the deltas.}
+Una LFT separa i coefficienti noti dai moltiplicatori incerti.
+Ponendo $d_\omega=\bar\omega_n r_\omega$ e
+$d_\zeta=\bar\zeta r_\zeta$, introduciamo
+\begin{align*}
+ z_1&=u-x,& w_1&=\delta_\omega z_1,\\
+ z_2&=\bar\omega_n z_1+d_\omega w_1-2\bar\zeta v-2d_\zeta w_3,
+ &w_2&=\delta_\omega z_2,\\
+ z_3&=v,&w_3&=\delta_\zeta z_3,\\
+ \dot v&=\bar\omega_n z_2+d_\omega w_2,&\dot x&=v.
+\end{align*}
+La stessa $\delta_\omega$ compare due volte, con valore identico:
+$\Delta_i=\operatorname{diag}(\delta_{\omega_i}I_2,\delta_{\zeta_i})$.
+Sostituendo $w_j$ si recupera esattamente il secondo ordine.
+Le somme, gli integratori e i coefficienti nominali costituiscono $M$:
+$[z_\Delta;y]=M[w_\Delta;u]$, $w_\Delta=\Delta z_\Delta$.
+\begin{figure}[H]\centering
+\input{figures/schemes/sea_delta.tex}
+\caption{LFT superiore: la perturbazione chiude le porte superiori.
+Le ripetizioni di uno scalare mantengono la dipendenza fisica.}
+\end{figure}
+Il codice verifica sia la ricostruzione automatica
+\texttt{[M,Delta,blocchi]=lftdata(GaA); lft(Delta,M)}
+sia questa realizzazione manuale su valori fisici sostituiti.
+La dimensione della LFT automatica puo differire; non cambia la famiglia
+quando le ripetizioni sono conservate. Le occorrenze effettive sono salvate
+in \path{risultati/incertezze.mat}.
+
+\paragraph*{Precedente scelta meccanica M4: contenuto storico.}
+Il seguente approfondimento conserva la motivazione del modello originale.
+I suoi tre parametri non appartengono al modello A corrente.
+
 Le due rigidezze SEA sono incluse perché modificano direttamente coppia elastica e modi flessibili; $J_{m1}$ rappresenta l'incertezza sull'inerzia riflessa del primo azionamento. Tutti e tre i parametri usano la variazione semplice $\pm10\%$:
 \begin{verbatim}
 k1  = ureal('k1',  p.Ks(1,1), 'Percentage', 10);
@@ -16,6 +94,79 @@ La scelta di $k_1$ e $k_2$ è legata alla natura SEA: una variazione di rigidezz
 Un parametro \texttt{ureal} conserva una dipendenza reale e ripetuta: se $k_1$ compare in più elementi di $A$, tutte le occorrenze variano in modo coerente attraverso lo stesso scalare normalizzato. È quindi adatto a una dispersione parametrica strutturata. Un blocco \texttt{ultidyn}, usato più avanti per $W_I\Delta$, descrive invece una dinamica stabile non nota entro un limite in norma; non possiede un unico valore fisico come rigidezza, massa o ritardo.
 
 \section{Incertezza dinamica degli attuatori}
+
+\paragraph*{Modello B corrente e forme alternative.}
+Le forme SISO viste a lezione sono
+\[
+G_p=G_0+W_A\Delta_A,\qquad
+G_p=G_0(1+W_I\Delta_I),\qquad
+G_p=G_0(1+W_{\rm inv}\Delta_{\rm inv})^{-1}.
+\]
+L'additiva pesa uno scostamento assoluto, la diretta uno scostamento
+relativo al nominale, l'inversa una variazione relativa nel denominatore.
+I rispettivi errori da maggiorare sono $G_p-G_0$, $G_p/G_0-1$
+e $G_0/G_p-1$. Nel nostro caso il guadagno statico unitario e comune
+e interessa leggere la perdita relativa di affidabilita con la frequenza:
+si adotta la forma diretta, verificandone anche la stabilita dinamica.
+\begin{figure}[H]\centering
+\input{figures/schemes/sea_forme.tex}
+\caption{Le tre forme SISO: la collocazione di $W\Delta$ cambia
+l'errore da normalizzare e il problema di robustezza.}
+\end{figure}
+
+\paragraph*{Pad\'e e stabilita dell'errore.}
+Scrivendo $G_p=H_pD_p$, $G_0=H_0D_p$, con lo stesso $D_p$, la
+cancellazione e analitica e precedente alla costruzione dello stato:
+\[
+E_p=\frac{G_p-G_0}{G_0}=\frac{H_p}{H_0}-1
+ =\frac{a s^2+b s}{s^2+2\zeta\omega_n s+\omega_n^2},
+\quad
+a=\frac{\omega_n^2}{\bar\omega_n^2}-1,\quad
+b=\frac{2\bar\zeta\omega_n^2}{\bar\omega_n}-2\zeta\omega_n .
+\]
+Il denominatore e Hurwitz per il box scelto; l'errore e proprio.
+Non si inverte numericamente lo zero RHP del Pad\'e.
+Se il ritardo variasse o il campione usasse il ritardo esatto rispetto
+a un nominale Pad\'e, questa cancellazione non varrebbe. La sola
+copertura del modulo non giustificherebbe un $\Delta$ stabile.
+Il presente confronto riguarda il modello razionale assegnato:
+l'errore Pad\'e e il ritardo variabile non sono inglobati implicitamente.
+
+\paragraph*{Dalla famiglia al peso: procedimento riproducibile.}
+Si calcolano gli scostamenti in \texttt{frd} sulla griglia
+$10^{-3}\leq\omega\leq10^4$ rad/s; il massimo fra i 25 casi forma
+l'inviluppo. \texttt{fitmagfrd}, senza selezione interattiva, confronta
+gli ordini 1, 2 e 3. Il peso e stabile, proprio e minimum-phase.
+Ogni candidato viene scalato affinche
+$\max_j\|E_j/W_I\|_\infty\leq1/1.02$:
+la norma continua controlla anche le frequenze fra i nodi e fuori griglia.
+Il criterio prefissato sceglie l'ordine minimo con copertura e rapporto
+mediano peso/inviluppo non superiore a 1.6. Non si afferma un ottimo
+globale. L'ordine due riduce l'eccesso, pagando uno stato in piu.
+\input{generated/definitiva_pesi.tex}
+\begin{figure}[H]\centering
+\input{figures/schemes/sea_fit.tex}
+\caption{Procedimento delle lezioni: campioni, errore relativo,
+inviluppo, fitting e verifica della perturbazione normalizzata.}
+\end{figure}
+\begin{figure}[H]\centering
+\includegraphics[width=.9\textwidth]{figures/definitiva/peso_incertezza.png}
+\caption{Scostamenti campionati, inviluppo massimo e peso selezionato.}
+\end{figure}
+Si costruiscono due blocchi \texttt{ultidyn} SISO indipendenti:
+\[
+G_{B}=\operatorname{diag}\bigl(G_0(1+W_I\Delta_1),
+G_0(1+W_I\Delta_2)\bigr),\quad \|\Delta_i\|_\infty\leq1 .
+\]
+Non si ammette un blocco pieno $2\times2$, che introdurrebbe
+accoppiamenti attuativi assenti nell'ipotesi fisica.
+
+\paragraph*{Precedente inviluppo M4: contenuto storico.}
+Il fit seguente includeva ritardo variabile e meccanica incerta.
+Il suo controllo in modulo non dimostra l'inclusione dinamica del ritardo
+esatto rispetto al nominale Pad\'e. I vecchi margini certificano soltanto
+l'insieme matematico M4 dichiarato; non certificano quella inclusione.
+
 Per ciascun drive assumiamo $\omega_n$ e $\zeta$ in $\pm10\%$ e il ritardo in $\pm20\%$. Il ritardo ha un intervallo più ampio perché include latenza e jitter. La famiglia di verifica contiene il nominale con ritardo esatto, sei variazioni singole, otto corner e 105 campioni riproducibili.
 
 La convenzione input-moltiplicativa è
@@ -36,6 +187,21 @@ I due canali usano $\Delta_{act1}$ e $\Delta_{act2}$ indipendenti. Un unico bloc
 \end{figure}
 
 \section{Verifica e limiti}
+
+\paragraph*{Confronto corrente A/B.}
+A conserva direttamente i quattro parametri reali e le loro ripetizioni;
+la sua analisi si riferisce all'intero box. B usa due perturbazioni
+dinamiche scalari: perde la corrispondenza univoca con $\omega_n,\zeta$
+e ammette variazioni non fisiche, ma rende piu compatta la descrizione.
+La verifica continua certifica l'inclusione dei campioni costruiti in B,
+\emph{non} l'inclusione di ogni punto del box A in B. Non viene quindi
+dedotto un ordinamento universale dei margini, ne trasferito un PASS.
+I due nominali coincidono con la baseline entro $10^{-8}$ sulla griglia
+dichiarata (lo scarto osservato e dell'ordine di $10^{-15}$).
+Le prestazioni nominali di un K fissato restano le stesse.
+
+\paragraph*{Verifiche storiche M4, non rieseguite sul nuovo insieme.}
+
 La struttura contiene \MFourBlockCount\ blocchi: tre \texttt{ureal} e due \texttt{ultidyn}. Il valore nominale delle viste verso $[q;\theta]$ e verso $q$ coincide con il modello completo entro $10^{-8}$. Quaranta campioni \texttt{usample} rispettano i range e producono sistemi finiti delle dimensioni attese.
 
 Questa verifica riguarda la costruzione dell'ensemble, non la robustezza in anello chiuso. I range sono intervalli ammissibili, non densità di probabilità: per questo un campionamento uniforme usato nelle prove pratiche non autorizza un'interpretazione probabilistica dei conteggi. Le conclusioni RS/RP appartengono alla $\mu$-analysis. Anche il campionamento successivo resta evidenza empirica e non sostituisce la certificazione strutturata.

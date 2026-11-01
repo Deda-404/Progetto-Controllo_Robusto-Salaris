@@ -1,4 +1,26 @@
 \chapter{Tracciabilità dei risultati}
+\paragraph*{Percorso corrente A/B.}
+I sette script accorpati leggono la banca originale estratta in
+\path{dati/banca_validata.mat}; il procedimento di estrazione e in
+\path{tools/prepara_banca_definitiva.m}. Le evidenze correnti sono nella
+sottocartella \path{risultati} degli script accorpati:
+\begin{center}\small
+\begin{tabular}{ll}\toprule
+Dato & Procedimento che lo genera\\\midrule
+\path{parametri_dieci_impianti.csv} & Campionamento fisico, seme 20261031\\
+\path{ordini_peso.csv} & Scostamenti, fitting, norma continua\\
+\path{confronto_robusto.csv} & Post-analisi dello stesso K su A/B\\
+\path{dieci_impianti.csv} & 110 chiusure fisiche, incluso il nominale\\
+\path{rumore.csv} & ZOH e verifica fra campioni\\
+\path{ras.csv} & 150 integrazioni non lineari\\
+\path{simulink.csv} & 28 run degli otto SLX originali\\
+\path{verifiche.csv} & Equilibrio, Jacobiano, LFT e controlli dinamici\\\bottomrule
+\end{tabular}
+\end{center}
+I MAT associati conservano controllori, modelli e traiettorie necessari
+al replay; \path{tools/esporta_definitiva.py} ricava le tabelle dai CSV.
+Le sezioni seguenti conservano la provenienza degli studi storici M4.
+
 I parametri e le matrici del modello provengono dai dataset in
 \path{results/data}. Il modello a 14 stati è in
 \path{m3_nominal_actuated_plant.mat}; $B_{d,\rm full}$ e le specifiche sono
@@ -6,7 +28,8 @@ in \path{m5_performance_specs.mat}. LQG proviene da
 \path{m6_lqg_no_integrator.mat}; LQGI da
 \path{m7_augmented_cost_feasibility.mat}, all'indice
 \texttt{config.illustrativeIndex}. I quattro script didattici sono in
-\path{File_di_Funzioni_Progetto-Accorpati} e usano questi stessi dati.
+\path{File_di_Funzioni_Progetto-Accorpati} e nella versione storica
+usavano direttamente questi dati, ora raccolti nella banca di provenienza.
 
 La cartella \path{results/data/hinf_final_coherent} contiene le fonti
 della sintesi e dell'analisi robusta:

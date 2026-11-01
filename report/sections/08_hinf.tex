@@ -1,4 +1,19 @@
 \chapter{\texorpdfstring{Progetto e risultati del controllo $H_\infty$}{Progetto e risultati del controllo H infinity}}
+
+\paragraph*{Lettura rispetto al nuovo confronto.}
+Le formulazioni, i pesi e gli approfondimenti di questo capitolo restano
+quelli del progetto. Il nuovo percorso ripete \texttt{mixsyn} e
+\texttt{hinfsyn} sulla medesima pianta generalizzata 1-DoF, poi
+\texttt{hinfsyn} sul problema 2-DoF. Si verificano separatamente
+l'equivalenza con \texttt{augw}, le norme e la stabilita interna.
+Il metodo di sintesi non va confuso con l'architettura.
+La nuova esplorazione PID limita gli avvii a tre (iniziale e due casuali):
+un avvio non stabilizza il chiuso; il migliore valido resta un candidato,
+non un minimo globale. Nessun peso viene modificato per farlo riuscire.
+La post-analisi corrente evidenzia RS fallita per Hinf2 e PID storici
+su A e B, mentre Hinf1 supera RS ma non il costo NP comune.
+La buona norma nominale di Hinf2 non protegge dal rumore intercampione.
+
 \label{cap:hinf}
 \section{Dal controllo LQG al problema che vogliamo risolvere}
 Nel capitolo precedente abbiamo progettato LQG combinando un regolatore

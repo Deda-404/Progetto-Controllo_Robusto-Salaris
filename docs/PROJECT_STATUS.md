@@ -1,3 +1,11 @@
+# Stato corrente — 01.11.2026, revisione definitiva A/B
+
+Ramo `codex/revisione-definitiva-sea-salaris`, base main `0ed5611f`. Modellazione A/B e controllori accorpati implementati; nominale, CARE, campionamento e copertura dei casi provati verificati. Risultati scientifici positivi e negativi in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).
+
+Quality gate implementazione, collaudi ed elaborati COMPLETE/PASS. Consegna estratta fuori repository: rapida e 28 run SLX PASS, 31 sorgenti/ingressi identici per hash. RAS: 117 convergenze, 24 mancate convergenze, 9 divergenze osservate su 150; nessun timeout finale. Relazione 120 pagine, 23 slide, 17:42 stimati. Matrice R01–R20 PASS; [PR #46](https://github.com/Deda-404/Progetto_CR/pull/46) aperta per revisione, non in bozza. Nessun merge. Lo stato precedente qui sotto riguarda la famiglia M4 storica.
+
+---
+
 # Stato corrente — 13.10.2026, revisione con rumore
 
 Implementazione, collaudo ed elaborati COMPLETE/PASS; accettazione scientifica PARTIAL. Tre H∞ con rumore esplicito nominalmente stabili ma RS/RP FAIL, nessuna promozione. MuN1 (82 stati) mantiene NS/NP/RS/RP: RS [1.84622,1.88174], RP [1.59634,1.60036]. Picco μ non lineare 108.526→2.25091 N m (48.21 volte), RMS 12.8223→1.35740 (9.446 volte). Rumore encoder isolato: oltre dieci volte in picco/RMS in tutti i tre seed.

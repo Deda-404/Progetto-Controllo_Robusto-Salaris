@@ -6,7 +6,11 @@ riscrittura del codice. Gli estratti richiedono gli argomenti, i dati
 e le funzioni del file completo; non sono script autonomi da incollare
 ed eseguire in sequenza.
 
-Le fonti didattiche sono i quattro script in
+Il percorso corrente comprende i quattro script rivisti e i tre script
+di modello, incertezze e confronto nella stessa cartella. I listati
+storici seguenti documentano le derivazioni originali e restano
+validi come approfondimento, ma non sono dipendenze operative.
+Le fonti didattiche originarie sono i quattro script in
 \path{File_di_Funzioni_Progetto-Accorpati}. Modelli e controllori sono
 salvati in \path{results/data}; le prove del rumore isolato, della griglia
 RAS comune e degli impianti incerti sono in
@@ -68,7 +72,7 @@ Le verifiche che non ripetono le sintesi sono nell'Appendice C.
 
 \par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/progetto_lqgi.m}\par\noindent\textit{Scopo.} Mostra il problema LQR aumentato, la verifica Riccati e la realizzazione a 16 stati con filtro di Kalman. Si carica il candidato all'indice \texttt{illustrativeIndex}; non si usa lo stato vero nel controllo.
 
-\lstinputlisting[firstline=17,lastline=34]{../analysis/progetto_lqgi.m}\end{minipage}
+\lstinputlisting[firstline=18,lastline=35]{../analysis/progetto_lqgi.m}\end{minipage}
 
 \par\medskip\noindent\begin{minipage}{\textwidth}\textbf{File:} \path{analysis/nonlinear/simulate_lqgi_nonlinear.m}\par\noindent\textit{Scopo.} Collega misure dei quattro encoder, stato stimato e memoria integrale alle equazioni SEA. Il rumore di processo entra solo nella pianta, mentre il Kalman conosce il comando calcolato.
 
