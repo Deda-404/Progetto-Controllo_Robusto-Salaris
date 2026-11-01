@@ -23,6 +23,24 @@ classdef seaFinaleTest < matlab.unittest.TestCase
             t.verifyGreaterThan(norm((C-C0)*v),0);
             t.verifyGreaterThan(min(eig(M)),0);
         end
+        function stessaFamigliaAB(t)
+            p=parametri_sea; a=load(fullfile(p.risultati,'incertezze.mat')); u=a.modelli;
+            t.verifyEqual(numel(fieldnames(u.PA.Uncertainty)),7);
+            t.verifyEqual(numel(fieldnames(u.PB.Uncertainty)),3);
+            t.verifyEqual(u.PA.Uncertainty.m_EE.Range,u.PB.Uncertainty.m_EE.Range,'AbsTol',1e-12);
+            t.verifyLessThan(u.erroreAB,1e-7);
+            t.verifyLessThan(u.erroreLFT,1e-8);
+            t.verifyEqual(order(u.PA),14);
+        end
+        function massaAiBordi(t)
+            p=parametri_sea; a=load(fullfile(p.risultati,'modello.mat')); m=a.modello;
+            basso=m; basso.fisica.mEE=p.mEE*(1-p.rmEE);
+            alto=m; alto.fisica.mEE=p.mEE*(1+p.rmEE);
+            mb=usubs(m.meccanicaIncerta,'m_EE',basso.fisica.mEE);
+            ma=usubs(m.meccanicaIncerta,'m_EE',alto.fisica.mEE);
+            t.verifyLessThan(norm(jacobiano(basso)-mb.A,'fro')/norm(mb.A,'fro'),1e-8);
+            t.verifyLessThan(norm(jacobiano(alto)-ma.A,'fro')/norm(ma.A,'fro'),1e-8);
+        end
         function energiaCoriolis(t)
             p=parametri_sea; a=load(fullfile(p.risultati,'modello.mat')); f=a.modello.fisica;
             q=[.4;-.3]; v=[.7;-.2]; h=1e-6;

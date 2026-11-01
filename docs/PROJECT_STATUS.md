@@ -1,6 +1,6 @@
 # Stato corrente — revisione finale con carico
 
-Meccanica e A/B COMPLETE/PASS; 3 test MATLAB, copertura e LFT eseguite. Controllori,
+Meccanica e A/B COMPLETE/PASS; 5 test MATLAB, copertura e LFT eseguite. Controllori,
 relazione e consegna NOT RUN sulle nuove ipotesi. Le evidenze sotto sono storiche.
 
 ---

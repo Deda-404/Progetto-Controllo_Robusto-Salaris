@@ -672,3 +672,13 @@ Nessun rilassamento del criterio di copertura o di eccesso mediano 1.6.
 Ordine selezionato 3: copertura 0.98037, eccesso mediano 1.0205,
 hold-out 0.8788; LFT e ricostruzione B dei campioni completate senza errori.
 Gate modellazione COMPLETE/PASS; copertura globale non dimostrata.
+
+## 2026-11-01 — Ricostruzione e validazione A/B
+
+Cinque test matlab.unittest superati, inclusi Jacobiani alle masse 0.1 e 0.3 kg,
+identita del parametro reale nei due insiemi e ricostruzione degli impianti comuni.
+Sette verifiche operative PASS: equilibrio, Jacobiano, nominali/LFT, struttura,
+normalizzazione continua, replay dei dieci campioni e stabilita interna esplicita.
+PBH dei modi instabili superato per stabilizzabilita/rilevabilita.
+La copertura riguarda 29 casi di fit e 30 hold-out; nessuna inclusione globale
+e nessuna garanzia trasferita dal modello A a B. Gate COMPLETE/PASS.
