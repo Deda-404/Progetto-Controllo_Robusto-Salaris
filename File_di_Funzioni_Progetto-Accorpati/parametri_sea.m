@@ -6,9 +6,11 @@ if ~isfolder(p.risultati),mkdir(p.risultati);end
 p.modalita=string(getenv('SEA_MODALITA'));
 if p.modalita=="",p.modalita="rapida";end
 assert(ismember(p.modalita,["rapida","completa"]),'SEA:Modo','Usare rapida o completa.');
-p.figure=true; p.seed=20261031; p.campioni=10;
+p.figure=true; p.seed=20261101; p.campioni=10;
+p.mEE=.2; p.rmEE=.50; p.masseCandidate=[.1 .2 .3];
+p.ritardiCandidati=[.10 .20 .30];
 p.wn=40; p.zeta=.8; p.ritardo=.015;
-p.rwn=.10; p.rzeta=.10; % Ipotesi ingegneristiche, non tolleranze misurate.
+p.rwn=.10; p.rzeta=.10; p.rritardo=.20; % Ipotesi, non tolleranze misurate.
 p.omega=logspace(-3,4,601); p.omegaMu=logspace(-2,4,121);
 p.tempo=(0:.002:12)'; p.rasTempo=(0:.02:15)';
 p.tempoRumore=(0:.002:4)';
@@ -20,6 +22,8 @@ p.dkIterazioni=3; p.dkFit=[2 1]; p.pidAvvii=2;
 p.tolNominale=1e-8; p.marginePeso=1.02; p.eccessoPesoMax=1.6;
 p.omegaW1=2; p.As=.15; p.Ms=3; p.ku=.003; p.omegaU=80; p.alpha=6; p.omegaM=4;
 p.rAmp=deg2rad(5); p.dAmp=.5; p.sigmaY=deg2rad(.05);
+p.firma=[2 p.mEE p.rmEE p.wn p.zeta p.ritardo p.rwn p.rzeta p.rritardo ...
+    p.omegaW1 p.As p.Ms p.ku p.omegaU p.alpha p.omegaM p.seed];
 assert(license('test','Control_Toolbox'),'SEA:Toolbox','Manca Control System Toolbox.');
 assert(license('test','Robust_Toolbox'),'SEA:Toolbox','Manca Robust Control Toolbox.');
 end

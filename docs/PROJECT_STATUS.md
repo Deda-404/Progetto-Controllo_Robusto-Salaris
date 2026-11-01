@@ -1,3 +1,10 @@
+# Stato corrente — revisione finale con carico
+
+Meccanica COMPLETE/PASS: 3 test MATLAB; A/B in elaborazione, controllori,
+relazione e consegna NOT RUN sulle nuove ipotesi. Le evidenze sotto sono storiche.
+
+---
+
 # Stato corrente — 01.11.2026, revisione definitiva A/B
 
 Ramo `codex/revisione-definitiva-sea-salaris`, base main `0ed5611f`. Modellazione A/B e controllori accorpati implementati; nominale, CARE, campionamento e copertura dei casi provati verificati. Risultati scientifici positivi e negativi in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).

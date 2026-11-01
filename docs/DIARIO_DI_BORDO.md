@@ -3062,3 +3062,20 @@ Relazione esistente aggiornata a 120 pagine con identità e indice invariati; st
 ## 2026-11-01 — Pubblicazione e confezionamento finale
 
 Pubblicati i commit 677ad20 (modellazione), 7324839 (percorso accorpato e campagne validate), 8db1b6d (elaborati e riproducibilità) sul branch codex/revisione-definitiva-sea-salaris. Aperta una sola PR #46, non in bozza, base main 0ed5611f, senza merge. Il confezionamento finale aggiunge lo ZIP verificato e il manifest, con gli stessi 31 sorgenti/ingressi collaudati fuori repository. R01–R20 PASS per l'incarico; FAIL prestazionali, limiti empirici, prova orale dal vivo e validazione hardware rimangono espliciti. Quality gate finale COMPLETE/PASS, accettazione scientifica dei singoli controllori come da matrice.
+
+## 2026-11-01 — Carico distale e nuovo nominale
+
+Branch codex/sea-revisione-finale-semplificata da main dbf6f00 (PR #46 integrata).
+Incarico degli studenti: carico meccanico e ritardo incerti, confronto A/B,
+semplificazione didattica e una PR senza merge. Consultate traccia ufficiale,
+materiale Salaris Matlab/Slide/Appunti e riassunto; Drive in sola lettura.
+Tre candidati 0.1/0.2/0.3 kg: M11=0.601/0.650/0.699 kg m²;
+LQG fissato stabile nei tre casi. Scelti 0.2 kg ±50% come ipotesi,
+non misura: massa distale effettiva 1 kg, intervallo del carico 0.1–0.3 kg.
+Equazioni condivise M,C,G; nominale rigenerato a 14 stati. Equilibrio verticale
+invariato, Jacobiano gravitazionale e inerzia aggiornati.
+MATLAB R2026b: modello eseguito, tre test indipendenti PASS (equilibrio/Jacobiano,
+energia Coriolis, contributo mEE*J'*J e gravita mEE*g*Jy').
+Gate meccanica COMPLETE/PASS. Il primo fit additivo non soddisfa il criterio
+di conservativita: lavoro A/B PARTIAL, errore conservato in log di sviluppo;
+nessuna garanzia precedente trasferita.

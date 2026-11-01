@@ -1,37 +1,52 @@
-%% 1 - Parametri della traccia e punto di equilibrio conservati da main
+%% 1 - Meccanica assegnata e ipotesi sul carico distale
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.dati,'banca_validata.mat'),'banca'); banca=a.banca;
-fisica=banca.plant.mechanicalParams; qbar=banca.plant.xbar(1:2);
-m1=fisica.m1; m2=fisica.m2; l1=fisica.l1; l2=fisica.l2; g=fisica.g;
+fisica=banca.plant.mechanicalParams; fisica.mEE=p.mEE; qbar=banca.plant.xbar(1:2);
 Ks=fisica.Ks; Jm=fisica.Jm; Bm=fisica.Bm; I=eye(2); Z=zeros(2);
 
-%% 2 - Equilibrio e linearizzazione delle equazioni SEA originali
-% x=[delta q;delta qdot;delta theta;delta thetadot]. Coppie in N m.
-Gbar=[(m1+m2)*g*l1*cos(qbar(1))+m2*g*l2*cos(sum(qbar));m2*g*l2*cos(sum(qbar))];
-thetabar=qbar+Ks\Gbar; xbar=[qbar;zeros(2,1);thetabar;zeros(2,1)]; taubar=Gbar;
-accoppiamento=m2*l1*l2*cos(qbar(2)); distale=m2*l2^2;
-Mbar=[(m1+m2)*l1^2+distale+2*accoppiamento,distale+accoppiamento;distale+accoppiamento,distale];
-g12=-m2*g*l2*sin(sum(qbar));
-Kg=[-(m1+m2)*g*l1*sin(qbar(1))+g12,g12;g12,g12];
-Am=[Z I Z Z;-Mbar\(Ks+Kg) Z Mbar\Ks Z;Z Z Z I;Jm\Ks Z -Jm\Ks -Jm\Bm];
-Btau=[zeros(6,2);Jm\I]; Bd=[Z;Mbar\I;zeros(4,2)];
+%% 2 - Un solo parametro reale per inerzia, gravita e Coriolis
+incerta=fisica; incerta.mEE=ureal('m_EE',p.mEE,'Percentage',100*p.rmEE);
+[Mu,~,Gu,Kgu]=matrici_sea(qbar,zeros(2,1),incerta);
+Au=[Z I Z Z;-Mu\(Ks+Kgu) Z Mu\Ks Z;Z Z Z I;Jm\Ks Z -Jm\Ks -Jm\Bm];
+Btau=[zeros(6,2);Jm\I]; Bdu=[Z;Mu\I;zeros(4,2)];
 Cm=[I zeros(2,6);zeros(2,4) I Z];
-meccanica=ss(Am,[Btau Bd],Cm,zeros(4));
-assert(all(eig(Mbar)>0) && norm(xbar-banca.plant.xbar)<1e-12);
+meccanicaIncerta=ss(Au,[Btau Bdu],Cm,zeros(4));
+meccanica=meccanicaIncerta.NominalValue; Am=meccanica.A; Bd=meccanica.B(:,3:4);
+[Mbar,~,Gbar,Kg]=matrici_sea(qbar,zeros(2,1),fisica);
+thetabar=qbar+Ks\Gbar; xbar=[qbar;zeros(2,1);thetabar;zeros(2,1)]; taubar=Gbar;
+assert(all(eig(Mbar)>0));
+assert(norm(dinamica_sea(xbar,taubar,zeros(2,1),fisica))<1e-10);
+% qbar=[pi/2;0]: gravita nulla per ogni massa, rigidezza gravitazionale non nulla.
+assert(norm(usubs(Gu,'m_EE',p.mEE*(1+p.rmEE)))<1e-12);
 
-%% 3 - Due attuatori SISO, senza duplicare le inerzie o il ritardo
+%% 3 - Due drive a tre stati; modello fisico con ordine degli stati esplicito
 s=tf('s'); Dp=(1-p.ritardo*s/2)/(1+p.ritardo*s/2);
 H0=p.wn^2/(s^2+2*p.zeta*p.wn*s+p.wn^2); G0=H0*Dp;
 attuatori=append(ss(G0),ss(G0));
-P0=meccanica*blkdiag(attuatori,I); % [u1 u2 d1 d2] -> [q1 q2 theta1 theta2]
-originale=ss(banca.plant.Afull,[banca.plant.Bfull banca.Bd],banca.plant.CfullMeas,zeros(4));
-erroreNominale=max(abs(freqresp(P0,p.omega)-freqresp(originale,p.omega)),[],'all');
-assert(erroreNominale<p.tolNominale,'SEA:Nominale','Nominale diverso da main.');
+[Aa,Ba,Ca,Da]=ssdata(attuatori);
+Afull=[Am Btau*Ca;zeros(6,8) Aa]; Bfull=[Btau*Da;Ba];
+Bdfull=[Bd;zeros(6,2)]; Cfull=[Cm zeros(4,6)];
+P0=ss(Afull,[Bfull Bdfull],Cfull,zeros(4));
+erroreNominale=max(abs(freqresp(P0,p.omega)-freqresp(meccanica*blkdiag(attuatori,I),p.omega)),[],'all');
+assert(erroreNominale<p.tolNominale);
+% Confronto limitato di ipotesi di carico, prima di interpretare il nominale.
+righe=zeros(numel(p.masseCandidate),5);
+for j=1:numel(p.masseCandidate)
+    fp=fisica; fp.mEE=p.masseCandidate(j);
+    [Mj,~,~,Kgj]=matrici_sea(qbar,zeros(2,1),fp);
+    Pj=usubs(meccanicaIncerta,'m_EE',fp.mEE)*blkdiag(attuatori,I);
+    [~,cl]=interconnessione_sea(Pj,p,4,banca.controllers(1).K);
+    righe(j,:)=[fp.mEE,fp.mEE/fisica.m2,Mj(1,1),norm(Kgj,2),max(real(pole(cl)))];
+end
+candidati=array2table(righe,'VariableNames',{'MassaEEkg','RapportoMassa2','M11','NormaKg','PoloLQGFissato'});
+writetable(candidati,fullfile(p.risultati,'candidati_carico.csv')); disp(candidati);
 modello=struct('fisica',fisica,'xbar',xbar,'taubar',taubar,'Am',Am,'Btau',Btau, ...
-    'Bd',Bd,'Cm',Cm,'meccanica',meccanica,'G0',G0,'H0',H0,'Dp',Dp, ...
-    'attuatori',attuatori,'P0',P0,'erroreNominale',erroreNominale);
+    'Bd',Bd,'Cm',Cm,'meccanica',meccanica,'meccanicaIncerta',meccanicaIncerta, ...
+    'G0',G0,'H0',H0,'Dp',Dp,'Mbar',Mbar,'Kg',Kg, ...
+    'Afull',Afull,'Bfull',Bfull,'Bdfull',Bdfull,'Cfull',Cfull, ...
+    'attuatori',attuatori,'P0',P0,'erroreNominale',erroreNominale,'firma',p.firma);
 save(fullfile(p.risultati,'modello.mat'),'modello','-v7');
-fprintf('Nominale: %d stati; errore rispetto a main %.3g.\n',order(P0),erroreNominale);
+fprintf('Nominale: %d stati; mEE %.1f kg; errore interconnessione %.3g.\n',order(P0),p.mEE,erroreNominale);
 
 %% 4 - Scale dinamiche e sensibilita: cinque valori, un parametro alla volta
 valori=linspace(-1,1,5); righe=cell(15,5); curva=0;
@@ -40,7 +55,7 @@ for tipo=1:3
         wn=p.wn; zeta=p.zeta; ritardo=p.ritardo;
         if tipo==1,wn=wn*(1+p.rwn*valore);end
         if tipo==2,zeta=zeta*(1+p.rzeta*valore);end
-        if tipo==3,ritardo=ritardo*(1+.2*valore);end
+        if tipo==3,ritardo=ritardo*(1+p.rritardo*valore);end
         Ga=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-ritardo*s/2)/(1+ritardo*s/2);
         curva=curva+1; risposta=stepinfo(Ga);
         scarto=max(abs(freqresp(Ga,p.omega)./freqresp(G0,p.omega)-1),[],'all');
@@ -50,8 +65,8 @@ end
 sensibilita=cell2table(righe,'VariableNames',{'Tipo_wn_zeta_ritardo','Delta','Banda','Overshoot','MaxErroreRelativo'});
 writetable(sensibilita,fullfile(p.risultati,'sensibilita_attuatori.csv'));
 disp(sensibilita);
-% Il ritardo resta noto nel confronto A/B: e una restrizione dichiarata.
-% Il suo errore di approssimazione non e coperto implicitamente dal peso.
+% Il ritardo varia in A e nella famiglia che costruisce il peso B.
+% L'errore rispetto al ritardo esatto resta distinto dalla sua variabilita.
 if p.figure
     f=figure('Name','Attuatore nominale e ritardo','Color','w'); theme(f,'light'); tiledlayout(1,2);
     nexttile; step(G0); grid on; title('Risposta nominale, coppia unitaria');

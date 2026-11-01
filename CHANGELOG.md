@@ -638,3 +638,20 @@ Relazione 97 pagine e presentazione 21 slide compilate con audit PASS: zero erro
 Prodotti REPORT_VERIFICA_SIMULINK, ANALISI_RUMORE_MISURA, CHIUSURA_FINALE_PROGETTO, checklist studenti e manifest di 237 file con SHA-256 portabili per i testi ed esatti per i binari. Dipendenze MATLAB rilevate (30) integrate con path dinamici e funzioni embedded. Archivio preservato; cache Python escluse. Controlli originali 8/8 PASS, 141/141 test PASS, quattro default e 80 artifact protetti PASS. Commit scientifici 27ad0db ed e880327. Nessun nuovo controllore o cambiamento SLX.
 
 Stato documentale COMPLETE/PASS; validazione SLX PARTIAL/NOT RUN e immagini autentiche da completare su R2026a. Rumore e target temporali restano limiti scientifici dichiarati; 18 casi PID e 24 H∞2 numericamente ignoti sulla griglia. Branch pronto per revisione; nessun merge su main.
+
+## 2026-11-01 — Carico distale e nuovo nominale
+
+Branch codex/sea-revisione-finale-semplificata da main dbf6f00 (PR #46 integrata).
+Incarico degli studenti: carico meccanico e ritardo incerti, confronto A/B,
+semplificazione didattica e una PR senza merge. Consultate traccia ufficiale,
+materiale Salaris Matlab/Slide/Appunti e riassunto; Drive in sola lettura.
+Tre candidati 0.1/0.2/0.3 kg: M11=0.601/0.650/0.699 kg m²;
+LQG fissato stabile nei tre casi. Scelti 0.2 kg ±50% come ipotesi,
+non misura: massa distale effettiva 1 kg, intervallo del carico 0.1–0.3 kg.
+Equazioni condivise M,C,G; nominale rigenerato a 14 stati. Equilibrio verticale
+invariato, Jacobiano gravitazionale e inerzia aggiornati.
+MATLAB R2026b: modello eseguito, tre test indipendenti PASS (equilibrio/Jacobiano,
+energia Coriolis, contributo mEE*J'*J e gravita mEE*g*Jy').
+Gate meccanica COMPLETE/PASS. Il primo fit additivo non soddisfa il criterio
+di conservativita: lavoro A/B PARTIAL, errore conservato in log di sviluppo;
+nessuna garanzia precedente trasferita.

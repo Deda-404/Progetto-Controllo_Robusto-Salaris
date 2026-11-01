@@ -2342,3 +2342,20 @@ PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliat
 ## 2026-10-31 — A/B attuativi e percorso didattico unico
 
 Accettata nell'incarico la riduzione alle due tipologie wn/zeta, indipendenti per giunto, ±10%. Ritardo noto e Padé comune: restrizione esplicita, non una conclusione sperimentale. Pesi prestazionali e nominale conservati. Scelto fitting di ordine minimo con copertura continua dei campioni e limite all'eccesso; non si assume inclusione globale A in B. I quattro script originali diventano il percorso autorevole con tre script didattici aggiuntivi e helper riusati. La consegna copia questi sorgenti. I risultati precedenti restano storici. Motivazioni e alternative in REVISIONE_DEFINITIVA.md.
+
+## 2026-11-01 — Carico distale e nuovo nominale
+
+Branch codex/sea-revisione-finale-semplificata da main dbf6f00 (PR #46 integrata).
+Incarico degli studenti: carico meccanico e ritardo incerti, confronto A/B,
+semplificazione didattica e una PR senza merge. Consultate traccia ufficiale,
+materiale Salaris Matlab/Slide/Appunti e riassunto; Drive in sola lettura.
+Tre candidati 0.1/0.2/0.3 kg: M11=0.601/0.650/0.699 kg m²;
+LQG fissato stabile nei tre casi. Scelti 0.2 kg ±50% come ipotesi,
+non misura: massa distale effettiva 1 kg, intervallo del carico 0.1–0.3 kg.
+Equazioni condivise M,C,G; nominale rigenerato a 14 stati. Equilibrio verticale
+invariato, Jacobiano gravitazionale e inerzia aggiornati.
+MATLAB R2026b: modello eseguito, tre test indipendenti PASS (equilibrio/Jacobiano,
+energia Coriolis, contributo mEE*J'*J e gravita mEE*g*Jy').
+Gate meccanica COMPLETE/PASS. Il primo fit additivo non soddisfa il criterio
+di conservativita: lavoro A/B PARTIAL, errore conservato in log di sviluppo;
+nessuna garanzia precedente trasferita.
