@@ -3058,3 +3058,7 @@ Il nuovo avvio MATLAB del 1 novembre ha fallito con errore 5201; riavviato il so
 ## 2026-11-01 — Elaborati conservati e verifica editoriale
 
 Relazione esistente aggiornata a 120 pagine con identità e indice invariati; stessa presentazione di 23 frame/titoli, discorso stimato 17:42. Verificati tutti i fogli di contatto e le pagine critiche: corretto il tema scuro dei grafici, un riferimento testuale storico alle cinque incertezze nelle slide, le terminazioni delle frecce LFT e un percorso LaTeX che oltrepassava il margine. Compilazione senza riferimenti indefiniti o box eccedenti; audit geometrico dei PDF e confronto dei titoli con main PASS. Spazi finali dei log normalizzati per Git, senza alterarne valori e messaggi. La prova orale dal vivo rimane NOT RUN. Quality gate editoriale COMPLETE/PASS. La sola pubblicazione resta da registrare.
+
+## 2026-11-01 — Pubblicazione e confezionamento finale
+
+Pubblicati i commit 677ad20 (modellazione), 7324839 (percorso accorpato e campagne validate), 8db1b6d (elaborati e riproducibilità) sul branch codex/revisione-definitiva-sea-salaris. Aperta una sola PR #46, non in bozza, base main 0ed5611f, senza merge. Il confezionamento finale aggiunge lo ZIP verificato e il manifest, con gli stessi 31 sorgenti/ingressi collaudati fuori repository. R01–R20 PASS per l'incarico; FAIL prestazionali, limiti empirici, prova orale dal vivo e validazione hardware rimangono espliciti. Quality gate finale COMPLETE/PASS, accettazione scientifica dei singoli controllori come da matrice.

@@ -87,5 +87,8 @@ i PDF ai nomi finali già presenti. python tools/consegna_definitiva.py
 confeziona gli stessi sorgenti e verifica SHA-256 e ZIP. Python e LaTeX
 servono per modificare gli elaborati, non per usare la consegna.
 
-Drive resta in sola lettura. Il ramo è codex/revisione-definitiva-sea-salaris;
-la PR raccoglie il lavoro eseguito e resta da revisionare, senza merge.
+Drive resta in sola lettura. [Branch pubblicato](https://github.com/Deda-404/Progetto_CR/tree/codex/revisione-definitiva-sea-salaris)
+e [PR #46](https://github.com/Deda-404/Progetto_CR/pull/46) raccolgono il
+lavoro eseguito. Tutti i requisiti R01–R20 sono PASS; i FAIL prestazionali
+e le verifiche fuori ambito rimangono distinti. PR pronta per revisione,
+senza merge.

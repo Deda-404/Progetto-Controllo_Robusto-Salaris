@@ -192,7 +192,7 @@ effettuato e audit senza testo oltre pagina o riferimenti indefiniti.
 | R17 | PASS | ZIP estratto fuori repository; rapida e collaudo Simulink realmente eseguiti |
 | R18 | PASS | Log completa/rapida, CSV/MAT, sette verifiche, Code Analyzer e audit PDF; nessun PASS inferito dal solo avvio |
 | R19 | PASS | Un solo run_all autorevole; copie di consegna identiche; runner storici esclusi dal path |
-| R20 | NOT RUN | Pubblicazione da registrare dopo push e apertura della sola PR, senza merge |
+| R20 | PASS | Branch pubblicato e [PR #46](https://github.com/Deda-404/Progetto_CR/pull/46) aperta per revisione, senza merge |
 
 Rimangono fuori dalle verifiche eseguite: prova orale dal vivo, validazione
 hardware, copertura rigorosa dell'intero box A da parte di B, ritardo
@@ -203,3 +203,9 @@ Il 1 novembre un nuovo avvio MATLAB ha dato errore 5201. Con nessuna
 sessione MATLAB attiva, il riavvio del solo MathWorks Service Host ha
 ripristinato l'avvio; il collaudo della consegna è stato poi realmente
 eseguito. Nessuna modifica alla licenza o ai controlli di accesso.
+
+Pubblicazione: [branch](https://github.com/Deda-404/Progetto_CR/tree/codex/revisione-definitiva-sea-salaris),
+[PR #46](https://github.com/Deda-404/Progetto_CR/pull/46).
+Commit scientifici principali: 677ad20 (modelli), 7324839 (codice e campagne),
+8db1b6d (relazione e presentazione). Il commit di confezionamento aggiunge
+ZIP, manifest e registrazione finale, senza modificare i calcoli.
