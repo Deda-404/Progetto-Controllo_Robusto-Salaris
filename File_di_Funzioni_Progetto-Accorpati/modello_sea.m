@@ -53,7 +53,7 @@ disp(sensibilita);
 % Il ritardo resta noto nel confronto A/B: e una restrizione dichiarata.
 % Il suo errore di approssimazione non e coperto implicitamente dal peso.
 if p.figure
-    f=figure('Name','Attuatore nominale e ritardo','Color','w'); tiledlayout(1,2);
+    f=figure('Name','Attuatore nominale e ritardo','Color','w'); theme(f,'light'); tiledlayout(1,2);
     nexttile; step(G0); grid on; title('Risposta nominale, coppia unitaria');
     nexttile; semilogx(p.omega,(-p.ritardo*p.omega+2*atan(p.ritardo*p.omega/2))*180/pi);
     grid on; xlabel('Frequenza [rad/s]'); ylabel('Fase esatto - Pade [gradi]');

@@ -1,543 +1,131 @@
-%% 1 - Mu: modello incerto -> analisi Hinf -> sintesi D-K -> verifica Kmu
-% Script con dati del repository, nello stile di progetto_lqg, progetto_lqgi e progetto_hinf.
-% Esecuzione: premere Run oppure scrivere progetto_mu nel Command Window.
-clearvars; clc; close all;
-ricalcolaAnalisi=true;  % robstab, robgain e mussv: puo richiedere alcuni minuti
-ricalcolaSintesi=false; % true: nuova musyn, con le 5 iterazioni del progetto
-mostraFigure=true;
-esportaControlloriRumore=true; % false: salta soltanto la nuova sezione 14
-% UNRCH annota soltanto rami disattivati dai flag iniziali;
-% le modalita alternativa e di risintesi sono verificate separatamente.
-% Default: analisi effettiva dei due controllori gia ottenuti nel progetto.
-% Con ricalcolaAnalisi=false si leggono i margini archiviati, esplicitamente
-% indicati come tali. Una nuova sintesi forza sempre una nuova analisi.
-% Run dall'Editor: i percorsi dipendono dalla posizione di questo file.
-% Richiede Control System Toolbox e Robust Control Toolbox (R2025b).
-% Si usano gli artifact della campagna finale 2 DoF, senza sovrascriverli.
-cartellaScript=fileparts(mfilename('fullpath')); radice=fileparts(cartellaScript);
-dati=fullfile(radice,'results','data','hinf_final_coherent');
-fileRichiesti={fullfile(dati,'selected_full_order.mat'),fullfile(dati,'m13.mat'), ...
-    fullfile(dati,'m12.mat'),fullfile(dati,'m14.mat'), ...
-    fullfile(dati,'robust_study.mat'),fullfile(radice,'results','data','m4_uncertain_plant.mat')};
-for j=1:numel(fileRichiesti)
-    assert(isfile(fileRichiesti{j}),'MuProgetto:FileMancante', ...
-        'Artifact necessario mancante: %s',fileRichiesti{j});
-end
-selezionato=load(fileRichiesti{1},'selected');
-sintesi=load(fileRichiesti{2},'synthesis');
-auditHinf=load(fileRichiesti{3},'audit'); auditMu=load(fileRichiesti{4},'audit');
-robusto=load(fileRichiesti{5},'result'); m4=load(fileRichiesti{6});
-omega=logspace(-3,4,1201); tempo=(0:.002:12)'; seed=sintesi.synthesis.seed;
+%% 1 - Due modelli, stessi pesi e controllori fissati della banca originale
+cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
+if ~isfile(fullfile(p.risultati,'incertezze.mat')),run(fullfile(cartella,'incertezze_attuatori.m'));end
+a=load(fullfile(p.risultati,'incertezze.mat')); modelli=a.modelli;
+a=load(fullfile(p.dati,'banca_validata.mat')); banca=a.banca;
+piante={modelli.PA,modelli.PB}; nomiModello=["A_parametrico","B_concentrato"];
+firma=[p.wn p.zeta p.ritardo p.rwn p.rzeta p.omegaW1 p.As p.Ms p.ku p.omegaU p.alpha p.omegaM p.seed];
+fileSintesi=fullfile(p.risultati,'sintesi_mu.mat');
+fileAnalisi=fullfile(p.risultati,'confronto_robusto.mat');
 
-% Solo risultati archiviati: non vengono presentati come nuovi calcoli.
-storico.obiettivoMu=sintesi.synthesis.objective;
-storico.normeNominali=[auditHinf.audit.nominalNorm;auditMu.audit.nominalNorm];
-storico.storiaDK=tabellaDK(sintesi.synthesis.info);
-auditSalvati={auditHinf.audit,auditMu.audit};
-for j=1:2
-    v=auditSalvati{j}; a=struct('RS',v.RS,'RP',v.RP,'normaWorstRP',v.rpWorstActualNorm);
-    if isfield(v,'rpInitial'), a.RPiniziale=v.rpInitial.margin; end
-    storico.analisi{j}=a;
-end
-
-% Parametri fisici ed equilibrio del sistema SEA a due giunti
-% Stato meccanico x=[dq;dqdot;dtheta;dthetadot], 8 coordinate.
-% Si lavora in deviazione da qbar=[pi/2;0]; q in rad, coppie in N m.
-m1=1; m2=.8; l1=.4; l2=.3; g=9.81;
-qbar=[pi/2;0]; Bm=diag([.02 .02]);
-coupling=m2*l1*l2*cos(qbar(2)); distal=m2*l2^2;
-Mbar=[(m1+m2)*l1^2+distal+2*coupling,distal+coupling; ...
-    distal+coupling,distal];
-dg=-m2*g*l2*sin(sum(qbar));
-Kg=[-(m1+m2)*g*l1*sin(qbar(1))+dg,dg;dg,dg];
-assert(all(eig(Mbar)>0),'MuProgetto:Massa','Mbar non definita positiva.');
-
-%% 2 - Incertezze parametriche reali, con identita condivisa
-% k1 e k2 +/-10%, Jm1 +/-10%. Gli altri parametri rimangono nominali.
-% Ogni nome rappresenta UN parametro: le sue occorrenze sono correlate.
-% Non sostituire un parametro ripetuto con piu blocchi indipendenti.
-k1=ureal('k1',50,'Percentage',10);
-k2=ureal('k2',40,'Percentage',10);
-Jm1=ureal('Jm1',.01,'Percentage',10);
-Ks=diag([k1 k2]); Jm=diag([Jm1 .01]);
-intervalli=table(["k1";"k2";"Jm1"],[50;40;.01],[45;36;.009], ...
-    [55;44;.011],'VariableNames',{'Parametro','Nominale','Minimo','Massimo'});
-disp('Incertezze fisiche dichiarate M4:'); disp(intervalli);
-
-%% 3 - Linearizzazione analitica e disturbo applicato lato link
-% Mbar*qdd = -(Ks+Kg)*q + Ks*theta + d.
-% Jm*thetadd = Ks*q - Ks*theta - Bm*thetadot + tau.
-% d e una coppia sui link: entra attraverso Mbar^-1, non attraverso Jm^-1.
-Z=zeros(2); I=eye(2);
-Amech=[Z,I,Z,Z;-(Mbar\(Ks+Kg)),Z,Mbar\Ks,Z; ...
-    Z,Z,Z,I;Jm\Ks,Z,-(Jm\Ks),-(Jm\Bm)];
-Btau=[Z;Z;Z;Jm\I]; Bd=[Z;Mbar\I;zeros(4,2)];
-Cq=[I,zeros(2,6)];
-Gmech=uss(Amech,[Btau Bd],Cq,zeros(2,4));
-Gmech.InputName={'tau1','tau2','d1','d2'}; Gmech.OutputName={'q1','q2'};
-
-% Attuatore nominale: secondo ordine e ritardo Pade di ordine 1
-% Ga(s)=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-Td*s/2)/(1+Td*s/2).
-% wn=40 rad/s, zeta=.8, Td=.015 s. Tre stati per attuatore.
-s=tf('s'); wn=40; zeta=.8; Td=.015;
-GaFormula=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-Td*s/2)/(1+Td*s/2);
-Ga=ss(m4.uncertainPlantInfo.GactuatorNominal);
-Ga.InputName={''}; Ga.OutputName={''}; % nomi della precedente variabile Ga
-assert(erroreMappe(Ga,GaFormula,omega)<1e-10);
-
-% Incertezza dinamica moltiplicativa degli attuatori
-% Ga_unc,i=Ga*(1+WI*Delta_act_i), ||Delta_act_i||inf<=1.
-% Delta_act1 e Delta_act2 sono dinamiche complesse indipendenti.
-% WI e il peso gia adattato in M4, non un nuovo peso prestazionale.
-% Copre la famiglia wn/zeta +/-10%, ritardo +/-20%, safety factor 1.08.
-WI=m4.WI;
-Delta_act1=ultidyn('Delta_act1',[1 1],'Type','GainBounded','Bound',1);
-Delta_act2=ultidyn('Delta_act2',[1 1],'Type','GainBounded','Bound',1);
-Gact=append(Ga*(1+WI*Delta_act1),Ga*(1+WI*Delta_act2));
-Gact.InputName={'u1','u2'}; Gact.OutputName={'tau1','tau2'};
-% Mantenere Gact come uss: ssdata o ss(Gact) eliminerebbero l'incertezza.
-
-% Pianta fisica incerta, e verifica del caso nominale
-physical=connect(Gmech,Gact,{'u1','u2','d1','d2'},{'q1','q2'});
-nomiIncertezza=string(fieldnames(physical.Uncertainty));
-assert(isequal(sort(nomiIncertezza),sort(["Delta_act1";"Delta_act2";"Jm1";"k1";"k2"])));
-physicalNom=physical.NominalValue;
-% I 16 stati qui includono due stati stabili di WI, inattivi nel nominale;
-% la pianta Hinf fisica senza WI aveva 14 stati. Nessuna riduzione di K.
-erroreNominale=erroreMappe(physicalNom,robusto.result.physical.NominalValue,omega);
-assert(erroreNominale<1e-8,'MuProgetto:Nominale','Pianta nominale differente.');
-fprintf('Pianta: %d stati nominali, cinque blocchi incerti; scarto %.3g.\n', ...
-    order(physicalNom),erroreNominale);
-
-%% 4 - Pesi prestazionali e modello desiderato della campagna finale
-% Profilo selezionato [omegaW1 As Ms ku omegaU]=[2 .15 3 .003 80].
-% W1 pesa q-Mo*r; W2 pesa il comando fisico. W3 e assente.
-% Mo e parte del costo 2 DoF, non un prefiltro aggiunto al controllore.
-omegaW1=2; As=.15; Ms=3; ku=.003; omegaU=80; alpha=6; omegaM=4;
-W1=(s/Ms+omegaW1)/(s+omegaW1*As)*I;
-W2=ku*(s+omegaU)/(s/alpha+omegaU)*I;
-Mo=omegaM^2/(s^2+2*omegaM*s+omegaM^2)*I;
-
-%% 5 - Pianta generalizzata incerta P: ingressi, uscite e segni
-% w=[r1;r2;d1;d2], z=[W1*(q-Mo*r);W2*u], y=[r1;r2;q1;q2].
-% P: [w;u] -> [z;y]. Il controllore e u=Kr*r+Ky*q.
-% Ky contiene il proprio segno. Non aggiungere una negazione esterna.
-Pn=physical; Pn.InputName={'u(1)','u(2)','d(1)','d(2)'};
-Pn.OutputName={'q(1)','q(2)'};
-Mon=ss(Mo); Mon.InputName={'r(1)','r(2)'}; Mon.OutputName={'qm(1)','qm(2)'};
-W1n=ss(W1); W1n.InputName={'em(1)','em(2)'}; W1n.OutputName={'ze(1)','ze(2)'};
-W2n=ss(W2); W2n.InputName={'u(1)','u(2)'}; W2n.OutputName={'zu(1)','zu(2)'};
-P=connect(Pn,Mon,W1n,W2n,sumblk('em = q - qm',2), ...
-    {'r(1)','r(2)','d(1)','d(2)','u(1)','u(2)'}, ...
-    {'ze(1)','ze(2)','zu(1)','zu(2)','r(1)','r(2)','q(1)','q(2)'});
-nmeas=4; ncont=2; nw=4; nz=4;
-assert(isequal(size(P),[8 6]));
-% connect condivide gli stati: nessuna duplicazione di modi instabili.
-
-%% 6 - Controllore Hinf 2 DoF da cui parte l'analisi
-% E il K di selected_full_order.mat: ordine 22, quattro ingressi/due uscite.
-% La sua sintesi hinfsyn e documentata nello script Hinf precedente.
-Khinf=selezionato.selected.K;
-CLhinf=lft(P,Khinf); % lft inferiore: chiude gli ultimi nmeas/ncont segnali
-assert(isequal(size(Khinf),[2 4]) && order(Khinf)==22);
-assert(isequal(size(CLhinf),[nz nw]));
-
-%% 7 - NS e NP: verifiche nominali distinte dalle verifiche robuste
-% NS: stabilita della chiusura nominale. NP: NS e ||Tzw_nom||inf<1.
-% gamma Hinf piccolo non garantisce la robustezza rispetto a Delta.
-NS_hinf=isstable(CLhinf.NominalValue);
-normaHinf=norm(CLhinf.NominalValue,inf);
-NP_hinf=NS_hinf && normaHinf<1;
-assert(NS_hinf && NP_hinf,'MuProgetto:NominalHinf','Gate nominale Hinf fallito.');
-fprintf('Hinf: NS=%d, NP=%d, norma nominale %.10g.\n',NS_hinf,NP_hinf,normaHinf);
-
-%% 8 - Decomposizione N-Delta e normalizzazione dei blocchi
-% [N,Delta,BlkStruct,NormUnc]=lftdata(CLhinf), CLhinf=lft(Delta,N).
-% Delta contiene i blocchi normalizzati: ureal in [-1,1], ultidyn a norma<=1.
-% N=[N11 N12;N21 N22], con N11 la mappa verso/dai soli canali incerti.
-% Il nome N evita di confondere la decomposizione con la massa Mbar.
-[N_hinf,Delta_hinf,BlkStruct,NormUnc]=lftdata(CLhinf);
-ndOut=size(Delta_hinf,2); ndIn=size(Delta_hinf,1);
-N11_hinf=N_hinf(1:ndOut,1:ndIn);
-ricostruita=lft(Delta_hinf,N_hinf);
-erroreLFT=erroreMappe(ricostruita.NominalValue,CLhinf.NominalValue,omega);
-assert(erroreLFT<1e-8);
-struttura=table(string({BlkStruct.Name})',string({BlkStruct.Type})', ...
-    [BlkStruct.Occurrences]','VariableNames',{'Blocco','Tipo','Occorrenze'});
-disp('Struttura normalizzata:'); disp(struttura);
-
-% Definizione di mu e significato dei due limiti
-% mu_Delta(N11)=1/min{||Delta||:det(I-N11*Delta)=0}, oppure 0 se
-% nessun Delta della struttura dichiarata rende singolare la matrice.
-% mussv stima lower<=mu<=upper. Non e una semplice norma o sigma massima.
-% RS richiede nominale stabile e sup_omega mu_Delta(N11(jw))<1.
-% Un upper<1 certifica; un lower>1 esclude; limiti a cavallo sono inconclusivi.
-% Una griglia finita puo perdere il picco: robstab usa ricerca adattiva.
-
-% RP: estensione con un blocco fittizio di prestazione
-% Per RP si aggiunge Delta_perf: z -> w, pieno complesso nw x nz.
-% La struttura e diag(Delta,Delta_perf); si analizza l'intera matrice N.
-% Il teorema vale per la mappa pesata Tzw e il target gamma=1.
-% Qui robgain(CL,1) calcola direttamente il margine robusto di guadagno.
-% Non confondere questo margine con wcgain o con l'obiettivo restituito
-% dalla sintesi musyn. Nel seguito RP viene verificata dopo la sintesi.
-dimensioneBloccoPrestazione=[nw nz];
-
-% Mu-analysis Hinf sulla griglia, prima di progettare Kmu.
-% mussv restituisce [upper,lower]; non sostituisce la ricerca adattiva RS.
-muGriglia=cell(2,1);
-if ricalcolaAnalisi || ricalcolaSintesi
-    statoRngGriglia=rng; rng(seed,'twister');
-    try
-        bounds=mussv(frd(N11_hinf,omega),BlkStruct,'s');
-        upper=squeeze(bounds.ResponseData(1,1,:)); lower=squeeze(bounds.ResponseData(1,2,:));
-        assert(all(isfinite(upper)) && all(isfinite(lower)) && all(upper+1e-8>=lower));
-        muGriglia{1}=struct('upper',upper,'lower',lower, ...
-            'margineGriglia',[1/max(upper),1/max(lower)]);
-        % Continuita della stessa sequenza casuale per la successiva analisi Mu.
-        statoRngDopoHinf=rng;
-    catch erroreMu
-        rng(statoRngGriglia); rethrow(erroreMu);
+%% 2 - D-K dedicata A/B: nessuna sostituzione dei controllori storici
+if p.modalita=="completa"
+    candidati=cell(1,2);
+    for modello=1:2
+        P=interconnessione_sea(piante{modello},p,2);
+        statoRng=rng; rng(p.seed,'twister');
+        opts=musynOptions('Display','short','MaxIter',p.dkIterazioni, ...
+            'FitOrder',p.dkFit,'FullDG',false,'MixedMU','on', ...
+            'FrequencyGrid',p.omegaMu,'UseParallel',false);
+        fprintf('D-K dedicata %s, massimo %d iterazioni.\n',nomiModello(modello),p.dkIterazioni);
+        [Knuovo,obiettivo,info]=musyn(P,4,2,opts); rng(statoRng);
+        assert(~isempty(Knuovo),'SEA:Sintesi','musyn non ha restituito un controllore.');
+        candidati{modello}=struct('K',Knuovo,'obiettivo',obiettivo,'info',info, ...
+            'origine',nomiModello(modello),'seed',p.seed);
     end
-    rng(statoRngGriglia);
-end
-
-%% 9 - Sintesi mu: iterazione D-K e opzioni congelate
-% D-step: bounds di mu e scaling D/G sulla struttura mista reale/complessa.
-% Fit: approssimazione razionale degli scaling, con FitOrder=[5 2].
-% K-step: nuovo problema Hinf scalato; si ripete fino all'arresto.
-% Procedura non convessa: il risultato non e un minimo globale garantito.
-% L'ordine cresce per le dinamiche degli scaling. Nessuna riduzione qui.
-% musyn(P,nmeas,ncont) usa hinfsyn nel K-step. La variante con blocchi
-% tunable usa hinfstruct; non e la sintassi full-order adottata qui.
-% Documentazione: https://www.mathworks.com/help/robust/ref/uss.musyn.html
-optsMu=musynOptions('Display','short','MaxIter',5,'TargetPerf',0, ...
-    'TolPerf',.01,'MixedMU','on','FullDG',[true true],'FitOrder',[5 2], ...
-    'FrequencyGrid',omega,'AutoScale','on','Regularize','on','LimitGain','on', ...
-    'RandomStart',0,'UseParallel',false,'MinDecay',1e-7,'MaxFrequency',Inf);
-
-%% 10 - musyn: quattro misure, due comandi, medesimo problema P
-% La configurazione storica M13 a 1 DoF aveva nmeas=2. Qui y=[r;q],
-% quindi nmeas=4: si conserva la chiamata effettiva della pipeline finale.
-% Si mantiene il seed del progetto e si ripristina lo stato RNG precedente.
-% D-K e i lower bound numerici possono produrre un nuovo K diverso da quello
-% archiviato, anche sullo stesso problema: si riportano i nuovi esiti reali.
-if ricalcolaSintesi
-    statoRng=rng; rng(seed,'twister'); %#ok<UNRCH>
-    try
-        [Kmu,obiettivoMu,infoDK]=musyn(P,nmeas,ncont,optsMu);
-    catch erroreSintesi
-        rng(statoRng); rethrow(erroreSintesi);
-    end
-    rng(statoRng); ricalcolaAnalisi=true;
-    storiaDK=tabellaDK(infoDK); origineSintesi="NUOVA MUSYN";
+    save(fileSintesi,'candidati','firma','-v7');
 else
-    Kmu=sintesi.synthesis.K; % stessa realizzazione originale, ordine 78
-    obiettivoMu=storico.obiettivoMu; storiaDK=storico.storiaDK;
-    infoDK=[]; origineSintesi="MUSYN ARCHIVIATA DEL PROGETTO";
+    if ~isfile(fileSintesi),fileSintesi=fullfile(p.dati,'sintesi_mu.mat');end
+    assert(isfile(fileSintesi),'SEA:Cache','Eseguire run_all(''completa'') per rigenerare le D-K.');
+    a=load(fileSintesi); assert(isequal(a.firma,firma),'SEA:Cache','Configurazione cache diversa.');
+    candidati=a.candidati; disp('D-K A/B CARICATE da esecuzione validata; non risintetizzate.');
 end
-assert(~isempty(Kmu) && isfinite(obiettivoMu) && isequal(size(Kmu),[2 4]));
-fprintf('%s: ordine %d, obiettivo %.10g.\n',origineSintesi,order(Kmu),obiettivoMu);
+nomi=[string({banca.controllers.name}),"MuN1","Mu_A","Mu_B"];
+K=[{banca.controllers.K},{banca.muRumore,candidati{1}.K,candidati{2}.K}];
+origine=[repmat("main / modello storico",1,7),nomiModello];
+fileH=fullfile(p.risultati,'sintesi_hinf.mat');
+if ~isfile(fileH),fileH=fullfile(p.dati,'sintesi_hinf.mat');end
+a=load(fileH); K=[K,{a.sintesi.Kpid}]; nomi=[nomi,"PID_nuovo"];
+origine=[origine,"hinfstruct nominale, stessi pesi"];
 
-% Storia D-K completa, senza eliminare iterazioni sfavorevoli
-% PeakMu, gamma scalata e PeakMuFit descrivono quantita diverse.
-% Cinque iterazioni sono il limite scelto, non una prova di ottimalita.
-disp(storiaDK);
-[migliorUpper,iterazioneMigliore]=min(storiaDK.PeakMu);
-fprintf('Migliore PeakMu %.10g, iterazione %d su %d.\n', ...
-    migliorUpper,iterazioneMigliore,height(storiaDK));
-
-%% 11 - Chiusura Kmu e nuova decomposizione LFT
-CLmu=lft(P,Kmu);
-[N_mu,Delta_mu,BlkStructMu,NormUncMu]=lftdata(CLmu);
-N11_mu=N_mu(1:size(Delta_mu,2),1:size(Delta_mu,1));
-assert(isequal(BlkStructMu,BlkStruct),'MuProgetto:Blocchi','Struttura incerta cambiata.');
-NS_mu=isstable(CLmu.NominalValue); normaMu=norm(CLmu.NominalValue,inf);
-NP_mu=NS_mu && normaMu<1;
-assert(NS_mu && NP_mu,'MuProgetto:NominalMu','Gate nominale Kmu fallito.');
-
-% RS e RP adattive: robstab e robgain sui due controllori
-% Margine rho: moltiplicatore del raggio delle incertezze normalizzate.
-% Lower>1: PASS sull'insieme dichiarato. Upper<1: FAIL. Altrimenti incerto.
-% Per Hinf il progetto ha osservato un intervallo RP invertito: si conserva,
-% si ripete con opzioni m9 e non si riordinano artificialmente gli estremi.
-chiusure={CLhinf,CLmu}; nomi=["Hinf 2 DoF";"Mu 2 DoF"];
-analisi=cell(2,1); statoRngAnalisi=rng;
-rng(seed,'twister');
-try
-    for j=1:2
-        if ricalcolaAnalisi
-            fprintf('Analisi adattiva %s...\n',nomi(j));
-            a=struct;
-            [a.RS,a.rsWorst,a.rsInfo]=robstab(chiusure{j});
-            [a.RP,a.rpWorst,a.rpInfo]=robgain(chiusure{j},1);
-            if a.RP.LowerBound>a.RP.UpperBound
-                a.RPiniziale=a.RP;
-                rng(seed,'twister');
-                [a.RP,a.rpWorst,a.rpInfo]=robgain(chiusure{j},1, ...
-                    robOptions('MussvOptions','m9','Sensitivity','on'));
+%% 3 - Stesso K su A e B: NS, NP, RS e RP sono proprieta distinte
+if p.modalita=="completa"
+    analisi=cell(numel(K),2); righe=cell(2*numel(K),15); riga=0;
+    for k=1:numel(K)
+        for modello=1:2
+            fprintf('Analisi %s / %s...\n',nomi(k),nomiModello(modello));
+            [~,CL]=interconnessione_sea(piante{modello},p,size(K{k},2)-2,K{k});
+            CL=CL(:,1:4); NS=isstable(CL.NominalValue);
+            norma=norm(CL.NominalValue(5:8,:),inf); NP=NS && norma<1;
+            statoRng=rng; rng(p.seed,'twister');
+            [RS,worstRS]=robstab(CL);
+            RPiniziale=[]; metodo="robgain";
+            if ~NP
+                RP=struct('LowerBound',0,'UpperBound',0); metodo="NP_FAIL";
+            elseif RS.UpperBound<1
+                RP=struct('LowerBound',0,'UpperBound',RS.UpperBound); metodo="LIMITE_DA_RS";
+            else
+                RP=robgain(CL(5:8,:),1);
+                if RP.LowerBound>RP.UpperBound
+                    RPiniziale=RP;
+                    RP=robgain(CL(5:8,:),1,robOptions('MussvOptions','m9'));
+                    metodo="robgain_retry_m9";
+                end
             end
-            a.origine="RICALCOLATA";
-            a.normaWorstRP=norm(usubs(chiusure{j},a.rpWorst),inf);
-        else
-            a=storico.analisi{j}; a.origine="ARCHIVIATA DEL PROGETTO"; %#ok<UNRCH>
+            muGriglia=struct;
+            if ismember(k,[4 6 8 9])
+                [N,Delta,struttura]=lftdata(CL(5:8,:));
+                nd=size(Delta,1); N11=N(1:nd,1:nd);
+                bounds=mussv(frd(N11,p.omegaMu),struttura,'s');
+                muGriglia=struct('omega',p.omegaMu,'upper',squeeze(bounds.ResponseData(1,1,:)), ...
+                    'lower',squeeze(bounds.ResponseData(1,2,:)));
+            end
+            rng(statoRng);
+            esitoRS=esito(RS); esitoRP=esito(RP);
+            analisi{k,modello}=struct('NS',NS,'NP',NP,'norma',norma,'RS',RS,'RP',RP, ...
+                'RPiniziale',RPiniziale,'worstRS',worstRS,'muGriglia',muGriglia,'metodoRP',metodo);
+            riga=riga+1;
+            righe(riga,:)={nomi(k),origine(k),nomiModello(modello),order(K{k}),NS,norma,NP, ...
+                RS.LowerBound,RS.UpperBound,esitoRS,RP.LowerBound,RP.UpperBound,esitoRP,metodo,RS.CriticalFrequency};
         end
-        assert(a.RS.LowerBound<=a.RS.UpperBound,'MuProgetto:RS','Intervallo RS invertito.');
-        a.esitoRS=esitoMargine(a.RS);
-        if a.RP.LowerBound>a.RP.UpperBound
-            a.esitoRP="NON VALIDATO: INTERVALLO INVERTITO";
-            if a.esitoRS=="FAIL", a.esitoRP="FAIL DA RS; MARGINE RP NON VALIDATO"; end
-        else
-            a.esitoRP=esitoMargine(a.RP);
-        end
-        analisi{j}=a;
     end
-catch erroreAnalisi
-    rng(statoRngAnalisi); rethrow(erroreAnalisi);
-end
-rng(statoRngAnalisi);
-
-% mussv su N11: bounds RS sulla griglia dichiarata
-% L'uscita mussv ha ordine [upper,lower], non [lower,upper].
-% Documentazione: https://www.mathworks.com/help/robust/ref/mussv.html
-% rho_RS circa [1/max(upper),1/max(lower)]: stima su GRIGLIA FINITA.
-% Non sostituisce il margine adattivo robstab della sezione precedente.
-N11={N11_hinf,N11_mu};
-if ricalcolaAnalisi
-    statoRngGriglia=rng;
-    rng(statoRngDopoHinf);
-    try
-        for j=2
-            fprintf('mussv su %d frequenze: %s...\n',numel(omega),nomi(j));
-            bounds=mussv(frd(N11{j},omega),BlkStruct,'s');
-            upper=squeeze(bounds.ResponseData(1,1,:));
-            lower=squeeze(bounds.ResponseData(1,2,:));
-            assert(all(isfinite(upper)) && all(isfinite(lower)) && all(upper+1e-8>=lower));
-            muGriglia{j}=struct('upper',upper,'lower',lower, ...
-                'margineGriglia',[1/max(upper),1/max(lower)]);
-        end
-    catch erroreMu
-        rng(statoRngGriglia); rethrow(erroreMu);
-    end
-    rng(statoRngGriglia);
-end
-
-%% 12 - Quadro NS / NP / RS / RP e confronto con i risultati archiviati
-RS_lower=cellfun(@(a) a.RS.LowerBound,analisi);
-RS_upper=cellfun(@(a) a.RS.UpperBound,analisi);
-RP_lower=cellfun(@(a) a.RP.LowerBound,analisi);
-RP_upper=cellfun(@(a) a.RP.UpperBound,analisi);
-confronto=table(nomi,[order(Khinf);order(Kmu)],[NS_hinf;NS_mu], ...
-    [normaHinf;normaMu],[NP_hinf;NP_mu],RS_lower,RS_upper, ...
-    string(cellfun(@(a) a.esitoRS,analisi,'UniformOutput',false)), ...
-    RP_lower,RP_upper,string(cellfun(@(a) a.esitoRP,analisi,'UniformOutput',false)), ...
-    string(cellfun(@(a) a.origine,analisi,'UniformOutput',false)), ...
-    'VariableNames',{'Controllore','Ordine','NS','NormaNominale','NP', ...
-    'RS_lower','RS_upper','RS','RP_lower','RP_upper','RP','OrigineAnalisi'});
-disp(confronto);
-% Risultati del progetto: Hinf NS/NP PASS, RS FAIL; RP numerica non validata
-% ed esclusa da RS. Kmu NS/NP/RS/RP PASS nel modello di incertezza dichiarato.
-% Una nuova sintesi o analisi va letta nella tabella corrente, non assume
-% automaticamente gli esiti della campagna archiviata.
-
-%% 13 - Grafici: bounds di mu e andamento delle iterazioni D-K
-if mostraFigure
-    fMu=figure('Name','Mu e iterazioni D-K','Theme','light','Color','white', ...
-        'Position',[80 80 1200 720]); tl=tiledlayout(fMu,2,2);
-    for j=1:2
-        nexttile(tl,j);
-        if ricalcolaAnalisi
-            semilogx(omega,muGriglia{j}.upper,'-',omega,muGriglia{j}.lower,'--');
-            yline(1,':'); legend('upper','lower','soglia 1','Location','best');
-            ylabel('Mu RS'); xlabel('Frequenza [rad/s]'); grid on;
-        else
-            axis off; text(.05,.5,'mussv non ricalcolata: attivare ricalcolaAnalisi'); %#ok<UNRCH>
-        end
-        title(nomi(j));
-    end
-    nexttile(tl,3); plot(storiaDK.Iterazione,storiaDK.PeakMu,'o-', ...
-        storiaDK.Iterazione,storiaDK.GammaScalata,'s-', ...
-        storiaDK.Iterazione,storiaDK.PeakMuFit,'d-');
-    yline(1,':'); grid on; xlabel('Iterazione'); ylabel('Obiettivo');
-    legend('PeakMu','gamma scalata','PeakMuFit','Location','best'); title(origineSintesi);
-    nexttile(tl,4); plot(storiaDK.Iterazione,storiaDK.OrdineK,'o-', ...
-        storiaDK.Iterazione,storiaDK.OrdineFitMassimo,'s-');
-    grid on; xlabel('Iterazione'); ylabel('Ordine'); legend('K','fit massimo','Location','best');
-    title('Crescita della complessita');
-end
-
-% Margini e norma pesata nominale: cosa migliora con Kmu
-if mostraFigure
-    fConfronto=figure('Name','Margini robusti e prestazioni nominali','Theme','light', ...
-        'Color','white','Position',[100 100 1200 400]); tl=tiledlayout(fConfronto,1,3);
-    nexttile(tl,1); bar([RS_lower RS_upper]); yline(1,':');
-    xticks(1:2); xticklabels(nomi); grid on; ylabel('Raggio normalizzato');
-    legend('lower','upper','Location','best'); title('Margine RS');
-    nexttile(tl,2);
-    if RP_lower(1)>RP_upper(1)
-        bar(2,[RP_lower(2) RP_upper(2)]); xlim([.5 2.5]);
-        text(1,.35,'RP Hinf non validata','HorizontalAlignment','center');
-    else
-        bar([RP_lower RP_upper]);
-    end
-    xticks(1:2); xticklabels(nomi); yline(1,':'); grid on;
-    ylabel('Raggio normalizzato'); title('Margine RP, target 1');
-    nexttile(tl,3); sigmaH=zeros(numel(omega),1); sigmaMu=sigmaH;
-    rispostaH=freqresp(CLhinf.NominalValue,omega); rispostaMu=freqresp(CLmu.NominalValue,omega);
-    for k=1:numel(omega)
-        sigmaH(k)=norm(rispostaH(:,:,k),2); sigmaMu(k)=norm(rispostaMu(:,:,k),2);
-    end
-    semilogx(omega,sigmaH,omega,sigmaMu); yline(1,':'); grid on;
-    xlabel('Frequenza [rad/s]'); ylabel('Sigma massima Tzw nominale');
-    legend(nomi,'Location','best'); title('Costo nominale');
-end
-
-% Tracking nominale sullo stesso sistema fisico
-% Due gradini separati di 5 deg; x(0)=0. La RP pesata non certifica Ts<=.8 s.
-% Il progetto conserva fallimenti temporali M5 anche per Kmu.
-tracking=cell(2,1); comandi=cell(2,1); mappeFisiche=cell(2,1);
-for j=1:2
-    if j==1, K=Khinf; else, K=Kmu; end
-    Kn=K; Kn.InputName={'r(1)','r(2)','q(1)','q(2)'}; Kn.OutputName={'u(1)','u(2)'};
-    Gnom=Pn.NominalValue;
-    CLfis=connect(Gnom,Kn,{'r(1)','r(2)','d(1)','d(2)'}, ...
-        {'q(1)','q(2)','u(1)','u(2)'});
-    assert(isstable(CLfis)); mappeFisiche{j}=CLfis;
-    risposte=step(CLfis(:,1:2),tempo)*deg2rad(5);
-    tracking{j}=risposte(:,1:2,:); comandi{j}=risposte(:,3:4,:);
-end
-if mostraFigure
-    fTracking=figure('Name','Tracking nominale: Hinf e Mu','Theme','light', ...
-        'Color','white','Position',[120 120 1100 700]); tl=tiledlayout(fTracking,2,2);
-    desiderata=step(Mo,tempo)*5;
-    for input=1:2
-        for output=1:2
-            nexttile(tl,(output-1)*2+input);
-            plot(tempo,rad2deg(tracking{1}(:,output,input)), ...
-                tempo,rad2deg(tracking{2}(:,output,input)), ...
-                tempo,desiderata(:,output,input),'--');
-            grid on; xlabel('Tempo [s]'); ylabel('Posizione [deg]');
-            title(sprintf('r%d -> q%d',input,output));
-            legend('Hinf','Mu','Mo','Location','best');
+    confronto=cell2table(righe,'VariableNames',{'Controllore','Sintesi','Analisi','Ordine','NS', ...
+        'NormaNominale','NP','RS_lower','RS_upper','RS','RP_lower','RP_upper','RP','MetodoRP','FrequenzaCritica'});
+    save(fileAnalisi,'analisi','confronto','nomi','K','origine','firma','-v7');
+else
+    if ~isfile(fileAnalisi),fileAnalisi=fullfile(p.dati,'confronto_robusto.mat');end
+    assert(isfile(fileAnalisi),'SEA:Cache','Manca analisi A/B validata: eseguire completa.');
+    a=load(fileAnalisi); assert(isequal(a.firma,firma),'SEA:Cache','Firma analisi diversa.');
+    analisi=a.analisi; confronto=a.confronto;
+    disp('RS/RP CARICATE dalla campagna completa; nuove verifiche nominali qui sotto.');
+    for k=1:numel(K)
+        for modello=1:2
+            [~,CL]=interconnessione_sea(piante{modello},p,size(K{k},2)-2,K{k});
+            assert(isstable(CL.NominalValue)==analisi{k,modello}.NS);
+            assert(abs(norm(CL.NominalValue(5:8,1:4),inf)-analisi{k,modello}.norma)<1e-6);
         end
     end
 end
+% Non trasferire PASS fra A e B: il fit certifica solo i campioni esplicitati.
+writetable(confronto,fullfile(p.risultati,'confronto_robusto.csv')); disp(confronto);
 
-% Risultati nel Workspace e limiti della verifica
-% Monte Carlo non viene scambiata per una garanzia mu. Questo script analizza
-% il modello lineare incerto dichiarato, non la regione di attrazione SEA.
-% Gli artifact del progetto non vengono sovrascritti e non si esporta nulla.
-risultati=struct('pianta',physical,'P',P,'Khinf',Khinf,'Kmu',Kmu, ...
-    'CLhinf',CLhinf,'CLmu',CLmu,'confronto',confronto,'analisi',{analisi}, ...
-    'muGriglia',{muGriglia},'storiaDK',storiaDK,'obiettivoMu',obiettivoMu, ...
-    'origineSintesi',origineSintesi,'storico',storico,'erroreNominale',erroreNominale, ...
-    'erroreLFT',erroreLFT,'tracking',{tracking},'comandi',{comandi}, ...
-    'mappeFisiche',{mappeFisiche},'ricalcolaAnalisi',ricalcolaAnalisi, ...
-    'ricalcolaSintesi',ricalcolaSintesi);
-disp('Percorso completo nel Workspace: physical, P, N_hinf, Delta_hinf, Kmu, risultati.');
-
-%% 14 - Controllore Mu con attenuazione del rumore di misura: esportazione Simulink
-% Solo lettura di MuN1 gia sintetizzato: Kmu rimane il precedente controllore.
-% MuN1 ha margini RS/RP sopra 1 negli audit archiviati, ma peggiora parte
-% del tracking: non soddisfa automaticamente tutte le specifiche originali.
-% Ingressi [r1;r2;qmis1;qmis2] in rad; uscite [u1;u2] in N m.
-% Il feedback e gia in K: nessuna negazione, conversione, scala, saturazione,
-% filtro o riduzione d'ordine viene aggiunta alla realizzazione originale.
-% Run lascia le variabili nel Base Workspace; clearvars iniziale cancella
-% quelle di progetto_hinf_tre_controllori. Prima di questo Run salvare con
-% save('controllori_Hinf.mat','*_Hinf_rumore','*_Hinf_precedente');
-% dopo questo Run, load('controllori_Hinf.mat') riunisce le due famiglie.
-% Per conservare Mu prima di eseguire Hinf usare analogamente
-% save('controllori_Mu.mat','*_Mu_rumore','*_Mu_precedente'); poi load.
-% La sola sezione richiede radice, Kmu ed esportaControlloriRumore gia definiti;
-% puo essere rieseguita senza musyn o una nuova iterazione D-K.
-if esportaControlloriRumore
-    fileRumoreMu=fullfile(radice,'results','data','noise_redesign','mu_noise_01.mat');
-    assert(isfile(fileRumoreMu),'MuProgetto:RumoreFile', ...
-        'File del controllore MuN1 mancante: %s',fileRumoreMu);
-    archivioRumoreMu=load(fileRumoreMu,'candidate');
-    assert(isfield(archivioRumoreMu,'candidate') && ...
-        isstruct(archivioRumoreMu.candidate) && isscalar(archivioRumoreMu.candidate), ...
-        'MuProgetto:RumoreCandidate','Struttura candidate mancante o non valida in %s.',fileRumoreMu);
-    assert(all(isfield(archivioRumoreMu.candidate,{'name','status','K'})), ...
-        'MuProgetto:RumoreCampi','Campi candidate.name, status o K mancanti in %s.',fileRumoreMu);
-    assert(isequal(archivioRumoreMu.candidate.name,"MuN1") || ...
-        isequal(archivioRumoreMu.candidate.name,'MuN1'), ...
-        'MuProgetto:RumoreNome','candidate.name deve essere MuN1 in %s.',fileRumoreMu);
-    assert(isequal(archivioRumoreMu.candidate.status,"SYNTHESIZED") || ...
-        isequal(archivioRumoreMu.candidate.status,'SYNTHESIZED'), ...
-        'MuProgetto:RumoreStato','candidate.status deve essere SYNTHESIZED in %s.',fileRumoreMu);
-    assert(isa(archivioRumoreMu.candidate.K,'ss') && ...
-        isequal(size(archivioRumoreMu.candidate.K),[2 4]), ...
-        'MuProgetto:RumoreSistema','candidate.K deve essere un singolo sistema ss 2x4 in %s.',fileRumoreMu);
-    assert(archivioRumoreMu.candidate.K.Ts==0 && ...
-        isempty(archivioRumoreMu.candidate.K.E) && ...
-        ~hasdelay(archivioRumoreMu.candidate.K) && isproper(archivioRumoreMu.candidate.K), ...
-        'MuProgetto:RumoreRealizzazione', ...
-        'candidate.K deve essere continuo, proprio, senza ritardi o matrice E in %s.',fileRumoreMu);
-
-    K_Mu_rumore=archivioRumoreMu.candidate.K;
-    [A_Mu_rumore,B_Mu_rumore,C_Mu_rumore,D_Mu_rumore]=ssdata(K_Mu_rumore);
-    assert(isreal([A_Mu_rumore(:);B_Mu_rumore(:);C_Mu_rumore(:);D_Mu_rumore(:)]) && ...
-        all(isfinite([A_Mu_rumore(:);B_Mu_rumore(:);C_Mu_rumore(:);D_Mu_rumore(:)])), ...
-        'MuProgetto:RumoreValori','Matrici di candidate.K complesse o non finite in %s.',fileRumoreMu);
-    assert(order(K_Mu_rumore)==82, ...
-        'MuProgetto:RumoreOrdine','candidate.K deve avere ordine 82 in %s.',fileRumoreMu);
-    assert(isequal(size(A_Mu_rumore),[82 82]) && ...
-        isequal(size(B_Mu_rumore),[82 4]) && isequal(size(C_Mu_rumore),[2 82]) && ...
-        isequal(size(D_Mu_rumore),[2 4]),'MuProgetto:RumoreMatrici', ...
-        'Dimensioni A, B, C, D incoerenti con MuN1 in %s.',fileRumoreMu);
-    x0_Mu_rumore=zeros(size(A_Mu_rumore,1),1);
-
-    assert(exist('Kmu','var')==1 && isa(Kmu,'ss') && isequal(size(Kmu),[2 4]), ...
-        'MuProgetto:PrecedenteSistema','Kmu precedente deve essere gia disponibile come sistema ss 2x4.');
-    assert(Kmu.Ts==0 && isempty(Kmu.E) && ~hasdelay(Kmu) && isproper(Kmu), ...
-        'MuProgetto:PrecedenteRealizzazione','Kmu deve essere continuo, proprio, senza ritardi o matrice E.');
-    K_Mu_precedente=Kmu;
-    [A_Mu_precedente,B_Mu_precedente,C_Mu_precedente,D_Mu_precedente]=ssdata(K_Mu_precedente);
-    nPrecedenteMu=order(K_Mu_precedente); % 78 nel MAT archiviato; ricalcolaSintesi resta opzionale
-    assert(isequal(size(A_Mu_precedente),[nPrecedenteMu nPrecedenteMu]) && ...
-        isequal(size(B_Mu_precedente),[nPrecedenteMu 4]) && ...
-        isequal(size(C_Mu_precedente),[2 nPrecedenteMu]) && ...
-        isequal(size(D_Mu_precedente),[2 4]),'MuProgetto:PrecedenteMatrici', ...
-        'Dimensioni A, B, C, D incoerenti con l''ordine di Kmu precedente.');
-    assert(isreal([A_Mu_precedente(:);B_Mu_precedente(:);C_Mu_precedente(:);D_Mu_precedente(:)]) && ...
-        all(isfinite([A_Mu_precedente(:);B_Mu_precedente(:);C_Mu_precedente(:);D_Mu_precedente(:)])), ...
-        'MuProgetto:PrecedenteValori','Matrici del Kmu precedente complesse o non finite.');
-    x0_Mu_precedente=zeros(nPrecedenteMu,1);
-
-    fprintf('\nSimulink: Mu precedente (Kmu), ordine %d; MuN1, ordine %d.\n', ...
-        nPrecedenteMu,size(A_Mu_rumore,1));
-    fprintf('Precedente: A %dx%d, B %dx4, C 2x%d, D 2x4, x0 %dx1.\n', ...
-        nPrecedenteMu,nPrecedenteMu,nPrecedenteMu,nPrecedenteMu,nPrecedenteMu);
-    fprintf('MuN1: A 82x82, B 82x4, C 2x82, D 2x4, x0 82x1.\n');
-    fprintf('State-Space precedente: A_Mu_precedente, B_Mu_precedente, C_Mu_precedente, D_Mu_precedente; IC x0_Mu_precedente.\n');
-    fprintf('State-Space MuN1: A_Mu_rumore, B_Mu_rumore, C_Mu_rumore, D_Mu_rumore; IC x0_Mu_rumore.\n');
-    fprintf('Ingressi [r1;r2;qmis1;qmis2] (rad), uscite [u1;u2] (N m); feedback gia incluso.\n');
-    fprintf('MuN1: margini RS/RP archiviati >1; compromessi di tracking e target M5 parziali.\n');
+%% 4 - Storia D-K e margini: gli insiemi oltre raggio uno sono differenti
+storia=cell(1,2);
+for modello=1:2
+    info=candidati{modello}.info; dati=zeros(numel(info),4);
+    for j=1:numel(info),dati(j,:)=[j info(j).PeakMu info(j).gamma order(info(j).K)];end
+    storia{modello}=array2table(dati,'VariableNames',{'Iterazione','PeakMu','GammaScalata','Ordine'});
+    writetable(storia{modello},fullfile(p.risultati,"dk_"+modello+".csv"));
+end
+if p.figure
+    f=figure('Name','Robustezza A/B e D-K','Color','w'); theme(f,'light'); tiledlayout(1,2);
+    nexttile; bar(reshape(confronto.RS_lower,2,[])'); yline(1,'--k');
+    set(gca,'XTick',1:numel(nomi),'XTickLabel',nomi); xtickangle(45); grid on;
+    ylabel('Limite inferiore RS'); legend('A parametrico','B concentrato');
+    nexttile; plot(storia{1}.Iterazione,storia{1}.PeakMu,'o-',storia{2}.Iterazione,storia{2}.PeakMu,'s-');
+    yline(1,'--k'); grid on; xlabel('Iterazione'); ylabel('Picco mu'); legend('Sintesi A','Sintesi B');
+    exportgraphics(f,fullfile(p.risultati,'robustezza.png'),'Resolution',170);
 end
 
-%% Funzioni locali: verifiche ausiliarie e tabella delle iterazioni
-function errore=erroreMappe(a,b,w)
-errore=max(abs(freqresp(a,w)-freqresp(b,w)),[],'all');
+function stato=esito(m)
+% Un intervallo numericamente invertito non viene mai riordinato.
+if isnan(m.LowerBound) || isnan(m.UpperBound) || m.LowerBound>m.UpperBound
+    stato="INCONCLUDENTE";
+elseif m.LowerBound>1
+    stato="PASS";
+elseif m.UpperBound<1
+    stato="FAIL";
+else
+    stato="INCONCLUDENTE";
 end
-
-function esito=esitoMargine(m)
-if m.LowerBound>1, esito="PASS";
-elseif m.UpperBound<1, esito="FAIL";
-else, esito="INCONCLUSIVE";
-end
-end
-
-function storia=tabellaDK(info)
-% Usata dal ramo di risintesi opzionale; dati delle iterazioni reali musyn.
-n=numel(info); dati=zeros(n,6);
-for k=1:n
-    peak=info(k).PeakMu; fit=info(k).PeakMuFit;
-    if isstruct(peak), peak=peak.UpperBound; end
-    if isstruct(fit), fit=fit.UpperBound; end
-    dati(k,:)=[k,peak,info(k).gamma,fit,order(info(k).K),max(info(k).FitOrder(:))];
-end
-storia=array2table(dati,'VariableNames', ...
-    {'Iterazione','PeakMu','GammaScalata','PeakMuFit','OrdineK','OrdineFitMassimo'});
 end

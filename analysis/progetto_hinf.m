@@ -1,3 +1,4 @@
+% ARCHIVIO M4: il percorso corrente e run_all.m e usa gli script accorpati.
 %% 1 - Introduzione e dati: progetto H-infinity, separato dal percorso LQG
 % Le sezioni 1-19 riproducono la baseline congelata M5/M10/M13.
 % La sezione 20 espone il successivo studio a tre pesi, separato e salvato.

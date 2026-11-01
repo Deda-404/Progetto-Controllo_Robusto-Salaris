@@ -4,6 +4,13 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+## 2026-11-01 — Collaudo e consegna definitiva
+
+- Percorso unico completo eseguito, A/B confrontati a controllore fissato e dopo le sintesi dedicate; risultati negativi preservati.
+- 150 prove RAS, venti prove non lineari, 110 chiusure fisiche e 28 run Simulink; otto SLX invariati.
+- Copia estratta autonoma verificata con rapida e tutti i run SLX; sorgenti/ingressi identici per hash.
+- Relazione conservata e aggiornata a 120 pagine, 23 slide con stessi titoli, discorso stimato 17:42; grafici e schemi verificati visivamente.
+
 ## 2026-10-31 — Revisione definitiva A/B, primo consolidamento
 
 - Modellazione attuativa parametrica e concentrata nello stesso percorso accorpato, nominale e controllori originali conservati.

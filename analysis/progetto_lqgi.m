@@ -1,3 +1,4 @@
+% ARCHIVIO M4: il percorso corrente e run_all.m e usa gli script accorpati.
 %% 1 - LQGI: LQR con integratore e osservatore di Kalman M6
 % Il controllore usa solo encoder: u=-Kx*xhat-Ki*xi, xi_dot=r-q_mis.
 % Lo stato vero entra nella pianta simulata, mai nel feedback implementato.

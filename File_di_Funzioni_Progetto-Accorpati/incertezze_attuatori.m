@@ -103,7 +103,7 @@ fprintf('A/B nominalmente equivalenti: %.3g / %.3g; peso ordine %d.\n',erroreA,e
 
 %% 7 - Grafici SISO: modulo, fase, poli e tempo della stessa famiglia
 if p.figure
-    f=figure('Name','Famiglia parametrica degli attuatori','Color','w'); tiledlayout(2,2);
+    f=figure('Name','Famiglia parametrica degli attuatori','Color','w'); theme(f,'light'); tiledlayout(2,2);
     for j=1:nCampioni
         risposta=squeeze(freqresp(attuatori{j},p.omega));
         nexttile(1); semilogx(p.omega,20*log10(abs(risposta)),'Color',[.7 .8 .9]); hold on;
@@ -117,7 +117,7 @@ if p.figure
     nexttile(3); plot(real(pole(G0)),imag(pole(G0)),'kx'); grid on; xlabel('Re polo [1/s]'); ylabel('Im polo [1/s]');
     nexttile(4); [y,t]=step(G0,0:.001:.4); plot(t,y,'k','LineWidth',1.5); grid on; xlabel('Tempo [s]'); ylabel('Coppia [N m]');
     exportgraphics(f,fullfile(p.risultati,'famiglia_attuatori.png'),'Resolution',170);
-    f=figure('Name','Costruzione del peso concentrato','Color','w');
+    f=figure('Name','Costruzione del peso concentrato','Color','w'); theme(f,'light');
     semilogx(p.omega,scostamenti,'Color',[.75 .8 .9]); hold on;
     h1=semilogx(p.omega,inviluppo,'k--','LineWidth',1.5);
     h2=semilogx(p.omega,squeeze(abs(freqresp(WI,p.omega))),'r','LineWidth',1.5);

@@ -47,6 +47,8 @@ desktop.ini
 # Temporary results only; validated result artifacts remain trackable
 results/tmp/
 tmp/
+# Curve lineari dense rigenerabili; CSV, parametri e figure restano versionati.
+/File_di_Funzioni_Progetto-Accorpati/risultati/confronto.mat
 
 # Intermediate PDF names; final deliverables are tracked
 /report/main.pdf
@@ -57,6 +59,7 @@ __pycache__/
 *.pyc
 
 # Generated student package; sources and selected hashes are tracked
+/delivery/Consegna_Progetto_SEA/
 /delivery/Consegna_SEA_2026-10-13/
 /delivery/Consegna_SEA_2026-10-13.zip
 /delivery/Consegna_SEA_Rumore_Orale_2026-10-13/

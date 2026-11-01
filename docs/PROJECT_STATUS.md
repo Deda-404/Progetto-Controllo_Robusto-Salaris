@@ -1,8 +1,8 @@
-# Stato corrente — 31.10.2026, revisione definitiva A/B
+# Stato corrente — 01.11.2026, revisione definitiva A/B
 
 Ramo `codex/revisione-definitiva-sea-salaris`, base main `0ed5611f`. Modellazione A/B e controllori accorpati implementati; nominale, CARE, campionamento e copertura dei casi provati verificati. Risultati scientifici positivi e negativi in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).
 
-Quality gate modellazione COMPLETE/PASS; collaudo integrato, elaborati e consegna PARTIAL in corso. Nessun merge. Lo stato precedente qui sotto riguarda la famiglia M4 storica.
+Quality gate implementazione, collaudi ed elaborati COMPLETE/PASS. Consegna estratta fuori repository: rapida e 28 run SLX PASS, 31 sorgenti/ingressi identici per hash. RAS: 117 convergenze, 24 mancate convergenze, 9 divergenze osservate su 150; nessun timeout finale. Relazione 120 pagine, 23 slide, 17:42 stimati. Matrice R01–R19 PASS; pubblicazione R20 in corso. Nessun merge. Lo stato precedente qui sotto riguarda la famiglia M4 storica.
 
 ---
 
