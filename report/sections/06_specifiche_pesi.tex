@@ -1,5 +1,20 @@
 \chapter{Specifiche di prestazione}
 \section{Obiettivo e scenari}
+
+\paragraph*{Invarianza del confronto A/B.}
+Nominale, equilibrio, misure, disturbo, riferimenti e pesi restano uguali.
+Per l'analisi comune usiamo i pesi della formulazione finale 2-DoF:
+\[
+W_e=\frac{s/3+2}{s+0.3}I_2,\quad
+W_u=0.003\frac{s+80}{s/6+80}I_2,\quad
+M_o=\frac{16}{s^2+8s+16}I_2.
+\]
+La prestazione pesata e $\|[W_e(q-M_or);W_uu]/[r;d]\|_\infty<1$.
+NP rispetto a questo costo comune puo fallire per LQG, LQGI o Hinf1
+pur essendo valido il loro diverso progetto originale. Non si
+reinterpreta retroattivamente il costo LQR o mixed sensitivity.
+Il peso $W_I$ descrive l'incertezza e non e un nuovo peso prestazionale.
+
 Le specifiche traducono il problema fisico in obiettivi comuni alle sintesi. Il riferimento nominale è un gradino articolare di $5^\circ$ attorno all'equilibrio; le ampiezze 2, 5 e $8^\circ$ servono soltanto a verificare la località del modello. Il disturbo nominale è una coppia di 0.5 N m applicata direttamente ai link. I target principali sono
 \[
 T_s\le\SettlingTarget\ \mathrm{s},\quad M_p\le\OvershootTarget\%,

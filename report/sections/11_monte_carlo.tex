@@ -1,5 +1,26 @@
 \chapter{Verifica pratica della robustezza su impianti incerti}
 \section{Scopo e costruzione degli impianti}
+
+\paragraph*{Campagna corrente sui dieci impianti fisici.}
+Il seme 20261031 campiona i quattro parametri reali di A.
+Le medesime dieci quadruple vengono usate per ogni controllore, oltre
+al nominale. Non si campionano nuove dinamiche arbitrarie in B per
+sostituire questi impianti: B deve essere confrontato sulla stessa
+fisica di A. Per ciascun caso si riportano poli, stabilita, errore
+statico, assestamento, overshoot, risposta al disturbo e comando.
+Un caso instabile non riceve metriche prestazionali finite inventate.
+\input{generated/definitiva_impianti.tex}
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{figures/definitiva/dieci_impianti.png}
+\caption{Tracking sui medesimi dieci impianti piu nominale.
+Le curve sono omesse quando il chiuso e instabile.}
+\end{figure}
+Queste dieci variazioni fisiche sono distinte dalle quindici condizioni
+iniziali della RAS. I conteggi sono evidenza empirica, non probabilita.
+\paragraph*{Precedente campagna M4, conservata per provenienza.}
+Le realizzazioni e i risultati del testo seguente appartengono al
+precedente insieme misto e non vengono rinominati come campioni A/B.
+
 Per rendere concreto il significato di robustezza abbiamo generato dieci
 impianti dall'insieme incerto, oltre al nominale. Non stimiamo una
 probabilità di successo: osserviamo come lo stesso controllore reagisce

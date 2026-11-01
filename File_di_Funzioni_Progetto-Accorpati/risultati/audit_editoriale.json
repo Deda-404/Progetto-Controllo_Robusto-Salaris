@@ -1,0 +1,129 @@
+{
+  "base": "0ed5611fdbb9c46475543f87eba68d9799b07bc5",
+  "indice": {
+    "report\\sections\\01_introduzione.tex": {
+      "titoli_conservati": 5
+    },
+    "report\\sections\\02_modello_dinamico.tex": {
+      "titoli_conservati": 6
+    },
+    "report\\sections\\03_equilibrio_linearizzazione.tex": {
+      "titoli_conservati": 4
+    },
+    "report\\sections\\04_attuatori.tex": {
+      "titoli_conservati": 5
+    },
+    "report\\sections\\05_incertezze.tex": {
+      "titoli_conservati": 5
+    },
+    "report\\sections\\06_specifiche_pesi.tex": {
+      "titoli_conservati": 4
+    },
+    "report\\sections\\07_lqg.tex": {
+      "titoli_conservati": 29
+    },
+    "report\\sections\\08_hinf.tex": {
+      "titoli_conservati": 23
+    },
+    "report\\sections\\09_mu.tex": {
+      "titoli_conservati": 17
+    },
+    "report\\sections\\10_originali_simulink.tex": {
+      "titoli_conservati": 3
+    },
+    "report\\sections\\10_validazione_nonlineare.tex": {
+      "titoli_conservati": 13
+    },
+    "report\\sections\\11_monte_carlo.tex": {
+      "titoli_conservati": 7
+    },
+    "report\\sections\\12_confronto_finale.tex": {
+      "titoli_conservati": 2
+    },
+    "report\\sections\\13_conclusioni_limiti.tex": {
+      "titoli_conservati": 1
+    },
+    "report\\sections\\A_parametri.tex": {
+      "titoli_conservati": 1
+    },
+    "report\\sections\\B_artifact_traceability.tex": {
+      "titoli_conservati": 1
+    },
+    "report\\sections\\C_riproducibilita.tex": {
+      "titoli_conservati": 5
+    },
+    "report\\sections\\D_codici_matlab.tex": {
+      "titoli_conservati": 15
+    }
+  },
+  "slx_hash": "8/8 PASS",
+  "pdf": {
+    "report": {
+      "pages": 120,
+      "outside_page": [],
+      "detail_pages": [
+        5,
+        7,
+        11,
+        20,
+        23,
+        25,
+        63,
+        66,
+        73,
+        74,
+        95,
+        108
+      ],
+      "contact_sheets": [
+        "tmp\\pdf_review\\report_sheet_1.png",
+        "tmp\\pdf_review\\report_sheet_2.png",
+        "tmp\\pdf_review\\report_sheet_3.png",
+        "tmp\\pdf_review\\report_sheet_4.png",
+        "tmp\\pdf_review\\report_sheet_5.png",
+        "tmp\\pdf_review\\report_sheet_6.png",
+        "tmp\\pdf_review\\report_sheet_7.png",
+        "tmp\\pdf_review\\report_sheet_8.png",
+        "tmp\\pdf_review\\report_sheet_9.png",
+        "tmp\\pdf_review\\report_sheet_10.png"
+      ],
+      "sha256": "4d6332b3c8ac2ee0bfee07f2939a70865c9fbaa641292649797cd4ebca5a6730",
+      "controllo_visivo": "PASS: tutte le pagine in fogli di contatto e dettagli critici"
+    },
+    "presentation": {
+      "pages": 23,
+      "outside_page": [],
+      "detail_pages": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "contact_sheets": [
+        "tmp\\pdf_review\\presentation_sheet_1.png",
+        "tmp\\pdf_review\\presentation_sheet_2.png"
+      ],
+      "sha256": "a8991bd755b70cbff8262d0d196ab5fd43bb50dd6eace910dded209a2ab22105",
+      "controllo_visivo": "PASS: tutte le pagine in fogli di contatto e dettagli critici"
+    }
+  }
+}

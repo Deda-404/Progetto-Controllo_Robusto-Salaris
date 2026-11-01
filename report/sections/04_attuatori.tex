@@ -30,6 +30,27 @@ La scelta di ordine uno mantiene contenuto l'ordine e rende esplicito il limite 
 \end{figure}
 
 \section{Implementazione, verifica e interpretazione}
+
+\paragraph*{Dal SISO al MIMO.}
+Il comando $u_i$ attraversa il drive $G_{a,i}$ e produce la coppia motore
+$\tau_i$. La molla trasferisce $k_i(\theta_i-q_i)$ al link. L'accoppiamento
+fra giunti appartiene a $M(q),C(q,\dot q),G(q)$: non viene aggiunto un
+accoppiamento incerto fra i due drive.
+\begin{figure}[H]\centering
+\input{figures/schemes/sea_attuatori.tex}
+\caption{Due canali attuativi SISO indipendenti e meccanica SEA accoppiata.
+Il disturbo $d$ entra sul lato link; le quattro posizioni sono le misure.}
+\end{figure}
+La nuova verifica varia cinque valori per volta di $\omega_n$, $\zeta$
+e del ritardo, mantenendo nominali gli altri. Nel primo intervallo,
+$[36,44]$ rad/s, la banda passa circa da 31.3 a 38.3 rad/s. Nel secondo,
+$[0.72,0.88]$, cambia soprattutto lo smorzamento (overshoot circa
+3.74--0.287\%). La variazione del ritardo ha un effetto non trascurabile
+sulla fase. Si conservano quindi i nominali gia motivati; il ritardo
+fisso della campagna A/B e una restrizione esplicita, non l'esito di
+una dimostrazione di irrilevanza. I dati sono in
+\path{risultati/sensibilita_attuatori.csv}.
+
 Due copie diagonali dell'attuatore aggiungono sei stati agli otto stati SEA. La pianta completa ha ordine \FullPlantOrder, ingressi $u_1,u_2$, misure $[q^T,\theta^T]^T$ e uscita primaria $q$. La cascata è costruita esplicitamente per preservare l'ordine degli stati e confrontata con una seconda interconnessione ottenuta mediante \texttt{series}; le risposte coincidono entro la precisione numerica.
 
 La pianta conserva i due poli meccanici instabili e aggiunge soltanto poli attuativi stabili. I test PBH confermano stabilizzabilità e rilevabilità. I valori attuativi sono assunzioni di progetto verificate, non risultati di identificazione sperimentale.
