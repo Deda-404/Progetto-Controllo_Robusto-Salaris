@@ -96,6 +96,6 @@ Le prime prove hanno rilevato un percorso temporaneo errato nel comando di ispez
 | C16 | Nessun nuovo modulo MATLAB, libreria, dipendenza o .satk | Verificato |
 | C17 | Schemi recuperati e aggiornati, quattro nuove figure dagli stessi dati correnti | Verificato |
 | C18–C19 | Medesimi campioni fisici, sei CSV riprodotti e nessun trasferimento di vecchi PASS | Verificato |
-| C20 | Stesso ramo e PR #47; commit correttivi, nessun merge | Pubblicazione in corso |
+| C20 | Stesso ramo e PR #47; commit correttivi, nessun merge | Pubblicato sulla PR esistente; nessun merge |
 
 Il recupero didattico riguarda gli argomenti elencati, non l'uguaglianza del numero di pagine o la reintroduzione di campagne obsolete. La valutazione editoriale finale spetta agli studenti; la consegna non dichiara risolti i limiti prestazionali.

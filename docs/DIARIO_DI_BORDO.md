@@ -3155,3 +3155,6 @@ Gli otto SLX hanno InitFcn locale automatica e massa effettiva parametrizzata pe
 
 
 Verifica finale della correzione: rapida e cinque test nel repository, rapida e 20 run campionati più otto avvii autonomi nella ZIP estratta, exit code 0; sei CSV identici. PDF di 68 pagine senza warning e controllato visivamente. Code Analyzer: due suggerimenti non critici, non zero. Nessuna nuova sintesi Hinf/D-K o RAS; tutti i FAIL restano espliciti. Pubblicazione sullo stesso ramo in corso.
+
+
+Pubblicazione della correzione: commit 0e3ff48 inviato sul ramo esistente, titolo e descrizione della PR #47 aggiornati; nessuna nuova PR e nessun merge. Rigenerazione finale della ZIP con gli stessi sorgenti e ingressi già collaudati; controllo SHA-256 di identità del contenuto eseguibile. La revisione editoriale degli studenti e i limiti prestazionali restano espliciti.

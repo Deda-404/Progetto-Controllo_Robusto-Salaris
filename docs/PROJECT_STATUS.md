@@ -2,7 +2,7 @@
 
 Recuperati gli approfondimenti dei capitoli 5, 7–10 dal main dbf6f00, mantenendo carico, ritardo e rappresentazione additiva corretti. Sette candidati predefiniti; riferimenti disponibili su richiesta. Nessuna nuova sintesi Hinf/D-K, pesi e target invariati dopo riesame esplicito dei loro limiti. Otto SLX salvati con InitFcn automatica, senza nuova topologia o librerie.
 
-Quality gate verifiche COMPLETE: rapida, cinque test, otto avvii SLX autonomi nel repository; rapida, 20 run campionati e otto avvii autonomi nella ZIP estratta. Sei CSV identici. PDF di 68 pagine compilato senza warning e controllato. Pubblicazione sullo stesso ramo in corso. Accettazione prestazionale PARTIAL: nessun RP PASS, µ_A/µ_B non raccomandati per tracking/rumore. Matrice dei contenuti e limiti in CORREZIONE_CONSERVATIVA.md. Gli stati sotto sono registrazioni precedenti e non descrivono la correzione in corso.
+Quality gate verifiche COMPLETE: rapida, cinque test, otto avvii SLX autonomi nel repository; rapida, 20 run campionati e otto avvii autonomi nella ZIP estratta. Sei CSV identici. PDF di 68 pagine compilato senza warning e controllato. Commit correttivo 0e3ff48 pubblicato sullo stesso ramo e descrizione della PR #47 aggiornata. Nessun merge. Accettazione prestazionale PARTIAL: nessun RP PASS, µ_A/µ_B non raccomandati per tracking/rumore. Matrice dei contenuti e limiti in CORREZIONE_CONSERVATIVA.md. Gli stati sotto sono registrazioni precedenti e non descrivono la correzione in corso.
 
 ---
 
