@@ -49,7 +49,7 @@ save(fullfile(p.risultati,'modello.mat'),'modello','-v7');
 fprintf('Nominale: %d stati; mEE %.1f kg; errore interconnessione %.3g.\n',order(P0),p.mEE,erroreNominale);
 
 %% 4 - Scale dinamiche e sensibilita: cinque valori, un parametro alla volta
-valori=linspace(-1,1,5); righe=cell(15,5); curva=0;
+valori=linspace(-1,1,5); righe=cell(15,5); curva=0; curveSensibilita=cell(15,1);
 for tipo=1:3
     for valore=valori
         wn=p.wn; zeta=p.zeta; ritardo=p.ritardo;
@@ -57,7 +57,7 @@ for tipo=1:3
         if tipo==2,zeta=zeta*(1+p.rzeta*valore);end
         if tipo==3,ritardo=ritardo*(1+p.rritardo*valore);end
         Ga=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-ritardo*s/2)/(1+ritardo*s/2);
-        curva=curva+1; risposta=stepinfo(Ga);
+        curva=curva+1; curveSensibilita{curva}=Ga; risposta=stepinfo(Ga);
         scarto=max(abs(freqresp(Ga,p.omega)./freqresp(G0,p.omega)-1),[],'all');
         righe(curva,:)={tipo,valore,bandwidth(Ga),risposta.Overshoot,scarto};
     end
@@ -68,6 +68,18 @@ disp(sensibilita);
 % Il ritardo varia in A e nella famiglia che costruisce il peso B.
 % L'errore rispetto al ritardo esatto resta distinto dalla sua variabilita.
 if p.figure
+    f=figure('Name','Tre parametri attuativi','Color','w','Position',[20 20 1100 800]); theme(f,'light'); tiledlayout(3,2);
+    etichette=["Frequenza naturale","Smorzamento","Ritardo"];
+    for tipo=1:3
+        for j=1:5
+            risposta=squeeze(freqresp(curveSensibilita{5*(tipo-1)+j},p.omega));
+            nexttile(2*tipo-1); semilogx(p.omega,20*log10(abs(risposta))); hold on;
+            nexttile(2*tipo); semilogx(p.omega,unwrap(angle(risposta))*180/pi); hold on;
+        end
+        nexttile(2*tipo-1); grid on; xlim([1 1000]); ylabel('Modulo [dB]'); title(etichette(tipo));
+        nexttile(2*tipo); grid on; xlim([1 1000]); ylabel('Fase [gradi]'); xlabel('rad/s');
+    end
+    exportgraphics(f,fullfile(p.risultati,'sensibilita_singoli_parametri.png'),'Resolution',170);
     f=figure('Name','Attuatore nominale e ritardo','Color','w'); theme(f,'light'); tiledlayout(1,2);
     nexttile; step(G0); grid on; title('Risposta nominale, coppia unitaria');
     nexttile; semilogx(p.omega,(-p.ritardo*p.omega+2*atan(p.ritardo*p.omega/2))*180/pi);

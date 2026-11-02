@@ -1,256 +1,190 @@
-PRESENTAZIONE ORALE — MANIPOLATORE PLANARE 2-DoF CON SEA
-Alessio de Dato, matricola 635256; Valerio Rebechi, matricola 722224.
-Revisione del 1 novembre 2026.
+PRESENTAZIONE ORALE — PROGETTO SEA
+Alessio de Dato e Valerio Rebechi
+Testo coerente con le 23 slide; tempi stimati, da provare ad alta voce.
 
-VERSIONE PRINCIPALE
-Titoli e regia non vanno letti. Le 23 slide conservano la sequenza originale.
-Il confronto corrente riguarda le famiglie attuative A/B. I risultati M4
-rimangono storici nella relazione. Tempi stimati, non prova orale dal vivo.
-
-SLIDE 1 — Controllo robusto di un manipolatore planare 2-DoF con SEA
-Studente: Alessio
-Tempo previsto: 0:21 (44 parole a 125 parole/min)
-Testo da pronunciare:
-Buongiorno. Presentiamo il controllo del nostro manipolatore SEA a due giunti. Conserviamo il progetto originale e approfondiamo la modellazione delle incertezze degli attuatori. Confrontiamo una descrizione parametrica e una concentrata, distinguendo ciò che cambia nelle garanzie da ciò che cambia realmente nella risposta fisica.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 2 — SEA: otto stati meccanici, due poli instabili
-Studente: Alessio
-Tempo previsto: 0:46 (96 parole a 125 parole/min)
-Testo da pronunciare:
-Un SEA collega il motore al link attraverso un elemento elastico. Per questo distinguiamo la posizione del rotore, theta, da quella del link, q. La differenza produce la coppia elastica. L'elasticità può rendere più cedevole l'interazione, ma introduce oscillazioni da controllare. Con due giunti abbiamo quattro posizioni e quattro velocità: gli stati meccanici sono otto. Lavoriamo attorno alla configurazione q uno uguale a pi greco mezzi e q due nullo, con velocità nulle. Le equazioni di equilibrio fissano anche le posizioni dei rotori e le coppie. La linearizzazione ha due poli positivi: dobbiamo stabilizzare questo equilibrio.
-Regia: indicare theta e q nelle due equazioni, poi l'equilibrio.
-
-SLIDE 3 — Sei stati di attuatore completano il modello
-Studente: Alessio
-Tempo previsto: 0:45 (93 parole a 125 parole/min)
-Testo da pronunciare:
-Ogni comando attraversa un attuatore del secondo ordine e un ritardo approssimato con Padé. Abbiamo tre stati per canale e quattordici in totale. Il nominale resta quaranta radianti al secondo, smorzamento zero virgola otto e ritardo di quindici millisecondi. Nell'analisi corrente variano frequenza naturale e smorzamento, indipendentemente nei due giunti, del dieci per cento. Sono quattro scalari reali, non due parametri condivisi. Manteniamo meccanica nominale e ritardo noto: è una restrizione dichiarata della famiglia, non una dimostrazione che le altre incertezze siano irrilevanti. I due drive sono SISO; l'accoppiamento appartiene alla meccanica MIMO.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 4 — Specifiche: norma pesata e tracking sono verifiche diverse
-Studente: Valerio
-Tempo previsto: 0:46 (96 parole a 125 parole/min)
-Testo da pronunciare:
-Le incertezze rappresentano variazioni ammesse del modello, non rumori casuali sui sensori. Manteniamo lo stesso insieme durante i confronti. Per il tracking usiamo gradini di cinque gradi, con obiettivi su assestamento, sovraelongazione, errore statico e accoppiamento. L'assestamento richiesto è entro zero virgola otto secondi. Il disturbo è una coppia di mezzo newton metro sul link. La scelta della banda deve confrontarsi con poli instabili, ritardo ed elasticità. La scala di dodici newton metro presente nel progetto aiuta a pesare il comando; non è il limite documentato di un motore reale. Questa distinzione tornerà nell'analisi del rumore.
-Regia: indicare la tabella delle specifiche; distinguere la scala del comando dal limite hardware.
-
-SLIDE 5 — LQR: il costo deriva dalle grandezze fisiche
-Studente: Valerio
-Tempo previsto: 0:47 (98 parole a 125 parole/min)
-Testo da pronunciare:
-Il primo progetto parte dal controllo ottimo LQR. Il costo penalizza lo scostamento dello stato e lo sforzo di controllo. Nel nostro caso lo stato contiene anche la deformazione elastica: penalizzare theta meno q introduce termini incrociati nella matrice del costo. Quindi i pesi hanno un significato fisico, oltre che numerico. Un comando più costoso porta a risposte meno energiche; chiedere maggiore rapidità può avvicinare la chiusura alle dinamiche elastiche e attuative più delicate. Il problema pratico è che non misuriamo tutte le velocità e gli stati degli attuatori. Per applicare questo feedback serve una stima dello stato.
-Regia: indicare i termini elastici del costo e la legge di feedback.
-
-SLIDE 6 — LQG: quattro encoder e stato stimato
-Studente: Valerio
-Tempo previsto: 0:49 (102 parole a 125 parole/min)
-Testo da pronunciare:
-Il filtro di Kalman combina il modello con quattro misure di posizione: due dei link e due dei rotori. Predice lo stato usando il comando e corregge la previsione con la differenza fra misura e uscita prevista. Le covarianze esprimono la fiducia relativa nel modello e nei sensori. Il controllore usa lo stato stimato, non quello esatto disponibile nel simulatore. LQG combina quindi LQR e Kalman. Il principio di separazione aiuta a progettare il caso nominale, ma non certifica automaticamente la robustezza. Il tracking nominale soddisfa le richieste; una coppia costante lascia però un offset. Alessio mostra come abbiamo affrontato questo limite.
-Regia: seguire misura, innovazione e stato stimato. Passaggio ad Alessio.
-
-SLIDE 7 — LQGI: memoria dell'errore misurato
-Studente: Alessio
-Tempo previsto: 0:48 (100 parole a 125 parole/min)
-Testo da pronunciare:
-LQGI aggiunge due integratori dell'errore fra riferimento e posizione misurata. Se persiste uno scostamento, la memoria integrale continua a modificare il comando. Il feedback usa sempre lo stato stimato da Kalman; l'integratore riceve invece l'errore encoder. Il suo ruolo è eliminare il residuo sotto disturbo costante. Nel modello lineare verifichiamo un guadagno statico nullo dal disturbo alla posizione. Nella simulazione non lineare osserviamo il recupero a tempo finito, che è una verifica diversa. Il prezzo della scelta è il tracking più lento: l'assestamento peggiore è circa cinque secondi. Non abbiamo introdotto saturazioni o anti-windup per modificare artificialmente questo confronto.
-Regia: indicare il recupero dopo il disturbo nel grafico.
-
-SLIDE 8 — H-infinity: sensibilità mista e pesi adottati
-Studente: Alessio
-Tempo previsto: 0:44 (91 parole a 125 parole/min)
-Testo da pronunciare:
-La sensibilità S descrive il ritorno dell'errore, mentre T è la sensibilità complementare. Nella sintesi mista pesiamo S con W uno e il comando con W due. Conserviamo i pesi scelti nella ricerca originale, così il confronto delle incertezze non viene favorito cambiando il costo. Mixsyn costruisce automaticamente la pianta standard; hinfsyn permette di costruirla esplicitamente. Abbiamo risolto entrambi lo stesso problema a un grado di libertà e verificato la coerenza. Gamma inferiore a uno riguarda quella norma pesata; non impone da solo overshoot, assestamento e robustezza rispetto alla famiglia incerta.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 9 — Due gradi di libertà, stati condivisi
-Studente: Alessio
-Tempo previsto: 0:49 (102 parole a 125 parole/min)
-Testo da pronunciare:
-Per gestire meglio il tracking separiamo riferimento e misura. Il controllore riceve quattro ingressi e genera due comandi; le due parti condividono la stessa dinamica interna. Il modello desiderato Mo entra nel costo attraverso la differenza fra posizione reale e posizione desiderata. Non è un prefiltro aggiunto dopo la sintesi. Hinfsyn usa quattro misure e due comandi. La prima formulazione produce un controllore di ordine ventidue, senza overshoot nominale e con assestamento di uno virgola quarantasei secondi. Miglioriamo quindi la forma della risposta, ma il target di zero virgola otto secondi resta fallito. Valerio confronta ora questo risultato con strutture più semplici.
-Regia: seguire i rami Kr e Ky. Passaggio a Valerio.
-
-SLIDE 10 — Ordine completo e ordine fissato: il compromesso rimane
-Studente: Valerio
-Tempo previsto: 0:44 (92 parole a 125 parole/min)
-Testo da pronunciare:
-Il controllore completo ha maggiore libertà progettuale e può avere molti stati. Il PID strutturato fissa invece l'architettura e lascia ottimizzare alcuni coefficienti. Nella nuova prova hinfstruct abbiamo usato tre avvii: uno è instabile e viene escluso; gli altri sono confrontati sullo stesso costo. Il PID selezionato migliora la norma nominale rispetto a quello originale, ma questo non risolve la fragilità. La tabella usa un costo comune di valutazione. Non confondiamo questo confronto con i gamma prodotti da problemi di sintesi differenti. I controllori originali rimangono disponibili e non vengono sostituiti silenziosamente.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 11 — Mu-analysis: separare controllore e incertezza
-Studente: Valerio
-Tempo previsto: 0:44 (92 parole a 125 parole/min)
-Testo da pronunciare:
-Il modello A conserva le quattro grandezze fisiche. Normalizziamo ogni parametro rispetto al nominale, con delta reale compreso fra meno uno e uno. Quando la frequenza compare più volte, riusiamo lo stesso delta: le occorrenze non diventano indipendenti. Per B partiamo dalla medesima famiglia, campioniamo gli attuatori, calcoliamo gli scostamenti relativi e ne prendiamo l'inviluppo. Confrontiamo fit di ordine uno, due e tre. Scegliamo l'ordine minimo che copre dinamicamente tutti i casi provati con eccesso contenuto. Otteniamo due perturbazioni dinamiche indipendenti. Attenzione: la copertura dei campioni non dimostra l'inclusione dell'intero box parametrico.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 12 — Mu: valore singolare strutturato
-Studente: Valerio
-Tempo previsto: 0:48 (100 parole a 125 parole/min)
-Testo da pronunciare:
-Mu misura quanto piccola può essere una perturbazione strutturata capace di rendere singolare la chiusura. Mu grande segnala fragilità; non è una probabilità di guasto. Distinguiamo quattro proprietà: stabilità nominale, prestazione nominale, stabilità robusta e prestazione robusta. Robstab valuta la stabilità dell'insieme incerto; robgain valuta anche una soglia sulla norma pesata. Mussv calcola limiti di mu su una griglia di frequenze. Nei margini robusti, un limite inferiore maggiore di uno certifica la proprietà sull'insieme dichiarato; un limite superiore minore di uno la esclude. Un intervallo che attraversa uno resta inconclusivo. Alessio spiega ora come usiamo questa analisi durante la sintesi.
-Regia: leggere NS, NP, RS e RP. Passaggio ad Alessio.
-
-SLIDE 13 — D-K iteration: sintesi, analisi, fit degli scaling
-Studente: Alessio
-Tempo previsto: 0:44 (92 parole a 125 parole/min)
-Testo da pronunciare:
-La D–K alterna la sintesi del controllore e l'analisi strutturata con aggiornamento degli scaling. Il fit razionale degli scaling influisce sull'ordine e sulla ricerca. Abbiamo eseguito tre iterazioni per ciascuna rappresentazione, usando gli stessi pesi e lo stesso seme. Il candidato A ha centoquarantadue stati e fallisce la prestazione nominale. Quello B ha trentadue stati e supera la successiva analisi robusta, ma vedremo che amplifica molto il rumore. Questi esiti non dimostrano una superiorità generale di B: la ricerca è non convessa e limitata. Conserviamo anche il risultato negativo di A.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 14 — La post-analisi cambia la scelta del controllore
-Studente: Alessio
-Tempo previsto: 0:45 (93 parole a 125 parole/min)
-Testo da pronunciare:
-Qui ogni riga mantiene lo stesso controllore e cambia soltanto la rappresentazione incerta analizzata. Un limite inferiore del margine maggiore di uno garantisce la stabilità nell'insieme dichiarato. Per H-infinity a due gradi di libertà anche il limite superiore è inferiore a uno: la stabilità robusta fallisce. LQG, LQGI e i controllori mu superano invece questa prova. A e B possono fornire margini diversi, ma non cambiano la risposta di una specifica pianta con uno specifico controllore. Inoltre, raggi maggiori di uno espandono famiglie diverse: non li leggiamo come una graduatoria fisica universale.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 15 — Robustezza pesata e requisiti temporali non coincidono
-Studente: Alessio
-Tempo previsto: 0:45 (93 parole a 125 parole/min)
-Testo da pronunciare:
-Questa tabella distingue quattro domande. NS riguarda il nominale; NP aggiunge la norma prestazionale nominale; RS considera la stabilità della famiglia; RP richiede stabilità e prestazione sulla famiglia. LQG e LQGI sono robustamente stabili, ma non rispettano il costo comune, che non era il loro obiettivo di ottimizzazione. H-infinity due gradi di libertà ha una buona norma nominale ma perde robustezza. K mu, MuN1 e il nuovo candidato B superano tutte e quattro le verifiche. Restano comunque da valutare tracking, rumore, comando e comportamento non lineare: non sono sostituiti da questa tabella.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 16 — Dieci impianti incerti: nominale e campioni comuni
-Studente: Valerio
-Tempo previsto: 0:42 (87 parole a 125 parole/min)
-Testo da pronunciare:
-Le verifiche pratiche usano dieci quadruple fisiche, estratte con seme fissato, più il nominale. Gli stessi valori di frequenza e smorzamento dei due attuatori sono usati per tutti i controllori. Il modello B non riceve una seconda campagna più favorevole: valutiamo i controllori sulle stesse piante fisiche di A. Il grafico mostra come cambiano modulo, fase, poli e gradino degli attuatori. I conteggi di stabilità sono verifiche finite e non probabilità di affidabilità. La garanzia robusta, quando disponibile, proviene invece dalla post-analisi della struttura incerta dichiarata.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 17 — Tracking e disturbi sugli impianti incerti
-Studente: Valerio
-Tempo previsto: 0:42 (88 parole a 125 parole/min)
-Testo da pronunciare:
-Su ogni impianto stabile applichiamo gradini di cinque gradi, separati per asse, e coppie di disturbo sul link. Il grafico mostra il tracking del primo giunto. I casi instabili non ricevono curve o indicatori prestazionali finiti. I dati completi riportano polo dominante, errore statico, comando, assestamento, overshoot e picco dovuto al disturbo. Confrontiamo quindi prestazioni e stabilità sullo stesso campione, senza confondere una buona risposta nominale con la capacità di affrontare variazioni fisiche. Anche un controllore robustamente stabile può avere risposta lenta, offset o richiesta di comando elevata.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 18 — Il rumore encoder produce impulsi fra i campioni
-Studente: Valerio
-Tempo previsto: 0:46 (96 parole a 125 parole/min)
-Testo da pronunciare:
-Il rumore entra negli encoder, con riferimento e disturbo nulli. Usiamo la stessa realizzazione, mantenuta costante per due millisecondi, per tutti i controllori. Il punto essenziale è osservare anche fra i campioni. Una dinamica molto rapida può generare impulsi che un logger lento perde quasi completamente. Propaghiamo esattamente il sistema lineare per ciascun tratto ZOH e raffiniamo la quadratura dell'RMS. H-infinity e il nuovo mu B mostrano richieste enormi, pur avendo buone proprietà nominali o robuste. Sono valori osservati in un modello senza saturazione, non coppie che un attuatore reale sia in grado di erogare.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 19 — Risultati della sintesi con rumore esplicito
-Studente: Alessio
-Tempo previsto: 0:44 (91 parole a 125 parole/min)
-Testo da pronunciare:
-Nel progetto originale era già stato sintetizzato MuN1 includendo esplicitamente il rumore nella pianta generalizzata. Lo conserviamo e lo rivalutiamo su A e B. Nella nuova prova comune mantiene robustezza e riduce fortemente picco e RMS del comando rispetto a K mu originale. L'ordine cresce da settantotto a ottantadue e rimane il compromesso sul tracking e sull'errore statico. Non mescoliamo questi numeri MATLAB con quelli degli Scope, che hanno ingressi e protocollo diversi. La lezione progettuale è includere nella sintesi i canali davvero importanti e verificare successivamente tutte le proprietà richieste.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
-
-SLIDE 20 — RAS empirica e insieme interno di Lyapunov
+SLIDE 1 — Titolo
 Studente: Alessio
 Tempo previsto: 0:40 (83 parole a 125 parole/min)
 Testo da pronunciare:
-La RAS è studiata nel piano degli spostamenti iniziali dei due giunti. Scegliamo cinque direzioni e tre distanze, per quindici condizioni identiche per controllore. Spostiamo anche i rotori della stessa quantità, conservando la deformazione elastica; velocità, attuatori e controllori partono all'equilibrio. Simuliamo quindici secondi e controlliamo posizione, velocità e comando nell'ultimo secondo. La campagna finale ha centodiciassette convergenze, ventiquattro mancate convergenze e nove divergenze osservate; nessun timeout finale. Questi punti non delimitano una frontiera rigorosa. L'approfondimento storico su Lyapunov rimane distinto nella relazione.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
+Studiamo il controllo di un manipolatore planare a due giunti con attuatori elastici in serie. Il punto centrale è capire come cambia il controllo quando il carico e la dinamica degli attuatori non sono esattamente noti. Usiamo due rappresentazioni delle incertezze attuative, mantenendo la stessa meccanica e gli stessi impianti fisici. Partiamo dalle equazioni, presentiamo le famiglie di controllori e confrontiamo robustezza, movimenti e rumore. Le tolleranze sono ipotesi di progetto e tutti i risultati numerici provengono dalle simulazioni, senza dati sperimentali inventati.
+Regia: Indicare lo scopo del confronto.
 
-SLIDE 21 — Simulink lineare: servo LQGI
+SLIDE 2 — SEA e carico variabile all'end-effector
 Studente: Alessio
-Tempo previsto: 0:49 (102 parole a 125 parole/min)
+Tempo previsto: 0:43 (89 parole a 125 parole/min)
 Testo da pronunciare:
-Questo è lo schema Simulink autentico del servo LQGI lineare. A sinistra entra il riferimento. La differenza con la misura alimenta l'integratore, mentre il filtro di Kalman restituisce lo stato stimato per il feedback. Il comando arriva alla pianta State-Space, che contiene già i quattordici stati fisici. Disturbo e rumori di processo entrano attraverso i rispettivi canali della pianta; il rumore encoder si aggiunge alle uscite. Gli Scope osservano posizioni, riferimento e comandi. Non abbiamo cambiato gli originali per ottenere i nuovi risultati: sostituiamo soltanto le variabili dei controllori dall'esterno. Valerio mostra ora come cambia la rappresentazione della pianta non lineare.
-Regia: seguire riferimento, controllore, pianta e ritorno delle misure. Passaggio a Valerio.
+Le molle collegano i rotori ai link e trasmettono una coppia proporzionale alla differenza fra i loro angoli. Il disturbo agisce direttamente sui link, mentre il comando attraversa i drive. Aggiungiamo una massa all’estremità del secondo link: scegliamo due decimi di chilogrammo, con intervallo fra uno e tre decimi. Abbiamo confrontato questi tre valori prima della scelta. Poiché il carico si trova nella stessa posizione della massa distale assegnata dalla traccia, usiamo la loro somma in inerzia, Coriolis e gravità. La verticale resta un equilibrio, ma cambia la linearizzazione.
+Regia: Indicare massa e due equazioni.
 
-SLIDE 22 — Simulink non lineare: la stessa architettura LQGI
+SLIDE 3 — Sei stati di attuatore completano il modello
+Studente: Alessio
+Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Testo da pronunciare:
+Ogni drive è descritto da un secondo ordine e da un’approssimazione di Padé del ritardo. Il nominale ha frequenza naturale quaranta radianti al secondo, smorzamento zero virgola otto e ritardo quindici millisecondi. Frequenza e smorzamento variano del dieci per cento; per il ritardo abbiamo confrontato dieci, venti e trenta per cento, scegliendo venti. I due canali possono variare indipendentemente. Ogni drive conserva tre stati anche quando cambia il ritardo, quindi la pianta fisica completa rimane a quattordici stati. La meccanica continua a essere accoppiata.
+Regia: Seguire i due drive verso la meccanica.
+
+SLIDE 4 — Specifiche: obiettivi temporali e norma pesata
 Studente: Valerio
-Tempo previsto: 0:48 (99 parole a 125 parole/min)
+Tempo previsto: 0:43 (88 parole a 125 parole/min)
 Testo da pronunciare:
-La coppia di schemi usa la stessa famiglia di controllo e rende chiara la differenza. Qui il comando attraversa gli attuatori, si somma alla coppia di equilibrio e raggiunge il blocco delle equazioni SEA. Il blocco calcola le derivate degli otto stati meccanici, che vengono integrate. Il disturbo agisce sui link. Le misure sono riportate in deviazione dall'equilibrio prima di chiudere osservatore e integratore. Nel confronto H-infinity occorre un'ulteriore cautela: il modello lineare originale seleziona misure ideali, quello non lineare rumorose. I selettori restano salvati come sono; quella differenza non può essere attribuita interamente alla meccanica non lineare.
-Regia: indicare attuatori, pianta non lineare, integratore dello stato e misure.
+Separiamo le condizioni matematiche dagli obiettivi scelti da noi. Non cambiamo le definizioni di stabilità e prestazione robusta. Per il movimento abbiamo confrontato tre alternative semplici e adottato due secondi di assestamento, quindici per cento di sovraelongazione, cinque per cento di errore statico e venticinque per cento di accoppiamento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. La scelta è quindi collegata a una risposta concreta. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
+Regia: Distinguere target temporali e soglie matematiche.
 
-SLIDE 23 — Conclusioni e limiti verificati
+SLIDE 5 — LQR: il costo deriva dalle grandezze fisiche
+Studente: Valerio
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Testo da pronunciare:
+Nel costo LQR non sommiamo direttamente quantità con scale molto diverse. Normalizziamo gli angoli rispetto a cinque gradi, le velocità rispetto a una scala coerente e la deformazione elastica rispetto a quella prodotta da mezzo newton metro sulla molla meno rigida. La matrice Q contiene quindi anche termini incrociati fra rotore e link. Il peso R penalizza direttamente il comando. Risolviamo la Riccati sul nominale con carico e controlliamo il suo residuo. Il guadagno così ottenuto stabilizza lo stato completo, comprendendo anche la dinamica interna degli attuatori.
+Regia: Indicare le scale fisiche.
+
+SLIDE 6 — LQG: quattro encoder e stato stimato
 Studente: Valerio
 Tempo previsto: 0:44 (91 parole a 125 parole/min)
 Testo da pronunciare:
-La conclusione principale riguarda la descrizione dell'incertezza. A conserva il legame con i parametri fisici e le loro ripetizioni; B rende più generale la dinamica ammessa entro un peso. Il peso deve derivare dalla famiglia e la perturbazione normalizzata deve essere dinamicamente ammissibile. A controllore fissato cambia ciò che l'analisi garantisce, non il comportamento della stessa pianta. Nelle nuove sintesi cambia anche il controllore, e allora servono prove comuni. Abbiamo conservato nominale, pesi e approfondimenti, riportando successi e fallimenti. Per valutare l'hardware servono ancora specifiche reali degli attuatori e verifiche sperimentali.
-Regia: Indicare i segnali e i risultati della slide; distinguere sempre modello, protocollo e limite della conclusione.
+Le velocità e gli stati dei drive non sono misurati direttamente. Il filtro di Kalman li ricostruisce usando quattro encoder, due sui link e due sui rotori. L’innovazione confronta la misura con la previsione del modello e corregge lo stato stimato. Le intensità dei rumori sono assunte, non identificate. Abbiamo anche verificato cinque livelli di fiducia nelle misure, applicando sempre la stessa sequenza rumorosa. Il principio di separazione è controllato sulla matrice completa. Il prefiltro corregge il guadagno statico nominale, ma non può eliminare ogni errore causato da un carico diverso.
+Regia: Seguire innovazione e comando.
+
+SLIDE 7 — LQGI: memoria dell'errore misurato
+Studente: Alessio
+Tempo previsto: 0:43 (89 parole a 125 parole/min)
+Testo da pronunciare:
+LQGI aggiunge la memoria dell’errore misurato. Quando rimane un offset, l’integratore continua a modificare il comando finché quell’errore si riduce. Aumentiamo la pianta con due stati e ricaviamo insieme i guadagni sullo stato e sull’integrale da una sola Riccati. L’osservatore mantiene il nominale ed è alimentato dal comando effettivo. Il sistema chiuso contiene trenta stati. Nei casi stabili otteniamo precisione statica e reiezione della coppia costante, ma il transitorio è più lento. Non sono presenti saturazioni, quindi non attribuiamo al modello una gestione dell’anti-windup che non abbiamo implementato.
+Regia: Indicare i due integratori.
+
+SLIDE 8 — $H_\infty$: sensibilità mista e pesi adottati
+Studente: Alessio
+Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Testo da pronunciare:
+Passiamo al controllo H infinito, che permette di formulare obiettivi direttamente sui trasferimenti. Nella sensibilità mista penalizziamo l’errore e il comando: il primo peso è maggiore a bassa frequenza, mentre il secondo cresce per le coppie rapide. Costruiamo lo stesso problema a un grado di libertà con mixsyn e hinfsyn, verificando sia l’interconnessione sia l’accordo fra i valori di sintesi. Il risultato limita una norma pesata, non impone direttamente una forma della risposta al gradino. Per questo continuiamo a misurare assestamento e sovraelongazione separatamente.
+Regia: Leggere il ruolo dei pesi.
+
+SLIDE 9 — Due gradi di libertà, stati condivisi
+Studente: Alessio
+Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Testo da pronunciare:
+La struttura a due gradi di libertà distingue il canale del riferimento dal feedback. Il riferimento passa attraverso il modello desiderato, mentre il controllore riceve riferimento e posizione. Le due partizioni del controllore condividono gli stessi stati: non sono due sistemi realizzati separatamente. Le uscite pesate sono errore rispetto al modello desiderato e comando; gli ingressi esogeni sono riferimento e disturbo lato link. La pianta generalizzata raccoglie questi segnali e permette una sintesi coerente. Usiamo la stessa interconnessione anche per confrontare tutte le altre famiglie sul costo comune.
+Regia: Seguire riferimento e feedback.
+
+SLIDE 10 — Ordine completo e ordine fissato: il compromesso rimane
+Studente: Valerio
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Testo da pronunciare:
+Confrontiamo le due soluzioni dinamiche con un PID strutturato. Quest’ultimo mantiene due canali diagonali e una derivata filtrata, per un totale di quattro stati. Il tuning usa tre avvii perché il problema è non convesso. La tabella mostra l’ordine e la norma sul medesimo costo, evitando di confrontare valori di gamma associati a problemi diversi. Hinf2 ottiene una norma nominale molto piccola. Questo è un risultato utile, ma non basta: il costo non contiene il rumore di misura e non certifica la stabilità in presenza delle incertezze.
+Regia: Confrontare ordine e costo comune.
+
+SLIDE 11 — A e B: stessa massa, diversa descrizione dei drive
+Studente: Valerio
+Tempo previsto: 0:45 (92 parole a 125 parole/min)
+Testo da pronunciare:
+Il modello A conserva sette parametri reali: tre per ciascun drive e uno per il carico. Nel modello B la massa rimane identica, mentre gli scostamenti dei drive vengono rappresentati da due dinamiche additive pesate. La scelta additiva è importante: con ritardo variabile, invertire il nominale di Padé introduce un polo instabile nell’errore relativo. Un fit del solo modulo potrebbe nascondere il problema. Confrontiamo tre ordini e scegliamo il terzo, che copre ventinove casi con eccesso contenuto. Altri trenta casi verificano indipendentemente il peso. Non dimostriamo però la copertura dell’intero intervallo continuo.
+Regia: Spiegare lo zero destro di Padé prima del fit.
+
+SLIDE 12 — $\mu$: valore singolare strutturato
+Studente: Valerio
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Testo da pronunciare:
+Mu cerca la perturbazione strutturata più piccola capace di destabilizzare la chiusura. La struttura conserva il significato dei parametri: copie della stessa massa non possono variare indipendentemente. Distinguiamo quattro proprietà. NS riguarda il nominale; NP aggiunge il vincolo sulla norma. RS richiede stabilità per tutta la famiglia, e RP aggiunge la prestazione. Il calcolo restituisce intervalli dei margini. Se il limite inferiore supera uno, il requisito è garantito; se il superiore è minore di uno, è escluso. Un intervallo che attraversa uno rimane inconcludente, senza arrotondamenti favorevoli.
+Regia: Distinguere margine e mu.
+
+SLIDE 13 — D--K: stessi pesi e stessa inizializzazione
+Studente: Alessio
+Tempo previsto: 0:41 (85 parole a 125 parole/min)
+Testo da pronunciare:
+La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Gli obiettivi ottenuti sono maggiori di uno, quindi non dichiariamo raggiunta la prestazione robusta. La tabella mostra anche l’ordine: gli scaling possono produrre controllori molto grandi. Questi risultati descrivono una ricerca limitata e non convessa, non una prova che una rappresentazione sia sempre migliore dell’altra.
+Regia: Indicare i tre passi e gli esiti maggiori di uno.
+
+SLIDE 14 — La post-analisi distingue le due rappresentazioni
+Studente: Alessio
+Tempo previsto: 0:42 (86 parole a 125 parole/min)
+Testo da pronunciare:
+Questa tabella confronta i margini inferiori di stabilità robusta. Per ogni riga il controllore è esattamente lo stesso nelle due colonne. LQG e LQGI mantengono margini maggiori di uno, mentre altre soluzioni risultano fragili. Per Hinf1 la rappresentazione concentrata è più restrittiva. Bisogna però ricordare che oltre il raggio unitario i due insiemi si espandono in modi diversi: A amplia intervalli fisici, B amplia anche dinamiche arbitrarie pesate. Il confronto dei margini va letto insieme alla struttura e alla copertura dichiarata, non come una semplice classifica.
+Regia: Confrontare A e B a controllore fissato.
+
+SLIDE 15 — Robustezza pesata e target temporali sono distinti
+Studente: Alessio
+Tempo previsto: 0:42 (86 parole a 125 parole/min)
+Testo da pronunciare:
+La separazione fra le quattro proprietà evita conclusioni scorrette. Un controllore può essere nominalmente stabile e non rispettare la norma comune; un altro può avere una buona norma nominale e perdere stabilità per piccole variazioni. Se NP fallisce, RP è già esclusa dal nominale. Se fallisce RS, anche RP è esclusa. Non cambiamo la soglia per ottenere risultati favorevoli. I controllori LQG non sono sintetizzati minimizzando il costo H infinito, quindi il loro esito NP va letto accanto alle prestazioni per le quali sono stati progettati.
+Regia: Leggere una riga con NP PASS e RS FAIL.
+
+SLIDE 16 — Dieci impianti: la stessa fisica per tutti
+Studente: Valerio
+Tempo previsto: 0:40 (82 parole a 125 parole/min)
+Testo da pronunciare:
+Per le simulazioni estraiamo una sola volta dieci combinazioni fisiche, con seed fissato. Ogni combinazione contiene entrambe le terne attuative e la massa. Tutti i controllori ricevono esattamente questi impianti. Per B non generiamo una popolazione diversa: ricostruiamo gli stessi drive usando le perturbazioni additive normalizzate. A parità di controllore e di impianto, la risposta deve quindi coincidere. Prima delle metriche temporali controlliamo la stabilità interna. I casi instabili rimangono nel conteggio e non ricevono prestazioni finite che potrebbero renderli artificialmente confrontabili.
+Regia: Ricordare la stessa settupla per tutti.
+
+SLIDE 17 — Tracking e disturbi sugli impianti incerti
+Studente: Valerio
+Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Testo da pronunciare:
+Le curve mostrano il primo giunto sotto un riferimento di cinque gradi, mentre le metriche comprendono entrambi gli assi. La dispersione rende visibile quanto il risultato cambia nella famiglia fisica. Misuriamo separatamente errore statico, assestamento, sovraelongazione e movimento del giunto non comandato. Per il disturbo applichiamo mezzo newton metro direttamente al link e controlliamo il recupero. Dieci casi riusciti non dimostrano una garanzia su tutti i parametri. Un caso instabile, invece, basta a mostrare un limite concreto: per questo le simulazioni accompagnano l’analisi robusta.
+Regia: Indicare la dispersione delle risposte.
+
+SLIDE 18 — Il rumore encoder può dominare il comando
+Studente: Valerio
+Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Testo da pronunciare:
+Il rumore viene applicato senza riferimento e senza disturbo, con la stessa sequenza e la stessa deviazione standard per tutti. Manteniamo ogni campione per due millisecondi. Non osserviamo soltanto gli istanti campionati, perché alcuni controllori producono impulsi molto rapidi fra un campione e il successivo. La tabella riporta quindi picchi e RMS integrati. Hinf2 amplifica fortemente le misure e richiede coppie molto elevate. La sua buona norma sul costo senza rumore non lo rende una soluzione utilizzabile. LQG e LQGI mostrano invece il beneficio del filtraggio delle misure.
+Regia: Confrontare gli ordini di grandezza del comando.
+
+SLIDE 19 — L'effetto del solo carico sul movimento non lineare
+Studente: Alessio
+Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Testo da pronunciare:
+Per isolare l’effetto meccanico ripetiamo il movimento non lineare con tre masse, mantenendo nominali i drive. Il riferimento è sempre cinque gradi al primo giunto. LQG usa un prefiltro calcolato per la massa centrale: agli estremi compare un errore finale. LQGI osserva l’errore misurato e lo corregge attraverso l’integratore. La massa entra contemporaneamente nelle accelerazioni, nei termini di velocità e nella gravità. Rimane costante durante ogni prova: queste simulazioni non descrivono l’urto o il transitorio di un oggetto afferrato mentre il braccio si muove.
+Regia: Indicare gli estremi di massa.
+
+SLIDE 20 — Regione di attrazione: una sezione empirica
+Studente: Alessio
+Tempo previsto: 0:43 (89 parole a 125 parole/min)
+Testo da pronunciare:
+La regione di attrazione comprende tutti gli stati dai quali il sistema non lineare torna all’equilibrio. Qui osserviamo soltanto una sezione: cinque direzioni per tre raggi, con angoli dei rotori spostati come quelli dei link e altri stati inizialmente nulli. Usiamo quindici secondi e condizioni finali su posizione, velocità e comando. I cerchi verdi indicano convergenza osservata. Mancata convergenza, allontanamento, timeout ed errore numerico sono classificazioni separate. Non disegniamo una frontiera certificata attraverso pochi punti e non estendiamo il risultato nominale a tutte le masse e tutti i ritardi.
+Regia: Leggere simboli e sezione iniziale.
+
+SLIDE 21 — Simulink lineare: servo LQGI
+Studente: Valerio
+Tempo previsto: 0:40 (83 parole a 125 parole/min)
+Testo da pronunciare:
+Nel modello Simulink lineare riconosciamo la stessa architettura LQGI spiegata prima: pianta fisica, osservatore e integratore dell’errore misurato. Le matrici della pianta vengono ricalcolate con la massa della prova. L’osservatore mantiene invece il nominale: adattarlo al campione gli darebbe una conoscenza che non fa parte del problema. Il runner assegna parametri e stati iniziali senza dipendere da variabili lasciate nel Workspace. In questo modo il confronto con le equazioni MATLAB riguarda lo stesso sistema, con gli stessi significati per comando, disturbo e misure.
+Regia: Seguire osservatore e integratore.
+
+SLIDE 22 — Simulink non lineare: la stessa legge di controllo
+Studente: Valerio
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Testo da pronunciare:
+Nel modello non lineare sostituiamo la pianta linearizzata con le equazioni del SEA, mantenendo la legge di controllo. Il runner aggiorna in memoria i generatori incorporati con la massa distale effettiva e assegna separatamente i parametri dei due drive. Non duplichiamo gli SLX. Le venti esecuzioni comprendono nominale e primo campione comune, con entrambi i candidati robusti nei modelli dedicati. Controlliamo il tempo finale, gli stati finiti e l’acquisizione degli Scope. Superare questo collaudo conferma l’esecuzione e la coerenza dei dati, non il rispetto automatico delle prestazioni.
+Regia: Indicare il cambio della pianta.
+
+SLIDE 23 — Conclusioni e limiti verificati
+Studente: Valerio
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Testo da pronunciare:
+Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicito il carico, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG e LQGI mostrano compromessi comprensibili fra stabilità, precisione e rapidità. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
+Regia: Chiudere con il compromesso A/B e i limiti.
 
 APPENDICE — POSSIBILI DOMANDE E RISPOSTE
-Questa sezione è esclusa dai 20 minuti.
 
-1. Perché scegliere un SEA?
-L'elemento elastico separa rotore e link e permette una trasmissione cedevole. Può essere utile nell'interazione e nella misura della coppia tramite deformazione. Nel progetto studiamo il costo dinamico di questa scelta: modi elastici, accoppiamento e distinzione fra posizione motrice e articolare. Non abbiamo verificato sperimentalmente benefici di sicurezza su hardware.
+Perché il carico non modifica soltanto G?
+Perché una massa puntiforme possiede energia cinetica e potenziale. Il contributo all’inerzia è m_EE J_EE^T J_EE e quello gravitazionale deriva dalla quota del punto distale.
 
-2. Come viene scelto il punto di equilibrio?
-Fissiamo qbar=[pi/2;0] e velocità nulle. Le equazioni statiche determinano deformazione elastica, posizione dei rotori e coppia di equilibrio. Verifichiamo il residuo delle equazioni prima della linearizzazione. Gli stati e i comandi dei controllori sono variazioni rispetto a questo equilibrio, mentre la meccanica non lineare usa coordinate assolute.
+Perché il punto di equilibrio rimane verticale?
+Le componenti di G sono proporzionali a cos(q1) e cos(q1+q2), che si annullano in quella configurazione per tutte le masse. Il Jacobiano della gravità cambia comunque.
 
-3. Perché il sistema linearizzato è instabile?
-La configurazione scelta non è passivamente stabilizzata dalla gravità e dall'elasticità. Il Jacobiano verificato ha due poli reali positivi, circa 7.21 e 4.04 s^-1. È un risultato del modello attorno a quell'equilibrio; non significa che ogni configurazione del manipolatore sia instabile.
+Perché la forma moltiplicativa non è valida qui?
+Il nominale Padé ha uno zero destro. Con ritardo diverso la cancellazione non avviene e l’errore relativo ha un polo instabile. Il solo fit del modulo non verifica la stabilità della perturbazione.
 
-4. Perché usiamo Padé?
-Il ritardo puro non ha una realizzazione razionale finita. Padé di ordine uno fornisce un'approssimazione utilizzabile nella sintesi State-Space. Introduce un polo stabile e uno zero a parte reale positiva; non elimina i limiti di fase del ritardo. I tre stati di ciascun attuatore includono il secondo ordine e questa approssimazione.
+Il peso copre tutto il modello A?
+Sono verificate norme continue di perturbazioni stabili e proprie per 29 casi di costruzione e 30 indipendenti. Non è stata dimostrata l’inclusione di tutto il box parametrico.
 
-5. Perché Kalman?
-Non misuriamo tutte le componenti dello stato. Kalman ricostruisce anche velocità e stati attuativi usando modello, comando e quattro encoder. L'innovazione corregge la previsione. La scelta delle covarianze è un'ipotesi progettuale, da distinguere dal protocollo discreto dei rumori simulati.
+Un margine RS maggiore su B significa che B è migliore?
+No. Le strutture e gli insiemi espansi sono differenti. Si confrontano vantaggi, conservatività e comportamento sugli stessi casi fisici.
 
-6. Perché aggiungere l'integratore? Qual è la differenza LQG/LQGI?
-Il prefiltro di riferimento LQG non accumula l'errore dovuto a una coppia costante. LQGI aggiunge due stati integrali dell'errore misurato e modifica il servo ottimo. Nel lineare elimina il residuo DC del disturbo. La configurazione selezionata è però più lenta: assestamento peggiore circa 5.046 s. Il residuo a un tempo finito non coincide con il valore asintotico.
+Perché NP e target temporali possono discordare?
+NP è un vincolo su un trasferimento pesato; assestamento, overshoot e errore statico sono metriche diverse e vengono controllate separatamente.
 
-7. Qual è la differenza mixsyn/hinfsyn?
-Mixsyn costruisce il problema standard di sensibilità mista; hinfsyn risolve una pianta generalizzata esplicita. Per il confronto 1-DoF costruiamo lo stesso problema. La sintesi 2-DoF corrente usa w=[r;d], misure [r;q] e costo [We(q-Mo*r);Wu*u]. Il rumore entra nella verifica; la sintesi storica MuN1 lo includeva anche come ingresso esogeno.
+Quale controllore approfondire per un movimento lento e preciso?
+LQGI è un candidato comprensibile per precisione e stabilità robusta, ma deve essere reso più rapido e verificato con limiti di coppia e anti-windup prima di un uso fisico.
 
-8. Perché H-infinity non garantisce tutte le incertezze?
-La sintesi nominale minimizza una norma sul nominale. La robustezza dipende dalla famiglia dichiarata. Hinf2 ha norma comune 0.04746 ma margini RS inferiori a uno su A e B; Hinf1 supera RS ma fallisce NP sul costo comune. Non si generalizza il risultato di un controllore a tutta una classe.
-
-9. Che cosa significa gamma?
-È la norma H-infinity della mappa pesata chiusa, che limita il rapporto di energia per ingressi deterministici a energia finita. Non è una varianza, un picco di coppia o un tempo di assestamento. Se cambiano ingressi e pesi del problema, cambia anche il significato del valore: non confrontiamo i gamma delle due formulazioni come una graduatoria universale.
-
-10. Come scegliete i pesi?
-W1=(s/3+2)/(s+0.3) I, W2=0.003(s+80)/(s/6+80) I e Mo=16/(s^2+8s+16) I sono conservati dalla selezione originale. Non sono stati cambiati per favorire A o B. Il peso di incertezza WI ha uno scopo diverso: maggiorare gli scostamenti normalizzati degli attuatori. La scelta fra ordini 1, 2, 3 usa copertura dinamica e limite all'eccesso.
-
-11. Che cos'è la LFT?
-È una rappresentazione dell'interconnessione come chiusura fra una parte nota e una parte variabile. La LFT P-K chiude il controllore sulla pianta generalizzata. La decomposizione N-Delta separa invece le incertezze normalizzate. I due usi hanno scopi e partizioni diversi.
-
-12. Che cosa rappresenta mu?
-L'inverso della più piccola perturbazione strutturata che rende singolare una matrice di ritorno. Per la stabilità studiamo il ritorno fra canali incerti. Per la prestazione aggiungiamo un blocco fittizio che chiude uscite prestazionali e ingressi esogeni. Questo blocco non è una nuova incertezza fisica. Mussv restituisce bound, non necessariamente il valore esatto.
-
-13. Come funziona D-K iteration?
-Alterna sintesi K sul problema scalato e analisi mu con aggiornamento e fit degli scaling D/G. Le due campagne correnti usano tre iterazioni, FitOrder [2,1], 121 frequenze e MixedMU on. Non è una ricerca globalmente ottima; PeakMu e gamma scalata sono grandezze diverse. Ogni candidato viene post-analizzato su entrambi i modelli.
-
-14. Qual è la differenza robstab/robgain?
-Robstab calcola un margine di stabilità rispetto alla scala delle incertezze. Robgain(CL,1) calcola il margine entro il quale la chiusura resta stabile e la norma della mappa considerata resta sotto uno. La prestazione riguarda esattamente i canali e i pesi di CL. Intervalli invertiti non vengono riordinati per farli apparire validi.
-
-15. Perché mu può avere ordine elevato?
-Fisica, pesi e scaling dinamici contribuiscono all'ordine. I controllori originali Kmu e MuN1 hanno 78 e 82 stati; i nuovi Mu_A e Mu_B ne hanno 142 e 32. Nessuno è stato ridotto per rendere favorevole il confronto. Una similitudine numerica usata dal solver cambia le coordinate interne, non il controllore.
-
-16. Perché il comando amplifica il rumore anche senza termine diretto?
-L'assenza di feedthrough elimina soltanto il salto istantaneo. Una dinamica strettamente propria può avere elevato guadagno a frequenze finite. Per questo il comando viene esaminato anche fra i campioni ZOH; nella campagna corrente Hinf2 raggiunge circa 5.45e5 N m osservati.
-
-17. Perché la posizione può restare regolare?
-Il comando attraversa gli attuatori e poi la meccanica, che attenuano componenti rapide. Tqv=G*Tuv può quindi essere molto più piccola di Tuv. Un'uscita regolare non dimostra un comando erogabile; servono metriche separate per posizione e richiesta agli attuatori.
-
-18. Come si affronta il problema del rumore?
-La sintesi storica MuN1 includeva encoder esogeni nella pianta generalizzata. Nel nuovo confronto lo stesso MuN1 viene analizzato sulle famiglie A e B e sugli stessi impianti. Non sono stati ridotti i campioni di rumore o introdotte saturazioni per migliorare artificialmente i risultati.
-
-19. Quali compromessi introduce MuN1?
-Mantiene RS/RP nei due insiemi correnti e riduce il comando rumoroso, ma conserva un errore statico nominale q1 di circa 8.24%, contro circa 6% di Kmu, e non rispetta tutti i target temporali. La riduzione del rumore è quindi un risultato parziale, non conformità completa.
-
-20. Quanto migliora il rumore nella campagna corrente?
-Con seed 20261031, quattro secondi e ZOH 2 ms, Kmu ha picco osservato circa 78.8 N m e RMS integrato 8.34 N m; MuN1 circa 1.123 e 0.256 N m. I risultati Scope seguono un protocollo diverso e restano separati.
-
-21. Perché dieci impianti non garantiscono robustezza?
-Una famiglia contiene infinitamente più modelli dei dieci provati. Il campionamento serve a capire effetti e compromessi, non a certificare l'insieme. Tutti i controllori usano le stesse quadruple fisiche; le garanzie RS/RP provengono dalle rispettive post-analisi strutturate.
-
-22. Che cos'è la RAS?
-L'insieme degli stati iniziali che convergono all'equilibrio in assenza degli ingressi perturbanti del test. La nostra griglia è una sezione con delta theta uguale a delta q e gli altri stati fissati. Non è una proiezione di tutti gli stati possibili e non include automaticamente limiti degli attuatori.
-
-23. Che cosa certifica Lyapunov?
-Una funzione positiva con derivata negativa in un insieme invariante fornisce una condizione di convergenza. L'approfondimento storico della relazione resta distinto dalla nuova campagna empirica. Le quindici condizioni attuali non vengono convertite in un certificato né in una frontiera rigorosa.
-
-24. Perché alcuni certificati non sono stati ottenuti?
-Stabilità lineare e affidabilità della soluzione numerica di Lyapunov sono controlli distinti. Residui, positività e stime di arrotondamento devono superare il gate. Se questo fallisce non accreditiamo un livello certificato. Anche un timeout o un arresto numerico della simulazione lascia la convergenza fisica ignota: non lo trasformiamo in una prova di divergenza.
-
-25. Quali limiti rimangono?
-Incertezza meccanica, ritardo variabile ed errore rispetto al ritardo esatto sono esclusi dalla campagna corrente. B copre i casi provati, senza prova globale di inclusione del box A. Mancano limiti hardware documentati e validazione sperimentale; un massimo osservato con rumore gaussiano non è un massimo universale.
-
-26. Come verificate una LFT?
-Sostituiamo valori fisici e confrontiamo il modello diretto con la ricostruzione lft(Delta,M). Verifichiamo sia l'estrazione automatica sia una derivazione manuale del secondo ordine. Lo stesso delta della frequenza è ripetuto con valore identico.
-
-27. Perché non basta coprire il modulo degli scostamenti?
-La perturbazione normalizzata deve essere stabile e propria, oltre ad avere norma non superiore a uno. Il Padé nominale ha uno zero RHP: qui il medesimo fattore è cancellato analiticamente fra tutti gli attuatori prima della divisione. Questa proprietà non si estende automaticamente a ritardi diversi.
-
-28. Quando preferire A o B?
-A quando interessa mantenere la struttura fisica e l'interpretazione dei parametri; B quando si vuole rappresentare una dispersione dinamica entro un inviluppo. B può essere più generale e introdurre conservatività. La scelta dipende dallo scopo, dalle evidenze di copertura e dalla sintesi, non dal solo valore numerico del margine.
+Le prove RAS certificano una regione?
+No: mostrano convergenza osservata su una sezione e un orizzonte finiti, con carico e drive nominali.

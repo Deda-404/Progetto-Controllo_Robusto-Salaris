@@ -704,3 +704,9 @@ Il percorso accorpato resta unico. matrici_sea condivide le equazioni e controll
 Riscritti i 13 capitoli e le quattro appendici sul percorso fisico corrente: carico, ritardo, A/B, specifiche, controllori, robustezza, non lineare, campioni e conclusioni. Eliminati cronache delle versioni, matrici estese, ricerche ripetitive e trattazione sproporzionata di Lyapunov; conservati LFT, Kalman, azione integrale, mixed sensitivity, PID, D-K e tutte le distinzioni scientifiche necessarie. Tabelle e formule provengono da CSV/JSON tramite l’esportatore aggiornato. Risultati negativi preservati, inclusi offset e rumore dei candidati robusti.
 
 PDF di 49 pagine, indice con 13 capitoli e quattro appendici, riferimenti e numerazione compilati. Nessun warning, overfull o riferimento irrisolto; controllo visivo sulle pagine renderizzate. Testo finale privo dei termini di cronaca vietati. Quality gate COMPLETE/PASS. La documentazione tecnica conserva la provenienza fuori dalla relazione.
+
+
+## 2026-11-02 — Figure e presentazione
+Aggiornati gli schemi del carico, del percorso SISO-MIMO e della LFT A/B. Rigenerate otto figure dai dati correnti, inclusa la sensibilità separata a wn, zeta e ritardo. Conservati gli schemi validi e le viste autentiche degli SLX. La presentazione esistente resta di 23 slide, con tabelle esportate dalla stessa fonte numerica della relazione.
+
+Testo orale di 1990 parole, stima a 125 parole/min e 22 cambi di slide: 16:50; Alessio 7:40 e Valerio 8:26 di parlato. Note, scaletta e possibili domande aggiornate. La stima lascia margine sotto i 20 minuti; prova dal vivo NOT RUN. PDF 23 pagine senza warning o contenuti fuori margine, controllo visivo completato. Quality gate COMPLETE/PASS per elaborati.

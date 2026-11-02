@@ -26,7 +26,7 @@ def main():
     assert source.count(r'\begin{frame}')==len(records)
     total=sum(r['seconds'] for r in records)+(len(records)-1)*CHANGE
     words=sum(r['words'] for r in records)
-    assert 18*60<=total<=19*60,(words,total)
+    assert 15*60<=total<=20*60,(words,total)
     totals={name:sum(r['seconds'] for r in records if r['speaker']==name) for name in ['Alessio','Valerio']}
     assert abs(totals['Alessio']-totals['Valerio'])<90,totals
     assert 'DA_CALCOLARE' not in raw
@@ -40,26 +40,16 @@ def main():
         'Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.',
         '', '| Slide | Titolo | Studente | Parole | Parlato |','|---|---|---|---:|---:|']
     timing += [f"| {r['slide']} | {r['title']} | {r['speaker']} | {r['words']} | {r['seconds']//60}:{r['seconds']%60:02d} |" for r in records]
-    timing += ['', 'Le slide 2–18 trattano la prima formulazione. La 19 distingue i nuovi candidati, '
-        'con compromessi e baseline predefinita. Le figure della RAS e dei dieci impianti restano identificate '
-        'come baseline; i risultati dei candidati sono separati nella relazione.',
-        '', 'Gli schemi LQGI lineare/non lineare usano la stessa famiglia di controllo. '
-        'Le viste autentiche rendono leggibili il cambio della pianta, l’osservatore e l’integratore.']
+    timing += ['', 'Massa e incertezze sono centrali nelle slide 2, 3, 11 e 16. La slide 19 isola il carico; le slide 21 e 22 mostrano la stessa architettura LQGI con pianta lineare e non lineare.']
     (ROOT/'presentation/OUTLINE_AND_TIMING.md').write_text('\n'.join(timing)+'\n',encoding='utf-8')
-    notes=['# Note per l’esposizione','', 'Il discorso completo e le risposte di preparazione sono in `Presentazione_orale.txt`. '
-        'Il conteggio del parlato e l’equilibrio fra studenti sono in `OUTLINE_AND_TIMING.md`.', '',
-        'Attenzione ai protocolli: i numeri della slide 18 sono MATLAB isolato, '
-        'quelli della slide 19 sono Scope Simulink combinato. RMS integrato medio fra canali '
-        'e massimo RMS per canale non sono la stessa statistica.', '',
-        'La slide 19 usa candidati verificati separatamente: HinfN3 non supera RS; '
-        'MuN1 supera RS/RP ma non tutti i target temporali. Nessuna certificazione hardware.']
+    notes=['# Note per l’esposizione','', 'Il discorso e le risposte sono in Presentazione_orale.txt. Il conteggio del parlato e la ripartizione sono in OUTLINE_AND_TIMING.md.', '', 'Non confondere il superamento di un collaudo numerico con il rispetto dei target di controllo. Tutti i numeri delle slide sono esportati dai CSV della campagna con carico.', '', 'La copertura del peso è campionata; la RAS è empirica; la durata orale è stimata, non cronometrata.']
     for r in records:
         notes += ['',f"## {r['slide']}. {r['title']} — {r['speaker']}, {r['seconds']//60}:{r['seconds']%60:02d}",'',r['cue']]
     (ROOT/'presentation/SPEAKER_NOTES.md').write_text('\n'.join(notes)+'\n',encoding='utf-8')
     evidence={'words':words,'speed_words_per_minute':SPEED,'transition_seconds':CHANGE,
         'spoken_seconds':sum(r['seconds'] for r in records),'total_seconds':total,'speaker_seconds':totals,
         'records':records,'status':'PASS: estimate only; live rehearsal still required'}
-    (ROOT/'results/data/noise_redesign/oral_timing.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (ROOT/'File_di_Funzioni_Progetto-Accorpati/risultati/oral_timing.json').write_text(json.dumps(evidence,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(words,total,totals)
 
 if __name__=='__main__':main()

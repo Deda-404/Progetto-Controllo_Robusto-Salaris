@@ -1,3 +1,9 @@
+# Stato corrente — 02.11.2026, elaborati verificati
+
+Relazione 49 pagine e presentazione 23 slide COMPLETE/PASS, figure e tabelle coerenti con i risultati. Discorso 16:50 stimati, non cronometrato. In corso il collaudo dello ZIP estratto con path MATLAB ripristinato; poi pubblicazione della PR.
+
+---
+
 # Stato corrente — 02.11.2026, relazione verificata
 
 Relazione 49 pagine COMPLETE/PASS: struttura conservata, numeri collegati ai dati, PDF controllato. Campagna numerica e Simulink verificati; pacchetto estratto in collaudo e pubblicazione da completare.
