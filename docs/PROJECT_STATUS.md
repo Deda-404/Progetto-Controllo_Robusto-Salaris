@@ -1,3 +1,13 @@
+# Stato corrente — solo pilota editoriale del capitolo 7
+
+Il metodo di recupero precedente non è stato approvato. Il lavoro è ora limitato al capitolo 7; nessuna estensione agli altri capitoli prima della verifica degli studenti. Modellazione A/B, controllori, script MATLAB, SLX e risultati numerici congelati.
+
+Pronto per lettura: report/Capitolo_7_Pilota.pdf, 19 pagine incluso indice; confronto con main e con lo stato precedente in [CAPITOLO_7_PILOTA_CONFRONTO.md](CAPITOLO_7_PILOTA_CONFRONTO.md). Recuperati tutti i 28 percorsi dell'indice con spiegazioni estese, esempi e matrici correnti. La griglia completa di 36 candidati e la vecchia traccia temporale di stima non sono dichiarate riprodotte.
+
+Quality gate tecnico pilota PASS: compilazione e controllo visivo, 561 file protetti invariati. Approvazione editoriale PENDING. Nessuna nuova sintesi o simulazione, nessun aggiornamento del PDF integrale o dello ZIP, nessun merge. Le registrazioni seguenti descrivono stati precedenti e non costituiscono approvazione della loro qualità didattica.
+
+---
+
 # Stato corrente — correzione conservativa PR #47
 
 Recuperati gli approfondimenti dei capitoli 5, 7–10 dal main dbf6f00, mantenendo carico, ritardo e rappresentazione additiva corretti. Sette candidati predefiniti; riferimenti disponibili su richiesta. Nessuna nuova sintesi Hinf/D-K, pesi e target invariati dopo riesame esplicito dei loro limiti. Otto SLX salvati con InitFcn automatica, senza nuova topologia o librerie.
