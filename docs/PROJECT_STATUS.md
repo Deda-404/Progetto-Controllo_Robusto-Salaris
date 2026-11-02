@@ -4,7 +4,7 @@ Implementazione e requisiti dell’incarico R01–R22 COMPLETE/PASS. Relazione 4
 
 Accettazione prestazionale PARTIAL: LQG/LQGI e i due candidati D-K mantengono RS A/B, ma NP/RP non sono raggiunte da queste famiglie; Hinf2/PID hanno NP ma non RS. Tutti i FAIL restano nei dati. Non dimostrate copertura globale di B e RAS certificata; nessuna validazione hardware o prova orale dal vivo. Discorso 16:50 stimati.
 
-Ramo `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. Ultimo passo: pubblicazione della PR unica pronta per revisione, senza merge. Le sezioni seguenti sono registrazioni dei precedenti stati del lavoro.
+Ramo `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47) pubblicata, aperta e non in bozza; nessun conflitto con main rilevato da GitHub, nessun merge eseguito. Lavoro richiesto completato; revisione degli studenti come passo successivo. Le sezioni seguenti sono registrazioni dei precedenti stati del lavoro.
 
 ---
 

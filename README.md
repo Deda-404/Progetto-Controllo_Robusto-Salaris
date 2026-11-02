@@ -43,4 +43,4 @@ Gli SLX su disco restano invariati. `collaudo_simulink` aggiorna in memoria matr
 
 Per rigenerare gli elaborati: `python tools/esporta_definitiva.py`, due passaggi `pdflatex` nelle cartelle report e presentation e copia dei PDF ai nomi finali. `python tools/audit_oral_timing.py` aggiorna i tempi. `python tools/consegna_definitiva.py` confeziona gli stessi sorgenti e controlla ZIP e SHA-256. Python e LaTeX servono per modificare gli elaborati, non per eseguire la consegna.
 
-Il ramo di lavoro è `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. Drive è usato in sola lettura. La nuova PR è destinata alla revisione del gruppo, senza merge automatico.
+Il ramo di lavoro è `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. Drive è usato in sola lettura. La [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47) è aperta e pronta per la revisione del gruppo. Nessun merge eseguito.

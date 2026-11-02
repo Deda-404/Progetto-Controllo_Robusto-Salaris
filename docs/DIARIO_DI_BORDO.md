@@ -3142,3 +3142,7 @@ Confezionati gli stessi sorgenti, le sintesi coerenti, gli otto SLX e i PDF in C
 Confronto: sei CSV riprodotti identici, massa e selezione dei drive coerenti, massimo scarto relativo dei picchi Scope zero; 33 sorgenti e ingressi identici per SHA-256. Il pacchetto finale viene rigenerato con evidenze e documentazione definitive, verificando che il contenuto eseguibile resti quello collaudato. I log sono conservati, con soli spazi finali rimossi. Cinque test MATLAB, sette verifiche scientifiche, 28 post-analisi, 154 casi lineari, 105 RAS, 35 prove non lineari e 20 run SLX nella campagna principale. Rapida e SLX ripetuti dalla consegna.
 
 Quality gate incarico R01–R22 COMPLETE/PASS. Gli obiettivi di controllo restano PARTIAL: nessuna RP raggiunta sulla famiglia completa, Hinf2/PID fragili, candidati D-K con offset e/o rumore elevati. Copertura globale B, RAS certificata, hardware e prova orale dal vivo non sono dichiarati eseguiti. Pubblicazione di una sola PR pronta per revisione; nessun merge.
+
+
+## 2026-11-02 — Pubblicazione per revisione
+Pubblicato il ramo e aperta una sola [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47), pronta per revisione (non draft), base main dbf6f00. Nove commit tematici coprono le aree richieste; questo aggiornamento registra soltanto la pubblicazione. GitHub indica assenza di conflitti; nessun merge effettuato. Tutte le verifiche e i limiti scientifici rimangono quelli della consegna collaudata. Stato incarico COMPLETE/PASS, accettazione dei controllori PARTIAL secondo i risultati.
