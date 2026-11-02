@@ -213,23 +213,25 @@ sul nominale con carico. La griglia descrive il metodo: non le
 attribuiamo un nuovo numero di punti conformi o un minimo sul nuovo
 carico senza aver calcolato tutte le 36 risposte. Possiamo invece
 confrontare i candidati effettivamente disponibili.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.82\textwidth]{figures/pilota_capitolo7/compromesso_nominale.png}
 \caption{Assestamento e picco di coppia dei candidati LQG e LQGI sul
 nominale con carico, prendendo il peggiore dei due riferimenti.
 Non è una nuova scansione dei 36 costi LQR.}\label{fig:m6-lqr-search}
 \end{figure}
+
 LQG raggiunge più rapidamente il riferimento, con picco di coppia maggiore.
 LQGI richiede meno coppia in queste prove, ma non soddisfa il tempo richiesto.
 Questo non significa che un integratore riduca sempre il comando:
 il sistema aumentato cambia anche il feedback ottenuto dalla Riccati.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.78\textwidth]{figures/pilota_capitolo7/priorita_costo.png}
 \caption{Priorità adimensionali delle grandezze normalizzate.
 Le barre non sono scale fisiche né elementi della matrice $Q$.}
 \label{fig:m6-lqr-weights}
 \end{figure}
-
 
 \subsection{Q e R finali, Riccati, guadagno e stabilità}
 La Riccati associa a modello e costo la matrice simmetrica
@@ -253,7 +255,9 @@ $Q$ dice quali combinazioni fisiche costano, mentre $K$ dice come il
 comando reagisce a quelle combinazioni. Un termine misto di $Q$ può
 quindi essere negativo senza premiare un movimento instabile: appartiene
 al quadrato di una differenza, come la deformazione elastica.
+
 \input{generated/pilota7_lqr.tex}
+
 Gli elementi $-640$ di $Q_8$ sono i contributi misti della deformazione.
 Il blocco nullo dei drive non elimina quegli stati: le loro dinamiche
 continuano a influenzare posizioni, comando e stabilità. Ottimizziamo
@@ -339,7 +343,9 @@ una correzione di stato. Il filtro non misura direttamente tutte le
 velocità: le ricostruisce usando la dinamica e le informazioni degli
 angoli. Per questo un encoder può correggere anche stati che appartengono
 all'altro giunto o al drive.
+
 \input{generated/pilota7_kalman.tex}
+
 Le righe seguono l'ordine dei 14 stati, le colonne quello degli encoder
 $[q_1,q_2,\theta_1,\theta_2]$. Ogni misura può correggere più stati,
 perché i giunti sono accoppiati. Un coefficiente in una riga di velocità
@@ -365,7 +371,9 @@ La sequenza applicata ha scala $0.05^\circ$, seed 20261101, durata
 nulli: isoliamo il rumore senza sovrapporlo al tracking.
 L'errore RMS riguarda le due posizioni stimate, il comando RMS le due
 coppie. I valori sono quelli della prova di sensibilità già calcolata.
+
 \input{generated/finale_kalman.tex}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.98\textwidth]{figures/pilota_capitolo7/kalman_sensibilita.png}
 \caption{Covarianza assunta variabile e stesso rumore applicato.
@@ -433,12 +441,14 @@ il suo movimento mostra l'accoppiamento meccanico. Il prefiltro corregge
 il guadagno statico ma non rende indipendenti tutti i transitori.
 Anche un giunto che torna a zero può avere un picco significativo
 durante il movimento dell'altro.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.88\textwidth]{figures/pilota_capitolo7/lqg_tracking.png}
 \caption{Due riferimenti LQG separati da 5 gradi. Le curve mostrano
 le posizioni fisiche dei link in deviazione, non stime o misure rumorose.}
 \label{fig:m6-tracking}
 \end{figure}
+
 Il peggiore assestamento è circa 0.731 s, la sovraelongazione 0.346\%,
 il cross-coupling 18.4\% e l'errore DC è nullo entro precisione numerica.
 LQG soddisfa quindi sul nominale i quattro target 2 s, 15\%, 5\%, 25\%.
@@ -501,12 +511,14 @@ Ascissa e ordinata sono parte reale e immaginaria dei poli in s$^{-1}$.
 I simboli distinguono regolatore, Kalman e chiusura completa.
 La sovrapposizione del terzo insieme con l'unione dei primi due rende
 visibile il principio di separazione.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.86\textwidth]{figures/pilota_capitolo7/poli_lqg.png}
 \caption{Poli del nominale con carico: tutti i 28 stati fisici e di
 stima sono conservati. Sono esclusi i pesi prestazionali esterni,
 che non appartengono a regolatore e osservatore.}\label{fig:m6-poli}
 \end{figure}
+
 I poli a sinistra dimostrano stabilità nominale lineare, non una regione
 di attrazione non lineare. La robustezza riguarda invece tutte le
 incertezze ammesse. Nei dati A/B LQG supera RS ma non NP sul costo
@@ -758,7 +770,9 @@ numerico complementare: non sostituisce il segno delle parti reali,
 né dimostra robustezza rispetto a perturbazioni fisiche strutturate.
 
 Le matrici di feedback del nominale con carico sono
+
 \input{generated/pilota7_lqgi.tex}
+
 Il residuo relativo della CARE è \FinCARELQGI.
 $K_x$ è $2\times14$ e $K_i$ è $2\times2$: derivano dalla medesima
 Riccati. Il confronto con LQG conserva scale e osservatore, ma non
@@ -779,6 +793,7 @@ Le stesse condizioni permettono di attribuire le differenze al controllo.
 di riferimento, a destra le due coppie costanti sui link. Gli esperimenti
 sono separati e usano lo stesso osservatore.}\label{fig:lqgi-disturbo}
 \end{figure}
+
 Nel tracking LQG raggiunge rapidamente la posizione; LQGI è più lento,
 pur annullando l'errore statico. Nel disturbo l'offset rende invece
 evidente il ruolo della memoria. LQG converge a una posizione spostata.
@@ -791,6 +806,7 @@ conservando il comando necessario a equilibrare la coppia esterna.
 permanente di compensazione è distinto dal picco del transitorio.
 Non sono presenti saturazioni o anti-windup.}\label{fig:lqgi-comando}
 \end{figure}
+
 Una coppia che non torna a zero non indica da sola una mancata reiezione.
 Può essere proprio il valore necessario a mantenere $q=0$ sotto disturbo.
 Per giudicare la risposta dobbiamo leggere insieme posizione e comando:
@@ -806,6 +822,7 @@ con $\xi(0)=0$. È una lettura delle traiettorie senza rumore, non una
 nuova simulazione né una misura diretta degli stati interni.}
 \label{fig:lqgi-tracking}
 \end{figure}
+
 La memoria cresce durante l'inseguimento e tende poi a un valore finito.
 Non deve tornare a zero quando la posizione raggiunge il riferimento:
 è la sua derivata, cioè l'errore, che si annulla. Anche il giunto non

@@ -29,23 +29,28 @@ rimane disponibile per variare massa e attuatori nei campioni comuni.
 La durata nominale e l'ampiezza delle coppie vanno lette separatamente
 dall'esito di completamento: il raggiungimento del tempo finale non è
 una certificazione di stabilità o prestazione.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.98\linewidth,trim=0 0 606 265,clip]{figures/student_exports/LQGI_linear_sim.png}
 \caption{Struttura LQGI lineare: pianta, osservatore e integratore dell'errore misurato.}
 \end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.98\linewidth,trim=0 0 580 110,clip]{figures/student_exports/LQGI_nonlinear_sim.png}
 \caption{La stessa legge di controllo con le equazioni non lineari del SEA. I valori della massa sono assegnati dal runner.}
 \end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_Kalman.png}
 \caption{Sottosistema Kalman del diagramma LQGI: $\dot{\hat x}=A\hat x+Bu+L(y_{mis}-C\hat x)$. Gli ingressi sono il comando calcolato e le quattro misure.}
 \label{fig:simulink-kalman}\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_nonlinear_plant.png}
 \caption{Dettaglio autentico della pianta non lineare: le equazioni del
 manipolatore ricevono lo stato, la coppia motrice e il disturbo lato link.}
 \label{fig:simulink-nonlinear-plant}\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.75\textwidth]{figures/student_exports/LQGI_actuators.png}
 \caption{Attuatori del modello non lineare LQGI: due canali con secondo
@@ -69,19 +74,20 @@ Figura~\ref{fig:simulink-mu-interface} mostra invece l'interfaccia
 $[r_1;r_2;q_{1,mis};q_{2,mis}]$ del controllore $\mu$, con misure rumorose
 effettivamente selezionate. Le viste sono ritagli delle esportazioni
 originali; nessun blocco o collegamento è stato ridisegnato.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=\textwidth,trim=0 540 1380 510,clip]{figures/student_exports/Hinf_linear_sim.png}
 \caption{Dettaglio autentico del ramo H-infinity 2-DoF:
 il controllore dinamico riceve quattro ingressi e restituisce due comandi;
 nel modello lineare il feedback salvato usa le posizioni ideali.}
 \label{fig:simulink-hinf-interface}\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=\textwidth,trim=0 0 740 0,clip]{figures/student_exports/mu_linear_sim.png}
 \caption{Interfaccia autentica $\mu$ lineare: riferimento e misura entrano
 nel blocco di controllo; il comando alimenta la pianta con disturbi e
 rumori di processo. Le misure rumorose chiudono l'anello.}
 \label{fig:simulink-mu-interface}\end{figure}
-
 
 La presenza di un generatore di rumore nel diagramma non dimostra che
 quel segnale sia selezionato in retroazione. Inoltre il rumore encoder
@@ -99,6 +105,7 @@ separati; l'orizzonte disponibile è 2 s e non permette di dedurre
 l'assestamento di un servo lento. Gli estratti possono essere diradati:
 i picchi di collaudo usano l'acquisizione integrale. Nessun nuovo run.}
 \end{figure}
+
 Queste curve mostrano l'esecuzione nelle condizioni del diagramma;
 non riproducono il protocollo pulito di tracking né la scansione
 intercampione del comando encoder. Il massimo dello Scope e il massimo
@@ -115,6 +122,7 @@ Il comando usa una scala simmetrica logaritmica con zona lineare vicino
 a zero. Sono ingressi combinati del diagramma, distinti dalla prova
 MATLAB di solo encoder e dal gradino isolato.}
 \end{figure}
+
 Il confronto fra i rami mostra perché la sola posizione non esaurisce
 la lettura di uno Scope. I segnali di comando possono differire molto
 anche se gli angoli hanno lo stesso ordine di grandezza. Le curve

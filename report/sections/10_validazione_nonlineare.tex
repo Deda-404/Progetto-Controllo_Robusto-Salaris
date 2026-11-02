@@ -103,11 +103,14 @@ la derivazione come metodo, senza assegnare raggi o livelli certificati.
 Proviamo cinque direzioni per ciascuno dei raggi $5^\circ$, $15^\circ$ e $30^\circ$: 15 condizioni per controllore. Poniamo $\delta\theta=\delta q$, conservando la deformazione elastica di equilibrio, con velocità, stati dei drive e stati del controllore nulli.
 
 L'orizzonte è 15 s. Classifichiamo come convergenza osservata una coda finale di un secondo con angoli link e motore entro $0.5^\circ$, velocità entro $0.5^\circ$/s e comando entro 0.05 N m. La mancata convergenza entro l'orizzonte non dimostra divergenza asintotica. Teniamo separati gli allontanamenti oltre le soglie numeriche, i timeout e gli errori del solver.
+
 \input{generated/finale_ras.tex}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.97\linewidth]{figures/definitiva/ras.png}
 \caption{Sezioni empiriche: cerchi verdi convergenti, quadrati rossi non convergenti entro 15 s, croci rosse per allontanamento osservato. Eventuali timeout e errori hanno simboli separati.}
 \end{figure}
+
 L'esito dipende dalla sezione iniziale e dal tempo di osservazione. Non estendiamo una convergenza nominale a tutte le masse e a tutti i ritardi incerti. La stabilità robusta lineare e l'attrazione non lineare locale rispondono a domande diverse.
 
 
@@ -154,9 +157,10 @@ $0.5^\circ$ descrivono aspetti diversi. Il picco di coppia quantifica
 la richiesta massima; l'RMS quella media quadratica sull'intera prova.
 Non sono limiti di targa, poiché il modello non comprende saturazioni.
 Una simulazione completata significa che il solver ha raggiunto il tempo finale con valori finiti. Non significa che il tracking sia soddisfacente. Confrontiamo quindi anche errore finale, picco di posizione e coppia richiesta.
-\input{generated/finale_carico_nonlineare.tex}
-Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi di carico compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sul solo carico non contraddicono la sua fragilità quando variano anche gli attuatori.
 
+\input{generated/finale_carico_nonlineare.tex}
+
+Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi di carico compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sul solo carico non contraddicono la sua fragilità quando variano anche gli attuatori.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_tracking.png}
@@ -165,18 +169,21 @@ dalle traiettorie salvate: riferimento di $5^\circ$ sul primo giunto,
 secondo riferimento nullo, orizzonte 12 s. Ogni pannello mantiene
 visibili entrambi i giunti, anche quando il tracking è insoddisfacente.}
 \end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_1.png}
 \caption{LQG, LQGI, Hinf1 e Hinf2: posizioni e comandi salvati con coppia
 costante di 0.5 N m sul primo link. Il riferimento è nullo. Ogni riga
 mostra un controllore; scale proprie permettono di leggere i compromessi.}
 \end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_2.png}
 \caption{La stessa prova di coppia sul primo link per PID, Mu\_A e Mu\_B.
 Posizioni e comandi sono ricavati dalle traiettorie non lineari salvate,
 con parametri nominali e orizzonte 12 s.}
 \end{figure}
+
 Il gradino e la coppia non sono la stessa prova. Nel primo caso il
 controllore deve spostare il robot verso una nuova posizione; nel secondo
 deve contrastare una forza esterna mantenendo la postura. Un prefiltro
@@ -211,6 +218,7 @@ non lineari o prove su tutti i carichi.
 Le linee tratteggiate sono le corrispondenti chiusure lineari; le continue
 integrano la meccanica completa. Parametri e controllori coincidono.}
 \end{figure}
+
 \section{Rumore di misura: dal segnale encoder al comando}
 
 Per un controllore 2-DoF poniamo $u=K_rr+K_y(q+v)$. Con $r=d=0$,
@@ -223,7 +231,9 @@ costo può quindi accompagnarsi a coppie molto grandi sotto rumore.
 Usiamo campioni gaussiani con deviazione standard $0.05^\circ$,
 mantenuti per 2 ms. Questa varianza discreta non è una densità continua.
 Gli encoder producono la stessa sequenza casuale per ogni controllore. I controllori con due misure ricevono le prime due componenti; LQG e LQGI usano tutte e quattro. Il comando viene valutato anche fra gli istanti di campionamento, perché un impulso molto rapido può essere quasi invisibile nei soli valori ogni 2 ms.
+
 \input{generated/finale_rumore.tex}
+
 Hinf2 richiede coppie molto elevate sotto questa eccitazione, pur avendo una piccola norma nominale sul costo senza rumore. LQG e LQGI filtrano meglio le misure. La distinzione serve a evitare una scelta basata solo su $\gamma$. I valori sono risposte del modello privo di saturazione, non coppie erogabili da un motore reale.
 
 
@@ -249,12 +259,14 @@ osservati nella scansione fra campioni, non massimi globali dimostrati
 per ogni possibile sequenza gaussiana. La norma $H_\infty$ della mappa
 $T_{uv}$ descrive invece un guadagno energetico nel caso peggiore:
 non è numericamente uguale al picco di una specifica realizzazione.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.95\linewidth]{figures/editoriale/rumore_confronto.png}
 \caption{Picco osservato e RMS del comando nella prova encoder comune,
 dai risultati salvati. La scala logaritmica mostra l'ampia differenza
 fra controllori; non rappresenta una traccia temporale o una saturazione.}
 \end{figure}
+
 Il drive e la meccanica possono attenuare le frequenze alte prima
 che raggiungano la posizione, lasciando comunque una richiesta di
 comando enorme. Una posizione apparentemente regolare non basta a

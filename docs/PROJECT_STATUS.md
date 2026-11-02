@@ -1,3 +1,13 @@
+# Stato corrente — relazione integrale editoriale completata
+
+Metodo del capitolo 7 approvato dagli studenti ed esteso all'intera relazione. Recupero discorsivo di 13 capitoli e quattro appendici con riferimento main dbf6f00; 129 percorsi dell'indice mantenuti, due titoli adattati alle ipotesi attuali. Approfondimento del capitolo 5: fisica, parametri, peso, LFT e robustezza A/B. Matrice dei contenuti e limiti in [REVISIONE_EDITORIALE_INTEGRALE.md](REVISIONE_EDITORIALE_INTEGRALE.md).
+
+Quality gate tecnico editoriale COMPLETE/PASS: PDF integrale 108 pagine compilato, zero warning/overfull/underfull/riferimenti irrisolti, tutte le pagine renderizzate e controllate. Audit in EVIDENZE_EDITORIALI_INTEGRALI.json. 589 file protetti immutati, nessuna nuova campagna numerica. ZIP aggiornata esclusivamente nel PDF e manifest, 89 altri contenuti identici.
+
+Accettazione dei controllori PARTIAL: nessun RP PASS; nessuna copertura globale B, certificazione Lyapunov con carico o validazione hardware attribuita al recupero teorico. Risultato disponibile per la lettura degli studenti sul ramo della PR #47, con commit progressivi e senza merge. Gli stati seguenti sono registrazioni precedenti.
+
+---
+
 # Stato corrente — verifica finale editoriale
 
 Recupero discorsivo completato nei sorgenti di tutti i capitoli e appendici. Indice originale: 129 percorsi conservati, con due adattamenti di titolo necessari al carico unico e alle esecuzioni non ripetute. Compilazione integrale riuscita; controllo finale delle pagine e matrice di copertura in corso. 589 file numerici/eseguibili protetti invariati. Nessuna nuova campagna numerica né merge.

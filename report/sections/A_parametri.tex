@@ -22,3 +22,17 @@ $\sigma_y$ & $0.05^\circ$ & Rumore encoder assunto\\\bottomrule
 I controllori di riferimento sono disponibili nei dati per un confronto
 mirato a coefficienti fissati. Il confronto principale impiega i sette
 candidati con carico; le garanzie non vengono trasferite da altri insiemi.
+
+La massa effettiva distale è $m_2+m_{EE}=1$ kg nel nominale e varia
+fra 0.9 e 1.1 kg. La variazione relativa del carico è quindi il 50\%,
+ma non lo è quella della massa effettiva. Il carico è trattato come
+puntiforme nella posizione dell'end-effector: non introduce un'inerzia
+rotazionale propria o un nuovo giunto. Le rigidezze elastiche e le
+inerzie dei motori restano quelle assegnate.
+
+Le tolleranze dei due drive sono indipendenti fra canali e fra tipi
+di parametro. La stessa massa è invece condivisa da entrambi i giunti,
+perché l'oggetto è uno solo. I parametri restano costanti durante una
+prova: i range non descrivono jitter temporale o un evento di presa.
+Le scale di rumore e disturbo sono ipotesi di verifica, distinte dalle
+intensità continue assunte nelle Riccati di Kalman.

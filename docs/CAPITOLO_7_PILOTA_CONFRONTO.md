@@ -1,3 +1,5 @@
+> Stato successivo: gli studenti hanno approvato il metodo del pilota e richiesto l'estensione integrale. Il confronto di quella fase resta documentato sotto; il risultato corrente è descritto in [REVISIONE_EDITORIALE_INTEGRALE.md](REVISIONE_EDITORIALE_INTEGRALE.md). Le indicazioni di attesa del pilota riportate sotto appartengono a quella verifica.
+
 # Capitolo 7 — intervento pilota da verificare
 
 Il pilota riguarda esclusivamente il capitolo 7. Il riferimento didattico è il main dbf6f00; il confronto immediato è f81d4db. Non viene attribuita approvazione degli studenti al metodo editoriale. Gli altri capitoli, i controllori, gli script MATLAB, gli SLX, le specifiche, i pesi e i dati rimangono invariati. Il PDF integrale e lo ZIP della consegna non sono stati sostituiti durante il pilota.

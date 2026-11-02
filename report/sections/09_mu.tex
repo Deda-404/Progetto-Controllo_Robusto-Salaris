@@ -64,6 +64,7 @@ $N$--$\Delta$ mostrata in Figura~\ref{fig:ndelta}.
 $\Delta$ la struttura A oppure B. $w=[r;d]$ e $z=[z_e;z_u]$
 conservano il significato del Capitolo 8.}\label{fig:ndelta}
 \end{figure}
+
 Solo dopo aver distinto le due parti scriviamo le loro connessioni:
 \[
  \begin{bmatrix}v_\Delta\\z\end{bmatrix}
@@ -199,6 +200,7 @@ non è un nuovo parametro fisico del robot.
 \caption{Interpretazione di RP con il blocco fittizio $\Delta_p$.
 Le incertezze fisiche conservano la loro struttura.}
 \end{figure}
+
 Nel nostro progetto \texttt{robgain(a.CL,1)} riceve lo stesso modello
 \texttt{uss} ottenuto chiudendo $K$ sulla pianta generalizzata incerta.
 I quattro ingressi sono $[r_1,r_2,d_1,d_2]$ e le quattro uscite
@@ -284,22 +286,30 @@ l'ordine del controllore.
 \caption{Iterazione di sintesi. Alla fine il controllore viene
 fissato e analizzato sulla pianta incerta originale.}
 \end{figure}
+
 Eseguiamo una sintesi su A e una su B con gli stessi pesi, $M_o$, ingressi e tre iterazioni. Usiamo 121 frequenze fra $10^{-2}$ e $10^4$ rad/s, trattamento misto reale/complesso e ordini di fitting $[2,1]$. Il medesimo controllore fissato MuN1 inizializza entrambi i problemi. La ricerca resta limitata, per evitare un numero elevato di varianti difficili da interpretare.
+
 \input{generated/finale_dk.tex}
+
 Gli obiettivi ottenuti sono maggiori di uno. Non accreditiamo quindi una prestazione robusta raggiunta dalla sola sintesi. Ripetiamo la post-analisi continua sui due insiemi per ciascun candidato e riportiamo anche l'ordine: gli scaling possono far crescere molto il numero di stati, anche con pochi passi D--K.
 
 \section{Post-analisi e confronto finale di robustezza}
+
 \input{generated/finale_robustezza.tex}
+
 LQG e LQGI conservano RS nei due modelli, pur non soddisfacendo il costo NP comune. Per Hinf1 la descrizione concentrata porta a un esito RS più restrittivo. Hinf2 e PID sono nominalmente prestazionali, ma la stabilità non resiste all'intero insieme dichiarato. I candidati D--K mostrano i limiti della ricerca eseguita e non diventano automaticamente i controllori preferiti.
 
 I margini di A e B non sono misure sulla stessa geometria oltre il raggio unitario. A espande intervalli di parametri reali; B espande anche dinamiche arbitrarie pesate. Inoltre la copertura di B è verificata sui casi dichiarati, senza prova globale del box A. Per queste ragioni confrontiamo gli esiti senza trasferire una garanzia da una rappresentazione all'altra.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.97\linewidth]{figures/definitiva/robustezza.png}
 \caption{Margini inferiori RS e andamento D--K; la linea unitaria indica la soglia normalizzata.}
 \end{figure}
 
 \subsection*{Lettura del compromesso delle sintesi}
+
 \input{generated/finale_riesame_mu.tex}
+
 Il punto iniziale comune ha 82 stati, errore DC del 3.82\% e norma
 comune 1.052: non raggiunge già NP. Le iterazioni successive riducono
 l'obiettivo scalato della D--K senza migliorare necessariamente il

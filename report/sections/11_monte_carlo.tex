@@ -19,7 +19,9 @@ singolo impianto fisico è stato rappresentato coerentemente nei due modi.
 
 \section{Stabilità interna prima delle prestazioni}
 Controlliamo i poli della realizzazione completa prima di misurare il tracking. Per un caso instabile lasciamo le metriche temporali non definite e riportiamo il fallimento; non lo eliminiamo dal conteggio. I massimi di errore e coppia nelle tabelle sono calcolati sui casi stabili, specificandone il numero.
+
 \input{generated/finale_impianti.tex}
+
 Dieci successi sono un'evidenza utile, ma non dimostrano robustezza su un continuo di parametri. Al contrario, un solo caso instabile basta a escludere la stabilità dell'intera famiglia. Per questo affianchiamo sempre le simulazioni alla $\mu$-analysis.
 
 LQG, LQGI, Hinf1, Mu\_A e Mu\_B stabilizzano tutti e dieci i casi;
@@ -32,11 +34,14 @@ controllo viene svolto sulla realizzazione interna completa.
 
 \section{Tracking e accoppiamento tra giunti}
 Applichiamo separatamente gradini di $5^\circ$ e misuriamo assestamento, sovraelongazione, errore DC e massimo movimento del giunto non comandato. La tabella nominale rende visibile il compromesso senza confondere le specifiche temporali con il costo pesato.
+
 \input{generated/finale_temporali.tex}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.97\linewidth]{figures/definitiva/dieci_impianti.png}
 \caption{Risposta del primo giunto: nominale e dieci impianti comuni nei casi stabili, riferimento di $5^\circ$. Le metriche comprendono entrambi i giunti.}
 \end{figure}
+
 L'azione integrale protegge la precisione statica, ma il tempo di assestamento rimane una richiesta distinta. Anche un controllore nominalmente preciso può perdere stabilità quando il ritardo cambia. Le risposte rendono quindi leggibile ciò che i soli margini non mostrano: quanto il risultato si disperde nella famiglia fisica.
 
 Il cross viene normalizzato all'ampiezza del gradino richiesto, non
@@ -57,6 +62,7 @@ che una singola risposta nominale non renderebbe visibili.
 
 \section{Reiezione della coppia lato link}
 Il disturbo di 0.5 N m viene applicato a un link alla volta, senza attraversare il drive. Riportiamo il massimo spostamento e il tempo di rientro entro $0.5^\circ$. Se l'errore rimane fuori dalla banda fino a 12 s, il recupero è segnato come non raggiunto nell'orizzonte. La coppia richiesta dal controllore è sempre valutata a monte del drive.
+
 \input{generated/finale_disturbo.tex}
 
 Il tempo di recupero misura l'ingresso definitivo nella fascia attorno

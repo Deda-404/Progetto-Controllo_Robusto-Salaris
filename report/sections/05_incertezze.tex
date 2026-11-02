@@ -71,12 +71,14 @@ Questa realizzazione rende visibile il ruolo dei parametri: la frequenza
 naturale entra sia nel richiamo verso l'ingresso sia nel termine dissipativo;
 lo smorzamento agisce sulla velocità. Perturbare indipendentemente tutti
 i coefficienti cancellerebbe questa dipendenza fisica.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\textwidth]{figures/definitiva/famiglia_attuatori.png}
 \caption{Modulo, fase, poli e gradino della famiglia fisica dei drive.
 Il confronto SISO precede l'inserimento nella meccanica MIMO accoppiata.}
 \label{fig:famiglia-drive}
 \end{figure}
+
 Il modulo mostra la banda, la fase evidenzia anche il ritardo, i poli
 rendono leggibili rapidità e smorzamento, il gradino il transitorio.
 Nessuno di questi pannelli, da solo, dimostra robustezza del robot
@@ -135,6 +137,7 @@ fisica della famiglia.
 
 
 La matrice $\Delta$ è diagonale a blocchi. Un parametro può comparire più volte nella LFT, perché entra in più coefficienti o attraverso prodotti e inversi. Queste ripetizioni rimangono correlate: non sono nuovi parametri fisici. La struttura estratta con \texttt{lftdata} e la sua ricostruzione sono verificate sostituendo gli stessi valori fisici.
+
 \begin{figure}[htbp]\centering
 \resizebox{.85\textwidth}{!}{\input{figures/schemes/sea_delta.tex}}
 \caption{Separazione fra parte nota e blocchi incerti; le ripetizioni dello stesso parametro mantengono lo stesso valore.}\label{fig:lft}
@@ -167,9 +170,10 @@ Per costruire B partiamo dagli stessi drive campionati in A. Consideriamo le tre
 
 \begin{figure}[htbp]\centering
 \resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_forme.tex}}
-\caption{Forme SISO alternative. Il segno del blocco nella forma inversa
-può essere assorbito nella perturbazione normalizzata.}
+\caption{Forme SISO alternative. I simboli $W_A,W_M,W_I$ e i segni
+corrispondono alle tre formule; il ritorno nella forma inversa è interno al modello di errore.}
 \end{figure}
+
 La forma additiva misura uno scostamento assoluto, la diretta uno
 scostamento relativo al nominale e l'inversa uno scostamento relativo
 alla pianta perturbata. In SISO l'ordine dei fattori non cambia il
@@ -197,11 +201,13 @@ I due blocchi dinamici sono indipendenti. La meccanica continua a dipendere dall
 
 
 \paragraph*{Dalla famiglia fisica al peso dinamico}
+
 \begin{figure}[htbp]\centering
 \resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_fit.tex}}
 \caption{Campioni fisici, scostamenti additivi, inviluppo, fit e verifica
 continua della perturbazione normalizzata.}
 \end{figure}
+
 I vertici esplorano combinazioni estreme, i campioni interni mostrano
 variazioni intermedie. Il massimo a una frequenza non deve appartenere
 sempre allo stesso attuatore né necessariamente a un vertice.
@@ -217,7 +223,9 @@ non è automaticamente migliore se rende l'analisi molto conservativa.
 
 
 Il procedimento segue quello del corso: famiglia fisica, scostamenti, inviluppo, fitting e normalizzazione. I dieci manipolatori forniscono venti drive; aggiungiamo gli otto vertici del box SISO e il nominale. Sono 29 casi SISO, non 29 manipolatori. Su una griglia logaritmica calcoliamo l'inviluppo di $|G_j-G_0|$ e confrontiamo fit di ordine 1, 2 e 3 mediante \texttt{fitmagfrd}.
+
 \input{generated/finale_pesi.tex}
+
 Il peso viene scalato per coprire le norme continue $\|(G_j-G_0)/W_A\|_\infty$, con un piccolo margine del 2\%. Scegliamo l'ordine minimo che rispetta la copertura e un eccesso mediano non maggiore di 1.6. Risulta sufficiente l'ordine 3; gli ordini più bassi sono troppo conservativi. La funzione selezionata è
 \[
  W_A(s)=\FinPesoFormula.
@@ -232,6 +240,7 @@ devono inoltre consentire una normalizzazione stabile.
 
 
 I coefficienti mostrati sono arrotondati; la normalizzazione usa la funzione a piena precisione conservata nei dati.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.9\textwidth]{figures/definitiva/peso_incertezza.png}
 \caption{Scostamenti additivi, inviluppo dei 29 casi e peso selezionato.}\label{fig:peso}

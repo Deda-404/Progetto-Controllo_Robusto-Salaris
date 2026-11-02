@@ -1,6 +1,6 @@
-Il metodo del capitolo 7 approvato dagli studenti è stato esteso a tutti i capitoli e alle appendici. Il recupero discorsivo è completo nei sorgenti; compilazione e verifica editoriale finale sono in chiusura. MATLAB, Simulink, controllori, parametri e dati sono invariati.
+La relazione integrale adotta il metodo discorsivo del capitolo 7 approvato dagli studenti: 13 capitoli e quattro appendici, con particolare sviluppo del confronto A/B nel capitolo 5. [Confronto dei contenuti con main](docs/REVISIONE_EDITORIALE_INTEGRALE.md) e [verifiche editoriali](docs/EVIDENZE_EDITORIALI_INTEGRALI.json).
 
-La correzione conservativa della PR #47 è descritta in [CORREZIONE_CONSERVATIVA.md](docs/CORREZIONE_CONSERVATIVA.md): recupero degli approfondimenti, sette candidati predefiniti e SLX con inizializzazione automatica. I risultati negativi restano espliciti.
+PDF di 108 pagine compilato e controllato visivamente; 129 percorsi dell'indice conservati con due adattamenti necessari. I 589 file MATLAB/Simulink e numerici protetti sono invariati rispetto all'inizio della fase editoriale. Nessuna nuova campagna numerica dichiarata, nessun merge. Lo ZIP contiene lo stesso PDF; gli altri 89 contenuti sono identici alla consegna già collaudata.
 
 # Controllo robusto di un manipolatore SEA a due giunti
 

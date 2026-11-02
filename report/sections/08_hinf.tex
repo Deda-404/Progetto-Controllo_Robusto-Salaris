@@ -98,6 +98,7 @@ indicano gli stessi pesi, applicati a segnali che preciseremo.
 una mappa corrispondente più piccola. Le curve coincidono perché
  i pesi sono diagonali e uguali.}\label{fig:hinfweights}
 \end{figure}
+
 Il terzo peso prestazionale è assente: \texttt{mixsyn} usa
 \texttt{W3=[]}. $W_I$ del Capitolo 5 descrive invece l'incertezza
 degli attuatori. Non è un peso prestazionale sul rumore.
@@ -461,7 +462,9 @@ posizioni e i due comandi; le metriche riportano il peggiore dei due
 esperimenti. L'assestamento al 2\% è rispetto al valore finale, mentre
 l'errore DC è rispetto al riferimento: una risposta assestata può
 quindi restare imprecisa.
+
 \input{generated/finale_hinf.tex}
+
 Hinf1 ha $T_s\simeq1.55$ s, ma overshoot circa 136\%, errore statico
 14.9\% e cross 44.8\%. Hinf2 ha $T_s\simeq1.94$ s, overshoot nullo,
 errore 0.111\% e cross 0.883\%: supera i quattro target nominali.
@@ -476,11 +479,13 @@ la conformità nominale con la robustezza sull'insieme incerto.
 nominali già salvate. Le colonne sono i due gradini separati; le righe
 distinguono posizione e comando. Nessuna simulazione aggiuntiva.}
 \end{figure}
+
 La sensibilità del feedback aiuta a capire come vengono corrette le
 perturbazioni. La complementare descrive invece la trasmissione verso
 l'uscita nel corrispondente anello. Per il 2-DoF queste mappe non
 sostituiscono $T_{qr}$, che comprende anche $K_r$. Confrontare una sola
 curva non basta a giudicare il tracking né la mappa pesata completa.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.95\linewidth]{figures/definitiva/sensibilita_hinf.png}
 \caption{Sensibilità e complementare sul nominale con carico, dalle
