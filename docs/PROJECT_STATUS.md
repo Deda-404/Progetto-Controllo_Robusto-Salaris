@@ -1,3 +1,9 @@
+# Stato corrente — 02.11.2026, controllori con carico
+
+Modello e analisi COMPLETE/PASS come implementazione; accettazione prestazionale PARTIAL. 28 analisi A/B, 105 RAS e 35 altre prove non lineari eseguite. Cinque test e pipeline rapida PASS. Elaborati compilati in prima verifica; consegna autonoma e pubblicazione ancora da completare. Le voci successive registrano gli stati precedenti.
+
+---
+
 # Stato corrente — revisione finale con carico
 
 Meccanica e A/B COMPLETE/PASS; 5 test MATLAB, copertura e LFT eseguite. Controllori,

@@ -682,3 +682,11 @@ normalizzazione continua, replay dei dieci campioni e stabilita interna esplicit
 PBH dei modi instabili superato per stabilizzabilita/rilevabilita.
 La copertura riguarda 29 casi di fit e 30 hold-out; nessuna inclusione globale
 e nessuna garanzia trasferita dal modello A a B. Gate COMPLETE/PASS.
+
+
+## 2026-11-02 — Controllori e verifiche con carico
+Sono stati ricalcolati LQG, LQGI, Hinf1, Hinf2 e PID sul nominale con mEE=0.2 kg. Sette controllori fissati restano distinti dai sette correnti; ogni K è analizzato senza modificarlo su A e B (28 post-analisi). La prima D-K automatica è conservata nei file avvio_nominale; il tentativo finale usa MuN1 comune come inizializzazione e tre iterazioni su ciascun modello.
+
+Esiti finali: LQG/LQGI RS PASS A/B, NP/RP FAIL; Hinf1 RS A PASS e B FAIL; Hinf2/PID NP PASS ma RS/RP FAIL; Mu_A e Mu_B RS PASS A/B ma NP/RP FAIL. Mu_A ha ordine 294 e offset DC 99.8%; Mu_B ordine 80, offset 21.9% e picco rumoroso 762 N m. Non sono promossi per il solo nome della sintesi. RAS: 86 convergenze, 12 mancate convergenze, 7 allontanamenti osservati, zero timeout/errori su 105 prove. Completate anche 14 prove non lineari nominali e 21 con solo carico variato.
+
+Verifiche: campagna completa eseguita per fasi, run_all('rapida') eseguito, 5 test MATLAB e 7 controlli del runner PASS; Code Analyzer senza messaggi sui 16 file operativi. Assestamento non determinato segnato Inf, mai zero. Quality gate implementazione COMPLETE/PASS, obiettivi prestazionali PARTIAL/FAIL secondo i CSV. Relazione e consegna in completamento.

@@ -1,29 +1,36 @@
-SEA - completa - MATLAB 26.2.0.3386108 (R2026b) - seed 20261031
+CAMPAGNA CON CARICO - ESECUZIONE COMPLETA PER FASI
+MATLAB R2026b, 2026-11-01, seed 20261101
+Modello, incertezze e sintesi nominali; D-K inizializzata MuN1; post-analisi e RAS; Simulink.
+Ogni fase e stata eseguita, la modalita rapida successiva verifica la coerenza dei dati.
 
---- modello_sea ---
-Nominale: 14 stati; errore rispetto a main 3.36e-15.
+    MassaEEkg    RapportoMassa2     M11     NormaKg    PoloLQGFissato
+    _________    ______________    _____    _______    ______________
+
+       0.1           0.125         0.601    10.949          -0.3     
+       0.2            0.25          0.65    11.772          -0.3     
+       0.3           0.375         0.699    12.597          -0.3     
+
+Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
     Tipo_wn_zeta_ritardo    Delta    Banda     Overshoot    MaxErroreRelativo
     ____________________    _____    ______    _________    _________________
 
-             1                -1     31.305       1.484            0.1905
-             1              -0.5     33.044      1.4784          0.097651
-             1                 0     34.783      1.4722        7.4562e-17
-             1               0.5     36.523      1.4652           0.10253
-             1                 1     38.262      1.4576           0.21001
-             2                -1     39.223      3.7427           0.11109
-             2              -0.5     36.974      2.4686          0.052625
-             2                 0     34.783      1.4722        7.4562e-17
-             2               0.5     32.689      0.7482          0.047614
-             2                 1      30.72     0.28675            0.0909
-             3                -1     34.783      1.4934           0.22221
-             3              -0.5     34.783       1.484           0.10526
-             3                 0     34.783      1.4722        7.4562e-17
-             3               0.5     34.783      1.4576           0.09523
-             3                 1     34.783      1.4401           0.18182
+             1                -1     31.305       1.484            0.1905    
+             1              -0.5     33.044      1.4784          0.097651    
+             1                 0     34.783      1.4722        7.4562e-17    
+             1               0.5     36.523      1.4652           0.10253    
+             1                 1     38.262      1.4576           0.21001    
+             2                -1     39.223      3.7427           0.11109    
+             2              -0.5     36.974      2.4686          0.052625    
+             2                 0     34.783      1.4722        7.4562e-17    
+             2               0.5     32.689      0.7482          0.047614    
+             2                 1      30.72     0.28675            0.0909    
+             3                -1     34.783      1.4934           0.22221    
+             3              -0.5     34.783       1.484           0.10526    
+             3                 0     34.783      1.4722        7.4562e-17    
+             3               0.5     34.783      1.4576           0.09523    
+             3                 1     34.783      1.4401           0.18182    
 
-
---- incertezze_attuatori ---
-  4×1 struct array with fields:
+  7×1 struct array with fields:
 
     Name
     Size
@@ -31,45 +38,46 @@ Nominale: 14 stati; errore rispetto a main 3.36e-15.
     Occurrences
     Simplify
 
-    Ordine    MaxNormaNormalizzata    EccessoMediano    Stabile    Proprio
-    ______    ____________________    ______________    _______    _______
+             Forma              Stabile    Propria    PoloDestro     Norma 
+    ________________________    _______    _______    __________    _______
 
-      1             0.98039                1.458           1          1
-      2             0.98028               1.0274           1          1
-      3             0.98035               1.0448           1          1
+    "Additiva"                   true       true           -32      0.06829
+    "Moltiplicativa"             false      true        133.33          Inf
+    "Moltiplicativa inversa"     false      true        111.11          Inf
 
-A/B nominalmente equivalenti: 4.37e-15 / 0; peso ordine 1.
+    Ordine    MaxNormaNormalizzata    EccessoMediano    Stabile    Proprio    MaxNormaIndipendente
+    ______    ____________________    ______________    _______    _______    ____________________
 
---- progetto_lqg ---
-LQG: coefficienti da main; verifiche CARE eseguite ora.
-CARE 1.15e-13; separazione 1.6e-13.
+      1             0.98039               125.07           1          1             0.79699       
+      2             0.98039               5.5966           1          1             0.86008       
+      3             0.98037               1.0205           1          1              0.8788       
+
+A/B: sette reali / due dinamiche e una massa; peso additivo ordine 3.
+LQG: nuova sintesi nominale; pesi e covarianze conservati.
+CARE 1.05e-13; separazione 1.15e-13.
     FattoreSigmaAssunta    PoloOsservatore    ErroreStimaRMS    ComandoRMS
     ___________________    _______________    ______________    __________
 
-            0.5                -13.035          0.00028216        0.13312
-           0.75                -10.626          0.00024996       0.095237
-              1                -9.3187          0.00022829       0.074225
-            1.5                -7.9986          0.00020073        0.05132
-              2                -7.3581          0.00018423       0.039235
+            0.5                -11.991          0.00028813        0.15195 
+           0.75                -9.7874          0.00025192        0.10728 
+              1                -8.5925          0.00022798        0.08303 
+            1.5                -7.3886          0.00019766       0.057142 
+              2                -6.8084          0.00017949        0.04367 
 
-
---- progetto_lqgi ---
-LQGI: 30 poli stabili; CARE 2.45e-13.
-
---- progetto_hinf_tre_controllori ---
-Final: Failed to enforce closed-loop stability (max Re(s) = 0.26)
-Final: Peak gain = 0.678, Iterations = 192
-Final: Peak gain = 0.892, Iterations = 190
+LQGI: 30 poli stabili; CARE 1.03e-13.
+Final: Peak gain = 0.991, Iterations = 329
+Final: Peak gain = 0.817, Iterations = 315
+Final: Failed to enforce closed-loop stability (max Re(s) = 0.76)
 NUOVE SINTESI, stessi pesi; candidati separati
     Controllore    Ordine     NS      NormaComune    GuadagnoRumoreComando
     ___________    ______    _____    ___________    _____________________
 
-      "Hinf1"        18      true        1.8656                270.6
-      "Hinf2"        22      true      0.047461           2.1022e+08
-      "PID"           4      true       0.67799               4502.5
+    "Hinf1"          18      true        2.1633               286.43      
+    "Hinf2"          22      true       0.03558           1.2608e+08      
+    "PID_nuovo"       4      true       0.81587                18196      
 
 
---- progetto_mu ---
+D-K E VERIFICHE FINALI
 D-K dedicata A_parametrico, massimo 3 iterazioni.
 
 
@@ -78,26 +86,40 @@ DG-K ITERATION SUMMARY:
                        Robust performance                 Fit order
 -------------------------------------------------------------------
   Iter         K Step       Peak MU       DG Fit           D      G
-    1           231.3        8.143         8.22           32     80
-    2           6.206        5.876        5.931           36     84
-    3           4.817        3.759          3.8           40     96
+    1            2157        8.716        11.62           50    204
+    2           8.305        6.683        6.774           58    214
+    3           6.656        6.651        6.779           58    190
 
-Best achieved robust performance: 3.76
+Best achieved robust performance: 6.65
 
 D-K dedicata B_concentrato, massimo 3 iterazioni.
 
 
-D-K ITERATION SUMMARY:
------------------------------------------------------------------
-                       Robust performance               Fit order
------------------------------------------------------------------
-  Iter         K Step       Peak MU       D Fit             D
-    1           5.606        4.951        4.982             0
-    2           2.159       0.8928       0.8999             8
-    3          0.4096       0.3928       0.5977             8
+DG-K ITERATION SUMMARY:
+-------------------------------------------------------------------
+                       Robust performance                 Fit order
+-------------------------------------------------------------------
+  Iter         K Step       Peak MU       DG Fit           D      G
+    1           86.13        5.915         7.62           18     36
+    2           4.314        3.253        5.402           22     30
+    3           2.946        2.081        22.31           24     50
 
-Best achieved robust performance: 0.393
+Best achieved robust performance: 2.08
 
+Analisi LQG_fisso / A_parametrico...
+Analisi LQG_fisso / B_concentrato...
+Analisi LQGI_fisso / A_parametrico...
+Analisi LQGI_fisso / B_concentrato...
+Analisi Hinf1_fisso / A_parametrico...
+Analisi Hinf1_fisso / B_concentrato...
+Analisi Hinf2_fisso / A_parametrico...
+Analisi Hinf2_fisso / B_concentrato...
+Analisi PID_fisso / A_parametrico...
+Analisi PID_fisso / B_concentrato...
+Analisi Kmu_fisso / A_parametrico...
+Analisi Kmu_fisso / B_concentrato...
+Analisi MuN1_fisso / A_parametrico...
+Analisi MuN1_fisso / B_concentrato...
 Analisi LQG / A_parametrico...
 Analisi LQG / B_concentrato...
 Analisi LQGI / A_parametrico...
@@ -108,52 +130,56 @@ Analisi Hinf2 / A_parametrico...
 Analisi Hinf2 / B_concentrato...
 Analisi PID / A_parametrico...
 Analisi PID / B_concentrato...
-Analisi Kmu / A_parametrico...
-Analisi Kmu / B_concentrato...
-Analisi MuN1 / A_parametrico...
-Analisi MuN1 / B_concentrato...
 Analisi Mu_A / A_parametrico...
 Analisi Mu_A / B_concentrato...
 Analisi Mu_B / A_parametrico...
 Analisi Mu_B / B_concentrato...
-Analisi PID_nuovo / A_parametrico...
-Analisi PID_nuovo / B_concentrato...
-    Controllore                 Sintesi                      Analisi        Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper      RP         MetodoRP       FrequenzaCritica
-    ___________    __________________________________    _______________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    ______    ______________    ________________
+     Controllore                    Sintesi                        Analisi        Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper      RP         MetodoRP       FrequenzaCritica
+    _____________    ______________________________________    _______________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    ______    ______________    ________________
 
-    "LQG"          "main / modello storico"              "A_parametrico"      14      true         2.1685       false     1.7279      1.7486     "PASS"          0           0     "FAIL"    "NP_FAIL"              50.153
-    "LQG"          "main / modello storico"              "B_concentrato"      14      true         2.1685       false     1.7393      1.7428     "PASS"          0           0     "FAIL"    "NP_FAIL"              41.832
-    "LQGI"         "main / modello storico"              "A_parametrico"      16      true         1.5136       false     1.6775      1.6848     "PASS"          0           0     "FAIL"    "NP_FAIL"              50.109
-    "LQGI"         "main / modello storico"              "B_concentrato"      16      true         1.5136       false     1.6778      1.6812     "PASS"          0           0     "FAIL"    "NP_FAIL"              41.954
-    "Hinf1"        "main / modello storico"              "A_parametrico"      18      true         1.8656       false     2.5882      2.5913     "PASS"          0           0     "FAIL"    "NP_FAIL"               39.84
-    "Hinf1"        "main / modello storico"              "B_concentrato"      18      true         1.8656       false     1.9593      1.9684     "PASS"          0           0     "FAIL"    "NP_FAIL"               69.86
-    "Hinf2"        "main / modello storico"              "A_parametrico"      22      true       0.047461       true     0.25632     0.25829     "FAIL"          0     0.25829     "FAIL"    "LIMITE_DA_RS"         64.053
-    "Hinf2"        "main / modello storico"              "B_concentrato"      22      true       0.047461       true     0.10539      0.1056     "FAIL"          0      0.1056     "FAIL"    "LIMITE_DA_RS"         61.657
-    "PID"          "main / modello storico"              "A_parametrico"       4      true        0.80095       true     0.29309     0.29509     "FAIL"          0     0.29509     "FAIL"    "LIMITE_DA_RS"         16.296
-    "PID"          "main / modello storico"              "B_concentrato"       4      true        0.80095       true     0.18232     0.18269     "FAIL"          0     0.18269     "FAIL"    "LIMITE_DA_RS"         16.277
-    "Kmu"          "main / modello storico"              "A_parametrico"      78      true        0.63468       true      3.3362      3.3599     "PASS"     2.4203      2.4396     "PASS"    "robgain"              8.3647
-    "Kmu"          "main / modello storico"              "B_concentrato"      78      true        0.63468       true      2.6674      2.6728     "PASS"     1.9842      1.9882     "PASS"    "robgain"              11.771
-    "MuN1"         "main / modello storico"              "A_parametrico"      82      true        0.67342       true      3.2893      3.6302     "PASS"     2.3175      2.3321     "PASS"    "robgain"              8.3019
-    "MuN1"         "main / modello storico"              "B_concentrato"      82      true        0.67342       true      2.6085      2.6138     "PASS"     1.8748      1.8785     "PASS"    "robgain"              11.523
-    "Mu_A"         "A_parametrico"                       "A_parametrico"     142      true            3.7       false     3.3305      3.3546     "PASS"          0           0     "FAIL"    "NP_FAIL"              62.936
-    "Mu_A"         "A_parametrico"                       "B_concentrato"     142      true            3.7       false     3.1356      3.1555     "PASS"          0           0     "FAIL"    "NP_FAIL"               55.62
-    "Mu_B"         "B_concentrato"                       "A_parametrico"      32      true        0.39001       true      3.8426      3.9164     "PASS"      3.702      3.9425     "PASS"    "robgain"              60.788
-    "Mu_B"         "B_concentrato"                       "B_concentrato"      32      true        0.39001       true      3.8883      3.8962     "PASS"     3.4605      3.4664     "PASS"    "robgain"               11.62
-    "PID_nuovo"    "hinfstruct nominale, stessi pesi"    "A_parametrico"       4      true        0.67799       true      0.3096     0.31369     "FAIL"          0     0.31369     "FAIL"    "LIMITE_DA_RS"         15.687
-    "PID_nuovo"    "hinfstruct nominale, stessi pesi"    "B_concentrato"       4      true        0.67799       true     0.20713     0.20755     "FAIL"          0     0.20755     "FAIL"    "LIMITE_DA_RS"         15.701
+    "LQG_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      14      true         2.9057       false      1.4712      1.4902    "PASS"           0           0    "FAIL"    "NP_FAIL"               55.24     
+    "LQG_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      14      true         2.9057       false      1.2771      1.2796    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.841     
+    "LQGI_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      16      true         1.0299       false      1.4323      1.4524    "PASS"           0           0    "FAIL"    "NP_FAIL"              55.223     
+    "LQGI_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      16      true         1.0299       false      1.2376      1.2401    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.919     
+    "Hinf1_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      18      true         2.5531       false     0.66184     0.67575    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.468     
+    "Hinf1_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      18      true         2.5531       false     0.42716     0.42802    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.511     
+    "Hinf2_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN     
+    "Hinf2_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN     
+    "PID_fisso"      "Controllore fissato prima del carico"    "A_parametrico"       4      true         1.9176       false     0.20839     0.21176    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.208     
+    "PID_fisso"      "Controllore fissato prima del carico"    "B_concentrato"       4      true         1.9176       false      0.1628     0.16323    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.078     
+    "Kmu_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      78      true        0.96183       true        2.306      2.6348    "PASS"    0.074049      0.1009    "FAIL"    "robgain"              6.0522     
+    "Kmu_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      78      true        0.96183       true       2.3294      2.3341    "PASS"    0.071704    0.071848    "FAIL"    "robgain"              2.3847     
+    "MuN1_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      82      true         1.0519       false      2.3506      2.4146    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.1409     
+    "MuN1_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      82      true         1.0519       false      2.1747       2.179    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.0315     
+    "LQG"            "Sintesi nominale con carico"             "A_parametrico"      14      true         2.1597       false      1.4593      1.4787    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.667     
+    "LQG"            "Sintesi nominale con carico"             "B_concentrato"      14      true         2.1597       false      1.1972      1.1996    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.148     
+    "LQGI"           "Sintesi nominale con carico"             "A_parametrico"      16      true         1.3239       false      1.4185      1.4385    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.377     
+    "LQGI"           "Sintesi nominale con carico"             "B_concentrato"      16      true         1.3239       false       1.155      1.1574    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.863     
+    "Hinf1"          "Sintesi nominale con carico"             "A_parametrico"      18      true         2.1633       false       1.337      1.3876    "PASS"           0           0    "FAIL"    "NP_FAIL"              78.438     
+    "Hinf1"          "Sintesi nominale con carico"             "B_concentrato"      18      true         2.1633       false     0.94854     0.95043    "FAIL"           0           0    "FAIL"    "NP_FAIL"               78.52     
+    "Hinf2"          "Sintesi nominale con carico"             "A_parametrico"      22      true        0.03558       true     0.055352    0.055671    "FAIL"           0    0.055671    "FAIL"    "LIMITE_DA_RS"         62.792     
+    "Hinf2"          "Sintesi nominale con carico"             "B_concentrato"      22      true        0.03558       true     0.037139    0.037213    "FAIL"           0    0.037213    "FAIL"    "LIMITE_DA_RS"         62.897     
+    "PID"            "Sintesi nominale con carico"             "A_parametrico"       4      true        0.81587       true      0.25217     0.25344    "FAIL"           0     0.25344    "FAIL"    "LIMITE_DA_RS"         15.319     
+    "PID"            "Sintesi nominale con carico"             "B_concentrato"       4      true        0.81587       true      0.20038     0.20078    "FAIL"           0     0.20078    "FAIL"    "LIMITE_DA_RS"         69.328     
+    "Mu_A"           "D-K su A"                                "A_parametrico"     294      true         6.6543       false      2.5314      2.6424    "PASS"           0           0    "FAIL"    "NP_FAIL"              20.785     
+    "Mu_A"           "D-K su A"                                "B_concentrato"     294      true         6.6543       false      1.7804       1.784    "PASS"           0           0    "FAIL"    "NP_FAIL"              20.724     
+    "Mu_B"           "D-K su B"                                "A_parametrico"      80      true         1.4815       false      2.5648      2.8257    "PASS"           0           0    "FAIL"    "NP_FAIL"               21.87     
+    "Mu_B"           "D-K su B"                                "B_concentrato"      80      true         1.4815       false      1.9511       1.955    "PASS"           0           0    "FAIL"    "NP_FAIL"              26.786     
 
-
---- confronto_ras ---
+Rumore ZOH e picchi intercampione: LQG_fisso
+Rumore ZOH e picchi intercampione: LQGI_fisso
+Rumore ZOH e picchi intercampione: Hinf1_fisso
+Rumore ZOH e picchi intercampione: Hinf2_fisso
+Rumore ZOH e picchi intercampione: PID_fisso
+Rumore ZOH e picchi intercampione: Kmu_fisso
+Rumore ZOH e picchi intercampione: MuN1_fisso
 Rumore ZOH e picchi intercampione: LQG
 Rumore ZOH e picchi intercampione: LQGI
 Rumore ZOH e picchi intercampione: Hinf1
 Rumore ZOH e picchi intercampione: Hinf2
 Rumore ZOH e picchi intercampione: PID
-Rumore ZOH e picchi intercampione: Kmu
-Rumore ZOH e picchi intercampione: MuN1
 Rumore ZOH e picchi intercampione: Mu_A
 Rumore ZOH e picchi intercampione: Mu_B
-Rumore ZOH e picchi intercampione: PID_nuovo
 RAS LQG, punto 1/15
 RAS LQG, punto 2/15
 RAS LQG, punto 3/15
@@ -229,36 +255,6 @@ RAS PID, punto 12/15
 RAS PID, punto 13/15
 RAS PID, punto 14/15
 RAS PID, punto 15/15
-RAS Kmu, punto 1/15
-RAS Kmu, punto 2/15
-RAS Kmu, punto 3/15
-RAS Kmu, punto 4/15
-RAS Kmu, punto 5/15
-RAS Kmu, punto 6/15
-RAS Kmu, punto 7/15
-RAS Kmu, punto 8/15
-RAS Kmu, punto 9/15
-RAS Kmu, punto 10/15
-RAS Kmu, punto 11/15
-RAS Kmu, punto 12/15
-RAS Kmu, punto 13/15
-RAS Kmu, punto 14/15
-RAS Kmu, punto 15/15
-RAS MuN1, punto 1/15
-RAS MuN1, punto 2/15
-RAS MuN1, punto 3/15
-RAS MuN1, punto 4/15
-RAS MuN1, punto 5/15
-RAS MuN1, punto 6/15
-RAS MuN1, punto 7/15
-RAS MuN1, punto 8/15
-RAS MuN1, punto 9/15
-RAS MuN1, punto 10/15
-RAS MuN1, punto 11/15
-RAS MuN1, punto 12/15
-RAS MuN1, punto 13/15
-RAS MuN1, punto 14/15
-RAS MuN1, punto 15/15
 RAS Mu_A, punto 1/15
 RAS Mu_A, punto 2/15
 RAS Mu_A, punto 3/15
@@ -289,58 +285,103 @@ RAS Mu_B, punto 12/15
 RAS Mu_B, punto 13/15
 RAS Mu_B, punto 14/15
 RAS Mu_B, punto 15/15
-RAS PID_nuovo, punto 1/15
-RAS PID_nuovo, punto 2/15
-RAS PID_nuovo, punto 3/15
-RAS PID_nuovo, punto 4/15
-RAS PID_nuovo, punto 5/15
-RAS PID_nuovo, punto 6/15
-RAS PID_nuovo, punto 7/15
-RAS PID_nuovo, punto 8/15
-RAS PID_nuovo, punto 9/15
-RAS PID_nuovo, punto 10/15
-RAS PID_nuovo, punto 11/15
-RAS PID_nuovo, punto 12/15
-RAS PID_nuovo, punto 13/15
-RAS PID_nuovo, punto 14/15
-RAS PID_nuovo, punto 15/15
-                         Verifica                         Stato
-    __________________________________________________    ______
+                            Verifica                            Stato 
+    ________________________________________________________    ______
 
-    "Equilibrio non lineare"                              "PASS"
-    "Jacobiano indipendente delle equazioni"              "PASS"
-    "Nominale main e LFT equivalenti"                     "PASS"
-    "Quattro reali / due SISO dinamici; ordine fisico"    "PASS"
-    "Copertura dinamica continua dei campioni SISO"       "PASS"
-    "Replay esatto dei dieci impianti comuni"             "PASS"
-    "Stabilita interna da matrice esplicita"              "PASS"
+    "Equilibrio non lineare"                                    "PASS"
+    "Jacobiano indipendente delle equazioni"                    "PASS"
+    "Nominale A/B e LFT equivalenti"                            "PASS"
+    "Sette reali / due SISO dinamici e massa; ordine fisico"    "PASS"
+    "Copertura dinamica continua dei campioni SISO"             "PASS"
+    "Replay esatto dei dieci impianti comuni"                   "PASS"
+    "Esito stabilita interna da matrice esplicita"              "PASS"
 
-Simulink Hinf_linear_sim, originale, campione 0...
-Simulink Hinf_linear_sim, originale, campione 1...
-Simulink Hinf_nonlinear_sim, originale, campione 0...
-Simulink Hinf_nonlinear_sim, originale, campione 1...
-Simulink LQGI_linear_sim, originale, campione 0...
-Simulink LQGI_linear_sim, originale, campione 1...
-Simulink LQGI_nonlinear_sim, originale, campione 0...
-Simulink LQGI_nonlinear_sim, originale, campione 1...
-Simulink LQG_linear_sim, originale, campione 0...
-Simulink LQG_linear_sim, originale, campione 1...
-Simulink LQG_nonlinear_sim, originale, campione 0...
-Simulink LQG_nonlinear_sim, originale, campione 1...
-Simulink mu_linear_sim, originale, campione 0...
-Simulink mu_linear_sim, originale, campione 1...
-Simulink mu_linear_sim, MuN1, campione 0...
-Simulink mu_linear_sim, MuN1, campione 1...
+
+ans =
+
+  7×2 table
+
+                            Verifica                            Stato 
+    ________________________________________________________    ______
+
+    "Equilibrio non lineare"                                    "PASS"
+    "Jacobiano indipendente delle equazioni"                    "PASS"
+    "Nominale A/B e LFT equivalenti"                            "PASS"
+    "Sette reali / due SISO dinamici e massa; ordine fisico"    "PASS"
+    "Copertura dinamica continua dei campioni SISO"             "PASS"
+    "Replay esatto dei dieci impianti comuni"                   "PASS"
+    "Esito stabilita interna da matrice esplicita"              "PASS"
+
+
+COLLAUDO SIMULINK FINALE
+    MassaEEkg    RapportoMassa2     M11     NormaKg    PoloLQGFissato
+    _________    ______________    _____    _______    ______________
+
+       0.1           0.125         0.601    10.949          -0.3     
+       0.2            0.25          0.65    11.772          -0.3     
+       0.3           0.375         0.699    12.597          -0.3     
+
+Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
+    Tipo_wn_zeta_ritardo    Delta    Banda     Overshoot    MaxErroreRelativo
+    ____________________    _____    ______    _________    _________________
+
+             1                -1     31.305       1.484            0.1905    
+             1              -0.5     33.044      1.4784          0.097651    
+             1                 0     34.783      1.4722        7.4562e-17    
+             1               0.5     36.523      1.4652           0.10253    
+             1                 1     38.262      1.4576           0.21001    
+             2                -1     39.223      3.7427           0.11109    
+             2              -0.5     36.974      2.4686          0.052625    
+             2                 0     34.783      1.4722        7.4562e-17    
+             2               0.5     32.689      0.7482          0.047614    
+             2                 1      30.72     0.28675            0.0909    
+             3                -1     34.783      1.4934           0.22221    
+             3              -0.5     34.783       1.484           0.10526    
+             3                 0     34.783      1.4722        7.4562e-17    
+             3               0.5     34.783      1.4576           0.09523    
+             3                 1     34.783      1.4401           0.18182    
+
+Simulink Hinf_linear_sim, corrente, campione 0...
+Simulink Hinf_linear_sim, corrente, campione 1...
+Simulink Hinf_nonlinear_sim, corrente, campione 0...
+Simulink Hinf_nonlinear_sim, corrente, campione 1...
+Simulink LQGI_linear_sim, corrente, campione 0...
+Simulink LQGI_linear_sim, corrente, campione 1...
+Simulink LQGI_nonlinear_sim, corrente, campione 0...
+Simulink LQGI_nonlinear_sim, corrente, campione 1...
+Simulink LQG_linear_sim, corrente, campione 0...
+Simulink LQG_linear_sim, corrente, campione 1...
+Simulink LQG_nonlinear_sim, corrente, campione 0...
+Simulink LQG_nonlinear_sim, corrente, campione 1...
 Simulink mu_linear_sim, Mu_A, campione 0...
 Simulink mu_linear_sim, Mu_A, campione 1...
 Simulink mu_linear_sim, Mu_B, campione 0...
 Simulink mu_linear_sim, Mu_B, campione 1...
-Simulink mu_nonlinear_sim, originale, campione 0...
-Simulink mu_nonlinear_sim, originale, campione 1...
-Simulink mu_nonlinear_sim, MuN1, campione 0...
-Simulink mu_nonlinear_sim, MuN1, campione 1...
 Simulink mu_nonlinear_sim, Mu_A, campione 0...
 Simulink mu_nonlinear_sim, Mu_A, campione 1...
 Simulink mu_nonlinear_sim, Mu_B, campione 0...
 Simulink mu_nonlinear_sim, Mu_B, campione 1...
-Percorso completa terminato. Consultare CSV per PASS/FAIL scientifici.
+           modello            campione    stato     tempoFinale    controllore    massimoScope      segnali      overrideInit    attuatori    massaEE    generatoriAggiornati
+    ______________________    ________    ______    ___________    ___________    ____________    ___________    ____________    _________    _______    ____________________
+
+    {'Hinf_linear_sim'   }       0        "PASS"         2         "corrente"          14.719     {10×1 cell}       true             0            0.2             0          
+    {'Hinf_linear_sim'   }       1        "PASS"         2         "corrente"          982.29     {10×1 cell}       true             0        0.17406             0          
+    {'Hinf_nonlinear_sim'}       0        "PASS"         2         "corrente"      3.0347e+05     {10×1 cell}       true             6            0.2             3          
+    {'Hinf_nonlinear_sim'}       1        "PASS"         2         "corrente"      3.0314e+05     {10×1 cell}       true             6        0.17406             3          
+    {'LQGI_linear_sim'   }       0        "PASS"         2         "corrente"          1.5368     { 5×1 cell}       true             0            0.2             0          
+    {'LQGI_linear_sim'   }       1        "PASS"         2         "corrente"          1.5623     { 5×1 cell}       true             0        0.17406             0          
+    {'LQGI_nonlinear_sim'}       0        "PASS"         2         "corrente"          1.5368     { 5×1 cell}       true             2            0.2             1          
+    {'LQGI_nonlinear_sim'}       1        "PASS"         2         "corrente"          1.5623     { 5×1 cell}       true             2        0.17406             1          
+    {'LQG_linear_sim'    }       0        "PASS"         2         "corrente"          4.8411     { 5×1 cell}       true             0            0.2             0          
+    {'LQG_linear_sim'    }       1        "PASS"         2         "corrente"          4.8417     { 5×1 cell}       true             0        0.17406             0          
+    {'LQG_nonlinear_sim' }       0        "PASS"         2         "corrente"          4.8411     { 5×1 cell}       true             2            0.2             1          
+    {'LQG_nonlinear_sim' }       1        "PASS"         2         "corrente"          4.8417     { 5×1 cell}       true             2        0.17406             1          
+    {'mu_linear_sim'     }       0        "PASS"         2         "Mu_A"              6.2466     { 5×1 cell}       true             0            0.2             0          
+    {'mu_linear_sim'     }       1        "PASS"         2         "Mu_A"               6.256     { 5×1 cell}       true             0        0.17406             0          
+    {'mu_linear_sim'     }       0        "PASS"         2         "Mu_B"              742.45     { 5×1 cell}       true             0            0.2             0          
+    {'mu_linear_sim'     }       1        "PASS"         2         "Mu_B"              742.44     { 5×1 cell}       true             0        0.17406             0          
+    {'mu_nonlinear_sim'  }       0        "PASS"         2         "Mu_A"              6.2466     { 5×1 cell}       true             2            0.2             1          
+    {'mu_nonlinear_sim'  }       1        "PASS"         2         "Mu_A"               6.256     { 5×1 cell}       true             2        0.17406             1          
+    {'mu_nonlinear_sim'  }       0        "PASS"         2         "Mu_B"               742.5     { 5×1 cell}       true             2            0.2             1          
+    {'mu_nonlinear_sim'  }       1        "PASS"         2         "Mu_B"              742.43     { 5×1 cell}       true             2        0.17406             1          
+

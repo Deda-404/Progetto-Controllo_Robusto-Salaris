@@ -52,7 +52,9 @@ writetable(esiti,fullfile(p.risultati,'verifiche.csv'));disp(esiti);
 % Numeri per tabelle e formule: doppia precisione qui, arrotondamento in LaTeX.
 [num,den]=tfdata(u.WI,'v'); poli=eig(m.Am);
 l=load(fullfile(p.risultati,'lqg.mat')); li=load(fullfile(p.risultati,'lqgi.mat'));
-h=load(fullfile(p.risultati,'sintesi_hinf.mat'));
+fileH=fullfile(p.risultati,'sintesi_hinf.mat');
+if ~isfile(fileH),fileH=fullfile(p.dati,'sintesi_hinf.mat');end
+h=load(fileH);
 riassunto=struct('Mbar',m.Mbar,'Kg',m.Kg,'taubar',m.taubar, ...
     'poliRe',real(poli),'poliIm',imag(poli),'residuoEquilibrio', ...
     norm(dinamica_sea(m.xbar,m.taubar,zeros(2,1),m.fisica)), ...

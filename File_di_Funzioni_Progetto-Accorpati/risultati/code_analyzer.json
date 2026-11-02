@@ -8,6 +8,10 @@
     "messaggi": []
   },
   {
+    "file": "controllori_sea.m",
+    "messaggi": []
+  },
+  {
     "file": "dinamica_sea.m",
     "messaggi": []
   },
@@ -17,6 +21,10 @@
   },
   {
     "file": "interconnessione_sea.m",
+    "messaggi": []
+  },
+  {
+    "file": "matrici_sea.m",
     "messaggi": []
   },
   {

@@ -4,7 +4,7 @@ if ~isfile(fullfile(p.risultati,'incertezze.mat')),run(fullfile(cartella,'incert
 a=load(fullfile(p.risultati,'incertezze.mat')); modelli=a.modelli;
 a=load(fullfile(p.dati,'banca_validata.mat')); banca=a.banca;
 piante={modelli.PA,modelli.PB}; nomiModello=["A_parametrico","B_concentrato"];
-firma=[p.wn p.zeta p.ritardo p.rwn p.rzeta p.omegaW1 p.As p.Ms p.ku p.omegaU p.alpha p.omegaM p.seed];
+firma=p.firma;
 fileSintesi=fullfile(p.risultati,'sintesi_mu.mat');
 fileAnalisi=fullfile(p.risultati,'confronto_robusto.mat');
 
@@ -18,25 +18,20 @@ if p.modalita=="completa"
             'FitOrder',p.dkFit,'FullDG',false,'MixedMU','on', ...
             'FrequencyGrid',p.omegaMu,'UseParallel',false);
         fprintf('D-K dedicata %s, massimo %d iterazioni.\n',nomiModello(modello),p.dkIterazioni);
-        [Knuovo,obiettivo,info]=musyn(P,4,2,opts); rng(statoRng);
+        [Knuovo,obiettivo,info]=musyn(P,4,2,banca.muRumore,opts); rng(statoRng);
         assert(~isempty(Knuovo),'SEA:Sintesi','musyn non ha restituito un controllore.');
         candidati{modello}=struct('K',Knuovo,'obiettivo',obiettivo,'info',info, ...
-            'origine',nomiModello(modello),'seed',p.seed);
+            'origine',nomiModello(modello),'seed',p.seed,'inizializzazione',"MuN1 fissato, comune ad A/B");
     end
-    save(fileSintesi,'candidati','firma','-v7');
+    inizializzazione="MuN1";
+    save(fileSintesi,'candidati','firma','inizializzazione','-v7');
 else
     if ~isfile(fileSintesi),fileSintesi=fullfile(p.dati,'sintesi_mu.mat');end
     assert(isfile(fileSintesi),'SEA:Cache','Eseguire run_all(''completa'') per rigenerare le D-K.');
-    a=load(fileSintesi); assert(isequal(a.firma,firma),'SEA:Cache','Configurazione cache diversa.');
+    a=load(fileSintesi); assert(isfield(a,'inizializzazione') && a.inizializzazione=="MuN1" && isequal(a.firma,firma),'SEA:Cache','Configurazione cache diversa.');
     candidati=a.candidati; disp('D-K A/B CARICATE da esecuzione validata; non risintetizzate.');
 end
-nomi=[string({banca.controllers.name}),"MuN1","Mu_A","Mu_B"];
-K=[{banca.controllers.K},{banca.muRumore,candidati{1}.K,candidati{2}.K}];
-origine=[repmat("main / modello storico",1,7),nomiModello];
-fileH=fullfile(p.risultati,'sintesi_hinf.mat');
-if ~isfile(fileH),fileH=fullfile(p.dati,'sintesi_hinf.mat');end
-a=load(fileH); K=[K,{a.sintesi.Kpid}]; nomi=[nomi,"PID_nuovo"];
-origine=[origine,"hinfstruct nominale, stessi pesi"];
+[nomi,K,origine,correnti]=controllori_sea(p);
 
 %% 3 - Stesso K su A e B: NS, NP, RS e RP sono proprieta distinte
 if p.modalita=="completa"
@@ -63,7 +58,7 @@ if p.modalita=="completa"
                 end
             end
             muGriglia=struct;
-            if ismember(k,[4 6 8 9])
+            if ismember(nomi(k),["Hinf2","Mu_A","Mu_B"])
                 [N,Delta,struttura]=lftdata(CL(5:8,:));
                 nd=size(Delta,1); N11=N(1:nd,1:nd);
                 bounds=mussv(frd(N11,p.omegaMu),struttura,'s');
@@ -81,11 +76,11 @@ if p.modalita=="completa"
     end
     confronto=cell2table(righe,'VariableNames',{'Controllore','Sintesi','Analisi','Ordine','NS', ...
         'NormaNominale','NP','RS_lower','RS_upper','RS','RP_lower','RP_upper','RP','MetodoRP','FrequenzaCritica'});
-    save(fileAnalisi,'analisi','confronto','nomi','K','origine','firma','-v7');
+    save(fileAnalisi,'analisi','confronto','nomi','K','origine','correnti','firma','-v7');
 else
     if ~isfile(fileAnalisi),fileAnalisi=fullfile(p.dati,'confronto_robusto.mat');end
     assert(isfile(fileAnalisi),'SEA:Cache','Manca analisi A/B validata: eseguire completa.');
-    a=load(fileAnalisi); assert(isequal(a.firma,firma),'SEA:Cache','Firma analisi diversa.');
+    a=load(fileAnalisi); assert(isequal(a.firma,firma) && isequaln(a.K,K),'SEA:Cache','Analisi relativa a configurazione o controllori diversi.');
     analisi=a.analisi; confronto=a.confronto;
     disp('RS/RP CARICATE dalla campagna completa; nuove verifiche nominali qui sotto.');
     for k=1:numel(K)
@@ -109,8 +104,8 @@ for modello=1:2
 end
 if p.figure
     f=figure('Name','Robustezza A/B e D-K','Color','w'); theme(f,'light'); tiledlayout(1,2);
-    nexttile; bar(reshape(confronto.RS_lower,2,[])'); yline(1,'--k');
-    set(gca,'XTick',1:numel(nomi),'XTickLabel',nomi); xtickangle(45); grid on;
+    nexttile; margini=reshape(confronto.RS_lower,2,[])'; bar(margini(correnti,:)); yline(1,'--k');
+    set(gca,'XTick',1:numel(correnti),'XTickLabel',nomi(correnti)); xtickangle(45); grid on;
     ylabel('Limite inferiore RS'); legend('A parametrico','B concentrato');
     nexttile; plot(storia{1}.Iterazione,storia{1}.PeakMu,'o-',storia{2}.Iterazione,storia{2}.PeakMu,'s-');
     yline(1,'--k'); grid on; xlabel('Iterazione'); ylabel('Picco mu'); legend('Sintesi A','Sintesi B');

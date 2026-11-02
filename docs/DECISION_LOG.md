@@ -2386,3 +2386,7 @@ normalizzazione continua, replay dei dieci campioni e stabilita interna esplicit
 PBH dei modi instabili superato per stabilizzabilita/rilevabilita.
 La copertura riguarda 29 casi di fit e 30 hold-out; nessuna inclusione globale
 e nessuna garanzia trasferita dal modello A a B. Gate COMPLETE/PASS.
+
+
+## 2026-11-02 — Sintesi e confronto limitati
+Decisione: conservare i sette K fissati e ricalcolare le cinque famiglie nominali più due D-K, senza ulteriori architetture. Usare la stessa inizializzazione MuN1 e i medesimi pesi su A/B; conservare anche il primo tentativo automatico non soddisfacente. La post-analisi prevale sull’obiettivo D-K. Nessuna riduzione d’ordine non validata e nessuna promozione in presenza di offset o rumore eccessivi. Stato: implementato e verificato; prestazione globale non raggiunta.

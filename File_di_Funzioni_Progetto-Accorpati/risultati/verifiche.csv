@@ -1,8 +1,8 @@
 Verifica,Stato
 Equilibrio non lineare,PASS
 Jacobiano indipendente delle equazioni,PASS
-Nominale main e LFT equivalenti,PASS
-Quattro reali / due SISO dinamici; ordine fisico,PASS
+Nominale A/B e LFT equivalenti,PASS
+Sette reali / due SISO dinamici e massa; ordine fisico,PASS
 Copertura dinamica continua dei campioni SISO,PASS
 Replay esatto dei dieci impianti comuni,PASS
-Stabilita interna da matrice esplicita,PASS
+Esito stabilita interna da matrice esplicita,PASS
