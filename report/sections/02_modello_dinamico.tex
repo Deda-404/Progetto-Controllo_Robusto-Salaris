@@ -16,6 +16,14 @@ $m_2$ resta la massa assegnata al secondo link: il carico aggiuntivo non era inc
 Abbiamo confrontato tre ipotesi semplici, riportate nella Tabella~\ref{tab:carico}. Scegliamo $m_{EE}=0.2$ kg: è un quarto di $m_2$ e porta la massa distale complessiva a 1 kg. L'intervallo $[0.1,0.3]$ kg, cioè $\pm50\%$ del solo carico, rappresenta utensili o piccoli oggetti di massa diversa. È una scelta di progetto, non una tolleranza misurata.
 \input{generated/finale_carico.tex}
 
+La coppia elastica dipende dalla differenza fra rotore e link.
+Se il rotore avanza rispetto al link, la molla esercita una coppia positiva
+sul braccio e una coppia opposta sul motore. Questo scambio spiega
+perché dobbiamo distinguere le due coordinate: comandare la posizione
+del rotore non impone istantaneamente quella del link.
+La misura di entrambe rende inoltre accessibile la deformazione,
+senza assumere una misura diretta delle velocità.
+
 \section{Equazioni del lato link e del lato motore}
 Definiamo la deformazione elastica $\delta=\theta-q$ e la coppia $\tau_{el}=K_s\delta$. Le equazioni sono
 \begin{align}
@@ -39,11 +47,26 @@ G(q)&=\begin{bmatrix}(m_1+m)gl_1\cos q_1+mgl_2\cos(q_1+q_2)\\mgl_2\cos(q_1+q_2)\
 \end{align*}
 Aumentare il carico modifica dunque sia le accelerazioni ottenute da una coppia sia l'effetto della gravità e delle velocità. Aggiungerlo soltanto in $G$ descriverebbe un sistema fisico diverso.
 
+Non introduciamo smorzamento viscoso lato link, perché non è previsto
+nelle equazioni assegnate; $B_m$ agisce sui rotori. Il vettore di gravità
+usa coseni degli angoli assoluti perché $q_1$ è misurato dall'orizzontale.
+Un'altra convenzione angolare cambierebbe l'aspetto delle formule:
+va conservata la stessa convenzione in equilibrio e simulazioni.
+
 La positività dell'inerzia si verifica senza una lunga ricerca numerica:
 \[
 \det M=ml_1^2l_2^2\bigl(m_1+m\sin^2q_2\bigr)>0.
 \]
 Poiché anche $M_{11}>0$, $M$ è definita positiva per ogni configurazione e per tutte le masse considerate.
+
+La simmetria di $M$ deriva dall'energia cinetica. Insieme a $M_{11}>0$,
+il determinante positivo soddisfa il criterio di Sylvester: per ogni
+velocità non nulla l'energia cinetica è positiva. È una proprietà
+analitica, valida in tutto l'intervallo fisico della massa, non soltanto
+nei punti eventualmente campionati. La struttura di $C$ completa il
+bilancio energetico attraverso l'antisimmetria di $\dot M-2C$.
+I termini di Coriolis redistribuiscono l'energia fra coordinate,
+non rappresentano una dissipazione viscosa aggiunta.
 
 \section{Stato, ingressi e uscite}
 Lo stato meccanico è $x_m=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T\in\mathbb R^8$. Le accelerazioni si ricavano risolvendo
@@ -52,6 +75,18 @@ Lo stato meccanico è $x_m=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T\in\mathbb R^8$
 \ddot\theta=J_m^{-1}\bigl[\tau-B_m\dot\theta-K_s(\theta-q)\bigr].
 \]
 Nel calcolo MATLAB usiamo sistemi lineari con l'operatore \texttt{\textbackslash}. Le uscite di prestazione sono le posizioni articolari $q$. Per il filtro di Kalman assumiamo disponibili quattro encoder, che misurano $[q^T,\theta^T]^T$, senza misure dirette di velocità.
+
+Se indichiamo con $v_q$ e $v_\theta$ le velocità, il primo ordine è
+\[
+ \frac{d}{dt}\begin{bmatrix}q\\v_q\\\theta\\v_\theta\end{bmatrix}
+ =\begin{bmatrix}v_q\\M^{-1}(K_s(\theta-q)-Cv_q-G+d)\\
+ v_\theta\\J_m^{-1}(\tau-B_mv_\theta-K_s(\theta-q))\end{bmatrix}.
+\]
+Questa forma chiarisce dove entra ciascuna coppia. Un disturbo sul link
+non è filtrato dal drive prima di raggiungere il braccio; il comando
+motore lo è. L'uscita regolata resta $q$, mentre $[q;\theta]$ è la
+misura disponibile al Kalman. Confondere queste due uscite cambierebbe
+l'informazione utilizzabile dal controllore.
 
 \section{Implementazione e verifiche}
 Le stesse espressioni di $M,C,G$ alimentano la dinamica e la linearizzazione. Una verifica indipendente usa il Jacobiano geometrico $J_{EE}$ della posizione distale:
@@ -63,3 +98,9 @@ Queste identità controllano direttamente il significato del carico puntiforme. 
 
 \section{Assunzioni e limiti del modello}
 Le molle sono lineari; il modello non include attrito secco, giochi, flessibilità distribuita dei link o saturazioni. Le inerzie dei motori e le rigidezze restano quelle della traccia. Il carico viene trattato come massa costante durante ciascuna prova: il modello non descrive un oggetto che viene afferrato o rilasciato nel mezzo del transitorio.
+
+Le inerzie sono riferite alle coordinate motore adottate e le molle sono
+lineari. Attrito secco, giochi e flessibilità distribuita richiederebbero
+altri termini. La coerenza energetica delle equazioni non dimostra quindi
+che ogni fenomeno reale sia incluso; verifica che i fenomeni dichiarati
+siano rappresentati senza contraddizioni interne.

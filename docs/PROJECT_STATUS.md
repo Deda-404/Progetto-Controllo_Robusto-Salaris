@@ -1,3 +1,9 @@
+# Stato corrente — estensione editoriale integrale in corso
+
+Il metodo del capitolo 7 è stato approvato dagli studenti ed esteso alla relazione. Capitoli 1–6 ampliati; compilazione intermedia integrale riuscita. Restano recupero dei capitoli 8–13 e appendici, controllo di copertura e verifica del PDF finale. MATLAB, Simulink, controllori, parametri e risultati congelati; nessun merge.
+
+---
+
 # Stato corrente — solo pilota editoriale del capitolo 7
 
 Il metodo di recupero precedente non è stato approvato. Il lavoro è ora limitato al capitolo 7; nessuna estensione agli altri capitoli prima della verifica degli studenti. Modellazione A/B, controllori, script MATLAB, SLX e risultati numerici congelati.

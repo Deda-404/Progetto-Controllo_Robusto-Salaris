@@ -55,7 +55,22 @@ resta perciò limitata: $M_o$ esprime la rapidità desiderata, i pesi
 definiscono il compromesso frequenziale, mentre i quattro target
 temporali e il rumore costituiscono verifiche ulteriori necessarie.
 
-\section{Rumore encoder e sforzo di controllo}
+\section{Requisito aggiuntivo sul rumore encoder}
 Per confrontare la sensibilità alle misure usiamo lo stesso rumore su tutti i controllori: deviazione standard $0.05^\circ$, campioni ogni 2 ms mantenuti costanti fra un campione e il successivo, durata 4 s. Riferimento e disturbo sono nulli.
 
 Misuriamo il picco del comando anche fra i campioni e il suo RMS nel tempo. Questo evita di sottostimare impulsi molto rapidi. Il rumore non è incluso nel costo robusto comune sopra: il suo effetto è quindi una verifica aggiuntiva, necessaria per interpretare l'utilità di un controllore. Per il disturbo riportiamo anche il tempo di rientro entro $0.5^\circ$, senza confonderlo con una soglia di robustezza.
+
+La richiesta di attenuare il rumore può essere formulata come un secondo
+problema di progetto, includendo una misura $q+W_n\nu$ nella pianta
+generalizzata. Questa estensione è spiegata nei capitoli 8 e 9, ma non
+attribuiamo ai controllori della famiglia con carico risultati di una
+sintesi aggiuntiva che non è qui eseguita. La verifica comune usa le
+metriche salvate sotto la stessa eccitazione; una riduzione osservata
+su una sequenza non è un massimo garantito per un rumore non limitato.
+
+La banda del feedback, la frequenza di transizione del peso sull'errore
+e la rapidità del modello desiderato hanno ruoli distinti. Il feedback
+deve stabilizzare il punto instabile, il peso esprime il compromesso
+frequenziale, $M_o$ descrive il moto richiesto. Non si può assegnare
+un unico significato numerico a tutte e tre le frequenze, né dedurre
+il tempo di assestamento reale dalla sola frequenza del peso.

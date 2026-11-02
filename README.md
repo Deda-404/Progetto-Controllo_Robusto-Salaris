@@ -1,4 +1,4 @@
-È in verifica il solo [capitolo 7 pilota](report/Capitolo_7_Pilota.pdf), con [confronto dei contenuti](docs/CAPITOLO_7_PILOTA_CONFRONTO.md). Il metodo editoriale attende la lettura degli studenti; gli altri capitoli e tutta la parte MATLAB/Simulink sono congelati.
+Il metodo editoriale del [capitolo 7 pilota](report/Capitolo_7_Pilota.pdf) è stato approvato. È in corso il recupero discorsivo integrale della relazione a partire dal main, con particolare attenzione al capitolo 5. La parte numerica e gli otto SLX rimangono congelati; verifica finale del PDF ancora da completare.
 
 La correzione conservativa della PR #47 è descritta in [CORREZIONE_CONSERVATIVA.md](docs/CORREZIONE_CONSERVATIVA.md): recupero degli approfondimenti, sette candidati predefiniti e SLX con inizializzazione automatica. I risultati negativi restano espliciti.
 

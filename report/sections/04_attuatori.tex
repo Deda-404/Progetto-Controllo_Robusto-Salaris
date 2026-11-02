@@ -7,11 +7,25 @@ Il segnale di controllo $u_i$ è una richiesta di coppia; il drive produce la co
 \]
 La dinamica del drive si trova a monte dell'inerzia del rotore, già contenuta nelle equazioni SEA. Non aggiungiamo un secondo modello meccanico del motore.
 
+Il guadagno statico unitario significa che una coppia costante richiesta
+viene riprodotta a regime dal modello del drive. Non significa risposta
+istantanea: il secondo ordine cambia modulo e fase durante il moto.
+$J_m$ e $B_m$ sono già nella meccanica e non vengono duplicati qui.
+Questa distinzione conserva il significato di coppia richiesta $u$
+e coppia effettiva $\tau$ applicata ai rotori.
+
 \section{Scelta ingegneristica}
 I nominali sono $\omega_n=40$ rad/s, $\zeta=0.8$ e $\tau_d=15$ ms. La frequenza naturale consente un'attuazione più rapida dei modi instabili, mentre lo smorzamento limita il picco del secondo ordine. Manteniamo $\pm10\%$ per frequenza naturale e smorzamento. Per il ritardo confrontiamo le variazioni $\pm10\%$, $\pm20\%$ e $\pm30\%$.
 \input{generated/finale_ritardo.tex}
 
 Scegliamo $\tau_d\in[12,18]$ ms: a 40 rad/s l'estremo superiore produce circa $6.2^\circ$ di ulteriore fase rispetto al nominale. È un effetto significativo ma moderato, che merita di entrare nel confronto robusto. Tutti gli intervalli sono ipotesi di progetto. I parametri dei due canali variano indipendentemente.
+
+La banda nominale del drive è circa 34.78 rad/s. È superiore ai modi
+instabili del braccio, ma non infinitamente maggiore delle frequenze
+elastiche. Lo smorzamento 0.8 limita il picco del secondo ordine;
+la sensibilità ai parametri permette di distinguere l'effetto della
+frequenza naturale da quello dello smorzamento, senza moltiplicare
+combinazioni di tuning prive di una domanda precisa.
 
 \section{Ritardo e Padé}
 Adottiamo Padé del primo ordine:
@@ -22,6 +36,18 @@ Adottiamo Padé del primo ordine:
 Variando $\tau_d$ cambiano i coefficienti della realizzazione, ma il ritardo mantiene un solo stato. Il drive ha quindi tre stati per ogni valore dei parametri. Il polo di Padé è $-2/\tau_d$ e lo zero è $+2/\tau_d$: quest'ultimo è essenziale per scegliere correttamente la forma dell'incertezza concentrata.
 
 Padé è un'approssimazione del ritardo puro. L'analisi A/B riguarda la famiglia razionale così definita; non certifica anche l'errore di approssimazione rispetto al ritardo esatto a tutte le frequenze.
+
+Lo zero destro rende il modello non a fase minima, pur lasciandolo
+stabile. Non è quindi possibile interpretare il ritardo come una sola
+attenuazione di modulo. A frequenze più alte l'approssimazione razionale
+si allontana dal ritardo esatto; il confronto nominale chiarisce questo
+limite senza trasformarlo in un'ulteriore incertezza non dichiarata.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.8\textwidth]{figures/student_baseline/delay_pade.png}
+\caption{Ritardo nominale di 15 ms e Padé del primo ordine. La figura
+riguarda il solo ritardo nominale, rimasto quello assegnato ai drive.}
+\label{fig:m3-pade}
+\end{figure}
 
 \section{Implementazione, verifica e interpretazione}
 La Figura~\ref{fig:attuatori} separa i due drive SISO dalla meccanica MIMO. Il disturbo entra direttamente sui link; il carico entra nelle equazioni meccaniche. Il sistema completo ha $8+3+3=14$ stati.
@@ -35,3 +61,17 @@ La Figura~\ref{fig:singoli} varia un parametro alla volta, mantenendo nominali g
 \includegraphics[width=.94\textwidth]{figures/definitiva/sensibilita_singoli_parametri.png}
 \caption{Cinque valori per ciascun parametro attuativo. A sinistra il modulo, a destra la fase.}\label{fig:singoli}
 \end{figure}
+
+Con cinque valori per parametro, mantenendo nominali gli altri, la
+banda cambia circa da 31.3 a 38.3 rad/s per $\omega_n\in[36,44]$;
+per $\zeta\in[0.72,0.88]$ la sovraelongazione cambia circa da 3.74\%
+a 0.287\%. Il ritardo influenza soprattutto la fase.
+Le tre variazioni entrano tutte nella famiglia incerta del capitolo 5.
+Il Padé conserva un solo stato anche quando il ritardo cambia:
+la pianta ha quindi sempre otto stati meccanici e sei attuativi.
+
+In spazio di stato la cascata collega l'uscita dei drive all'ingresso
+di coppia della meccanica. Il disturbo lato link conserva una matrice
+d'ingresso separata. I drive aggiungono poli stabili, senza rimuovere
+i due modi instabili del robot. La verifica della cascata e quella
+delle proprietà PBH controllano quindi aspetti diversi della costruzione.

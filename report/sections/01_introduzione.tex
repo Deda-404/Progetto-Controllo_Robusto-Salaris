@@ -1,20 +1,47 @@
 \chapter{Introduzione e obiettivi}
+
 \section{Problema fisico}
-Un manipolatore con attuatori elastici in serie non trasmette rigidamente il moto dei motori ai link. Fra ciascun rotore e il braccio si trova una molla torsionale: il motore deve deformarla per produrre la coppia sul giunto. Questa elasticità rende il comportamento più ricco di quello di un manipolatore rigido e introduce oscillazioni che il controllo deve smorzare.
+Il sistema considerato è un manipolatore planare 2R nel quale ciascun motore trasmette coppia al link attraverso un elemento elastico torsionale. Nei robot rigidamente attuati si assume spesso una corrispondenza diretta fra posizione del rotore e configurazione articolare; con un Series Elastic Actuator (SEA) questa equivalenza non è più valida. Le coordinate dei link $q=[q_1,q_2]^T$ descrivono la configurazione del braccio, mentre $\theta=[\theta_1,\theta_2]^T$ descrive la posizione dei rotori. La differenza $\theta-q$ genera la coppia elastica trasmessa.
 
-Studiamo il manipolatore planare a due giunti assegnato nella traccia del corso. All'estremità del secondo link consideriamo anche una massa aggiuntiva, che rappresenta il carico dell'end-effector. Il suo valore può cambiare durante l'impiego del robot. Anche i due drive sono conosciuti solo approssimativamente: frequenza naturale, smorzamento e ritardo possono discostarsi dai valori nominali.
+L'elasticità è utile per la misura indiretta della coppia e per la sicurezza dell'interazione, ma introduce dinamiche interne e risonanze. Una variazione di comando non agisce istantaneamente sul link: attraversa la dinamica dell'attuatore, accelera il rotore, deforma la molla e solo successivamente produce coppia sul lato meccanico. La configurazione verticale superiore scelta nel progetto è inoltre instabile in anello aperto. Il problema non consiste quindi soltanto nell'inseguire un riferimento, ma nel coordinare stabilizzazione, rapidità, interazione fra giunti e contenimento del comando in presenza di incertezze.
 
-Il punto centrale del lavoro è confrontare due modi di descrivere queste incertezze. Nel modello A manteniamo espliciti i parametri fisici dei drive; nel modello B raccogliamo le loro variazioni in due perturbazioni dinamiche pesate. La massa del carico rimane invece un parametro reale in entrambi. In questo modo il confronto riguarda due descrizioni degli stessi attuatori e della stessa meccanica.
+Il carico dell'end-effector è una massa aggiuntiva concentrata nella
+punta del secondo link. Non modifica soltanto la coppia gravitazionale:
+partecipa a inerzia e Coriolis. Anche i drive presentano variazioni di
+frequenza naturale, smorzamento e ritardo. Questi effetti agiscono
+in punti diversi del sistema e devono restare distinguibili.
+
+Il filo conduttore è il confronto fra due rappresentazioni degli stessi
+attuatori e dello stesso carico. La prima conserva i parametri fisici;
+la seconda concentra lo scostamento dei drive in dinamiche pesate.
+Osserviamo sia che cosa cambia nei margini sia che cosa rimane identico
+quando controllore e impianto fisico sono gli stessi. È questa distinzione
+a collegare la modellazione delle incertezze alla scelta del controllo.
 
 \section{Obiettivi di controllo}
-Vogliamo stabilizzare il braccio nella configurazione verticale superiore, seguire piccoli riferimenti articolari e limitare gli effetti di coppie disturbanti applicate ai link. Confrontiamo LQG, LQGI, controllo $H_\infty$ a uno e due gradi di libertà, PID strutturato e sintesi robusta mediante iterazione D--K.
+La traccia richiede di partire dal modello non lineare, scegliere e verificare un punto di equilibrio, introdurre gli attuatori con ritardo e costruire un insieme incerto di dimensione contenuta. Su questa base devono essere confrontati un controllo LQG, sintesi $H_\infty$ nominali, strutture di ordine ridotto, $\mu$-analysis e $\mu$-synthesis. Le prestazioni di interesse comprendono tracking di piccoli riferimenti articolari, reiezione di coppie esterne lato link, attenuazione del rumore, interazione MIMO e sforzo di controllo.
 
-Queste strategie rispondono a domande diverse. LQG bilancia stato e comando e ricostruisce gli stati non misurati; l'integratore corregge gli errori persistenti. La sintesi $H_\infty$ limita una norma pesata, mentre la sintesi con $\mu$ tiene conto della struttura delle incertezze. Per valutarle usiamo gli stessi riferimenti, disturbi e impianti fisici campionati.
+Nel progetto abbiamo adottato due principi metodologici. Il primo consiste nel dichiarare modello incerto, target e pesi, verificando ogni controllore sul problema a cui appartiene. Il secondo consiste nel separare quattro domande differenti: stabilità nominale, prestazione nominale, stabilità robusta e prestazione robusta. Un controllore può rispondere positivamente a una di esse e negativamente alle altre.
 
 \section{Metodo di lavoro e classi di verifica}
-Distinguiamo quattro proprietà. La stabilità nominale, NS, riguarda la convergenza degli stati nel modello nominale. La prestazione nominale, NP, richiede anche che una mappa pesata abbia norma minore di uno. La stabilità robusta, RS, estende la stabilità a tutta la famiglia ammessa. La prestazione robusta, RP, richiede stabilità e limite prestazionale per tutti i suoi elementi.
+Il percorso progettuale procede dalle equazioni fisiche alla definizione degli obiettivi e delle verifiche. Dopo la verifica dell'equilibrio e dei Jacobiani, il modello viene esteso con gli attuatori nominali e con le incertezze parametriche e dinamiche. Le specifiche temporali vengono quindi collegate ai pesi frequenziali, consentendo di confrontare controllori con strutture diverse sullo stesso problema.
 
-Queste definizioni non sostituiscono le prove temporali. Un controllore può soddisfare una norma pesata e avere un transitorio poco adatto, oppure amplificare il rumore fino a richiedere coppie irragionevoli. Per questo affianchiamo all'analisi robusta tracking, disturbi, sforzo di controllo e simulazioni non lineari. I campioni danno evidenza numerica; non dimostrano da soli una proprietà sull'intero insieme.
+Le verifiche finali appartengono a classi che non possono essere aggregate indiscriminatamente:
+\begin{itemize}
+\item l'analisi lineare nominale misura stabilità, norme pesate e risposte temporali sul modello usato per la sintesi;
+\item le simulazioni non lineari verificano che i controllori conservino il comportamento previsto quando vengono reinserite le equazioni meccaniche complete e forniscono stime empiriche della regione di attrazione;
+\item il ragionamento di Lyapunov spiega quali condizioni servirebbero per un insieme interno certificato; per i controllori studiati qui non viene dichiarata una nuova regione certificata;
+\item la prova pratica sugli impianti incerti confronta i controllori sulle stesse realizzazioni finite dell'insieme incerto lineare;
+\item la $\mu$-analysis valuta formalmente Robust Stability e Robust Performance rispetto alla struttura di incertezza adottata.
+\end{itemize}
+La distinzione evita, per esempio, di interpretare la frazione di campioni stabili come probabilità fisica o di usare una simulazione non lineare nominale come certificato robusto.
 
 \section{Organizzazione della relazione}
-Partiamo dalle equazioni fisiche, dall'equilibrio e dalla linearizzazione. Introduciamo poi i drive e le due rappresentazioni delle incertezze. Dopo aver definito obiettivi e pesi, progettiamo i controllori e ne discutiamo la robustezza. Le simulazioni non lineari, la regione di attrazione empirica e i dieci impianti comuni permettono infine di interpretare vantaggi e limiti delle soluzioni. Le appendici raccolgono parametri, istruzioni di riproduzione e pochi estratti MATLAB essenziali.
+I capitoli successivi seguono il ragionamento ingegneristico. I Capitoli 2--5 costruiscono il modello nominale e incerto; il Capitolo 6 definisce obiettivi e scale generali. I Capitoli 7--9 descrivono le sintesi LQG, $H_\infty$ e $\mu$; i pesi mixed-sensitivity sono introdotti nel Capitolo 8. I Capitoli 10 e 11 discutono validazione non lineare, RAS e prove pratiche di robustezza. Il Capitolo 12 confronta le famiglie studiate e ne valuta i ruoli; il Capitolo 13 raccoglie conclusioni, limiti e possibili sviluppi. I nomi dei file che producono i risultati sono raccolti nell'Appendice B.
+
+Le fonti didattiche sono la traccia e il materiale del corso di Controllo
+Robusto: gli esempi MATLAB sulla modellazione delle incertezze, le slide
+su LFT e pesi e le parti degli Appunti e del riassunto dedicate a
+$H_\infty$ e $\mu$. Gli esempi guidano il metodo; parametri e conclusioni
+numeriche del manipolatore provengono dai dati del progetto.
+Le ipotesi liberamente scelte non sono attribuite al docente.

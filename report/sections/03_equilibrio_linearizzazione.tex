@@ -14,7 +14,25 @@ Qui entrambi i coseni di $G$ sono nulli: coppia e deformazione d'equilibrio sono
 
 Il residuo della dinamica non lineare all'equilibrio è \FinResiduoEquilibrio, inferiore alla tolleranza $10^{-10}$. Le quantità molto piccole sono residui del calcolo in doppia precisione.
 
+Le due relazioni statiche hanno un significato distinto: la molla
+sostiene la gravità del link, il motore equilibra la reazione della molla.
+Qui $G(\bar q)=0$, ma la configurazione rimane instabile: essere in
+equilibrio significa avere derivata nulla esattamente nel punto,
+non ritornarvi dopo un piccolo spostamento.
+
 \section{Coordinate incrementali e Jacobiani}
+Introduciamo $\widetilde x_m=x_m-\bar x_m$ e
+$\widetilde\tau=\tau-\bar\tau$. Lo sviluppo al primo ordine dà
+\[
+ \dot{\widetilde x}_m=A_m\widetilde x_m+B_\tau\widetilde\tau+B_dd,
+ \quad A_m=\left.\frac{\partial f}{\partial x_m}\right|_{\bar x_m},
+ \quad B_\tau=\left.\frac{\partial f}{\partial\tau}\right|_{\bar x_m}.
+\]
+Il termine costante è nullo perché abbiamo verificato l'equilibrio.
+Le derivate descrivono la risposta a piccoli spostamenti, non a un
+moto arbitrariamente ampio. La massa continua a comparire in queste
+derivate anche quando il valore della gravità nel punto è zero.
+
 Poniamo $\widetilde x_m=x_m-\bar x_m$ e $\widetilde\tau=\tau-\bar\tau$. Definendo $\bar M=M(\bar q)$ e $K_g=\partial G/\partial q|_{\bar q}$, otteniamo
 \[
  A_m=\begin{bmatrix}
@@ -35,6 +53,14 @@ Per il carico nominale si ha
 \]
 Mostriamo tre decimali in $K_g$ per rendere controllabile il calcolo; le altre matrici complete restano nei dati MATLAB. Il confronto con differenze finite centrate dà un errore relativo \FinErroreJacobiano. La stessa verifica viene eseguita anche ai due estremi del carico.
 
+Il confronto a differenze finite usa le stesse equazioni fisiche e
+una costruzione indipendente del Jacobiano. Un accordo numerico
+controlla l'implementazione della linearizzazione; non misura da solo
+il raggio entro cui l'approssimazione è sufficientemente accurata.
+Il resto di Taylor tende a zero più rapidamente del termine lineare
+al diminuire dell'ampiezza, ma il comportamento a grande spostamento
+va valutato sulle equazioni complete.
+
 \section{Poli e proprietà strutturali}
 Il modello meccanico ha otto stati e due poli reali instabili, riportati nella Tabella~\ref{tab:poli}. Le oscillazioni elastiche hanno frequenze più alte e richiedono di evitare un controllo troppo aggressivo.
 \input{generated/finale_poli.tex}
@@ -42,3 +68,13 @@ Il modello meccanico ha otto stati e due poli reali instabili, riportati nella T
 Usiamo il criterio PBH sui modi instabili per verificare che le coppie possano controllarli e che gli encoder possano osservarli. Il modello è stabilizzabile e rilevabile. Questo è il controllo strutturale necessario alle sintesi; non ricaviamo conclusioni dal solo rango di matrici contenenti alte potenze di $A_m$.
 
 La linearizzazione descrive piccole variazioni attorno all'equilibrio. Per spostamenti maggiori valutiamo direttamente le equazioni non lineari. La stabilità del modello lineare non viene presentata come una garanzia globale sul braccio.
+
+Il criterio PBH controlla se un modo instabile può essere influenzato
+dalle coppie e ricostruito dalle misure. Le matrici classiche di
+controllabilità e osservabilità contengono alte potenze di $A_m$:
+con scale meccaniche e attuative diverse possono essere mal condizionate.
+Per le sintesi servono stabilizzabilità e rilevabilità dei modi critici,
+non un rango dichiarato senza tolleranza numerica.
+Le frequenze elastiche più elevate spiegano inoltre perché aumentare
+molto la rapidità del feedback possa richiedere più coppia e rendere
+più rilevante l'incertezza dei drive.
