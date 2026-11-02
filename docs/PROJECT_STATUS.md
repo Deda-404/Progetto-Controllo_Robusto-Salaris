@@ -1,3 +1,11 @@
+# Stato corrente — 02.11.2026, specifiche prestazionali
+
+Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferimento (3, 4, 5 rad/s). Scelti Ts=2 s, Mp=15%, ess=5%, cross=25%, Mo=9/(s^2+6s+9). Il riferimento a 3 rad/s ha Ts=1.9447 s. We e Wu conservati. Le definizioni NS/NP/RS/RP e la soglia unitaria non cambiano. Recupero entro 0.5 gradi, picco e RMS del comando restano diagnostici senza limiti hardware. Risultati dei candidati conservati; nessun target rende automaticamente soddisfacenti tutti i K fissati. Quality gate COMPLETE/PASS per studio e coerenza, target dei controllori distinti nei CSV.
+
+Elaborati e consegna in completamento. Le voci successive sono stati precedenti.
+
+---
+
 # Stato corrente — 02.11.2026, controllori con carico
 
 Modello e analisi COMPLETE/PASS come implementazione; accettazione prestazionale PARTIAL. 28 analisi A/B, 105 RAS e 35 altre prove non lineari eseguite. Cinque test e pipeline rapida PASS. Elaborati compilati in prima verifica; consegna autonoma e pubblicazione ancora da completare. Le voci successive registrano gli stati precedenti.

@@ -3114,3 +3114,7 @@ Sono stati ricalcolati LQG, LQGI, Hinf1, Hinf2 e PID sul nominale con mEE=0.2 kg
 Esiti finali: LQG/LQGI RS PASS A/B, NP/RP FAIL; Hinf1 RS A PASS e B FAIL; Hinf2/PID NP PASS ma RS/RP FAIL; Mu_A e Mu_B RS PASS A/B ma NP/RP FAIL. Mu_A ha ordine 294 e offset DC 99.8%; Mu_B ordine 80, offset 21.9% e picco rumoroso 762 N m. Non sono promossi per il solo nome della sintesi. RAS: 86 convergenze, 12 mancate convergenze, 7 allontanamenti osservati, zero timeout/errori su 105 prove. Completate anche 14 prove non lineari nominali e 21 con solo carico variato.
 
 Verifiche: campagna completa eseguita per fasi, run_all('rapida') eseguito, 5 test MATLAB e 7 controlli del runner PASS; Code Analyzer senza messaggi sui 16 file operativi. Assestamento non determinato segnato Inf, mai zero. Quality gate implementazione COMPLETE/PASS, obiettivi prestazionali PARTIAL/FAIL secondo i CSV. Relazione e consegna in completamento.
+
+
+## 2026-11-02 — Specifiche prestazionali
+Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferimento (3, 4, 5 rad/s). Scelti Ts=2 s, Mp=15%, ess=5%, cross=25%, Mo=9/(s^2+6s+9). Il riferimento a 3 rad/s ha Ts=1.9447 s. We e Wu conservati. Le definizioni NS/NP/RS/RP e la soglia unitaria non cambiano. Recupero entro 0.5 gradi, picco e RMS del comando restano diagnostici senza limiti hardware. Risultati dei candidati conservati; nessun target rende automaticamente soddisfacenti tutti i K fissati. Quality gate COMPLETE/PASS per studio e coerenza, target dei controllori distinti nei CSV.

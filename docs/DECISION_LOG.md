@@ -2390,3 +2390,7 @@ e nessuna garanzia trasferita dal modello A a B. Gate COMPLETE/PASS.
 
 ## 2026-11-02 — Sintesi e confronto limitati
 Decisione: conservare i sette K fissati e ricalcolare le cinque famiglie nominali più due D-K, senza ulteriori architetture. Usare la stessa inizializzazione MuN1 e i medesimi pesi su A/B; conservare anche il primo tentativo automatico non soddisfacente. La post-analisi prevale sull’obiettivo D-K. Nessuna riduzione d’ordine non validata e nessuna promozione in presenza di offset o rumore eccessivi. Stato: implementato e verificato; prestazione globale non raggiunta.
+
+
+## 2026-11-02 — Specifiche prestazionali
+Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferimento (3, 4, 5 rad/s). Scelti Ts=2 s, Mp=15%, ess=5%, cross=25%, Mo=9/(s^2+6s+9). Il riferimento a 3 rad/s ha Ts=1.9447 s. We e Wu conservati. Le definizioni NS/NP/RS/RP e la soglia unitaria non cambiano. Recupero entro 0.5 gradi, picco e RMS del comando restano diagnostici senza limiti hardware. Risultati dei candidati conservati; nessun target rende automaticamente soddisfacenti tutti i K fissati. Quality gate COMPLETE/PASS per studio e coerenza, target dei controllori distinti nei CSV.
