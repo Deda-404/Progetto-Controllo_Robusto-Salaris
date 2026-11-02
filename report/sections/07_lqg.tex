@@ -2,44 +2,185 @@
 \section{Obiettivo e architettura}
 L'equilibrio verticale richiede una retroazione che agisca prima che il braccio si allontani dalla configurazione desiderata. Se tutti gli stati fossero disponibili, potremmo usare direttamente un regolatore LQR. Nel modello disponiamo invece di quattro encoder: due misurano gli angoli dei link e due quelli dei rotori. Le velocità e gli stati interni dei drive vengono stimati. LQG combina quindi un regolatore LQR e un osservatore di Kalman.
 
-Per valutare l'effetto del carico, analizziamo prima i controllori già disponibili mantenendone fissi i coefficienti. Sintetizziamo poi LQG e LQGI sul nominale con $m_{EE}=0.2$ kg, conservando le scale del costo e le ipotesi sui rumori. La distinzione permette di attribuire le differenze alla pianta e alla sintesi, senza cambiare contemporaneamente ogni scelta di progetto.
+Il progetto usa il nominale con $m_{EE}=0.2$ kg. Manteniamo le scale fisiche del costo e le ipotesi sui rumori, così da leggere le conseguenze della scelta di regolatore e osservatore. Il confronto a coefficienti fissati è raccolto separatamente in appendice e non raddoppia le prove principali.
 
 \section{Normalizzazione di Q e scelta diretta di R}
-Il costo LQR è
+\subsection{Il problema LQR e le unità fisiche}
+Il costo è
 \[
- J=\int_0^\infty(x^TQx+u^TRu)\,dt.
+J=\int_0^\infty \left(x^TQx+u^TRu\right)\,dt .
 \]
-Posizioni, velocità e deformazioni elastiche hanno unità e ordini di grandezza diversi. Per confrontarle usiamo le variabili
+Il primo termine penalizza gli scostamenti delle coordinate fisiche di interesse;
+il secondo penalizza le coppie di comando. Il compromesso fra transitorio e
+sforzo dipende da entrambi. Usare una matrice identità senza spiegazione
+assegnerebbe lo stesso coefficiente numerico a radianti, radianti al secondo e
+coordinate arbitrarie di realizzazione, senza renderne comparabili gli effetti.
+
+Lo stato completo, in deviazione dall'equilibrio, è
 \[
- v=Fx=[\delta q;\delta\dot q;\delta\theta-\delta q;\delta\dot\theta],
- \qquad Q=F^TS_x^{-T}W_qS_x^{-1}F.
+x=[\Delta q_1,\Delta q_2,\Delta\dot q_1,\Delta\dot q_2,
+\Delta\theta_1,\Delta\theta_2,\Delta\dot\theta_1,\Delta\dot\theta_2,x_a^T]^T.
 \]
-Le scale sono $q_s=5^\circ$, $\dot q_s=12q_s$ e $\delta_s=0.5/40=0.0125$ rad. La prima è l'ampiezza del riferimento; la seconda fornisce una scala di velocità, mentre la terza corrisponde alla deformazione della molla meno rigida sotto 0.5 N m. Non sono limiti di saturazione.
+I sei elementi di $x_a$ appartengono alla realizzazione \texttt{ss} dei due
+attuatori secondo ordine--Padé; le loro unità dipendono dalla realizzazione,
+non sono ulteriori posizioni fisiche. Non viene attribuita loro una scala
+meccanica inventata e non ricevono una penalizzazione diretta. Restano comunque
+nel modello, nel feedback e nella verifica di stabilità.
 
-Scegliamo $W_q=\mathrm{diag}(2,2,1,1,0.1,0.1,1,1)$ e $R=0.1I_2$. Il termine sulla deformazione rende $Q$ non diagonale: penalizzare $(\theta_i-q_i)^2$ introduce prodotti fra angolo motore e angolo link. I sei stati dei drive non ricevono un peso diretto, ma intervengono nella dinamica completa.
+\subsection{Scale e provenienza: il significato esatto di qs}
+Distinguiamo parametri imposti dalla traccia (A), derivati matematicamente (B),
+ricavati da grandezze fisiche (C), scelti nel progetto (D) e selezionati dalla
+ricerca (E). Questa distinzione evita di attribuire al docente scelte nostre.
 
-La matrice $X$ dell'equazione di Riccati e il guadagno sono
+\begin{table}[H]\centering\small
+\begin{tabular}{p{3.4cm}p{3.5cm}p{6.6cm}}\toprule
+Grandezza del costo & Scala & Origine e significato\\\midrule
+$\Delta q_i$ [rad] & $q_s=5\pi/180$ & C da scelte progettuali D: ampiezza del riferimento nominale.\\
+$\Delta\dot q_i$ [rad/s] & $\dot q_s=12q_s$ & C: velocità caratteristica banda per ampiezza; non velocità massima.\\
+$\Delta\theta_i-\Delta q_i$ [rad] & $\delta_s=0.5/40=0.0125$ & C dalla coppia di disturbo dichiarata e rigidezza minima della traccia-A. Scala comune della molla più cedevole.\\
+$\Delta\dot\theta_i$ [rad/s] & $\dot\theta_s=\dot q_s$ & D/C: stessa scala cinematica scelta per i motori; non un vincolo.\\
+$x_a$ (6 coordinate) & nessuna scala diretta & Nessuna penalizzazione diretta di coordinate dipendenti dalla realizzazione.\\
+\bottomrule\end{tabular}
+\caption{Scale del costo LQG: derivazioni fisiche basate su scelte progettuali, non nuovi limiti hardware.}
+\end{table}
+
+\subsection{Trasformazione esplicita e matrice Q non diagonale}
+Introduciamo le otto uscite fisiche del costo:
+\[
+v=Fx=\begin{bmatrix}\Delta q\\\Delta\dot q\\
+\Delta\theta-\Delta q\\\Delta\dot\theta\end{bmatrix},\qquad
+F=\begin{bmatrix}
+I_2&0&0&0&0\\0&I_2&0&0&0\\-I_2&0&I_2&0&0\\0&0&0&I_2&0
+\end{bmatrix}.
+\]
+L'ultima colonna a blocchi ha sei colonne scalari. Le posizioni sono quindi
+penalizzate sia come errore articolare sia come parte della deformazione.
+Definiamo
+\[
+S_x=\operatorname{diag}(q_sI_2,\dot q_sI_2,\delta_sI_2,\dot\theta_sI_2),
+\quad \tilde v=S_x^{-1}Fx,\quad
+W_q=\operatorname{diag}(w_qI_2,w_vI_2,w_\delta I_2,w_vI_2).
+\]
+Qui $S_x$ è $8\times8$ perché normalizza le uscite del costo, non uno stato
+trasformato invertibile di dimensione 14. Ne segue esattamente
+\[
+x^TQx=\tilde v^TW_q\tilde v,\qquad
+Q=F^TS_x^{-T}W_qS_x^{-1}F=C_{cost}^TC_{cost},\quad
+C_{cost}=W_q^{1/2}S_x^{-1}F.
+\]
+Per ogni uscita normalizzata il coefficiente è $w_i/s_i^2$.
+Espandendo il termine elastico compaiono coefficienti incrociati negativi fra
+$q_i$ e $\theta_i$. Pertanto scrivere semplicemente $Q=\operatorname{diag}(q_i)$
+sarebbe errato per questo progetto. $Q$ è semidefinita positiva: il blocco
+attuativo nullo non implica assenza degli attuatori dalla dinamica ottimizzata.
+
+\subsection{R: peso diretto dello sforzo di controllo}
+Le componenti di $u$ sono coppie fisiche in N m. Il costo del comando
+viene scritto direttamente come
+\[
+R=r_uI_2,\qquad u^TRu=r_u(u_1^2+u_2^2).
+\]
+$r_u>0$ è il coefficiente associato allo sforzo di controllo: aumentarlo,
+a parità di $Q$, rende più costoso il comando. Le sue unità rendono
+il termine quadratico coerente con quello degli stati; non è una
+saturazione né un limite di coppia.
+Il candidato selezionato usa $R=0.10I_2$; guadagno $K$ e prefiltro
+sono calcolati con le matrici di costo selezionate.
+
+
+\subsection{Scelta dei pesi e soluzione della Riccati}
+Manteniamo $w_q=2$, $w_v=1$, $w_\delta=0.1$, $R=0.10I_2$.
+Sono priorità progettuali: non richiedono una nuova ricerca esaustiva
+per spiegare il comportamento del modello con carico. Le scale restano
+$q_s=5^\circ$, $\dot q_s=12q_s$ e $\delta_s=0.5/40=0.0125$ rad.
+La matrice di Riccati e il guadagno soddisfano
 \[
  A^TX+XA-XBR^{-1}B^TX+Q=0,\qquad K_x=R^{-1}B^TX.
 \]
-Il residuo relativo della CARE è \FinCARELQG. Il feedback stabilizza il nominale a 14 stati. Il prefiltro $N_r$ è calcolato imponendo guadagno statico unitario dal riferimento a $q$. Questa correzione vale sul nominale e non introduce memoria dell'errore.
+Il residuo relativo è \FinCARELQG. Il prefiltro è
+$N_r=[-C_q(A-BK_x)^{-1}B]^{-1}$: rende unitario il guadagno
+statico nominale ma non fornisce memoria dell'errore.
+Un residuo piccolo verifica il calcolo; la risposta fisica e la
+robustezza richiedono le prove dei capitoli successivi.
 
 \section{Filtro di Kalman: ipotesi, covarianze e verifica}
-Scriviamo il modello per la stima come
+\subsection{Stima dello stato e innovazione}
+LQR richiede $x$, mentre sono disponibili soltanto le quattro posizioni.
+Il modello usato per la stima è
 \[
- \dot x=Ax+Bu+G_ww,\qquad y=Cx+v,\qquad G_w=[B_d\ B].
+\dot x=Ax+Bu+G_ww,\qquad y=Cx+v,\qquad G_w=[B_d\ B].
 \]
-Le intensità dei rumori continui sono $Q_n=0.01I_4$ e $R_n=(0.05\pi/180)^2I_4$. Sono ipotesi progettuali, non covarianze identificate sperimentalmente. La sequenza di rumore mantenuta ogni 2 ms nelle simulazioni è un diverso protocollo di verifica, definito nel capitolo 6.
+I primi due canali di $w$ sono coppie equivalenti lato link, i successivi due
+coppie equivalenti all'ingresso attuativo. I quattro canali di $v$ rappresentano
+gli encoder di $q$ e $\theta$. Sono ipotizzati indipendenti, a media nulla,
+senza correlazione processo--misura. Lo stimatore realizza
+\[
+\dot{\hat x}=A\hat x+Bu+L(y-C\hat x).
+\]
+L'innovazione $y-C\hat x$ confronta la misura con la previsione del modello:
+il guadagno $L$ stabilisce quanto questa differenza corregga ciascuno stato.
 
-Il filtro confronta la misura con quella prevista dal modello:
+\subsection{Origine delle sigma e costruzione non ambigua delle covarianze}
+Non sono disponibili dati sperimentali sui sensori o sugli errori di processo.
+Le scale
+$\sigma_d=0.1$ N m, $\sigma_u=0.1$ N m e $\sigma_y=0.05^\circ$
+sono ipotesi progettuali D di questo lavoro, \emph{non dati del docente}.
+Il loro scopo è assegnare fiducia relativa al modello e alle misure, non
+rappresentare una caratterizzazione dell'hardware.
+Per contestualizzarle, 0.1 N m equivale al 20\% del disturbo di progetto ; 0.05 gradi equivale all'1\% del riferimento.
+Questi rapporti descrivono i valori già scelti: non sono una legge fisica che
+li determini univocamente. La sensibilità successiva ne rende verificabili
+le conseguenze senza un'ottimizzazione delle covarianze.
+
+La varianza è il quadrato della deviazione standard. La costruzione effettiva è
 \[
- \dot{\hat x}=A\hat x+Bu+L(y-C\hat x).
+Q_n=\operatorname{diag}(\sigma_d^2,\sigma_d^2,\sigma_u^2,\sigma_u^2)
+=0.01\,I_4,\qquad
+R_n=(0.05\pi/180)^2I_4\simeq7.62\,10^{-7}I_4.
 \]
-Il termine $y-C\hat x$, detto innovazione, corregge la stima. Attribuire più rumore agli encoder riduce la fiducia nelle misure: l'osservatore rallenta e il comando risente meno della sequenza rumorosa. La tabella mostra cinque valori della deviazione standard assunta, con identici rumore applicato e regolatore.
+$Q_n$ agisce sui quattro canali di $w$, non direttamente sui 14 stati;
+la covarianza equivalente nello stato è $G_wQ_nG_w^T$.
+La notazione $0.01 I_4$ evita ogni ambiguità fra $(0.1)^2$ e $0.12$.
+
+Una precisazione è necessaria per il filtro continuo: il rumore bianco ideale
+non ha una deviazione standard istantanea finita. In \texttt{lqe}, $Q_n,R_n$
+sono intensità, ossia coefficienti della delta di Dirac nelle correlazioni.
+Le sigma sopra sono scale equivalenti riferite alla convenzione temporale di
+1 s; restituendo le dimensioni temporali, le intensità hanno unità
+$(\mathrm{N\,m})^2\,\mathrm{s}$ e $\mathrm{rad}^2\,\mathrm{s}$.
+La successiva simulazione \texttt{randn} usa invece campioni con deviazione
+standard finita a passo 2 ms. Non viene affermata l'equivalenza di questo
+esperimento con il modello bianco continuo né una calibrazione probabilistica.
+
+
+\subsection{Guadagno e sensibilità alle covarianze}
+Il calcolo è $L=\texttt{lqe}(A,G_w,C,Q_n,R_n)$.
+L'osservatore è verificato su tutti i 14 stati. Per leggere l'effetto
+delle covarianze variamo la sola deviazione standard assunta, lasciando
+invariati regolatore e sequenza encoder applicata. Il confronto non
+rappresenta cinque sensori reali diversi.
 \input{generated/finale_kalman.tex}
-Il minore errore RMS ottenuto con un filtro più lento in questa prova a riferimento nullo non dimostra che esso sia migliore durante ogni movimento. Manteniamo quindi il fattore unitario, senza trasformare questa breve sensibilità in un'ulteriore ricerca di tuning.
-
-Con $u=-K_x\hat x+N_rr$, il principio di separazione permette di progettare regolatore e osservatore separatamente. In coordinate $(x,x-\hat x)$ la matrice del chiuso è triangolare a blocchi, con diagonale $A-BK_x$ e $A-LC$. Abbiamo verificato questa identità e la stabilità dei 28 stati; non basta controllare il solo regolatore.
+Aumentare $R_n$ riduce la fiducia nelle misure e tende a filtrare di più;
+aumentare $Q_n$ valorizza l'innovazione. Nel caso MIMO ciò non impone
+una monotonia di ogni polo o elemento di $L$. La minore coppia RMS a
+riferimento nullo non identifica da sola il miglior filtro per ogni moto.
+Manteniamo il fattore unitario.
+\subsection{LQG e principio di separazione}
+Per $z=[x^T,\hat x^T]^T$ la matrice completa è
+\[
+A_{cl}=\begin{bmatrix}A&-BK\\LC&A-BK-LC\end{bmatrix}.
+\]
+Con $e=x-\hat x$ si ottiene la forma triangolare
+\[
+\begin{bmatrix}\dot x\\\dot e\end{bmatrix}
+=\begin{bmatrix}A-BK&BK\\0&A-LC\end{bmatrix}
+\begin{bmatrix}x\\e\end{bmatrix}
+\]
+in assenza di ingressi esogeni. L'unione degli spettri di regolatore e stimatore
+coincide quindi con quello della chiusura completa. La trasformazione viene
+verificata numericamente nello script; il residuo è controllato numericamente.
+Questo risultato riguarda stabilità nominale lineare, non robustezza rispetto
+al modello incerto o stabilità non lineare globale.
 
 \section{Risultati LQG: tracking e disturbi}
 Il prefiltro corregge il tracking statico del nominale. Se cambia la massa, cambia anche il guadagno della pianta e può comparire un errore persistente. Una coppia costante sul link produce lo stesso tipo di problema: il prefiltro dipende dal riferimento e non può compensare un disturbo sconosciuto.
@@ -47,19 +188,197 @@ Il prefiltro corregge il tracking statico del nominale. Se cambia la massa, camb
 LQG mantiene stabilità robusta sulle due descrizioni considerate. Non soddisfa però la norma pesata comune usata per confrontare tutte le famiglie. Questo esito è compatibile con la sua origine: il costo quadratico degli stati non è il costo $H_\infty$ del capitolo 6. Nel confronto finale riportiamo entrambe le letture, insieme alle metriche temporali.
 
 \section{LQGI: azione integrale e stato stimato}
-Per eliminare un errore costante aggiungiamo la memoria dell'errore misurato:
-\[
- \dot\xi=r-q_{\rm mis},\qquad u=-K_x\hat x-K_i\xi.
-\]
-Per la sintesi aumentiamo la pianta con due stati integrali:
-\[
- A_a=\begin{bmatrix}A&0\\-C_q&0\end{bmatrix},\qquad
- B_a=\begin{bmatrix}B\\0\end{bmatrix},\qquad
- Q_a=\mathrm{diag}(Q,200I_2),\quad R=0.1I_2.
-\]
-Una sola CARE determina insieme $K_x$ e $K_i$. Il residuo relativo è \FinCARELQGI. Il Kalman rimane quello del modello fisico a 14 stati ed è alimentato dal comando effettivo, comprensivo dell'azione integrale. Il controllore ha quindi 16 stati; il sistema completo ne ha 30.
+\label{sec:lqgi}
+\subsection{Dall'offset alla memoria dell'errore}
+Il prefiltro LQG corregge il guadagno statico nominale del riferimento,
+ma non riceve l'errore generato da un disturbo. A riferimento nullo
+$N_rr=0$ anche quando la posizione converge a un valore non nullo.
+Introduciamo pertanto due integratori, uno per ciascuna uscita regolata.
+LQR calcola il guadagno supponendo disponibile lo stato. LQG combina
+quel regolatore con Kalman, ricostruendo gli stati mancanti dalle quattro
+misure. LQGI aggiunge a LQG la memoria dell'errore: il regolatore è
+progettato sul sistema aumentato, ma utilizza sempre lo stato stimato.
+Questa è la configurazione richiesta dalla traccia come LQG con integratore.
+Il feedback usa lo stato stimato, non lo stato vero completo.
 
-L'integratore è guidato dalla misura, non dalla sola stima: se il modello non coincide con l'impianto, continua a osservare l'errore reale. Nei casi stabili il guadagno DC da riferimento a posizione è unitario e la risposta statica alla coppia costante si annulla. La maggiore precisione comporta però un assestamento più lento. Il capitolo 11 quantifica questo compromesso sui dieci impianti comuni.
+Le quattro misure rimangono quelle LQG:
+\[
+y=Cx+v=\begin{bmatrix}q\\\theta\end{bmatrix}+v,\qquad
+E_q=\begin{bmatrix}I_2&0\end{bmatrix},\qquad q_{\mathrm{mis}}=E_qy.
+\]
+Tutte le posizioni sono deviazioni dall'equilibrio. Si definisce
+\[
+e_q=r-q_{\mathrm{mis}},\qquad
+\xi(t)=\int_0^t e_q(\tau)\,d\tau,\qquad
+\dot\xi=r-E_qy,\quad \xi(0)=0.
+\]
+Ogni componente di $\xi$ ha unità rad\,s ed è una memoria dell'errore:
+un errore persistente continua a modificarla. Non si integra
+$r-C_q\hat x$, poiché $q$ è disponibile dagli encoder; questo evita di
+sostituire l'errore effettivamente misurato con un errore di previsione.
+
+\begin{figure}[htbp]\centering
+\resizebox{.98\textwidth}{!}{\input{figures/schemes/lqgi_architecture.tex}}
+\caption{LQGI: la pianta fornisce soltanto le misure encoder.
+Kalman ricostruisce i 14 stati; l'integratore riceve l'errore misurato.
+Il comando ritorna sia alla pianta sia allo stimatore, che ne conosce
+il valore. Lo stato fisico completo non entra direttamente nel feedback.}
+\label{fig:lqgi-architecture}
+\end{figure}
+
+Il principio del modello interno giustifica i due modi integrali per
+riferimenti e disturbi costanti. In un equilibrio finito deve essere
+$\dot\xi=0$, dunque $q_{\mathrm{mis}}=r$. Per il modello nominale senza
+rumore, bias o saturazioni ciò implica $q=r$. La memoria $\xi$ può
+restare non nulla quando l'errore si annulla: insieme alla retroazione
+stimata mantiene la coppia necessaria a compensare il disturbo.
+Stabilità e compatibilità dell'equilibrio sono condizioni necessarie;
+non si deduce una garanzia sul modello incerto o non lineare.
+
+\subsection{Sistema aumentato per la sintesi}
+Per calcolare insieme feedback e azione integrale aggiungiamo le due
+memorie al modello della Riccati. Questo aumento descrive il problema
+di progetto; Kalman resta quello dei 14 stati fisici, perché la memoria
+integrale è già calcolata dalle misure.
+Il problema LQR si costruisce sul sistema fisico aumentato
+$x_a=[x^T,\xi^T]^T$, con 14 stati del modello completo e due integratori. In assenza di
+rumore $E_qC=C_q$, quindi
+\[
+\dot x_a=
+\underbrace{\begin{bmatrix}A&0_{14\times2}\\-C_q&0_{2\times2}\end{bmatrix}}_{A_a}x_a+
+\underbrace{\begin{bmatrix}B\\0_{2\times2}\end{bmatrix}}_{B_a}u+
+\underbrace{\begin{bmatrix}0_{14\times2}\\I_2\end{bmatrix}}_{B_r}r+
+\begin{bmatrix}B_d\\0\end{bmatrix}d.
+\]
+$A_a$ è $16\times16$; $B_a$ e $B_r$ sono $16\times2$.
+Queste 16 coordinate definiscono il problema di ottimizzazione,
+\emph{non} l'ordine della chiusura con osservatore.
+
+La condizione PBH deve valere sui modi
+non stabili, incluso quello all'origine:
+\[
+\operatorname{rank}[\lambda I_{16}-A_a\;\;B_a]=16,\qquad
+\operatorname{rank}\begin{bmatrix}A&B\\C_q&0\end{bmatrix}=16.
+\]
+La seconda verifica esclude un'ostruzione all'origine per la regolazione
+delle due posizioni. I ranghi sono valutazioni numeriche sul modello
+nominale; non certificazioni rispetto all'insieme incerto.
+
+\subsection{Costo e significato del peso integrale}
+Si minimizza
+\[
+J=\int_0^\infty(x_a^TQ_ax_a+u^TRu)\,dt,\qquad
+Q_a=\operatorname{blkdiag}(Q,Q_i),\qquad R=r_uI_2.
+\]
+$Q$ e $R$ sono riutilizzate esattamente da LQG. Si sceglie direttamente
+il peso delle due memorie dell'errore:
+\[
+Q_i=200 I_2.
+\]
+Il costo è quindi $x^TQx+\xi^TQ_i\xi+u^TRu$.
+Il coefficiente 200 assegna un costo alla memoria dell'errore, espressa
+in rad s. È una scelta progettuale comune ai due canali, non un limite
+fisico. Un peso maggiore tende a rendere più incisiva l'azione integrale,
+ma può aumentare il comando. Non deduciamo una monotonia universale MIMO.
+\medskip
+\subsection{Riccati e origine comune di \texorpdfstring{$K_x,K_i$}{Kx, Ki}}
+La soluzione stabilizzante $P_a$ soddisfa
+\[
+A_a^TP_a+P_aA_a-P_aB_aR^{-1}B_a^TP_a+Q_a=0,\qquad
+K_a=R^{-1}B_a^TP_a=[K_x\;\;K_i].
+\]
+La chiamata MATLAB è \texttt{[Kaug,P,poli]=lqr(Aaug,Baug,Qaug,R)}.
+$K_x\in\mathbb R^{2\times14}$ e $K_i\in\mathbb R^{2\times2}$ derivano
+dalla stessa Riccati: nessun elemento di $K_i$ viene assegnato manualmente.
+La convenzione $\dot\xi=r-q_{\mathrm{mis}}$ deve essere mantenuta insieme
+alla legge
+\[
+\boxed{u=-K_x\hat x-K_i\xi.}
+\]
+Il segno numerico degli elementi di $K_i$ non autorizza a cancellare il
+meno nella legge. La coerenza viene verificata sulle equazioni chiuse.
+$K_x$ è progettato per lo stato fisico, ma nella realizzazione moltiplica
+esclusivamente $\hat x$. Non compare alcun prefiltro LQGI.
+
+\subsection{Riutilizzo del Kalman LQG e controllore implementato}
+Si mantengono esattamente $L\in\mathbb R^{14\times4}$,
+$Q_n$ e $R_n$ già progettati:
+\[
+\dot{\hat x}=A\hat x+Bu+L(y-C\hat x).
+\]
+L'osservatore stima soltanto i 14 stati fisici, non $\xi$, che è già
+calcolata integrando riferimento e misure. Riceve il medesimo comando
+applicato alla pianta. Il controllore autonomo ha stato
+$x_K=[\hat x^T,\xi^T]^T\in\mathbb R^{16}$ e ingressi $[r^T,y^T]^T$:
+\[
+\dot x_K=
+\begin{bmatrix}A-LC-BK_x&-BK_i\\0&0\end{bmatrix}x_K+
+\begin{bmatrix}0&L\\I_2&-E_q\end{bmatrix}
+\begin{bmatrix}r\\y\end{bmatrix},\qquad
+u=\begin{bmatrix}-K_x&-K_i\end{bmatrix}x_K.
+\]
+La matrice di attraversamento diretto è nulla. L'azione integrale realizza
+il tracking costante nella chiusura stabile, mentre LQG impiega
+$u=-K\hat x+N_rr$. Non sono modificati sensori o covarianze per migliorare
+artificialmente il confronto.
+
+\subsection{Chiusura reale a 30 stati e principio di separazione}
+La verifica include pianta, stimatore e integratori. Nel caso nominale
+lineare la stabilità deriva da regolatore aumentato e filtro stabili:
+il principio di separazione esprime questa proprietà, senza estenderla
+al robot non lineare o alla famiglia incerta.
+Con $z=[x^T,\xi^T,\hat x^T]^T$ la matrice effettivamente simulata è
+\[
+A_{\mathrm{cl}}=
+\begin{bmatrix}
+A&-BK_i&-BK_x\\
+-C_q&0&0\\
+LC&-BK_i&A-BK_x-LC
+\end{bmatrix}\in\mathbb R^{30\times30}.
+\]
+Gli ingressi esogeni $[r^T,d^T,v^T]^T$ agiscono mediante
+\[
+B_{\mathrm{cl}}=
+\begin{bmatrix}0&B_d&0\\I_2&0&-E_q\\0&0&L\end{bmatrix}.
+\]
+Il termine $-E_qv$ mostra che l'integratore riceve la misura encoder.
+Definendo $e_x=x-\hat x$ si ottiene, senza ingressi esogeni,
+\[
+\begin{bmatrix}\dot x\\\dot\xi\\\dot e_x\end{bmatrix}=
+\begin{bmatrix}
+A-BK_x&-BK_i&BK_x\\
+-C_q&0&0\\
+0&0&A-LC
+\end{bmatrix}
+\begin{bmatrix}x\\\xi\\e_x\end{bmatrix}.
+\]
+Le due rappresentazioni sono collegate da una trasformazione invertibile.
+
+Lo spettro è l'unione dei 16 poli del regolatore aumentato e dei 14
+poli del Kalman. La stabilità è verificata sulla matrice completa,
+senza eliminare stati mediante cancellazioni. Il residuo della CARE
+è \FinCARELQGI. Il tempo nominale \FinLQGITs\ s supera il target di 2 s,
+pur con errore statico nullo nei casi stabili. La memoria dell'errore
+migliora quindi la precisione senza assicurare il transitorio richiesto.
+In presenza di bias encoder annullerebbe l'errore misurato; con
+saturazioni occorrerebbe considerare l'anti-windup, qui assente.
 
 \section{Implementazione nei modelli Simulink}
 I modelli lineare e non lineare usano gli stessi guadagni di regolatore e osservatore. La pianta riceve la massa della prova, mentre il Kalman mantiene il nominale: aggiornare anche l'osservatore al campione gli fornirebbe un'informazione non disponibile nel problema. Gli stati iniziali del controllore sono nulli nelle coordinate incrementali. Non sono presenti saturazione e anti-windup; le coppie richieste vengono quindi riportate come risultati del modello.
+
+\section{Lettura delle risposte nominali}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.95\linewidth]{figures/definitiva/lqg_lqgi_risposte.png}
+\caption{Due gradini di riferimento da 5 gradi e due disturbi da 0.5 N m,
+applicati separatamente. LQG e LQGI usano lo stesso Kalman e partono
+con stati nulli in deviazione.}
+\end{figure}
+Il prefiltro LQG garantisce il tracking statico nominale, ma la coppia
+costante lascia un offset. LQGI mantiene una memoria non nulla anche
+quando l'errore si annulla: è questa memoria a fornire la coppia permanente.
+Il confronto va letto insieme all'assestamento, più lento con l'integratore.
+\begin{figure}[htbp]\centering
+\includegraphics[width=.9\linewidth]{figures/definitiva/lqg_lqgi_comando.png}
+\caption{Comandi dei due esperimenti di disturbo. La coppia permanente
+non è un difetto del transitorio: compensa il carico esterno.}
+\end{figure}

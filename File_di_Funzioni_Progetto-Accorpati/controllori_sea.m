@@ -1,5 +1,6 @@
-function [nomi,K,origine,correnti]=controllori_sea(p)
-%CONTROLLORI_SEA Confronto fissato e sette controllori del nuovo nominale.
+function [nomi,K,origine,correnti]=controllori_sea(p,includiRiferimenti)
+%CONTROLLORI_SEA Sette candidati finali; riferimenti solo su richiesta esplicita.
+if nargin<2,includiRiferimenti=false;end
 a=load(fullfile(p.dati,'banca_validata.mat')); b=a.banca;
 nomi=[string({b.controllers.name})+"_fisso","MuN1_fisso"];
 K=[{b.controllers.K},{b.muRumore}];
@@ -16,4 +17,7 @@ correnti=numel(K)+(1:7);
 nomi=[nomi,"LQG","LQGI","Hinf1","Hinf2","PID","Mu_A","Mu_B"];
 K=[K,{l.lqg.K,li.lqgi.K,h.sintesi.K1,h.sintesi.K2,h.sintesi.Kpid,mu.candidati{1}.K,mu.candidati{2}.K}];
 origine=[origine,repmat("Sintesi nominale con carico",1,5),"D-K su A","D-K su B"];
+if ~includiRiferimenti
+    nomi=nomi(correnti);K=K(correnti);origine=origine(correnti);correnti=1:numel(K);
+end
 end

@@ -4,6 +4,8 @@ La consegna autonoma contiene gli stessi sorgenti del repository, i controllori 
 \begin{lstlisting}
 run_all('rapida')
 \end{lstlisting}
+Gli SLX possono anche essere aperti singolarmente: la callback di inizializzazione assegna automaticamente i dati nominali.
+
 Sono richiesti Control System Toolbox e Robust Control Toolbox; per i collaudi dei modelli serve anche Simulink. L'ambiente verificato è MATLAB R2026b. Non sono richiesti accesso al repository, Python o variabili preesistenti nel Workspace.
 
 La modalità rapida ricostruisce meccanica, incertezze, peso e campioni, sintetizza LQG e LQGI e ripete i confronti temporali e sul rumore. Carica esplicitamente le sintesi $H_\infty$/D--K, l'analisi robusta e la RAS della campagna completa, verificandone configurazione e identità dei controllori. Ripete anche una simulazione locale LQG. Un risultato caricato non viene indicato come nuova sintesi.
@@ -18,7 +20,7 @@ I parametri modificabili sono centralizzati in \texttt{parametri\_sea.m}. Una fi
 Nel repository i cinque test di \texttt{tests/seaFinaleTest.m} verificano in modo indipendente equilibrio, Jacobiano, identità del carico puntiforme, coerenza energetica e ricostruzione A/B. Il comando \texttt{verifica\_sea} ripete i controlli essenziali anche nella consegna.
 
 \section{Gli originali Simulink}
-Il comando \texttt{collaudo\_simulink} prepara i parametri, aggiorna in memoria i generatori incorporati e acquisisce gli Scope. I modelli su disco conservano la loro struttura; il runner applica nominale e primo campione comune. Aprire un modello isolatamente non riproduce questi override. Gli estratti delle curve salvate sono diradati, mentre i controlli di finitezza e i picchi usano l'acquisizione integrale.
+Il comando \texttt{collaudo\_simulink} prepara i parametri, aggiorna in memoria i generatori incorporati e acquisisce gli Scope. I modelli su disco conservano la loro struttura; il runner applica nominale e primo campione comune. Aprendo un modello isolatamente, la callback assegna il nominale; il runner estende la prova ai campioni. Gli estratti delle curve salvate sono diradati, mentre i controlli di finitezza e i picchi usano l'acquisizione integrale.
 
 \section{Compilazione e consegna}
 Nel repository \texttt{tools/esporta\_definitiva.py} aggiorna tabelle e figure dai dati MATLAB. Relazione e slide sono compilate dai rispettivi \texttt{main.tex}. Lo script \texttt{tools/consegna\_definitiva.py} copia i sorgenti autorevoli, i dati coerenti e i PDF in un solo ZIP e ne verifica gli hash SHA-256. Il collaudo da una cartella estratta esterna al repository controlla che l'esecuzione non dipenda da percorsi di sviluppo.

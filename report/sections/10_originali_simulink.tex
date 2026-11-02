@@ -5,7 +5,17 @@ Nei generatori di parametri incorporati, la massa distale diventa $m_2+m_{EE}$. 
 
 Sono eseguite 20 simulazioni di 2 s: nominale e primo impianto fisico per ciascun modello, con entrambi i candidati nei due modelli $\mu$. Vengono controllati tempo finale, stati finiti e acquisizione completa degli Scope. Il massimo di uno Scope può mescolare grandezze con unità diverse: viene usato per controllare l'acquisizione, non come indice di prestazione.
 
-Le modifiche ai parametri incorporati avvengono in memoria. Gli SLX sono chiusi senza salvarli e non vengono duplicati; l'esecuzione riproducibile è quella del runner, non l'apertura isolata di un file con un Workspace arbitrario.
+Gli otto file richiamano automaticamente l'inizializzazione all'avvio.
+Dopo aver estratto la consegna basta aprire un modello e premere Run:
+la callback individua gli script associati attraverso il percorso del
+modello, carica i dati coerenti e assegna il Workspace nominale.
+La massa effettiva $m_2+m_{EE}$ è un parametro esplicito dei generatori;
+i due drive ricevono le proprie realizzazioni. Non servono variabili
+lasciate da una sessione precedente. Il collaudo con SimulationInput
+rimane disponibile per variare massa e attuatori nei campioni comuni.
+La durata nominale e l'ampiezza delle coppie vanno lette separatamente
+dall'esito di completamento: il raggiungimento del tempo finale non è
+una certificazione di stabilità o prestazione.
 \begin{figure}[htbp]\centering
 \includegraphics[width=.98\linewidth,trim=0 0 606 265,clip]{figures/student_exports/LQGI_linear_sim.png}
 \caption{Struttura LQGI lineare: pianta, osservatore e integratore dell'errore misurato.}
@@ -14,3 +24,24 @@ Le modifiche ai parametri incorporati avvengono in memoria. Gli SLX sono chiusi 
 \includegraphics[width=.98\linewidth,trim=0 0 580 110,clip]{figures/student_exports/LQGI_nonlinear_sim.png}
 \caption{La stessa legge di controllo con le equazioni non lineari del SEA. I valori della massa sono assegnati dal runner.}
 \end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_Kalman.png}
+\caption{Sottosistema Kalman del diagramma LQGI: $\dot{\hat x}=A\hat x+Bu+L(y_{mis}-C\hat x)$. Gli ingressi sono il comando calcolato e le quattro misure.}
+\label{fig:simulink-kalman}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_nonlinear_plant.png}
+\caption{Dettaglio autentico della pianta non lineare: le equazioni del
+manipolatore ricevono lo stato, la coppia motrice e il disturbo lato link.}
+\label{fig:simulink-nonlinear-plant}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=.75\textwidth]{figures/student_exports/LQGI_actuators.png}
+\caption{Attuatori del modello non lineare LQGI: due canali con secondo
+ordine e approssimazione Padé del ritardo. Il rumore sul comando attraversa
+questa dinamica prima di arrivare ai rotori.}
+\label{fig:simulink-actuators}\end{figure}
+
+Le viste dei sottosistemi illustrano equazioni e flussi dei segnali;
+non sono curve di prestazione. Le misure alimentano sia l'innovazione
+sia l'integratore, mentre le coppie di processo entrano nella pianta.
+La verifica di un comando fisicamente realizzabile richiede limiti dei
+motori e saturazioni, che non sono disponibili in questo modello.

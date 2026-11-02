@@ -5,20 +5,78 @@ Il modello linearizzato descrive piccoli spostamenti attorno alla verticale. Qua
 \section{Equazioni e scenari}
 Usiamo due prove nominali per ciascuno dei sette controllori della campagna: gradino di $5^\circ$ sul primo giunto e coppia costante di 0.5 N m sul primo link. L'orizzonte è 12 s. Partiamo dall'equilibrio, con stima e integratore nulli nelle coordinate incrementali. A queste prove affianchiamo tre masse, 0.1, 0.2 e 0.3 kg, mantenendo nominali i drive: così isoliamo l'effetto del solo carico.
 
+
+\subsection{Stato completo e confronto locale}
+Per i controllori con due misure usiamo
+\[
+ \dot x_K=A_Kx_K+B_K[r;\delta q],\quad
+ \delta u=C_Kx_K+D_K[r;\delta q],\quad u=\bar\tau+\delta u.
+\]
+Per LQG/LQGI la misura comprende anche gli angoli motore. L'osservatore
+riceve il comando noto; il disturbo sui link rimane ignoto. Le posizioni
+fisiche sono assolute, mentre le misure fornite al controllore sono
+scostamenti dall'equilibrio. Confondere queste coordinate produrrebbe
+un comando anche nella configurazione nominale ferma.
+Vicino all'equilibrio le traiettorie lineari e non lineari devono essere
+confrontate con lo stesso stato iniziale, ingressi e controllore.
+All'aumentare dell'ampiezza, i termini trigonometrici, inerziali e di
+Coriolis rendono possibile un diverso transitorio. Il confronto locale
+non autorizza una conclusione globale sulla regione di attrazione.
+\subsection{Lettura di tracking, disturbi e comando}
+Il residuo all'ultimo istante è una misura a orizzonte finito; il guadagno
+DC deriva invece dall'equilibrio della chiusura lineare stabile.
+La deviazione massima sotto coppia e il tempo di recupero entro
+$0.5^\circ$ descrivono aspetti diversi. Il picco di coppia quantifica
+la richiesta massima; l'RMS quella media quadratica sull'intera prova.
+Non sono limiti di targa, poiché il modello non comprende saturazioni.
 Una simulazione completata significa che il solver ha raggiunto il tempo finale con valori finiti. Non significa che il tracking sia soddisfacente. Confrontiamo quindi anche errore finale, picco di posizione e coppia richiesta.
 \input{generated/finale_carico_nonlineare.tex}
 Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi di carico compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sul solo carico non contraddicono la sua fragilità quando variano anche gli attuatori.
 
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.95\linewidth]{figures/definitiva/lineare_nonlineare_lqg.png}
+\caption{LQG e LQGI: tracking al primo giunto e disturbo sul primo link.
+Le linee tratteggiate sono le corrispondenti chiusure lineari; le continue
+integrano la meccanica completa. Parametri e controllori coincidono.}
+\end{figure}
 \section{Rumore di misura: dal segnale encoder al comando}
+
+Per un controllore 2-DoF poniamo $u=K_rr+K_y(q+v)$. Con $r=d=0$,
+\[
+ T_{uv}=(I-K_yG)^{-1}K_y,\qquad T_{qv}=GT_{uv}.
+\]
+La mappa che trasmette il rumore al comando non è penalizzata
+esplicitamente dal costo $[r;d]\to[z_e;z_u]$. Un valore basso di quel
+costo può quindi accompagnarsi a coppie molto grandi sotto rumore.
+Usiamo campioni gaussiani con deviazione standard $0.05^\circ$,
+mantenuti per 2 ms. Questa varianza discreta non è una densità continua.
 Gli encoder producono la stessa sequenza casuale per ogni controllore. I controllori con due misure ricevono le prime due componenti; LQG e LQGI usano tutte e quattro. Il comando viene valutato anche fra gli istanti di campionamento, perché un impulso molto rapido può essere quasi invisibile nei soli valori ogni 2 ms.
 \input{generated/finale_rumore.tex}
 Hinf2 richiede coppie molto elevate sotto questa eccitazione, pur avendo una piccola norma nominale sul costo senza rumore. LQG e LQGI filtrano meglio le misure. La distinzione serve a evitare una scelta basata solo su $\gamma$. I valori sono risposte del modello privo di saturazione, non coppie erogabili da un motore reale.
 
 \section{Che cos'è la regione di attrazione}
-La regione di attrazione è l'insieme degli stati iniziali dai quali il sistema non lineare torna all'equilibrio. Il sistema chiuso comprende anche drive, stima e integratori; un disegno nel piano $(\delta q_1,\delta q_2)$ è quindi soltanto una sezione di uno spazio più grande.
+La regione di attrazione, indicata qui con RAS, è l'insieme delle condizioni
+iniziali da cui il sistema deterministico ritorna all'equilibrio. Non basta
+che una posizione articolare sia vicina al riferimento: anche velocità,
+deformazioni elastiche, attuatori e stati interni del controllore devono
+essere considerati. Lo stato aumentato $z$ raccoglie queste deviazioni.
+Per LQG comprende anche l'osservatore e per LQGI i due integratori.
 
-Una funzione di Lyapunov potrebbe fornire un insieme interno se si dimostrasse che la sua derivata è negativa in tutta una regione. La positività di una matrice ricavata dal modello lineare non basta a farlo per le equazioni non lineari. Qui manteniamo l'obiettivo della traccia: una valutazione empirica mediante simulazioni, senza attribuire ai punti provati una frontiera certificata.
+Una figura nel piano $(\delta q_1,\delta q_2)$ è soltanto una sezione della
+RAS: fissa tutte le altre condizioni iniziali. Una simulazione che converge
+individua un punto favorevole, ma non dimostra che tutti i punti vicini
+abbiano lo stesso comportamento. Viceversa una traiettoria ancora lontana
+alla fine dell'orizzonte non dimostra necessariamente divergenza asintotica.
+Le prove di attrazione non contengono rumore persistente, riferimenti o
+disturbi applicati durante il moto.
 
+
+Una funzione di Lyapunov potrebbe delimitare un insieme interno se la
+sua derivata fosse negativa in tutta quella regione. Una matrice positiva
+ricavata dal linearizzato non basta a dimostrarlo per le equazioni SEA.
+Manteniamo quindi una sezione empirica, con condizioni iniziali e criteri
+espliciti, senza attribuirle una frontiera certificata.
 \section{Sezione empirica e risultati}
 Proviamo cinque direzioni per ciascuno dei raggi $5^\circ$, $15^\circ$ e $30^\circ$: 15 condizioni per controllore. Poniamo $\delta\theta=\delta q$, conservando la deformazione elastica di equilibrio, con velocità, stati dei drive e stati del controllore nulli.
 

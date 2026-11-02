@@ -1,3 +1,5 @@
+La correzione conservativa della PR #47 è descritta in [CORREZIONE_CONSERVATIVA.md](docs/CORREZIONE_CONSERVATIVA.md): recupero degli approfondimenti, sette candidati predefiniti e SLX con inizializzazione automatica. I risultati negativi restano espliciti.
+
 # Controllo robusto di un manipolatore SEA a due giunti
 
 Alessio de Dato (635256) e Valerio Rebechi (722224). Progetto con carico incerto all’end-effector e ritardo variabile nei due drive. Un solo percorso MATLAB accorpato, gli otto modelli Simulink esistenti e confronto fra rappresentazione parametrica A e concentrata B.
@@ -39,7 +41,7 @@ Dieci impianti fisici comuni: Hinf2 stabile in 4/10, PID in 7/10; gli altri cinq
 - [ZIP autonomo](delivery/Consegna_Progetto_SEA.zip): estrarre e lanciare `run_all`.
 - [Evidenze e requisiti R01–R22](docs/REVISIONE_DEFINITIVA.md), [stato](docs/PROJECT_STATUS.md), [diario](docs/DIARIO_DI_BORDO.md), [decisioni](docs/DECISION_LOG.md).
 
-Gli SLX su disco restano invariati. `collaudo_simulink` aggiorna in memoria matrici, massa effettiva nei generatori incorporati, drive e controllori; usa `SimulationInput`, esclude le callback che sovrascriverebbero i dati e chiude senza salvare. L’esecuzione riproducibile passa dal runner. I 20 run verificano parametri, stati e Scope; non sostituiscono i target di controllo.
+Gli otto SLX avviano automaticamente l'inizializzazione nominale dal percorso del modello. Si possono aprire singolarmente e avviare con Run. La massa effettiva è un parametro permanente dei generatori; non sono state cambiate le connessioni. `collaudo_simulink` senza argomenti conserva le 20 prove campionate. Completamento, stati finiti e Scope non equivalgono a RS/RP o a target raggiunti.
 
 Per rigenerare gli elaborati: `python tools/esporta_definitiva.py`, due passaggi `pdflatex` nelle cartelle report e presentation e copia dei PDF ai nomi finali. `python tools/audit_oral_timing.py` aggiorna i tempi. `python tools/consegna_definitiva.py` confeziona gli stessi sorgenti e controlla ZIP e SHA-256. Python e LaTeX servono per modificare gli elaborati, non per eseguire la consegna.
 

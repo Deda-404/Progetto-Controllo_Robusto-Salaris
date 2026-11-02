@@ -11,6 +11,39 @@ Nel modello A ogni parametro si scrive come valore nominale più una variazione 
 \]
 Abbiamo sei parametri attuativi indipendenti e una sola massa reale comune: sette scalari incerti. Tutte le occorrenze della massa in $M,C,G$ dipendono dalla stessa $\delta_m$. Le rigidezze e le inerzie dei motori sono note nel modello adottato.
 
+
+\subsection{Dal parametro fisico al secondo ordine SISO}
+Per ciascun attuatore la realizzazione è
+\[
+ \dot x=v,\qquad \dot v=\omega_n^2(u-x)-2\zeta\omega_nv.
+\]
+Le due coordinate descrivono il secondo ordine; segue un solo stato
+Padé. Il suo ordine rimane uguale per tutti i valori ammessi di ritardo.
+Non sommiamo un secondo errore di ritardo al blocco già parametrico.
+\subsection{Pulling out the deltas}
+Ponendo $d_\omega=\bar\omega_nr_\omega$ e
+$d_\zeta=\bar\zeta r_\zeta$ otteniamo
+\begin{align*}
+ z_1&=u-x,& w_1&=\delta_\omega z_1,\\
+ z_2&=\bar\omega_nz_1+d_\omega w_1-2\bar\zeta v-2d_\zeta w_3,
+ &w_2&=\delta_\omega z_2,\\
+ z_3&=v,&w_3&=\delta_\zeta z_3,\\
+ \dot v&=\bar\omega_nz_2+d_\omega w_2,&\dot x&=v.
+\end{align*}
+Sostituendo i segnali $w_j$ si recuperano i prodotti originali.
+Lo scalare $\delta_\omega$ è ripetuto due volte con valore identico.
+Per Padé poniamo $\tau_d=\bar\tau_d(1+r_t\delta_t)$ e usiamo
+\[
+ \dot x_d=-\frac{2}{\tau_d}x_d+\frac{2}{\tau_d}x,
+ \qquad y=2x_d-x.
+\]
+La dipendenza da $1/\tau_d$ è razionale. La sua estrazione nella LFT
+mantiene lo stesso parametro reale, non una dinamica indipendente.
+Anche $M(q)^{-1}$ dipende dalla medesima massa che compare in gravità.
+La LFT automatica del modello completo ha 19 occorrenze: cinque di
+$m_{EE}$, cinque per ogni $\omega_n$ e una per ogni $\zeta$ e $\tau_d$.
+Sono sette grandezze fisiche, non diciannove perturbazioni indipendenti.
+\subsection{Parte nota e chiusura delle porte incerte}
 Una LFT separa la parte nota dalle perturbazioni. Se le porte incerte sono ordinate per prime, scriviamo
 \[
  \begin{bmatrix}z_\Delta\\y\end{bmatrix}
@@ -34,6 +67,12 @@ Per costruire B partiamo dagli stessi drive campionati in A. Consideriamo le tre
 \text{moltiplicativa:}\quad&G_p=G_0(1+W_M\Delta_M), &E_M&=(G_p-G_0)/G_0,\\
 \text{inversa:}\quad&G_p=G_0/(1-W_I\Delta_I), &E_I&=(G_p-G_0)/G_p.
 \end{align*}
+
+\begin{figure}[htbp]\centering
+\resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_forme.tex}}
+\caption{Forme SISO alternative. Il segno del blocco nella forma inversa
+può essere assorbito nella perturbazione normalizzata.}
+\end{figure}
 Non basta che il modulo di $E/W$ sia piccolo: la perturbazione normalizzata deve essere stabile e propria. Se cambia il ritardo, lo zero destro di $G_0$ non si cancella nel rapporto $G_p/G_0$. Con $\tau_d=18$ ms, $E_M$ ha un polo a $+133.3$ s$^{-1}$ e $E_I$ a $+111.1$ s$^{-1}$. Il fit del solo modulo nasconderebbe questa incompatibilità con un blocco $\Delta$ stabile.
 
 Adottiamo quindi la forma additiva. La differenza fra due drive stabili e strettamente propri è stabile e propria, e non richiede di invertire uno zero destro. Per ciascun canale,
@@ -42,6 +81,13 @@ Adottiamo quindi la forma additiva. La differenza fra due drive stabili e strett
 \]
 I due blocchi dinamici sono indipendenti. La meccanica continua a dipendere dallo stesso parametro reale $m_{EE}$; il suo effetto non entra nel peso del drive.
 
+
+\subsection{Dalla famiglia fisica al peso dinamico}
+\begin{figure}[htbp]\centering
+\resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_fit.tex}}
+\caption{Campioni fisici, scostamenti additivi, inviluppo, fit e verifica
+continua della perturbazione normalizzata.}
+\end{figure}
 Il procedimento segue quello del corso: famiglia fisica, scostamenti, inviluppo, fitting e normalizzazione. I dieci manipolatori forniscono venti drive; aggiungiamo gli otto vertici del box SISO e il nominale. Sono 29 casi SISO, non 29 manipolatori. Su una griglia logaritmica calcoliamo l'inviluppo di $|G_j-G_0|$ e confrontiamo fit di ordine 1, 2 e 3 mediante \texttt{fitmagfrd}.
 \input{generated/finale_pesi.tex}
 Il peso viene scalato per coprire le norme continue $\|(G_j-G_0)/W_A\|_\infty$, con un piccolo margine del 2\%. Scegliamo l'ordine minimo che rispetta la copertura e un eccesso mediano non maggiore di 1.6. Risulta sufficiente l'ordine 3; gli ordini più bassi sono troppo conservativi. La funzione selezionata è

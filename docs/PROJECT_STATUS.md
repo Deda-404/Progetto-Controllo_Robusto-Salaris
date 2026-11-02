@@ -1,3 +1,11 @@
+# Stato corrente — correzione conservativa PR #47
+
+Recuperati gli approfondimenti dei capitoli 5, 7–10 dal main dbf6f00, mantenendo carico, ritardo e rappresentazione additiva corretti. Sette candidati predefiniti; riferimenti disponibili su richiesta. Nessuna nuova sintesi Hinf/D-K, pesi e target invariati dopo riesame esplicito dei loro limiti. Otto SLX salvati con InitFcn automatica, senza nuova topologia o librerie.
+
+Quality gate verifiche COMPLETE: rapida, cinque test, otto avvii SLX autonomi nel repository; rapida, 20 run campionati e otto avvii autonomi nella ZIP estratta. Sei CSV identici. PDF di 68 pagine compilato senza warning e controllato. Pubblicazione sullo stesso ramo in corso. Accettazione prestazionale PARTIAL: nessun RP PASS, µ_A/µ_B non raccomandati per tracking/rumore. Matrice dei contenuti e limiti in CORREZIONE_CONSERVATIVA.md. Gli stati sotto sono registrazioni precedenti e non descrivono la correzione in corso.
+
+---
+
 # Stato corrente — 02.11.2026, revisione finale con carico
 
 Implementazione e requisiti dell’incarico R01–R22 COMPLETE/PASS. Relazione 49 pagine e 23 slide compilate e controllate. Consegna autonoma: 33 sorgenti/ingressi identici, rapida e 20 SLX PASS dall’estrazione esterna, sei CSV identici e scarto Scope zero. Evidenze in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).

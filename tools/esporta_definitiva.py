@@ -83,7 +83,8 @@ def polynomial(coeff):
 def main():
     GEN.mkdir(exist_ok=True); FIG.mkdir(parents=True,exist_ok=True)
     for name in ["famiglia_attuatori","peso_incertezza","robustezza","ras","dieci_impianti",
-                 "sensibilita_singoli_parametri","sensibilita_hinf","nominale"]:
+                 "sensibilita_singoli_parametri","sensibilita_hinf","nominale",
+                 "lqg_lqgi_risposte","lqg_lqgi_comando","hinf_disturbi","lineare_nonlineare_lqg"]:
         shutil.copy2(DATA/(name+".png"),FIG)
     info=json.loads((DATA/"riassunto_numerico.json").read_text(encoding="utf-8"))
     weights=read("ordini_peso"); selected=next(x for x in weights if x["Ordine"]=="3")
@@ -117,17 +118,19 @@ def main():
           [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
           "Tutti nominalmente stabili. La norma comune include riferimento e disturbo; il rumore è valutato separatamente.")
     robust=read("confronto_robusto")
-    assert len(robust)==28
+    assert len(robust)==14
     caption="Margini robusti: soglia unitaria. NP indica esclusione già sul nominale; RS indica un limite superiore dedotto dalla perdita di stabilità. Non sono misure dirette di RP."
     headers=["Controllore","A/B","Norma nominale","Margine RS","Margine RP"]
     table("robustezza",headers,robust_rows([x for x in robust if x["Controllore"] in CURRENT]),caption)
-    table("fissi",headers,robust_rows([x for x in robust if x["Controllore"] not in CURRENT]),"Primo esperimento, coefficienti mantenuti fissi. "+caption)
     dk=[]
     for i,name in enumerate(["A","B"],1):
         for x in read(f"dk_{i}"):
             dk.append([name,x["Iterazione"],num(x["PeakMu"],4),num(x["GammaScalata"],4),x["Ordine"]])
     table("dk",["Sintesi","Iterazione",r"Picco $\mu$",r"$\gamma$ scalata","Ordine K"],dk,
           "Stessi pesi e stesso controllore iniziale. Il risultato di sintesi non sostituisce la post-analisi continua.")
+    table("riesame_mu",["Modello","Passo","Ordine","Norma comune",r"Errore DC [\%]","Guadagno rumore"],
+          [[x["Modello"],x["Iterazione"],x["Ordine"],num(x["NormaComune"],4),percent(x["ErroreDC"]),num(x["GuadagnoRumore"],4)] for x in read("riesame_mu")],
+          "Riesame dei candidati D--K: la prima riga di ogni modello è il medesimo punto iniziale. Il guadagno del rumore è una norma, non un picco di coppia.")
     ras=read("ras"); plants=read("dieci_impianti"); noise=read("rumore")
     states=["CONVERGENZA","MANCATA_CONVERGENZA","DIVERGENZA_OSSERVATA","TIMEOUT","ERRORE_NUMERICO"]
     rasrows=[]; plantrows=[]; timerows=[]; disturbrows=[]; noiserows=[]; loadrows=[]

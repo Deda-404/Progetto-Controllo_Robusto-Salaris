@@ -33,6 +33,28 @@ Il primo penalizza soprattutto gli errori lenti; il secondo aumenta il costo del
 \]
 Non è un modo alternativo di definire $T_s$ o l'overshoot. Le prestazioni pesate e i target temporali vengono verificati separatamente. I pesi e $M_o$ sono identici nelle sintesi robuste A e B.
 
+\subsection{Verifica della coerenza fra pesi e specifiche}
+Il modello desiderato ha guadagno statico uno e un transitorio coerente
+con i due secondi richiesti. Il peso sull'errore ha invece
+$W_e(0)=2/0.3=6.67$: un limite unitario sulla sola mappa pesata
+implicherebbe un errore statico inferiore a 0.15 per un ingresso
+unitario, non il 5\% richiesto. Quest'ultimo deve quindi essere
+verificato direttamente e non può essere dedotto da NP o RP.
+Analogamente, $W_u(0)=0.003$ non rappresenta una coppia massima:
+il livello unitario suggerisce una scala di guadagno, senza imporre
+un limite puntuale al comando. Gli ingressi $r$ e $d$ mantengono le
+unità rad e N m; il costo non è una percentuale di errore comune ai due.
+
+Manteniamo questi pesi per confrontare sullo stesso problema le famiglie
+studiate. Aumentare automaticamente il guadagno statico di $W_e$ a 20
+per tradurre il 5\% renderebbe più severa una sintesi che già non
+soddisfa RP. Ridurlo per ottenere un PASS indebolirebbe invece la
+richiesta di precisione. Nessuna di queste operazioni risolverebbe il
+rumore, che non è un ingresso del costo. La conclusione progettuale
+resta perciò limitata: $M_o$ esprime la rapidità desiderata, i pesi
+definiscono il compromesso frequenziale, mentre i quattro target
+temporali e il rumore costituiscono verifiche ulteriori necessarie.
+
 \section{Rumore encoder e sforzo di controllo}
 Per confrontare la sensibilità alle misure usiamo lo stesso rumore su tutti i controllori: deviazione standard $0.05^\circ$, campioni ogni 2 ms mantenuti costanti fra un campione e il successivo, durata 4 s. Riferimento e disturbo sono nulli.
 

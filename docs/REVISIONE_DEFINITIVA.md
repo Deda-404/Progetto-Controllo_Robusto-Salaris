@@ -1,3 +1,5 @@
+> Lo stato documentale di questa pagina precede la correzione conservativa richiesta dagli studenti. Per il contenuto corrente, la selezione di sette candidati e l'inizializzazione automatica SLX vedere [CORREZIONE_CONSERVATIVA.md](CORREZIONE_CONSERVATIVA.md). Le evidenze fisiche e i risultati numerici conservano la propria provenienza; il precedente giudizio di completezza editoriale è superato.
+
 # Revisione finale del progetto SEA — evidenze tecniche
 
 Data di completamento documentale: 2 novembre 2026. Campagna MATLAB: 1 novembre 2026, seed 20261101, R2026b 26.2.0.3386108. Base main `dbf6f00b06e0cddc65cd19e90d11ad3418cab2da`, contenente PR #46; ramo unico `codex/sea-revisione-finale-semplificata`. Nessun merge.

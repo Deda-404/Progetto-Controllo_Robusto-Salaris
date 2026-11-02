@@ -148,6 +148,52 @@ if p.figure
     exportgraphics(f,fullfile(p.risultati,'ras.png'),'Resolution',170);
 end
 
+%% Figure didattiche: stessi controllori, nominale e traiettorie gia calcolate
+if p.figure
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,2);
+for prova=1:2
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(1:2,prova)*p.rAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Gradino giunto "+prova);legend('LQG q1','LQG q2','LQGI q1','LQGI q2');
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(1:2,prova+2)*p.dAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Disturbo link "+prova);
+end
+exportgraphics(f,fullfile(p.risultati,'lqg_lqgi_risposte.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,1);
+for prova=1:2
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(3:4,prova+2)*p.dAmp,p.tempo);plot(p.tempo,y);
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Comando [N m]');title("Disturbo link "+prova);legend('LQG u1','LQG u2','LQGI u1','LQGI u2');
+end
+exportgraphics(f,fullfile(p.risultati,'lqg_lqgi_comando.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,1);
+for prova=1:2
+ nexttile;hold on
+ for k=3:5
+ [~,CL]=interconnessione_sea(modello.P0,p,2,controllori{k});y=step(CL(1:2,prova+2)*p.dAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Disturbo link "+prova);legend('Hinf1 q1','Hinf1 q2','Hinf2 q1','Hinf2 q2','PID q1','PID q2');
+end
+exportgraphics(f,fullfile(p.risultati,'hinf_disturbi.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,2);
+for k=1:2
+ for prova=1:2
+ o=traiettorie{k,prova};[~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});
+ if prova==1,y=step(CL(1:2,1)*p.rAmp,o.tempo);else,y=step(CL(1:2,3)*p.dAmp,o.tempo);end
+ nexttile;plot(o.tempo,rad2deg(o.q),o.tempo,rad2deg(y),'--');grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title(nomi(k)+" prova "+prova);legend('NL q1','NL q2','Lineare q1','Lineare q2');
+ end
+end
+exportgraphics(f,fullfile(p.risultati,'lineare_nonlineare_lqg.png'),'Resolution',160);close(f);
+
+end
+
 function metriche=rumoreContinuo(sys,v,t)
 % Propagazione ZOH esatta, ripresa dalla diagnostica originale del progetto.
 % La scansione temporale verifica picchi osservati; non un massimo rigoroso.

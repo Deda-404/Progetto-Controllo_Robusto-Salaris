@@ -80,8 +80,10 @@ if p.modalita=="completa"
 else
     if ~isfile(fileAnalisi),fileAnalisi=fullfile(p.dati,'confronto_robusto.mat');end
     assert(isfile(fileAnalisi),'SEA:Cache','Manca analisi A/B validata: eseguire completa.');
-    a=load(fileAnalisi); assert(isequal(a.firma,firma) && isequaln(a.K,K),'SEA:Cache','Analisi relativa a configurazione o controllori diversi.');
-    analisi=a.analisi; confronto=a.confronto;
+    a=load(fileAnalisi);
+    [presenti,indici]=ismember(nomi,a.nomi);
+    assert(all(presenti) && isequal(a.firma,firma) && isequaln(a.K(indici),K),'SEA:Cache','Analisi relativa a configurazione o controllori diversi.');
+    analisi=a.analisi(indici,:);confronto=a.confronto(ismember(a.confronto.Controllore,nomi),:);
     disp('RS/RP CARICATE dalla campagna completa; nuove verifiche nominali qui sotto.');
     for k=1:numel(K)
         for modello=1:2
@@ -111,6 +113,18 @@ if p.figure
     yline(1,'--k'); grid on; xlabel('Iterazione'); ylabel('Picco mu'); legend('Sintesi A','Sintesi B');
     exportgraphics(f,fullfile(p.risultati,'robustezza.png'),'Resolution',170);
 end
+
+%% Riesame dei candidati gia prodotti, senza nuove sintesi
+righe={};
+for j=1:2
+ for k=1:numel(candidati{j}.info)
+ K=candidati{j}.info(k).K;[~,CL]=interconnessione_sea(modelli.PA.NominalValue,p,2,K);
+ ns=isstable(CL);g=Inf;e=Inf;nu=Inf;
+ if ns,g=norm(CL(5:8,1:4),inf);e=max(abs(dcgain(CL(1:2,1:2))-eye(2)),[],'all');nu=norm(CL(3:4,5:6),inf);end
+ righe(end+1,:)={j,k,order(K),ns,g,e,nu};
+ end
+end
+T=cell2table(righe,'VariableNames',{'Modello','Iterazione','Ordine','NS','NormaComune','ErroreDC','GuadagnoRumore'});disp(T);writetable(T,fullfile(p.risultati,'riesame_mu.csv'));
 
 function stato=esito(m)
 % Un intervallo numericamente invertito non viene mai riordinato.

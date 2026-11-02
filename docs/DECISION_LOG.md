@@ -2422,3 +2422,12 @@ Quality gate incarico R01–R22 COMPLETE/PASS. Gli obiettivi di controllo restan
 
 ## 2026-11-02 — Pubblicazione per revisione
 Pubblicato il ramo e aperta una sola [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47), pronta per revisione (non draft), base main dbf6f00. Nove commit tematici coprono le aree richieste; questo aggiornamento registra soltanto la pubblicazione. GitHub indica assenza di conflitti; nessun merge effettuato. Tutte le verifiche e i limiti scientifici rimangono quelli della consegna collaudata. Stato incarico COMPLETE/PASS, accettazione dei controllori PARTIAL secondo i risultati.
+
+
+## 2026-11-02 — Correzione conservativa richiesta dagli studenti
+Confrontati direttamente tutti i capitoli con main dbf6f00, conservato il riferimento Git recupero/pr47-prima-correzione-7456a30. Recuperati costi fisici, Riccati, covarianze, separazione, LQGI completo, pianta generalizzata, sensibilità, LFT, mu e margini. Recuperati schemi validi e rigenerate quattro figure con il carico corrente. Il diagramma del fitting è stato aggiornato alla forma additiva; escluse vecchie tabelle e garanzie relative a famiglie differenti. Matrice dettagliata in CORREZIONE_CONSERVATIVA.md.
+Campagna predefinita ridotta a sette candidati, riferimenti opzionali. Riesaminate le sei righe delle D-K salvate, senza nuove sintesi Hinf/musyn. Nessun risultato negativo nascosto. Esplicitato che We(0)=6.67 non garantisce il 5% e che il rumore è escluso dal costo; pesi e soglie non alterati. I candidati mu finali non sono raccomandati come soluzioni operative.
+Gli otto SLX hanno InitFcn locale automatica e massa effettiva parametrizzata permanentemente; topologia conservata, nessuna nuova libreria, dipendenza o configurazione .satk. Originali recuperabili da Git. Eseguiti rapida, cinque test, sette verifiche e otto avvii SLX senza override InitFcn. I primi errori di percorso, recupero LaTeX, conteggio tabella e condizioni InitFcn sono stati corretti e le prove ripetute. Verifica ZIP e pubblicazione in corso: quality gate PARTIAL, nessuna nuova dichiarazione di prestazione robusta.
+
+
+Verifica finale della correzione: rapida e cinque test nel repository, rapida e 20 run campionati più otto avvii autonomi nella ZIP estratta, exit code 0; sei CSV identici. PDF di 68 pagine senza warning e controllato visivamente. Code Analyzer: due suggerimenti non critici, non zero. Nessuna nuova sintesi Hinf/D-K o RAS; tutti i FAIL restano espliciti. Pubblicazione sullo stesso ramo in corso.

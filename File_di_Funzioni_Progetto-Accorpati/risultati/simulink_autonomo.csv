@@ -1,0 +1,9 @@
+Modello,TempoFinale,StatiFiniti,MassaDistale
+Hinf_linear_sim,2,1,1
+Hinf_nonlinear_sim,2,1,1
+LQGI_linear_sim,2,1,1
+LQGI_nonlinear_sim,2,1,1
+LQG_linear_sim,2,1,1
+LQG_nonlinear_sim,2,1,1
+mu_linear_sim,2,1,1
+mu_nonlinear_sim,2,1,1

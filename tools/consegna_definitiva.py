@@ -20,7 +20,7 @@ Carico incerto e confronto A/B; elaborati del 2 novembre 2026.
 4. Per rigenerare sintesi, analisi robuste, RAS e Simulink: run_all('completa').
 
 Toolbox: Control System Toolbox, Robust Control Toolbox, Simulink.
-R2026b 26.2.0.3386108 è la versione verificata. Gli SLX sono R2026a;
+R2026b 26.2.0.3386108 è la versione verificata. Gli SLX sono R2026b;
 R2025b non li apre senza conversione, qui non effettuata.
 Non servono Symbolic Math Toolbox, Python, Git o accesso al repository.
 
@@ -34,7 +34,9 @@ diverse decine di minuti, soprattutto per D-K e analisi robuste.
 
 La configurazione unica è parametri_sea.m. Gli script sono richiamati
 in ordine da run_all, con Workspace separati. Risultati in risultati/;
-dati/banca_validata.mat conserva i controllori fissati del primo esperimento.
+dati/banca_validata.mat conserva i controllori di riferimento.
+La campagna predefinita usa sette candidati; controllori_sea(p,true)
+include esplicitamente i riferimenti per un confronto mirato.
 Le altre quattro MAT in dati/ contengono i risultati coerenti della campagna.
 
 mEE=0.2 kg, intervallo [0.1,0.3] kg; m2 rimane 0.8 kg.
@@ -48,17 +50,20 @@ Target: 2 s, 15%, errore statico 5%, cross 25%; soglie NS/NP/RS/RP immutate.
 I fallimenti prestazionali, il rumore eccessivo e i limiti della RAS
 rimangono nei risultati. Non tutti i controllori sono utilizzabili.
 
-collaudo_simulink usa gli otto SLX esistenti, aggiorna in memoria massa,
-drive e controllori, esclude callback incompatibili e chiude senza salvare.
-Il parametro m2_eff entra nei generatori incorporati: non basta aprire uno
-SLX e premere Run senza la preparazione del runner. Gli helper in
-simulink/support sono usati dai MATLAB Function.
-Le prove durano 2 s; si controllano stati finiti e Scope acquisiti.
-Gli estratti delle curve hanno al massimo 2000 campioni, ma picchi e
-finitezza usano l'acquisizione integrale. Non è una verifica hardware.
+Gli otto SLX si possono aprire singolarmente e avviare con Run.
+La callback InitFcn individua automaticamente collaudo_simulink.m e assegna
+il nominale dal contenuto locale della consegna, senza Workspace precedente.
+La massa m2_eff è un parametro permanente dei generatori non lineari;
+i due drive hanno realizzazioni distinte. Nessuna libreria esterna richiesta.
+collaudo_simulink senza argomenti esegue invece le 20 prove campionate.
+Il completamento e gli stati finiti sono verifiche di esecuzione;
+RS/RP, target temporali e ampiezze dei comandi sono riportati separatamente.
+I modelli sono stati salvati con R2026b; gli originali sono recuperabili
+nella cronologia Git. Non è stata modificata la topologia.
 
 Relazione, slide e testo orale sono in relazione/.
 Evidenze e matrice R01-R22: REVISIONE_DEFINITIVA.md.
+Correzione conservativa e matrice C01-C20: CORREZIONE_CONSERVATIVA.md.
 Sorgenti e storia: https://github.com/Deda-404/Progetto_CR
 Ramo: codex/sea-revisione-finale-semplificata.
 
@@ -89,6 +94,7 @@ def main():
                  "presentation/Presentazione_orale.txt"]:
         mapping[Path("relazione") / Path(name).name] = ROOT / name
     mapping[Path("REVISIONE_DEFINITIVA.md")] = ROOT / "docs/REVISIONE_DEFINITIVA.md"
+    mapping[Path("CORREZIONE_CONSERVATIVA.md")] = ROOT / "docs/CORREZIONE_CONSERVATIVA.md"
     expected = {str(path.as_posix()) for path in mapping} | {"LEGGIMI.txt", "MANIFEST_SHA256.json"}
     unexpected = {str(f.relative_to(OUTPUT).as_posix()) for f in OUTPUT.rglob("*") if f.is_file()} - expected
     if unexpected:

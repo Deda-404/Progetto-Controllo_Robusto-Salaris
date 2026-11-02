@@ -1,5 +1,8 @@
-function risultati=collaudo_simulink
-%COLLAUDO_SIMULINK Originali invariati, parametri espliciti con SimulationInput.
+function risultati=collaudo_simulink(nomeModello)
+%COLLAUDO_SIMULINK Inizializzazione automatica o collaudo dei modelli esistenti.
+% Con il nome del modello assegna solo i parametri nominali, senza simulare.
+if nargin==0,nomeModello="";end
+inizializza=strlength(string(nomeModello))>0;
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 radice=fileparts(cartella); modelliDir=fullfile(radice,'simulink','student_originals');
 support=fullfile(radice,'src','model');
@@ -32,23 +35,27 @@ for j=1:numel(nomi)
     elementi(j).Name=nomi{j}; elementi(j).Dimensions=size(fisica.(nomi{j})); elementi(j).DataType='double';
 end
 data.slBus1=Simulink.Bus; data.slBus1.Elements=elementi;
-files=dir(fullfile(modelliDir,'*.slx')); risultati=cell(20,1); tracce=cell(20,1); riga=0;
+files=dir(fullfile(modelliDir,'*.slx'));
+if inizializza,files=files(strcmp({files.name},char(string(nomeModello)+".slx")));assert(numel(files)==1);end
+risultati=cell(20,1); tracce=cell(20,1); riga=0;
 for k=1:numel(files)
     [~,nome]=fileparts(files(k).name); file=fullfile(files(k).folder,files(k).name);
     % Apertura in memoria per ispezionare SID e parametri, senza salvataggio.
-    load_system(file); cleanup=onCleanup(@()close_system(nome,0));
+    load_system(file);
+    if ~inizializza,cleanup=onCleanup(@()close_system(nome,0));end
     % I generatori di parametri incorporati ricevono la massa effettiva dal Workspace.
     % Nessuna modifica della topologia o degli originali su disco.
     root=sfroot; charts=root.find('-isa','Stateflow.EMChart');
     aggiornati=0;
     for j=1:numel(charts)
-        if startsWith(charts(j).Path,[nome '/']) && contains(charts(j).Script,'function p = sea_params_nominal')
+        if ~inizializza && startsWith(charts(j).Path,[nome '/']) && contains(charts(j).Script,'function p = sea_params_nominal')
             charts(j).Script=regexprep(charts(j).Script,'p\.m2\s*=\s*0\.8;','p.m2 = m2_eff;');
-            parametro=Stateflow.Data(charts(j)); parametro.Name='m2_eff'; parametro.Scope='Parameter';
+            parametro=charts(j).find('-isa','Stateflow.Data','Name','m2_eff');
+            if isempty(parametro),parametro=Stateflow.Data(charts(j));parametro.Name='m2_eff';parametro.Scope='Parameter';end
             aggiornati=aggiornati+1;
         end
     end
-    if contains(nome,'nonlinear'),assert(aggiornati>0,'SEA:SLX','Parametro meccanico non aggiornato.');end
+    if ~inizializza && contains(nome,'nonlinear'),assert(aggiornati>0,'SEA:SLX','Parametro meccanico non aggiornato.');end
     scope=find_system(nome,'BlockType','Scope');
     att=find_system(nome,'LookUnderMasks','all','MaskType','LTI Block');
     if isempty(att),att=find_system(nome,'LookUnderMasks','all','ReferenceBlock','cstblocks_lti/LTI System');end
@@ -60,7 +67,8 @@ for k=1:numel(files)
         elseif scelta=="Mu_A",data.Kmu=candidati{1}.K;
         else,data.Kmu=candidati{2}.K;
         end
-    for campione=[0 1]
+    campioni=[0 1];if inizializza,campioni=0;end
+    for campione=campioni
         if campione==0,Ga=modello.attuatori;else,Ga=inc.campioniAtt(:,:,campione);end
         [Aa,Ba,Ca,Da]=ssdata(Ga);
         if campione==0,massa=p.mEE;else,massa=inc.parametri(campione,7);end
@@ -89,6 +97,10 @@ for k=1:numel(files)
             etichetta=get_param(att{j},'Name');
             if contains(etichetta,'1'),sistema='Gact1';else,sistema='Gact2';end
             set_param(att{j},'sys',sistema);
+        end
+        if inizializza
+            assignin('base','slBus1',data.slBus1);
+            risultati=data;return
         end
         in=Simulink.SimulationInput(nome);
         in=in.setModelParameter('InitFcn','','StopTime','2','SaveState','on', ...
