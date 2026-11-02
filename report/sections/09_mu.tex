@@ -1,491 +1,51 @@
 \chapter{\texorpdfstring{Robustezza alle incertezze: analisi e sintesi con $\mu$}{Robustezza alle incertezze: analisi e sintesi con mu}}
-\label{cap:mu}
 \section{Dalle prove nominali alle incertezze fisiche}
+Una massa diversa e drive meno rapidi modificano il chiuso anche quando il controllore rimane identico. Vogliamo sapere se la stabilità e la prestazione resistono a tutte le variazioni ammesse dal modello, non soltanto a quelle estratte per le simulazioni. L'analisi strutturata tiene conto del fatto che alcune variazioni sono scalari reali ripetuti, mentre altre sono funzioni di trasferimento stabili.
 
-\paragraph*{Campagna corrente: due strutture e stesso controllore.}
-La tabella seguente proviene dalle nuove esecuzioni, con meccanica
-nominale e incertezze attuative del Capitolo 5. Per ciascun K si chiudono
-le due piante e si calcolano NS, NP, \texttt{robstab} e
-\texttt{robgain} a livello uno. I limiti invertiti o che attraversano
-uno rimangono inconcludenti. Quando NP fallisce, RP fallisce gia al
-nominale; quando RS fallisce, RP non puo essere garantita.
-\input{generated/definitiva_robustezza.tex}
-\texttt{lftdata} estrae $N$ e $\Delta$ dalla mappa pesata chiusa.
-Il blocco $N_{11}$ collega uscita e ingresso delle perturbazioni:
-\texttt{mussv(frd(N11,omega),blocchi)} fornisce limiti su $\mu$
-sulla griglia. La griglia e un controllo didattico, distinto dalle
-stime continue dei margini. Il piccolo guadagno ignora parte della
-struttura; $\mu$ conserva blocchi e ripetizioni.
-Per RP il blocco fittizio prestazionale chiude $w$ e $z$; non e una
-nuova incertezza fisica. Le architetture N--$\Delta$ e D--K sviluppate
-di seguito valgono anche per A/B, cambiando la struttura $\Delta$.
+Il confronto a controllore fissato è il primo esperimento. I sette controllori disponibili vengono collegati senza cambiarne i coefficienti sia ad A sia a B. Successivamente confrontiamo le sintesi sul nominale con carico e i due candidati D--K. La tabella in appendice conserva il primo esperimento; nel corpo discutiamo i controllori della campagna con carico.
 
-\paragraph*{Sintesi dedicata senza cambiare il problema.}
-Sono state eseguite tre iterazioni per A e tre per B, con gli stessi
-$W_e,W_u,M_o$ e seme. Il candidato A della campagna limitata fallisce
-NP; non viene rilassato il costo per nasconderlo. Il candidato B
-supera RS/RP nelle due post-analisi. Questo risultato dipende anche
-dalla ricerca non convessa e dai fit degli scaling: non dimostra
-superiorita universale di B. Ordini, storie D--K, campioni comuni e
-rumore sono parte del confronto; un controllore robusto in norma
-puo avere un comando rumoroso inaccettabile.
-\begin{figure}[H]\centering
-\includegraphics[width=.95\textwidth]{figures/definitiva/robustezza.png}
-\caption{Margini inferiori RS a K fissato e storia delle due D--K.
-L'espansione oltre il raggio unitario non identifica la stessa famiglia.}
-\end{figure}
+\section{Raccogliere le incertezze e separare la parte nota}
+In A, $\Delta_A$ contiene i sette parametri reali normalizzati. Ogni parametro può comparire più volte nella LFT, ma le sue copie hanno lo stesso valore. In B, $\Delta_B$ contiene il parametro reale del carico e i due blocchi dinamici indipendenti dei drive. La dimensione delle porte della LFT non coincide quindi con il numero di grandezze fisiche incerte.
 
-\paragraph*{Derivazione e risultati del precedente modello M4.}
-Il resto del capitolo conserva lo sviluppo originale. Rigidezze,
-inerzia e ritardo variabile citati qui appartengono a M4, non ad A/B.
+Dopo aver chiuso il controllore raccogliamo la parte nota in $N$. La partizione $N_{11}$ è il trasferimento fra le porte dell'incertezza. La chiusura $w_\Delta=\Delta z_\Delta$ può destabilizzare il sistema quando $I-N_{11}\Delta$ diventa singolare.
 
-Dopo aver verificato il comportamento nominale, dobbiamo chiederci
-se il manipolatore conservi stabilità e prestazioni quando rigidezze,
-inerzie e attuatori differiscono dal modello usato nella sintesi.
-Una molla più rigida sposta le risonanze SEA; un'inerzia motore diversa
-cambia la dinamica interna; un ritardo attuativo maggiore può ridurre
-il margine del feedback. Una risposta nominale buona non risolve
-questo problema, perché riguarda una sola pianta.
-
-Per rappresentare questa variabilità definiamo una famiglia di modelli
-e conserviamo il significato fisico di ogni scostamento. Vogliamo
-verificare stabilità e prestazione pesata per \emph{tutta} la famiglia,
-non soltanto per alcuni campioni. Confrontiamo il controllore
-$H_\infty$ 2-DoF e $K_\mu$ mantenendo gli stessi $W_e,W_u,M_o$,
-lo stesso disturbo lato link e la stessa mappa $[r;d]\mapsto[z_e;z_u]$.
-Le incertezze sono quelle del Capitolo 5, dichiarate prima della sintesi.
-
-\subsection{I tre parametri meccanici selezionati}
-Sono incerti $k_1,k_2$ e $J_{m1}$, indipendenti e reali.
-Le rigidezze possono variare per materiali e assemblaggio; l'inerzia
-riflessa del primo motore dipende anche dalla modellazione
- dell'azionamento. Il 10\% è un'ipotesi ingegneristica del progetto,
-non una tolleranza misurata né un intervallo statistico.
-
-\begin{table}[htbp]\centering\small
-\begin{tabular}{lrrl}\toprule
-Parametro & Nominale & Intervallo & Oggetto MATLAB\\\midrule
-$k_1$ [N m/rad] & 50 & $[45,55]$ & \texttt{ureal('k1',50,\ldots)}\\
-$k_2$ [N m/rad] & 40 & $[36,44]$ & \texttt{ureal('k2',40,\ldots)}\\
-$J_{m1}$ [kg m$^2$] & 0.01 & $[0.009,0.011]$ & \texttt{ureal('Jm1',0.01,\ldots)}\\\bottomrule
-\end{tabular}
-\caption{I tre scalari reali usano \texttt{'Percentage',10},
-come definito nella funzione centrale dei parametri incerti.}
-\end{table}
-Masse, geometrie, $J_{m2}$, attriti e gravità restano nominali.
-È una scelta per contenere il numero di parametri incerti,
-non una dichiarazione che siano fisicamente esatti.
-
-\subsection{La dinamica degli attuatori}
-Per costruire la famiglia attuativa si variano frequenza naturale,
-smorzamento e ritardo. Le prime due influenzano rapidità e risonanza;
-il ritardo include dispersioni di latenza e jitter.
-
-\begin{table}[htbp]\centering
-\begin{tabular}{lrrr}\toprule
-Grandezza & Nominale & Variazione & Intervallo\\\midrule
-$\omega_n$ [rad/s] & 40 & $\pm10\%$ & $[36,44]$\\
-$\zeta$ & 0.8 & $\pm10\%$ & $[0.72,0.88]$\\
-Ritardo [ms] & 15 & $\pm20\%$ & $[12,18]$\\\bottomrule
-\end{tabular}
-\caption{Intervalli usati per costruire l'inviluppo degli errori
-attuativi; non sono tre ulteriori blocchi \texttt{ureal} nella pianta finale.}
-\end{table}
-La famiglia contiene 120 attuatori: nominale, sei variazioni singole,
-otto vertici e 105 campioni riproducibili. L'errore relativo rispetto
-all'attuatore nominale è raccolto nell'inviluppo
+\section{\texorpdfstring{$\mu$}{mu}: valore singolare strutturato}
+Il valore singolare strutturato cerca la più piccola perturbazione ammessa che rende singolare quella matrice:
 \[
- W_I(s)=\frac{2.929983729s+3.748469010}{s+206.973575453}.
+ \mu_{\boldsymbol\Delta}(H)=
+ \frac{1}{\min_{\Delta\in\boldsymbol\Delta}
+ \{\bar\sigma(\Delta):\det(I-H\Delta)=0\}}.
 \]
-Il fit usa margine 1.08 e il massimo rapporto campionato
- fra errore relativo e inviluppo è 0.92593. Questa verifica
-copre i campioni costruiti, non ogni possibile attuatore fisico.
-La rappresentazione finale per ciascun canale è
-\[
- G_{ai}^{\Delta}=G_{a0}(1+W_I\Delta_{ai}),\qquad
- \|\Delta_{ai}\|_\infty\le1,\quad i=1,2.
-\]
-$\Delta_{ai}$ è una dinamica scalare stabile ignota, rappresentata
-con \texttt{ultidyn}. I due canali sono indipendenti.
-Nell'analisi robusta si considera tutto questo insieme matematico,
-più ampio della sola lista di attuatori usata per il fit.
+Se non esiste una perturbazione di questo tipo, il valore è zero. La struttura è essenziale: permettere una matrice arbitraria al posto di parametri reali condivisi significa risolvere un altro problema.
 
-\section{Raccogliere le incertezze in \texorpdfstring{$\Delta$}{Delta}}
-Le incertezze descritte hanno unità e natura diverse: una rigidezza
-è un numero reale, una dinamica attuativa è una funzione di trasferimento.
-Per trattarle insieme esprimiamo ogni scostamento in forma normalizzata.
-Per esempio,
-\[
- k_1=50(1+0.1\delta_{k1}),\qquad \delta_{k1}\in[-1,1].
-\]
-$\delta_{k1}=0$ è il nominale; $\delta_{k1}=1$ dà 55 N m/rad.
-La stessa idea vale per $k_2$ e $J_{m1}$. La normalizzazione
-non cambia gli intervalli: rende la soglia uno comune ai blocchi.
-Le dipendenze fisiche, incluso l'inverso di $J_{m1}$, sono
-conservate nel modello; non si aggiunge un errore arbitrario ad $A$.
-
-Raccogliamo questi contributi nel blocco diagonale estratto da MATLAB:
-\begin{equation}\label{eq:deltafive}
- \Delta=\operatorname{diag}(\Delta_{a1},\Delta_{a2},
- \delta_J,\delta_{k1},\delta_{k2})\in\mathbb C^{5\times5}.
-\end{equation}
-I primi due blocchi sono dinamici scalari complessi, gli ultimi tre
-scalari reali. Il campo \texttt{Occurrences} vale uno per ciascuno
- dei cinque blocchi nella rappresentazione salvata. Non si conta
-il numero di blocchi dal numero di apparizioni del simbolo nelle
- equazioni. Le due dinamiche non sono fuse in un blocco pieno
-$2\times2$, che ammetterebbe accoppiamenti diversi da quelli scelti.
-
-\section{Separare la parte nota: lo schema \texorpdfstring{$N$--$\Delta$}{N--Delta}}
-Una volta fissato il controllore, separiamo le parti note dalle
-incertezze. Indichiamo con $N$ la dinamica che conosciamo, comprendente
-pianta nominale, controllore, pesi e connessioni. Il blocco $\Delta$
-raccoglie soltanto gli scostamenti ammessi. Questa separazione lascia
-visibile dove la perturbazione rientra nel sistema: $N$ manda
-$v_\Delta$ al blocco incerto, che restituisce
-$w_\Delta=\Delta v_\Delta$. Questa è la rappresentazione
-$N$--$\Delta$ mostrata in Figura~\ref{fig:ndelta}.
-
-\begin{figure}[htbp]\centering
-\input{figures/schemes/ndelta_didactic.tex}
-\caption{A controllore fissato, $N$ raccoglie la parte nota e
-$\Delta$ i cinque blocchi incerti. $w=[r;d]$ e $z=[z_e;z_u]$
-conservano il significato del Capitolo 8.}\label{fig:ndelta}
-\end{figure}
-Solo dopo aver distinto le due parti scriviamo le loro connessioni:
-\[
- \begin{bmatrix}v_\Delta\\z\end{bmatrix}
- =\begin{bmatrix}N_{11}&N_{12}\\N_{21}&N_{22}\end{bmatrix}
- \begin{bmatrix}w_\Delta\\w\end{bmatrix},\qquad
- w_\Delta=\Delta v_\Delta.
-\]
-$N_{11}$ è il ritorno fra le porte dell'incertezza;
-$N_{22}$ è la mappa nominale esterna quando $\Delta=0$.
-Nel nostro caso $N$ è $9\times9$, con cinque canali interni
- e quattro ingressi esterni/uscite pesate. Quindi $N_{11}$
-è $5\times5$ e $N_{22}$ è $4\times4$.
-
-Eliminando i due segnali interni otteniamo una mappa esterna che
-dipende da $\Delta$. La trasformazione frazionaria lineare (LFT)
-è il modo compatto di scrivere proprio questa chiusura. Il nome
-descrive una connessione, non un'approssimazione del robot.
-Collegare $K$ alle porte di controllo di $P_\Delta$ dà una LFT
-inferiore; richiudere le porte d'incertezza di $N$ dà una LFT superiore.
-Nel codice la matrice chiamata $N$ nel testo è \texttt{M}:
-\begin{lstlisting}
-CL=lft(P,K);
-[M,Delta,BlkStruct,NormUnc]=lftdata(CL);
-CLcheck=lft(Delta,M);
-\end{lstlisting}
-La terza riga ricompone il modello nella convenzione MATLAB.
-Non va invertito l'ordine degli argomenti mantenendo la stessa
-partizione. La ricostruzione nominale è stata verificata; le
-formule complete sono nell'Appendice~\ref{app:matlab}.
-
-\section{\texorpdfstring{$\mu$}{mu}: valore singolare strutturato (structured singular value)}
-Vogliamo misurare quanto siamo lontani da una perturbazione critica,
-rispettando le incertezze che abbiamo effettivamente modellato.
-Il valore singolare strutturato $\mu$ risponde a questa domanda.
-A una frequenza fissata poniamo $H=N_{11}(j\omega)$: è la matrice
-quadrata $5\times5$ di ritorno fra le porte d'incertezza, non tutta
-la matrice $N$ di dimensione $9\times9$. La definizione è
-\begin{equation}\label{eq:mu-definition}
-\mu_{\boldsymbol\Delta}(H)=
-\frac{1}{\min\left\{\bar\sigma(\Delta):
-\det(I_5-H\Delta)=0,\ \Delta\in\boldsymbol\Delta\right\}}.
-\end{equation}
-Se nessuna perturbazione con quella struttura rende singolare il
-ritorno, si pone $\mu=0$. Qui $\boldsymbol\Delta$ è l'insieme dei
-blocchi con struttura~\eqref{eq:deltafive}, con tre scalari reali e
-due scalari complessi alla frequenza considerata. Nella ricerca
-della perturbazione critica la loro ampiezza può variare; il dominio
-fisico dichiarato è il sottoinsieme normalizzato di ampiezza non
-superiore a uno. Limitare già il minimo a tale dominio impedirebbe
-di misurare una distanza critica maggiore di uno.
-
-Leggiamo la formula partendo dal vincolo. Consideriamo solamente
-perturbazioni con i tipi di blocchi ammessi. Fra quelle che rendono
-singolare $I_5-H\Delta$ cerchiamo la più piccola, misurata dal massimo
-valore singolare $\bar\sigma(\Delta)$. La chiamiamo perturbazione
-critica; $\mu$ è l'inverso della sua dimensione. Un $\mu$ grande
-significa quindi che basta un piccolo scostamento per arrivare alla
-criticità; un $\mu$ piccolo indica una maggiore distanza.
-
-La parola \emph{strutturato} è essenziale. Non permettiamo una
-perturbazione arbitraria che mescoli tutti i canali: le rigidezze
-rimangono reali e indipendenti, le dinamiche dei due attuatori
-rimangono due blocchi distinti. Il massimo valore singolare ordinario
-non conserva da solo queste restrizioni. Per le dinamiche ammesse,
-$\Delta_{ai}(j\omega)$ è il valore alla frequenza di un sistema
-stabile con norma limitata; i tre parametri reali restano scalari
-costanti. L'analisi usa dunque la struttura mista reale/dinamica.
-
-Con stabilità nominale, interconnessione ben posta e le ipotesi della
-verifica robusta, un picco di $\mu$ minore di uno esclude la condizione
-critica nel dominio normalizzato. Se supera uno, una perturbazione
-di ampiezza ammessa può raggiungerla. La soglia riguarda tutta
-l'analisi frequenziale, non un solo punto della curva. Non è una
-probabilità di guasto e non quantifica l'incertezza non modellata.
-
-Il minimo strutturato è difficile da calcolare esattamente. MATLAB
-restituisce quindi spesso una minorazione e una maggiorazione,
-$\underline\mu\le\mu\le\overline\mu$. La maggiorazione sotto uno
-consente di escludere la criticità; una minorazione sopra uno
-fornisce evidenza di una perturbazione critica nel dominio.
-Se i limiti attraversano uno la decisione rimane inconclusiva.
-Gli scaling D/G usati numericamente affinano queste stime senza
-cambiare i cinque blocchi fisici dichiarati.
+I calcoli restituiscono in generale un limite inferiore e uno superiore. Un intervallo che attraversa la soglia non permette di decidere. Riportare soltanto un numero centrale nasconderebbe questa informazione.
 
 \section{Prestazione nominale, stabilità e prestazione robuste}
-\subsection{Prima il caso nominale: NS e NP}
-Prima di studiare la famiglia controlliamo il suo membro nominale.
-La stabilità nominale, NS, richiede che tutti gli stati interni
-convergano per $\Delta=0$. La prestazione nominale, NP, aggiunge
-$\|T_{zw,0}\|_\infty<1$. Controlliamo prima i poli della realizzazione
-completa e poi la norma, evitando che una cancellazione nasconda
-un modo instabile. Il significato della prestazione rimane quello
-del Capitolo 8: il suo superamento non implica tutti i target
-temporali, come mostra l'assestamento nominale oltre 0.8 s.
+NS richiede stabilità interna del chiuso nominale. NP richiede inoltre che la norma del trasferimento comune sia minore di uno. RS richiede stabilità per ogni incertezza normalizzata ammessa; RP richiede sia stabilità sia norma minore di uno per tutta la famiglia.
 
-\subsection{Stabilità robusta: RS}
-La domanda fisica è: di quanto possiamo aumentare contemporaneamente
-le incertezze prima che il sistema possa perdere stabilità? Per
-rispondere usiamo \texttt{robstab} sull'interconnessione incerta
-\texttt{a.CL=lft(P,K)}, di tipo \texttt{uss}. Il modello conserva
-gli intervalli \texttt{ureal} e i due blocchi \texttt{ultidyn}; il
-comando utilizza questa struttura, senza trasformarla in una
-perturbazione piena arbitraria.
+Il margine robusto è il fattore di espansione dell'incertezza prima di perdere la proprietà. Un limite inferiore maggiore di uno certifica il requisito sull'insieme dichiarato; un limite superiore minore di uno lo esclude. Il margine non è il valore di $\mu$: per RS il legame è con l'inverso del suo massimo in frequenza.
 
-Il margine $m_{RS}$ esprime la massima scala degli scostamenti
-normalizzati prima della perdita di stabilità. Uno corrisponde
-all'intera famiglia dichiarata; un margine maggiore di uno consente
-anche di ampliarla. La scala moltiplica l'incertezza rispetto al
-nominale, non le matrici del controllore o tutti i valori nominali
-dei parametri. Poiché la ricerca strutturata è numerica, il risultato
-ha due estremi: \texttt{LowerBound} garantisce stabilità almeno fino
-a quella scala; \texttt{UpperBound} limita superiormente la scala
-critica, mediante una perturbazione destabilizzante trovata.
-
-Se il limite inferiore supera uno, la stabilità robusta è certificata
-nel dominio modellato. Se il limite superiore è minore di uno,
-esiste una criticità già entro quel dominio e RS è esclusa.
-Un intervallo che attraversa uno non consente di decidere rispetto
-alla soglia. Queste sono le regole usate nei risultati salvati.
-Il secondo output, \texttt{a.rsWorst}, descrive un'istanza critica
-dei blocchi; non è un nuovo campione casuale.
-
-\subsection{Prestazione robusta: RP}
-Anche se il sistema resta stabile, continua a contenere errore e
-comando al livello richiesto? Questa è la domanda della prestazione
-robusta: oltre alla stabilità, richiediamo
-$\|T_{zw}(\Delta)\|_\infty<1$ per tutta la famiglia. Una pianta
-stabile può comunque amplificare troppo le grandezze penalizzate.
-Per interpretare RP si può aggiungere un blocco fittizio di
-prestazione che richiude $z$ su $w$. Nel nostro problema è un
-blocco complesso pieno $\Delta_p$ di dimensione $4\times4$:
-non è un nuovo parametro fisico del robot.
-
+Per RP si introduce un blocco fittizio di prestazione che collega uscite pesate e ingressi esogeni. Non è un'ulteriore massa o un'incertezza fisica.
 \begin{figure}[htbp]\centering
-\resizebox{.8\textwidth}{!}{\input{figures/schemes/performance.tex}}
-\caption{Interpretazione di RP con il blocco fittizio $\Delta_p$.
-Le incertezze fisiche conservano la loro struttura.}
+\begingroup\newcommand{\SeaDeltaLabel}{struttura A oppure B}
+\resizebox{.73\linewidth}{!}{\input{figures/schemes/performance.tex}}\endgroup
+\caption{Stabilità e prestazione: il blocco di prestazione estende la struttura fisica.}
 \end{figure}
-Nel nostro progetto \texttt{robgain(a.CL,1)} riceve lo stesso modello
-\texttt{uss} ottenuto chiudendo $K$ sulla pianta generalizzata incerta.
-I quattro ingressi sono $[r_1,r_2,d_1,d_2]$ e le quattro uscite
-$[z_{e1},z_{e2},z_{u1},z_{u2}]$, con
-$z_e=W_e(q-M_or)$ e $z_u=W_uu$. Il livello verificato è uno,
-scelto per questa mappa e questi pesi: non è una percentuale di
-overshoot né il $\gamma$ nominale restituito dalla sintesi.
-Le chiamate effettive in \path{run_hinf_final_robust.m} sono
-\begin{lstlisting}
-[a.RS,a.rsWorst,a.rsInfo]=robstab(a.CL);
-[a.RP,a.rpWorst,a.rpInfo]=robgain(a.CL,1);
-\end{lstlisting}
-Il margine RP scala le incertezze fisiche mantenendo fissa la soglia
-di guadagno. Il limite inferiore garantisce il livello richiesto
-almeno fino a quella scala; quello superiore individua una scala
-alla quale un'istanza critica raggiunge o supera il livello.
-La lettura rispetto a uno è analoga a RS: limite inferiore sopra
-uno per una garanzia, superiore sotto uno per escluderla,
-intervallo a cavallo per un esito inconclusivo. Prima si deve
-verificare stabilità e prestazione nominali.
-
-Il secondo output \texttt{a.rpWorst} contiene i valori critici dei
-parametri reali e le realizzazioni dei blocchi dinamici. Sono valori
-effettivi dei blocchi, non direttamente i loro scostamenti normalizzati.
-La sostituzione \texttt{usubs(a.CL,a.rpWorst)} permette di verificarne
-la norma; il controllo è già conservato in \texttt{rpWorstActualNorm}.
-Non si confonde questa perturbazione con quella di \texttt{robstab}:
-una può violare prima il livello di prestazione, l'altra la stabilità.
-
-Il collegamento con $\mu$ riguarda la stessa struttura frequenziale.
-Per RS, nel contesto della chiusura $N_{11}$ e della scala uniforme
-dell'incertezza, il margine teorico è il reciproco del picco di $\mu$;
-minorazioni e maggiorazioni si scambiano passando al reciproco.
-Per RP si introduce anche il blocco fittizio $\Delta_p$. Il margine
-di \texttt{robgain(CL,1)} scala però i blocchi fisici lasciando
-fissato il livello prestazionale: non lo identifichiamo automaticamente
-con l'inverso del picco di $\mu$ ottenuto scalando tutti i blocchi,
-compreso $\Delta_p$. Né RS né RP sono l'inverso della sola norma nominale.
-\texttt{mussv} fornisce una lettura diretta per frequenza; i comandi
-di alto livello organizzano le verifiche sul sistema incerto completo.
-L'appendice riporta la definizione del problema LFT. I valori di questo
-capitolo si riferiscono alle realizzazioni dei controllori qui analizzati.
-
-\subsection{Esito del controllore nominale}
-Il controllore $H_\infty$ di ordine \FinalOrder\ supera NS e NP,
-ma il margine RS è
-\[
- m_{RS}\in[\FinalHRSLowerBound,\FinalHRSUpperBound],
- \qquad\omega_{\rm crit}\simeq\FinalHRSFrequency\ \mathrm{rad/s}.
-\]
-Entrambi gli estremi sono molto minori di uno. La frequenza è
-vicina ai modi elastici: suggerisce una compensazione nominale
-fragile in quella zona, senza identificare da sola un parametro
-responsabile. L'intervallo RP restituito è invece invertito,
-circa $[\FinalHRPLowerBound,\FinalHRPUpperBound]$, anche dopo la ricerca rinforzata
-\texttt{MussvOptions='m9'}. Non ne scambiamo gli estremi:
-la stima numerica del margine RP è non validata. RP è comunque
-esclusa dal fallimento RS, che è una sua condizione necessaria.
+Usiamo \texttt{robstab} per RS e \texttt{robgain} con soglia unitaria per RP. Se NP fallisce, RP è già esclusa dal nominale e il suo margine è zero. Se RS è esclusa, il suo limite superiore è anche un limite superiore per RP: la tabella segnala questo caso senza presentarlo come un risultato diretto di \texttt{robgain}.
 
 \section{Progettare per le incertezze: \texorpdfstring{$\mu$-synthesis}{mu-synthesis}}
-Finora abbiamo analizzato un controllore progettato sul nominale.
-La $\mu$-synthesis considera invece le incertezze mentre progetta il
-controllore. Nel progetto usiamo \texttt{musyn}, con iterazione D--K.
-Il procedimento alterna due problemi: a controllore fissato cerca
-gli scaling che descrivono le direzioni d'incertezza più critiche;
-con tali scaling fissati sintetizza un nuovo controllore $H_\infty$.
-Gli scaling devono essere approssimati con trasferimenti razionali
-per entrare nella successiva sintesi. Ripetiamo questa alternanza
-fino al criterio di arresto o al numero massimo di iterazioni.
-Con blocchi reali e dinamici si usano scaling D/G; D--K è il
-nome usuale del procedimento. L'alternanza non dimostra un
-ottimo globale. Le dinamiche del fit possono aumentare
-l'ordine del controllore.
+L'iterazione D--K alterna una sintesi $H_\infty$ con scaling fissati e una ricerca di scaling per il controllore ottenuto. Il fitting degli scaling li rende utilizzabili nella sintesi successiva. Il metodo non è una ricerca globale: il risultato dipende anche dal punto iniziale e dall'ordine dei fit.
 
-\begin{figure}[htbp]\centering
-\resizebox{.94\textwidth}{!}{\input{figures/schemes/dk.tex}}
-\caption{Iterazione di sintesi. Alla fine il controllore viene
-fissato e analizzato sulla pianta incerta originale.}
-\end{figure}
-La chiamata reale è
-\begin{lstlisting}
-[K,objective,info]=musyn(P,4,2,opts);
-\end{lstlisting}
-$P$ è qui la pianta generalizzata incerta 2-DoF; rimangono quattro
-segnali $[r;q]$ per il controllore e due comandi.
-È stata eseguita una campagna di cinque iterazioni, con
-\texttt{MixedMU='on'}, scaling D/G e griglia di 1201 frequenze
-fra $10^{-3}$ e $10^4$ rad/s. Opzioni e seed sono salvati
-insieme al risultato e riassunti nell'Appendice~\ref{app:matlab}.
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.85\textwidth]{figures/mu/dk_history.png}
-\caption{Picchi salvati di $\mu$ e delle rispettive approssimazioni
- dopo il fit. Sono risultati della sintesi e del fit degli scaling.}\label{fig:dkhistory}
-\end{figure}
-Il picco scende da circa 5.1412 a \FinalMuObjective;
-il controllore ottenuto ha ordine \FinalMuOrder.
-Il valore finale della sintesi, il picco dopo fit e la norma
-nominale sulla pianta originale sono quantità diverse.
-Non è stata eseguita una riduzione d'ordine.
+Eseguiamo una sintesi su A e una su B con gli stessi pesi, $M_o$, ingressi e tre iterazioni. Usiamo 121 frequenze fra $10^{-2}$ e $10^4$ rad/s, trattamento misto reale/complesso e ordini di fitting $[2,1]$. Il medesimo controllore fissato MuN1 inizializza entrambi i problemi. La ricerca resta limitata, per evitare un numero elevato di varianti difficili da interpretare.
+\input{generated/finale_dk.tex}
+Gli obiettivi ottenuti sono maggiori di uno. Non accreditiamo quindi una prestazione robusta raggiunta dalla sola sintesi. Ripetiamo la post-analisi continua sui due insiemi per ciascun candidato e riportiamo anche l'ordine: gli scaling possono far crescere molto il numero di stati, anche con pochi passi D--K.
 
 \section{Post-analisi e confronto finale di robustezza}
-La sintesi ha proposto un controllore; per valutarlo lo ricolleghiamo
-alla pianta incerta originale. Verifichiamo che nominale, pesi e
-blocchi siano gli stessi e ripetiamo le verifiche di stabilità e
-prestazione. Questo passaggio impedisce di trattare l'obiettivo
-interno dell'iterazione come una garanzia già acquisita sul robot.
+\input{generated/finale_robustezza.tex}
+LQG e LQGI conservano RS nei due modelli, pur non soddisfacendo il costo NP comune. Per Hinf1 la descrizione concentrata porta a un esito RS più restrittivo. Hinf2 e PID sono nominalmente prestazionali, ma la stabilità non resiste all'intero insieme dichiarato. I candidati D--K mostrano i limiti della ricerca eseguita e non diventano automaticamente i controllori preferiti.
 
-\begin{table}[htbp]\centering\small
-\begin{tabular}{lcc}\toprule
-Quantità & $H_\infty$ 2-DoF & $K_\mu$ 2-DoF\\\midrule
-Ordine & \FinalOrder & \FinalMuOrder\\
-NS & soddisfatta & soddisfatta\\
-Norma nominale & \FinalGamma & \FinalMuGamma\\
-NP & soddisfatta & soddisfatta\\
-Margine RS & $[\FinalHRSLowerBound,\FinalHRSUpperBound]$ & $[\FinalMuRSLowerBound,\FinalMuRSUpperBound]$\\
-Esito RS & non soddisfatta & soddisfatta\\
-Margine RP & intervallo non valido & $[\FinalMuRPLowerBound,\FinalMuRPUpperBound]$\\
-Esito RP & esclusa da RS & soddisfatta\\
-$\omega_{RS}$ [rad/s] & \FinalHRSFrequency & 61.96\\
-$\omega_{RP}$ [rad/s] & non accreditata & 9.85\\\bottomrule
-\end{tabular}
-\caption{Confronto sullo stesso modello incerto e sugli stessi pesi.
-Gli intervalli sono limiti del margine.}
-\end{table}
+I margini di A e B non sono misure sulla stessa geometria oltre il raggio unitario. A espande intervalli di parametri reali; B espande anche dinamiche arbitrarie pesate. Inoltre la copertura di B è verificata sui casi dichiarati, senza prova globale del box A. Per queste ragioni confrontiamo gli esiti senza trasferire una garanzia da una rappresentazione all'altra.
 \begin{figure}[htbp]\centering
-\includegraphics[width=.94\textwidth]{figures/final_simulink/robust_margins_R2026b.png}
-\caption{Margini rispetto alla soglia uno. L'intervallo RP non
-valido del controllore nominale non è disegnato come garanzia.}
+\includegraphics[width=.97\linewidth]{figures/definitiva/robustezza.png}
+\caption{Margini inferiori RS e andamento D--K; la linea unitaria indica la soglia normalizzata.}
 \end{figure}
-Per $K_\mu$ il limite inferiore RS è circa 1.80: copre l'intera
-incertezza normalizzata e una sua amplificazione. Il limite inferiore
-RP è circa 1.68, più piccolo: la prestazione pesata diventa critica
-prima della stabilità, ma entrambi coprono il dominio unitario.
-Questi sono margini, non valori di $\mu$. I limiti inferiori superano
-uno, dunque il controllore
-soddisfa NS, NP, RS e RP per il modello lineare incerto dichiarato.
-La norma nominale \FinalMuGamma\ è peggiore di quella del comparatore
-$H_\infty$, ma la proprietà è mantenuta sull'intero dominio modellato.
-Il prezzo è l'ordine 78 e un tracking ancora oltre il target:
-$T_s=1.522,1.478$ s; sul primo giunto l'errore statico è circa 6\%,
-sopra il 5\% richiesto. RP e requisiti temporali sono distinti.
-
-La prova pratica del Capitolo 11 confronta il nominale e dieci impianti
-incerti comuni. L'inviluppo di 120 attuatori e questi impianti chiusi
-servono a scopi diversi: il primo costruisce il modello dinamico incerto,
-i secondi ne mostrano l'effetto in anello chiuso. Il campionamento non
-sostituisce i margini robusti. Le prove non lineari e di rumore non
-estendono RS/RP all'hardware o a fenomeni esclusi dal modello.
-
-\section{Seconda D--K: la stessa famiglia con misura rumorosa}
-La nuova pianta usa $q+W_n\nu$. Il rumore è esogeno; rimangono le
-cinque incertezze originali. Una sola nuova \texttt{musyn(P,4,2)} usa
-$W_n=\sigma_y I_2$, seed 20261013 e opzioni consolidate: MixedMU,
-FullDG, FitOrder $[5,2]$, cinque iterazioni massime, tolleranza 0.01
-e la stessa griglia di 1201 frequenze.
-
-MuN1 ha ordine 82 e obiettivo D--K 0.87439. La post-analisi indipendente
-fornisce norma nominale 0.67346, RS $[1.84622,1.88174]$ e RP
-$[1.59634,1.60036]$. Sul problema precedente RP è
-$[1.59623,1.60042]$: nessun certificato del primo Kmu è trasferito.
-\texttt{mussv} usa il blocco fittizio di prestazione $6\times4$, con sei
-esogeni e quattro prestazioni. I massimi upper RS/RP sulla griglia sono
-0.53908/0.77503; i margini adattivi restano verifiche distinte.
-\input{generated/noise_redesign_synthesis.tex}
-
-L'attenuazione migliora molto, ma i target temporali restano parziali:
-$T_s=1.558,1.482$ s ed errori $8.243\%,2.192\%$. L'offset q1 peggiora
-rispetto a circa 6\% della baseline, insieme a una moderata perdita
-di reiezione nominale della coppia. RP resta sopra uno, pur diminuendo.
-MuN1 è una proposta robusta verificata con compromessi; la baseline
-resta predefinita e l'adozione finale spetta agli studenti.
-
-\subsection{Perché i controllori $H_\infty$ e $\mu$ possono avere un ordine elevato}
-L'ordine è il numero degli stati interni, distinto dall'ampiezza del comando
-$u$. La pianta completa ha 14 stati e la pianta generalizzata aggiunge le
-dinamiche dei pesi e del modello desiderato. Nel problema 2-DoF adottato
-l'interconnessione ha 22 stati e il controllore $H_\infty$ selezionato ne
-ha 22; la sintesi a ordine pieno non riguarda soltanto gli otto stati
-meccanici. Per $K_\mu$ l'ordine verificato è 78 nella prima formulazione e
-82 in MuN1: i fit dinamici degli
-scaling della D--K iteration aumentano la complessità del problema scalato.
-Il totale non va attribuito automaticamente ai soli parametri incerti.
-Un ordine elevato non implica un controllore instabile, ma richiede più
-memoria e calcolo e può peggiorare il condizionamento. In teoria si possono
-valutare riduzione bilanciata, eliminazione motivata di dinamiche
-trascurabili, approssimazioni ridotte, \texttt{hinfstruct} o scaling di
-ordine minore. Qui non applichiamo riduzioni: ogni variante richiederebbe
-nuove verifiche nominali, robuste e del rumore.
-
-\section{Riferimenti per i comandi MATLAB}
-Le convenzioni sono documentate da MathWorks per
-\href{https://www.mathworks.com/help/robust/ref/inputoutputmodel.lftdata.html}{\texttt{lftdata}},
-\href{https://www.mathworks.com/help/robust/ref/dynamicsystem.robstab.html}{\texttt{robstab}},
-\href{https://www.mathworks.com/help/robust/ref/dynamicsystem.robgain.html}{\texttt{robgain}},
-\href{https://www.mathworks.com/help/robust/ref/mussv.html}{valore singolare strutturato}
- e \href{https://www.mathworks.com/help/robust/ug/d-k-iteration-process.html}{iterazione D--K}.
-Strutture, numeri e conclusioni derivano dai dati del nostro
-repository, tracciati nelle appendici.

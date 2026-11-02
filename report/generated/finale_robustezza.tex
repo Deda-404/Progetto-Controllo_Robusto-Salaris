@@ -1,0 +1,21 @@
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrr}\toprule
+Controllore & A/B & Norma nominale & Margine RS & Margine RP\\\midrule
+LQG & A & \num{2.16} & [\num{1.459}, \num{1.479}] & 0 (NP)\\
+LQG & B & \num{2.16} & [\num{1.197}, \num{1.2}] & 0 (NP)\\
+LQGI & A & \num{1.324} & [\num{1.418}, \num{1.438}] & 0 (NP)\\
+LQGI & B & \num{1.324} & [\num{1.155}, \num{1.157}] & 0 (NP)\\
+Hinf1 & A & \num{2.163} & [\num{1.337}, \num{1.388}] & 0 (NP)\\
+Hinf1 & B & \num{2.163} & [\num{0.9485}, \num{0.9504}] & 0 (NP)\\
+Hinf2 & A & \num{0.03558} & [\num{0.05535}, \num{0.05567}] & $\leq$\num{0.05567} (RS)\\
+Hinf2 & B & \num{0.03558} & [\num{0.03714}, \num{0.03721}] & $\leq$\num{0.03721} (RS)\\
+PID & A & \num{0.8159} & [\num{0.2522}, \num{0.2534}] & $\leq$\num{0.2534} (RS)\\
+PID & B & \num{0.8159} & [\num{0.2004}, \num{0.2008}] & $\leq$\num{0.2008} (RS)\\
+Mu\_A & A & \num{6.654} & [\num{2.531}, \num{2.642}] & 0 (NP)\\
+Mu\_A & B & \num{6.654} & [\num{1.78}, \num{1.784}] & 0 (NP)\\
+Mu\_B & A & \num{1.481} & [\num{2.565}, \num{2.826}] & 0 (NP)\\
+Mu\_B & B & \num{1.481} & [\num{1.951}, \num{1.955}] & 0 (NP)\\
+\bottomrule\end{tabular}
+\caption{Margini robusti: soglia unitaria. NP indica esclusione già sul nominale; RS indica un limite superiore dedotto dalla perdita di stabilità. Non sono misure dirette di RP.}
+\end{table}

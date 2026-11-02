@@ -2398,3 +2398,9 @@ Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferi
 
 ## 2026-11-02 — Semplificazione e allineamento Simulink
 Il percorso accorpato resta unico. matrici_sea condivide le equazioni e controllori_sea evita elenchi incoerenti. La RAS riguarda solo i sette controllori correnti; le prove fissate restano nel confronto lineare. Gli otto SLX non sono duplicati né salvati: il runner aggiorna in memoria la massa effettiva nei generatori incorporati, i due drive, i guadagni e gli stati iniziali. Confrontate numericamente le funzioni meccaniche usate dai MATLAB Function con matrici_sea per ogni massa. Venti run di 2 s PASS con stati e Scope finiti; parametri e massa salvati. Cache coerenti anche nel formato della consegna. Quality gate COMPLETE/PASS; questo collaudo non certifica i target prestazionali.
+
+
+## 2026-11-02 — Riscrittura didattica della relazione
+Riscritti i 13 capitoli e le quattro appendici sul percorso fisico corrente: carico, ritardo, A/B, specifiche, controllori, robustezza, non lineare, campioni e conclusioni. Eliminati cronache delle versioni, matrici estese, ricerche ripetitive e trattazione sproporzionata di Lyapunov; conservati LFT, Kalman, azione integrale, mixed sensitivity, PID, D-K e tutte le distinzioni scientifiche necessarie. Tabelle e formule provengono da CSV/JSON tramite l’esportatore aggiornato. Risultati negativi preservati, inclusi offset e rumore dei candidati robusti.
+
+PDF di 49 pagine, indice con 13 capitoli e quattro appendici, riferimenti e numerazione compilati. Nessun warning, overfull o riferimento irrisolto; controllo visivo sulle pagine renderizzate. Testo finale privo dei termini di cronaca vietati. Quality gate COMPLETE/PASS. La documentazione tecnica conserva la provenienza fuori dalla relazione.

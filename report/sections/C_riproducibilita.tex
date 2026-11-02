@@ -1,57 +1,24 @@
 \chapter{Riproducibilità}
 \section{Verifiche senza ripetere le sintesi}
-Dalla radice oppure dalla cartella estratta, in MATLAB R2026b:
-\begin{verbatim}
-run_all
-% oppure:
+La consegna autonoma contiene gli stessi sorgenti del repository, i controllori ottenuti, i dati necessari e gli otto SLX. Dopo aver estratto lo ZIP e selezionato la cartella in MATLAB si esegue
+\begin{lstlisting}
 run_all('rapida')
-\end{verbatim}
-Servono Control System Toolbox e Robust Control Toolbox; il collaudo SLX
-richiede Simulink. La modalita rapida carica i controllori congelati e
-le analisi robuste/RAS della campagna completa, dichiarandolo nel log.
-Ricalcola nominale, campioni, peso, CARE, controlli essenziali e confronti.
-Le matrici non dipendono da un Workspace preparato manualmente.
+\end{lstlisting}
+Sono richiesti Control System Toolbox e Robust Control Toolbox; per i collaudi dei modelli serve anche Simulink. L'ambiente verificato è MATLAB R2026b. Non sono richiesti accesso al repository, Python o variabili preesistenti nel Workspace.
+
+La modalità rapida ricostruisce meccanica, incertezze, peso e campioni, sintetizza LQG e LQGI e ripete i confronti temporali e sul rumore. Carica esplicitamente le sintesi $H_\infty$/D--K, l'analisi robusta e la RAS della campagna completa, verificandone configurazione e identità dei controllori. Ripete anche una simulazione locale LQG. Un risultato caricato non viene indicato come nuova sintesi.
 
 \section{Esperimenti MATLAB}
-\begin{verbatim}
+Per ripetere le sintesi, la robustezza, le 105 prove RAS, le altre simulazioni non lineari e Simulink si usa
+\begin{lstlisting}
 run_all('completa')
-\end{verbatim}
-Rigenera le sintesi H-infinity, il PID con tre avvii, le due D--K con
-tre iterazioni, la post-analisi A/B, le prove non lineari, la RAS e
-il collaudo Simulink. I parametri e il seme sono in
-\path{parametri_sea.m}; ogni script accorpato e eseguibile direttamente.
-La banca storica non viene sovrascritta. I CSV distinguono i fallimenti
-scientifici da errori software e da prove non eseguite.
+\end{lstlisting}
+I parametri modificabili sono centralizzati in \texttt{parametri\_sea.m}. Una firma numerica impedisce di usare risultati incompatibili con il modello o con i pesi. La modalità completa può richiedere diversi minuti; il tempo maggiore è assorbito dalla D--K e dall'analisi robusta.
+
+Nel repository i cinque test di \texttt{tests/seaFinaleTest.m} verificano in modo indipendente equilibrio, Jacobiano, identità del carico puntiforme, coerenza energetica e ricostruzione A/B. Il comando \texttt{verifica\_sea} ripete i controlli essenziali anche nella consegna.
 
 \section{Gli originali Simulink}
-\begin{verbatim}
-addpath('File_di_Funzioni_Progetto-Accorpati')
-collaudo_simulink
-\end{verbatim}
-Nella consegna gli script sono gia nella radice.
-Gli otto SLX sono mantenuti; il Model Workspace riceve matrici e
-controllori in memoria prima della compilazione. \texttt{SimulationInput}
-fornisce il bus ed esclude la callback che reimposterebbe il nominale
-e seleziona separatamente i due attuatori. Gli override appartengono alla
-prova e non riscrivono gli SLX. Il collaudo registra configurazione,
-orizzonte e segnali, distinguendo il modello lineare dal non lineare.
-Sono stati eseguiti 28 run di 2 s, con stati finiti e Scope acquisiti:
-nominale e primo campione per gli otto SLX, piu MuN1, Mu\_A e Mu\_B
-nei due modelli mu. Le curve archiviate sono estratti fino a 2000 punti;
-picchi e controllo di finitezza usano i campioni integrali.
-Il modello H-infinity lineare conserva il feedback ideale degli originali;
-non certifica l'attenuazione del rumore encoder. I protocolli Scope e
-MATLAB non vanno confrontati come se avessero gli stessi ingressi.
+Il comando \texttt{collaudo\_simulink} prepara i parametri, aggiorna in memoria i generatori incorporati e acquisisce gli Scope. I modelli su disco conservano la loro struttura; il runner applica nominale e primo campione comune. Aprire un modello isolatamente non riproduce questi override. Gli estratti delle curve salvate sono diradati, mentre i controlli di finitezza e i picchi usano l'acquisizione integrale.
 
 \section{Compilazione e consegna}
-\path{tools/esporta_definitiva.py} genera tabelle dalle evidenze reali
-e copia le figure negli elaborati. I PDF mantengono i nomi originali.
-\path{tools/consegna_definitiva.py} seleziona gli stessi sorgenti,
-i dati indispensabili, gli otto SLX e i due PDF; genera cartella e ZIP.
-Il collaudo da estrazione esterna al repository verifica l'autonomia.
-I sorgenti storici in \path{src}, \path{analysis}, \path{controllers}
-e i risultati M4 sono conservati come archivio, fuori dal percorso
-operativo e dalla consegna. Non costituiscono una seconda implementazione
-da eseguire. La durata orale prevista resta entro 20 minuti;
-la stima testuale e 17:42 inclusi i cambi slide. La verifica dal vivo
-rimane \texttt{NOT RUN}.
+Nel repository \texttt{tools/esporta\_definitiva.py} aggiorna tabelle e figure dai dati MATLAB. Relazione e slide sono compilate dai rispettivi \texttt{main.tex}. Lo script \texttt{tools/consegna\_definitiva.py} copia i sorgenti autorevoli, i dati coerenti e i PDF in un solo ZIP e ne verifica gli hash SHA-256. Il collaudo da una cartella estratta esterna al repository controlla che l'esecuzione non dipenda da percorsi di sviluppo.

@@ -1,111 +1,28 @@
 \chapter{Verifica pratica della robustezza su impianti incerti}
 \section{Scopo e costruzione degli impianti}
+Le prove campionate mostrano in modo diretto che cosa significa cambiare i parametri fisici. Usiamo dieci settuple $(\omega_{n1},\zeta_1,\tau_{d1},\omega_{n2},\zeta_2,\tau_{d2},m_{EE})$, estratte una sola volta con seed 20261101. Tutti i controllori ricevono gli stessi impianti, oltre al nominale. I valori sono conservati nel file \texttt{parametri\_dieci\_impianti.csv}.
 
-\paragraph*{Campagna corrente sui dieci impianti fisici.}
-Il seme 20261031 campiona i quattro parametri reali di A.
-Le medesime dieci quadruple vengono usate per ogni controllore, oltre
-al nominale. Non si campionano nuove dinamiche arbitrarie in B per
-sostituire questi impianti: B deve essere confrontato sulla stessa
-fisica di A. Per ciascun caso si riportano poli, stabilita, errore
-statico, assestamento, overshoot, risposta al disturbo e comando.
-Un caso instabile non riceve metriche prestazionali finite inventate.
-\input{generated/definitiva_impianti.tex}
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{figures/definitiva/dieci_impianti.png}
-\caption{Tracking sui medesimi dieci impianti piu nominale.
-Le curve sono omesse quando il chiuso e instabile.}
-\end{figure}
-Queste dieci variazioni fisiche sono distinte dalle quindici condizioni
-iniziali della RAS. I conteggi sono evidenza empirica, non probabilita.
-\paragraph*{Precedente campagna M4, conservata per provenienza.}
-Le realizzazioni e i risultati del testo seguente appartengono al
-precedente insieme misto e non vengono rinominati come campioni A/B.
-
-Per rendere concreto il significato di robustezza abbiamo generato dieci
-impianti dall'insieme incerto, oltre al nominale. Non stimiamo una
-probabilità di successo: osserviamo come lo stesso controllore reagisce
-quando parametri e dinamiche non coincidono con i valori nominali.
-La prova risponde al punto 5 della traccia del docente.
-
-Si usa il modello incerto dei Capitoli 4--5: $k_1\in[45,55]$ e
-$k_2\in[36,44]$ N m/rad, $J_{m1}\in[0.009,0.011]$ kg m$^2$ e i due
-blocchi dinamici indipendenti $\Delta_{a1},\Delta_{a2}$ nell'inviluppo
-attuativo adottato. I parametri fisici cambiano nell'interconnessione
-incerta, senza perturbare arbitrariamente le matrici $A$ e $B$.
-\texttt{usample} con seed 20261012 e \texttt{twister} genera dieci
-realizzazioni condivise da $H_\infty$ 2-DoF e $K_\mu$.
-Il replay deve restituire esattamente le stesse realizzazioni.
-\input{generated/final_plants_table.tex}
-I due blocchi dinamici campionati hanno tre stati ciascuno e norma
-$H_\infty$ non superiore a uno. Le loro matrici complete sono salvate
-insieme alle piante; il campionamento è una scelta esplorativa entro il
-modello ammesso e non introduce nuovi intervalli di incertezza.
+Non campioniamo una seconda popolazione arbitraria di B. Per ogni impianto fisico ricaviamo invece le perturbazioni additive normalizzate che ricostruiscono esattamente i suoi drive, mantenendo identico il carico. La risposta a controllore fissato è allora unica: A e B cambiano la descrizione della famiglia, non l'impianto che viene simulato.
 
 \section{Stabilità interna prima delle prestazioni}
-Per ogni impianto si costruisce l'anello chiuso completo, senza riduzioni
-che possano cancellare modi interni. I poli sono verificati prima di
-simulare tracking e disturbi. $H_\infty$ 2-DoF stabilizza il nominale,
-ma nessuno dei dieci impianti incerti; $K_\mu$ stabilizza il nominale e
-tutti e dieci. Questi conteggi riguardano precisamente la campagna qui
-descritta, non una frequenza di affidabilità fisica.
-\begin{figure}[htbp]\centering
-\includegraphics[width=.94\textwidth]{figures/final_closure/practical_comparison.png}
-\caption{A sinistra il polo dominante di ogni chiusura; a destra il numero
-di impianti incerti stabili. Il caso 0 è nominale. I campioni instabili
-sono mostrati separatamente dalle risposte delle chiusure stabili.}
-\end{figure}
+Controlliamo i poli della realizzazione completa prima di misurare il tracking. Per un caso instabile lasciamo le metriche temporali non definite e riportiamo il fallimento; non lo eliminiamo dal conteggio. I massimi di errore e coppia nelle tabelle sono calcolati sui casi stabili, specificandone il numero.
+\input{generated/finale_impianti.tex}
+Dieci successi sono un'evidenza utile, ma non dimostrano robustezza su un continuo di parametri. Al contrario, un solo caso instabile basta a escludere la stabilità dell'intera famiglia. Per questo affianchiamo sempre le simulazioni alla $\mu$-analysis.
 
 \section{Tracking e accoppiamento tra giunti}
-Applichiamo due gradini separati di 5 gradi, con stato iniziale nullo,
-orizzonte di 4 s e passo di osservazione 2 ms. L'assestamento usa una fascia
-del 2\% dell'ampiezza del riferimento attorno al valore DC analitico;
-overshoot, errore finale e accoppiamento restano indicatori distinti.
-Un tempo finito attorno al valore DC non significa tracking esatto.
+Applichiamo separatamente gradini di $5^\circ$ e misuriamo assestamento, sovraelongazione, errore DC e massimo movimento del giunto non comandato. La tabella nominale rende visibile il compromesso senza confondere le specifiche temporali con il costo pesato.
+\input{generated/finale_temporali.tex}
 \begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_closure/practical_tracking.png}
-\caption{Tracking del nominale e dei dieci campioni stabili con $K_\mu$,
-confrontato con $H_\infty$ 2-DoF nominale. Le curve chiare sono i campioni;
-non sono presenti risposte temporali accreditate per $H_\infty$ instabile.}
+\includegraphics[width=.97\linewidth]{figures/definitiva/dieci_impianti.png}
+\caption{Risposta del primo giunto: nominale e dieci impianti comuni nei casi stabili, riferimento di $5^\circ$. Le metriche comprendono entrambi i giunti.}
 \end{figure}
+L'azione integrale protegge la precisione statica, ma il tempo di assestamento rimane una richiesta distinta. Anche un controllore nominalmente preciso può perdere stabilità quando il ritardo cambia. Le risposte rendono quindi leggibile ciò che i soli margini non mostrano: quanto il risultato si disperde nella famiglia fisica.
 
 \section{Reiezione della coppia lato link}
-Il riferimento è nullo; a 1 s applichiamo una coppia costante di 0.5 N m
-su un link alla volta e osserviamo la risposta fino a 8 s. Il disturbo entra
-nell'equazione dei link e non viene confuso con un comando ai motori.
-Misuriamo deviazione massima, residuo finale, picco e RMS del comando.
-Il recupero è l'ingresso definitivo nella fascia $\pm0.5^\circ$ attorno
-all'equilibrio dopo l'applicazione della coppia: se non avviene entro
-l'orizzonte viene indicato come non raggiunto. Il residuo a 8 s non è un
-guadagno DC e un disturbo costante può lasciare uno scostamento.
-\begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_closure/practical_disturbance.png}
-\caption{Deviazioni articolari con coppia link di 0.5 N m dal tempo 1 s.
-Nominali e campioni stabili usano gli stessi scenari e le stesse unità.}
-\end{figure}
-\input{generated/final_practical_table.tex}
-\input{generated/final_practical_disturbance_table.tex}
+Il disturbo di 0.5 N m viene applicato a un link alla volta, senza attraversare il drive. Riportiamo il massimo spostamento e il tempo di rientro entro $0.5^\circ$. Se l'errore rimane fuori dalla banda fino a 12 s, il recupero è segnato come non raggiunto nell'orizzonte. La coppia richiesta dal controllore è sempre valutata a monte del drive.
+\input{generated/finale_disturbo.tex}
 
-\section{Interpretazione e collegamento con la $\mu$-analysis}
-Il confronto mette in evidenza il compromesso: sul nominale il controllore
-$H_\infty$ presenta una norma pesata e alcune risposte più favorevoli,
-ma non mantiene la stabilità quando l'impianto varia nella famiglia
-campionata. $K_\mu$ conserva la stabilità e mostra la dispersione delle
-prestazioni nelle figure; il rispetto dei target temporali va comunque
-letto nelle metriche, senza dedurlo dalla sola stabilità.
+\section{Interpretazione e collegamento con la \texorpdfstring{$\mu$-analysis}{mu-analysis}}
+La descrizione parametrica conserva le correlazioni fra coefficienti causate dalla stessa massa e dallo stesso ritardo. La descrizione concentrata consente invece molte dinamiche che non corrispondono a un drive fisico della famiglia campionata. Un margine inferiore in B può essere il prezzo di questa maggiore libertà; non dimostra che il manipolatore reale sia cambiato.
 
-Dieci impianti non coprono tutte le perturbazioni ammissibili. Il loro
-comportamento fornisce una verifica pratica, mentre i margini RS/RP del
-Capitolo 9 riguardano l'intero modello strutturato dichiarato. Il campione
-conferma l'utilità del confronto robusto, senza sostituire la post-analisi
-o estendere le garanzie a non linearità, saturazioni e fenomeni non modellati.
-
-\section{Candidati con rumore sugli stessi impianti}
-Le figure precedenti restano quelle della prima formulazione. Per
-HinfN3/MuN1 riutilizziamo gli stessi dieci oggetti congelati, senza
-rigenerare parametri o blocchi dinamici. Nominale e campioni affrontano
-gradini di 5 gradi e coppie link di 0.5 N m. HinfN3 stabilizza 6/10
-campioni; le prestazioni dei quattro instabili sono escluse. MuN1
-mantiene 10/10 stabili, coerentemente con RS. Assestamento e offset
-rimangono indicatori autonomi, senza dedurli dalla stabilità.
-I dati per ogni giunto e impianto sono nella campagna dedicata;
-il confronto nominale è nel Capitolo 10.
+Il confronto finale tiene insieme quattro elementi: esito nominale, margini robusti, comportamento sugli impianti comuni e sensibilità al rumore. Nessuno dei quattro, preso isolatamente, descrive completamente il controllore.

@@ -1,9 +1,6 @@
-﻿STATUS=PASS
-JOB=Progetto_CR_Relazione_finale
-ERRORS=0
-UNRESOLVED_REFERENCES=0
-OVERFULL_HBOX=0
-OVERFULL_VBOX=0
-DUPLICATE_DESTINATIONS=0
-Pages:           108
-PDF=C:\Users\aless\OneDrive - University of Pisa\Documenti\ChatGPT\Progetto_CR&IS\Progetto_CR_finale\report\Progetto_CR_Relazione_finale.pdf
+PDF finale con carico, 2026-11-02
+Pagine: 49
+Warning: 0
+Overfull: 0
+Riferimenti irrisolti: 0
+Controllo visivo: completato

@@ -1,3 +1,9 @@
+# Stato corrente — 02.11.2026, relazione verificata
+
+Relazione 49 pagine COMPLETE/PASS: struttura conservata, numeri collegati ai dati, PDF controllato. Campagna numerica e Simulink verificati; pacchetto estratto in collaudo e pubblicazione da completare.
+
+---
+
 # Stato corrente — 02.11.2026, semplificazione e allineamento simulink
 
 Il percorso accorpato resta unico. matrici_sea condivide le equazioni e controllori_sea evita elenchi incoerenti. La RAS riguarda solo i sette controllori correnti; le prove fissate restano nel confronto lineare. Gli otto SLX non sono duplicati né salvati: il runner aggiorna in memoria la massa effettiva nei generatori incorporati, i due drive, i guadagni e gli stati iniziali. Confrontate numericamente le funzioni meccaniche usate dai MATLAB Function con matrici_sea per ogni massa. Venti run di 2 s PASS con stati e Scope finiti; parametri e massa salvati. Cache coerenti anche nel formato della consegna. Quality gate COMPLETE/PASS; questo collaudo non certifica i target prestazionali.

@@ -1,0 +1,14 @@
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}\toprule
+Controllore & $T_s$ [s] & $M_p$ [\%] & $e_{ss}$ [\%] & Cross [\%] & Target\\\midrule
+LQG & \num{0.731} & \num{0.346} & 0 & \num{18.4} & PASS\\
+LQGI & \num{5.15} & \num{0} & 0 & \num{4.24} & FAIL\\
+Hinf1 & \num{1.55} & \num{136} & \num{14.9} & \num{44.8} & FAIL\\
+Hinf2 & \num{1.94} & \num{0} & \num{0.111} & \num{0.883} & PASS\\
+PID & \num{5} & \num{4.74} & 0 & \num{34.5} & FAIL\\
+Mu\_A & $\infty$ & \num{0} & \num{99.8} & \num{0.0185} & FAIL\\
+Mu\_B & \num{4.39} & \num{0} & \num{21.9} & \num{3.98} & FAIL\\
+\bottomrule\end{tabular}
+\caption{Nominale con carico: target simultanei 2 s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.}
+\end{table}

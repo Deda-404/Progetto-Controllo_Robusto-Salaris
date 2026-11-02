@@ -1,81 +1,24 @@
 \chapter{Confronto finale e scelta per ruolo}
+Il confronto non individua un controllore che soddisfi contemporaneamente ogni obiettivo. Le famiglie mettono in evidenza compromessi diversi, che diventano più chiari quando massa e ritardi variano insieme.
 
-\paragraph*{Confronto corrente delle due rappresentazioni.}
-A e la descrizione piu diretta delle variazioni fisiche: quattro scalari
-reali mantengono frequenza naturale, smorzamento e dipendenze ripetute.
-B offre una descrizione compatta con due blocchi dinamici SISO e un
-peso semplice, ma ammette dinamiche non fisiche e la copertura globale
-del box non e stata dimostrata. E utile per la sintesi e per leggere
-il ruolo della frequenza; A rimane il riferimento fisico della campagna.
+LQG stabilizza in modo robusto entrambe le rappresentazioni e limita bene il comando prodotto dal rumore. Il prefiltro offre precisione sul nominale, ma non corregge automaticamente l'offset dovuto a un carico diverso o a una coppia costante. È una soluzione utile per mostrare il ruolo dello stato stimato e il limite di un inseguimento senza integrazione.
 
-A controllore fissato, nominale e risposte sui medesimi impianti sono
-identici. Cambiano i margini e la famiglia rispetto alla quale valgono.
-Hinf2 e PID storici sono fragili in entrambi; LQG e LQGI sono RS ma
-non soddisfano il costo NP comune; Kmu e MuN1 superano RS/RP.
-Per le sintesi dedicate il candidato A non raggiunge NP nel budget
-dichiarato, mentre B raggiunge RP, con ordine inferiore. Il comando
-rumoroso di B e pero molto elevato. La maggiore garanzia pesata non
-e quindi un miglioramento operativo generale.
+LQGI aggiunge soltanto due stati e mantiene la stabilità robusta. L'integratore corregge l'errore misurato nei casi stabili e rende il tracking meno sensibile alla massa. Il prezzo osservato è il tempo di assestamento, che supera il target scelto. Per un compito di posizionamento lento e preciso è il candidato più comprensibile da approfondire, senza dichiararlo già conforme a tutte le specifiche.
 
-MuN1 conserva un compromesso utile fra robustezza e rumore; Kmu rimane
-il comparatore robusto consolidato e LQG quello nominale. Le tabelle
-dei Capitoli 9--11 permettono di scegliere secondo l'esigenza,
-senza una classifica universale e senza allentare i target M5.
-\paragraph*{Confronto storico M4, con il proprio dominio di validita.}
-La tabella e la discussione seguenti conservano i risultati precedenti.
-I conteggi e i margini qui citati non sono quelli della nuova campagna.
+Hinf1 mostra come la sensibilità mista controlli trasferimenti pesati senza garantire una buona forma del transitorio. Passare alla struttura 2-DoF permette a Hinf2 di seguire molto meglio il modello desiderato sul nominale. Tuttavia il suo margine robusto è piccolo e il rumore genera coppie molto elevate. La piccola norma nominale è quindi un risultato matematico corretto, ma insufficiente a motivarne l'uso.
 
-La scelta finale distingue prestazioni nominali, robustezza rispetto al
-modello incerto e fattibilità implementativa. Un'unica classifica basata sulla
-norma pesata nasconderebbe proprio il limite emerso nel progetto.
+Il PID strutturato contiene pochi stati e conserva una legge facilmente riconoscibile. Ottiene NP sul costo comune, ma non RS. La semplicità della struttura non elimina l'accoppiamento del braccio né il ritardo dei drive: i due canali diagonali hanno una libertà limitata per affrontarli.
 
-\begin{table}[htbp]\centering\small
-\begin{tabular}{lccc}\toprule
-Proprietà & LQG & H-infinity 2-DoF & Kmu 2-DoF\\\midrule
-Ordine & 14 & 22 & 78\\
-NS & PASS & PASS & PASS\\
-NP sul proprio problema & non confrontata & PASS & PASS\\
-Tracking nominale & PASS & FAIL & FAIL\\
-RS & non certificata & FAIL & PASS\\
-RP sul problema corrente & non valutata & FAIL per RS & PASS\\
-Impianti incerti stabili (Cap. 11) & non valutato & 0/10 & 10/10\\\bottomrule
-\end{tabular}
-\caption{Confronto dei controllori. Gli intervalli robusti sono riportati nel Capitolo 9.}
-\end{table}
+La D--K incorpora direttamente la struttura incerta, ma il problema non è convesso e gli scaling aumentano l'ordine. Le due sintesi eseguite con uguali pesi e inizializzazione non raggiungono l'obiettivo robusto unitario. Mu\_A lascia un errore DC di circa il 99.8\%, mentre Mu\_B lascia circa il 21.9\% e amplifica il rumore fino a un picco osservato di circa 762 N m. Entrambi mantengono RS, ma queste prestazioni non ne motivano l’adozione. Il confronto rimane utile perché mostra quanto una descrizione più ricca o più libera possa cambiare la ricerca. Non scegliamo un candidato soltanto perché proviene da una sintesi robusta.
 
-LQG rimane il riferimento per il tracking nominale delle specifiche temporali. H-infinity 2-DoF
-rimane il comparatore della sintesi nominale: mostra che il model following
-può eliminare l'enorme overshoot della struttura 1-DoF, ma la sua
-fragilità incerta e l'amplificazione del rumore ne impediscono l'adozione
-come controllore robusto operativo. Il buon gradino nominale non compensa
-questi fallimenti.
+\section{Che cosa offre la rappresentazione parametrica}
+A conserva il significato di ogni variazione. Una massa più grande modifica insieme inerzia e gravità; un ritardo più grande sposta insieme il polo e lo zero di Padé. Questa correlazione evita che l'analisi combini coefficienti fisicamente incompatibili. È la descrizione naturale quando gli intervalli dei parametri sono noti e il modello fisico è credibile.
 
-Kmu assume il ruolo di candidato robusto sul dominio incerto, grazie a margini
-RS e RP maggiori di uno verificati indipendentemente dalla sintesi.
-Rimangono il costo di ordine 78, il fallimento delle specifiche temporali per assestamento e offset,
-e l'assenza di limiti hardware identificati. La RAS senza saturazione non
-elimina questi limiti, soprattutto quando richiede coppie molto grandi.
-Il minimo ordine osservato 2 della campagna hinfstruct dimostra soltanto
-NP nominale: non sostituisce Kmu e non eredita i suoi certificati.
+Il costo è la complessità della struttura reale ripetuta: sette grandezze non significano sette sole porte. Prodotti, inversi e ripetizioni possono rendere più impegnative l'analisi e la sintesi. La fedeltà della famiglia non rende automaticamente semplice il calcolo.
 
-LQGI completa il confronto sul disturbo costante: il suo integratore elimina
-lo scostamento asintotico nel modello lineare, ma il punto scelto non soddisfa
-tutti i target temporali. La sezione radiale RAS MATLAB converge nei
-57 punti esplorati fino ai bordi del box, senza saturazioni e con
-comando massimo circa 240 N m. Non sono disponibili margini robusti
-LQGI o una RAS validata degli originali Simulink LQG/LQGI.
+\section{Che cosa offre la rappresentazione concentrata}
+B riassume gli scostamenti dei drive in due perturbazioni dinamiche e un peso comune. Il procedimento SISO rende leggibile il passaggio dalla famiglia all'inviluppo e al fit. Il carico resta esplicito nella meccanica: il confronto riguarda davvero il modo di rappresentare gli attuatori.
 
-\section{Scelta rispetto alla seconda formulazione}
-La tabella precedente identifica le baseline, tuttora predefinite.
-HinfN3 attenua molto il rumore e mantiene il tracking nominale, ma
-fallisce RS/RP: non è una soluzione robusta finale. MuN1 mantiene
-NS/NP/RS/RP e i dieci impianti stabili. Nel Simulink non lineare passa
-da 108.526 a 2.251 N m di picco e da 12.822 a 1.357 N m di massimo RMS
-per canale. La riduzione non richiede di cambiare il rumore.
+Il prezzo è la libertà concessa a dinamiche che non corrispondono necessariamente a frequenze, smorzamenti e ritardi fisici della famiglia. Questa libertà può ridurre i margini dimostrabili. Inoltre il peso è verificato su un insieme finito di casi: la copertura globale resta un limite dichiarato.
 
-Il prezzo è l'ordine 82, l'offset q1 di 8.243\%, una reiezione del
-disturbo nominale moderatamente peggiore e RP inferiore alla baseline,
-pur sopra uno. La RAS candidata è empirica, senza certificato Lyapunov
-mu. Perciò MuN1 resta una proposta verificata; gli studenti decidono
-se il vantaggio sul rumore compensi questi limiti. Nessun target M5
-è allentato e nessuna coppia è dichiarata hardware certificata.
+Le due rappresentazioni sono quindi strumenti complementari. A aiuta a spiegare l'origine fisica delle variazioni; B offre una descrizione dinamica compatta dei drive coperti. Nei dieci impianti ricostruiti, a controllore fissato, producono la stessa risposta. Sono le garanzie sull'insieme ammesso a cambiare.

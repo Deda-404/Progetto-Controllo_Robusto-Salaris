@@ -1,3 +1,23 @@
 \chapter{Parametri principali}\label{app:parametri}
-\input{tables/nominal_parameters.tex}
-I valori provengono da \artifact{sea\_params\_nominal.m} e dai dataset di equilibrio e modello completo. La tabella non introduce metadata di laboratorio o tolleranze non presenti nel progetto.
+\begin{table}[htbp]\centering
+\begin{tabular}{lll}\toprule
+Grandezza & Valore & Origine\\\midrule
+$m_1,m_2$ & $1,\ 0.8$ kg & Traccia\\
+$l_1,l_2$ & $0.4,\ 0.3$ m & Traccia\\
+$J_m$ & $0.01I_2$ kg m$^2$ & Traccia\\
+$B_m$ & $0.02I_2$ N m s/rad & Traccia\\
+$K_s$ & $\mathrm{diag}(50,40)$ N m/rad & Traccia\\
+$g$ & $9.81$ m/s$^2$ & Traccia\\
+$m_{EE}$ & $0.2$ kg, $[0.1,0.3]$ kg & Ipotesi di progetto\\
+$\omega_{n,i}$ & $40$ rad/s, $[36,44]$ rad/s & Ipotesi di progetto\\
+$\zeta_i$ & $0.8$, $[0.72,0.88]$ & Ipotesi di progetto\\
+$\tau_{d,i}$ & $15$ ms, $[12,18]$ ms & Ipotesi di progetto\\
+$\bar q$ & $[\pi/2,0]^T$ rad & Punto di lavoro\\
+$r$, $d$ di prova & $5^\circ$, $0.5$ N m & Scenari separati\\
+$\sigma_y$ & $0.05^\circ$ & Rumore encoder assunto\\\bottomrule
+\end{tabular}
+\caption{Dati fisici e scelte progettuali; i parametri attuativi sono indipendenti fra canali.}
+\end{table}
+
+\input{generated/finale_fissi.tex}
+La sigla \texttt{fisso} identifica coefficienti conservati nel primo esperimento. Kmu e MuN1 sono i due controllori robusti disponibili, il secondo ottenuto includendo il rumore nella sua formulazione di origine. Le garanzie in tabella sono ricalcolate sulla famiglia con carico e ritardo variabili, con il costo comune dichiarato in questa relazione.
