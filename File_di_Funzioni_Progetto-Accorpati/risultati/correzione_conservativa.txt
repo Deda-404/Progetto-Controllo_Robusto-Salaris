@@ -180,4 +180,3 @@ progetto_mu
         fix: 0
        line: 124
      column: [2 6]
-

@@ -3158,3 +3158,6 @@ Verifica finale della correzione: rapida e cinque test nel repository, rapida e 
 
 
 Pubblicazione della correzione: commit 0e3ff48 inviato sul ramo esistente, titolo e descrizione della PR #47 aggiornati; nessuna nuova PR e nessun merge. Rigenerazione finale della ZIP con gli stessi sorgenti e ingressi già collaudati; controllo SHA-256 di identità del contenuto eseguibile. La revisione editoriale degli studenti e i limiti prestazionali restano espliciti.
+
+
+Controllo finale Git: rimossa una riga vuota eccedente in fondo al log generato e rigenerato il manifest della consegna; contenuto numerico e 33 sorgenti/ingressi collaudati invariati.
