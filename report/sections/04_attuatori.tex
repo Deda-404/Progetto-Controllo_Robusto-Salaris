@@ -42,7 +42,7 @@ stabile. Non è quindi possibile interpretare il ritardo come una sola
 attenuazione di modulo. A frequenze più alte l'approssimazione razionale
 si allontana dal ritardo esatto; il confronto nominale chiarisce questo
 limite senza trasformarlo in un'ulteriore incertezza non dichiarata.
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=.8\textwidth]{figures/student_baseline/delay_pade.png}
 \caption{Ritardo nominale di 15 ms e Padé del primo ordine. La figura
 riguarda il solo ritardo nominale, rimasto quello assegnato ai drive.}
@@ -51,13 +51,13 @@ riguarda il solo ritardo nominale, rimasto quello assegnato ai drive.}
 
 \section{Implementazione, verifica e interpretazione}
 La Figura~\ref{fig:attuatori} separa i due drive SISO dalla meccanica MIMO. Il disturbo entra direttamente sui link; il carico entra nelle equazioni meccaniche. Il sistema completo ha $8+3+3=14$ stati.
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \resizebox{.92\textwidth}{!}{\input{figures/schemes/sea_attuatori.tex}}
 \caption{Dai due drive SISO al manipolatore accoppiato.}\label{fig:attuatori}
 \end{figure}
 
 La Figura~\ref{fig:singoli} varia un parametro alla volta, mantenendo nominali gli altri. La frequenza naturale sposta la velocità del drive; lo smorzamento modifica picco e fase; il ritardo di Padé cambia la fase senza cambiare il modulo. Queste differenze aiutano a interpretare la famiglia completa prima di usarla nelle sintesi.
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=.94\textwidth]{figures/definitiva/sensibilita_singoli_parametri.png}
 \caption{Cinque valori per ciascun parametro attuativo. A sinistra il modulo, a destra la fase.}\label{fig:singoli}
 \end{figure}

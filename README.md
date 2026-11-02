@@ -1,4 +1,4 @@
-Il metodo editoriale del [capitolo 7 pilota](report/Capitolo_7_Pilota.pdf) è stato approvato. È in corso il recupero discorsivo integrale della relazione a partire dal main, con particolare attenzione al capitolo 5. La parte numerica e gli otto SLX rimangono congelati; verifica finale del PDF ancora da completare.
+Il metodo del capitolo 7 approvato dagli studenti è stato esteso a tutti i capitoli e alle appendici. Il recupero discorsivo è completo nei sorgenti; compilazione e verifica editoriale finale sono in chiusura. MATLAB, Simulink, controllori, parametri e dati sono invariati.
 
 La correzione conservativa della PR #47 è descritta in [CORREZIONE_CONSERVATIVA.md](docs/CORREZIONE_CONSERVATIVA.md): recupero degli approfondimenti, sette candidati predefiniti e SLX con inizializzazione automatica. I risultati negativi restano espliciti.
 

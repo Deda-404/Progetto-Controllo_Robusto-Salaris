@@ -3171,3 +3171,7 @@ Fascicolo pilota di 19 pagine, incluso indice, compilato senza warning/overfull/
 
 ## 2026-11-02 — Estensione editoriale, primo gruppo
 Estensione editoriale approvata dopo il pilota del capitolo 7. Recupero discorsivo dei capitoli 1–6, con particolare sviluppo della catena fisica → parametri → LFT → peso additivo → robustezza nel capitolo 5. Prima compilazione integrale intermedia riuscita; capitoli successivi e verifica finale ancora in corso. Nessuna nuova sintesi/simulazione né modifica dei file numerici protetti. Nessun merge.
+
+
+## 2026-11-02 — Estensione editoriale, controllo e verifiche
+Recuperati i percorsi completi dei capitoli 8–11: sensibilità mista, pianta generalizzata e partizioni 1/2-DoF, struttura PID, NS/NP/RS/RP, D/G e D–K, Lyapunov sullo stato completo, rumore ZOH, nonlinearità e campioni comuni. Otto figure editoriali leggono esclusivamente MAT/CSV e Scope salvati; nessuna sintesi/simulazione. Corretto nell’esportatore il diverso orientamento del buffer comando Scope, senza modificare il dato. Tutti i 589 file protetti sono identici per SHA-256. Compilazione integrale intermedia riuscita, controllo visivo e confronto dei contenuti in chiusura. Le seconde formulazioni con rumore e Lyapunov restano teoria dove non esistono esperimenti attuali. Nessun merge.

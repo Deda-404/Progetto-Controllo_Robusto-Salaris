@@ -248,6 +248,11 @@ Le matrici seguenti provengono dai dati del nominale con carico.
 Sono arrotondate per la lettura; i dati conservano la precisione di calcolo.
 La partizione di $K$ in due gruppi di sette colonne serve all'impaginazione:
 l'ordine dei 14 stati resta quello dichiarato all'inizio del capitolo.
+Prima di leggere i coefficienti, conviene distinguere i due oggetti:
+$Q$ dice quali combinazioni fisiche costano, mentre $K$ dice come il
+comando reagisce a quelle combinazioni. Un termine misto di $Q$ può
+quindi essere negativo senza premiare un movimento instabile: appartiene
+al quadrato di una differenza, come la deformazione elastica.
 \input{generated/pilota7_lqr.tex}
 Gli elementi $-640$ di $Q_8$ sono i contributi misti della deformazione.
 Il blocco nullo dei drive non elimina quegli stati: le loro dinamiche
@@ -329,6 +334,11 @@ In assenza di rumori soddisfa $\dot e_x=(A-LC)e_x$: se questa matrice
 Con i rumori l'errore è continuamente eccitato da $G_ww-Lv$.
 Il Kalman bilancia quindi rapidità della correzione e trasmissione
 delle fluttuazioni di misura; non rende esatta ogni stima istantanea.
+Nella matrice seguente ogni colonna rappresenta una misura e ogni riga
+una correzione di stato. Il filtro non misura direttamente tutte le
+velocità: le ricostruisce usando la dinamica e le informazioni degli
+angoli. Per questo un encoder può correggere anche stati che appartengono
+all'altro giunto o al drive.
 \input{generated/pilota7_kalman.tex}
 Le righe seguono l'ordine dei 14 stati, le colonne quello degli encoder
 $[q_1,q_2,\theta_1,\theta_2]$. Ogni misura può correggere più stati,
@@ -701,6 +711,9 @@ A&-BK_i&-BK_x\\
 LC&-BK_i&A-BK_x-LC
 \end{bmatrix}\in\mathbb R^{30\times30}.
 \]
+La prima riga descrive il robot reale, la seconda accumula l'errore,
+la terza aggiorna la stima. Leggere la matrice per righe rende visibile
+il percorso fisico dei segnali prima di considerarne lo spettro.
 Gli ingressi esogeni $[r^T,d^T,v^T]^T$ agiscono mediante
 \[
 B_{\mathrm{cl}}=

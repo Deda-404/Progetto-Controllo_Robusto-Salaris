@@ -1,3 +1,9 @@
+# Stato corrente — verifica finale editoriale
+
+Recupero discorsivo completato nei sorgenti di tutti i capitoli e appendici. Indice originale: 129 percorsi conservati, con due adattamenti di titolo necessari al carico unico e alle esecuzioni non ripetute. Compilazione integrale riuscita; controllo finale delle pagine e matrice di copertura in corso. 589 file numerici/eseguibili protetti invariati. Nessuna nuova campagna numerica né merge.
+
+---
+
 # Stato corrente — estensione editoriale integrale in corso
 
 Il metodo del capitolo 7 è stato approvato dagli studenti ed esteso alla relazione. Capitoli 1–6 ampliati; compilazione intermedia integrale riuscita. Restano recupero dei capitoli 8–13 e appendici, controllo di copertura e verifica del PDF finale. MATLAB, Simulink, controllori, parametri e risultati congelati; nessun merge.

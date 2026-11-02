@@ -3,7 +3,20 @@ Gli otto modelli Simulink conservano la struttura lineare e non lineare delle fa
 
 Nei generatori di parametri incorporati, la massa distale diventa $m_2+m_{EE}$. È questo valore a raggiungere le funzioni di inerzia, Coriolis e gravità. Il runner confronta numericamente le loro espressioni con quelle MATLAB per ogni massa provata. I due drive ricevono separatamente frequenza, smorzamento e ritardo del medesimo campione; le callback automatiche non sovrascrivono questi dati.
 
-Sono eseguite 20 simulazioni di 2 s: nominale e primo impianto fisico per ciascun modello, con entrambi i candidati nei due modelli $\mu$. Vengono controllati tempo finale, stati finiti e acquisizione completa degli Scope. Il massimo di uno Scope può mescolare grandezze con unità diverse: viene usato per controllare l'acquisizione, non come indice di prestazione.
+Le interfacce conservano un significato preciso. LQG usa
+$u=N_rr-K\hat x$ e quattro misure encoder; LQGI aggiunge
+$\dot\xi=r-q_{mis}$ e $u=-K_x\hat x-K_i\xi$. Hinf1 riceve l'errore,
+mentre Hinf2, PID e i controllori $\mu$ ricevono riferimento e misura
+separati. I rami di un controllore 2-DoF condividono la dinamica interna:
+non sono due copie indipendenti di $K$.
+
+Le posizioni del modello non lineare sono assolute; al controllore
+arrivano invece le deviazioni dall'equilibrio. La coppia nominale viene
+aggiunta all'uscita incrementale del drive. Queste due conversioni
+rendono confrontabili le equazioni non lineari e il modello linearizzato.
+
+\subsection{Prove nella configurazione salvata}
+Il collaudo salvato comprende 20 simulazioni di 2 s: nominale e primo impianto fisico per ciascun modello, con entrambi i candidati nei due modelli $\mu$. Vengono controllati tempo finale, stati finiti e acquisizione completa degli Scope. Il massimo di uno Scope può mescolare grandezze con unità diverse: viene usato per controllare l'acquisizione, non come indice di prestazione.
 
 Gli otto file richiamano automaticamente l'inizializzazione all'avvio.
 Dopo aver estratto la consegna basta aprire un modello e premere Run:
@@ -45,3 +58,67 @@ non sono curve di prestazione. Le misure alimentano sia l'innovazione
 sia l'integratore, mentre le coppie di processo entrano nella pianta.
 La verifica di un comando fisicamente realizzabile richiede limiti dei
 motori e saturazioni, che non sono disponibili in questo modello.
+
+\subsection{Selettori, rumore e risoluzione del comando}
+Nella Figura~\ref{fig:simulink-hinf-interface} il ramo centrale mostra
+l'ingresso separato di riferimento e misura nel controllore 2-DoF.
+Lo schema lineare conserva il selettore sulle misure ideali;
+la presenza grafica del generatore encoder non certifica quindi una
+prova di attenuazione nel feedback. La
+Figura~\ref{fig:simulink-mu-interface} mostra invece l'interfaccia
+$[r_1;r_2;q_{1,mis};q_{2,mis}]$ del controllore $\mu$, con misure rumorose
+effettivamente selezionate. Le viste sono ritagli delle esportazioni
+originali; nessun blocco o collegamento è stato ridisegnato.
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth,trim=0 540 1380 510,clip]{figures/student_exports/Hinf_linear_sim.png}
+\caption{Dettaglio autentico del ramo H-infinity 2-DoF:
+il controllore dinamico riceve quattro ingressi e restituisce due comandi;
+nel modello lineare il feedback salvato usa le posizioni ideali.}
+\label{fig:simulink-hinf-interface}\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\textwidth,trim=0 0 740 0,clip]{figures/student_exports/mu_linear_sim.png}
+\caption{Interfaccia autentica $\mu$ lineare: riferimento e misura entrano
+nel blocco di controllo; il comando alimenta la pianta con disturbi e
+rumori di processo. Le misure rumorose chiudono l'anello.}
+\label{fig:simulink-mu-interface}\end{figure}
+
+
+La presenza di un generatore di rumore nel diagramma non dimostra che
+quel segnale sia selezionato in retroazione. Inoltre il rumore encoder
+si somma alla misura, mentre il rumore di processo entra nella pianta:
+confonderli cambia il trasferimento verso il comando. Nelle configurazioni
+con ingressi combinati, riferimento e coppia iniziano a 1 s e il rumore
+è quello impostato nei blocchi. Tale scenario è diverso dalla prova
+MATLAB di solo encoder a riferimento e disturbo nulli.
+
+\begin{figure}[p]\centering
+\includegraphics[width=.98\linewidth,height=.78\textheight,keepaspectratio]{figures/editoriale/scope_salvati.png}
+\caption{Estratti degli Scope già salvati, nominale non lineare LQG,
+LQGI e due candidati $\mu$. Posizioni incrementali e comandi sono
+separati; l'orizzonte disponibile è 2 s e non permette di dedurre
+l'assestamento di un servo lento. Gli estratti possono essere diradati:
+i picchi di collaudo usano l'acquisizione integrale. Nessun nuovo run.}
+\end{figure}
+Queste curve mostrano l'esecuzione nelle condizioni del diagramma;
+non riproducono il protocollo pulito di tracking né la scansione
+intercampione del comando encoder. Il massimo dello Scope e il massimo
+continuo sono quindi informazioni diverse. Per verificare una futura
+modifica bisognerebbe mantenere fisse condizioni e selettori, confrontare
+i segnali con le stesse unità e ripetere l'analisi fra campioni dove
+necessario. Il collaudo di esecuzione rimane distinto da NS, NP, RS e RP.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.95\linewidth]{figures/editoriale/scope_hinf_salvati.png}
+\caption{Scope H-infinity non lineare già acquisiti nel nominale: primo
+giunto dei tre rami e massimo modulo dei due comandi per ramo, fino a 2 s.
+Il comando usa una scala simmetrica logaritmica con zona lineare vicino
+a zero. Sono ingressi combinati del diagramma, distinti dalla prova
+MATLAB di solo encoder e dal gradino isolato.}
+\end{figure}
+Il confronto fra i rami mostra perché la sola posizione non esaurisce
+la lettura di uno Scope. I segnali di comando possono differire molto
+anche se gli angoli hanno lo stesso ordine di grandezza. Le curve
+salvate durano soltanto 2 s: consentono di osservare l'avvio del moto
+e il comando, senza attribuire un regime finale a un servo che richiede
+più tempo. Allo stesso modo, gli estratti fino a 2000 punti non possono
+sostituire la scansione intercampione del rumore.

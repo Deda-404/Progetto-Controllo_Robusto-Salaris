@@ -65,6 +65,14 @@ va valutato sulle equazioni complete.
 Il modello meccanico ha otto stati e due poli reali instabili, riportati nella Tabella~\ref{tab:poli}. Le oscillazioni elastiche hanno frequenze più alte e richiedono di evitare un controllo troppo aggressivo.
 \input{generated/finale_poli.tex}
 
+\begin{figure}[!htbp]\centering
+\includegraphics[width=.85\linewidth]{figures/editoriale/poli_meccanici.png}
+\caption{Spettro della matrice meccanica salvata con carico nominale.
+I poli reali positivi indicano l'instabilità della postura; le coppie
+complesse distinguono i modi elastici più rapidi. È una visualizzazione
+della linearizzazione disponibile, senza nuova simulazione.}
+\end{figure}
+
 Usiamo il criterio PBH sui modi instabili per verificare che le coppie possano controllarli e che gli encoder possano osservarli. Il modello è stabilizzabile e rilevabile. Questo è il controllo strutturale necessario alle sintesi; non ricaviamo conclusioni dal solo rango di matrici contenenti alte potenze di $A_m$.
 
 La linearizzazione descrive piccole variazioni attorno all'equilibrio. Per spostamenti maggiori valutiamo direttamente le equazioni non lineari. La stabilità del modello lineare non viene presentata come una garanzia globale sul braccio.
@@ -78,3 +86,4 @@ non un rango dichiarato senza tolleranza numerica.
 Le frequenze elastiche più elevate spiegano inoltre perché aumentare
 molto la rapidità del feedback possa richiedere più coppia e rendere
 più rilevante l'incertezza dei drive.
+

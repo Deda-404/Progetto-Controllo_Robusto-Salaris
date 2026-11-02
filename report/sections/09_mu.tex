@@ -3,10 +3,44 @@
 \section{Dalle prove nominali alle incertezze fisiche}
 Una massa diversa e drive meno rapidi modificano il chiuso anche quando il controllore rimane identico. Vogliamo sapere se la stabilità e la prestazione resistono a tutte le variazioni ammesse dal modello, non soltanto a quelle estratte per le simulazioni. L'analisi strutturata tiene conto del fatto che alcune variazioni sono scalari reali ripetuti, mentre altre sono funzioni di trasferimento stabili.
 
-Il confronto a controllore fissato è il primo esperimento. I sette controllori disponibili vengono collegati senza cambiarne i coefficienti sia ad A sia a B. Successivamente confrontiamo le sintesi sul nominale con carico e i due candidati D--K. I coefficienti di riferimento restano disponibili per un confronto mirato; le prove e le tabelle principali riguardano i sette candidati con carico.
+Il confronto a controllore fissato collega i sette candidati alle due
+rappresentazioni A e B senza cambiarne i coefficienti. È il modo per
+separare l'effetto del controllore da quello della famiglia incerta.
+Le sintesi D--K su A e B affrontano poi una domanda ulteriore: come
+cambia il progetto quando la struttura delle incertezze entra nel costo?
 
+\subsection{Il carico meccanico selezionato}
+L'incertezza meccanica è la massa concentrata all'end-effector,
+$m_{EE}\in[0.1,0.3]$ kg. La massa del secondo link resta 0.8 kg:
+non sono due parametri indipendenti da variare contemporaneamente.
+Il carico modifica inerzia, Coriolis e gravità attraverso la stessa
+massa effettiva, e deve assumere lo stesso valore in tutte le equazioni.
+Se rendessimo incerto separatamente ciascun coefficiente di $M^{-1}$
+e di $K_g$, l'analisi potrebbe combinare matrici che non appartengono
+ad alcun manipolatore del progetto. Conservare un unico reale ripetuto
+serve proprio a escludere queste combinazioni artificiali.
 
-\section{Raccogliere le incertezze nella struttura normalizzata}
+Il carico non viene assorbito nel peso dinamico del drive. Così A e B
+hanno la stessa meccanica incerta e possiamo attribuire le differenze
+dei margini al modo di descrivere gli attuatori. Le ripetizioni nella
+LFT non aggiungono masse: sono più apparizioni della medesima variabile.
+
+\subsection{La dinamica degli attuatori}
+Ogni drive ha frequenza naturale $40\pm10\%$ rad/s, smorzamento
+$0.8\pm10\%$ e ritardo $15\pm20\%$ ms. I due canali sono indipendenti:
+un attuatore più lento non obbliga l'altro a esserlo. In A manteniamo
+questi sei scalari reali; in B usiamo due perturbazioni SISO additive,
+stabili e limitate in norma, pesate dal fit del Capitolo 5.
+
+Questa sostituzione cambia le dinamiche ammesse dall'analisi. Un
+blocco dinamico può scegliere una fase e una forma frequenziale che
+non corrispondono a nessuna terna fisica $(\omega_n,\zeta,\tau_d)$.
+D'altra parte la copertura continua delle perturbazioni normalizzate
+è stata controllata sui casi dichiarati, senza provare l'inclusione
+dell'intero box parametrico. B non è quindi identificata con A né
+assunta automaticamente come suo sovrainsieme globale.
+
+\section{Raccogliere le incertezze in \texorpdfstring{$\Delta$}{Delta}}
 In A raccogliamo sette scalari reali: tre per ogni drive e uno per il
 carico. Le loro ripetizioni nella LFT hanno lo stesso valore. In B
 rimangono il parametro reale $m_{EE}$ e due dinamiche SISO indipendenti.
@@ -214,9 +248,23 @@ Se RS è esclusa, il suo limite superiore è anche un limite superiore
 per RP. Le tabelle distinguono queste deduzioni da una valutazione diretta
 di \texttt{robgain}; un intervallo invertito non viene riordinato.
 
-\section{Progettare per le incertezze: \texorpdfstring{$\mu$-synthesis}{mu-synthesis}}
-L'iterazione D--K alterna una sintesi $H_\infty$ con scaling fissati e una ricerca di scaling per il controllore ottenuto. Il fitting degli scaling li rende utilizzabili nella sintesi successiva. Il metodo non è una ricerca globale: il risultato dipende anche dal punto iniziale e dall'ordine dei fit.
+\subsection{Esito del controllore nominale}
+Hinf2 soddisfa NS e NP sul nominale, ma i margini RS sono circa
+$[0.05535,0.05567]$ in A e $[0.03714,0.03721]$ in B. Entrambi i
+limiti superiori sono inferiori a uno: la buona prestazione nominale
+non resiste all'intera incertezza ammessa. Poiché RP richiede anche
+stabilità, è esclusa senza bisogno di attribuire un risultato
+favorevole a una curva nominale particolarmente piccola.
 
+Il caso complementare è LQG: mantiene RS in A e B, ma non raggiunge
+NP sul costo comune. Può quindi essere robustamente stabile senza
+soddisfare la prestazione pesata neppure nel nominale. Questi due
+esempi rendono concreta la distinzione fra le quattro proprietà.
+La famiglia incerta, la mappa prestazionale e la soglia devono essere
+sempre indicate insieme all'esito: un solo acronimo PASS non descrive
+il comportamento fisico di un controllore.
+
+\section{Progettare per le incertezze: \texorpdfstring{$\mu$-synthesis}{mu-synthesis}}
 Finora abbiamo analizzato un controllore progettato sul nominale.
 La $\mu$-synthesis considera invece le incertezze mentre progetta il
 controllore. Nel progetto usiamo \texttt{musyn}, con iterazione D--K.
@@ -250,7 +298,7 @@ I margini di A e B non sono misure sulla stessa geometria oltre il raggio unitar
 \caption{Margini inferiori RS e andamento D--K; la linea unitaria indica la soglia normalizzata.}
 \end{figure}
 
-\section{Riesame del compromesso delle sintesi}
+\subsection*{Lettura del compromesso delle sintesi}
 \input{generated/finale_riesame_mu.tex}
 Il punto iniziale comune ha 82 stati, errore DC del 3.82\% e norma
 comune 1.052: non raggiunge già NP. Le iterazioni successive riducono
@@ -279,3 +327,67 @@ soluzione che già fallisce NP/RP. I risultati restano utili per capire
 la differenza fra progettare sull'insieme incerto e soddisfare tutte le
 richieste fisiche. Nessun risultato D--K è assunto come garanzia senza
 la post-analisi sulla pianta originale.
+
+\section{Seconda D--K: la stessa famiglia con misura rumorosa}
+La formulazione con rumore del capitolo precedente può essere estesa
+alla sintesi robusta. Si conserva A oppure B, con le stesse dipendenze
+della massa e dei drive, e si aggiunge l'ingresso normalizzato $\nu$
+alla pianta generalizzata. La misura è $q_{mis}=q+W_n\nu$, mentre
+l'errore pesato resta $q-M_or$. Il blocco encoder è un ingresso esterno,
+non un nuovo parametro reale da inserire nella massa o nel ritardo.
+
+Una D--K su questa pianta cercherebbe di contenere insieme gli effetti
+di riferimento, coppia sui link e rumore, per la famiglia incerta scelta.
+Per leggere RP tramite il blocco fittizio, le porte di prestazione
+andrebbero aggiornate: $w$ avrebbe sei componenti e $z$ quattro,
+quindi il blocco di ritorno da $z$ a $w$ sarebbe $6\times4$.
+Il collegamento delle porte conta quanto la scelta del peso: usare il
+vecchio blocco $4\times4$ ignorerebbe i due ingressi aggiunti.
+
+Il costo più ricco può portare a un compromesso diverso: ridurre il
+guadagno del ramo di misura alle frequenze alte può proteggere il
+comando, ma anche rallentare la correzione o cambiare il margine robusto.
+Il vantaggio andrebbe verificato sulla pianta originale, non soltanto
+sul problema scalato dell'ultima iterazione. Questa estensione resta
+un approfondimento di metodo; non presentiamo un'ulteriore D--K con
+rumore come esperimento eseguito sul modello con carico.
+
+\subsection{Perché i controllori \texorpdfstring{$H_\infty$}{H infinity} e \texorpdfstring{$\mu$}{mu} possono avere un ordine elevato}
+L'ordine del controllore dipende dalla pianta generalizzata, non dai
+soli due angoli comandati. Alla dinamica fisica si aggiungono i pesi
+e il riferimento desiderato; nelle iterazioni robuste entrano anche
+i fit razionali degli scaling. Le loro realizzazioni portano memoria
+nel problema successivo, e parte di questa memoria compare in $K$.
+È quindi possibile avere pochi ingressi e uscite ma molti stati.
+
+Inoltre i blocchi reali ripetuti richiedono di rispettare correlazioni
+che un'unica perturbazione piena cancellerebbe. Un fit di ordine più
+alto può seguire meglio lo scaling frequenziale, al costo di una
+sintesi più grande. Un fit corto può semplificare il calcolo, ma non
+assicura una prestazione migliore. I 294 stati di Mu\_A e gli 80 di
+Mu\_B illustrano questo compromesso, senza dimostrare che un modello
+sia in generale più facile da controllare dell'altro.
+
+Una riduzione d'ordine richiederebbe analisi dell'errore di
+approssimazione e nuova verifica di NS, NP, RS, RP, rumore e tracking.
+La vicinanza fra due funzioni di trasferimento non autorizza a
+trasferire automaticamente le garanzie robuste. Qui le realizzazioni
+restano intere e gli ordini elevati rimangono un limite esplicito.
+
+\section{Riferimenti per i comandi MATLAB}
+\texttt{lft} collega controllore e pianta usando la partizione delle
+porte; \texttt{lftdata} espone blocchi incerti e parte nota;
+\texttt{usubs} sostituisce valori fisici o perturbazioni trovate
+nell'analisi. \texttt{robstab} studia la stabilità dell'intera famiglia,
+mentre \texttt{robgain(CL,1)} mantiene fisso il livello prestazionale
+unitario e cerca quanto possano crescere le incertezze.
+\texttt{mussv} mostra i limiti del valore singolare strutturato alla
+frequenza considerata; \texttt{musyn} usa la struttura durante la sintesi.
+
+I comandi non sono intercambiabili. Campionare con \texttt{usample}
+produce esempi fisici, non una prova su un insieme continuo; usare
+\texttt{norm} sul nominale non misura il margine robusto. L'Appendice
+\ref{app:matlab} esplicita connessioni e formule, mentre le tabelle
+conservano i risultati salvati e distinguono analisi diretta e deduzioni
+logiche. Questa distinzione permette di ripercorrere ogni conclusione
+senza confondere il metodo teorico con una nuova esecuzione numerica.
