@@ -1,211 +1,81 @@
-# Revisione definitiva SEA — 1 novembre 2026
+# Revisione finale del progetto SEA — evidenze tecniche
 
-Responsabile: Alessio. Base: origin/main 0ed5611fdbb9c46475543f87eba68d9799b07bc5.
-Il ramo codex/revisione-definitiva-sea-salaris conserva relazione, indice,
-controllori originali e otto SLX. Le modifiche scientifiche sono autorizzate
-dall'incarico definitivo; adozione e merge restano alla revisione degli studenti.
+Data di completamento documentale: 2 novembre 2026. Campagna MATLAB: 1 novembre 2026, seed 20261101, R2026b 26.2.0.3386108. Base main `dbf6f00b06e0cddc65cd19e90d11ad3418cab2da`, contenente PR #46; ramo unico `codex/sea-revisione-finale-semplificata`. Nessun merge.
 
-## Percorso e provenienza
+## Fonti e perimetro
 
-I quattro script accorpati esistenti sono aggiornati in sede. Il percorso
-run_all esegue sette script didattici; sei funzioni condivise contengono
-configurazione, interconnessione, dinamica non lineare, integrazione,
-verifiche e collaudo Simulink. Non usa genpath né i runner in analysis,
-controllers o src. I quattro helper meccanici originali restano necessari
-esclusivamente ai MATLAB Function degli SLX. La consegna è una copia degli
-stessi sorgenti, generata automaticamente.
+Consultate la traccia ufficiale «Manipolatore planare 2R con SEA», la versione main, gli script accorpati, gli otto SLX, relazione e slide esistenti. Il materiale del professor Salaris è stato letto nelle cartelle Matlab, Slide e Appunti, compreso il riassunto di controllo robusto e il capitolo sulle incertezze. Drive è rimasto in sola lettura. Massa, intervalli e target sono scelte di progetto; non sono misure né prescrizioni attribuite al docente.
 
-La banca validata conserva matrici e controllori provenienti da main;
-tools/prepara_banca_definitiva.m documenta l'estrazione. I risultati storici
-non vengono rinominati come nuovi risultati. Le risintesi sono esplicite.
-La modalità rapida carica le sintesi e le campagne onerose dichiarandolo;
-la completa le ricalcola.
+## Scelte consolidate
 
-Le PR 43, 44 e 45 sono state consultate senza merge o cherry-pick:
-la 43 sostituiva la relazione con un elaborato ridotto, la 44 introduceva
-un'architettura parallela, la 45 lasciava l'analisi separata dal percorso
-predefinito. Si conservano le lezioni metodologiche utili (confronti
-omogenei, normalizzazione, provenienza), non quei difetti organizzativi.
+Massa aggiuntiva 0.2 kg ±50%, dopo confronto 0.1/0.2/0.3 kg. La stessa massa entra in M, C e G; nessuna incertezza aggiunta su Ks o Jm. Equilibrio `[pi/2;0]`, coppia nulla analiticamente. Errore relativo del Jacobiano 6.20e-11. Mbar = [0.650 0.210; 0.210 0.090], Kg = [-10.791 -2.943; -2.943 -2.943].
 
-## Fonti effettivamente consultate
+Attuatori: wn=40±10% rad/s, zeta=0.8±10%, td=15±20% ms, tre parametri per canale. Ritardo scelto confrontando ±10/20/30%; Padé di ordine uno, 14 stati fisici invariati.
 
-- [Traccia ufficiale 2](https://drive.google.com/file/d/1SslzEc6_-SfOLIJyR6Qb7XTx2DfH65mt/view):
-  equazioni, confronto dei controllori, dieci impianti, limite orale.
-- [Lezione3004.m](https://drive.google.com/file/d/1eBF1ZGKLhwiReaWv11tH2MFWv-qCVVjW/view):
-  ureal, usubs, usample, frd e variazione dei parametri.
-- [Lezione3004_1.m](https://drive.google.com/file/d/1BRRVgh9aW4M360xJO5ETXb9rHkLywnPh/view):
-  scostamenti relativi, inviluppo e fitmagfrd; qui la scelta interattiva
-  dei punti è sostituita dal massimo riproducibile dei campioni.
-- [Capitolo 5](https://drive.google.com/file/d/1ZE4s4RYfgb5k2V6jB8bEi4bEEocwP1f0/view):
-  pulling out the deltas, normalizzazione, ripetizioni reali e M–Delta.
-- [Capitolo 4](https://drive.google.com/file/d/1Lgk_5PN2ONw4ZcSBFyJFI2Z7GAuGt7oq/view):
-  pianta generalizzata e sensibilità mista.
-- [Appunti](https://drive.google.com/file/d/1HOvOZ0tELDyTlpRVvW8mqWdE3VtYfUd1/view)
-  e [riassunto](https://drive.google.com/file/d/1rd2cNTtBw6Z4DNa3OsXE850MCCSxQad_/view):
-  forme di incertezza, piccolo guadagno, NS/NP/RS/RP e D–K.
-- Documentazione MathWorks di [fitmagfrd](https://www.mathworks.com/help/robust/ref/frd.fitmagfrd.html),
-  [ucover](https://www.mathworks.com/help/robust/ref/dynamicsystem.ucover.html)
-  e [lftdata](https://www.mathworks.com/help/robust/ref/inputoutputmodel.lftdata.html).
+A contiene sette reali indipendenti, con massa condivisa fra tutte le occorrenze. La LFT estratta ha 19 occorrenze: massa 5, ciascuna wn 5, ciascun td e zeta 1. Non sono 19 grandezze fisiche. B contiene due ultidyn SISO e lo stesso ureal meccanico. La forma additiva evita i poli destri generati dai rapporti moltiplicativi con ritardo variabile. Esempio td=18 ms: poli +133.333 e +111.111 nei due errori relativi.
 
-Drive è rimasto in sola lettura. Non è stato consultato un audio originale
-del ricevimento: le indicazioni attribuite al docente sono il resoconto
-degli studenti, distinto dalle slide e dalla traccia.
+Peso selezionato: `(861.4711 s + 0.00408509)/(s^3 + 106.7152 s^2 + 4537.9213 s + 71007.8405)`. I coefficienti in MAT restano a piena precisione. Ordini 1/2/3 confrontati; scelto 3 per copertura ed eccesso mediano 1.0205. Max norma normalizzata 0.980367 sui 29 casi di costruzione e 0.878798 sui 30 indipendenti. Ricostruzione A/B sugli stessi dieci impianti: errore massimo in frequenza 1.03e-14. Inclusione dell’intero box NON DIMOSTRATA.
 
-## Ipotesi e metodo
+Specifiche: candidati Ts 0.8/1.5/2 s e Mp 10/15/15%. Scelti 2 s e 15%, conservando ess 5% e cross 25%. Mo=9/(s²+6s+9), con Ts 1.9447 s. We e Wu invariati e semplici; il requisito normalizzato resta <1. Recupero, rumore e coppie sono indicatori diagnostici, senza soglie hardware arbitrarie.
 
-Nominale, equilibrio, meccanica, misure e pesi restano quelli di main.
-Solo la descrizione incerta corrente cambia: due tipi di parametro,
-frequenza naturale e smorzamento, indipendenti nei due giunti (quattro
-scalari). Intervalli ±10%, nominali 40 rad/s e 0.8; ritardo noto 15 ms,
-Padé di ordine uno comune. Il ritardo variabile è escluso esplicitamente,
-non dichiarato trascurabile. Le tolleranze sono ipotesi ingegneristiche.
+## Controllori e risultati
 
-A usa quattro ureal nella realizzazione fisica a 14 stati complessivi.
-B usa due ultidyn SISO indipendenti, G0*(1+WI*Delta). Il peso proviene
-dagli stessi dieci impianti, dai quattro vertici SISO e dal nominale:
-25 casi SISO, non 25 manipolatori. Il Padé comune viene cancellato
-analiticamente prima della normalizzazione per evitare uno zero RHP
-invertito. Il peso scelto è stabile, proprio e minimo-fase.
+Sette controllori fissati analizzati senza modifica su A/B. Risintetizzati LQG, LQGI, Hinf1, Hinf2, PID e due D-K. Primo avvio automatico D-K conservato nei file `avvio_nominale`; tentativo finale con MuN1 comune, tre iterazioni, stessi pesi. I file correnti non usano cache del precedente nominale.
 
-Ordini provati 1, 2, 3; criterio dichiarato: ordine minimo con norma
-normalizzata <=1 ed eccesso mediano <=1.6. Ordine selezionato 1:
-massima norma continua 0.980392, eccesso 1.457951.
-Questa verifica copre i casi provati in frequenza continua, non dimostra
-l'inclusione dell'intero box A in B. Non si trasferiscono garanzie mediante
-una presunta inclusione. I raggi robusti >1 rappresentano espansioni
-diverse per A e B e non ammettono un ordinamento universale.
+| Controllore corrente | RS A (limite inferiore) | RS B | NP | RP A/B |
+|---|---:|---:|---|---|
+| LQG | 1.4593 | 1.1972 | FAIL | FAIL |
+| LQGI | 1.4185 | 1.1550 | FAIL | FAIL |
+| Hinf1 | 1.3370 | 0.9485 | FAIL | FAIL |
+| Hinf2 | 0.05535 | 0.03714 | PASS | FAIL |
+| PID | 0.2522 | 0.2004 | PASS | FAIL |
+| Mu_A | 2.5314 | 1.7804 | FAIL | FAIL |
+| Mu_B | 2.5648 | 1.9511 | FAIL | FAIL |
 
-## Verifiche intermedie e fallimenti conservati
+Gli intervalli completi sono in `confronto_robusto.csv`. La perdita di RP è dedotta dal nominale se NP fallisce; da RS quando la stabilità è esclusa; altrimenti si usa robgain. I valori dedotti non sono presentati come una misura diretta. Nessun intervallo viene riordinato. Tutti i correnti sono NS PASS; Hinf2_fisso è NS FAIL.
 
-Nominale: differenza massima in risposta rispetto a main 3.36e-15.
-Equilibrio e Jacobiano indipendente verificati; CARE LQG/LQGI e separazione
-coerenti con le matrici congelate. Ricostruzione LFT automatica e manuale
-verificata su sostituzioni fisiche. Controllo continuo delle perturbazioni
-normalizzate e replay del campionamento inclusi in verifica_sea.
+LQG soddisfa i target temporali nominali (Ts 0.731 s), ma può avere offset sotto carico e disturbo. LQGI ha offset DC nullo e Ts 5.15 s. Hinf2 raggiunge i target nominali ma è stabile in 4/10 impianti; PID in 7/10. Mu_A: ordine 294, errore DC 99.8%. Mu_B: ordine 80, errore DC 21.9%, picco da rumore 762 N m. Hinf2: picco fra campioni 269010 N m. Nessun candidato viene dichiarato utilizzabile grazie al solo gamma.
 
-Una prima realizzazione algebrica di A produceva 22 stati ridondanti:
-è stata sostituita dalla realizzazione fisica a 14 stati. Il candidato
-D–K di quella prova (186 stati) è scartato e i suoi numeri non sono usati
-negli elaborati. La nuova D–K A a 142 stati fallisce NP; B a 32 stati
-supera RS/RP, con forte amplificazione del rumore. Nessun peso è stato
-rilassato per ottenere PASS.
+RAS finale: 105 prove, 86 convergenze, 12 mancate convergenze, 7 allontanamenti, zero timeout/errori. Le 35 altre simulazioni comprendono 14 tracking/disturbo e 21 prove con sole masse 0.1/0.2/0.3 kg. I risultati sono nominali rispetto ai drive salvo dove esplicitamente campionati; non sono garanzie non lineari robuste.
 
-Un avvio hinfstruct ha restituito un chiuso instabile: conservato in
-infoPID, non selezionato. Gli altri due avvii sono confrontati prima
-della scelta. Il comando viene misurato anche fra campioni: il solo
-campionamento a 2 ms sottostima gravemente Hinf2 e Mu_B.
+## Verifiche realmente eseguite
 
-RAS: 15 condizioni per controllore, stessa sezione dello stato aumentato,
-15 s, soglie esplicite. Convergenza empirica, mancata convergenza,
-divergenza osservata, timeout ed errore numerico sono categorie distinte.
-Le prime prove hanno mostrato timeout per modi molto veloci; una
-similitudine numerica del controllore e un Jacobiano del sistema
-completo migliorano l'integrazione senza ridurre l'ordine.
+- Campagna completa per fasi: nuove sintesi, 28 post-analisi, 154 casi lineari (14 K × 11 impianti), rumore comune, 105 RAS, 35 altre prove non lineari. Log `esecuzione_completa.txt` con provenienza delle fasi.
+- `run_all('rapida')`: esecuzione nuova, sintesi onerose e RAS esplicitamente caricate e controllate.
+- Cinque test `seaFinaleTest`: equilibrio/Jacobiano, carico puntiforme, identità energetica, A/B e bordi di massa. Tutti PASS.
+- Sette verifiche del runner PASS, inclusi replay esatto, normalizzazione continua e stabilità interna da matrice esplicita. PBH sui modi instabili verificato.
+- Code Analyzer: nessun messaggio sui 16 file operativi.
+- Simulink: 20 run di 2 s su otto modelli, nominale e primo campione. Formule M/C/G confrontate, massa/drive/controller registrati, stati e Scope finiti. Gli SLX su disco rimangono invariati.
+- Relazione 49 pagine e slide 23 pagine: compilazione senza warning, overfull o riferimenti irrisolti; tutte le pagine renderizzate e controllo visivo completato.
+- ZIP estratto fuori repository con restoredefaultpath: pipeline rapida e 20 SLX PASS, sei CSV identici e scarto dei massimi Scope nullo. I 33 sorgenti/ingressi sono identici per SHA-256; il pacchetto finale conserva lo stesso contenuto eseguibile collaudato.
 
-Gli errori preliminari Simulink hanno riguardato la risoluzione delle
-variabili nelle maschere LTI, poi corretta assegnando il Model Workspace
-in memoria prima della compilazione, e un path MATLAB incompleto.
-restoredefaultpath e rehash toolboxcache ripristinano i prodotti
-installati. Gli SLX non vengono salvati o modificati.
+## Requisiti R01–R22
 
-## Accettazione finale
+Tutti i percorsi sotto appartengono a `File_di_Funzioni_Progetto-Accorpati`, salvo indicazione.
 
-Un requisito di realizzazione può essere PASS pur documentando un
-controllore con prestazioni FAIL; le due valutazioni non sono intercambiabili.
-
-La pipeline completa è terminata in R2026b 26.2.0.3386108: due D–K,
-risintesi H-infinity/PID, venti post-analisi (dieci controllori per A/B),
-110 chiusure fisiche (dieci campioni più nominale), venti prove non lineari
-di tracking/disturbo e 150 condizioni RAS. Sette verifiche fisiche e
-dinamiche PASS; Code Analyzer senza segnalazioni sui quattordici sorgenti
-operativi. Gli otto SLX sono invariati e completano 28 run di 2 s,
-con stati finiti, Scope acquisiti e coefficienti conservati nei dati.
-
-| Controllore | Ordine | Norma comune | RS A/B | RP A/B | Impianti stabili /10 | RAS convergenti /15 |
-|---|---:|---:|---|---|---:|---:|
-| LQG | 14 | 2.16850 | PASS/PASS | FAIL/FAIL | 10 | 15 |
-| LQGI | 16 | 1.51358 | PASS/PASS | FAIL/FAIL | 10 | 15 |
-| Hinf1 | 18 | 1.86565 | PASS/PASS | FAIL/FAIL | 10 | 15 |
-| Hinf2 | 22 | 0.04746 | FAIL/FAIL | FAIL/FAIL | 2 | 12 |
-| PID originale | 4 | 0.80095 | FAIL/FAIL | FAIL/FAIL | 8 | 0 |
-| Kmu originale | 78 | 0.63468 | PASS/PASS | PASS/PASS | 10 | 15 |
-| MuN1 | 82 | 0.67342 | PASS/PASS | PASS/PASS | 10 | 15 |
-| Mu_A | 142 | 3.70000 | PASS/PASS | FAIL/FAIL | 10 | 15 |
-| Mu_B | 32 | 0.39001 | PASS/PASS | PASS/PASS | 10 | 15 |
-| PID nuovo | 4 | 0.67799 | FAIL/FAIL | FAIL/FAIL | 8 | 0 |
-
-Tutti nominalmente stabili. NP richiede norma comune <1.
-Per Hinf2 i margini RS sono circa [0.2563,0.2583] su A e
-[0.1054,0.1056] su B; per Kmu [3.3362,3.3599] e [2.6674,2.6728].
-Gli intervalli completi e il metodo RP sono in confronto_robusto.csv:
-un FAIL NP esclude RP, mentre un limite superiore RS <1 esclude la
-garanzia RP senza inventare un margine robgain.
-
-La RAS finale conta 117 convergenze, 24 mancate convergenze e 9
-divergenze osservate. I timeout iniziali sono risolti mediante
-similitudine numerica e Jacobiano, senza riduzione dei controllori.
-Il rumore è distinto dalle prove RAS: Hinf2 raggiunge circa 5.45e5 N m
-fra campioni contro 22.1 N m sui nodi; Kmu 78.8 N m, MuN1 1.123 N m,
-Mu_B circa 2.39e5 N m. Nessun risultato certifica un attuatore reale.
-
-La cartella estratta fuori dal repository ha eseguito la modalità rapida
-e tutti i 28 run SLX, dopo restoredefaultpath e senza alcun percorso del
-repository. I 31 sorgenti/ingressi necessari coincidono per SHA-256;
-gli Scope hanno scarto relativo nullo rispetto al collaudo del repository.
-La rietichettatura del PID nuovo è stata verificata separatamente in
-entrambe le cartelle. Evidenze: collaudo_consegna.json e
-collaudo_consegna.txt nella cartella risultati.
-
-La riduzione operativa è effettiva: il vecchio run_all aggiungeva alberi
-con 193 file MATLAB (src, analysis, controllers) e sei runner Simulink.
-Il percorso corrente richiede quattordici sorgenti principali e quattro
-helper per gli SLX, senza quegli alberi. Il conteggio precedente descrive
-la superficie resa visibile al path, non una stima esatta delle chiamate
-transitive. La prova da estrazione dimostra l'assenza delle dipendenze
-storiche, che restano recuperabili nel repository e in Git.
-
-Relazione esistente: 120 pagine, stesso indice; grafici A/B, quattro
-nuovi schemi vettoriali e tabelle derivate dai CSV. Conservati meccanica,
-LQR/Kalman, LQGI, H-infinity, mu, Lyapunov e contenuti storici validi,
-con etichette di provenienza. Presentazione: stessi 23 frame e titoli,
-discorso aggiornato, 17:42 stimati inclusi i cambi. Controllo visivo
-effettuato e audit senza testo oltre pagina o riferimenti indefiniti.
-
-| ID | Stato | Evidenza e portata |
+| ID | Evidenza verificabile | Esito |
 |---|---|---|
-| R01 | PASS | Titoli di capitoli/sezioni/sottosezioni identici a main; audit_editoriale.json |
-| R02 | PASS | Diff dei capitoli e appendici; approfondimenti validi conservati, M4 identificato |
-| R03 | PASS | 14 sorgenti + 4 helper; run senza src/analysis/controllers nella copia estratta |
-| R04 | PASS | Quattro script esistenti riscritti in sede, tre script didattici aggiunti; run_all eseguito |
-| R05 | PASS | Due tipi di parametro, quattro scalari; sensibilita_attuatori.csv e cap. 4–5 |
-| R06 | PASS | Modello fisico a 14 stati, ureal, campioni e verifica nominale/LFT |
-| R07 | PASS | Ordini 1/2/3; peso stabile e minimo-fase; norme continue dei 25 casi, limite globale esplicito |
-| R08 | PASS | Fonti consultate sopra; procedimento Lezione3004_1 reso automatico e riproducibile |
-| R09 | PASS | LFT manuale e automatica, ripetizioni reali, schemi e sostituzioni numeriche |
-| R10 | PASS | confronto_robusto.csv: stesso K su A e B, NS/NP/RS/RP distinti |
-| R11 | PASS | Due D–K e nuovo PID; stessi dieci impianti e campagna non lineare; esiti negativi conservati |
-| R12 | PASS | Sensibilità dei drive, cinque covarianze Kalman, tre ordini peso, tre avvii PID; pesi originali invariati |
-| R13 | PASS | ras.csv/ras.mat/ras.png: 150 condizioni, cinque categorie separate, nessuna frontiera certificata |
-| R14 | PASS | parametri_dieci_impianti.csv, seed e replay esatto, dieci_impianti.csv |
-| R15 | PASS | Schemi TikZ integrati: SISO/MIMO, LFT, tre forme, fitting; schemi di controllo originali conservati |
-| R16 | PASS | Otto SLX invariati; 28 run nel repository e nella consegna, segnali e parametri salvati |
-| R17 | PASS | ZIP estratto fuori repository; rapida e collaudo Simulink realmente eseguiti |
-| R18 | PASS | Log completa/rapida, CSV/MAT, sette verifiche, Code Analyzer e audit PDF; nessun PASS inferito dal solo avvio |
-| R19 | PASS | Un solo run_all autorevole; copie di consegna identiche; runner storici esclusi dal path |
-| R20 | PASS | Branch pubblicato e [PR #46](https://github.com/Deda-404/Progetto_CR/pull/46) aperta per revisione, senza merge |
+| R01 | matrici_sea.m, dinamica_sea.m; test carico puntiforme | PASS |
+| R02 | modello_sea.m: unico ureal m_EE; test ai bordi | PASS |
+| R03 | incertezze_attuatori.m; parametri_dieci_impianti.csv | PASS |
+| R04 | medesimi campioniFisici e delta normalizzate; erroreAB 1.03e-14 | PASS |
+| R05 | stessa meccanicaIncerta in PA/PB | PASS |
+| R06 | forme_incertezza.csv; delta additive stabili e proprie | PASS |
+| R07 | lftdata, ricostruzione e verifica_sea | PASS |
+| R08 | modello.mat, riassunto_numerico.json, PBH e Jacobiano | PASS |
+| R09 | 28 righe confronto_robusto.csv, sette fissati e sette correnti | PASS |
+| R10 | margini RS/RP nuovi, deduzioni analitiche dichiarate | PASS |
+| R11 | sintesi_hinf.mat, sintesi_mu.mat, CARE; primo tentativo conservato | PASS |
+| R12 | candidati_specifiche.csv, candidati_riferimento.csv; capitolo 6 | PASS |
+| R13 | soglie unitarie immutate; FAIL preservati | PASS |
+| R14 | parametri_sea.m e candidati fisici arrotondati | PASS |
+| R15 | MAT/CSV pieni; esportatore arrotonda solo per LaTeX | PASS |
+| R16 | 13 capitoli e appendici riscritti; confronto discorsivo | PASS |
+| R17 | nessuna cronaca di PR, branch o versioni nel testo finale | PASS |
+| R18 | niente nuove famiglie o griglie estese; RAS empirica e funzioni condivise | PASS |
+| R19 | ras.mat, nonlineare.csv, carico_nonlineare.csv | PASS |
+| R20 | collaudo_simulink.m e simulink.mat con massa e dati assegnati | PASS |
+| R21 | 23 slide, tabelle generate dagli stessi CSV; discorso 16:50 stimati | PASS |
+| R22 | manifest, 33 ingressi identici, rapida e 20 SLX dalla ZIP estratta | PASS |
 
-Rimangono fuori dalle verifiche eseguite: prova orale dal vivo, validazione
-hardware, copertura rigorosa dell'intero box A da parte di B, ritardo
-variabile e incertezza meccanica. Non sono dichiarati soddisfatti né
-confusi con i requisiti implementativi R01–R20.
-
-Il 1 novembre un nuovo avvio MATLAB ha dato errore 5201. Con nessuna
-sessione MATLAB attiva, il riavvio del solo MathWorks Service Host ha
-ripristinato l'avvio; il collaudo della consegna è stato poi realmente
-eseguito. Nessuna modifica alla licenza o ai controlli di accesso.
-
-Pubblicazione: [branch](https://github.com/Deda-404/Progetto_CR/tree/codex/revisione-definitiva-sea-salaris),
-[PR #46](https://github.com/Deda-404/Progetto_CR/pull/46).
-Commit scientifici principali: 677ad20 (modelli), 7324839 (codice e campagne),
-8db1b6d (relazione e presentazione). Il commit di confezionamento aggiunge
-ZIP, manifest e registrazione finale, senza modificare i calcoli.
+Gli esiti della matrice riguardano l’esecuzione dei requisiti dell’incarico. Non significano che tutti i controllori raggiungano gli obiettivi. Restano non dimostrate la copertura globale del box e una RAS certificata; hardware e prova orale dal vivo non sono stati eseguiti.

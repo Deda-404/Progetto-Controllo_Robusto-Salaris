@@ -3134,3 +3134,11 @@ PDF di 49 pagine, indice con 13 capitoli e quattro appendici, riferimenti e nume
 Aggiornati gli schemi del carico, del percorso SISO-MIMO e della LFT A/B. Rigenerate otto figure dai dati correnti, inclusa la sensibilità separata a wn, zeta e ritardo. Conservati gli schemi validi e le viste autentiche degli SLX. La presentazione esistente resta di 23 slide, con tabelle esportate dalla stessa fonte numerica della relazione.
 
 Testo orale di 1990 parole, stima a 125 parole/min e 22 cambi di slide: 16:50; Alessio 7:40 e Valerio 8:26 di parlato. Note, scaletta e possibili domande aggiornate. La stima lascia margine sotto i 20 minuti; prova dal vivo NOT RUN. PDF 23 pagine senza warning o contenuti fuori margine, controllo visivo completato. Quality gate COMPLETE/PASS per elaborati.
+
+
+## 2026-11-02 — Consegna autonoma finale
+Confezionati gli stessi sorgenti, le sintesi coerenti, gli otto SLX e i PDF in Consegna_Progetto_SEA.zip. Il pacchetto è stato estratto in una nuova cartella TEMP esterna al repository. Il primo comando CLI aveva un errore di quoting e non ha avviato i calcoli; corretto il comando, restoredefaultpath e un assert hanno escluso il path del repository. run_all('rapida') e 20 esecuzioni collaudo_simulink sono terminati con exit code 0.
+
+Confronto: sei CSV riprodotti identici, massa e selezione dei drive coerenti, massimo scarto relativo dei picchi Scope zero; 33 sorgenti e ingressi identici per SHA-256. Il pacchetto finale viene rigenerato con evidenze e documentazione definitive, verificando che il contenuto eseguibile resti quello collaudato. I log sono conservati, con soli spazi finali rimossi. Cinque test MATLAB, sette verifiche scientifiche, 28 post-analisi, 154 casi lineari, 105 RAS, 35 prove non lineari e 20 run SLX nella campagna principale. Rapida e SLX ripetuti dalla consegna.
+
+Quality gate incarico R01–R22 COMPLETE/PASS. Gli obiettivi di controllo restano PARTIAL: nessuna RP raggiunta sulla famiglia completa, Hinf2/PID fragili, candidati D-K con offset e/o rumore elevati. Copertura globale B, RAS certificata, hardware e prova orale dal vivo non sono dichiarati eseguiti. Pubblicazione di una sola PR pronta per revisione; nessun merge.

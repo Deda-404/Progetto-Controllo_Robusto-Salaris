@@ -12,52 +12,59 @@ ARCHIVE = OUTPUT.with_suffix(".zip")
 
 README = """PROGETTO SEA — CONSEGNA AUTONOMA
 Alessio de Dato e Valerio Rebechi
-Revisione A/B completata il 1 novembre 2026.
+Carico incerto e confronto A/B; elaborati del 2 novembre 2026.
 
 1. Estrarre tutto lo ZIP.
 2. Aprire MATLAB R2026b e selezionare la cartella Consegna_Progetto_SEA.
 3. Eseguire run_all oppure run_all('rapida').
-4. Per rigenerare sintesi, robustezza, RAS e Simulink: run_all('completa').
+4. Per rigenerare sintesi, analisi robuste, RAS e Simulink: run_all('completa').
 
 Toolbox: Control System Toolbox, Robust Control Toolbox, Simulink.
-R2026b 26.2.0.3386108 è la versione collaudata. Gli SLX originali sono
-R2026a: R2025b non li apre senza conversione, qui non effettuata.
+R2026b 26.2.0.3386108 è la versione verificata. Gli SLX sono R2026a;
+R2025b non li apre senza conversione, qui non effettuata.
 Non servono Symbolic Math Toolbox, Python, Git o accesso al repository.
 
-La rapida ricalcola modello, peso, verifiche CARE, campioni, risposte e
-rumore. Carica esplicitamente le sintesi H-infinity/D-K, la post-analisi
-robusta e la RAS della campagna completa; ripete una verifica RAS locale.
-La completa rigenera tutto, compresi 150 casi RAS e 28 run Simulink.
-Le simulazioni possono richiedere diversi minuti; sono mostrati i progressi.
-I risultati si trovano in risultati/. La banca originale in dati/ è conservata.
-I controllori nuovi restano identificati separatamente da quelli originali.
+La rapida ricalcola modello, incertezze, peso, LQG/LQGI, campioni,
+risposte, rumore e una simulazione locale. Carica esplicitamente le sintesi
+H-infinity/D-K, l'analisi robusta e la RAS della campagna completa,
+verificando configurazione e identità dei controllori.
+La completa rigenera tutto: 105 RAS, 14 prove non lineari nominali,
+21 prove con solo carico variato e 20 run Simulink. Può richiedere
+diverse decine di minuti, soprattutto per D-K e analisi robuste.
 
-Script, nell'ordine del percorso:
-modello_sea; incertezze_attuatori; progetto_lqg; progetto_lqgi;
-progetto_hinf_tre_controllori; progetto_mu; confronto_ras.
-Ogni script è leggibile per sezioni. Eseguire prima run_all per predisporre
-i dati delle sezioni dipendenti. Configurazione unica: parametri_sea.m.
-collaudo_simulink esegue gli otto modelli con matrici e parametri espliciti:
-modifica soltanto il modello in memoria e chiude senza salvare gli SLX.
-Le callback storiche sono escluse durante questi run. Per ripetere i run
-usare collaudo_simulink, non il tasto Run su uno SLX aperto senza preparazione.
-Le quattro funzioni in simulink/support sono richiamate dai MATLAB Function.
+La configurazione unica è parametri_sea.m. Gli script sono richiamati
+in ordine da run_all, con Workspace separati. Risultati in risultati/;
+dati/banca_validata.mat conserva i controllori fissati del primo esperimento.
+Le altre quattro MAT in dati/ contengono i risultati coerenti della campagna.
 
-Il confronto A/B riguarda wn e zeta indipendenti per i due attuatori, ±10%;
-meccanica nominale, ritardo 15 ms noto e Padé comune di ordine uno.
-La copertura di B è verificata sui casi SISO provati; non è una prova
-di inclusione dell'intero box parametrico. Fallimenti di prestazione,
-rumore elevato e limiti empirici della RAS sono risultati, non errori omessi.
-Gli estratti Scope conservano picchi e conteggi dell'acquisizione integrale;
-le curve archiviate sono diradate a massimo 2000 campioni per segnale.
-I picchi dei diversi protocolli non sono direttamente intercambiabili.
+mEE=0.2 kg, intervallo [0.1,0.3] kg; m2 rimane 0.8 kg.
+Il carico contribuisce a M, C e G senza doppio conteggio.
+wn=40 rad/s ±10%, zeta=0.8 ±10%, td=15 ms ±20% per ogni drive.
+A: sei reali attuativi e una massa reale comune.
+B: due perturbazioni dinamiche additive e la stessa massa reale.
+Peso di ordine 3; copertura verificata su 29 casi e 30 indipendenti,
+non dimostrata sull'intero box. Gli stessi dieci impianti per tutti i K.
+Target: 2 s, 15%, errore statico 5%, cross 25%; soglie NS/NP/RS/RP immutate.
+I fallimenti prestazionali, il rumore eccessivo e i limiti della RAS
+rimangono nei risultati. Non tutti i controllori sono utilizzabili.
 
-Relazione e slide sono in relazione/. Sorgenti LaTeX e storia completa:
-https://github.com/Deda-404/Progetto_CR/tree/codex/revisione-definitiva-sea-salaris
+collaudo_simulink usa gli otto SLX esistenti, aggiorna in memoria massa,
+drive e controllori, esclude callback incompatibili e chiude senza salvare.
+Il parametro m2_eff entra nei generatori incorporati: non basta aprire uno
+SLX e premere Run senza la preparazione del runner. Gli helper in
+simulink/support sono usati dai MATLAB Function.
+Le prove durano 2 s; si controllano stati finiti e Scope acquisiti.
+Gli estratti delle curve hanno al massimo 2000 campioni, ma picchi e
+finitezza usano l'acquisizione integrale. Non è una verifica hardware.
 
-Se un path MATLAB personalizzato nasconde funzioni dei toolbox installati:
+Relazione, slide e testo orale sono in relazione/.
+Evidenze e matrice R01-R22: REVISIONE_DEFINITIVA.md.
+Sorgenti e storia: https://github.com/Deda-404/Progetto_CR
+Ramo: codex/sea-revisione-finale-semplificata.
+
+In caso di path personale che nasconde funzioni dei toolbox:
 restoredefaultpath; rehash toolboxcache; cd(cartella_estratta); run_all
-Questo ripristina il path solo nella sessione; non eseguire savepath.
+Il ripristino vale per la sessione; non eseguire savepath.
 """
 
 def sha(path):

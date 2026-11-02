@@ -1,29 +1,29 @@
     MassaEEkg    RapportoMassa2     M11     NormaKg    PoloLQGFissato
     _________    ______________    _____    _______    ______________
 
-       0.1           0.125         0.601    10.949          -0.3     
-       0.2            0.25          0.65    11.772          -0.3     
-       0.3           0.375         0.699    12.597          -0.3     
+       0.1           0.125         0.601    10.949          -0.3
+       0.2            0.25          0.65    11.772          -0.3
+       0.3           0.375         0.699    12.597          -0.3
 
 Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
     Tipo_wn_zeta_ritardo    Delta    Banda     Overshoot    MaxErroreRelativo
     ____________________    _____    ______    _________    _________________
 
-             1                -1     31.305       1.484            0.1905    
-             1              -0.5     33.044      1.4784          0.097651    
-             1                 0     34.783      1.4722        7.4562e-17    
-             1               0.5     36.523      1.4652           0.10253    
-             1                 1     38.262      1.4576           0.21001    
-             2                -1     39.223      3.7427           0.11109    
-             2              -0.5     36.974      2.4686          0.052625    
-             2                 0     34.783      1.4722        7.4562e-17    
-             2               0.5     32.689      0.7482          0.047614    
-             2                 1      30.72     0.28675            0.0909    
-             3                -1     34.783      1.4934           0.22221    
-             3              -0.5     34.783       1.484           0.10526    
-             3                 0     34.783      1.4722        7.4562e-17    
-             3               0.5     34.783      1.4576           0.09523    
-             3                 1     34.783      1.4401           0.18182    
+             1                -1     31.305       1.484            0.1905
+             1              -0.5     33.044      1.4784          0.097651
+             1                 0     34.783      1.4722        7.4562e-17
+             1               0.5     36.523      1.4652           0.10253
+             1                 1     38.262      1.4576           0.21001
+             2                -1     39.223      3.7427           0.11109
+             2              -0.5     36.974      2.4686          0.052625
+             2                 0     34.783      1.4722        7.4562e-17
+             2               0.5     32.689      0.7482          0.047614
+             2                 1      30.72     0.28675            0.0909
+             3                -1     34.783      1.4934           0.22221
+             3              -0.5     34.783       1.484           0.10526
+             3                 0     34.783      1.4722        7.4562e-17
+             3               0.5     34.783      1.4576           0.09523
+             3                 1     34.783      1.4401           0.18182
 
   7×1 struct array with fields:
 
@@ -33,7 +33,7 @@ Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
     Occurrences
     Simplify
 
-             Forma              Stabile    Propria    PoloDestro     Norma 
+             Forma              Stabile    Propria    PoloDestro     Norma
     ________________________    _______    _______    __________    _______
 
     "Additiva"                   true       true           -32      0.06829
@@ -43,9 +43,9 @@ Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
     Ordine    MaxNormaNormalizzata    EccessoMediano    Stabile    Proprio    MaxNormaIndipendente
     ______    ____________________    ______________    _______    _______    ____________________
 
-      1             0.98039               125.07           1          1             0.79699       
-      2             0.98039               5.5966           1          1             0.86008       
-      3             0.98037               1.0205           1          1              0.8788       
+      1             0.98039               125.07           1          1             0.79699
+      2             0.98039               5.5966           1          1             0.86008
+      3             0.98037               1.0205           1          1              0.8788
 
 A/B: sette reali / due dinamiche e una massa; peso additivo ordine 3.
 LQG: nuova sintesi nominale; pesi e covarianze conservati.
@@ -53,11 +53,11 @@ CARE 1.05e-13; separazione 1.15e-13.
     FattoreSigmaAssunta    PoloOsservatore    ErroreStimaRMS    ComandoRMS
     ___________________    _______________    ______________    __________
 
-            0.5                -11.991          0.00028813        0.15195 
-           0.75                -9.7874          0.00025192        0.10728 
-              1                -8.5925          0.00022798        0.08303 
-            1.5                -7.3886          0.00019766       0.057142 
-              2                -6.8084          0.00017949        0.04367 
+            0.5                -11.991          0.00028813        0.15195
+           0.75                -9.7874          0.00025192        0.10728
+              1                -8.5925          0.00022798        0.08303
+            1.5                -7.3886          0.00019766       0.057142
+              2                -6.8084          0.00017949        0.04367
 
 LQGI: 30 poli stabili; CARE 1.03e-13.
 Final: Peak gain = 0.991, Iterations = 329
@@ -67,9 +67,9 @@ NUOVE SINTESI, stessi pesi; candidati separati
     Controllore    Ordine     NS      NormaComune    GuadagnoRumoreComando
     ___________    ______    _____    ___________    _____________________
 
-    "Hinf1"          18      true        2.1633               286.43      
-    "Hinf2"          22      true       0.03558           1.2608e+08      
-    "PID_nuovo"       4      true       0.81587                18196      
+    "Hinf1"          18      true        2.1633               286.43
+    "Hinf2"          22      true       0.03558           1.2608e+08
+    "PID_nuovo"       4      true       0.81587                18196
 
 D-K dedicata A_parametrico, massimo 3 iterazioni.
 
@@ -130,34 +130,34 @@ Analisi Mu_B / B_concentrato...
      Controllore                    Sintesi                        Analisi        Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper      RP         MetodoRP       FrequenzaCritica
     _____________    ______________________________________    _______________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    ______    ______________    ________________
 
-    "LQG_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      14      true         2.9057       false      1.4712      1.4902    "PASS"           0           0    "FAIL"    "NP_FAIL"               55.24     
-    "LQG_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      14      true         2.9057       false      1.2771      1.2796    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.841     
-    "LQGI_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      16      true         1.0299       false      1.4323      1.4524    "PASS"           0           0    "FAIL"    "NP_FAIL"              55.223     
-    "LQGI_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      16      true         1.0299       false      1.2376      1.2401    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.919     
-    "Hinf1_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      18      true         2.5531       false     0.66184     0.67575    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.468     
-    "Hinf1_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      18      true         2.5531       false     0.42716     0.42802    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.511     
-    "Hinf2_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN     
-    "Hinf2_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN     
-    "PID_fisso"      "Controllore fissato prima del carico"    "A_parametrico"       4      true         1.9176       false     0.20839     0.21176    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.208     
-    "PID_fisso"      "Controllore fissato prima del carico"    "B_concentrato"       4      true         1.9176       false      0.1628     0.16323    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.078     
-    "Kmu_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      78      true        0.96183       true        2.306      2.6348    "PASS"    0.074049      0.1009    "FAIL"    "robgain"              6.0522     
-    "Kmu_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      78      true        0.96183       true       2.3294      2.3341    "PASS"    0.071704    0.071848    "FAIL"    "robgain"              2.3847     
-    "MuN1_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      82      true         1.0519       false      2.3506      2.4146    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.1409     
-    "MuN1_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      82      true         1.0519       false      2.1747       2.179    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.0315     
-    "LQG"            "Sintesi nominale con carico"             "A_parametrico"      14      true         2.1597       false      1.4593      1.4787    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.667     
-    "LQG"            "Sintesi nominale con carico"             "B_concentrato"      14      true         2.1597       false      1.1972      1.1996    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.148     
-    "LQGI"           "Sintesi nominale con carico"             "A_parametrico"      16      true         1.3239       false      1.4185      1.4385    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.377     
-    "LQGI"           "Sintesi nominale con carico"             "B_concentrato"      16      true         1.3239       false       1.155      1.1574    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.863     
-    "Hinf1"          "Sintesi nominale con carico"             "A_parametrico"      18      true         2.1633       false       1.337      1.3876    "PASS"           0           0    "FAIL"    "NP_FAIL"              78.438     
-    "Hinf1"          "Sintesi nominale con carico"             "B_concentrato"      18      true         2.1633       false     0.94854     0.95043    "FAIL"           0           0    "FAIL"    "NP_FAIL"               78.52     
-    "Hinf2"          "Sintesi nominale con carico"             "A_parametrico"      22      true        0.03558       true     0.055352    0.055671    "FAIL"           0    0.055671    "FAIL"    "LIMITE_DA_RS"         62.792     
-    "Hinf2"          "Sintesi nominale con carico"             "B_concentrato"      22      true        0.03558       true     0.037139    0.037213    "FAIL"           0    0.037213    "FAIL"    "LIMITE_DA_RS"         62.897     
-    "PID"            "Sintesi nominale con carico"             "A_parametrico"       4      true        0.81587       true      0.25217     0.25344    "FAIL"           0     0.25344    "FAIL"    "LIMITE_DA_RS"         15.319     
-    "PID"            "Sintesi nominale con carico"             "B_concentrato"       4      true        0.81587       true      0.20038     0.20078    "FAIL"           0     0.20078    "FAIL"    "LIMITE_DA_RS"         69.328     
-    "Mu_A"           "D-K su A"                                "A_parametrico"     264      true         6.5334       false      2.5228      2.8077    "PASS"           0           0    "FAIL"    "NP_FAIL"              60.587     
-    "Mu_A"           "D-K su A"                                "B_concentrato"     264      true         6.5334       false      2.2148      2.2192    "PASS"           0           0    "FAIL"    "NP_FAIL"              28.544     
-    "Mu_B"           "D-K su B"                                "A_parametrico"      28      true         6.6332       false     0.44411     0.44597    "FAIL"           0           0    "FAIL"    "NP_FAIL"              61.489     
-    "Mu_B"           "D-K su B"                                "B_concentrato"      28      true         6.6332       false     0.30356     0.30417    "FAIL"           0           0    "FAIL"    "NP_FAIL"              62.829     
+    "LQG_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      14      true         2.9057       false      1.4712      1.4902    "PASS"           0           0    "FAIL"    "NP_FAIL"               55.24
+    "LQG_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      14      true         2.9057       false      1.2771      1.2796    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.841
+    "LQGI_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      16      true         1.0299       false      1.4323      1.4524    "PASS"           0           0    "FAIL"    "NP_FAIL"              55.223
+    "LQGI_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      16      true         1.0299       false      1.2376      1.2401    "PASS"           0           0    "FAIL"    "NP_FAIL"              47.919
+    "Hinf1_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      18      true         2.5531       false     0.66184     0.67575    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.468
+    "Hinf1_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      18      true         2.5531       false     0.42716     0.42802    "FAIL"           0           0    "FAIL"    "NP_FAIL"              78.511
+    "Hinf2_fisso"    "Controllore fissato prima del carico"    "A_parametrico"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN
+    "Hinf2_fisso"    "Controllore fissato prima del carico"    "B_concentrato"      22      false       0.93205       false           0           0    "FAIL"           0           0    "FAIL"    "NP_FAIL"                 NaN
+    "PID_fisso"      "Controllore fissato prima del carico"    "A_parametrico"       4      true         1.9176       false     0.20839     0.21176    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.208
+    "PID_fisso"      "Controllore fissato prima del carico"    "B_concentrato"       4      true         1.9176       false      0.1628     0.16323    "FAIL"           0           0    "FAIL"    "NP_FAIL"              16.078
+    "Kmu_fisso"      "Controllore fissato prima del carico"    "A_parametrico"      78      true        0.96183       true        2.306      2.6348    "PASS"    0.074049      0.1009    "FAIL"    "robgain"              6.0522
+    "Kmu_fisso"      "Controllore fissato prima del carico"    "B_concentrato"      78      true        0.96183       true       2.3294      2.3341    "PASS"    0.071704    0.071848    "FAIL"    "robgain"              2.3847
+    "MuN1_fisso"     "Controllore fissato prima del carico"    "A_parametrico"      82      true         1.0519       false      2.3506      2.4146    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.1409
+    "MuN1_fisso"     "Controllore fissato prima del carico"    "B_concentrato"      82      true         1.0519       false      2.1747       2.179    "PASS"           0           0    "FAIL"    "NP_FAIL"              2.0315
+    "LQG"            "Sintesi nominale con carico"             "A_parametrico"      14      true         2.1597       false      1.4593      1.4787    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.667
+    "LQG"            "Sintesi nominale con carico"             "B_concentrato"      14      true         2.1597       false      1.1972      1.1996    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.148
+    "LQGI"           "Sintesi nominale con carico"             "A_parametrico"      16      true         1.3239       false      1.4185      1.4385    "PASS"           0           0    "FAIL"    "NP_FAIL"              53.377
+    "LQGI"           "Sintesi nominale con carico"             "B_concentrato"      16      true         1.3239       false       1.155      1.1574    "PASS"           0           0    "FAIL"    "NP_FAIL"              43.863
+    "Hinf1"          "Sintesi nominale con carico"             "A_parametrico"      18      true         2.1633       false       1.337      1.3876    "PASS"           0           0    "FAIL"    "NP_FAIL"              78.438
+    "Hinf1"          "Sintesi nominale con carico"             "B_concentrato"      18      true         2.1633       false     0.94854     0.95043    "FAIL"           0           0    "FAIL"    "NP_FAIL"               78.52
+    "Hinf2"          "Sintesi nominale con carico"             "A_parametrico"      22      true        0.03558       true     0.055352    0.055671    "FAIL"           0    0.055671    "FAIL"    "LIMITE_DA_RS"         62.792
+    "Hinf2"          "Sintesi nominale con carico"             "B_concentrato"      22      true        0.03558       true     0.037139    0.037213    "FAIL"           0    0.037213    "FAIL"    "LIMITE_DA_RS"         62.897
+    "PID"            "Sintesi nominale con carico"             "A_parametrico"       4      true        0.81587       true      0.25217     0.25344    "FAIL"           0     0.25344    "FAIL"    "LIMITE_DA_RS"         15.319
+    "PID"            "Sintesi nominale con carico"             "B_concentrato"       4      true        0.81587       true      0.20038     0.20078    "FAIL"           0     0.20078    "FAIL"    "LIMITE_DA_RS"         69.328
+    "Mu_A"           "D-K su A"                                "A_parametrico"     264      true         6.5334       false      2.5228      2.8077    "PASS"           0           0    "FAIL"    "NP_FAIL"              60.587
+    "Mu_A"           "D-K su A"                                "B_concentrato"     264      true         6.5334       false      2.2148      2.2192    "PASS"           0           0    "FAIL"    "NP_FAIL"              28.544
+    "Mu_B"           "D-K su B"                                "A_parametrico"      28      true         6.6332       false     0.44411     0.44597    "FAIL"           0           0    "FAIL"    "NP_FAIL"              61.489
+    "Mu_B"           "D-K su B"                                "B_concentrato"      28      true         6.6332       false     0.30356     0.30417    "FAIL"           0           0    "FAIL"    "NP_FAIL"              62.829
 
 Rumore ZOH e picchi intercampione: LQG_fisso
 Rumore ZOH e picchi intercampione: LQGI_fisso
@@ -278,7 +278,7 @@ RAS Mu_B, punto 12/15
 RAS Mu_B, punto 13/15
 RAS Mu_B, punto 14/15
 RAS Mu_B, punto 15/15
-                            Verifica                            Stato 
+                            Verifica                            Stato
     ________________________________________________________    ______
 
     "Equilibrio non lineare"                                    "PASS"
@@ -294,7 +294,7 @@ ans =
 
   7×2 table
 
-                            Verifica                            Stato 
+                            Verifica                            Stato
     ________________________________________________________    ______
 
     "Equilibrio non lineare"                                    "PASS"
@@ -304,4 +304,3 @@ ans =
     "Copertura dinamica continua dei campioni SISO"             "PASS"
     "Replay esatto dei dieci impianti comuni"                   "PASS"
     "Esito stabilita interna da matrice esplicita"              "PASS"
-

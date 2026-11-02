@@ -1,3 +1,13 @@
+# Stato corrente — 02.11.2026, revisione finale con carico
+
+Implementazione e requisiti dell’incarico R01–R22 COMPLETE/PASS. Relazione 49 pagine e 23 slide compilate e controllate. Consegna autonoma: 33 sorgenti/ingressi identici, rapida e 20 SLX PASS dall’estrazione esterna, sei CSV identici e scarto Scope zero. Evidenze in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).
+
+Accettazione prestazionale PARTIAL: LQG/LQGI e i due candidati D-K mantengono RS A/B, ma NP/RP non sono raggiunte da queste famiglie; Hinf2/PID hanno NP ma non RS. Tutti i FAIL restano nei dati. Non dimostrate copertura globale di B e RAS certificata; nessuna validazione hardware o prova orale dal vivo. Discorso 16:50 stimati.
+
+Ramo `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. Ultimo passo: pubblicazione della PR unica pronta per revisione, senza merge. Le sezioni seguenti sono registrazioni dei precedenti stati del lavoro.
+
+---
+
 # Stato corrente — 02.11.2026, elaborati verificati
 
 Relazione 49 pagine e presentazione 23 slide COMPLETE/PASS, figure e tabelle coerenti con i risultati. Discorso 16:50 stimati, non cronometrato. In corso il collaudo dello ZIP estratto con path MATLAB ripristinato; poi pubblicazione della PR.
