@@ -1,6 +1,6 @@
-# Stato corrente — 04.11.2026, revisione definitiva in corso
+# Stato corrente — 04.11.2026, sintesi e validazione completate
 
-PR #47, ramo esistente codex/sea-revisione-finale-semplificata; HEAD iniziale cbdee45. Gate meccanica e incertezze COMPLETE/PASS, cinque test MATLAB superati. Soltanto m2, wn1/2 e td1/2 incerti, smorzamento noto. Peso ordine 3 verificato su 25+30 casi, senza garanzia globale. Sintesi, analisi robuste, simulazioni e PDF in aggiornamento. Gli esiti delle configurazioni precedenti riportati sotto sono storici e non trasferiti alla configurazione corrente.
+PR #47, stesso ramo codex/sea-revisione-finale-semplificata. Modellazione, sintesi e post-analisi COMPLETE; gate tecnico PASS, accettazione prestazionale PARTIAL: nessun RP PASS, RS fallita per Hinf2/PID. Cinque test correnti, otto verifiche scientifiche, 20 run Simulink e otto avvii autonomi PASS. Risultati negativi conservati. Campagna completa eseguita per fasi, rapida eseguita integralmente. Relazione 111 pagine e 23 slide compilate e controllate su tutte le pagine senza warning/riferimenti irrisolti. Collaudo della ZIP estratta fuori dal repository in corso. Dettagli in REVISIONE_TRACCIA_20261104.md. Gli stati seguenti restano cronologia.
 
 ---
 

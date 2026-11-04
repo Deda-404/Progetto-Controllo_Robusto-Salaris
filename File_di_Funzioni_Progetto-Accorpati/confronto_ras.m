@@ -75,19 +75,19 @@ if p.modalita=="completa"
     end
     nonlineare=cell2table(righe,'VariableNames',{'Controllore','ProvaTrackingDisturbo','Completato','Esito','PiccoU','PiccoQ'});
     writetable(nonlineare,fullfile(p.risultati,'nonlineare.csv'));
-    % Carico isolato, tre valori, stesso riferimento e attuatore nominale.
+    % Massa m2 isolata, tre valori, stesso riferimento e attuatore nominale.
     carico=cell(3*numel(nomi),6); rr=0;
     for k=1:numel(nomi)
-        for massa=p.mEE*[1-p.rmEE 1 1+p.rmEE]
-            mj=modello; mj.fisica.mEE=massa;
+        for massa=p.m2*[1-p.rm2 1 1+p.rm2]
+            mj=modello; mj.fisica.m2=massa;
             out=simula_sea(controllori{k},mj,p,struct('r',[p.rAmp;0],'tempo',p.tempo));
             rr=rr+1;
             carico(rr,:)={nomi(k),massa,out.esito,max(abs(out.u),[],'all'), ...
                 max(abs(out.q(end,:)-[p.rAmp 0]))/p.rAmp,out.completato};
         end
     end
-    carico=cell2table(carico,'VariableNames',{'Controllore','MassaEE','Esito','PiccoU','ErroreFinale','Completato'});
-    writetable(carico,fullfile(p.risultati,'carico_nonlineare.csv'));
+    carico=cell2table(carico,'VariableNames',{'Controllore','Massa2','Esito','PiccoU','ErroreFinale','Completato'});
+    writetable(carico,fullfile(p.risultati,'massa_nonlineare.csv'));
     %% 5 - RAS: cinque direzioni per tre distanze, nessuna frontiera dedotta
     punti=zeros(numel(p.rasRaggi)*numel(p.rasDirezioni),2);
     for j=1:numel(p.rasRaggi)

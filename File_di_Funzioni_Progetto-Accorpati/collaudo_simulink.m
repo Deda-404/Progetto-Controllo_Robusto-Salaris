@@ -29,7 +29,7 @@ data.Kpid=h.sintesi.Kpid; data.Kmu=b.controllers(6).K;
 fileMu=fullfile(p.risultati,'sintesi_mu.mat');
 if ~isfile(fileMu),fileMu=fullfile(p.dati,'sintesi_mu.mat');end
 a=load(fileMu); assert(isequal(a.firma,p.firma) && a.inizializzazione=="MuN1",'SEA:Cache','Sintesi mu incoerente.'); candidati=a.candidati;
-fisica=rmfield(modello.fisica,'mEE'); nomi=fieldnames(fisica);
+fisica=modello.fisica; nomi=fieldnames(fisica);
 elementi=repmat(Simulink.BusElement,numel(nomi),1);
 for j=1:numel(nomi)
     elementi(j).Name=nomi{j}; elementi(j).Dimensions=size(fisica.(nomi{j})); elementi(j).DataType='double';
@@ -43,7 +43,7 @@ for k=1:numel(files)
     % Apertura in memoria per ispezionare SID e parametri, senza salvataggio.
     load_system(file);
     if ~inizializza,cleanup=onCleanup(@()close_system(nome,0));end
-    % I generatori di parametri incorporati ricevono la massa effettiva dal Workspace.
+    % I generatori di parametri incorporati ricevono la massa m2 dal Workspace.
     % Nessuna modifica della topologia o degli originali su disco.
     root=sfroot; charts=root.find('-isa','Stateflow.EMChart');
     aggiornati=0;
@@ -71,11 +71,11 @@ for k=1:numel(files)
     for campione=campioni
         if campione==0,Ga=modello.attuatori;else,Ga=inc.campioniAtt(:,:,campione);end
         [Aa,Ba,Ca,Da]=ssdata(Ga);
-        if campione==0,massa=p.mEE;else,massa=inc.parametri(campione,7);end
-        meccanica=usubs(modello.meccanicaIncerta,'m_EE',massa);
-        data.m2_eff=modello.fisica.m2+massa;
+        if campione==0,massa=p.m2;else,massa=inc.parametri(campione,5);end
+        meccanica=usubs(modello.meccanicaIncerta,'m2',massa);
+        data.m2_eff=massa;
         % Equazioni esterne dei MATLAB Function confrontate con quelle MATLAB.
-        pslx=fisica; pslx.m2=data.m2_eff; pm=modello.fisica; pm.mEE=massa;
+        pslx=fisica; pslx.m2=data.m2_eff; pm=modello.fisica; pm.m2=massa;
         qtest=[.4;-.3]; vtest=[.2;-.1];
         [Mt,Ct,Gt]=matrici_sea(qtest,vtest,pm);
         assert(norm(Mt-sea_link_inertia(qtest,pslx),'fro')<1e-12);
@@ -85,7 +85,7 @@ for k=1:numel(files)
         Bu=[modello.Btau*Da;Ba]; Bd=[meccanica.B(:,3:4);zeros(6,2)];
         data.Bplant=[Bu Bd Bd Bu]; data.Cplant=[modello.Cm zeros(4,6)]; data.Dplant=zeros(4,8);
         % Ogni maschera SISO riceve solo i propri tre stati, come l'originale.
-        if campione==0,parametri=[p.wn p.zeta p.ritardo p.wn p.zeta p.ritardo p.mEE];
+        if campione==0,parametri=[p.wn p.ritardo p.wn p.ritardo p.m2];
         else,parametri=inc.parametri(campione,:);end
         data.Gact1=Ga(1,1); data.Gact2=Ga(2,2);
         data.Gact=data.Gact1;
@@ -140,7 +140,7 @@ for k=1:numel(files)
         assert(isfinite(massimo) && ~isempty(scope),'SEA:Scope','Scope non acquisiti o non finiti.');
         riga=riga+1; risultati{riga}=struct('modello',nome,'campione',campione, ...
             'stato',"PASS",'tempoFinale',fine,'controllore',scelta,'massimoScope',massimo, ...
-            'segnali',{segnali},'overrideInit',true,'attuatori',numel(att),'massaEE',massa,'generatoriAggiornati',aggiornati);
+            'segnali',{segnali},'overrideInit',true,'attuatori',numel(att),'massa2',massa,'generatoriAggiornati',aggiornati);
         tracce{riga}=struct('scope',acquisizione,'parametri',parametri,'dati',data);
     end
     end

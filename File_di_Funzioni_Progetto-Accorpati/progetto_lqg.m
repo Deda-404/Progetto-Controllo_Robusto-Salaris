@@ -1,4 +1,4 @@
-%% 1 - LQG: sintesi sul nominale con carico
+%% 1 - LQG: sintesi sul nominale della traccia
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.dati,'banca_validata.mat'),'banca'); banca=a.banca;
 a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;

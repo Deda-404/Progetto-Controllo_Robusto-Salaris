@@ -1,50 +1,41 @@
-La relazione integrale adotta il metodo discorsivo del capitolo 7 approvato dagli studenti: 13 capitoli e quattro appendici, con particolare sviluppo del confronto A/B nel capitolo 5. [Confronto dei contenuti con main](docs/REVISIONE_EDITORIALE_INTEGRALE.md) e [verifiche editoriali](docs/EVIDENZE_EDITORIALI_INTEGRALI.json).
-
-PDF di 108 pagine compilato e controllato visivamente; 129 percorsi dell'indice conservati con due adattamenti necessari. I 589 file MATLAB/Simulink e numerici protetti sono invariati rispetto all'inizio della fase editoriale. Nessuna nuova campagna numerica dichiarata, nessun merge. Lo ZIP contiene lo stesso PDF; gli altri 89 contenuti sono identici alla consegna già collaudata.
-
 # Controllo robusto di un manipolatore SEA a due giunti
 
-Alessio de Dato (635256) e Valerio Rebechi (722224). Progetto con carico incerto all’end-effector e ritardo variabile nei due drive. Un solo percorso MATLAB accorpato, gli otto modelli Simulink esistenti e confronto fra rappresentazione parametrica A e concentrata B.
+Alessio de Dato (635256) e Valerio Rebechi (722224). Il progetto segue la Traccia n. 2 del professor Salaris: due masse puntiformi, molle SEA e due drive del secondo ordine con ritardo Padé. Il confronto principale riguarda le rappresentazioni delle incertezze attuative, parametrica A e concentrata additiva B, con la stessa meccanica incerta.
 
 ## Esecuzione
 
-MATLAB R2026b, Control System Toolbox, Robust Control Toolbox; Simulink per gli SLX. Dalla radice:
+MATLAB R2026b, Control System Toolbox, Robust Control Toolbox; Simulink per gli otto SLX. Dalla radice del repository o dalla cartella estratta della consegna:
 
 ```matlab
-run_all                 % ricalcola modello e verifiche; carica le sintesi onerose
-run_all('completa')      % rigenera sintesi, robustezza, 105 RAS e 20 run SLX
+run_all                 % ricostruisce il modello; usa le sintesi onerose salvate
+run_all('completa')      % rigenera sintesi, robustezza, simulazioni, RAS e SLX
 ```
 
-La rapida ricostruisce A/B e il peso, sintetizza LQG/LQGI, verifica la coerenza dei dati caricati e ripete risposte, rumore e una simulazione locale. La completa include 14 prove non lineari nominali e 21 con solo carico variato. Richiede diverse decine di minuti, soprattutto per D–K e analisi robusta. Non servono Symbolic Math Toolbox né un Workspace preparato manualmente.
+`parametri_sea.m` è l'unica configurazione del percorso corrente. `run_all.m` richiama sette script accorpati con Workspace separati. Il percorso è modello → incertezze → LQG → LQGI → H∞/PID → μ → confronto e RAS. `matrici_sea`, `dinamica_sea`, `interconnessione_sea` e `simula_sea` condividono equazioni e collegamenti.
 
-## Percorso operativo
+La modalità rapida ricalcola A/B, peso, campioni, LQG/LQGI, risposte e rumore, e ripete una verifica non lineare locale. Carica H∞/D–K, analisi robuste e RAS verificandone la firma di configurazione e l'identità dei controllori. La completa include due D–K, 14 post-analisi A/B, 77 casi lineari, 14 prove non lineari nominali, 21 con sola massa variata, 105 RAS e 20 run Simulink. Può richiedere un tempo elevato per i reali ripetuti e gli scaling. Per una sessione priva di grafica si può impostare `setenv('SEA_FIGURE','off')`; il percorso numerico resta lo stesso.
 
-`run_all.m` richiama sette script nella cartella `File_di_Funzioni_Progetto-Accorpati`: modello, incertezze, LQG, LQGI, H∞/PID, µ e confronto/RAS. `parametri_sea.m` centralizza le scelte. Le funzioni condivise `matrici_sea`, `dinamica_sea`, `interconnessione_sea`, `controllori_sea` e `simula_sea` evitano duplicazioni delle equazioni e dei controllori. `verifica_sea` e `collaudo_simulink` eseguono i controlli.
+## Modello corrente
 
-La banca in `dati/banca_validata.mat` conserva i coefficienti fissati del primo esperimento; le nuove sintesi sono in `risultati`. La firma di configurazione e l’identità dei controllori impediscono di usare dati incompatibili. Gli alberi `analysis`, `controllers` e `src` conservano la provenienza storica, fuori dal percorso corrente. Solo quattro helper di `src/model` sono richiesti dai MATLAB Function degli SLX.
+- Sole masse della traccia: m1=1 kg e m2=0.8 kg. m2 incerta ±10%, in [0.72,0.88] kg, condivisa da M/C/G e da A/B.
+- Drive: wn=40 rad/s ±15%, td=15 ms ±20%, zeta=0.8 noto. Due canali con variazioni indipendenti.
+- A: cinque reali indipendenti, wn1/td1/wn2/td2/m2. Le occorrenze ripetute restano correlate.
+- B: due perturbazioni dinamiche SISO additive e la stessa m2. Peso di ordine 3, verificato in norma sui 25 casi di costruzione e sui 30 indipendenti. Copertura globale non dimostrata.
+- Equilibrio verticale [pi/2;0], 14 stati fisici. Target conservati: Ts≤2 s, overshoot≤15%, errore statico≤5%, cross≤25%. Stessi pesi e modello desiderato nelle due D–K.
 
-## Modello e risultati
+Le tolleranze sono ipotesi ingegneristiche. La RAS è una sezione empirica nominale; i comandi sono risultati diagnostici senza limiti hardware assegnati. NS, NP, RS e RP rimangono proprietà distinte.
 
-- Carico `mEE=0.2 kg`, intervallo `[0.1,0.3] kg`; contribuisce a M, C e G tramite `m2+mEE`.
-- Drive nominali: 40 rad/s, 0.8, 15 ms; intervalli ±10%, ±10%, ±20%, indipendenti per canale.
-- A: sei reali attuativi e una massa reale condivisa. B: due dinamiche SISO additive e la stessa massa reale.
-- Peso additivo di ordine 3: massima norma normalizzata 0.9804 su 29 casi, 0.8788 su 30 casi indipendenti. Nessuna prova di copertura globale del box.
-- Target: Ts≤2 s, Mp≤15%, ess≤5%, cross≤25%; modello desiderato `9/(s²+6s+9)`. Soglie NS/NP/RS/RP immutate.
+## Risultati e verifiche
 
-LQG e LQGI mantengono RS su A/B ma non NP/RP sul costo comune. Hinf1 mantiene RS su A e la perde su B. Hinf2 e PID hanno NP ma falliscono RS/RP. Mu_A e Mu_B mantengono RS ma falliscono NP/RP e presentano offset e/o rumore elevati. Nessuna soluzione viene promossa soltanto per il valore della norma o il metodo di sintesi.
+Lo stato, gli esiti favorevoli e negativi e le verifiche effettivamente eseguite sono in [REVISIONE_TRACCIA_20261104.md](docs/REVISIONE_TRACCIA_20261104.md). I numeri autorevoli sono nei MAT/CSV correnti sotto `File_di_Funzioni_Progetto-Accorpati/risultati`; tabelle e figure dei PDF derivano da quei dati.
 
-Dieci impianti fisici comuni: Hinf2 stabile in 4/10, PID in 7/10; gli altri cinque controllori correnti in 10/10. RAS: 86 convergenze, 12 mancate convergenze entro 15 s, 7 allontanamenti osservati su 105, nessun timeout o errore numerico. Sono sezioni empiriche nominali. Il rumore è verificato anche fra campioni; non sono inventati limiti di coppia hardware.
+Cinque test indipendenti correnti: `runtests('tests/seaFinaleTest.m')`. `verifica_sea` esegue otto controlli scientifici del percorso. I vecchi runner e i risultati in `analysis`, `controllers`, `results` e parte della documentazione restano patrimonio storico; i loro esiti non sono trasferiti alla configurazione corrente. `dati/banca_validata.mat` conserva costi e riferimenti fissati, senza sostituire le sintesi correnti.
 
-## Elaborati e consegna
+## Elaborati
 
-- [Relazione](report/Progetto_CR_Relazione_finale.pdf), con i 13 capitoli e quattro appendici.
-- [Presentazione](presentation/Progetto_CR_Presentazione.pdf), 23 slide.
-- [Discorso](presentation/Presentazione_orale.txt), [note](presentation/SPEAKER_NOTES.md) e [tempi](presentation/OUTLINE_AND_TIMING.md): 16:50 stimati, prova dal vivo ancora necessaria.
-- [ZIP autonomo](delivery/Consegna_Progetto_SEA.zip): estrarre e lanciare `run_all`.
-- [Evidenze e requisiti R01–R22](docs/REVISIONE_DEFINITIVA.md), [stato](docs/PROJECT_STATUS.md), [diario](docs/DIARIO_DI_BORDO.md), [decisioni](docs/DECISION_LOG.md).
+- [Relazione integrale](report/Progetto_CR_Relazione_finale.pdf): 13 capitoli e quattro appendici.
+- [Presentazione](presentation/Progetto_CR_Presentazione.pdf): 23 slide, con il confronto A/B dopo il modello dei drive.
+- [Discorso orale](presentation/Presentazione_orale.txt) e [tempi stimati](presentation/OUTLINE_AND_TIMING.md).
+- [Consegna autonoma](delivery/Consegna_Progetto_SEA.zip), rigenerata dagli stessi sorgenti e dati.
 
-Gli otto SLX avviano automaticamente l'inizializzazione nominale dal percorso del modello. Si possono aprire singolarmente e avviare con Run. La massa effettiva è un parametro permanente dei generatori; non sono state cambiate le connessioni. `collaudo_simulink` senza argomenti conserva le 20 prove campionate. Completamento, stati finiti e Scope non equivalgono a RS/RP o a target raggiunti.
-
-Per rigenerare gli elaborati: `python tools/esporta_definitiva.py`, due passaggi `pdflatex` nelle cartelle report e presentation e copia dei PDF ai nomi finali. `python tools/audit_oral_timing.py` aggiorna i tempi. `python tools/consegna_definitiva.py` confeziona gli stessi sorgenti e controlla ZIP e SHA-256. Python e LaTeX servono per modificare gli elaborati, non per eseguire la consegna.
-
-Il ramo di lavoro è `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. Drive è usato in sola lettura. La [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47) è aperta e pronta per la revisione del gruppo. Nessun merge eseguito.
+La compilazione usa i sorgenti LaTeX esistenti. `tools/esporta_definitiva.py` aggiorna le tabelle; gli esportatori delle figure leggono dati salvati. `tools/consegna_definitiva.py` verifica SHA-256 e integrità ZIP. Google Drive resta in sola lettura. Il lavoro è sulla [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47), ramo `codex/sea-revisione-finale-semplificata`; main resta riferimento, senza merge.

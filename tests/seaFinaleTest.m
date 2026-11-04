@@ -33,6 +33,11 @@ classdef seaFinaleTest < matlab.unittest.TestCase
             t.verifyEqual(order(u.PA),14);
             t.verifyEqual(sort(fieldnames(u.PA.Uncertainty)),sort({'m2';'wn1';'wn2';'td1';'td2'}));
             t.verifyEqual(u.PA.Uncertainty.m2.Range,[.72 .88],'AbsTol',1e-12);
+            t.verifyEqual(u.PA.Uncertainty.wn1.Range,[34 46],'AbsTol',1e-12);
+            t.verifyEqual(u.PA.Uncertainty.wn2.Range,[34 46],'AbsTol',1e-12);
+            t.verifyEqual(u.PA.Uncertainty.td1.Range,[.012 .018],'AbsTol',1e-12);
+            t.verifyEqual(u.PA.Uncertainty.td2.Range,[.012 .018],'AbsTol',1e-12);
+            t.verifyEqual(p.zeta,.8);
         end
         function massaAiBordi(t)
             p=parametri_sea; a=load(fullfile(p.risultati,'modello.mat')); m=a.modello;

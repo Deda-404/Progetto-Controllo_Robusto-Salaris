@@ -1,0 +1,60 @@
+{
+  "report": {
+    "pages": 111,
+    "warnings": [],
+    "outside_page": [],
+    "sheets": [
+      "tmp\\revisione_pdf_20261104\\report_sheet_01.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_02.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_03.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_04.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_05.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_06.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_07.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_08.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_09.png",
+      "tmp\\revisione_pdf_20261104\\report_sheet_10.png"
+    ],
+    "detail_pages": [
+      7,
+      10,
+      11,
+      15,
+      27,
+      72,
+      78,
+      96
+    ],
+    "sha256": "8e9be3bab1e9a80476bd6b59bfbf89d4b847a951c5b6fecccc63b68b343e47eb",
+    "chapters": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  "presentation": {
+    "pages": 23,
+    "warnings": [],
+    "outside_page": [],
+    "sheets": [
+      "tmp\\revisione_pdf_20261104\\presentation_sheet_01.png",
+      "tmp\\revisione_pdf_20261104\\presentation_sheet_02.png"
+    ],
+    "detail_pages": [],
+    "sha256": "b47ceff2e3a774ceb97caac469859557224c6c241d1069ee7c4e1b4eebc1458e"
+  }
+}

@@ -1,4 +1,4 @@
-%% 1 - LQGI: sintesi con carico e pesi conservati
+%% 1 - LQGI: sintesi della traccia e pesi conservati
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.dati,'banca_validata.mat'),'banca'); banca=a.banca;
 a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;

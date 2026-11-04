@@ -763,3 +763,12 @@ Incarico degli studenti sulla PR #47, HEAD iniziale cbdee456cee9b766c4bbc7d107f4
 Traccia ufficiale letta su Drive in sola lettura, figura originale recuperata. Cinque test seaFinaleTest PASS su MATLAB R2026b: equilibrio/Jacobiano, contributo geometrico della massa m2, famiglia A/B e nomi dei cinque reali, Jacobiani ai bordi e energia Coriolis. Peso additivo ordine 3: massima norma normalizzata 0.98007 sui 25 casi di costruzione e 0.94364 sui 30 indipendenti, eccesso mediano 1.0205. Nessuna prova globale del box.
 
 Un riavvio del PC ha interrotto il primo calcolo; dopo il riavvio si è manifestato errore MathWorks 5201, risolto riavviando il Service Host. Campagna senza grafica per separare calcoli ed esportazione. Gate modellazione COMPLETE/PASS; nuove sintesi, robustezza e validazione in corso. Esiti precedenti non trasferiti.
+
+
+## 2026-11-04 — Sintesi, post-analisi e collaudo dei modelli
+
+Risintetizzati LQG/LQGI, mixsyn, due hinfsyn, PID hinfstruct e D–K su A/B (tre iterazioni ciascuna). Ricalcolate 14 post-analisi con K invariato fra A e B: tutte NS; NP solo Hinf2/PID; RS su entrambe per LQG/LQGI/Hinf1/Mu_A/Mu_B, FAIL Hinf2/PID. Nessun RP PASS. Hinf1-B passa con margine inferiore 1.01379, esito diverso dalla precedente configurazione.
+
+Eseguiti 77 casi lineari, 14 non lineari nominali, 21 con sola m2 variata, rumore ZOH/intercampione e 105 RAS (88 convergenze, 15 mancate, due divergenze osservate). Comandi elevati e prestazioni negative mantenuti. Venti run Simulink di 2 s e otto avvii originali autonomi PASS; topologia/layout invariati, m2 nominale persistente nei Model Workspace. Cinque test e otto verifiche scientifiche PASS, PBH rango 14. Due suggerimenti non critici Code Analyzer su 16 sorgenti. Eseguito integralmente run_all(rapida), tutte le figure correnti rigenerate; campagna completa eseguita per fasi.
+
+I log conservano due errori degli helper temporanei (radice da pwd e who(ws)), corretti e collaudati nuovamente. Le vecchie evidenze restano cronologia, esplicitamente separate dalle correnti. Gate tecnico COMPLETE/PASS; accettazione prestazionale PARTIAL. Collaudo esterno della ZIP in corso. Responsabile: Alessio.

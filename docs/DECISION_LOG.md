@@ -2459,3 +2459,8 @@ Integrità: 589 file protetti identici per SHA-256. Nessuna nuova sintesi, simul
 ## 2026-11-04 — Decisione definitiva approvata dagli studenti
 
 L'incarico definitivo sostituisce la decisione sul carico aggiuntivo: sole masse m1=1 e m2=0.8 kg. Unica incertezza meccanica m2 ±10%; quattro reali attuativi wn1/wn2 ±15% e td1/td2 ±20%; zeta noto. A e B condividono meccanica, nominale, equilibrio e segnali; B concentra soltanto i drive in due perturbazioni SISO additive. Conservati pesi, specifiche e famiglie di controllo. Cinque test e copertura campionata PASS. Restano storiche le decisioni precedenti incompatibili. Confermata l'autorizzazione già registrata alle API MATLAB locali in assenza di model_edit; nessuna nuova topologia o libreria Simulink.
+
+
+## 2026-11-04 — Esiti negativi e validazione distinta
+
+Confermati pesi e target precedenti, senza adattarli ai risultati. Le due D–K hanno obiettivi finali 2.92947/1.81149 e ordini 242/106; non sono sostituti di RS/RP. Nessun RP PASS; Hinf2/PID falliscono RS. I test finiti di 2 s sugli SLX attestano esecuzione e coerenza, non prestazioni. Le cinque prove correnti sostituiscono l'attribuzione indebita di test storici non ripetuti. La consegna viene verificata da ZIP estratta fuori dal repository con path pulito; l'esito sarà registrato dopo l'esecuzione. Confermata la conservazione del patrimonio teorico dei 13 capitoli e quattro appendici, con numeri correnti e limiti espliciti.

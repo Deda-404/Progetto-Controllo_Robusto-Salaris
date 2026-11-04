@@ -18,7 +18,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/mu_linear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/mu_linear_sim_audit.json",
+      "sha256_current": "6d23fb8daef3d8cd849c7547583284742aecddb2131e87c142ccbff429eeb645",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "Hinf_linear_sim.slx",
@@ -36,7 +39,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/Hinf_linear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/Hinf_linear_sim_audit.json",
+      "sha256_current": "d0e5fc2cc1206b89aa8120c5b21d208393ff672d13531108c9e5b5fd2cc6641d",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "LQGI_linear_sim.slx",
@@ -54,7 +60,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/LQGI_linear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/LQGI_linear_sim_audit.json",
+      "sha256_current": "bdf3cd0fe0925e0d15f25fe5551136b6c1d663c2dc6b26f607a3661dcf527a25",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "LQG_linear_sim.slx",
@@ -72,7 +81,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/LQG_linear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/LQG_linear_sim_audit.json",
+      "sha256_current": "852dfc44062219cb00dc9ce11b72bfffbadfc99f774ccf5ce282aba07b300164",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "LQGI_nonlinear_sim.slx",
@@ -90,7 +102,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/LQGI_nonlinear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/LQGI_nonlinear_sim_audit.json",
+      "sha256_current": "d015653836588fdba93af523086981ae169ad74dbe50f0e6b535c3340bef5a45",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "LQG_nonlinear_sim.slx",
@@ -108,7 +123,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/LQG_nonlinear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/LQG_nonlinear_sim_audit.json",
+      "sha256_current": "43df707c36bdfbcc3e02e2f5f0ba3f19b45157655c9e07401f01a6192cab1b0b",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "Hinf_nonlinear_sim.slx",
@@ -126,7 +144,10 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/Hinf_nonlinear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/Hinf_nonlinear_sim_audit.json",
+      "sha256_current": "f2f7645f3379193dc2458a572d3a51cf719d5446d126f72d82e77ff70eb08b8c",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     },
     {
       "name": "mu_nonlinear_sim.slx",
@@ -144,8 +165,17 @@
       "dynamic_validation_status": "DYNAMIC VALIDATION PASS",
       "validated_release": "2026b",
       "validated_date": "2026-10-13",
-      "runtime_evidence": "results/data/final_simulink_validation/mu_nonlinear_sim_audit.json"
+      "runtime_evidence": "results/data/final_simulink_validation/mu_nonlinear_sim_audit.json",
+      "sha256_current": "172dde6ee32108bcfadacf1e791586c8d2c8ba083a17fbf826cb8a13af74d97d",
+      "current_validation_date": "2026-11-04",
+      "current_validation_status": "20 run campionati e 8 avvii autonomi PASS; non certificazione prestazionale"
     }
   ],
-  "current_validation": "Eight original files validated in R2026b; original source SHA-256 preserved."
+  "current_validation": "Eight original files validated in R2026b; original source SHA-256 preserved.",
+  "current_revision": {
+    "date": "2026-11-04",
+    "source_head": "cbdee456cee9b766c4bbc7d107f46750a1553409",
+    "description": "Parametri e controllori del modello della traccia, m2=0.8 kg, senza massa aggiuntiva; topologia e layout conservati. I campi source/imported restano provenienza storica.",
+    "evidence": "File_di_Funzioni_Progetto-Accorpati/risultati/simulink_autonomo.csv"
+  }
 }
