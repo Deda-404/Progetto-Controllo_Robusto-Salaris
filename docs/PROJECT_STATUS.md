@@ -1,3 +1,9 @@
+# Stato corrente — 04.11.2026, revisione definitiva in corso
+
+PR #47, ramo esistente codex/sea-revisione-finale-semplificata; HEAD iniziale cbdee45. Gate meccanica e incertezze COMPLETE/PASS, cinque test MATLAB superati. Soltanto m2, wn1/2 e td1/2 incerti, smorzamento noto. Peso ordine 3 verificato su 25+30 casi, senza garanzia globale. Sintesi, analisi robuste, simulazioni e PDF in aggiornamento. Gli esiti delle configurazioni precedenti riportati sotto sono storici e non trasferiti alla configurazione corrente.
+
+---
+
 # Stato corrente — relazione integrale editoriale completata
 
 Metodo del capitolo 7 approvato dagli studenti ed esteso all'intera relazione. Recupero discorsivo di 13 capitoli e quattro appendici con riferimento main dbf6f00; 129 percorsi dell'indice mantenuti, due titoli adattati alle ipotesi attuali. Approfondimento del capitolo 5: fisica, parametri, peso, LFT e robustezza A/B. Matrice dei contenuti e limiti in [REVISIONE_EDITORIALE_INTEGRALE.md](REVISIONE_EDITORIALE_INTEGRALE.md).

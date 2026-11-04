@@ -1,11 +1,12 @@
-%% 1 - Meccanica assegnata e ipotesi sul carico distale
+%% 1 - Meccanica assegnata: due sole masse puntiformi
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.dati,'banca_validata.mat'),'banca'); banca=a.banca;
-fisica=banca.plant.mechanicalParams; fisica.mEE=p.mEE; qbar=banca.plant.xbar(1:2);
+fisica=struct('m1',p.m1,'m2',p.m2,'l1',p.l1,'l2',p.l2, ...
+    'Jm',p.Jm,'Bm',p.Bm,'Ks',p.Ks,'g',p.g); qbar=p.qbar;
 Ks=fisica.Ks; Jm=fisica.Jm; Bm=fisica.Bm; I=eye(2); Z=zeros(2);
 
 %% 2 - Un solo parametro reale per inerzia, gravita e Coriolis
-incerta=fisica; incerta.mEE=ureal('m_EE',p.mEE,'Percentage',100*p.rmEE);
+incerta=fisica; incerta.m2=ureal('m2',p.m2,'Percentage',100*p.rm2);
 [Mu,~,Gu,Kgu]=matrici_sea(qbar,zeros(2,1),incerta);
 Au=[Z I Z Z;-Mu\(Ks+Kgu) Z Mu\Ks Z;Z Z Z I;Jm\Ks Z -Jm\Ks -Jm\Bm];
 Btau=[zeros(6,2);Jm\I]; Bdu=[Z;Mu\I;zeros(4,2)];
@@ -17,7 +18,7 @@ thetabar=qbar+Ks\Gbar; xbar=[qbar;zeros(2,1);thetabar;zeros(2,1)]; taubar=Gbar;
 assert(all(eig(Mbar)>0));
 assert(norm(dinamica_sea(xbar,taubar,zeros(2,1),fisica))<1e-10);
 % qbar=[pi/2;0]: gravita nulla per ogni massa, rigidezza gravitazionale non nulla.
-assert(norm(usubs(Gu,'m_EE',p.mEE*(1+p.rmEE)))<1e-12);
+assert(norm(usubs(Gu,'m2',p.m2*(1+p.rm2)))<1e-12);
 
 %% 3 - Due drive a tre stati; modello fisico con ordine degli stati esplicito
 s=tf('s'); Dp=(1-p.ritardo*s/2)/(1+p.ritardo*s/2);
@@ -29,48 +30,47 @@ Bdfull=[Bd;zeros(6,2)]; Cfull=[Cm zeros(4,6)];
 P0=ss(Afull,[Bfull Bdfull],Cfull,zeros(4));
 erroreNominale=max(abs(freqresp(P0,p.omega)-freqresp(meccanica*blkdiag(attuatori,I),p.omega)),[],'all');
 assert(erroreNominale<p.tolNominale);
-% Confronto limitato di ipotesi di carico, prima di interpretare il nominale.
+% Confronto limitato di variazioni della massa m2, prima di interpretare il nominale.
 righe=zeros(numel(p.masseCandidate),5);
 for j=1:numel(p.masseCandidate)
-    fp=fisica; fp.mEE=p.masseCandidate(j);
+    fp=fisica; fp.m2=p.masseCandidate(j);
     [Mj,~,~,Kgj]=matrici_sea(qbar,zeros(2,1),fp);
-    Pj=usubs(meccanicaIncerta,'m_EE',fp.mEE)*blkdiag(attuatori,I);
+    Pj=usubs(meccanicaIncerta,'m2',fp.m2)*blkdiag(attuatori,I);
     [~,cl]=interconnessione_sea(Pj,p,4,banca.controllers(1).K);
-    righe(j,:)=[fp.mEE,fp.mEE/fisica.m2,Mj(1,1),norm(Kgj,2),max(real(pole(cl)))];
+    righe(j,:)=[fp.m2,fp.m2/fisica.m2,Mj(1,1),norm(Kgj,2),max(real(pole(cl)))];
 end
-candidati=array2table(righe,'VariableNames',{'MassaEEkg','RapportoMassa2','M11','NormaKg','PoloLQGFissato'});
-writetable(candidati,fullfile(p.risultati,'candidati_carico.csv')); disp(candidati);
+candidati=array2table(righe,'VariableNames',{'Massa2kg','RapportoNominale','M11','NormaKg','PoloLQGFissato'});
+writetable(candidati,fullfile(p.risultati,'candidati_massa.csv')); disp(candidati);
 modello=struct('fisica',fisica,'xbar',xbar,'taubar',taubar,'Am',Am,'Btau',Btau, ...
     'Bd',Bd,'Cm',Cm,'meccanica',meccanica,'meccanicaIncerta',meccanicaIncerta, ...
     'G0',G0,'H0',H0,'Dp',Dp,'Mbar',Mbar,'Kg',Kg, ...
     'Afull',Afull,'Bfull',Bfull,'Bdfull',Bdfull,'Cfull',Cfull, ...
     'attuatori',attuatori,'P0',P0,'erroreNominale',erroreNominale,'firma',p.firma);
 save(fullfile(p.risultati,'modello.mat'),'modello','-v7');
-fprintf('Nominale: %d stati; mEE %.1f kg; errore interconnessione %.3g.\n',order(P0),p.mEE,erroreNominale);
+fprintf('Nominale: %d stati; m2 %.1f kg; errore interconnessione %.3g.\n',order(P0),p.m2,erroreNominale);
 
 %% 4 - Scale dinamiche e sensibilita: cinque valori, un parametro alla volta
-valori=linspace(-1,1,5); righe=cell(15,5); curva=0; curveSensibilita=cell(15,1);
-for tipo=1:3
+valori=linspace(-1,1,5); righe=cell(10,5); curva=0; curveSensibilita=cell(10,1);
+for tipo=1:2
     for valore=valori
         wn=p.wn; zeta=p.zeta; ritardo=p.ritardo;
         if tipo==1,wn=wn*(1+p.rwn*valore);end
-        if tipo==2,zeta=zeta*(1+p.rzeta*valore);end
-        if tipo==3,ritardo=ritardo*(1+p.rritardo*valore);end
+        if tipo==2,ritardo=ritardo*(1+p.rritardo*valore);end
         Ga=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-ritardo*s/2)/(1+ritardo*s/2);
         curva=curva+1; curveSensibilita{curva}=Ga; risposta=stepinfo(Ga);
         scarto=max(abs(freqresp(Ga,p.omega)./freqresp(G0,p.omega)-1),[],'all');
         righe(curva,:)={tipo,valore,bandwidth(Ga),risposta.Overshoot,scarto};
     end
 end
-sensibilita=cell2table(righe,'VariableNames',{'Tipo_wn_zeta_ritardo','Delta','Banda','Overshoot','MaxErroreRelativo'});
+sensibilita=cell2table(righe,'VariableNames',{'Tipo_wn_ritardo','Delta','Banda','Overshoot','MaxErroreRelativo'});
 writetable(sensibilita,fullfile(p.risultati,'sensibilita_attuatori.csv'));
 disp(sensibilita);
 % Il ritardo varia in A e nella famiglia che costruisce il peso B.
 % L'errore rispetto al ritardo esatto resta distinto dalla sua variabilita.
 if p.figure
-    f=figure('Name','Tre parametri attuativi','Color','w','Position',[20 20 1100 800]); theme(f,'light'); tiledlayout(3,2);
-    etichette=["Frequenza naturale","Smorzamento","Ritardo"];
-    for tipo=1:3
+    f=figure('Name','Due parametri attuativi','Color','w','Position',[20 20 1100 800]); theme(f,'light'); tiledlayout(2,2);
+    etichette=["Frequenza naturale","Ritardo"];
+    for tipo=1:2
         for j=1:5
             risposta=squeeze(freqresp(curveSensibilita{5*(tipo-1)+j},p.omega));
             nexttile(2*tipo-1); semilogx(p.omega,20*log10(abs(risposta))); hold on;

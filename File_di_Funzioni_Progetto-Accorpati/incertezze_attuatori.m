@@ -1,4 +1,4 @@
-%% 1 - Unica famiglia fisica: sei parametri attuativi e un carico comune
+%% 1 - Unica famiglia fisica: quattro parametri attuativi e la massa m2 comune
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;
 assert(isequal(modello.firma,p.firma),'SEA:Cache','Rigenerare modello_sea.');
@@ -6,7 +6,7 @@ s=tf('s'); G0=modello.G0;
 attA=cell(1,2);
 for giunto=1:2
     wn=ureal(char("wn"+giunto),p.wn,'Percentage',100*p.rwn);
-    zeta=ureal(char("zeta"+giunto),p.zeta,'Percentage',100*p.rzeta);
+    zeta=p.zeta; % Noto ai fini del progetto, nessun blocco incerto.
     td=ureal(char("td"+giunto),p.ritardo,'Percentage',100*p.rritardo);
     % Pade: xdot=-2/td*x+2/td*u, y=2*x-u. Sempre un solo stato.
     ritardo=ss(-2/td,2/td,2,-1);
@@ -15,13 +15,13 @@ end
 GaA=append(attA{:}); PA=modello.meccanicaIncerta*blkdiag(GaA,eye(2));
 statoRng=rng; rng(p.seed,'twister');
 [campioniFisici,estrazioni]=usample(PA,p.campioni); rng(statoRng);
-parametri=[[estrazioni.wn1]',[estrazioni.zeta1]',[estrazioni.td1]', ...
-    [estrazioni.wn2]',[estrazioni.zeta2]',[estrazioni.td2]',[estrazioni.m_EE]'];
+parametri=[[estrazioni.wn1]',[estrazioni.td1]', ...
+    [estrazioni.wn2]',[estrazioni.td2]',[estrazioni.m2]'];
 campioniAtt=ss(zeros(2,2,0));
 for j=1:p.campioni
-    campioniAtt(:,:,j)=usubs(GaA,rmfield(estrazioni(j),'m_EE'));
+    campioniAtt(:,:,j)=usubs(GaA,rmfield(estrazioni(j),'m2'));
 end
-writetable(array2table(parametri,'VariableNames',{'wn1','zeta1','td1','wn2','zeta2','td2','m_EE'}), ...
+writetable(array2table(parametri,'VariableNames',{'wn1','td1','wn2','td2','m2'}), ...
     fullfile(p.risultati,'parametri_dieci_impianti.csv'));
 
 %% 2 - LFT completa: nomi fisici distinti dalle ripetizioni algebriche
@@ -46,10 +46,11 @@ tabellaForme=cell2table(forme,'VariableNames',{'Forma','Stabile','Propria','Polo
 writetable(tabellaForme,fullfile(p.risultati,'forme_incertezza.csv')); disp(tabellaForme);
 % Si adotta Gp=G0+WI*Delta: nessuna inversione dello zero RHP del drive.
 
-%% 4 - Venti drive comuni, otto vertici SISO e nominale
-[a1,a2,a3]=ndgrid([-1 1]); corner=[a1(:),a2(:),a3(:);0 0 0];
-coppie=[parametri(:,1:3);parametri(:,4:6);p.wn*(1+p.rwn*corner(:,1)), ...
-    p.zeta*(1+p.rzeta*corner(:,2)),p.ritardo*(1+p.rritardo*corner(:,3))];
+%% 4 - Venti drive comuni, quattro vertici SISO e nominale
+[a1,a2]=ndgrid([-1 1]); corner=[a1(:),a2(:);0 0];
+coppie=[parametri(:,1),repmat(p.zeta,p.campioni,1),parametri(:,2); ...
+    parametri(:,3),repmat(p.zeta,p.campioni,1),parametri(:,4); ...
+    p.wn*(1+p.rwn*corner(:,1)),repmat(p.zeta,5,1),p.ritardo*(1+p.rritardo*corner(:,2))];
 nCampioni=size(coppie,1); errori=cell(nCampioni,1); attuatori=cell(nCampioni,1);
 scostamenti=zeros(numel(p.omega),nCampioni);
 for j=1:nCampioni
@@ -60,11 +61,11 @@ for j=1:nCampioni
 end
 inviluppo=max(scostamenti,[],2);
 % Hold-out: campioni indipendenti usati solo per verifica, mai per il fit.
-rng(p.seed+1,'twister'); verifica=rand(30,3)*2-1; rng(statoRng);
+rng(p.seed+1,'twister'); verifica=rand(30,2)*2-1; rng(statoRng);
 erroriVerifica=cell(30,1);
 for j=1:30
     erroriVerifica{j}=minreal(drive(p.wn*(1+p.rwn*verifica(j,1)), ...
-        p.zeta*(1+p.rzeta*verifica(j,2)),p.ritardo*(1+p.rritardo*verifica(j,3)))-G0,1e-8);
+        p.zeta,p.ritardo*(1+p.rritardo*verifica(j,2)))-G0,1e-8);
 end
 
 %% 5 - Fit semplice, copertura continua dei campioni e controllo indipendente
@@ -104,7 +105,7 @@ for j=1:p.campioni
     delta1=minreal(errori{j}/WI,1e-7);
     delta2=minreal(errori{p.campioni+j}/WI,1e-7);
     assert(isstable(delta1) && isstable(delta2) && isproper(delta1) && isproper(delta2));
-    riassemblato=usubs(PB,'m_EE',parametri(j,7),'Delta_act1',delta1,'Delta_act2',delta2);
+    riassemblato=usubs(PB,'m2',parametri(j,5),'Delta_act1',delta1,'Delta_act2',delta2);
     erroreAB=max(erroreAB,max(abs(freqresp(riassemblato,p.omega)-freqresp(campioniFisici(:,:,j),p.omega)),[],'all'));
 end
 assert(erroreAB<1e-7);
@@ -122,7 +123,7 @@ modelli=struct('PA',PA,'PB',PB,'GaA',GaA,'GaB',GaB,'WI',WI,'M',M,'Delta',Delta, 
     'tabellaPesi',tabellaPesi,'scelta',scelta,'erroreLFT',erroreLFT,'erroreAB',erroreAB, ...
     'erroreNominale',[erroreA erroreB],'omega',p.omega,'seed',p.seed,'firma',p.firma);
 save(fullfile(p.risultati,'incertezze.mat'),'modelli','-v7');
-fprintf('A/B: sette reali / due dinamiche e una massa; peso additivo ordine %d.\n',scelta);
+fprintf('A/B: cinque reali / due dinamiche e una massa; peso additivo ordine %d.\n',scelta);
 
 %% 7 - Grafici SISO: modulo, fase, poli e tempo della stessa famiglia
 if p.figure
