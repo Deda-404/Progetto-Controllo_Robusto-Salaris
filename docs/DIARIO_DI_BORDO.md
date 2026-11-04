@@ -3208,3 +3208,12 @@ Aggiornati tutti i 13 capitoli e le appendici A–D, conservando Riccati, Kalman
 Relazione finale 111 pagine, presentazione 23 slide: compilazione latexmk riuscita, zero warning/overfull/underfull/riferimenti irrisolti, controllo di tutte le pagine e dei margini. Corretti durante il controllo il numero di vertici SISO nello schema del fitting e il testo relativo allo smorzamento noto; nuova compilazione e audit PASS. SHA-256 nell’audit PDF. La slide A/B precede i controllori; discorso 2043 parole, 17:17 stimati inclusi cambi, prova dal vivo non eseguita. Le negative NS/NP/RS/RP e i limiti hardware restano leggibili.
 
 Gate elaborati COMPLETE/PASS. PDF finali copiati nei nomi di consegna; verifica della ZIP estratta ancora in corso. Responsabile: Alessio.
+
+
+## 2026-11-04 — Consegna estratta, collaudo e confezionamento definitivo
+
+Collaudo effettivo della ZIP estratta fuori dal repository con restoredefaultpath e path controllato: rapida integrale, otto verifiche scientifiche, 20 run Simulink di 2 s e otto avvii con callback originali PASS. Sette CSV identici byte per byte al repository; 33 ingressi eseguibili/MAT/SLX controllati per SHA-256 e mantenuti nel pacchetto finale. Il primo helper ha fallito dopo la rapida per autodetection del delimitatore CSV; specificato Delimiter comma, ripetuta l’intera prova, conservati entrambi i log. Non si attribuisce alla copia estratta una nuova sintesi D–K.
+
+Aggiornati soltanto documentazione, evidenze e manifest dopo il collaudo, mantenendo i medesimi ingressi testati. Consegna con due PDF verificati, sorgenti autorevoli, dati correnti, otto SLX e istruzioni R2026b. Gate tecnico e confezionamento COMPLETE/PASS; accettazione prestazionale PARTIAL, nessun RP PASS. Nessun merge. Responsabile: Alessio.
+
+Nota del confronto estratto: Nel CSV Simulink differisce soltanto il contatore attuatori (maschere ancora chiamate Gact da riconfigurare): negli SLX salvati i canali sono già Gact1/Gact2, quindi il contatore è zero. Tutte le altre colonne, inclusi picchi Scope, massa, tempo finale e stato, coincidono byte per byte nei valori.

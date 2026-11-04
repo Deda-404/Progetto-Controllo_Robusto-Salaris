@@ -4,7 +4,7 @@ Responsabile: Alessio. Ramo `codex/sea-revisione-finale-semplificata`, PR #47. B
 
 ## Stato della revisione
 
-Modellazione, sintesi, post-analisi, simulazioni e PDF COMPLETE. Gate tecnico PASS; accettazione prestazionale PARTIAL: nessun controllore ottiene RP PASS. Collaudo della consegna estratta in corso. Le registrazioni precedenti nella documentazione restano cronologia e non descrivono la configurazione corrente.
+Modellazione, sintesi, post-analisi, simulazioni e PDF COMPLETE. Gate tecnico PASS; accettazione prestazionale PARTIAL: nessun controllore ottiene RP PASS. Consegna estratta COMPLETE/PASS: rapida, otto verifiche, 20 run Simulink e otto callback originali; sette CSV identici e 33 ingressi eseguibili verificati per hash. Le registrazioni precedenti nella documentazione restano cronologia e non descrivono la configurazione corrente.
 
 ## Modello fisico e incertezze
 
@@ -76,3 +76,13 @@ Semplificazioni: un solo file parametri, sette script lineari richiamati dal run
 ## Non eseguito e limiti
 
 Non eseguite certificazione continua globale del box, Lyapunov robusto non lineare su tutta la famiglia, identificazione sperimentale delle tolleranze/rumori, validazione hardware, saturazioni fisiche, prova orale dal vivo o ripetizione della vecchia griglia di 36 candidati. Non sono obiettivi dichiarati raggiunti. SLX salvati e verificati con R2026b: apertura in R2025b richiederebbe conversione, non effettuata. È stato usato il runtime PDF già presente e autorizzato dal sistema, senza modificare le protezioni Windows.
+
+## Consegna autonoma: collaudo concluso
+
+ZIP estratta in una cartella TEMP nuova, esterna al repository. Eseguiti restoredefaultpath e rehash toolboxcache, controllati path privo del repository e risoluzione locale di run_all/parametri_sea. Eseguita integralmente la rapida, poi otto verifiche PASS, 20 run Simulink di 2 s PASS e otto avvii con le InitFcn originali di 2 s PASS, senza risalvare gli SLX. Stesso m2 nominale 0.8 kg e stati finiti. Non è stata ripetuta D–K nella copia estratta; i caricamenti coerenti sono espliciti.
+
+I sette CSV ordini_peso, parametri_dieci_impianti, dieci_impianti, rumore, hinf, confronto_robusto e verifiche sono identici byte per byte al repository. I 33 ingressi eseguibili (MATLAB, MAT di dati/cache e otto SLX) sono identici per SHA-256 al manifest collaudato. Nel CSV Simulink differisce soltanto il contatore attuatori (maschere ancora chiamate Gact da riconfigurare): negli SLX salvati i canali sono già Gact1/Gact2, quindi il contatore è zero. Tutte le altre colonne, inclusi picchi Scope, massa, tempo finale e stato, coincidono byte per byte nei valori. Gli stessi ingressi sono mantenuti nella ZIP finale; dopo la prova cambiano soltanto documentazione, evidenze e manifest. Integrità ZIP e identità dei due PDF sono verificate dal confezionatore. Evidenze: collaudo_consegna_20261104.json/.txt.
+
+Il primo tentativo ha completato la rapida, poi l’helper readtable ha interpretato il separatore del CSV in modo errato. L’helper è stato corretto specificando Delimiter comma e l’intero collaudo è stato ripetuto con esito positivo. Entrambi i log sono conservati. Si aggiunge ai due errori degli helper di audit già descritti, senza nasconderli né attribuirli a fallimenti dei modelli. Nessuna dipendenza o protezione di sistema è stata disabilitata.
+
+Stato finale: gate tecnico e confezionamento COMPLETE/PASS; accettazione dei controllori PARTIAL per le specifiche non raggiunte. Stesso ramo della PR #47, main invariato, nessun merge.

@@ -12,7 +12,7 @@ ARCHIVE = OUTPUT.with_suffix(".zip")
 
 README = """PROGETTO SEA — CONSEGNA AUTONOMA
 Alessio de Dato e Valerio Rebechi
-Carico incerto e confronto A/B; elaborati del 2 novembre 2026.
+Massa m2 incerta e confronto A/B; elaborati del 4 novembre 2026.
 
 1. Estrarre tutto lo ZIP.
 2. Aprire MATLAB R2026b e selezionare la cartella Consegna_Progetto_SEA.
@@ -23,13 +23,17 @@ Toolbox: Control System Toolbox, Robust Control Toolbox, Simulink.
 R2026b 26.2.0.3386108 è la versione verificata. Gli SLX sono R2026b;
 R2025b non li apre senza conversione, qui non effettuata.
 Non servono Symbolic Math Toolbox, Python, Git o accesso al repository.
+Collaudo da ZIP estratta in TEMP con path pulito: rapida integrale, 8 verifiche,
+20 run Simulink e 8 callback originali PASS. Sette CSV identici al repository;
+33 ingressi eseguibili corrispondono agli hash del pacchetto collaudato.
+Dopo il collaudo sono aggiornati soltanto documentazione, evidenze e manifest.
 
 La rapida ricalcola modello, incertezze, peso, LQG/LQGI, campioni,
 risposte, rumore e una simulazione locale. Carica esplicitamente le sintesi
 H-infinity/D-K, l'analisi robusta e la RAS della campagna completa,
 verificando configurazione e identità dei controllori.
 La completa rigenera tutto: 105 RAS, 14 prove non lineari nominali,
-21 prove con solo carico variato e 20 run Simulink. Può richiedere
+21 prove con sola massa m2 variata e 20 run Simulink. Può richiedere
 diverse decine di minuti, soprattutto per D-K e analisi robuste.
 
 La configurazione unica è parametri_sea.m. Gli script sono richiamati
@@ -39,12 +43,12 @@ La campagna predefinita usa sette candidati; controllori_sea(p,true)
 include esplicitamente i riferimenti per un confronto mirato.
 Le altre quattro MAT in dati/ contengono i risultati coerenti della campagna.
 
-mEE=0.2 kg, intervallo [0.1,0.3] kg; m2 rimane 0.8 kg.
-Il carico contribuisce a M, C e G senza doppio conteggio.
-wn=40 rad/s ±10%, zeta=0.8 ±10%, td=15 ms ±20% per ogni drive.
-A: sei reali attuativi e una massa reale comune.
+m1=1 kg; m2=0.8 kg ±10%, intervallo [0.72,0.88] kg.
+Le due masse sono quelle della traccia; m2 compare in M, C e G.
+wn=40 rad/s ±15%, zeta=0.8 noto, td=15 ms ±20% per ogni drive.
+A: quattro reali attuativi e una massa reale comune, cinque scalari.
 B: due perturbazioni dinamiche additive e la stessa massa reale.
-Peso di ordine 3; copertura verificata su 29 casi e 30 indipendenti,
+Peso di ordine 3; copertura verificata su 25 casi e 30 indipendenti,
 non dimostrata sull'intero box. Gli stessi dieci impianti per tutti i K.
 Target: 2 s, 15%, errore statico 5%, cross 25%; soglie NS/NP/RS/RP immutate.
 I fallimenti prestazionali, il rumore eccessivo e i limiti della RAS
@@ -53,7 +57,7 @@ rimangono nei risultati. Non tutti i controllori sono utilizzabili.
 Gli otto SLX si possono aprire singolarmente e avviare con Run.
 La callback InitFcn individua automaticamente collaudo_simulink.m e assegna
 il nominale dal contenuto locale della consegna, senza Workspace precedente.
-La massa m2_eff è un parametro permanente dei generatori non lineari;
+La variabile m2_eff dei generatori non lineari riceve esclusivamente m2;
 i due drive hanno realizzazioni distinte. Nessuna libreria esterna richiesta.
 collaudo_simulink senza argomenti esegue invece le 20 prove campionate.
 Il completamento e gli stati finiti sono verifiche di esecuzione;
@@ -62,8 +66,7 @@ I modelli sono stati salvati con R2026b; gli originali sono recuperabili
 nella cronologia Git. Non è stata modificata la topologia.
 
 Relazione, slide e testo orale sono in relazione/.
-Evidenze e matrice R01-R22: REVISIONE_DEFINITIVA.md.
-Correzione conservativa e matrice C01-C20: CORREZIONE_CONSERVATIVA.md.
+Evidenze e limiti correnti: REVISIONE_TRACCIA_20261104.md.
 Sorgenti e storia: https://github.com/Deda-404/Progetto_CR
 Ramo: codex/sea-revisione-finale-semplificata.
 
@@ -83,8 +86,15 @@ def main():
     for name in ["sintesi_hinf", "sintesi_mu", "confronto_robusto", "ras"]:
         mapping[Path(f"dati/{name}.mat")] = SOURCE / f"risultati/{name}.mat"
     for source in (SOURCE / "risultati").iterdir():
-        if source.suffix in {".csv", ".png", ".json", ".txt"} or source.name in {
-            "simulink.mat", "modello.mat", "incertezze.mat", "lqg.mat", "lqgi.mat"}:
+        correnti={"candidati_massa","candidati_ritardo","candidati_specifiche","candidati_riferimento",
+                  "confronto_robusto","dieci_impianti","dk_1","dk_2","forme_incertezza","hinf",
+                  "kalman","massa_nonlineare","nonlineare","ordini_peso","parametri_dieci_impianti",
+                  "ras","riesame_mu","rumore","sensibilita_attuatori","simulink","simulink_autonomo",
+                  "esecuzione_rapida","verifiche","riassunto_numerico","oral_timing","code_analyzer",
+                  "verifica_modellazione_20261104","verifica_numerica_20261104","verifica_pdf_20261104",
+                  "collaudo_consegna_20261104"}
+        if source.suffix==".png" or source.stem in correnti or source.name in {
+            "modello.mat", "incertezze.mat", "lqg.mat", "lqgi.mat"}:
             mapping[Path("risultati") / source.name] = source
     for source in (ROOT / "simulink/student_originals").glob("*.slx"):
         mapping[Path("simulink") / source.name] = source
@@ -93,8 +103,7 @@ def main():
     for name in ["report/Progetto_CR_Relazione_finale.pdf", "presentation/Progetto_CR_Presentazione.pdf",
                  "presentation/Presentazione_orale.txt"]:
         mapping[Path("relazione") / Path(name).name] = ROOT / name
-    mapping[Path("REVISIONE_DEFINITIVA.md")] = ROOT / "docs/REVISIONE_DEFINITIVA.md"
-    mapping[Path("CORREZIONE_CONSERVATIVA.md")] = ROOT / "docs/CORREZIONE_CONSERVATIVA.md"
+    mapping[Path("REVISIONE_TRACCIA_20261104.md")] = ROOT / "docs/REVISIONE_TRACCIA_20261104.md"
     expected = {str(path.as_posix()) for path in mapping} | {"LEGGIMI.txt", "MANIFEST_SHA256.json"}
     unexpected = {str(f.relative_to(OUTPUT).as_posix()) for f in OUTPUT.rglob("*") if f.is_file()} - expected
     if unexpected:

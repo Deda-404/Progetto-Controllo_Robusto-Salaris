@@ -2464,3 +2464,8 @@ L'incarico definitivo sostituisce la decisione sul carico aggiuntivo: sole masse
 ## 2026-11-04 — Esiti negativi e validazione distinta
 
 Confermati pesi e target precedenti, senza adattarli ai risultati. Le due D–K hanno obiettivi finali 2.92947/1.81149 e ordini 242/106; non sono sostituti di RS/RP. Nessun RP PASS; Hinf2/PID falliscono RS. I test finiti di 2 s sugli SLX attestano esecuzione e coerenza, non prestazioni. Le cinque prove correnti sostituiscono l'attribuzione indebita di test storici non ripetuti. La consegna viene verificata da ZIP estratta fuori dal repository con path pulito; l'esito sarà registrato dopo l'esecuzione. Confermata la conservazione del patrimonio teorico dei 13 capitoli e quattro appendici, con numeri correnti e limiti espliciti.
+
+
+## 2026-11-04 — Consegna verificata, pubblicazione sul ramo esistente
+
+Collaudo estratto COMPLETE/PASS (rapida, 8 verifiche, 20 run, 8 callback originali). Il pacchetto finale mantiene per hash i 33 ingressi eseguibili collaudati; aggiornati soltanto documentazione/evidenze/manifest. Confermata pubblicazione dei commit sul ramo esistente della PR #47 come richiesto dagli studenti, senza merge e senza modifica di main. Il completamento tecnico non modifica l’accettazione prestazionale PARTIAL: nessun RP e limiti hardware/globali dichiarati.

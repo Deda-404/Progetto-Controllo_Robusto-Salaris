@@ -1,6 +1,8 @@
-# Stato corrente — 04.11.2026, sintesi e validazione completate
+# Stato corrente — 04.11.2026, revisione definitiva completata
 
-PR #47, stesso ramo codex/sea-revisione-finale-semplificata. Modellazione, sintesi e post-analisi COMPLETE; gate tecnico PASS, accettazione prestazionale PARTIAL: nessun RP PASS, RS fallita per Hinf2/PID. Cinque test correnti, otto verifiche scientifiche, 20 run Simulink e otto avvii autonomi PASS. Risultati negativi conservati. Campagna completa eseguita per fasi, rapida eseguita integralmente. Relazione 111 pagine e 23 slide compilate e controllate su tutte le pagine senza warning/riferimenti irrisolti. Collaudo della ZIP estratta fuori dal repository in corso. Dettagli in REVISIONE_TRACCIA_20261104.md. Gli stati seguenti restano cronologia.
+Stesso ramo codex/sea-revisione-finale-semplificata e PR #47. Modello della traccia con sole m1/m2, cinque reali in A e due dinamiche più m2 in B. Sintesi, 14 post-analisi, 77 casi lineari, 14+21 non lineari, rumore e 105 RAS eseguiti. Cinque test correnti e otto verifiche PASS. Venti run Simulink e otto avvii autonomi PASS, ripetuti anche dalla ZIP estratta fuori dal repository con path pulito; rapida integrale, sette CSV identici, 33 ingressi testati verificati per hash.
+
+Relazione di 111 pagine e presentazione di 23 slide, tutte renderizzate e controllate, zero warning/riferimenti irrisolti; discorso 17:17 stimati. Gate tecnico e confezionamento COMPLETE/PASS. Accettazione prestazionale PARTIAL: nessun RP PASS; RS fallita per Hinf2/PID; rumore, offset e target non raggiunti restano espliciti. Nessun certificato globale, hardware o Lyapunov non lineare robusto; prova orale dal vivo non eseguita. Dettagli e fallimenti corretti degli helper in REVISIONE_TRACCIA_20261104.md e log correnti. Nessun merge, main invariato. Gli stati seguenti restano cronologia.
 
 ---
 

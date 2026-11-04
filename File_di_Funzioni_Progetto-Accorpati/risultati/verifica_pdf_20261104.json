@@ -44,7 +44,9 @@
       "B",
       "C",
       "D"
-    ]
+    ],
+    "deliverable": "report/Progetto_CR_Relazione_finale.pdf",
+    "all_pages_visually_reviewed": true
   },
   "presentation": {
     "pages": 23,
@@ -55,6 +57,8 @@
       "tmp\\revisione_pdf_20261104\\presentation_sheet_02.png"
     ],
     "detail_pages": [],
-    "sha256": "b47ceff2e3a774ceb97caac469859557224c6c241d1069ee7c4e1b4eebc1458e"
+    "sha256": "b47ceff2e3a774ceb97caac469859557224c6c241d1069ee7c4e1b4eebc1458e",
+    "deliverable": "presentation/Progetto_CR_Presentazione.pdf",
+    "all_pages_visually_reviewed": true
   }
 }

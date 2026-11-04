@@ -1,0 +1,129 @@
+{
+  "stato": "PASS",
+  "radice_estratta": "C:\\Users\\aless\\AppData\\Local\\Temp\\SEA_consegna_20261104_8c4eeaec\\Consegna_Progetto_SEA",
+  "versione": "26.2.0.3386108 (R2026b)",
+  "path_repository_assente": true,
+  "verifiche": 8,
+  "run_simulink": 20,
+  "avvii_autonomi": [
+    "Hinf_linear_sim",
+    "Hinf_nonlinear_sim",
+    "LQGI_linear_sim",
+    "LQGI_nonlinear_sim",
+    "LQG_linear_sim",
+    "LQG_nonlinear_sim",
+    "mu_linear_sim",
+    "mu_nonlinear_sim"
+  ],
+  "durata_run_simulink_secondi": 2,
+  "csv_identici_repository": {
+    "ordini_peso": true,
+    "parametri_dieci_impianti": true,
+    "dieci_impianti": true,
+    "rumore": true,
+    "hinf": true,
+    "confronto_robusto": true,
+    "verifiche": true
+  },
+  "simulink_csv_identico": false,
+  "ingressi_testati_sha256": {
+    "collaudo_simulink.m": "87deb57c660a192479147eacc346fe0f332ed063afbd7780fa9f8cbb4383072c",
+    "confronto_ras.m": "729e4857440b92bb8659b63bec5d5d26a4c50afce30e7080bda54e1adf7d06f7",
+    "controllori_sea.m": "0e62fe879f2ca794b321c94327c900a9f74b8c8361b159ca74e6c642df099e0d",
+    "dinamica_sea.m": "f75c4f81d39f68cd4b90a39196d928508f179c660af63dc16b76c1fa65de05e8",
+    "incertezze_attuatori.m": "e437b868ad91b743d646adc2a6e215acf06de1250b5ccd994a6ba2231bf998c9",
+    "interconnessione_sea.m": "c9c9192e82919840de381b2ae9bec53863899798e23a9ab43e82092e9f1600a7",
+    "matrici_sea.m": "32b47538c565986a0002249d0d1ab29ce900322f69f61c036595e9fac2444810",
+    "modello_sea.m": "b6884a8c3afdad3f3ed79e2b7c4e93a2c4ae265b237ca748eabaf19be16cb942",
+    "parametri_sea.m": "dbbffea0829c802a5cfd322bb44100ef1c308204e6e520503ee2727382f7f426",
+    "progetto_hinf_tre_controllori.m": "701a13337498ba5c8663265a2193c064d01ff0b493724c9d320aec2735701eb0",
+    "progetto_lqg.m": "ee846c53a9644b16e353ee42ab9c644bffce1d978b3f40d3acf71adf168919af",
+    "progetto_lqgi.m": "f82548d5fe946f80b964a4028646293f3d34434c11464620b6c4e8970053afff",
+    "progetto_mu.m": "2c9385aad129a29a7101ac7ebc196f2b3c8e1d09cf76047e12a61f50700081e7",
+    "run_all.m": "1dd032bae8eee63c28a5a5eddcd7c854b3036e377b15fa51a8bfb7daa2cba814",
+    "simula_sea.m": "23bd6bd0d747e637ddd6018f4e279ddb5b7864082e4cd2b5832d5e6b5a2f7381",
+    "verifica_sea.m": "e1176e8c85ad6f66bbf763d67e3482d00b8e262c50e9e9cc368d7bb47ff6c2a7",
+    "dati/banca_validata.mat": "ab228ed2970f022a8408e813bde85d4764663871386f1c3ea6fd0d022537f35f",
+    "dati/confronto_robusto.mat": "e64d89e5d6e052ca0ecb90b2e531bd1dfe6577585a7bc8e768c8cb4f7a811d03",
+    "dati/ras.mat": "7f226f880503d0790d6c922d3ee3a04aa0be77b638df93acc727f9b2cf3dd45f",
+    "dati/sintesi_hinf.mat": "33ff33237761159d47fcbd228abff3834491bf1780b9d4b852163abb23051e3e",
+    "dati/sintesi_mu.mat": "7ad3f2691f0b2c2ff7fca72d1b720ec01dfc48c64873c06493d0e8a0f09bd663",
+    "simulink/Hinf_linear_sim.slx": "d0e5fc2cc1206b89aa8120c5b21d208393ff672d13531108c9e5b5fd2cc6641d",
+    "simulink/Hinf_nonlinear_sim.slx": "f2f7645f3379193dc2458a572d3a51cf719d5446d126f72d82e77ff70eb08b8c",
+    "simulink/LQGI_linear_sim.slx": "bdf3cd0fe0925e0d15f25fe5551136b6c1d663c2dc6b26f607a3661dcf527a25",
+    "simulink/LQGI_nonlinear_sim.slx": "d015653836588fdba93af523086981ae169ad74dbe50f0e6b535c3340bef5a45",
+    "simulink/LQG_linear_sim.slx": "852dfc44062219cb00dc9ce11b72bfffbadfc99f774ccf5ce282aba07b300164",
+    "simulink/LQG_nonlinear_sim.slx": "43df707c36bdfbcc3e02e2f5f0ba3f19b45157655c9e07401f01a6192cab1b0b",
+    "simulink/mu_linear_sim.slx": "6d23fb8daef3d8cd849c7547583284742aecddb2131e87c142ccbff429eeb645",
+    "simulink/mu_nonlinear_sim.slx": "172dde6ee32108bcfadacf1e791586c8d2c8ba083a17fbf826cb8a13af74d97d",
+    "simulink/support/sea_coriolis.m": "9a01d65dc851de117310724a0919bcc5cca4695eec09dd64d027cfcc7c1be867",
+    "simulink/support/sea_elastic_torque.m": "7f4ed625c3ac9be279b65f55831ff0138baba9de3507adbc4e83c49fc6c16d87",
+    "simulink/support/sea_gravity.m": "0dbeaef63b874b0d1de02932e047517b28a5fd14731e21445de8f3e61e9c9b69",
+    "simulink/support/sea_link_inertia.m": "a6312332740442c5cb044dd52114b306b0cff7056018905a63400350bdc66727"
+  },
+  "nota": "Completa eseguita per fasi nel repository; nella copia ZIP rapida integrale con cache Hinf/DK/robustezza/RAS dichiarate, 20 run e 8 avvii autonomi da path pulito. Dopo il collaudo si aggiornano soltanto documentazione/evidenze/manifest, non gli ingressi eseguibili.",
+  "tentativo_precedente": "Rapida PASS; helper readtable con autodetection del delimitatore errata. Specificato Delimiter comma e ripetuto tutto il collaudo, con PASS.",
+  "simulink_differenze": [
+    {
+      "riga": 3,
+      "colonna": "attuatori",
+      "repository": "6",
+      "estratto": "0"
+    },
+    {
+      "riga": 4,
+      "colonna": "attuatori",
+      "repository": "6",
+      "estratto": "0"
+    },
+    {
+      "riga": 7,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 8,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 11,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 12,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 17,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 18,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 19,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    },
+    {
+      "riga": 20,
+      "colonna": "attuatori",
+      "repository": "2",
+      "estratto": "0"
+    }
+  ],
+  "simulink_confronto_numerico": "Nel CSV Simulink differisce soltanto il contatore attuatori (maschere ancora chiamate Gact da riconfigurare): negli SLX salvati i canali sono già Gact1/Gact2, quindi il contatore è zero. Tutte le altre colonne, inclusi picchi Scope, massa, tempo finale e stato, coincidono byte per byte nei valori."
+}
