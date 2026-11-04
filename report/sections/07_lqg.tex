@@ -7,7 +7,7 @@ La retroazione deve quindi intervenire anche quando chiediamo al robot di
 restare fermo. Durante il movimento deve inoltre contenere le oscillazioni
 legate alle molle dei SEA e tenere conto della risposta non istantanea dei drive.
 
-Per il progetto utilizziamo il modello nominale con $m_{EE}=0.2$ kg e
+Per il progetto utilizziamo il modello nominale con $m_2=0.8$ kg e
 14 stati: otto meccanici e sei dei due attuatori. Le coordinate sono
 scostamenti dall'equilibrio. Un riferimento di cinque gradi indica dunque
 una variazione rispetto alla verticale, non un angolo assoluto rispetto
@@ -31,7 +31,7 @@ Da questo limite nasce LQGI, che aggiunge due memorie dell'errore misurato.
 Seguiamo quindi un percorso preciso: quali grandezze penalizziamo,
 come scegliamo le scale, come stimiamo gli stati mancanti e come
 interpretiamo le risposte? Le matrici numeriche e le curve del capitolo
-si riferiscono al nominale con carico. Stabilità nominale, robustezza
+si riferiscono al nominale della traccia. Stabilità nominale, robustezza
 sulle famiglie A/B e prove non lineari rimangono proprietà distinte.
 
 
@@ -209,15 +209,14 @@ un vincitore fisico indipendente dalle preferenze progettuali.
 
 La configurazione studiata usa $w_q=2$, $w_v=1$, $w_\delta=0.1$ e
 $r_u=0.10$. Le figure numeriche si riferiscono a questi coefficienti
-sul nominale con carico. La griglia descrive il metodo: non le
-attribuiamo un nuovo numero di punti conformi o un minimo sul nuovo
-carico senza aver calcolato tutte le 36 risposte. Possiamo invece
+sul nominale della traccia. La griglia descrive il metodo: non le
+attribuiamo un nuovo numero di punti conformi o un minimo sul modello corrente senza aver calcolato tutte le 36 risposte. Possiamo invece
 confrontare i candidati effettivamente disponibili.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.82\textwidth]{figures/pilota_capitolo7/compromesso_nominale.png}
 \caption{Assestamento e picco di coppia dei candidati LQG e LQGI sul
-nominale con carico, prendendo il peggiore dei due riferimenti.
+nominale della traccia, prendendo il peggiore dei due riferimenti.
 Non è una nuova scansione dei 36 costi LQR.}\label{fig:m6-lqr-search}
 \end{figure}
 
@@ -246,7 +245,7 @@ iniziale. È diversa dalle covarianze di Kalman e da una matrice usata
 per delimitare una regione di attrazione non lineare. La somiglianza
 fra alcune equazioni matriciali non rende intercambiabili i loro significati.
 
-Le matrici seguenti provengono dai dati del nominale con carico.
+Le matrici seguenti provengono dai dati del nominale della traccia.
 Sono arrotondate per la lettura; i dati conservano la precisione di calcolo.
 La partizione di $K$ in due gruppi di sette colonne serve all'impaginazione:
 l'ordine dei 14 stati resta quello dichiarato all'inizio del capitolo.
@@ -352,9 +351,7 @@ perché i giunti sono accoppiati. Un coefficiente in una riga di velocità
 non va confrontato direttamente con uno in una riga di angolo: sono
 diverse le unità e il ruolo della correzione nella dinamica.
 
-Il polo più lento di $A-LC$ ha parte reale circa $-8.592$ s$^{-1}$,
-contro $-5.752$ s$^{-1}$ del regolatore. La rapidità asintotica del
-Kalman è circa 1.49 volte quella del feedback. Il rapporto descrive
+Il polo più lento di $A-LC$ ha parte reale $-\FinAlphaKalman$ s$^{-1}$, contro $-\FinAlphaLqr$ s$^{-1}$ del regolatore. Il rapporto fra le rapidità asintotiche è \FinRapportoKalman. Il rapporto descrive
 il progetto ottenuto: non è una regola del docente né una garanzia
 di basso rumore. Un osservatore reso molto rapido può trasmettere
 al comando una parte maggiore delle fluttuazioni degli encoder.
@@ -419,7 +416,7 @@ Con $e=x-\hat x$ si ottiene la forma triangolare
 \]
 in assenza di ingressi esogeni. L'unione degli spettri di regolatore e stimatore
 coincide quindi con quello della chiusura completa. La trasformazione viene
-verificata numericamente nello script; il residuo è circa $1.15\,10^{-13}$.
+verificata numericamente nello script; il residuo è circa \FinSeparazione.
 Questo risultato riguarda stabilità nominale lineare, non robustezza rispetto
 al modello incerto o stabilità non lineare globale.
 La chiusura LQG ha 28 stati: 14 della pianta e 14 della stima.
@@ -433,7 +430,7 @@ La Figura~\ref{fig:m6-tracking} usa le due prove di tracking nominale.
 In alto si applica $r_1=5^\circ,r_2=0$; in basso $r_1=0,r_2=5^\circ$.
 Pianta e osservatore partono da deviazioni nulle; rumore e coppie
 esterne sono nulli. Tempo e posizioni sono espressi in secondi e gradi.
-Le curve provengono dalle risposte salvate del nominale con carico.
+Le curve provengono dalle risposte salvate del nominale della traccia.
 
 La prima lettura riguarda il giunto comandato: rapidità, superamento
 del riferimento e valore finale. La seconda riguarda l'altro giunto:
@@ -449,11 +446,7 @@ le posizioni fisiche dei link in deviazione, non stime o misure rumorose.}
 \label{fig:m6-tracking}
 \end{figure}
 
-Il peggiore assestamento è circa 0.731 s, la sovraelongazione 0.346\%,
-il cross-coupling 18.4\% e l'errore DC è nullo entro precisione numerica.
-LQG soddisfa quindi sul nominale i quattro target 2 s, 15\%, 5\%, 25\%.
-Il picco del comando di tracking è circa 4.83 N m: è una richiesta del
-modello privo di saturazione, non una verifica di targa del motore.
+Il peggiore assestamento è \FinLQGTs\ s, la sovraelongazione \FinLQGMp\%, il cross-coupling \FinLQGCross\% e l'errore DC \FinLQGEss\%. L'esito simultaneo dei quattro target nominali è \FinLQGTarget. Il picco del comando di tracking è \FinLQGTrackPeak\ N m: quantifica la richiesta del modello, senza certificare la coppia erogabile dall'hardware.
 
 \subsection{Disturbo costante e limite del prefiltro}
 Poniamo ora $r=0$ e applichiamo da $t=0$ una coppia costante di
@@ -492,8 +485,7 @@ isola il contributo degli encoder; il comando totale comprende invece
 anche la coppia necessaria al moto o alla reiezione del disturbo.
 
 Nella prova comune con rumore mantenuto per 2 ms, riferimento e disturbo
-nulli, LQG ha picco osservato fra campioni circa 0.403 N m e RMS
-integrato 0.0799 N m. LQGI dà circa 0.418 N m e 0.0829 N m.
+nulli, LQG ha picco osservato fra campioni \FinLQGPeak\ N m e RMS integrato \FinLQGRms\ N m. LQGI dà rispettivamente \FinLQGIPeak\ N m e \FinLQGIRms\ N m.
 Questi valori confrontano i candidati sotto la stessa eccitazione:
 non sono massimi certificati per ogni rumore possibile. Osservare
 il comando fra i campioni evita inoltre di ignorare richieste rapide
@@ -514,7 +506,7 @@ visibile il principio di separazione.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.86\textwidth]{figures/pilota_capitolo7/poli_lqg.png}
-\caption{Poli del nominale con carico: tutti i 28 stati fisici e di
+\caption{Poli del nominale della traccia: tutti i 28 stati fisici e di
 stima sono conservati. Sono esclusi i pesi prestazionali esterni,
 che non appartengono a regolatore e osservatore.}\label{fig:m6-poli}
 \end{figure}
@@ -545,7 +537,7 @@ Il Kalman deve conoscere la stessa $u$ inviata alla pianta: diversamente
 attribuirebbe al modello una differenza introdotta nel collegamento.
 Quando la pianta usa una massa o un drive perturbati, l'osservatore
 continua a usare il nominale. Aggiornare anche il Kalman al campione
-gli fornirebbe un'informazione sul carico non disponibile dagli encoder.
+gli fornirebbe un'informazione sulla massa non disponibile dagli encoder.
 
 Nel diagramma non lineare le equazioni meccaniche usano angoli assoluti;
 prima del feedback si sottraggono le posizioni d'equilibrio.
@@ -647,7 +639,7 @@ Il coefficiente 200 è una scelta progettuale comune alle due memorie
 espresse in rad s. I valori 20, 200 e 800 illustrano rispettivamente
 una penalizzazione debole, intermedia e forte; il candidato nelle figure
 usa soltanto 200. Non attribuiamo agli altri due valori risultati sul
-carico incerto che non appartengono alle prove riportate.
+massa incerta che non appartengono alle prove riportate.
 
 Immaginiamo un errore di un grado quasi costante per un secondo:
 la memoria accumula circa un grado secondo. Se l'errore persiste per
@@ -769,7 +761,7 @@ o eliminare modi per ottenere una lista più ordinata. È un controllo
 numerico complementare: non sostituisce il segno delle parti reali,
 né dimostra robustezza rispetto a perturbazioni fisiche strutturate.
 
-Le matrici di feedback del nominale con carico sono
+Le matrici di feedback del nominale della traccia sono
 
 \input{generated/pilota7_lqgi.tex}
 
@@ -789,7 +781,7 @@ Le stesse condizioni permettono di attribuire le differenze al controllo.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.98\textwidth]{figures/definitiva/lqg_lqgi_risposte.png}
-\caption{LQG e LQGI sul nominale con carico. A sinistra i due gradini
+\caption{LQG e LQGI sul nominale della traccia. A sinistra i due gradini
 di riferimento, a destra le due coppie costanti sui link. Gli esperimenti
 sono separati e usano lo stesso osservatore.}\label{fig:lqgi-disturbo}
 \end{figure}
@@ -842,12 +834,7 @@ La distinzione conta per un servo lento, nel quale un residuo ancora
 visibile può essere un transitorio non esaurito. Nelle prove non lineari
 l'errore finale è invece una misura a orizzonte finito, non un guadagno DC.
 
-Sul nominale con carico LQGI ha assestamento peggiore di circa 5.155 s,
-sovraelongazione nulla, errore DC nullo entro precisione numerica e
-cross-coupling di circa 4.24\%. Il picco di coppia nelle prove di
-tracking è circa 0.942 N m. LQG dà 0.731 s e 4.83 N m: emerge un
-compromesso concreto fra rapidità, interazione e sforzo nelle condizioni
-studiate, senza poter dedurre una graduatoria universale delle architetture.
+Sul nominale LQGI ha assestamento peggiore \FinLQGITs\ s, sovraelongazione \FinLQGIMp\%, errore DC \FinLQGIEss\% e cross-coupling \FinLQGICross\%. Il picco di coppia nel tracking è \FinLQGITrackPeak\ N m. LQG dà \FinLQGTs\ s e \FinLQGTrackPeak\ N m: emerge un compromesso fra rapidità, interazione e sforzo, senza una graduatoria universale delle architetture.
 
 LQGI non soddisfa il requisito di assestamento di 2 s. La precisione
 statica non compensa questo FAIL. Confrontare soltanto sovraelongazione
@@ -856,19 +843,9 @@ il candidato $Q_i=200I_2$ effettivamente usato, non tutti i possibili
 valori del peso integrale.
 
 La massa incerta chiarisce l'utilità dell'integratore. Nelle prove
-non lineari con riferimento sul primo giunto e drive nominali, le masse
-0.1, 0.2 e 0.3 kg danno errori finali relativi LQG circa
-7.57\%, 0.174\% e 8.78\% a 12 s; per LQGI sono circa
-0.0228\%, 0.00838\% e 0.00249\%. Questi dati mostrano il beneficio
-osservato variando il solo carico. Non certificano tracking non lineare
-robusto rispetto a ogni massa, drive o condizione iniziale.
+non lineari con riferimento sul primo giunto e drive nominali variano soltanto le masse $m_2=0.72,0.8,0.88$ kg. La tabella del Capitolo 10 riporta i residui a 12 s: l'integratore corregge l'errore misurato nei casi stabili, mentre il prefiltro è calcolato sul solo nominale. Non ne segue una garanzia di tracking non lineare per ogni massa, drive o condizione iniziale.
 
-Nell'analisi lineare incerta entrambi superano RS su A e B.
-I limiti inferiori dei margini sono circa 1.459/1.197 per LQG e
-1.418/1.155 per LQGI. Nessuno raggiunge NP sul costo comune,
-con norme nominali circa 2.160 e 1.324, quindi RP è esclusa già dal
-nominale. A conserva i parametri fisici; B ammette anche dinamiche
-pesate senza corrispondenza con una singola terna attuativa.
+Nell'analisi lineare i limiti inferiori RS sono \FinLQGRSA/\FinLQGRSB\ per LQG e \FinLQGIRSA/\FinLQGIRSB\ per LQGI. Le norme comuni sono \FinLQGNorma\ e \FinLQGINorma. NP richiede una norma inferiore a uno; il suo fallimento esclude già RP. A conserva i parametri fisici; B ammette dinamiche pesate senza corrispondenza con una singola coppia attuativa.
 Non trasferiamo una garanzia da un insieme all'altro né dalle loro
 linearizzazioni all'intero robot non lineare.
 

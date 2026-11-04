@@ -27,14 +27,14 @@
 \newcommand{\good}[1]{\textcolor{accent}{\textbf{#1}}}
 \newcommand{\bad}[1]{\textcolor{warn}{\textbf{#1}}}
 \title{Controllo robusto di un manipolatore planare 2-DoF con SEA}
-\subtitle{Carico incerto, ritardo variabile e confronto A/B}
+\subtitle{Incertezze degli attuatori e confronto A/B}
 \author{\texorpdfstring{Alessio de Dato\\{\small Matricola 635256}\\[0.5em]Valerio Rebechi\\{\small Matricola 722224}}{Alessio de Dato; Valerio Rebechi}}
 \input{generated/finale_values.tex}
-\date{02.11.2026}
+\date{04.11.2026}
 \begin{document}
 \begin{frame}[plain]\titlepage\end{frame}
 
-\begin{frame}{SEA e carico variabile all'end-effector}
+\begin{frame}{Manipolatore SEA: le due masse della traccia}
 \begin{columns}[T]
 \column{.50\textwidth}\small
 \[
@@ -43,11 +43,11 @@ M(q)\ddot q+C(q,\dot q)\dot q+G(q)=K_s(\theta-q)+d
 \[
 J_m\ddot\theta+B_m\dot\theta=\tau-K_s(\theta-q)
 \]
-$m_{EE}=0.2$ kg, intervallo $[0.1,0.3]$ kg.
-\par\medskip Carico puntiforme: $m_2^{eff}=m_2+m_{EE}$ in $M,C,G$.
+$m_1=1$ kg, $m_2=0.8$ kg.\par $m_2\in[0.72,0.88]$ kg.
+\par\medskip La stessa massa $m_2$ compare in $M,C,G$. EE indica l'estremità operativa.
 \par\medskip Otto stati meccanici; equilibrio verticale $\bar q=[\pi/2;0]$, $\bar\tau=0$.
 \column{.46\textwidth}
-\resizebox{\linewidth}{!}{\input{../report/figures/schemes/sea_carico.tex}}
+\includegraphics[width=\linewidth,height=.61\textheight,keepaspectratio]{../report/figures/traccia/manipolatore_originale.png}
 \end{columns}
 \medskip\good{Una sola massa incerta; valori assunti, non misurati.}
 \end{frame}
@@ -60,16 +60,32 @@ G_{a,i}=\frac{\omega_{n,i}^2}{s^2+2\zeta_i\omega_{n,i}s+\omega_{n,i}^2}
 \frac{1-\tau_{d,i}s/2}{1+\tau_{d,i}s/2}
 \]
 \begin{itemize}
-\item $\omega_n=40$ rad/s, $\pm10\%$.
-\item $\zeta=0.8$, $\pm10\%$.
+\item $\omega_n=40$ rad/s, $\pm15\%$.
+\item $\zeta=0.8$, noto nel progetto.
 \item $\tau_d=15$ ms, $\pm20\%$.
-\item Tre parametri indipendenti per canale.
+\item Due parametri incerti per canale.
 \end{itemize}
 \column{.48\textwidth}
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/sea_attuatori.tex}}
 \par\medskip\small Due SISO attuativi e meccanica MIMO accoppiata. Totale $8+6=14$ stati.
 \end{columns}
 \medskip\good{Padé cambia coefficienti con il ritardo; l'ordine resta invariato.}
+\end{frame}
+
+\begin{frame}{A e B: stessa massa, diversa descrizione dei drive}
+\begin{columns}[T]
+\column{.50\textwidth}\small
+\textbf{A: cinque scalari reali.}
+\par Quattro parametri attuativi indipendenti e una massa condivisa.
+\medskip\par\textbf{B: due dinamiche SISO e la stessa massa.}
+\[G_{B,i}=G_0+W_A\Delta_i,\quad\|\Delta_i\|_\infty\leq1\]
+Padé variabile: i rapporti $G_p/G_0$ e $G_0/G_p$ introducono poli instabili.
+\column{.47\textwidth}
+\includegraphics[width=\linewidth]{../report/figures/definitiva/peso_incertezza.png}
+\small Peso additivo di ordine \FinOrdinePeso.
+\par 25 casi: \FinCopertura; 30 indipendenti: \FinHoldout.
+\end{columns}
+\medskip\bad{Copertura numerica dei casi dichiarati; nessuna prova globale del box.}
 \end{frame}
 
 \begin{frame}{Specifiche: obiettivi temporali e norma pesata}
@@ -103,7 +119,7 @@ Scale: $q_s=5^\circ$, $\dot q_s=12q_s$, $\delta_s=0.5/40$ rad.
 \par\medskip $Q$ contiene la deformazione $(\theta-q)^2$.
 \column{.48\textwidth}
 Pesi: posizione 2, velocità 1, deformazione 0.1.
-\par\medskip Sintesi sul nominale con carico; residuo CARE \FinCARELQG.
+\par\medskip Sintesi sul nominale della traccia; residuo CARE \FinCARELQG.
 \end{columns}
 \[A^TX+XA-XBR^{-1}B^TX+Q=0,\qquad K_x=R^{-1}B^TX\]
 \end{frame}
@@ -119,7 +135,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \item 14 stati stimati; 28 stati in chiusura, separazione verificata.
 \item Nominale: $T_s=\FinLQGTs$ s, errore DC \FinLQGEss\%.
 \end{itemize}
-\bad{Il prefiltro corregge il nominale; un carico diverso può produrre offset.}
+\bad{Il prefiltro corregge il nominale; una massa $m_2$ diversa può produrre offset.}
 \end{frame}
 
 \begin{frame}{LQGI: memoria dell'errore misurato}
@@ -171,21 +187,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \bad{Una buona NP non garantisce robustezza né un comando utilizzabile.}
 \end{frame}
 
-\begin{frame}{A e B: stessa massa, diversa descrizione dei drive}
-\begin{columns}[T]
-\column{.50\textwidth}\small
-\textbf{A: sette scalari reali.}
-\par Sei parametri attuativi indipendenti e una massa condivisa.
-\medskip\par\textbf{B: due dinamiche SISO e la stessa massa.}
-\[G_{B,i}=G_0+W_A\Delta_i,\quad\|\Delta_i\|_\infty\leq1\]
-Padé variabile: i rapporti $G_p/G_0$ e $G_0/G_p$ introducono poli instabili.
-\column{.47\textwidth}
-\includegraphics[width=\linewidth]{../report/figures/definitiva/peso_incertezza.png}
-\small Peso additivo di ordine 3.
-\par 29 casi: \FinCopertura; 30 indipendenti: \FinHoldout.
-\end{columns}
-\medskip\bad{Copertura numerica dei casi dichiarati; nessuna prova globale del box.}
-\end{frame}
+
 
 \begin{frame}{$\mu$: valore singolare strutturato}
 \begin{columns}[T]
@@ -216,7 +218,7 @@ Candidato & Ordine & Norma nominale\\\midrule
 Mu\_A &\FinMuAOrdine&\FinMuANorma\\
 Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
 \end{tabular}
-\par\medskip Obiettivo D--K: circa 6.65 su A e 2.08 su B, entrambi $>1$.
+\par\medskip Obiettivo D--K: \FinDkA\ su A, \FinDkB\ su B. Soglia desiderata: 1.
 \par\medskip Post-analisi di ogni K su entrambi i modelli.
 \end{columns}
 \medskip\bad{Ricerca limitata e non convessa: nessuna superiorità universale.}
@@ -243,8 +245,8 @@ Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
 \begin{frame}{Dieci impianti: la stessa fisica per tutti}
 \begin{columns}[T]
 \column{.45\textwidth}\small
-Seed 20261101; dieci settuple:
-\[(\omega_{n1},\zeta_1,\tau_{d1},\omega_{n2},\zeta_2,\tau_{d2},m_{EE}).\]
+Seed 20261101; dieci quintuple:
+\[(\omega_{n1},\tau_{d1},\omega_{n2},\tau_{d2},m_2).\]
 \begin{tabular}{lr}\toprule
 Controllore & Stabili/10\\\midrule
 LQG &\FinLQGStable\\
@@ -282,17 +284,17 @@ Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
 \par\medskip\bad{Hinf2 non è utilizzabile sulla base del solo buon costo nominale.}
 \end{frame}
 
-\begin{frame}{L'effetto del solo carico sul movimento non lineare}
+\begin{frame}{Massa del secondo link e movimento non lineare}
 \small Drive nominali, gradino di $5^\circ$ al primo giunto, 12 s.
 \begin{center}\input{generated/finale_slide_carico.tex}\end{center}
-\small Errore finale relativo in percentuale; massa dell'end-effector in colonna.
+\small Errore finale relativo in percentuale; massa $m_2$ del secondo link in colonna.
 \begin{itemize}
 \item LQG: prefiltro adattato al nominale, offset agli estremi.
 \item LQGI: l'integratore corregge l'errore misurato.
 \item La stessa massa modifica inerzia, Coriolis e gravità.
-\item Il carico è costante in ogni prova: nessun evento di presa o rilascio.
+\item La massa $m_2$ è costante in ogni prova: nessun evento di presa o rilascio.
 \end{itemize}
-\good{Separare il carico dai drive rende leggibile la causa delle differenze.}
+\good{Separare la massa $m_2$ dai drive rende leggibile la causa delle differenze.}
 \end{frame}
 
 \begin{frame}{Regione di attrazione: una sezione empirica}
@@ -311,22 +313,22 @@ Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
 
 \begin{frame}{Simulink lineare: servo LQGI}
 \includegraphics[width=\textwidth,height=.65\textheight,keepaspectratio,trim=0 0 606 265,clip]{../report/figures/student_exports/LQGI_linear_sim.png}
-\par\small Matrici della pianta con il carico; osservatore fisso sul nominale.
+\par\small Matrici della pianta con la massa $m_2$; osservatore fisso sul nominale.
 \par\small Riferimento, disturbo lato link, encoder e comando mantengono gli stessi segnali.
 \end{frame}
 
 \begin{frame}{Simulink non lineare: la stessa legge di controllo}
 \includegraphics[width=\textwidth,height=.56\textheight,keepaspectratio,trim=0 0 580 110,clip]{../report/figures/student_exports/LQGI_nonlinear_sim.png}
-\par\small Il Workspace fornisce $m_2+m_{EE}$ ai generatori incorporati e tre parametri a ogni drive.
+\par\small Il Workspace fornisce $m_2$ ai generatori incorporati; frequenza e ritardo variano, $\zeta$ resta noto.
 \par\small 20 run su otto SLX: nominale e primo campione, Mu\_A e Mu\_B nei modelli robusti.
 \par\small Tempo finale, stati e Scope verificati; questo controllo non sostituisce i target prestazionali.
 \end{frame}
 
 \begin{frame}{Conclusioni e limiti verificati}
 \begin{itemize}
-\item A conserva le dipendenze dei sette parametri fisici.
+\item A conserva le dipendenze dei cinque parametri fisici.
 \item B concentra i drive in due dinamiche pesate; la massa resta esplicita.
-\item Ritardo variabile: forma additiva stabile, peso di ordine 3.
+\item Ritardo variabile: forma additiva, peso di ordine \FinOrdinePeso.
 \item LQG e LQGI offrono stabilità robusta, con compromessi su precisione e rapidità.
 \item Hinf2 e PID mostrano i limiti del buon risultato nominale.
 \item D--K, rumore e RAS non forniscono una soluzione universalmente migliore.

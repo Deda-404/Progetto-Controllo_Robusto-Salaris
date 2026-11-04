@@ -2,19 +2,16 @@
 \section{Coordinate e struttura meccanica}
 Il manipolatore è formato da due link planari. L'angolo $q_1$ è riferito all'orizzontale; $q_2$ è relativo al primo link, quindi l'orientamento assoluto del secondo è $q_1+q_2$. Le coordinate dei rotori sono $\theta_1,\theta_2$. Le masse $m_1=1$ kg e $m_2=0.8$ kg sono concentrate alle estremità dei rispettivi link, come nella traccia.
 
-Aggiungiamo nella posizione distale una massa $m_{EE}$. Essa rappresenta il carico fisico dell'end-effector, il cui peso gravitazionale è $F_{EE}=m_{EE}g$. Non è una funzione peso della sintesi. Poiché il carico si trova nella stessa posizione della massa concentrata $m_2$, introduciamo
-\[
- m=m_2+m_{EE}.
-\]
-$m_2$ resta la massa assegnata al secondo link: il carico aggiuntivo non era incluso nel suo valore. Non introduciamo geometrie dell'utensile o inerzie rotazionali ulteriori.
+La massa distale è esclusivamente $m_2=0.8$ kg, concentrata all'estremità del secondo link. La sigla EE nella figura indica l'end-effector, cioè la posizione operativa del manipolatore. Le due masse della traccia esauriscono il modello meccanico assegnato.
 
 \begin{figure}[htbp]\centering
-\input{figures/schemes/sea_carico.tex}
-\caption{Coordinate del manipolatore e carico aggiuntivo concentrato all'estremità. Le molle SEA collegano le coordinate dei rotori a quelle dei link.}\label{fig:carico}
+\includegraphics[width=.88\textwidth]{figures/traccia/manipolatore_originale.png}
+\caption{Manipolatore SEA della traccia ufficiale del professor Salaris, prima pagina. I rotori M1 e M2 sono collegati ai link mediante le molle $k_1,k_2$; EE identifica l'estremità operativa.}\label{fig:carico}
 \end{figure}
 
-Abbiamo confrontato tre ipotesi semplici, riportate nella Tabella~\ref{tab:carico}. Scegliamo $m_{EE}=0.2$ kg: è un quarto di $m_2$ e porta la massa distale complessiva a 1 kg. L'intervallo $[0.1,0.3]$ kg, cioè $\pm50\%$ del solo carico, rappresenta utensili o piccoli oggetti di massa diversa. È una scelta di progetto, non una tolleranza misurata.
+La Tabella~\ref{tab:parametri-definitivi} raccoglie tutti i dati nominali e le incertezze effettivamente utilizzate. Varia soltanto la massa del secondo link per la meccanica; nei drive variano frequenza naturale e ritardo. Queste percentuali sono ipotesi ingegneristiche, motivate dalla dinamica e dalla necessità di confrontare famiglie comprensibili. Lo zero nella colonna delle incertezze indica un parametro assunto noto ai fini del progetto, senza attribuirgli esattezza fisica.
 
+\input{generated/parametri_definitivi.tex}
 \input{generated/finale_carico.tex}
 
 La coppia elastica dipende dalla differenza fra rotore e link.
@@ -31,22 +28,22 @@ Definiamo la deformazione elastica $\delta=\theta-q$ e la coppia $\tau_{el}=K_s\
 M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q)+d,\label{eq:link}\\
 J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).\label{eq:motori}
 \end{align}
-Il disturbo $d$ è una coppia applicata direttamente ai link. Il comando del drive produce invece la coppia motore $\tau$. La coppia elastica agisce con segni opposti nelle due equazioni, coerentemente con lo scambio di energia fra rotori e braccio.
+Il modello fisico di base della traccia si ottiene ponendo $d=0$. Il termine $d$ è introdotto soltanto nelle verifiche come coppia esterna applicata direttamente ai link. Il comando del drive produce invece la coppia motore $\tau$. La coppia elastica agisce con segni opposti nelle due equazioni, coerentemente con lo scambio di energia fra rotori e braccio.
 
-Con la massa distale effettiva $m$, la matrice d'inerzia è
+Con la massa $m_2$ del secondo link, la matrice d'inerzia è
 \[
 M(q)=\begin{bmatrix}
-(m_1+m)l_1^2+ml_2^2+2ml_1l_2\cos q_2&ml_2^2+ml_1l_2\cos q_2\\
-ml_2^2+ml_1l_2\cos q_2&ml_2^2
+(m_1+m_2)l_1^2+m_2l_2^2+2m_2l_1l_2\cos q_2&m_2l_2^2+m_2l_1l_2\cos q_2\\
+m_2l_2^2+m_2l_1l_2\cos q_2&m_2l_2^2
 \end{bmatrix}.
 \]
 La stessa massa compare nei termini di Coriolis e gravità:
 \begin{align*}
 C(q,\dot q)&=\begin{bmatrix}-h\dot q_2&-h(\dot q_1+\dot q_2)\\h\dot q_1&0\end{bmatrix},
-&h&=ml_1l_2\sin q_2,\\
-G(q)&=\begin{bmatrix}(m_1+m)gl_1\cos q_1+mgl_2\cos(q_1+q_2)\\mgl_2\cos(q_1+q_2)\end{bmatrix}.
+&h&=m_2l_1l_2\sin q_2,\\
+G(q)&=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
 \end{align*}
-Aumentare il carico modifica dunque sia le accelerazioni ottenute da una coppia sia l'effetto della gravità e delle velocità. Aggiungerlo soltanto in $G$ descriverebbe un sistema fisico diverso.
+Aumentare $m_2$ modifica dunque sia le accelerazioni ottenute da una coppia sia l'effetto della gravità e delle velocità. Modificarla soltanto in $G$ descriverebbe un sistema fisico diverso.
 
 Non introduciamo smorzamento viscoso lato link, perché non è previsto
 nelle equazioni assegnate; $B_m$ agisce sui rotori. Il vettore di gravità
@@ -56,7 +53,7 @@ va conservata la stessa convenzione in equilibrio e simulazioni.
 
 La positività dell'inerzia si verifica senza una lunga ricerca numerica:
 \[
-\det M=ml_1^2l_2^2\bigl(m_1+m\sin^2q_2\bigr)>0.
+\det M=m_2l_1^2l_2^2\bigl(m_1+m_2\sin^2q_2\bigr)>0.
 \]
 Poiché anche $M_{11}>0$, $M$ è definita positiva per ogni configurazione e per tutte le masse considerate.
 
@@ -92,13 +89,13 @@ l'informazione utilizzabile dal controllore.
 \section{Implementazione e verifiche}
 Le stesse espressioni di $M,C,G$ alimentano la dinamica e la linearizzazione. Una verifica indipendente usa il Jacobiano geometrico $J_{EE}$ della posizione distale:
 \[
- M-M\big|_{m_{EE}=0}=m_{EE}J_{EE}^TJ_{EE},\qquad
- G-G\big|_{m_{EE}=0}=m_{EE}gJ_{EE,y}^T.
+ M-M\big|_{m_2=0}=m_2J_{EE}^TJ_{EE},\qquad
+ G-G\big|_{m_2=0}=m_2gJ_{EE,y}^T.
 \]
-Queste identità controllano direttamente il significato del carico puntiforme. È verificata anche l'antisimmetria di $\dot M-2C$, che esprime la coerenza energetica dei termini centrifughi e di Coriolis.
+Queste identità verificano il contributo della massa distale assegnata: il caso $m_2=0$ serve soltanto come riferimento algebrico per sottrarre quel contributo, senza invertire la matrice singolare e senza appartenere alla famiglia fisica studiata. È verificata anche l'antisimmetria di $\dot M-2C$, che esprime la coerenza energetica dei termini centrifughi e di Coriolis.
 
 \section{Assunzioni e limiti del modello}
-Le molle sono lineari; il modello non include attrito secco, giochi, flessibilità distribuita dei link o saturazioni. Le inerzie dei motori e le rigidezze restano quelle della traccia. Il carico viene trattato come massa costante durante ciascuna prova: il modello non descrive un oggetto che viene afferrato o rilasciato nel mezzo del transitorio.
+Le molle sono lineari; il modello non include attrito secco, giochi, flessibilità distribuita dei link o saturazioni. Le inerzie dei motori e le rigidezze restano quelle della traccia. La massa $m_2$ rimane costante durante ogni prova. Le sue tolleranze possono descrivere differenze costruttive o un'identificazione imperfetta della massa equivalente concentrata del secondo link.
 
 Le inerzie sono riferite alle coordinate motore adottate e le molle sono
 lineari. Attrito secco, giochi e flessibilità distribuita richiederebbero

@@ -772,3 +772,12 @@ Risintetizzati LQG/LQGI, mixsyn, due hinfsyn, PID hinfstruct e D–K su A/B (tre
 Eseguiti 77 casi lineari, 14 non lineari nominali, 21 con sola m2 variata, rumore ZOH/intercampione e 105 RAS (88 convergenze, 15 mancate, due divergenze osservate). Comandi elevati e prestazioni negative mantenuti. Venti run Simulink di 2 s e otto avvii originali autonomi PASS; topologia/layout invariati, m2 nominale persistente nei Model Workspace. Cinque test e otto verifiche scientifiche PASS, PBH rango 14. Due suggerimenti non critici Code Analyzer su 16 sorgenti. Eseguito integralmente run_all(rapida), tutte le figure correnti rigenerate; campagna completa eseguita per fasi.
 
 I log conservano due errori degli helper temporanei (radice da pwd e who(ws)), corretti e collaudati nuovamente. Le vecchie evidenze restano cronologia, esplicitamente separate dalle correnti. Gate tecnico COMPLETE/PASS; accettazione prestazionale PARTIAL. Collaudo esterno della ZIP in corso. Responsabile: Alessio.
+
+
+## 2026-11-04 — Elaborati integrali aggiornati e verificati
+
+Aggiornati tutti i 13 capitoli e le appendici A–D, conservando Riccati, Kalman, separazione, LFT, piante generalizzate, H∞/PID, μ/D–K, Lyapunov teorico, ZOH/intercampione e confronto multicriterio. Eliminata la massa aggiuntiva; centrale la stessa m2 in M/C/G e A/B. Parametri e risultato del peso sono espliciti; copertura 25+30 casi distinta dal box globale. Figura originale della traccia; tutte le 12 figure MATLAB e i grafici editoriali rigenerati dai dati correnti. Tabelle e macro numeriche aggiornate.
+
+Relazione finale 111 pagine, presentazione 23 slide: compilazione latexmk riuscita, zero warning/overfull/underfull/riferimenti irrisolti, controllo di tutte le pagine e dei margini. Corretti durante il controllo il numero di vertici SISO nello schema del fitting e il testo relativo allo smorzamento noto; nuova compilazione e audit PASS. SHA-256 nell’audit PDF. La slide A/B precede i controllori; discorso 2043 parole, 17:17 stimati inclusi cambi, prova dal vivo non eseguita. Le negative NS/NP/RS/RP e i limiti hardware restano leggibili.
+
+Gate elaborati COMPLETE/PASS. PDF finali copiati nei nomi di consegna; verifica della ZIP estratta ancora in corso. Responsabile: Alessio.

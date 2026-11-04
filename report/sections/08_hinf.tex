@@ -17,9 +17,8 @@ mantenendo stabile il modello nominale.
 
 La difficoltà fisica è la stessa già incontrata con LQG. Il modello
 ha 14 stati: otto meccanici e sei degli attuatori. Due poli instabili,
-circa $4.00$ e $7.79$ s$^{-1}$, richiedono una retroazione sufficientemente
-rapida. Attuatori a 40 rad/s, ritardo e modi elastici intorno a
-70--79 rad/s limitano invece l'aumento dell'azione di controllo.
+riportati nella tabella dei poli del Capitolo 3, richiedono una retroazione sufficientemente
+rapida. La dinamica dei drive a 40 rad/s, il ritardo e i modi elastici riportati nello spettro meccanico limitano invece l'aumento dell'azione di controllo.
 Una risposta più rapida può richiedere coppie maggiori ed eccitare i SEA.
 
 La sintesi di questo capitolo usa la pianta nominale. Le prove non
@@ -62,8 +61,8 @@ $W_2$ serve a evitare che la sintesi riduca l'errore chiedendo
 comandi eccessivi. Le coppie rapide possono sollecitare i SEA ed
 eccitare i modi elastici: si è quindi scelto un peso che cresce
 con la frequenza. Questo orienta il compromesso di progetto, ma
-non introduce una saturazione. La scala di 12 N m delle specifiche
-serve a valutare lo sforzo, non è un limite hardware implementato.
+non introduce una saturazione. In assenza di dati di targa valutiamo
+picchi e RMS come diagnostica, senza imporre un limite di coppia inventato.
 I picchi vanno controllati anche nelle simulazioni, soprattutto
 in presenza di rumore.
 
@@ -178,7 +177,7 @@ Usiamo $\omega_M=3$ rad/s, quindi $M_o=9/(s^2+6s+9)I_2$.
 L'assestamento al 2\% del solo modello vale 1.9447 s ed è coerente con il
 target di 2 s. I dati disponibili riportano anche 1.4585 e 1.1668 s per
 $\omega_M=4,5$ rad/s. Questi numeri descrivono i modelli desiderati:
-non costituiscono tre sintesi del controllore sul manipolatore con carico.
+non costituiscono tre sintesi del controllore sul manipolatore della traccia.
 Per scegliere una banda maggiore servirebbe valutare nuovamente comando,
 rumore e robustezza, poiché un riferimento più rapido può richiedere
 maggiore azione proprio nelle frequenze in cui ritardo e modi elastici
@@ -236,12 +235,12 @@ $G$ ha due ingressi e due uscite; $K_{\rm mix}$ riceve i due errori
 
 Il controllore 1-DoF ottenuto ha 18 stati. I due metodi,
 \texttt{mixsyn} e \texttt{hinfsyn} sulla stessa pianta aumentata,
-forniscono $\gamma=0.998158738$, con scarto relativo \FinScartoMixsyn.
+forniscono $\gamma=\FinGammaMix$, con scarto relativo \FinScartoMixsyn.
 Questo limite riguarda la sensibilità mista appena definita. Ricollegando
-Hinf1 alla mappa comune $[r;d]\mapsto[z_e;z_u]$, la norma diventa 2.1633:
+Hinf1 alla mappa comune $[r;d]\mapsto[z_e;z_u]$, la norma diventa \FinHinfOneNorma:
 sono cambiati ingressi esterni ed errore prestazionale, quindi i due
 valori non sono contraddittori. La risposta a gradino ha overshoot circa
-135.5\% ed errore statico massimo circa 14.9\%.
+\FinHinfOneMp\% ed errore statico massimo \FinHinfOneEss\%.
 
 Il risultato non contraddice la sintesi: $\gamma<1$ garantisce il
 limite della mappa nominale pesata verificata, mentre l'overshoot è
@@ -377,7 +376,7 @@ $T_{ur}=K_r+K_yT_{qr}$ e $T_{ud}=K_yT_{qd}$. L'obiettivo è
 La prima colonna di blocchi riguarda il riferimento, la seconda
  il disturbo. Norma e poli sono ricontrollati sulla realizzazione
 originale completa, senza \texttt{minreal}. Il controllore selezionato
-ha ordine 22 e norma comune 0.0355804.
+ha ordine \FinHinfTwoOrdine\ e norma comune \FinHinfTwoNorma.
 
 Non confrontiamo questa norma come un miglioramento percentuale
 rispetto al 1-DoF: sono cambiati errore e ingressi esterni.
@@ -421,8 +420,7 @@ lo stato integrale e quello del filtro derivativo.
 La ricerca salvata usa tre avvii, uno iniziale e due casuali con seed
 fissato. Il problema è non convesso: i risultati dipendono dai parametri
 iniziali e un avvio non stabilizzante deve essere scartato. Il migliore
-valido ha obiettivo di tuning 0.817324 e norma comune verificata
-0.815871. La verifica sulla realizzazione finale è necessaria anche
+valido ha obiettivo di tuning \FinGammaPID\ e norma comune verificata \FinPIDNorma. La verifica sulla realizzazione finale è necessaria anche
 quando l'ottimizzatore restituisce un valore favorevole.
 
 Un guadagno statico, un PI o un controllore MIMO di ordine fissato
@@ -465,11 +463,7 @@ quindi restare imprecisa.
 
 \input{generated/finale_hinf.tex}
 
-Hinf1 ha $T_s\simeq1.55$ s, ma overshoot circa 136\%, errore statico
-14.9\% e cross 44.8\%. Hinf2 ha $T_s\simeq1.94$ s, overshoot nullo,
-errore 0.111\% e cross 0.883\%: supera i quattro target nominali.
-Il PID si assesta in circa 5 s, con overshoot 4.74\%, offset DC nullo
-e cross 34.5\%; la precisione statica non risolve lentezza e interazione.
+Hinf1 ha $T_s=\FinHinfOneTs$ s, overshoot \FinHinfOneMp\%, errore statico \FinHinfOneEss\% e cross \FinHinfOneCross\%. Hinf2 ha $T_s=\FinHinfTwoTs$ s, overshoot \FinHinfTwoMp\%, errore \FinHinfTwoEss\% e cross \FinHinfTwoCross\%: l'esito dei quattro target è \FinHinfTwoTarget. Il PID ha $T_s=\FinPIDTs$ s, overshoot \FinPIDMp\%, errore DC \FinPIDEss\% e cross \FinPIDCross\%. La precisione statica e la rapidità restano requisiti distinti.
 Questi risultati danno significato fisico alla norma, senza confondere
 la conformità nominale con la robustezza sull'insieme incerto.
 
@@ -488,7 +482,7 @@ curva non basta a giudicare il tracking né la mappa pesata completa.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.95\linewidth]{figures/definitiva/sensibilita_hinf.png}
-\caption{Sensibilità e complementare sul nominale con carico, dalle
+\caption{Sensibilità e complementare sul nominale della traccia, dalle
 analisi salvate. Le mappe riguardano il feedback e vanno lette insieme
 alla risposta al riferimento e alla norma comune.}
 \end{figure}
@@ -524,34 +518,29 @@ recupero e comando, senza trasferire conclusioni dalla sola norma.
 \begin{figure}[htbp]\centering
 \includegraphics[width=.95\linewidth]{figures/definitiva/hinf_disturbi.png}
 \caption{Reiezione delle due coppie sui link, applicate separatamente,
-per Hinf1, Hinf2 e PID sullo stesso nominale con carico.}
+per Hinf1, Hinf2 e PID sullo stesso nominale della traccia.}
 \end{figure}
 
 \subsection{Prove non lineari, rumore e RAS}
 La campagna non lineare usa per ciascun controllore un gradino di
 $5^\circ$ sul primo giunto e una coppia di 0.5 N m sul primo link,
-oltre ai casi di solo carico variato. Non estendiamo il risultato a
+oltre ai casi di sola massa $m_2$ variata. Non estendiamo il risultato a
 una scansione di ampiezze non eseguita. L'accordo locale con la
 linearizzazione controlla l'uso delle stesse equazioni e dello stesso
 controllore; non dimostra stabilità globale.
 
 La prova comune di rumore encoder, con riferimento e disturbo nulli,
 mette in evidenza un limite che il tracking pulito nasconde. Per Hinf2
-il picco osservato è circa $2.69\,10^5$ N m e l'RMS circa 8653 N m.
+il picco osservato è \FinHinfTwoPeak\ N m e l'RMS \FinHinfTwoRms\ N m.
 Sono richieste del modello senza saturazioni, non coppie erogabili.
 Il costo nominale non contiene l'ingresso encoder e non impedisce
 questa amplificazione. Il Capitolo 10 spiega anche perché si debba
 valutare il comando fra i campioni, anziché soltanto ogni 2 ms.
 
-Nella sezione empirica di attrazione Hinf1 converge nei 15 casi,
-Hinf2 in 11 con quattro allontanamenti osservati; il PID ha 12 mancate
-convergenze entro 15 s e tre allontanamenti. Gli stati del controllore
-sono inclusi e inizialmente nulli. Questi conteggi non sono un certificato
-di Lyapunov e non descrivono tutta la RAS. Si aggiunge la verifica
-strutturata: Hinf1 mantiene RS in A ma non in B, mentre Hinf2 e PID
-non mantengono RS in nessuna delle due rappresentazioni. La causa non
+Nella sezione empirica Hinf1 converge in \FinHinfOneConv/15 casi, Hinf2 in \FinHinfTwoConv/15 e PID in \FinPIDConv/15. Le altre classificazioni restano separate nella tabella RAS. Gli stati del controllore sono inclusi e inizialmente nulli. I conteggi non certificano tutta la RAS. Le corrispondenti analisi RS danno A/B: \FinHinfOneRSesitoA/\FinHinfOneRSesitoB\ per Hinf1, \FinHinfTwoRSesitoA/\FinHinfTwoRSesitoB\ per Hinf2 e \FinPIDRSesitoA/\FinPIDRSesitoB\ per PID.
+La causa non
 si può attribuire alla sola massa: nei modelli incerti cambiano anche
-frequenza, smorzamento e ritardo dei due drive.
+frequenza naturale e ritardo dei due drive, con smorzamento noto.
 
 \section{Seconda formulazione: rumore esplicito nella sintesi}
 Per includere il problema encoder nel progetto si può ampliare la
@@ -576,7 +565,7 @@ non si può trasformarla in una densità spettrale continua senza
 specificare un modello del processo e il periodo di mantenimento.
 
 Questa è una formulazione teorica, non una nuova serie di sintesi sul
-modello con carico. I sette candidati e le norme riportate rimangono
+modello della traccia. I sette candidati e le norme riportate rimangono
 quelli analizzati sopra. Un'eventuale soluzione del problema ampliato
 andrebbe verificata nuovamente su rumore, tracking, A e B: il suo
 $\gamma$ apparterrebbe a una mappa con più ingressi e non sarebbe

@@ -1,6 +1,6 @@
 \chapter{Simulazioni, rumore e regione di attrazione}
 \section{Perché verifichiamo il comportamento non lineare}
-Il modello linearizzato descrive piccoli spostamenti attorno alla verticale. Quando il braccio si allontana, inerzia, Coriolis e gravità cambiano con gli angoli. Le simulazioni integrano perciò le equazioni meccaniche complete, i sei stati dei drive e tutti gli stati del controllore. Il carico è presente nelle tre componenti meccaniche e rimane costante durante ogni esecuzione.
+Il modello linearizzato descrive piccoli spostamenti attorno alla verticale. Quando il braccio si allontana, inerzia, Coriolis e gravità cambiano con gli angoli. Le simulazioni integrano perciò le equazioni meccaniche complete, i sei stati dei drive e tutti gli stati del controllore. La massa $m_2$ è presente nelle tre componenti meccaniche e rimane costante durante ogni esecuzione.
 
 \section{Che cos'è la regione di attrazione}
 La regione di attrazione, indicata qui con RAS, è l'insieme delle condizioni
@@ -50,7 +50,7 @@ ha la forma $u=C_Kx_K+D_yC_mx$. Pertanto
 \]
 Per LQG e LQGI $C_m$ seleziona quattro encoder; per le altre famiglie
 i due angoli link. Il segno di retroazione è già nelle matrici del
-controllore. Gli ordini aumentati sono 28, 30, 32, 36, 18, 308 e 94,
+controllore. Gli ordini aumentati sono \FinLQGOrdineChiuso, \FinLQGIOrdineChiuso, \FinHinfOneOrdineChiuso, \FinHinfTwoOrdineChiuso, \FinPIDOrdineChiuso, \FinMuAOrdineChiuso\ e \FinMuBOrdineChiuso,
 rispettivamente per LQG, LQGI, Hinf1, Hinf2, PID, Mu\_A e Mu\_B.
 Una verifica sulle sole otto equazioni meccaniche ignorerebbe la
 memoria del drive, dell'osservatore e del controllore.
@@ -95,7 +95,7 @@ renderebbe negativa la derivata nel dominio corrispondente. Un
 sottolivello $\zeta^TP_b\zeta\le c$ contenuto nella sfera di raggio $r$
 si ottiene imponendo $c\le\lambda_{\min}(P_b)r^2$.
 È una costruzione sufficiente e conservativa: non individua la frontiera
-della vera RAS. Per i sette candidati con carico non è disponibile
+della vera RAS. Per i sette candidati della traccia non è disponibile
 una certificazione numerica di questi passaggi. Conserviamo quindi
 la derivazione come metodo, senza assegnare raggi o livelli certificati.
 
@@ -105,6 +105,9 @@ Proviamo cinque direzioni per ciascuno dei raggi $5^\circ$, $15^\circ$ e $30^\ci
 L'orizzonte è 15 s. Classifichiamo come convergenza osservata una coda finale di un secondo con angoli link e motore entro $0.5^\circ$, velocità entro $0.5^\circ$/s e comando entro 0.05 N m. La mancata convergenza entro l'orizzonte non dimostra divergenza asintotica. Teniamo separati gli allontanamenti oltre le soglie numeriche, i timeout e gli errori del solver.
 
 \input{generated/finale_ras.tex}
+
+Mu\_A e Mu\_B convergono rispettivamente in \FinMuAConv/15 e \FinMuBConv/15 condizioni provate, pur avendo un errore di tracking significativo. La prova RAS ha infatti riferimento nullo: ritornare alla verticale non equivale a inseguire bene una nuova posizione. Hinf2 ha \FinHinfTwoDiv\ allontanamenti osservati; PID ha \FinPIDNonConv\ mancate convergenze nell'orizzonte, che restano distinte da una divergenza dimostrata. Questa lettura evita una classifica basata sul solo numero di punti favorevoli.
+
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.97\linewidth]{figures/definitiva/ras.png}
@@ -123,7 +126,7 @@ non significa che ogni stato esterno diverga: può essere il prezzo della
 maggiorazione prudente del resto o delle coordinate poco ben scalate.
 
 \section{Equazioni e scenari}
-Usiamo due prove nominali per ciascuno dei sette controllori della campagna: gradino di $5^\circ$ sul primo giunto e coppia costante di 0.5 N m sul primo link. L'orizzonte è 12 s. Partiamo dall'equilibrio, con stima e integratore nulli nelle coordinate incrementali. A queste prove affianchiamo tre masse, 0.1, 0.2 e 0.3 kg, mantenendo nominali i drive: così isoliamo l'effetto del solo carico.
+Usiamo due prove nominali per ciascuno dei sette controllori della campagna: gradino di $5^\circ$ sul primo giunto e coppia costante di 0.5 N m sul primo link. L'orizzonte è 12 s. Partiamo dall'equilibrio, con stima e integratore nulli nelle coordinate incrementali. A queste prove affianchiamo tre masse $m_2=0.72,0.8,0.88$ kg, mantenendo nominali i drive: così isoliamo l'effetto della sola massa $m_2$.
 
 
 Per i controllori con due misure usiamo
@@ -160,7 +163,7 @@ Una simulazione completata significa che il solver ha raggiunto il tempo finale 
 
 \input{generated/finale_carico_nonlineare.tex}
 
-Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi di carico compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sul solo carico non contraddicono la sua fragilità quando variano anche gli attuatori.
+Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi della massa $m_2$ compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sulla sola massa $m_2$ non contraddicono la sua fragilità quando variano anche gli attuatori.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_tracking.png}
@@ -202,15 +205,11 @@ stabili in cui esiste un equilibrio compatibile. Non riceve la posizione
 ideale al posto della misura: anche il rumore può entrare in questa
 memoria e deve essere valutato separatamente.
 
-Nel nominale il tracking lineare ha assestamento circa 5.15 s,
-overshoot nullo e offset DC nullo. La lentezza è un compromesso della
-configurazione scelta, non un effetto da nascondere nel confronto con
-LQG. Nelle prove non lineari di solo carico, gli errori finali a 12 s
-sono circa 0.0228\%, 0.00838\% e 0.00249\% per 0.1, 0.2 e 0.3 kg.
-Per LQG sono circa 7.57\%, 0.174\% e 8.78\%. La differenza rende
-visibile il limite del prefiltro nominale e il beneficio della correzione
-integrale; i valori restano residui a tempo finito, non guadagni DC
-non lineari o prove su tutti i carichi.
+Nel nominale il tracking lineare LQGI ha assestamento \FinLQGITs\ s, overshoot \FinLQGIMp\% e offset DC \FinLQGIEss\%. La lentezza è un compromesso della configurazione scelta. Le prove non lineari di sola massa $m_2$ riportano l'errore finale a 12 s per entrambi i controllori:
+
+I valori sono riportati nella tabella delle prove con sola massa $m_2$ della sezione precedente.
+
+Il confronto rende leggibile il limite del prefiltro nominale e l'effetto della correzione integrale nei casi stabili. I numeri sono residui a tempo finito, distinti da guadagni DC non lineari e da una prova per ogni valore della massa.
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.95\linewidth]{figures/definitiva/lineare_nonlineare_lqg.png}
@@ -285,7 +284,7 @@ separare encoder singoli, encoder indipendenti o correlati, processo
 e ingressi combinati, per individuare quale canale genera il comando.
 Tali scenari spiegano come verificare una nuova sintesi senza
 attribuire al tuning un miglioramento causato dal cambio di eccitazione.
-Non sono una campagna aggiuntiva eseguita sui sette candidati con carico.
+Non sono una campagna aggiuntiva eseguita sui sette candidati della traccia.
 La prova encoder comune e i risultati già riportati sono quelli disponibili.
 
 \subsection{Esecuzioni Simulink abbinate}

@@ -5,14 +5,10 @@ Il sistema considerato è un manipolatore planare 2R nel quale ciascun motore tr
 
 L'elasticità è utile per la misura indiretta della coppia e per la sicurezza dell'interazione, ma introduce dinamiche interne e risonanze. Una variazione di comando non agisce istantaneamente sul link: attraversa la dinamica dell'attuatore, accelera il rotore, deforma la molla e solo successivamente produce coppia sul lato meccanico. La configurazione verticale superiore scelta nel progetto è inoltre instabile in anello aperto. Il problema non consiste quindi soltanto nell'inseguire un riferimento, ma nel coordinare stabilizzazione, rapidità, interazione fra giunti e contenimento del comando in presenza di incertezze.
 
-Il carico dell'end-effector è una massa aggiuntiva concentrata nella
-punta del secondo link. Non modifica soltanto la coppia gravitazionale:
-partecipa a inerzia e Coriolis. Anche i drive presentano variazioni di
-frequenza naturale, smorzamento e ritardo. Questi effetti agiscono
-in punti diversi del sistema e devono restare distinguibili.
+La massa $m_2$ è quella concentrata all'estremità del secondo link, come nella traccia. La sua incertezza modifica insieme inerzia, Coriolis e gravità. I drive presentano invece variazioni di frequenza naturale e ritardo, mentre lo smorzamento resta noto. Sono tre tipologie fisiche con ruoli diversi: la prima meccanica, le altre due attuative.
 
 Il filo conduttore è il confronto fra due rappresentazioni degli stessi
-attuatori e dello stesso carico. La prima conserva i parametri fisici;
+attuatori e della stessa meccanica. La prima conserva i parametri fisici;
 la seconda concentra lo scostamento dei drive in dinamiche pesate.
 Osserviamo sia che cosa cambia nei margini sia che cosa rimane identico
 quando controllore e impianto fisico sono gli stessi. È questa distinzione

@@ -1,7 +1,7 @@
 \section{Implementazioni MATLAB/Simulink adottate}\label{sec:originali}
 Gli otto modelli Simulink conservano la struttura lineare e non lineare delle famiglie LQG, LQGI, $H_\infty$/PID e $\mu$. Il comando \texttt{collaudo\_simulink} assegna matrici, controllori e parametri nel Workspace del modello e usa \texttt{SimulationInput} per ogni prova.
 
-Nei generatori di parametri incorporati, la massa distale diventa $m_2+m_{EE}$. È questo valore a raggiungere le funzioni di inerzia, Coriolis e gravità. Il runner confronta numericamente le loro espressioni con quelle MATLAB per ogni massa provata. I due drive ricevono separatamente frequenza, smorzamento e ritardo del medesimo campione; le callback automatiche non sovrascrivono questi dati.
+Nei generatori di parametri incorporati, la massa distale diventa $m_2$. È questo valore a raggiungere le funzioni di inerzia, Coriolis e gravità. Il runner confronta numericamente le loro espressioni con quelle MATLAB per ogni massa provata. I due drive ricevono separatamente frequenza, smorzamento e ritardo del medesimo campione; le callback automatiche non sovrascrivono questi dati.
 
 Le interfacce conservano un significato preciso. LQG usa
 $u=N_rr-K\hat x$ e quattro misure encoder; LQGI aggiunge
@@ -22,7 +22,7 @@ Gli otto file richiamano automaticamente l'inizializzazione all'avvio.
 Dopo aver estratto la consegna basta aprire un modello e premere Run:
 la callback individua gli script associati attraverso il percorso del
 modello, carica i dati coerenti e assegna il Workspace nominale.
-La massa effettiva $m_2+m_{EE}$ è un parametro esplicito dei generatori;
+La massa del secondo link $m_2$ è un parametro esplicito dei generatori;
 i due drive ricevono le proprie realizzazioni. Non servono variabili
 lasciate da una sessione precedente. Il collaudo con SimulationInput
 rimane disponibile per variare massa e attuatori nei campioni comuni.

@@ -49,7 +49,7 @@ for r in nominal:
     ax.annotate(r["Controllore"], (x, y), xytext=(9, 7), textcoords="offset points")
 ax.axvline(2, color="black", ls="--", lw=1, label="Target di 2 s")
 ax.set(xlabel="Assestamento peggiore sui due giunti [s]",
-       ylabel="Picco del comando di tracking [N m]", xlim=(0, 6.2), ylim=(0, 5.6))
+       ylabel="Picco del comando di tracking [N m]", xlim=(0, None), ylim=(0, None))
 ax.legend(); save(fig, "compromesso_nominale")
 
 fig, axs = plt.subplots(1, 3, figsize=(10.2, 3.5))

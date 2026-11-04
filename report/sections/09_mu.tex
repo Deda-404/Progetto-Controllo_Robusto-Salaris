@@ -9,42 +9,36 @@ separare l'effetto del controllore da quello della famiglia incerta.
 Le sintesi D--K su A e B affrontano poi una domanda ulteriore: come
 cambia il progetto quando la struttura delle incertezze entra nel costo?
 
-\subsection{Il carico meccanico selezionato}
-L'incertezza meccanica è la massa concentrata all'end-effector,
-$m_{EE}\in[0.1,0.3]$ kg. La massa del secondo link resta 0.8 kg:
-non sono due parametri indipendenti da variare contemporaneamente.
-Il carico modifica inerzia, Coriolis e gravità attraverso la stessa
-massa effettiva, e deve assumere lo stesso valore in tutte le equazioni.
+\subsection{La massa meccanica selezionata}
+L'incertezza meccanica riguarda $m_2\in[0.72,0.88]$ kg, la massa concentrata del secondo link già presente nella traccia. Essa modifica inerzia, Coriolis e gravità, mantenendo lo stesso valore in tutte le equazioni.
 Se rendessimo incerto separatamente ciascun coefficiente di $M^{-1}$
 e di $K_g$, l'analisi potrebbe combinare matrici che non appartengono
 ad alcun manipolatore del progetto. Conservare un unico reale ripetuto
 serve proprio a escludere queste combinazioni artificiali.
 
-Il carico non viene assorbito nel peso dinamico del drive. Così A e B
+La massa $m_2$ non viene assorbita nel peso dinamico del drive. Così A e B
 hanno la stessa meccanica incerta e possiamo attribuire le differenze
 dei margini al modo di descrivere gli attuatori. Le ripetizioni nella
 LFT non aggiungono masse: sono più apparizioni della medesima variabile.
 
 \subsection{La dinamica degli attuatori}
-Ogni drive ha frequenza naturale $40\pm10\%$ rad/s, smorzamento
-$0.8\pm10\%$ e ritardo $15\pm20\%$ ms. I due canali sono indipendenti:
+Ogni drive ha frequenza naturale $40\pm15\%$ rad/s, smorzamento noto $0.8$ e ritardo $15\pm20\%$ ms. I due canali sono indipendenti:
 un attuatore più lento non obbliga l'altro a esserlo. In A manteniamo
-questi sei scalari reali; in B usiamo due perturbazioni SISO additive,
+questi quattro scalari reali; in B usiamo due perturbazioni SISO additive,
 stabili e limitate in norma, pesate dal fit del Capitolo 5.
 
 Questa sostituzione cambia le dinamiche ammesse dall'analisi. Un
 blocco dinamico può scegliere una fase e una forma frequenziale che
-non corrispondono a nessuna terna fisica $(\omega_n,\zeta,\tau_d)$.
+non corrispondono a nessuna coppia fisica $(\omega_n,\tau_d)$.
 D'altra parte la copertura continua delle perturbazioni normalizzate
 è stata controllata sui casi dichiarati, senza provare l'inclusione
 dell'intero box parametrico. B non è quindi identificata con A né
 assunta automaticamente come suo sovrainsieme globale.
 
 \section{Raccogliere le incertezze in \texorpdfstring{$\Delta$}{Delta}}
-In A raccogliamo sette scalari reali: tre per ogni drive e uno per il
-carico. Le loro ripetizioni nella LFT hanno lo stesso valore. In B
-rimangono il parametro reale $m_{EE}$ e due dinamiche SISO indipendenti.
-Per esempio $m_{EE}=0.2+0.1\delta_m$ kg: $\delta_m=1$ indica 0.3 kg.
+In A raccogliamo cinque scalari reali: due per ogni drive e uno per la massa $m_2$. Le loro ripetizioni nella LFT hanno lo stesso valore. In B
+rimangono il parametro reale $m_2$ e due dinamiche SISO indipendenti.
+Per esempio $m_2=0.8+0.08\delta_m$ kg: $\delta_m=1$ indica 0.88 kg.
 La normalizzazione rende comune la soglia uno senza confondere kg,
 secondi e coefficienti adimensionali. Le dipendenze inverse dell'inerzia
 sono conservate: non aggiungiamo perturbazioni indipendenti ad $A$.
@@ -251,12 +245,7 @@ per RP. Le tabelle distinguono queste deduzioni da una valutazione diretta
 di \texttt{robgain}; un intervallo invertito non viene riordinato.
 
 \subsection{Esito del controllore nominale}
-Hinf2 soddisfa NS e NP sul nominale, ma i margini RS sono circa
-$[0.05535,0.05567]$ in A e $[0.03714,0.03721]$ in B. Entrambi i
-limiti superiori sono inferiori a uno: la buona prestazione nominale
-non resiste all'intera incertezza ammessa. Poiché RP richiede anche
-stabilità, è esclusa senza bisogno di attribuire un risultato
-favorevole a una curva nominale particolarmente piccola.
+Per Hinf2 gli intervalli RS sono \FinHinfTwoIntervalloRSA\ in A e \FinHinfTwoIntervalloRSB\ in B. La norma nominale comune è \FinHinfTwoNorma. Confrontare gli estremi con la soglia uno permette di leggere separatamente NP e RS. Se il limite superiore RS è inferiore a uno, RP è esclusa perché richiede anche stabilità; una buona curva nominale non risolve quella perdita.
 
 Il caso complementare è LQG: mantiene RS in A e B, ma non raggiunge
 NP sul costo comune. Può quindi essere robustamente stabile senza
@@ -291,13 +280,14 @@ Eseguiamo una sintesi su A e una su B con gli stessi pesi, $M_o$, ingressi e tre
 
 \input{generated/finale_dk.tex}
 
-Gli obiettivi ottenuti sono maggiori di uno. Non accreditiamo quindi una prestazione robusta raggiunta dalla sola sintesi. Ripetiamo la post-analisi continua sui due insiemi per ciascun candidato e riportiamo anche l'ordine: gli scaling possono far crescere molto il numero di stati, anche con pochi passi D--K.
+Gli obiettivi restituiti sono \FinDkA\ su A e \FinDkB\ su B. Non accreditiamo quindi una prestazione robusta raggiunta dalla sola sintesi. Ripetiamo la post-analisi continua sui due insiemi per ciascun candidato e riportiamo anche l'ordine: gli scaling possono far crescere molto il numero di stati, anche con pochi passi D--K.
 
 \section{Post-analisi e confronto finale di robustezza}
 
 \input{generated/finale_robustezza.tex}
+\input{generated/finale_frequenze.tex}
 
-LQG e LQGI conservano RS nei due modelli, pur non soddisfacendo il costo NP comune. Per Hinf1 la descrizione concentrata porta a un esito RS più restrittivo. Hinf2 e PID sono nominalmente prestazionali, ma la stabilità non resiste all'intero insieme dichiarato. I candidati D--K mostrano i limiti della ricerca eseguita e non diventano automaticamente i controllori preferiti.
+LQG e LQGI conservano RS nei due modelli, pur non soddisfacendo il costo NP comune. Hinf1 mantiene RS anche in B, ma il suo limite inferiore scende da \FinHinfOneRSA\ in A a \FinHinfOneRSB\ in B, molto vicino alla soglia uno. La garanzia è quindi più stretta pur lasciando invariato il controllore. Hinf2 e PID sono nominalmente prestazionali, ma la stabilità non resiste all'intero insieme dichiarato. I candidati D--K mostrano i limiti della ricerca eseguita e non diventano automaticamente i controllori preferiti.
 
 I margini di A e B non sono misure sulla stessa geometria oltre il raggio unitario. A espande intervalli di parametri reali; B espande anche dinamiche arbitrarie pesate. Inoltre la copertura di B è verificata sui casi dichiarati, senza prova globale del box A. Per queste ragioni confrontiamo gli esiti senza trasferire una garanzia da una rappresentazione all'altra.
 
@@ -310,13 +300,7 @@ I margini di A e B non sono misure sulla stessa geometria oltre il raggio unitar
 
 \input{generated/finale_riesame_mu.tex}
 
-Il punto iniziale comune ha 82 stati, errore DC del 3.82\% e norma
-comune 1.052: non raggiunge già NP. Le iterazioni successive riducono
-l'obiettivo scalato della D--K senza migliorare necessariamente il
-tracking fisico. In A il comando di riferimento diventa quasi nullo;
-in B resta un offset significativo e cresce la trasmissione del rumore.
-Il confronto usa gli stessi pesi e non promuove il punto iniziale
-sostituendolo a una delle sintesi finali.
+La tabella conserva il punto iniziale comune e i candidati di ogni iterazione. Le norme sono rivalutate sulla medesima pianta e le colonne di errore DC e trasmissione del rumore permettono di capire se una riduzione del costo scalato corrisponda a un miglioramento del moto. Il confronto non promuove il punto iniziale sostituendolo a una delle sintesi finali. Un costo più basso non corregge automaticamente un errore statico o un guadagno encoder elevato.
 
 Il costo non contiene l'ingresso encoder e il peso statico sull'errore
 non impone da solo il 5\%. La ricerca privilegia quindi un compromesso
@@ -328,12 +312,11 @@ destri: aumentare la rapidità senza limite non è una soluzione.
 
 L'ordine è il numero degli stati interni, distinto dall'ampiezza della
 coppia. Ai 14 stati fisici si aggiungono pesi, riferimento e fit degli
-scaling. In A si arriva a 294 stati, in B a 80: non sono due alternative
+scaling. In A si arriva a \FinMuAOrdine\ stati, in B a \FinMuBOrdine: non sono due alternative
 operative raccomandate. La riduzione bilanciata potrebbe approssimare
-un controllore, ma non correggerebbe il quasi annullamento del tracking
+un controllore, ma non correggerebbe un eventuale errore di tracking
 né aggiungerebbe la penalizzazione del rumore assente dal costo.
-Non applichiamo perciò un taglio di ordine per rendere presentabile una
-soluzione che già fallisce NP/RP. I risultati restano utili per capire
+Non applichiamo perciò un taglio di ordine per rendere presentabile una soluzione senza ricalcolarne tutte le proprietà. I risultati restano utili per capire
 la differenza fra progettare sull'insieme incerto e soddisfare tutte le
 richieste fisiche. Nessun risultato D--K è assunto come garanzia senza
 la post-analisi sulla pianta originale.
@@ -360,7 +343,7 @@ comando, ma anche rallentare la correzione o cambiare il margine robusto.
 Il vantaggio andrebbe verificato sulla pianta originale, non soltanto
 sul problema scalato dell'ultima iterazione. Questa estensione resta
 un approfondimento di metodo; non presentiamo un'ulteriore D--K con
-rumore come esperimento eseguito sul modello con carico.
+rumore come esperimento eseguito sul modello della traccia.
 
 \subsection{Perché i controllori \texorpdfstring{$H_\infty$}{H infinity} e \texorpdfstring{$\mu$}{mu} possono avere un ordine elevato}
 L'ordine del controllore dipende dalla pianta generalizzata, non dai
@@ -374,7 +357,7 @@ Inoltre i blocchi reali ripetuti richiedono di rispettare correlazioni
 che un'unica perturbazione piena cancellerebbe. Un fit di ordine più
 alto può seguire meglio lo scaling frequenziale, al costo di una
 sintesi più grande. Un fit corto può semplificare il calcolo, ma non
-assicura una prestazione migliore. I 294 stati di Mu\_A e gli 80 di
+assicura una prestazione migliore. I \FinMuAOrdine\ stati di Mu\_A e i \FinMuBOrdine\ di
 Mu\_B illustrano questo compromesso, senza dimostrare che un modello
 sia in generale più facile da controllare dell'altro.
 

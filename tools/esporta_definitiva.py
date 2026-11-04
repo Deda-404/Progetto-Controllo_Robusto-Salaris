@@ -1,4 +1,4 @@
-"""Esporta la relazione e le slide dai risultati della campagna con carico."""
+"""Esporta relazione e slide esclusivamente dai risultati della configurazione corrente."""
 from pathlib import Path
 import csv
 import json
@@ -87,22 +87,32 @@ def main():
                  "lqg_lqgi_risposte","lqg_lqgi_comando","hinf_disturbi","lineare_nonlineare_lqg"]:
         shutil.copy2(DATA/(name+".png"),FIG)
     info=json.loads((DATA/"riassunto_numerico.json").read_text(encoding="utf-8"))
-    weights=read("ordini_peso"); selected=next(x for x in weights if x["Ordine"]=="3")
+    assert info['fisica']['m2']==.8 and 'mEE' not in info['fisica']
+    weights=read("ordini_peso"); selected=next(x for x in weights if int(x["Ordine"])==info['ordinePeso'])
     values={"ResiduoEquilibrio":num(info["residuoEquilibrio"]),"ErroreJacobiano":num(info["erroreJacobiano"]),
             "ErroreAB":num(info["erroreAB"]),"ErroreLFT":num(info["erroreLFT"]),
             "Copertura":num(selected["MaxNormaNormalizzata"],4),"Holdout":num(selected["MaxNormaIndipendente"],4),
             "PesoFormula":r"\frac{"+polynomial(info["pesoNum"])+"}{"+polynomial(info["pesoDen"])+"}",
             "CARELQG":num(info["CARE"][0]),"CARELQGI":num(info["CARE"][1]),
-            "ScartoMixsyn":num(info["scartoMixsyn"])}
-    table("carico",[r"$m_{EE}$ [kg]",r"$m_{EE}/m_2$",r"$M_{11}$ [kg m$^2$]",r"$\|K_g\|_2$"],
-          [[num(x["MassaEEkg"]),num(x["RapportoMassa2"]),num(x["M11"]),num(x["NormaKg"],4)] for x in read("candidati_carico")],
-          "Tre masse candidate nella configurazione verticale. Il carico centrale porta la massa distale a 1 kg.","tab:carico")
+            "ScartoMixsyn":num(info["scartoMixsyn"]),"OrdinePeso":str(info['ordinePeso']),
+            "GammaMix":num(info['gammaHinf'][0],6),"GammaPID":num(info['gammaHinf'][3],6),
+            "Separazione":num(info['separazione']),"DkA":num(info['obiettivoDK'][0],4),"DkB":num(info['obiettivoDK'][1],4),
+            "Occorrenze":str(sum(x['Occurrences'] for x in info['blocchiA'])),
+            "AlphaLqr":num(info['alphaLqr'],4),"AlphaKalman":num(info['alphaKalman'],4),
+            "RapportoKalman":num(info['alphaKalman']/info['alphaLqr'],4)}
+    table("carico",[r"$m_2$ [kg]",r"$m_2/\bar m_2$",r"$M_{11}$ [kg m$^2$]",r"$\|K_g\|_2$"],
+          [[num(x["Massa2kg"]),num(x["RapportoNominale"]),num(x["M11"]),num(x["NormaKg"],4)] for x in read("candidati_massa")],
+          "Massa nominale e due estremi dell'incertezza del secondo link nella configurazione verticale.","tab:carico")
+    table('campioni_fisici',['Impianto',r'$\omega_{n1}$',r'$\omega_{n2}$',r'$\tau_{d1}$',r'$\tau_{d2}$',r'$m_2$'],
+          [[str(j)]+[num(x[k],4) for k in ['wn1','wn2']]+[num(1000*float(x[k]),4) for k in ['td1','td2']]+[num(x['m2'],4)]
+           for j,x in enumerate(read('parametri_dieci_impianti'),1)],
+          'Dieci impianti fisici comuni, seed 20261101. Frequenze in rad/s, ritardi in ms e massa in kg; smorzamento 0.8 noto.')
     table("ritardo",["Tolleranza",r"$\|G_p-G_0\|_\infty$",r"Scarto di fase a 40 rad/s [$^\circ$]"],
           [[num(100*float(x["Tolleranza"]))+r"\%",num(x["ScartoAdditivo"],4),num(x["ScartoFase40deg"])] for x in read("candidati_ritardo")],
           "Variazione del solo ritardo verso l'estremo superiore; frequenza naturale e smorzamento nominali.")
     table("pesi",["Ordine",r"$\max\|E_j/W_A\|_\infty$","Eccesso mediano","30 casi indipendenti"],
           [[x["Ordine"],num(x["MaxNormaNormalizzata"],4),num(x["EccessoMediano"],4),num(x["MaxNormaIndipendente"],4)] for x in weights],
-          "Copertura continua dei 29 casi di costruzione e verifica indipendente. Selezionato l'ordine 3.")
+          f"Copertura continua dei {info['numeroFit']} casi di costruzione e verifica indipendente. Selezionato l'ordine {info['ordinePeso']}.")
     # Un solo elemento per ciascuna coppia di poli complessi coniugati.
     poles=[]
     for re,im in sorted(zip(info["poliRe"],info["poliIm"]),reverse=True):
@@ -134,7 +144,8 @@ def main():
     ras=read("ras"); plants=read("dieci_impianti"); noise=read("rumore")
     states=["CONVERGENZA","MANCATA_CONVERGENZA","DIVERGENZA_OSSERVATA","TIMEOUT","ERRORE_NUMERICO"]
     rasrows=[]; plantrows=[]; timerows=[]; disturbrows=[]; noiserows=[]; loadrows=[]
-    load=read("carico_nonlineare")
+    load=read("massa_nonlineare")
+    finalrows=[]
     for name in CURRENT:
         counts=Counter(x["Esito"] for x in ras if x["Controllore"]==name)
         assert sum(counts.values())==15 and set(counts).issubset(states)
@@ -148,13 +159,20 @@ def main():
         n=next(x for x in plants if x["Controllore"]==name and x["Impianto"]=="0")
         ok=(n["Stabile"]=="1" and float(n["Assestamento"])<=2 and float(n["OvershootPercent"])<=15 and float(n["ErroreDC"])<=.05 and float(n["Cross"])<=.25)
         timerows.append([esc(name),num(n["Assestamento"]),num(n["OvershootPercent"]),percent(n["ErroreDC"]),num(100*float(n["Cross"])),"PASS" if ok else "FAIL"])
+        rb=[x for x in robust if x['Controllore']==name]
+        finalrows.append([esc(name),'PASS' if ok else 'FAIL','PASS' if rb[0]['NP']=='1' else 'FAIL',
+                          '/'.join(x['RS'] for x in rb),'/'.join(x['RP'] for x in rb)])
         disturbrows.append([esc(name),num(180/math.pi*float(n["PiccoDisturboRad"])),num(n["RecuperoDisturbo"]),maximum("RecuperoDisturbo")])
         v=next(x for x in noise if x["Controllore"]==name)
         noiserows.append([esc(name),num(v["PiccoCampioni"],4),num(v["PiccoTraCampioni"],4),num(v["RMSIntegrato"],4)])
-        loads=sorted([x for x in load if x["Controllore"]==name],key=lambda x:float(x["MassaEE"]))
+        loads=sorted([x for x in load if x["Controllore"]==name],key=lambda x:float(x["Massa2"]))
         loadrows.append([esc(name)]+[num(100*float(x["ErroreFinale"])) if x["Completato"]=="1" else "arresto" for x in loads])
         tag=name.replace("_", "").replace("1", "One").replace("2", "Two")
         values.update({tag+"Stable":str(len(stable)),tag+"Conv":str(counts["CONVERGENZA"]),tag+"Peak":num(v["PiccoTraCampioni"],3),tag+"Rms":num(v["RMSIntegrato"],3),tag+"Ts":num(n["Assestamento"]),tag+"Ess":percent(n["ErroreDC"])})
+        values.update({tag+'Mp':num(n['OvershootPercent']),tag+'Cross':num(100*float(n['Cross'])),
+                       tag+'TrackPeak':num(n['PiccoComando']),tag+'Target':'PASS' if ok else 'FAIL'})
+        values.update({tag+'NonConv':str(counts['MANCATA_CONVERGENZA']),
+                       tag+'Div':str(counts['DIVERGENZA_OSSERVATA'])})
         for x in robust:
             if x["Controllore"]==name:
                 a=x["Analisi"][0]
@@ -163,17 +181,25 @@ def main():
                 values[tag+"RPesito"+a]=x["RP"]
                 values[tag+"Norma"]=num(x["NormaNominale"],4)
                 values[tag+"Ordine"]=x["Ordine"]
+                values[tag+'OrdineChiuso']=str(14+int(x['Ordine']))
+                values[tag+'IntervalloRS'+a]=interval(x,'RS')
+                values[tag+'Frequenza'+a]=num(x['FrequenzaCritica'],4)
+    table('confronto_finale',['Controllore','Target nominali','NP comune','RS A/B','RP A/B'],finalrows,
+          'Confronto sul modello corrente: target temporali distinti dal costo pesato e dalle garanzie robuste.')
+    table('frequenze',['Controllore','A/B',r'$\omega_{RS}$ [rad/s]'],
+          [[esc(x['Controllore']),x['Analisi'][0],num(x['FrequenzaCritica'],4)] for x in robust],
+          'Frequenze critiche restituite dall\'analisi di stabilità robusta dello stesso controllore su A e B.')
     table("ras",["Controllore","Conv.","Non conv.","Allont.","Timeout","Errore"],rasrows,
           "Quindici condizioni iniziali per controllore. Gli esiti numerici restano separati dall'attrazione osservata.")
     table("impianti",["Controllore","Stabili",r"Errore DC [\%]","Picco u [N m]",r"Picco $q_d$ [$^\circ$]"],plantrows,
           "Dieci impianti comuni: massimi sui soli casi stabili. Errore DC relativo e coppia link di 0.5 N m.")
     table("temporali",["Controllore",r"$T_s$ [s]",r"$M_p$ [\%]",r"$e_{ss}$ [\%]",r"Cross [\%]","Target"],timerows,
-          r"Nominale con carico: target simultanei 2 s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.")
+          r"Nominale corrente: target simultanei 2 s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.")
     table("disturbo",["Controllore",r"Picco $q_d$ [$^\circ$]","Recupero nom. [s]","Recupero max [s]"],disturbrows,
           "Coppie link separate: peggiore asse nominale e massimo fra campioni stabili. Infinito indica mancato rientro entro 0.5 gradi nell'orizzonte di 12 s.")
     table("rumore",["Controllore","Picco a 2 ms","Picco fra campioni","RMS integrato"],noiserows,
           "Comando in N m: rumore encoder comune, ZOH 2 ms, 4 s. Picchi osservati senza saturazione; RMS medio fra canali.")
-    table("carico_nonlineare",["Controllore","0.1 kg","0.2 kg","0.3 kg"],loadrows,
+    table("carico_nonlineare",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows,
           r"Errore finale non lineare relativo [\%] a 12 s, riferimento di 5 gradi al primo giunto; drive nominali. Non è una misura asintotica.")
     # Tabelle compatte per le slide: un'unica fonte numerica.
     table("slide_hinf",["Soluzione","Ordine","Norma comune"],
@@ -184,11 +210,11 @@ def main():
           [[esc(name),"PASS" if next(x for x in robust if x["Controllore"]==name)["NS"]=="1" else "FAIL",
             "PASS" if next(x for x in robust if x["Controllore"]==name)["NP"]=="1" else "FAIL"]+
             ["/".join(x[key] for x in robust if x["Controllore"]==name) for key in ["RS","RP"]] for name in CURRENT],"",slide=True)
-    table("slide_carico",["Controllore","0.1 kg","0.2 kg","0.3 kg"],loadrows[:2],"",slide=True)
+    table("slide_carico",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows[:2],"",slide=True)
     tex="\n".join(r"\newcommand{\Fin"+name+"}{"+value+"}" for name,value in values.items())+"\n"
     (GEN/"finale_values.tex").write_text(tex,encoding="utf-8")
     (ROOT/"presentation/generated/finale_values.tex").write_text(tex,encoding="utf-8")
-    print("Tabelle, macro e otto figure esportate dai dati con carico.")
+    print("Tabelle, macro e figure esportate dai dati correnti.")
 
 
 if __name__=="__main__":

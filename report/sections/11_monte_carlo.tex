@@ -1,19 +1,21 @@
 \chapter{Verifica pratica della robustezza su impianti incerti}
 \section{Scopo e costruzione degli impianti}
-Le prove campionate mostrano in modo diretto che cosa significa cambiare i parametri fisici. Usiamo dieci settuple $(\omega_{n1},\zeta_1,\tau_{d1},\omega_{n2},\zeta_2,\tau_{d2},m_{EE})$, estratte una sola volta con seed 20261101. Tutti i controllori ricevono gli stessi impianti, oltre al nominale. I valori sono conservati nel file \texttt{parametri\_dieci\_impianti.csv}.
+Le prove campionate mostrano in modo diretto che cosa significa cambiare i parametri fisici. Usiamo dieci quintuple $(\omega_{n1},\tau_{d1},\omega_{n2},\tau_{d2},m_2)$, estratte una sola volta con seed 20261101. Tutti i controllori ricevono gli stessi impianti, oltre al nominale. I valori sono conservati nel file \texttt{parametri\_dieci\_impianti.csv}.
 
-Non campioniamo una seconda popolazione arbitraria di B. Per ogni impianto fisico ricaviamo invece le perturbazioni additive normalizzate che ricostruiscono esattamente i suoi drive, mantenendo identico il carico. La risposta a controllore fissato è allora unica: A e B cambiano la descrizione della famiglia, non l'impianto che viene simulato.
+\input{generated/finale_campioni_fisici.tex}
+
+Non campioniamo una seconda popolazione arbitraria di B. Per ogni impianto fisico ricaviamo invece le perturbazioni additive normalizzate che ricostruiscono esattamente i suoi drive, mantenendo identica la massa $m_2$. La risposta a controllore fissato è allora unica: A e B cambiano la descrizione della famiglia, non l'impianto che viene simulato.
 
 La tabella dei parametri è parte dell'esperimento: il solo seed non basta
 se cambiano ordine delle estrazioni, generatori o intervalli. Conservare
-le settuple consente di ricostruire ogni pianta e di confrontare i
+le quintuple consente di ricostruire ogni pianta e di confrontare i
 controllori sul medesimo caso sfavorevole. I dieci impianti non sono le
 quindici condizioni iniziali della RAS: qui cambia il modello fisico,
 lì cambia lo stato iniziale della stessa pianta nominale.
 
 La ricostruzione dei drive attraverso $(G_{ai}-G_{a0})/W_A$ è verificata
 anche in stabilità, proprietà e norma. Il massimo errore relativo di
-ricostruzione A/B è circa $1.03\,10^{-14}$. Una coppia di curve coincidenti
+ricostruzione A/B è \FinErroreAB. Una coppia di curve coincidenti
 non prova però che l'intera famiglia B coincida con A: prova che quel
 singolo impianto fisico è stato rappresentato coerentemente nei due modi.
 
@@ -24,8 +26,8 @@ Controlliamo i poli della realizzazione completa prima di misurare il tracking. 
 
 Dieci successi sono un'evidenza utile, ma non dimostrano robustezza su un continuo di parametri. Al contrario, un solo caso instabile basta a escludere la stabilità dell'intera famiglia. Per questo affianchiamo sempre le simulazioni alla $\mu$-analysis.
 
-LQG, LQGI, Hinf1, Mu\_A e Mu\_B stabilizzano tutti e dieci i casi;
-Hinf2 ne stabilizza quattro e PID sette. Il polo dominante rende visibile
+I casi stabili sono \FinLQGStable/10 per LQG, \FinLQGIStable/10 per LQGI, \FinHinfOneStable/10 per Hinf1, \FinHinfTwoStable/10 per Hinf2, \FinPIDStable/10 per PID, \FinMuAStable/10 per Mu\_A e \FinMuBStable/10 per Mu\_B.
+Il polo dominante rende visibile
 quanto rapidamente una perturbazione libera si spegne o cresce: una
 parte reale positiva è una violazione di stabilità, non semplicemente
 un tempo di assestamento molto lungo. Una cancellazione nella sola
@@ -48,7 +50,7 @@ Il cross viene normalizzato all'ampiezza del gradino richiesto, non
 all'eventuale risposta ridotta del giunto comandato. Altrimenti un
 controllore che quasi non muove il robot potrebbe apparire ben
 disaccoppiato soltanto perché entrambe le uscite sono piccole.
-Analogamente, un errore statico del 99.8\% non è accettabile anche se
+Analogamente, un errore statico del \FinMuAEss\% non è accettabile anche se
 overshoot e cross sono minimi. Queste metriche vanno lette insieme,
 come accade per Mu\_A sul nominale.
 
@@ -83,7 +85,7 @@ Un risultato campionato e un margine strutturato possono dare
 informazioni differenti senza essere incompatibili. Dieci casi stabili
 sono possibili anche con RS fallita, perché la perturbazione critica
 non è necessariamente fra le dieci estrazioni. In B può inoltre essere
-una dinamica stabile ammessa dal peso e priva di una terna fisica
+una dinamica stabile ammessa dal peso e priva di una coppia fisica
 corrispondente. Quando una garanzia RS è presente, rimane circoscritta
 al modello lineare e alla famiglia dichiarata, senza estendersi a
 saturazioni o ad ampiezze non lineari arbitrarie.
@@ -92,12 +94,11 @@ saturazioni o ad ampiezze non lineari arbitrarie.
 La formulazione ampliata dei Capitoli 8 e 9 suggerisce un confronto
 aggiuntivo con encoder rumorosi sugli stessi impianti congelati.
 Per attribuire un miglioramento al controllore occorrerebbe mantenere
-comuni sia le settuple sia la sequenza encoder. Cambiare il peso di
+comuni sia le quintuple sia la sequenza encoder. Cambiare il peso di
 rumore nella sintesi non dovrebbe cambiare automaticamente la varianza
 fisica nella verifica: altrimenti si confronterebbero due problemi.
 
-Non è disponibile una nuova campagna di questo tipo sul modello con
-carico. I risultati della prova encoder nominale e quelli dei dieci
+Non è disponibile una nuova campagna di questo tipo sul modello corrente. I risultati della prova encoder nominale e quelli dei dieci
 impianti puliti sono distinti e non vengono sommati in una garanzia
 congiunta. L'analisi nominale di $T_{uv}$ individua la sensibilità alle
 misure; RS studia la stabilità della famiglia. Nessuna delle due,

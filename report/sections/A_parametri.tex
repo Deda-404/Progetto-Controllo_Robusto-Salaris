@@ -1,38 +1,8 @@
 \chapter{Parametri principali}\label{app:parametri}
-\begin{table}[htbp]\centering
-\begin{tabular}{lll}\toprule
-Grandezza & Valore & Origine\\\midrule
-$m_1,m_2$ & $1,\ 0.8$ kg & Traccia\\
-$l_1,l_2$ & $0.4,\ 0.3$ m & Traccia\\
-$J_m$ & $0.01I_2$ kg m$^2$ & Traccia\\
-$B_m$ & $0.02I_2$ N m s/rad & Traccia\\
-$K_s$ & $\mathrm{diag}(50,40)$ N m/rad & Traccia\\
-$g$ & $9.81$ m/s$^2$ & Traccia\\
-$m_{EE}$ & $0.2$ kg, $[0.1,0.3]$ kg & Ipotesi di progetto\\
-$\omega_{n,i}$ & $40$ rad/s, $[36,44]$ rad/s & Ipotesi di progetto\\
-$\zeta_i$ & $0.8$, $[0.72,0.88]$ & Ipotesi di progetto\\
-$\tau_{d,i}$ & $15$ ms, $[12,18]$ ms & Ipotesi di progetto\\
-$\bar q$ & $[\pi/2,0]^T$ rad & Punto di lavoro\\
-$r$, $d$ di prova & $5^\circ$, $0.5$ N m & Scenari separati\\
-$\sigma_y$ & $0.05^\circ$ & Rumore encoder assunto\\\bottomrule
-\end{tabular}
-\caption{Dati fisici e scelte progettuali; i parametri attuativi sono indipendenti fra canali.}
-\end{table}
+La tabella completa dei parametri e delle incertezze è riportata nel Capitolo 2 (Tabella~\ref{tab:parametri-definitivi}). La massa distale nominale è $m_2=0.8$ kg e l'intervallo è $[0.72,0.88]$ kg. La medesima massa compare in tutte le equazioni meccaniche di A e B.
 
-I controllori di riferimento sono disponibili nei dati per un confronto
-mirato a coefficienti fissati. Il confronto principale impiega i sette
-candidati con carico; le garanzie non vengono trasferite da altri insiemi.
+Per ogni drive si assumono $\omega_{n,i}\in[34,46]$ rad/s e $\tau_{d,i}\in[12,18]$ ms, indipendenti fra canali. Lo smorzamento è noto, $\zeta=0.8$. Le percentuali sono ipotesi ingegneristiche e non intervalli identificati da misure. I parametri restano costanti durante ogni prova.
 
-La massa effettiva distale è $m_2+m_{EE}=1$ kg nel nominale e varia
-fra 0.9 e 1.1 kg. La variazione relativa del carico è quindi il 50\%,
-ma non lo è quella della massa effettiva. Il carico è trattato come
-puntiforme nella posizione dell'end-effector: non introduce un'inerzia
-rotazionale propria o un nuovo giunto. Le rigidezze elastiche e le
-inerzie dei motori restano quelle assegnate.
+Il punto di lavoro è $\bar q=[\pi/2,0]^T$ rad. I gradini di riferimento sono di $5^\circ$ e le coppie disturbanti di 0.5 N m, applicate separatamente. Il rumore encoder ha deviazione standard $\sigma_y=0.05^\circ$, quindi varianza $(0.05\pi/180)^2$ rad$^2$. Il segnale campionato con ZOH è distinto dalle intensità continue utilizzate nel progetto di Kalman.
 
-Le tolleranze dei due drive sono indipendenti fra canali e fra tipi
-di parametro. La stessa massa è invece condivisa da entrambi i giunti,
-perché l'oggetto è uno solo. I parametri restano costanti durante una
-prova: i range non descrivono jitter temporale o un evento di presa.
-Le scale di rumore e disturbo sono ipotesi di verifica, distinte dalle
-intensità continue assunte nelle Riccati di Kalman.
+I sette candidati correnti sono LQG, LQGI, Hinf1, Hinf2, PID, Mu\_A e Mu\_B. I controllori storici rimangono disponibili come riferimenti a coefficienti fissati, senza trasferire garanzie ottenute su famiglie diverse. Le scale di rumore e disturbo, i pesi e le tolleranze sono centralizzati in \path{parametri_sea.m}.

@@ -1,11 +1,11 @@
 {
   "input_sha256": {
-    "lqg.mat": "56afe6b698f3221e3989bc2138ef6b5834d0b7a61b65dd6eb02091c4709ca9fa",
-    "lqgi.mat": "41fc7d42220ac2a7cfc8a0e126451f7f62e9b61dc3ccb94f260e3b98891d2417",
-    "modello.mat": "9402a5d2f7fd3c62a359c709806bdb1febe6f7ce8d01cc896feea79ae29e73bd",
-    "confronto.mat": "0a5d986806b166cdb1c38ebd302372318040167d7ce2a77a850313ea7711f63c",
-    "kalman.csv": "a68bcf2d2a03dd42123b59a8f96d9c7b6b414cc8357b3810b23c7ed579b212f3",
-    "dieci_impianti.csv": "b3df518dbb2d7e7d09eb2078e57c61e5f9aafde4b464de2f007549b09987109b"
+    "lqg.mat": "7dad53f62643c01dcc82a40a4ac79c501228c2264ccce26f69cad1b82bd42160",
+    "lqgi.mat": "479b58e4c7d14620af5b1f5341457dc58f888ab6af6eb503ffcede6940cb0f58",
+    "modello.mat": "4552887a794602d959b8bda2def94cec377c84d9d2158a294782f7d45cc82dec",
+    "confronto.mat": "9ed244731610c4074c7f9c2630b1f85ff3a7e34922f57f9d7deca645006fef71",
+    "kalman.csv": "a9a47e94b2442cdf813ed384e06a0773655e50f191dcbcebaa173a69aaa24910",
+    "dieci_impianti.csv": "84da2f55731854ada3b10b9ac38352dc7523a55e99048dc898eea65587eafa29"
   },
   "operazioni": [
     "lettura dati salvati",
@@ -15,6 +15,6 @@
   ],
   "nuove_sintesi": false,
   "nuove_simulazioni": false,
-  "alpha_regolatore": 5.7517365904521895,
-  "alpha_kalman": 8.592451849742892
+  "alpha_regolatore": 6.218530077516474,
+  "alpha_kalman": 9.318739887136978
 }

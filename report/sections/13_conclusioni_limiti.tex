@@ -1,21 +1,21 @@
 \chapter{Conclusioni e limiti}
-Abbiamo studiato un manipolatore SEA con carico concentrato all'end-effector. La massa scelta, $0.2$ kg nell'intervallo $[0.1,0.3]$ kg, modifica in modo coerente inerzia, Coriolis e gravità. L'equilibrio verticale rimane valido, ma la linearizzazione e i controllori nominali devono essere calcolati con questa massa. I controlli indipendenti sul Jacobiano e sul contributo del carico confermano la coerenza delle equazioni.
+Abbiamo studiato il manipolatore SEA con le due masse puntiformi della traccia: $m_1=1$ kg e $m_2=0.8$ kg. L'incertezza di $m_2$, fra 0.72 e 0.88 kg, entra coerentemente in inerzia, Coriolis e gravità. L'equilibrio verticale rimane valido, mentre la linearizzazione dipende dalla massa. I controlli indipendenti sul Jacobiano, sull'energia e sul contributo geometrico della massa distale verificano questa coerenza.
 
-Il modello A comprende sei parametri attuativi reali e una massa reale condivisa. Il modello B mantiene la stessa massa e sostituisce i soli drive con due perturbazioni dinamiche additive pesate. Il ritardo variabile è decisivo nella scelta: l'inversione del nominale di Padé introduce poli instabili negli errori moltiplicativi, mentre la differenza additiva permette perturbazioni stabili e proprie. Un peso di ordine 3 copre i casi dichiarati con un eccesso contenuto.
+Il modello A comprende quattro parametri attuativi reali e una massa reale condivisa. Il modello B mantiene la stessa massa e sostituisce i soli drive con due perturbazioni dinamiche additive pesate. Il ritardo variabile è decisivo nella scelta: l'inversione del nominale di Padé introduce poli instabili negli errori moltiplicativi, mentre la differenza additiva permette perturbazioni stabili e proprie. Un peso di ordine 3 copre i casi dichiarati con un eccesso contenuto.
 
 Le specifiche temporali adottate, 2 s e 15\% per assestamento e sovraelongazione, mantengono un compito significativo e sono coerenti con il riferimento desiderato. Precisione statica al 5\% e accoppiamento al 25\% restano richieste separate. Le definizioni e le soglie di NS, NP, RS e RP non cambiano.
 
 LQG e LQGI offrono stabilità robusta, con un compromesso fra rapidità, precisione e reiezione del disturbo. Hinf2 e PID mostrano che una buona prestazione nominale può coesistere con fragilità alle incertezze. Le sintesi D--K limitate e le prove di rumore impediscono di proclamare una soluzione migliore in ogni senso. Anche gli esiti negativi aiutano a capire quali obiettivi vengono realmente controllati da ciascun metodo.
 
-Restano limiti precisi. Le tolleranze e il carico sono ipotesi, non dati identificati. Padé approssima il ritardo e non certifica il comportamento con un ritardo esatto a ogni frequenza. La copertura di B non è dimostrata sull'intero box A. Le regioni di attrazione sono sezioni empiriche nominali. Il modello non include saturazione, attrito secco, giochi né un evento di presa del carico.
+Restano limiti precisi. Le tolleranze sono ipotesi, non dati identificati. Padé approssima il ritardo e non certifica il comportamento con un ritardo esatto a ogni frequenza. La copertura di B non è dimostrata sull'intero box A. Le regioni di attrazione sono sezioni empiriche nominali. Il modello non include saturazione, attrito secco, giochi né variazioni della massa durante il moto.
 
 Per avvicinarsi a una realizzazione fisica servirebbero dati di targa, limiti di coppia, misure dei drive e una gestione dell'integratore in saturazione. Nel perimetro del progetto, il risultato è un confronto riproducibile in cui equazioni, famiglie incerte, controllori e simulazioni usano le stesse ipotesi e permettono di spiegare sia i vantaggi sia i limiti delle scelte.
 
 Il contributo centrale è il collegamento fra origine fisica e forma
 matematica dell'incertezza. Un'unica massa condivisa conserva le
-correlazioni meccaniche; sei scalari attuativi mantengono il significato
-di frequenza, smorzamento e ritardo; due blocchi dinamici concentrano
-invece gli scostamenti dei drive lasciando esplicito il carico. La LFT
+correlazioni meccaniche; quattro scalari attuativi mantengono il significato
+di frequenza naturale e ritardo; due blocchi dinamici concentrano
+invece gli scostamenti dei drive lasciando esplicita la massa $m_2$. La LFT
 permette di rendere visibili queste dipendenze, distinguendo numero di
 parametri, ripetizioni e stati. Il fit non è scelto soltanto perché
 segue una curva: si controllano stabilità, proprietà, norma continua e
@@ -35,7 +35,7 @@ Anche le verifiche hanno ruoli diversi. I dieci impianti comuni
 mostrano esempi della dispersione fisica, senza dimostrare una probabilità
 di successo. I margini strutturati riguardano la famiglia lineare
 specificata. Le simulazioni non lineari controllano traiettorie complete
-a carico costante, e le quindici condizioni iniziali per candidato
+a massa costante, e le quindici condizioni iniziali per candidato
 costituiscono soltanto sezioni empiriche nominali. La derivazione di
 Lyapunov spiega come si potrebbe ottenere un insieme interno, ma non
 aggiunge un certificato numerico ai risultati disponibili.

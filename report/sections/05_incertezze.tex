@@ -1,6 +1,6 @@
 \chapter{Modello delle incertezze}
 \section{Obiettivo e principio di modellazione}
-Vogliamo confrontare l'effetto della rappresentazione dell'incertezza, mantenendo uguale il sistema fisico. Per questo A e B condividono il nominale, il punto di lavoro, i segnali e la massa incerta $m_{EE}$. Cambia soltanto il modo di descrivere le variazioni dei due drive.
+Vogliamo confrontare l'effetto della rappresentazione dell'incertezza, mantenendo uguale il sistema fisico. Per questo A e B condividono il nominale, il punto di lavoro, i segnali e la massa incerta $m_2$. Cambia soltanto il modo di descrivere le variazioni dei due drive.
 
 Un modello incerto deve descrivere una famiglia, non aggiungere errori
 arbitrari alle matrici. Una massa è costante per una particolare prova;
@@ -26,11 +26,11 @@ senza dichiarare che tali grandezze siano fisicamente esatte.
 \section{Parametri reali \texttt{ureal}}
 Nel modello A ogni parametro si scrive come valore nominale più una variazione normalizzata. Per esempio,
 \[
- \omega_{n,1}=40(1+0.1\delta_{\omega_1}),\quad
+ \omega_{n,1}=40(1+0.15\delta_{\omega_1}),\quad
  \tau_{d,1}=0.015(1+0.2\delta_{t_1}),\quad
- m_{EE}=0.2(1+0.5\delta_m),\qquad |\delta|\leq1.
+ m_2=0.8(1+0.1\delta_m),\qquad |\delta|\leq1.
 \]
-Abbiamo sei parametri attuativi indipendenti e una sola massa reale comune: sette scalari incerti. Tutte le occorrenze della massa in $M,C,G$ dipendono dalla stessa $\delta_m$. Le rigidezze e le inerzie dei motori sono note nel modello adottato.
+Abbiamo quattro parametri attuativi indipendenti e una sola massa reale comune: cinque scalari incerti. Tutte le occorrenze della massa in $M,C,G$ dipendono dalla stessa $\delta_m$. Le rigidezze e le inerzie dei motori sono note nel modello adottato.
 
 
 \paragraph*{Significato della normalizzazione.}
@@ -43,21 +43,12 @@ Per ogni pianta un parametro reale rimane costante in frequenza:
 non può assumere un valore a bassa frequenza e un altro ad alta frequenza.
 Questo vincolo è parte dell'informazione conservata da A.
 
-\paragraph*{Un solo carico fisico.}
-La massa si può scrivere $m_{EE}=0.2+0.1\delta_m$ kg.
-$\delta_m=1$ significa quindi un carico di 0.3 kg, non il raddoppio
-della massa totale distale. Il carico cambia l'energia cinetica della
-punta e il suo contributo gravitazionale. Due perturbazioni indipendenti
-per questi effetti ammetterebbero un oggetto con massa inerziale e peso
-scollegati. Usiamo invece la medesima istanza reale in tutte le occorrenze.
+\paragraph*{Una sola massa meccanica condivisa.}
+La massa si scrive $m_2=0.8+0.08\delta_m$ kg. Agli estremi $\delta_m=-1,+1$ corrispondono 0.72 e 0.88 kg. La variazione può rappresentare tolleranze costruttive o un'identificazione imperfetta della massa concentrata del secondo link. La stessa massa modifica energia cinetica, Coriolis e gravità. Perturbare separatamente questi contributi ammetterebbe combinazioni prive di significato fisico. Per questo usiamo la medesima istanza reale in tutte le occorrenze.
 
-All'equilibrio verticale la coppia rimane nulla per ogni carico ammesso,
-ma inerzia e derivata della gravità cambiano. Il suo effetto non può
-essere sostituito da una sola coppia disturbante esterna. Nel non lineare
-cambia anche Coriolis; durante ogni prova la massa resta costante.
-Un oggetto afferrato nel mezzo del transitorio richiederebbe un problema
-diverso, non un altro valore costante della stessa prova.
+Le tre tipologie hanno ruoli complementari: $\omega_n$ cambia la rapidità del drive, $\tau_d$ lo sfasamento e $m_2$ la dinamica meccanica. Due attuatori indipendenti richiedono quattro scalari attuativi; aggiungendo la massa si ottengono cinque scalari, pur avendo soltanto tre tipologie fisiche. Gli altri parametri rimangono nominali per isolare questi effetti.
 
+All'equilibrio verticale la coppia rimane nulla per ogni massa ammessa, ma inerzia e derivata della gravità cambiano. Una coppia disturbante esterna non riproduce questo effetto. La massa rimane costante durante ogni simulazione; la famiglia non descrive una variazione improvvisa durante il moto.
 
 \paragraph*{Dal parametro fisico al secondo ordine SISO}
 Per ciascun attuatore la realizzazione è
@@ -87,13 +78,11 @@ in modo accoppiato attraverso la meccanica.
 
 
 \paragraph*{Pulling out the deltas}
-Ponendo $d_\omega=\bar\omega_nr_\omega$ e
-$d_\zeta=\bar\zeta r_\zeta$ otteniamo
+Ponendo $d_\omega=\bar\omega_nr_\omega$ e mantenendo $\bar\zeta=0.8$ noto otteniamo
 \begin{align*}
  z_1&=u-x,& w_1&=\delta_\omega z_1,\\
- z_2&=\bar\omega_nz_1+d_\omega w_1-2\bar\zeta v-2d_\zeta w_3,
+ z_2&=\bar\omega_nz_1+d_\omega w_1-2\bar\zeta v,
  &w_2&=\delta_\omega z_2,\\
- z_3&=v,&w_3&=\delta_\zeta z_3,\\
  \dot v&=\bar\omega_nz_2+d_\omega w_2,&\dot x&=v.
 \end{align*}
 Sostituendo i segnali $w_j$ si recuperano i prodotti originali.
@@ -104,8 +93,7 @@ Per Padé poniamo $\tau_d=\bar\tau_d(1+r_t\delta_t)$ e usiamo
  \qquad y=2x_d-x.
 \]
 Sostituire i segnali interni è un controllo utile per leggere il metodo:
-$w_1$ ricostruisce il primo fattore $\omega_n$, $w_2$ il secondo e $w_3$
-il fattore $\zeta$. Le due occorrenze di $\delta_\omega$ non possono
+$w_1$ ricostruisce il primo fattore $\omega_n$ e $w_2$ il secondo; $\zeta$ resta un coefficiente noto. Le due occorrenze di $\delta_\omega$ non possono
 variare separatamente. Nel Padé, il cambiamento di $\tau_d$ modifica
 insieme polo e zero; lo stesso ritardo non è contato una seconda volta
 attraverso una perturbazione dinamica aggiuntiva.
@@ -114,9 +102,7 @@ attraverso una perturbazione dinamica aggiuntiva.
 La dipendenza da $1/\tau_d$ è razionale. La sua estrazione nella LFT
 mantiene lo stesso parametro reale, non una dinamica indipendente.
 Anche $M(q)^{-1}$ dipende dalla medesima massa che compare in gravità.
-La LFT automatica del modello completo ha 19 occorrenze: cinque di
-$m_{EE}$, cinque per ogni $\omega_n$ e una per ogni $\zeta$ e $\tau_d$.
-Sono sette grandezze fisiche, non diciannove perturbazioni indipendenti.
+La LFT estratta automaticamente con \texttt{lftdata} ha \FinOccorrenze\ occorrenze: cinque di $m_2$, cinque per ciascuna frequenza naturale e una per ciascun ritardo. La struttura completa è salvata nei dati insieme al nome e alla dimensione di ogni blocco. Sono cinque grandezze fisiche, indipendentemente dal numero delle loro ripetizioni algebriche. Una massa ripetuta in più coefficienti rimane sempre la stessa massa.
 \paragraph*{Parte nota e chiusura delle porte incerte}
 Una LFT separa la parte nota dalle perturbazioni. Se le porte incerte sono ordinate per prime, scriviamo
 \[
@@ -197,7 +183,7 @@ Adottiamo quindi la forma additiva. La differenza fra due drive stabili e strett
 \[
  G_{B,i}=G_0+W_A\Delta_i,\qquad \|\Delta_i\|_\infty\leq1.
 \]
-I due blocchi dinamici sono indipendenti. La meccanica continua a dipendere dallo stesso parametro reale $m_{EE}$; il suo effetto non entra nel peso del drive.
+I due blocchi dinamici sono indipendenti. La meccanica continua a dipendere dallo stesso parametro reale $m_2$; il suo effetto non entra nel peso del drive.
 
 
 \paragraph*{Dalla famiglia fisica al peso dinamico}
@@ -222,7 +208,7 @@ include ammettendo però molte dinamiche ulteriori. Un ordine basso
 non è automaticamente migliore se rende l'analisi molto conservativa.
 
 
-Il procedimento segue quello del corso: famiglia fisica, scostamenti, inviluppo, fitting e normalizzazione. I dieci manipolatori forniscono venti drive; aggiungiamo gli otto vertici del box SISO e il nominale. Sono 29 casi SISO, non 29 manipolatori. Su una griglia logaritmica calcoliamo l'inviluppo di $|G_j-G_0|$ e confrontiamo fit di ordine 1, 2 e 3 mediante \texttt{fitmagfrd}.
+Il procedimento segue quello del corso: famiglia fisica, scostamenti, inviluppo, fitting e normalizzazione. I dieci manipolatori forniscono venti drive; aggiungiamo i quattro vertici del box SISO e il nominale. Sono 25 casi SISO, non 25 manipolatori. Su una griglia logaritmica calcoliamo l'inviluppo di $|G_j-G_0|$ e confrontiamo fit di ordine 1, 2 e 3 mediante \texttt{fitmagfrd}.
 
 \input{generated/finale_pesi.tex}
 
@@ -243,7 +229,7 @@ I coefficienti mostrati sono arrotondati; la normalizzazione usa la funzione a p
 
 \begin{figure}[htbp]\centering
 \includegraphics[width=.9\textwidth]{figures/definitiva/peso_incertezza.png}
-\caption{Scostamenti additivi, inviluppo dei 29 casi e peso selezionato.}\label{fig:peso}
+\caption{Scostamenti additivi, inviluppo dei 25 casi e peso selezionato.}\label{fig:peso}
 \end{figure}
 
 \paragraph*{Dai due SISO al robot.}
@@ -266,14 +252,14 @@ La massima norma normalizzata dei casi di costruzione è \FinCopertura; su trent
 \]
 e la stessa massa usata in A: la differenza massima delle risposte in frequenza è \FinErroreAB. A e B ricostruiscono quindi gli stessi casi fisici provati.
 
-Questo controllo non dimostra l'inclusione dell'intero box parametrico in B. Inoltre B ammette dinamiche e fasi che possono non corrispondere a nessuna terna fisica $(\omega_n,\zeta,\tau_d)$. La maggiore libertà può rendere l'analisi conservativa. Le garanzie robuste vanno lette rispetto alla propria famiglia; un margine maggiore di uno espande due insiemi diversi e non definisce da solo il modello migliore.
+Questo controllo non dimostra l'inclusione dell'intero box parametrico in B. Inoltre B ammette dinamiche e fasi che possono non corrispondere a nessuna coppia fisica $(\omega_n,\tau_d)$. La maggiore libertà può rendere l'analisi conservativa. Le garanzie robuste vanno lette rispetto alla propria famiglia; un margine maggiore di uno espande due insiemi diversi e non definisce da solo il modello migliore.
 
 La norma continua controlla anche le frequenze fra i nodi e fuori dalla
 griglia del fit, nei limiti numerici della funzione razionale.
 I trenta casi indipendenti rafforzano la verifica, ma non costituiscono
 una prova per ogni punto del box. Non dimostriamo quindi $A\subseteq B$,
 né l'inclusione opposta. B ammette funzioni stabili pesate che possono
-non corrispondere ad alcuna terna fisica dei parametri.
+non corrispondere ad alcuna coppia fisica dei parametri.
 
 La conseguenza si vede nei margini. A mantiene il legame fra parametri
 costanti e coefficienti in tutte le frequenze; B permette variazioni
@@ -293,7 +279,7 @@ che possiamo attribuire a quel risultato.
 Il vantaggio di A è la leggibilità fisica dei parametri e delle loro
 relazioni. B rende più immediato il ruolo della frequenza attraverso
 un peso e due canali dinamici compatti, pagando possibile conservatività
-e perdita della corrispondenza univoca con la terna del drive.
-In entrambi, il carico resta la stessa massa reale. Le conclusioni
+e perdita della corrispondenza univoca con la coppia del drive.
+In entrambi, la massa $m_2$ resta la stessa massa reale. Le conclusioni
 riguardano i modelli razionali, il punto di lavoro e i fenomeni ammessi;
 non ogni errore possibile di un manipolatore reale.

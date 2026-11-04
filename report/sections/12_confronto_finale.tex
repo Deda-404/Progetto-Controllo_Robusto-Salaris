@@ -11,25 +11,9 @@ impediscono di trattare ogni soluzione matematica come immediatamente
 realizzabile. La tabella rende leggibili questi livelli senza
 sostituire gli intervalli completi del Capitolo 9.
 
-\begin{table}[htbp]\centering\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccc}\toprule
-Controllore & Target nominali & NP comune & RS A/B & RP A/B\\\midrule
-LQG & PASS & FAIL & PASS/PASS & FAIL/FAIL\\
-LQGI & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
-Hinf1 & FAIL & FAIL & PASS/FAIL & FAIL/FAIL\\
-Hinf2 & PASS & PASS & FAIL/FAIL & FAIL/FAIL\\
-PID & FAIL & PASS & FAIL/FAIL & FAIL/FAIL\\
-Mu\_A & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
-Mu\_B & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\\bottomrule
-\end{tabular}
-\caption{Sintesi dei ruoli sul modello con carico. Tutti i candidati
-soddisfano NS; i target nominali sono le quattro soglie temporali e
-statiche comuni. NP e RP riguardano la stessa mappa pesata, mentre
-RS non richiede che il costo sia inferiore a uno.}
-\end{table}
+\input{generated/finale_confronto_finale.tex}
 
-LQG stabilizza in modo robusto entrambe le rappresentazioni e limita bene il comando prodotto dal rumore. Il prefiltro offre precisione sul nominale, ma non corregge automaticamente l'offset dovuto a un carico diverso o a una coppia costante. È una soluzione utile per mostrare il ruolo dello stato stimato e il limite di un inseguimento senza integrazione.
+LQG stabilizza in modo robusto entrambe le rappresentazioni e limita bene il comando prodotto dal rumore. Il prefiltro offre precisione sul nominale, ma non corregge automaticamente l'offset dovuto a una massa $m_2$ diversa o a una coppia costante. È una soluzione utile per mostrare il ruolo dello stato stimato e il limite di un inseguimento senza integrazione.
 
 LQGI aggiunge soltanto due stati e mantiene la stabilità robusta. L'integratore corregge l'errore misurato nei casi stabili e rende il tracking meno sensibile alla massa. Il prezzo osservato è il tempo di assestamento, che supera il target scelto. Per un compito di posizionamento lento e preciso è il candidato più comprensibile da approfondire, senza dichiararlo già conforme a tutte le specifiche.
 
@@ -37,17 +21,17 @@ Hinf1 mostra come la sensibilità mista controlli trasferimenti pesati senza gar
 
 Il PID strutturato contiene pochi stati e conserva una legge facilmente riconoscibile. Ottiene NP sul costo comune, ma non RS. La semplicità della struttura non elimina l'accoppiamento del braccio né il ritardo dei drive: i due canali diagonali hanno una libertà limitata per affrontarli.
 
-La D--K incorpora direttamente la struttura incerta, ma il problema non è convesso e gli scaling aumentano l'ordine. Le due sintesi eseguite con uguali pesi e inizializzazione non raggiungono l'obiettivo robusto unitario. Mu\_A lascia un errore DC di circa il 99.8\%, mentre Mu\_B lascia circa il 21.9\% e amplifica il rumore fino a un picco osservato di circa 762 N m. Entrambi mantengono RS, ma queste prestazioni non ne motivano l’adozione. Il confronto rimane utile perché mostra quanto una descrizione più ricca o più libera possa cambiare la ricerca. Non scegliamo un candidato soltanto perché proviene da una sintesi robusta.
+La D--K incorpora la struttura incerta, ma il problema non è convesso e gli scaling aumentano l'ordine. Mu\_A e Mu\_B hanno rispettivamente \FinMuAOrdine\ e \FinMuBOrdine\ stati e norme comuni \FinMuANorma\ e \FinMuBNorma. Gli errori DC sono \FinMuAEss\% e \FinMuBEss\%; i picchi encoder osservati sono \FinMuAPeak\ e \FinMuBPeak\ N m. Queste grandezze vanno lette insieme ai margini e ai campioni: la provenienza da una sintesi robusta, da sola, non giustifica l'adozione del candidato.
 
 
 A conserva il significato di ogni variazione. Una massa più grande modifica insieme inerzia e gravità; un ritardo più grande sposta insieme il polo e lo zero di Padé. Questa correlazione evita che l'analisi combini coefficienti fisicamente incompatibili. È la descrizione naturale quando gli intervalli dei parametri sono noti e il modello fisico è credibile.
 
-Il costo è la complessità della struttura reale ripetuta: sette grandezze non significano sette sole porte. Prodotti, inversi e ripetizioni possono rendere più impegnative l'analisi e la sintesi. La fedeltà della famiglia non rende automaticamente semplice il calcolo.
+Il costo è la complessità della struttura reale ripetuta: cinque grandezze non significano cinque sole porte. Prodotti, inversi e ripetizioni possono rendere più impegnative l'analisi e la sintesi. La fedeltà della famiglia non rende automaticamente semplice il calcolo.
 
 
-B riassume gli scostamenti dei drive in due perturbazioni dinamiche e un peso comune. Il procedimento SISO rende leggibile il passaggio dalla famiglia all'inviluppo e al fit. Il carico resta esplicito nella meccanica: il confronto riguarda davvero il modo di rappresentare gli attuatori.
+B riassume gli scostamenti dei drive in due perturbazioni dinamiche e un peso comune. Il procedimento SISO rende leggibile il passaggio dalla famiglia all'inviluppo e al fit. La massa $m_2$ resta esplicita nella meccanica: il confronto riguarda davvero il modo di rappresentare gli attuatori.
 
-Il prezzo è la libertà concessa a dinamiche che non corrispondono necessariamente a frequenze, smorzamenti e ritardi fisici della famiglia. Questa libertà può ridurre i margini dimostrabili. Inoltre il peso è verificato su un insieme finito di casi: la copertura globale resta un limite dichiarato.
+Il prezzo è la libertà concessa a dinamiche che non corrispondono necessariamente a frequenze e ritardi fisici della famiglia. Questa libertà può ridurre i margini dimostrabili. Inoltre il peso è verificato su un insieme finito di casi: la copertura globale resta un limite dichiarato.
 
 Le due rappresentazioni sono quindi strumenti complementari. A aiuta a spiegare l'origine fisica delle variazioni; B offre una descrizione dinamica compatta dei drive coperti. Nei dieci impianti ricostruiti, a controllore fissato, producono la stessa risposta. Sono le garanzie sull'insieme ammesso a cambiare.
 
@@ -59,7 +43,7 @@ pagato con perdita di RS, offset o comando eccessivo durante tracking
 e disturbo. Anche il valore di RP andrebbe ricalcolato sul problema
 ampliato, senza trasferire quello del costo privo di rumore.
 
-Per il modello con carico questa rimane una direzione teorica, senza
+Per il modello della traccia questa rimane una direzione teorica, senza
 ulteriori candidati verificati da adottare. Le sintesi disponibili non
 forniscono un unico controllore conforme a tutte le richieste. LQG è
 un riferimento utile per rapidità e rumore nominali; LQGI è il candidato

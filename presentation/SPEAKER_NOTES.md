@@ -2,55 +2,55 @@
 
 Il discorso e le risposte sono in Presentazione_orale.txt. Il conteggio del parlato e la ripartizione sono in OUTLINE_AND_TIMING.md.
 
-Non confondere il superamento di un collaudo numerico con il rispetto dei target di controllo. Tutti i numeri delle slide sono esportati dai CSV della campagna con carico.
+Non confondere il superamento di un collaudo numerico con il rispetto dei target di controllo. Tutti i numeri delle slide sono esportati dai CSV della campagna corrente.
 
 La copertura del peso è campionata; la RAS è empirica; la durata orale è stimata, non cronometrata.
 
-## 1. Titolo — Alessio, 0:40
+## 1. Titolo — Alessio, 0:42
 
 Indicare lo scopo del confronto.
 
-## 2. SEA e carico variabile all'end-effector — Alessio, 0:43
+## 2. Manipolatore SEA: le due masse della traccia — Alessio, 0:49
 
 Indicare massa e due equazioni.
 
-## 3. Sei stati di attuatore completano il modello — Alessio, 0:41
+## 3. Sei stati di attuatore completano il modello — Alessio, 0:48
 
 Seguire i due drive verso la meccanica.
 
-## 4. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:43
-
-Distinguere target temporali e soglie matematiche.
-
-## 5. LQR: il costo deriva dalle grandezze fisiche — Valerio, 0:42
-
-Indicare le scale fisiche.
-
-## 6. LQG: quattro encoder e stato stimato — Valerio, 0:44
-
-Seguire innovazione e comando.
-
-## 7. LQGI: memoria dell'errore misurato — Alessio, 0:43
-
-Indicare i due integratori.
-
-## 8. $H_\infty$: sensibilità mista e pesi adottati — Alessio, 0:41
-
-Leggere il ruolo dei pesi.
-
-## 9. Due gradi di libertà, stati condivisi — Alessio, 0:43
-
-Seguire riferimento e feedback.
-
-## 10. Ordine completo e ordine fissato: il compromesso rimane — Valerio, 0:42
-
-Confrontare ordine e costo comune.
-
-## 11. A e B: stessa massa, diversa descrizione dei drive — Valerio, 0:45
+## 4. A e B: stessa massa, diversa descrizione dei drive — Valerio, 0:48
 
 Spiegare lo zero destro di Padé prima del fit.
 
-## 12. $\mu$: valore singolare strutturato — Valerio, 0:42
+## 5. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:43
+
+Distinguere target temporali e soglie matematiche.
+
+## 6. LQR: il costo deriva dalle grandezze fisiche — Valerio, 0:42
+
+Indicare le scale fisiche.
+
+## 7. LQG: quattro encoder e stato stimato — Valerio, 0:45
+
+Seguire innovazione e comando.
+
+## 8. LQGI: memoria dell'errore misurato — Alessio, 0:43
+
+Indicare i due integratori.
+
+## 9. H infinito: sensibilità mista e pesi adottati — Alessio, 0:41
+
+Leggere il ruolo dei pesi.
+
+## 10. Due gradi di libertà, stati condivisi — Alessio, 0:43
+
+Seguire riferimento e feedback.
+
+## 11. Ordine completo e ordine fissato: il compromesso rimane — Valerio, 0:42
+
+Confrontare ordine e costo comune.
+
+## 12. μ: valore singolare strutturato — Valerio, 0:42
 
 Distinguere margine e mu.
 
@@ -66,7 +66,7 @@ Confrontare A e B a controllore fissato.
 
 Leggere una riga con NP PASS e RS FAIL.
 
-## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:40
+## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:41
 
 Ricordare la stessa settupla per tutti.
 
@@ -78,7 +78,7 @@ Indicare la dispersione delle risposte.
 
 Confrontare gli ordini di grandezza del comando.
 
-## 19. L'effetto del solo carico sul movimento non lineare — Alessio, 0:41
+## 19. Massa del secondo link e movimento non lineare — Alessio, 0:46
 
 Indicare gli estremi di massa.
 
@@ -90,10 +90,10 @@ Leggere simboli e sezione iniziale.
 
 Seguire osservatore e integratore.
 
-## 22. Simulink non lineare: la stessa legge di controllo — Valerio, 0:42
+## 22. Simulink non lineare: la stessa legge di controllo — Valerio, 0:43
 
 Indicare il cambio della pianta.
 
-## 23. Conclusioni e limiti verificati — Valerio, 0:42
+## 23. Conclusioni e limiti verificati — Valerio, 0:43
 
 Chiudere con il compromesso A/B e i limiti.

@@ -24,12 +24,12 @@ run_all('completa')
 \end{lstlisting}
 I parametri modificabili sono centralizzati in \texttt{parametri\_sea.m}. Una firma numerica impedisce di usare risultati incompatibili con il modello o con i pesi. La modalità completa può richiedere diversi minuti; il tempo maggiore è assorbito dalla D--K e dall'analisi robusta.
 
-Nel repository i cinque test di \texttt{tests/seaFinaleTest.m} verificano in modo indipendente equilibrio, Jacobiano, identità del carico puntiforme, coerenza energetica e ricostruzione A/B. Il comando \texttt{verifica\_sea} ripete i controlli essenziali anche nella consegna.
+Nel repository i cinque test di \texttt{tests/seaFinaleTest.m} verificano in modo indipendente equilibrio, Jacobiano, identità di $m_2$ puntiforme, coerenza energetica e ricostruzione A/B. Il comando \texttt{verifica\_sea} ripete i controlli essenziali anche nella consegna.
 
 La selezione dei sette candidati è comune ai confronti. I controllori
 di riferimento possono essere richiesti separatamente con
 \texttt{controllori\_sea(p,true)}, senza sostituirli implicitamente ai
-candidati con carico. Le prove non eseguite e i risultati caricati
+candidati della traccia. Le prove non eseguite e i risultati caricati
 restano riconoscibili; una compilazione della relazione non esegue
 né sintetizza alcun controllore.
 

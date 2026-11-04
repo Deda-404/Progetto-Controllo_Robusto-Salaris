@@ -6,7 +6,7 @@ Ogni sezione chiarisce il motivo del calcolo e la verifica che lo
 accompagna; le formule finali completano gli aspetti di metodo.
 
 \section{Parametri, equilibrio e linearizzazione}
-L'unico parametro $m_{EE}$ viene usato per costruire tutte le dipendenze
+L'unico parametro $m_2$ viene usato per costruire tutte le dipendenze
 meccaniche. L'equilibrio si ricava dalla gravità e dalla deformazione
 elastica, prima di assemblare il Jacobiano. Le identità controllate
 riguardano l'equilibrio delle equazioni complete, non soltanto quello
@@ -15,7 +15,7 @@ $M^{-1}$ nelle accelerazioni dei link e non attraverso $J_m^{-1}$.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{modello_sea.m}.
-\lstinputlisting[firstline=8,lastline=18]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
+\lstinputlisting[firstline=9,lastline=23]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
 \end{minipage}\par\medskip
 
 La struttura a blocchi rende leggibile l'ordine $[q;\dot q;\theta;\dot\theta]$.
@@ -31,7 +31,7 @@ una porta distinta e non attraversa la cascata.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{modello_sea.m}.
-\lstinputlisting[firstline=23,lastline=31]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
+\lstinputlisting[firstline=26,lastline=34]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
 \end{minipage}\par\medskip
 
 Il controllo dell'interconnessione confronta il modello assemblato con
@@ -174,7 +174,7 @@ registrate separatamente da una valutazione diretta di \texttt{robgain}.
 Un intervallo incoerente non viene invertito per ottenere un PASS.
 
 \section{Campioni comuni e verifica pratica della robustezza}
-Le settuple fisiche sono salvate e riutilizzate per ogni controllore.
+Le quintuple fisiche sono salvate e riutilizzate per ogni controllore.
 Il seed rende ripetibile l'estrazione nella configurazione fissata;
 i valori espliciti consentono anche il replay senza affidarsi al solo
 ordine delle chiamate casuali.
@@ -285,6 +285,6 @@ Se il limite supera uno, l'obiettivo unitario è impossibile con quei
 pesi e quella formulazione. Se resta sotto uno, non ne segue la
 fattibilità: manca ancora un unico controllore causale stabilizzante.
 La derivazione è una diagnosi teorica e non un nuovo calcolo numerico
-del limite sul modello con carico. Un massimo su una griglia finita
+del limite sul modello della traccia. Un massimo su una griglia finita
 sarebbe inoltre una minorazione del supremo continuo, non una prova
 di copertura di tutte le frequenze.

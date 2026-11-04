@@ -10,7 +10,7 @@ Dalle equazioni statiche ricaviamo
 \[
  \bar\tau=G(\bar q),\qquad \bar\theta=\bar q+K_s^{-1}G(\bar q).
 \]
-Qui entrambi i coseni di $G$ sono nulli: coppia e deformazione d'equilibrio sono nulle per qualunque massa del carico. L'aggiunta del carico non sposta quindi questo particolare equilibrio. Non segue però che la linearizzazione sia invariata: la derivata di $G$ e la matrice d'inerzia dipendono ancora da $m_{EE}$.
+Qui entrambi i coseni di $G$ sono nulli: coppia e deformazione d'equilibrio sono nulle per ogni $m_2\in[0.72,0.88]$ kg. La massa del secondo link non sposta quindi questo particolare punto di lavoro. La linearizzazione cambia ugualmente, perché la pendenza della gravità e l'inerzia dipendono da $m_2$. Un pendolo verticale può avere coppia gravitazionale nulla esattamente in alto e una forza destabilizzante diversa appena si sposta: è questa pendenza che entra nel Jacobiano.
 
 Il residuo della dinamica non lineare all'equilibrio è \FinResiduoEquilibrio, inferiore alla tolleranza $10^{-10}$. Le quantità molto piccole sono residui del calcolo in doppia precisione.
 
@@ -46,12 +46,12 @@ Poniamo $\widetilde x_m=x_m-\bar x_m$ e $\widetilde\tau=\tau-\bar\tau$. Definend
 \]
 I blocchi sono di dimensione $2\times2$. Il termine $C\dot q$ è quadratico nelle velocità e non contribuisce al Jacobiano in un equilibrio statico. La sua dipendenza dal carico rimane invece nella simulazione non lineare.
 
-Per il carico nominale si ha
+Per la massa $m_2$ nominale si ha
 \[
- \bar M=\begin{bmatrix}0.65&0.21\\0.21&0.09\end{bmatrix}\ \mathrm{kg\,m^2},\qquad
- K_g=\begin{bmatrix}-10.791&-2.943\\-2.943&-2.943\end{bmatrix}\ \mathrm{N\,m/rad}.
+ \bar M=\begin{bmatrix}0.552&0.168\\0.168&0.072\end{bmatrix}\ \mathrm{kg\,m^2},\qquad
+ K_g=\begin{bmatrix}-9.4176&-2.3544\\-2.3544&-2.3544\end{bmatrix}\ \mathrm{N\,m/rad}.
 \]
-Mostriamo tre decimali in $K_g$ per rendere controllabile il calcolo; le altre matrici complete restano nei dati MATLAB. Il confronto con differenze finite centrate dà un errore relativo \FinErroreJacobiano. La stessa verifica viene eseguita anche ai due estremi del carico.
+Mostriamo quattro decimali in $K_g$ per rendere controllabile il calcolo; le altre matrici complete restano nei dati MATLAB. Il confronto con differenze finite centrate dà un errore relativo \FinErroreJacobiano. La stessa verifica viene eseguita anche ai due estremi di $m_2$.
 
 Il confronto a differenze finite usa le stesse equazioni fisiche e
 una costruzione indipendente del Jacobiano. Un accordo numerico
@@ -68,13 +68,13 @@ Il modello meccanico ha otto stati e due poli reali instabili, riportati nella T
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=.85\linewidth]{figures/editoriale/poli_meccanici.png}
-\caption{Spettro della matrice meccanica salvata con carico nominale.
+\caption{Spettro della matrice meccanica salvata con massa nominale.
 I poli reali positivi indicano l'instabilità della postura; le coppie
 complesse distinguono i modi elastici più rapidi. È una visualizzazione
-della linearizzazione disponibile, senza nuova simulazione.}
+della linearizzazione disponibile, ricalcolata sul modello corrente.}
 \end{figure}
 
-Usiamo il criterio PBH sui modi instabili per verificare che le coppie possano controllarli e che gli encoder possano osservarli. Il modello è stabilizzabile e rilevabile. Questo è il controllo strutturale necessario alle sintesi; non ricaviamo conclusioni dal solo rango di matrici contenenti alte potenze di $A_m$.
+Usiamo il criterio PBH su tutti i modi per verificare che le coppie possano controllarli e che gli encoder possano osservarli. Il modello completo è controllabile e osservabile: i ranghi PBH sono entrambi 14. In particolare è stabilizzabile e rilevabile. Questo è il controllo strutturale necessario alle sintesi; non ricaviamo conclusioni dal solo rango di matrici contenenti alte potenze di $A_m$.
 
 La linearizzazione descrive piccole variazioni attorno all'equilibrio. Per spostamenti maggiori valutiamo direttamente le equazioni non lineari. La stabilità del modello lineare non viene presentata come una garanzia globale sul braccio.
 

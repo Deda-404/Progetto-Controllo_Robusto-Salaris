@@ -15,7 +15,7 @@ Questa distinzione conserva il significato di coppia richiesta $u$
 e coppia effettiva $\tau$ applicata ai rotori.
 
 \section{Scelta ingegneristica}
-I nominali sono $\omega_n=40$ rad/s, $\zeta=0.8$ e $\tau_d=15$ ms. La frequenza naturale consente un'attuazione più rapida dei modi instabili, mentre lo smorzamento limita il picco del secondo ordine. Manteniamo $\pm10\%$ per frequenza naturale e smorzamento. Per il ritardo confrontiamo le variazioni $\pm10\%$, $\pm20\%$ e $\pm30\%$.
+I nominali sono $\omega_n=40$ rad/s, $\zeta=0.8$ e $\tau_d=15$ ms. La frequenza naturale consente un'attuazione più rapida dei modi instabili, mentre lo smorzamento limita il picco del secondo ordine. La frequenza naturale varia del $\pm15\%$, quindi fra 34 e 46 rad/s; lo smorzamento resta $\zeta=0.8$. Tolleranze costruttive, condizioni operative e approssimazioni del modello possono rendere un drive più rapido o più lento del nominale. Per il ritardo confrontiamo le variazioni $\pm10\%$, $\pm20\%$ e $\pm30\%$.
 
 \input{generated/finale_ritardo.tex}
 
@@ -25,7 +25,7 @@ La banda nominale del drive è circa 34.78 rad/s. È superiore ai modi
 instabili del braccio, ma non infinitamente maggiore delle frequenze
 elastiche. Lo smorzamento 0.8 limita il picco del secondo ordine;
 la sensibilità ai parametri permette di distinguere l'effetto della
-frequenza naturale da quello dello smorzamento, senza moltiplicare
+frequenza naturale da quello del ritardo, senza moltiplicare
 combinazioni di tuning prive di una domanda precisa.
 
 \section{Ritardo e Padé}
@@ -52,25 +52,21 @@ riguarda il solo ritardo nominale, rimasto quello assegnato ai drive.}
 \end{figure}
 
 \section{Implementazione, verifica e interpretazione}
-La Figura~\ref{fig:attuatori} separa i due drive SISO dalla meccanica MIMO. Il disturbo entra direttamente sui link; il carico entra nelle equazioni meccaniche. Il sistema completo ha $8+3+3=14$ stati.
+La Figura~\ref{fig:attuatori} separa i due drive SISO dalla meccanica MIMO. Il disturbo entra direttamente sui link; la massa $m_2$ entra nelle equazioni meccaniche. Il sistema completo ha $8+3+3=14$ stati.
 
 \begin{figure}[!htbp]\centering
 \resizebox{.92\textwidth}{!}{\input{figures/schemes/sea_attuatori.tex}}
 \caption{Dai due drive SISO al manipolatore accoppiato.}\label{fig:attuatori}
 \end{figure}
 
-La Figura~\ref{fig:singoli} varia un parametro alla volta, mantenendo nominali gli altri. La frequenza naturale sposta la velocità del drive; lo smorzamento modifica picco e fase; il ritardo di Padé cambia la fase senza cambiare il modulo. Queste differenze aiutano a interpretare la famiglia completa prima di usarla nelle sintesi.
+La Figura~\ref{fig:singoli} varia un parametro alla volta, mantenendo nominali gli altri. La frequenza naturale sposta la velocità del drive; il ritardo di Padé cambia la fase senza cambiare il modulo. Queste differenze aiutano a interpretare la famiglia completa prima di usarla nelle sintesi.
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=.94\textwidth]{figures/definitiva/sensibilita_singoli_parametri.png}
 \caption{Cinque valori per ciascun parametro attuativo. A sinistra il modulo, a destra la fase.}\label{fig:singoli}
 \end{figure}
 
-Con cinque valori per parametro, mantenendo nominali gli altri, la
-banda cambia circa da 31.3 a 38.3 rad/s per $\omega_n\in[36,44]$;
-per $\zeta\in[0.72,0.88]$ la sovraelongazione cambia circa da 3.74\%
-a 0.287\%. Il ritardo influenza soprattutto la fase.
-Le tre variazioni entrano tutte nella famiglia incerta del capitolo 5.
+Con cinque valori per parametro, mantenendo nominali gli altri, la banda varia da circa 29.57 a 40.00 rad/s per $\omega_n\in[34,46]$. Il ritardo all-pass di Padé conserva il modulo e modifica la fase. Un ritardo maggiore introduce più sfasamento e può ridurre i margini del sistema in retroazione. La variabilità del ritardo rappresenta elettronica, elaborazione dei segnali e dinamiche trascurate; lo smorzamento resta fisso e continua a comparire nel denominatore. Queste sono le due sole tipologie attuative della famiglia incerta del capitolo 5.
 Il Padé conserva un solo stato anche quando il ritardo cambia:
 la pianta ha quindi sempre otto stati meccanici e sei attuativi.
 

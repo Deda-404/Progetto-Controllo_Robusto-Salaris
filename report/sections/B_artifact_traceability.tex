@@ -3,7 +3,7 @@ I risultati provengono dagli script in \texttt{File\_di\_Funzioni\_Progetto-Acco
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{.26\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}\toprule
 Argomento & Script & Evidenza\\\midrule\endhead
-Meccanica e nominale & \path{modello_sea.m}, \path{matrici_sea.m} & \path{modello.mat}, candidati carico, verifica Jacobiano\\
+Meccanica e nominale & \path{modello_sea.m}, \path{matrici_sea.m} & \path{modello.mat}, estremi di $m_2$, verifica Jacobiano\\
 Famiglie A/B & \path{incertezze_attuatori.m} & \path{incertezze.mat}, ordini del peso, parametri comuni\\
 LQG e LQGI & \path{progetto_lqg.m}, \path{progetto_lqgi.m} & CARE, \path{kalman.csv}, guadagni nei MAT\\
 $H_\infty$ e PID & \path{progetto_hinf_tre_controllori.m} & \path{sintesi_hinf.mat}, \path{hinf.csv}\\
@@ -33,7 +33,7 @@ sarebbe sufficiente a trasferire una conclusione robusta.
 \path{confronto.mat} conserva le risposte lineari nominali e degli
 impianti comuni; \path{ras.mat} contiene le traiettorie non lineari
 di tracking, disturbo e attrazione. I CSV \path{dieci_impianti.csv},
-\path{carico_nonlineare.csv} e \path{ras.csv} ne rendono leggibili le
+\path{massa_nonlineare.csv} e \path{ras.csv} ne rendono leggibili le
 metriche. \path{rumore.csv} distingue esplicitamente campioni, massimi
 intercampione e RMS integrato; una figura a barre di tali metriche
 non viene presentata come una traccia temporale encoder.

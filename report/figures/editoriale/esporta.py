@@ -37,7 +37,7 @@ def export():
     ax.scatter(poles.real, poles.imag, marker='x', s=60, color='#126c87')
     ax.axvline(0, color='black', lw=.8)
     ax.set(xlabel='Parte reale [1/s]', ylabel='Parte immaginaria [rad/s]',
-           title='Poli degli otto stati meccanici, con carico nominale')
+           title='Poli degli otto stati meccanici, modello della traccia')
     save(fig, 'poli_meccanici.png')
 
     responses = loadmat(DATA / 'confronto.mat', simplify_cells=True)['risposte']

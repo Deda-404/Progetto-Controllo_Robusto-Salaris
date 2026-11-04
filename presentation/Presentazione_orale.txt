@@ -1,85 +1,85 @@
 PRESENTAZIONE ORALE — PROGETTO SEA
 Alessio de Dato e Valerio Rebechi
-Testo coerente con le 23 slide; tempi stimati, da provare ad alta voce.
+Testo coerente con le 23 slide; durata stimata, da provare ad alta voce.
 
 SLIDE 1 — Titolo
 Studente: Alessio
-Tempo previsto: 0:40 (83 parole a 125 parole/min)
+Tempo previsto: 0:42 (86 parole a 125 parole/min)
 Testo da pronunciare:
-Studiamo il controllo di un manipolatore planare a due giunti con attuatori elastici in serie. Il punto centrale è capire come cambia il controllo quando il carico e la dinamica degli attuatori non sono esattamente noti. Usiamo due rappresentazioni delle incertezze attuative, mantenendo la stessa meccanica e gli stessi impianti fisici. Partiamo dalle equazioni, presentiamo le famiglie di controllori e confrontiamo robustezza, movimenti e rumore. Le tolleranze sono ipotesi di progetto e tutti i risultati numerici provengono dalle simulazioni, senza dati sperimentali inventati.
+Studiamo il controllo di un manipolatore planare a due giunti con attuatori elastici in serie. Il punto centrale è capire come cambia il controllo quando la massa del secondo link e la dinamica degli attuatori non sono esattamente noti. Usiamo due rappresentazioni delle incertezze attuative, mantenendo la stessa meccanica e gli stessi impianti fisici. Partiamo dalle equazioni, presentiamo le famiglie di controllori e confrontiamo robustezza, movimenti e rumore. Le tolleranze sono ipotesi di progetto e tutti i risultati numerici provengono dalle simulazioni, senza dati sperimentali inventati.
 Regia: Indicare lo scopo del confronto.
 
-SLIDE 2 — SEA e carico variabile all'end-effector
+SLIDE 2 — Manipolatore SEA: le due masse della traccia
 Studente: Alessio
-Tempo previsto: 0:43 (89 parole a 125 parole/min)
+Tempo previsto: 0:49 (101 parole a 125 parole/min)
 Testo da pronunciare:
-Le molle collegano i rotori ai link e trasmettono una coppia proporzionale alla differenza fra i loro angoli. Il disturbo agisce direttamente sui link, mentre il comando attraversa i drive. Aggiungiamo una massa all’estremità del secondo link: scegliamo due decimi di chilogrammo, con intervallo fra uno e tre decimi. Abbiamo confrontato questi tre valori prima della scelta. Poiché il carico si trova nella stessa posizione della massa distale assegnata dalla traccia, usiamo la loro somma in inerzia, Coriolis e gravità. La verticale resta un equilibrio, ma cambia la linearizzazione.
+Le molle collegano i rotori ai link e trasmettono una coppia proporzionale alla differenza fra i loro angoli. Il disturbo agisce sui link, mentre il comando attraversa i drive. Manteniamo le sole due masse della traccia: un chilogrammo per il primo link e zero virgola otto per il secondo. La sigla EE identifica l’estremità operativa nella figura originale del docente. Rendiamo incerta soltanto la seconda massa, del dieci per cento. Lo stesso valore entra in inerzia, Coriolis e gravità. Alla verticale la coppia gravitazionale si annulla per ogni massa ammessa, ma la sua pendenza cambia: per questo cambia anche la linearizzazione.
 Regia: Indicare massa e due equazioni.
 
 SLIDE 3 — Sei stati di attuatore completano il modello
 Studente: Alessio
-Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Tempo previsto: 0:48 (98 parole a 125 parole/min)
 Testo da pronunciare:
-Ogni drive è descritto da un secondo ordine e da un’approssimazione di Padé del ritardo. Il nominale ha frequenza naturale quaranta radianti al secondo, smorzamento zero virgola otto e ritardo quindici millisecondi. Frequenza e smorzamento variano del dieci per cento; per il ritardo abbiamo confrontato dieci, venti e trenta per cento, scegliendo venti. I due canali possono variare indipendentemente. Ogni drive conserva tre stati anche quando cambia il ritardo, quindi la pianta fisica completa rimane a quattordici stati. La meccanica continua a essere accoppiata.
+Ogni drive è un secondo ordine con ritardo approssimato mediante Padé del primo ordine. Il nominale ha frequenza naturale quaranta radianti al secondo, smorzamento zero virgola otto e ritardo quindici millisecondi. La frequenza varia del quindici per cento e il ritardo del venti; lo smorzamento rimane noto. La frequenza rappresenta un attuatore più rapido o più lento, per differenze costruttive o condizioni operative. Il ritardo rappresenta il tempo di elaborazione e attuazione: aumentandolo cresce lo sfasamento, con possibili conseguenze sui margini. I due canali variano indipendentemente. Ogni drive conserva tre stati e la pianta completa ne mantiene quattordici.
 Regia: Seguire i due drive verso la meccanica.
 
-SLIDE 4 — Specifiche: obiettivi temporali e norma pesata
+SLIDE 4 — A e B: stessa massa, diversa descrizione dei drive
+Studente: Valerio
+Tempo previsto: 0:48 (99 parole a 125 parole/min)
+Testo da pronunciare:
+Il modello A conserva cinque scalari reali: due frequenze naturali, due ritardi e la massa del secondo link. Sono cinque variabili indipendenti ma soltanto tre tipologie fisiche. In B la stessa massa rimane nella meccanica; cambiamo soltanto la descrizione dei drive. Partiamo dalla stessa famiglia parametrica, calcoliamo gli scostamenti dal nominale e il loro inviluppo. La forma additiva evita l’inversione dello zero destro introdotto da Padé. Fra tre ordini scegliamo il terzo: copre venticinque casi in norma con un eccesso contenuto. Altri trenta casi indipendenti verificano il peso. Questo controllo non dimostra la copertura di tutto il box continuo.
+Regia: Spiegare lo zero destro di Padé prima del fit.
+
+SLIDE 5 — Specifiche: obiettivi temporali e norma pesata
 Studente: Valerio
 Tempo previsto: 0:43 (88 parole a 125 parole/min)
 Testo da pronunciare:
 Separiamo le condizioni matematiche dagli obiettivi scelti da noi. Non cambiamo le definizioni di stabilità e prestazione robusta. Per il movimento abbiamo confrontato tre alternative semplici e adottato due secondi di assestamento, quindici per cento di sovraelongazione, cinque per cento di errore statico e venticinque per cento di accoppiamento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. La scelta è quindi collegata a una risposta concreta. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
 Regia: Distinguere target temporali e soglie matematiche.
 
-SLIDE 5 — LQR: il costo deriva dalle grandezze fisiche
+SLIDE 6 — LQR: il costo deriva dalle grandezze fisiche
 Studente: Valerio
 Tempo previsto: 0:42 (87 parole a 125 parole/min)
 Testo da pronunciare:
 Nel costo LQR non sommiamo direttamente quantità con scale molto diverse. Normalizziamo gli angoli rispetto a cinque gradi, le velocità rispetto a una scala coerente e la deformazione elastica rispetto a quella prodotta da mezzo newton metro sulla molla meno rigida. La matrice Q contiene quindi anche termini incrociati fra rotore e link. Il peso R penalizza direttamente il comando. Risolviamo la Riccati sul nominale con carico e controlliamo il suo residuo. Il guadagno così ottenuto stabilizza lo stato completo, comprendendo anche la dinamica interna degli attuatori.
 Regia: Indicare le scale fisiche.
 
-SLIDE 6 — LQG: quattro encoder e stato stimato
+SLIDE 7 — LQG: quattro encoder e stato stimato
 Studente: Valerio
-Tempo previsto: 0:44 (91 parole a 125 parole/min)
+Tempo previsto: 0:45 (93 parole a 125 parole/min)
 Testo da pronunciare:
-Le velocità e gli stati dei drive non sono misurati direttamente. Il filtro di Kalman li ricostruisce usando quattro encoder, due sui link e due sui rotori. L’innovazione confronta la misura con la previsione del modello e corregge lo stato stimato. Le intensità dei rumori sono assunte, non identificate. Abbiamo anche verificato cinque livelli di fiducia nelle misure, applicando sempre la stessa sequenza rumorosa. Il principio di separazione è controllato sulla matrice completa. Il prefiltro corregge il guadagno statico nominale, ma non può eliminare ogni errore causato da un carico diverso.
+Le velocità e gli stati dei drive non sono misurati direttamente. Il filtro di Kalman li ricostruisce usando quattro encoder, due sui link e due sui rotori. L’innovazione confronta la misura con la previsione del modello e corregge lo stato stimato. Le intensità dei rumori sono assunte, non identificate. Abbiamo anche verificato cinque livelli di fiducia nelle misure, applicando sempre la stessa sequenza rumorosa. Il principio di separazione è controllato sulla matrice completa. Il prefiltro corregge il guadagno statico nominale, ma non può eliminare ogni errore causato da un valore diverso della massa.
 Regia: Seguire innovazione e comando.
 
-SLIDE 7 — LQGI: memoria dell'errore misurato
+SLIDE 8 — LQGI: memoria dell'errore misurato
 Studente: Alessio
 Tempo previsto: 0:43 (89 parole a 125 parole/min)
 Testo da pronunciare:
 LQGI aggiunge la memoria dell’errore misurato. Quando rimane un offset, l’integratore continua a modificare il comando finché quell’errore si riduce. Aumentiamo la pianta con due stati e ricaviamo insieme i guadagni sullo stato e sull’integrale da una sola Riccati. L’osservatore mantiene il nominale ed è alimentato dal comando effettivo. Il sistema chiuso contiene trenta stati. Nei casi stabili otteniamo precisione statica e reiezione della coppia costante, ma il transitorio è più lento. Non sono presenti saturazioni, quindi non attribuiamo al modello una gestione dell’anti-windup che non abbiamo implementato.
 Regia: Indicare i due integratori.
 
-SLIDE 8 — $H_\infty$: sensibilità mista e pesi adottati
+SLIDE 9 — H infinito: sensibilità mista e pesi adottati
 Studente: Alessio
 Tempo previsto: 0:41 (84 parole a 125 parole/min)
 Testo da pronunciare:
 Passiamo al controllo H infinito, che permette di formulare obiettivi direttamente sui trasferimenti. Nella sensibilità mista penalizziamo l’errore e il comando: il primo peso è maggiore a bassa frequenza, mentre il secondo cresce per le coppie rapide. Costruiamo lo stesso problema a un grado di libertà con mixsyn e hinfsyn, verificando sia l’interconnessione sia l’accordo fra i valori di sintesi. Il risultato limita una norma pesata, non impone direttamente una forma della risposta al gradino. Per questo continuiamo a misurare assestamento e sovraelongazione separatamente.
 Regia: Leggere il ruolo dei pesi.
 
-SLIDE 9 — Due gradi di libertà, stati condivisi
+SLIDE 10 — Due gradi di libertà, stati condivisi
 Studente: Alessio
 Tempo previsto: 0:43 (88 parole a 125 parole/min)
 Testo da pronunciare:
 La struttura a due gradi di libertà distingue il canale del riferimento dal feedback. Il riferimento passa attraverso il modello desiderato, mentre il controllore riceve riferimento e posizione. Le due partizioni del controllore condividono gli stessi stati: non sono due sistemi realizzati separatamente. Le uscite pesate sono errore rispetto al modello desiderato e comando; gli ingressi esogeni sono riferimento e disturbo lato link. La pianta generalizzata raccoglie questi segnali e permette una sintesi coerente. Usiamo la stessa interconnessione anche per confrontare tutte le altre famiglie sul costo comune.
 Regia: Seguire riferimento e feedback.
 
-SLIDE 10 — Ordine completo e ordine fissato: il compromesso rimane
+SLIDE 11 — Ordine completo e ordine fissato: il compromesso rimane
 Studente: Valerio
 Tempo previsto: 0:42 (87 parole a 125 parole/min)
 Testo da pronunciare:
 Confrontiamo le due soluzioni dinamiche con un PID strutturato. Quest’ultimo mantiene due canali diagonali e una derivata filtrata, per un totale di quattro stati. Il tuning usa tre avvii perché il problema è non convesso. La tabella mostra l’ordine e la norma sul medesimo costo, evitando di confrontare valori di gamma associati a problemi diversi. Hinf2 ottiene una norma nominale molto piccola. Questo è un risultato utile, ma non basta: il costo non contiene il rumore di misura e non certifica la stabilità in presenza delle incertezze.
 Regia: Confrontare ordine e costo comune.
 
-SLIDE 11 — A e B: stessa massa, diversa descrizione dei drive
-Studente: Valerio
-Tempo previsto: 0:45 (92 parole a 125 parole/min)
-Testo da pronunciare:
-Il modello A conserva sette parametri reali: tre per ciascun drive e uno per il carico. Nel modello B la massa rimane identica, mentre gli scostamenti dei drive vengono rappresentati da due dinamiche additive pesate. La scelta additiva è importante: con ritardo variabile, invertire il nominale di Padé introduce un polo instabile nell’errore relativo. Un fit del solo modulo potrebbe nascondere il problema. Confrontiamo tre ordini e scegliamo il terzo, che copre ventinove casi con eccesso contenuto. Altri trenta casi verificano indipendentemente il peso. Non dimostriamo però la copertura dell’intero intervallo continuo.
-Regia: Spiegare lo zero destro di Padé prima del fit.
-
-SLIDE 12 — $\mu$: valore singolare strutturato
+SLIDE 12 — μ: valore singolare strutturato
 Studente: Valerio
 Tempo previsto: 0:42 (87 parole a 125 parole/min)
 Testo da pronunciare:
@@ -109,9 +109,9 @@ Regia: Leggere una riga con NP PASS e RS FAIL.
 
 SLIDE 16 — Dieci impianti: la stessa fisica per tutti
 Studente: Valerio
-Tempo previsto: 0:40 (82 parole a 125 parole/min)
+Tempo previsto: 0:41 (84 parole a 125 parole/min)
 Testo da pronunciare:
-Per le simulazioni estraiamo una sola volta dieci combinazioni fisiche, con seed fissato. Ogni combinazione contiene entrambe le terne attuative e la massa. Tutti i controllori ricevono esattamente questi impianti. Per B non generiamo una popolazione diversa: ricostruiamo gli stessi drive usando le perturbazioni additive normalizzate. A parità di controllore e di impianto, la risposta deve quindi coincidere. Prima delle metriche temporali controlliamo la stabilità interna. I casi instabili rimangono nel conteggio e non ricevono prestazioni finite che potrebbero renderli artificialmente confrontabili.
+Per le simulazioni estraiamo una sola volta dieci combinazioni fisiche, con seed fissato. Ogni combinazione contiene entrambe le coppie di parametri attuativi e la massa. Tutti i controllori ricevono esattamente questi impianti. Per B non generiamo una popolazione diversa: ricostruiamo gli stessi drive usando le perturbazioni additive normalizzate. A parità di controllore e di impianto, la risposta deve quindi coincidere. Prima delle metriche temporali controlliamo la stabilità interna. I casi instabili rimangono nel conteggio e non ricevono prestazioni finite che potrebbero renderli artificialmente confrontabili.
 Regia: Ricordare la stessa settupla per tutti.
 
 SLIDE 17 — Tracking e disturbi sugli impianti incerti
@@ -128,11 +128,11 @@ Testo da pronunciare:
 Il rumore viene applicato senza riferimento e senza disturbo, con la stessa sequenza e la stessa deviazione standard per tutti. Manteniamo ogni campione per due millisecondi. Non osserviamo soltanto gli istanti campionati, perché alcuni controllori producono impulsi molto rapidi fra un campione e il successivo. La tabella riporta quindi picchi e RMS integrati. Hinf2 amplifica fortemente le misure e richiede coppie molto elevate. La sua buona norma sul costo senza rumore non lo rende una soluzione utilizzabile. LQG e LQGI mostrano invece il beneficio del filtraggio delle misure.
 Regia: Confrontare gli ordini di grandezza del comando.
 
-SLIDE 19 — L'effetto del solo carico sul movimento non lineare
+SLIDE 19 — Massa del secondo link e movimento non lineare
 Studente: Alessio
-Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Tempo previsto: 0:46 (95 parole a 125 parole/min)
 Testo da pronunciare:
-Per isolare l’effetto meccanico ripetiamo il movimento non lineare con tre masse, mantenendo nominali i drive. Il riferimento è sempre cinque gradi al primo giunto. LQG usa un prefiltro calcolato per la massa centrale: agli estremi compare un errore finale. LQGI osserva l’errore misurato e lo corregge attraverso l’integratore. La massa entra contemporaneamente nelle accelerazioni, nei termini di velocità e nella gravità. Rimane costante durante ogni prova: queste simulazioni non descrivono l’urto o il transitorio di un oggetto afferrato mentre il braccio si muove.
+Per isolare l’effetto meccanico ripetiamo il movimento non lineare con masse del secondo link pari a zero virgola settantadue, zero virgola otto e zero virgola ottantotto chilogrammi, mantenendo nominali i drive. Il riferimento è sempre cinque gradi al primo giunto. LQG usa un prefiltro calcolato per la massa centrale: agli estremi compare un errore finale. LQGI osserva l’errore misurato e lo corregge attraverso l’integratore. La massa entra contemporaneamente nelle accelerazioni, nei termini di velocità e nella gravità. Rimane costante durante ogni prova: le prove descrivono una massa costante, non una variazione improvvisa durante il moto.
 Regia: Indicare gli estremi di massa.
 
 SLIDE 20 — Regione di attrazione: una sezione empirica
@@ -151,22 +151,21 @@ Regia: Seguire osservatore e integratore.
 
 SLIDE 22 — Simulink non lineare: la stessa legge di controllo
 Studente: Valerio
-Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Tempo previsto: 0:43 (88 parole a 125 parole/min)
 Testo da pronunciare:
-Nel modello non lineare sostituiamo la pianta linearizzata con le equazioni del SEA, mantenendo la legge di controllo. Il runner aggiorna in memoria i generatori incorporati con la massa distale effettiva e assegna separatamente i parametri dei due drive. Non duplichiamo gli SLX. Le venti esecuzioni comprendono nominale e primo campione comune, con entrambi i candidati robusti nei modelli dedicati. Controlliamo il tempo finale, gli stati finiti e l’acquisizione degli Scope. Superare questo collaudo conferma l’esecuzione e la coerenza dei dati, non il rispetto automatico delle prestazioni.
+Nel modello non lineare sostituiamo la pianta linearizzata con le equazioni del SEA, mantenendo la legge di controllo. Il runner aggiorna in memoria i generatori incorporati con la massa m2 della prova e assegna separatamente i parametri dei due drive. Non duplichiamo gli SLX. Le venti esecuzioni comprendono nominale e primo campione comune, con entrambi i candidati robusti nei modelli dedicati. Controlliamo il tempo finale, gli stati finiti e l’acquisizione degli Scope. Superare questo collaudo conferma l’esecuzione e la coerenza dei dati, non il rispetto automatico delle prestazioni.
 Regia: Indicare il cambio della pianta.
 
 SLIDE 23 — Conclusioni e limiti verificati
 Studente: Valerio
-Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Tempo previsto: 0:43 (88 parole a 125 parole/min)
 Testo da pronunciare:
-Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicito il carico, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG e LQGI mostrano compromessi comprensibili fra stabilità, precisione e rapidità. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
+Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG e LQGI mostrano compromessi comprensibili fra stabilità, precisione e rapidità. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
 Regia: Chiudere con il compromesso A/B e i limiti.
 
 APPENDICE — POSSIBILI DOMANDE E RISPOSTE
-
-Perché il carico non modifica soltanto G?
-Perché una massa puntiforme possiede energia cinetica e potenziale. Il contributo all’inerzia è m_EE J_EE^T J_EE e quello gravitazionale deriva dalla quota del punto distale.
+Perché m2 non modifica soltanto G?
+Perché una massa puntiforme possiede energia cinetica e potenziale. Il contributo all’inerzia è m2 J_EE^T J_EE e quello gravitazionale deriva dalla quota del punto distale.
 
 Perché il punto di equilibrio rimane verticale?
 Le componenti di G sono proporzionali a cos(q1) e cos(q1+q2), che si annullano in quella configurazione per tutte le masse. Il Jacobiano della gravità cambia comunque.
@@ -175,7 +174,7 @@ Perché la forma moltiplicativa non è valida qui?
 Il nominale Padé ha uno zero destro. Con ritardo diverso la cancellazione non avviene e l’errore relativo ha un polo instabile. Il solo fit del modulo non verifica la stabilità della perturbazione.
 
 Il peso copre tutto il modello A?
-Sono verificate norme continue di perturbazioni stabili e proprie per 29 casi di costruzione e 30 indipendenti. Non è stata dimostrata l’inclusione di tutto il box parametrico.
+Sono verificate norme continue di perturbazioni stabili e proprie per 25 casi di costruzione e 30 indipendenti. Non è stata dimostrata l’inclusione di tutto il box parametrico.
 
 Un margine RS maggiore su B significa che B è migliore?
 No. Le strutture e gli insiemi espansi sono differenti. Si confrontano vantaggi, conservatività e comportamento sugli stessi casi fisici.
@@ -187,4 +186,4 @@ Quale controllore approfondire per un movimento lento e preciso?
 LQGI è un candidato comprensibile per precisione e stabilità robusta, ma deve essere reso più rapido e verificato con limiti di coppia e anti-windup prima di un uso fisico.
 
 Le prove RAS certificano una regione?
-No: mostrano convergenza osservata su una sezione e un orizzonte finiti, con carico e drive nominali.
+No: mostrano convergenza osservata su una sezione e un orizzonte finiti, con massa e drive nominali.
