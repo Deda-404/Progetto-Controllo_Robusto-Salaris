@@ -2342,3 +2342,130 @@ PDF e orale distinguono prima formulazione e candidati. Schemi autentici ampliat
 ## 2026-10-31 — A/B attuativi e percorso didattico unico
 
 Accettata nell'incarico la riduzione alle due tipologie wn/zeta, indipendenti per giunto, ±10%. Ritardo noto e Padé comune: restrizione esplicita, non una conclusione sperimentale. Pesi prestazionali e nominale conservati. Scelto fitting di ordine minimo con copertura continua dei campioni e limite all'eccesso; non si assume inclusione globale A in B. I quattro script originali diventano il percorso autorevole con tre script didattici aggiuntivi e helper riusati. La consegna copia questi sorgenti. I risultati precedenti restano storici. Motivazioni e alternative in REVISIONE_DEFINITIVA.md.
+
+## 2026-11-01 — Carico distale e nuovo nominale
+
+Branch codex/sea-revisione-finale-semplificata da main dbf6f00 (PR #46 integrata).
+Incarico degli studenti: carico meccanico e ritardo incerti, confronto A/B,
+semplificazione didattica e una PR senza merge. Consultate traccia ufficiale,
+materiale Salaris Matlab/Slide/Appunti e riassunto; Drive in sola lettura.
+Tre candidati 0.1/0.2/0.3 kg: M11=0.601/0.650/0.699 kg m²;
+LQG fissato stabile nei tre casi. Scelti 0.2 kg ±50% come ipotesi,
+non misura: massa distale effettiva 1 kg, intervallo del carico 0.1–0.3 kg.
+Equazioni condivise M,C,G; nominale rigenerato a 14 stati. Equilibrio verticale
+invariato, Jacobiano gravitazionale e inerzia aggiornati.
+MATLAB R2026b: modello eseguito, tre test indipendenti PASS (equilibrio/Jacobiano,
+energia Coriolis, contributo mEE*J'*J e gravita mEE*g*Jy').
+Gate meccanica COMPLETE/PASS. Il primo fit additivo non soddisfa il criterio
+di conservativita: lavoro A/B PARTIAL, errore conservato in log di sviluppo;
+nessuna garanzia precedente trasferita.
+
+## 2026-11-01 — Ritardi reali e modello concentrato additivo
+
+Sei ureal attuativi indipendenti: wn 40 rad/s ±10%, zeta 0.8 ±10%,
+td 15 ms ±20%; stesso ureal m_EE in A/B. Padé a uno stato,
+ordine della pianta A fisso a 14. Candidati ritardo ±10/20/30%:
+scarti additivi 0.0344/0.0683/0.1016 e di fase a 40 rad/s 3.1/6.2/9.2 gradi.
+Scelto ±20%: variazione sensibile ma moderata, ipotesi non misurata.
+Con td=18 ms gli errori moltiplicativi diretto/inverso hanno poli RHP
++133.3/+111.1; forma additiva stabile/propria. Peso dal fit su 29 drive
+(20 dai dieci manipolatori, 8 vertici SISO, nominale); hold-out 30 campioni.
+Un'inversione in spazio di stato del peso strettamente proprio ha introdotto
+artefatti numerici: corretta eseguendo la normalizzazione in forma razionale.
+Nessun rilassamento del criterio di copertura o di eccesso mediano 1.6.
+Ordine selezionato 3: copertura 0.98037, eccesso mediano 1.0205,
+hold-out 0.8788; LFT e ricostruzione B dei campioni completate senza errori.
+Gate modellazione COMPLETE/PASS; copertura globale non dimostrata.
+
+## 2026-11-01 — Ricostruzione e validazione A/B
+
+Cinque test matlab.unittest superati, inclusi Jacobiani alle masse 0.1 e 0.3 kg,
+identita del parametro reale nei due insiemi e ricostruzione degli impianti comuni.
+Sette verifiche operative PASS: equilibrio, Jacobiano, nominali/LFT, struttura,
+normalizzazione continua, replay dei dieci campioni e stabilita interna esplicita.
+PBH dei modi instabili superato per stabilizzabilita/rilevabilita.
+La copertura riguarda 29 casi di fit e 30 hold-out; nessuna inclusione globale
+e nessuna garanzia trasferita dal modello A a B. Gate COMPLETE/PASS.
+
+
+## 2026-11-02 — Sintesi e confronto limitati
+Decisione: conservare i sette K fissati e ricalcolare le cinque famiglie nominali più due D-K, senza ulteriori architetture. Usare la stessa inizializzazione MuN1 e i medesimi pesi su A/B; conservare anche il primo tentativo automatico non soddisfacente. La post-analisi prevale sull’obiettivo D-K. Nessuna riduzione d’ordine non validata e nessuna promozione in presenza di offset o rumore eccessivi. Stato: implementato e verificato; prestazione globale non raggiunta.
+
+
+## 2026-11-02 — Specifiche prestazionali
+Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferimento (3, 4, 5 rad/s). Scelti Ts=2 s, Mp=15%, ess=5%, cross=25%, Mo=9/(s^2+6s+9). Il riferimento a 3 rad/s ha Ts=1.9447 s. We e Wu conservati. Le definizioni NS/NP/RS/RP e la soglia unitaria non cambiano. Recupero entro 0.5 gradi, picco e RMS del comando restano diagnostici senza limiti hardware. Risultati dei candidati conservati; nessun target rende automaticamente soddisfacenti tutti i K fissati. Quality gate COMPLETE/PASS per studio e coerenza, target dei controllori distinti nei CSV.
+
+
+## 2026-11-02 — Semplificazione e allineamento Simulink
+Il percorso accorpato resta unico. matrici_sea condivide le equazioni e controllori_sea evita elenchi incoerenti. La RAS riguarda solo i sette controllori correnti; le prove fissate restano nel confronto lineare. Gli otto SLX non sono duplicati né salvati: il runner aggiorna in memoria la massa effettiva nei generatori incorporati, i due drive, i guadagni e gli stati iniziali. Confrontate numericamente le funzioni meccaniche usate dai MATLAB Function con matrici_sea per ogni massa. Venti run di 2 s PASS con stati e Scope finiti; parametri e massa salvati. Cache coerenti anche nel formato della consegna. Quality gate COMPLETE/PASS; questo collaudo non certifica i target prestazionali.
+
+
+## 2026-11-02 — Riscrittura didattica della relazione
+Riscritti i 13 capitoli e le quattro appendici sul percorso fisico corrente: carico, ritardo, A/B, specifiche, controllori, robustezza, non lineare, campioni e conclusioni. Eliminati cronache delle versioni, matrici estese, ricerche ripetitive e trattazione sproporzionata di Lyapunov; conservati LFT, Kalman, azione integrale, mixed sensitivity, PID, D-K e tutte le distinzioni scientifiche necessarie. Tabelle e formule provengono da CSV/JSON tramite l’esportatore aggiornato. Risultati negativi preservati, inclusi offset e rumore dei candidati robusti.
+
+PDF di 49 pagine, indice con 13 capitoli e quattro appendici, riferimenti e numerazione compilati. Nessun warning, overfull o riferimento irrisolto; controllo visivo sulle pagine renderizzate. Testo finale privo dei termini di cronaca vietati. Quality gate COMPLETE/PASS. La documentazione tecnica conserva la provenienza fuori dalla relazione.
+
+
+## 2026-11-02 — Figure e presentazione
+Aggiornati gli schemi del carico, del percorso SISO-MIMO e della LFT A/B. Rigenerate otto figure dai dati correnti, inclusa la sensibilità separata a wn, zeta e ritardo. Conservati gli schemi validi e le viste autentiche degli SLX. La presentazione esistente resta di 23 slide, con tabelle esportate dalla stessa fonte numerica della relazione.
+
+Testo orale di 1990 parole, stima a 125 parole/min e 22 cambi di slide: 16:50; Alessio 7:40 e Valerio 8:26 di parlato. Note, scaletta e possibili domande aggiornate. La stima lascia margine sotto i 20 minuti; prova dal vivo NOT RUN. PDF 23 pagine senza warning o contenuti fuori margine, controllo visivo completato. Quality gate COMPLETE/PASS per elaborati.
+
+
+## 2026-11-02 — Consegna autonoma finale
+Confezionati gli stessi sorgenti, le sintesi coerenti, gli otto SLX e i PDF in Consegna_Progetto_SEA.zip. Il pacchetto è stato estratto in una nuova cartella TEMP esterna al repository. Il primo comando CLI aveva un errore di quoting e non ha avviato i calcoli; corretto il comando, restoredefaultpath e un assert hanno escluso il path del repository. run_all('rapida') e 20 esecuzioni collaudo_simulink sono terminati con exit code 0.
+
+Confronto: sei CSV riprodotti identici, massa e selezione dei drive coerenti, massimo scarto relativo dei picchi Scope zero; 33 sorgenti e ingressi identici per SHA-256. Il pacchetto finale viene rigenerato con evidenze e documentazione definitive, verificando che il contenuto eseguibile resti quello collaudato. I log sono conservati, con soli spazi finali rimossi. Cinque test MATLAB, sette verifiche scientifiche, 28 post-analisi, 154 casi lineari, 105 RAS, 35 prove non lineari e 20 run SLX nella campagna principale. Rapida e SLX ripetuti dalla consegna.
+
+Quality gate incarico R01–R22 COMPLETE/PASS. Gli obiettivi di controllo restano PARTIAL: nessuna RP raggiunta sulla famiglia completa, Hinf2/PID fragili, candidati D-K con offset e/o rumore elevati. Copertura globale B, RAS certificata, hardware e prova orale dal vivo non sono dichiarati eseguiti. Pubblicazione di una sola PR pronta per revisione; nessun merge.
+
+
+## 2026-11-02 — Pubblicazione per revisione
+Pubblicato il ramo e aperta una sola [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47), pronta per revisione (non draft), base main dbf6f00. Nove commit tematici coprono le aree richieste; questo aggiornamento registra soltanto la pubblicazione. GitHub indica assenza di conflitti; nessun merge effettuato. Tutte le verifiche e i limiti scientifici rimangono quelli della consegna collaudata. Stato incarico COMPLETE/PASS, accettazione dei controllori PARTIAL secondo i risultati.
+
+
+## 2026-11-02 — Correzione conservativa richiesta dagli studenti
+Confrontati direttamente tutti i capitoli con main dbf6f00, conservato il riferimento Git recupero/pr47-prima-correzione-7456a30. Recuperati costi fisici, Riccati, covarianze, separazione, LQGI completo, pianta generalizzata, sensibilità, LFT, mu e margini. Recuperati schemi validi e rigenerate quattro figure con il carico corrente. Il diagramma del fitting è stato aggiornato alla forma additiva; escluse vecchie tabelle e garanzie relative a famiglie differenti. Matrice dettagliata in CORREZIONE_CONSERVATIVA.md.
+Campagna predefinita ridotta a sette candidati, riferimenti opzionali. Riesaminate le sei righe delle D-K salvate, senza nuove sintesi Hinf/musyn. Nessun risultato negativo nascosto. Esplicitato che We(0)=6.67 non garantisce il 5% e che il rumore è escluso dal costo; pesi e soglie non alterati. I candidati mu finali non sono raccomandati come soluzioni operative.
+Gli otto SLX hanno InitFcn locale automatica e massa effettiva parametrizzata permanentemente; topologia conservata, nessuna nuova libreria, dipendenza o configurazione .satk. Originali recuperabili da Git. Eseguiti rapida, cinque test, sette verifiche e otto avvii SLX senza override InitFcn. I primi errori di percorso, recupero LaTeX, conteggio tabella e condizioni InitFcn sono stati corretti e le prove ripetute. Verifica ZIP e pubblicazione in corso: quality gate PARTIAL, nessuna nuova dichiarazione di prestazione robusta.
+
+
+Verifica finale della correzione: rapida e cinque test nel repository, rapida e 20 run campionati più otto avvii autonomi nella ZIP estratta, exit code 0; sei CSV identici. PDF di 68 pagine senza warning e controllato visivamente. Code Analyzer: due suggerimenti non critici, non zero. Nessuna nuova sintesi Hinf/D-K o RAS; tutti i FAIL restano espliciti. Pubblicazione sullo stesso ramo in corso.
+
+
+Pubblicazione della correzione: commit 0e3ff48 inviato sul ramo esistente, titolo e descrizione della PR #47 aggiornati; nessuna nuova PR e nessun merge. Rigenerazione finale della ZIP con gli stessi sorgenti e ingressi già collaudati; controllo SHA-256 di identità del contenuto eseguibile. La revisione editoriale degli studenti e i limiti prestazionali restano espliciti.
+
+
+## 2026-11-02 — Pilota editoriale limitato al capitolo 7
+La profondità didattica del PDF da 68 pagine non è stata approvata dagli studenti. Il nuovo incarico congela modellazione, controllori, MATLAB e Simulink e autorizza soltanto il capitolo 7, prima di ogni estensione. Ripreso l'intero sorgente del main dbf6f00: conservati i 28 percorsi di sezione e sottosezione e sviluppati spiegazioni, esempi, motivazioni e interpretazione dei risultati. Le matrici numeriche sono esportate dai dati correnti; sei figure editoriali usano coefficienti e risposte già salvati, mantenendo anche gli schemi e i confronti pertinenti esistenti.
+Non è stata rieseguita la griglia di 36 candidati né è stata trasferita la vecchia traccia temporale di stima al nuovo nominale. Il confronto dettagliato distingue questi limiti dal recupero teorico, senza equiparare titolo, formula o numero di righe alla profondità del contenuto. Nessuna sintesi, simulazione o modifica delle scelte di controllo. La quadratura dell'errore per illustrare xi è dichiarata nella didascalia. Corretto nel solo esportatore editoriale il tipo delle matrici binarie lette dai MAT prima di disegnare lo spettro; sorgenti numerici intatti.
+Fascicolo pilota di 19 pagine, incluso indice, compilato senza warning/overfull/riferimenti irrisolti e controllato visivamente. Identità SHA-256 di 561 file protetti verificata. Documentazione in CAPITOLO_7_PILOTA_CONFRONTO.md. Quality gate tecnico del pilota PASS; approvazione editoriale PENDING. Gli altri capitoli, il PDF integrale e lo ZIP rimangono invariati. Il lavoro si ferma per la verifica degli studenti; nessun merge.
+
+
+## 2026-11-02 — Estensione editoriale, primo gruppo
+Estensione editoriale approvata dopo il pilota del capitolo 7. Recupero discorsivo dei capitoli 1–6, con particolare sviluppo della catena fisica → parametri → LFT → peso additivo → robustezza nel capitolo 5. Prima compilazione integrale intermedia riuscita; capitoli successivi e verifica finale ancora in corso. Nessuna nuova sintesi/simulazione né modifica dei file numerici protetti. Nessun merge.
+
+
+## 2026-11-02 — Estensione editoriale, controllo e verifiche
+Recuperati i percorsi completi dei capitoli 8–11: sensibilità mista, pianta generalizzata e partizioni 1/2-DoF, struttura PID, NS/NP/RS/RP, D/G e D–K, Lyapunov sullo stato completo, rumore ZOH, nonlinearità e campioni comuni. Otto figure editoriali leggono esclusivamente MAT/CSV e Scope salvati; nessuna sintesi/simulazione. Corretto nell’esportatore il diverso orientamento del buffer comando Scope, senza modificare il dato. Tutti i 589 file protetti sono identici per SHA-256. Compilazione integrale intermedia riuscita, controllo visivo e confronto dei contenuti in chiusura. Le seconde formulazioni con rumore e Lyapunov restano teoria dove non esistono esperimenti attuali. Nessun merge.
+
+
+## 2026-11-02 — Relazione integrale, verifica editoriale finale
+Completata l'estensione editoriale autorizzata dopo l'approvazione del capitolo 7. Conservati i 13 capitoli, le quattro appendici e tutti i 129 percorsi dell'indice del main dbf6f00, con due adattamenti di titolo necessari (unico carico e prove non ripetute). Recuperati motivazioni, passaggi logici, formule, interpretazioni e visualizzazioni pertinenti; matrice puntuale in REVISIONE_EDITORIALE_INTEGRALE.md. Sviluppo speciale del capitolo 5 e collegamento alle incertezze nei capitoli Hinf e mu. Conclusioni e appendici conservano il ragionamento completo, inclusa la derivazione sigma_min. Otto figure dai dati già salvati, 18 estratti letti dai sorgenti correnti.
+Compilazione integrale latexmk/pdflatex: 108 pagine, zero errori, warning, overfull, underfull o riferimenti irrisolti. Render di tutte le pagine e controllo visivo; dettagli capitolo 5 a 140 dpi. Corretti i paragrafi attorno ai float e uniformato lo schema delle forme alla notazione e ai segni delle formule, senza cambiare la modellazione. Un primo comando di compilazione era stato lanciato dalla radice anziché report, senza produrre un PDF; le compilazioni corrette sono documentate nell'audit finale. Corretto nell'esportatore l'orientamento del comando Scope; dati originali intatti.
+Integrità: 589 file protetti identici per SHA-256. Nessuna nuova sintesi, simulazione, post-analisi o RAS; teoria con rumore e Lyapunov non dichiarata esperimento. Aggiornata la ZIP soltanto nel PDF e manifest interno: 89 altri contenuti identici, CRC e hash PASS. Non è un nuovo collaudo eseguibile. Quality gate tecnico editoriale COMPLETE/PASS; accettazione prestazionale ancora PARTIAL (nessun RP), revisione degli studenti distinta. Stesso ramo e PR #47, commit progressivi, nessun merge.
+
+
+## 2026-11-04 — Decisione definitiva approvata dagli studenti
+
+L'incarico definitivo sostituisce la decisione sul carico aggiuntivo: sole masse m1=1 e m2=0.8 kg. Unica incertezza meccanica m2 ±10%; quattro reali attuativi wn1/wn2 ±15% e td1/td2 ±20%; zeta noto. A e B condividono meccanica, nominale, equilibrio e segnali; B concentra soltanto i drive in due perturbazioni SISO additive. Conservati pesi, specifiche e famiglie di controllo. Cinque test e copertura campionata PASS. Restano storiche le decisioni precedenti incompatibili. Confermata l'autorizzazione già registrata alle API MATLAB locali in assenza di model_edit; nessuna nuova topologia o libreria Simulink.
+
+
+## 2026-11-04 — Esiti negativi e validazione distinta
+
+Confermati pesi e target precedenti, senza adattarli ai risultati. Le due D–K hanno obiettivi finali 2.92947/1.81149 e ordini 242/106; non sono sostituti di RS/RP. Nessun RP PASS; Hinf2/PID falliscono RS. I test finiti di 2 s sugli SLX attestano esecuzione e coerenza, non prestazioni. Le cinque prove correnti sostituiscono l'attribuzione indebita di test storici non ripetuti. La consegna viene verificata da ZIP estratta fuori dal repository con path pulito; l'esito sarà registrato dopo l'esecuzione. Confermata la conservazione del patrimonio teorico dei 13 capitoli e quattro appendici, con numeri correnti e limiti espliciti.
+
+
+## 2026-11-04 — Consegna verificata, pubblicazione sul ramo esistente
+
+Collaudo estratto COMPLETE/PASS (rapida, 8 verifiche, 20 run, 8 callback originali). Il pacchetto finale mantiene per hash i 33 ingressi eseguibili collaudati; aggiornati soltanto documentazione/evidenze/manifest. Confermata pubblicazione dei commit sul ramo esistente della PR #47 come richiesto dagli studenti, senza merge e senza modifica di main. Il completamento tecnico non modifica l’accettazione prestazionale PARTIAL: nessun RP e limiti hardware/globali dichiarati.

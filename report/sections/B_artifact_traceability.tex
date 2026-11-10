@@ -1,68 +1,60 @@
 \chapter{Tracciabilità dei risultati}
-\paragraph*{Percorso corrente A/B.}
-I sette script accorpati leggono la banca originale estratta in
-\path{dati/banca_validata.mat}; il procedimento di estrazione e in
-\path{tools/prepara_banca_definitiva.m}. Le evidenze correnti sono nella
-sottocartella \path{risultati} degli script accorpati:
-\begin{center}\small
-\begin{tabular}{ll}\toprule
-Dato & Procedimento che lo genera\\\midrule
-\path{parametri_dieci_impianti.csv} & Campionamento fisico, seme 20261031\\
-\path{ordini_peso.csv} & Scostamenti, fitting, norma continua\\
-\path{confronto_robusto.csv} & Post-analisi dello stesso K su A/B\\
-\path{dieci_impianti.csv} & 110 chiusure fisiche, incluso il nominale\\
-\path{rumore.csv} & ZOH e verifica fra campioni\\
-\path{ras.csv} & 150 integrazioni non lineari\\
-\path{simulink.csv} & 28 run degli otto SLX originali\\
-\path{verifiche.csv} & Equilibrio, Jacobiano, LFT e controlli dinamici\\\bottomrule
-\end{tabular}
-\end{center}
-I MAT associati conservano controllori, modelli e traiettorie necessari
-al replay; \path{tools/esporta_definitiva.py} ricava le tabelle dai CSV.
-Le sezioni seguenti conservano la provenienza degli studi storici M4.
+I risultati provengono dagli script in \texttt{File\_di\_Funzioni\_Progetto-Accorpati}. La cartella \texttt{risultati} conserva i dati a precisione di calcolo; tabelle e formule della relazione sono esportate da quei file. L'arrotondamento avviene solo nella presentazione.
 
-I parametri e le matrici del modello provengono dai dataset in
-\path{results/data}. Il modello a 14 stati è in
-\path{m3_nominal_actuated_plant.mat}; $B_{d,\rm full}$ e le specifiche sono
-in \path{m5_performance_specs.mat}. LQG proviene da
-\path{m6_lqg_no_integrator.mat}; LQGI da
-\path{m7_augmented_cost_feasibility.mat}, all'indice
-\texttt{config.illustrativeIndex}. I quattro script didattici sono in
-\path{File_di_Funzioni_Progetto-Accorpati} e nella versione storica
-usavano direttamente questi dati, ora raccolti nella banca di provenienza.
+\begin{longtable}{>{\raggedright\arraybackslash}p{.26\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}\toprule
+Argomento & Script & Evidenza\\\midrule\endhead
+Meccanica e nominale & \path{modello_sea.m}, \path{matrici_sea.m} & \path{modello.mat}, estremi di $m_2$, verifica Jacobiano\\
+Famiglie A/B & \path{incertezze_attuatori.m} & \path{incertezze.mat}, ordini del peso, parametri comuni\\
+LQG e LQGI & \path{progetto_lqg.m}, \path{progetto_lqgi.m} & CARE, \path{kalman.csv}, guadagni nei MAT\\
+$H_\infty$ e PID & \path{progetto_hinf_tre_controllori.m} & \path{sintesi_hinf.mat}, \path{hinf.csv}\\
+Robustezza e D--K & \path{progetto_mu.m} & \path{confronto_robusto.csv}, \path{dk_1.csv}, \path{dk_2.csv}\\
+Campioni, rumore, RAS & \path{confronto_ras.m}, \path{simula_sea.m} & \path{dieci_impianti.csv}, \path{rumore.csv}, \path{ras.mat}\\
+Simulink & \path{collaudo_simulink.m} & \path{simulink.csv}, parametri e Scope in \path{simulink.mat}\\
+Verifiche fisiche & \path{verifica_sea.m}, test MATLAB & \path{verifiche.csv}, \path{riassunto_numerico.json}\\\bottomrule
+\end{longtable}
 
-La cartella \path{results/data/hinf_final_coherent} contiene le fonti
-della sintesi e dell'analisi robusta:
-\begin{longtable}{p{.40\textwidth}p{.52\textwidth}}\toprule
-Dataset & Evidenza\\\midrule
-\path{nominal_study.mat} & Pesi, profili 1-DoF, tre problemi 2-DoF e selezione\\
-\path{selected_full_order.mat} & $H_\infty$ $2\times4$, ordine 22\\
-\path{fixed_PID.mat} & Controllore PID strutturato e avvii verificati\\
-\path{m12.mat} & Struttura N--Delta e margini del comparatore\\
-\path{m13.mat}, \path{m14.mat} & $K_\mu$, ordine 78, storia D--K e post-analisi\\
-\path{nonlinear_study.mat} & Equilibrio, gradini e disturbi nominali MATLAB\\
-\path{ras_study.mat} & Ricerca radiale empirica dichiarata nel Capitolo 10\\
-\bottomrule\end{longtable}
+La catena dati--figura--testo permette di distinguere quattro situazioni.
+Una sintesi produce nuove matrici di controllo; una post-analisi mantiene
+quelle matrici e calcola nuove proprietà; un replay ripete un protocollo;
+un'esportazione ricava una tabella o un grafico da dati già disponibili.
+Cambiare il modo di rappresentare un risultato non costituisce una nuova
+simulazione. Il confronto didattico della relazione conserva questa
+distinzione anche quando un ragionamento teorico viene sviluppato senza
+una corrispondente campagna numerica.
 
-Le prove del rumore isolato, della griglia RAS comune e dei dieci impianti
-incerti sono in \path{results/data/final_closure}:
-\begin{longtable}{p{.40\textwidth}p{.52\textwidth}}\toprule
-Dataset & Evidenza\\\midrule
-\path{noise_diagnostics.mat} & Sette scenari, mappe $T_{uv}$ e impulsi fra i campioni\\
-\path{practical_robustness.mat} & Dieci impianti, nominale, replay, poli e risposte\\
-\path{ras_lyapunov.mat} & Stato aumentato, controlli Lyapunov e 150 condizioni iniziali\\
-\path{summary.json} & Esportazione numerica delle tabelle e dei conteggi\\
-\path{slx_static_audit.json} & Blocchi, connessioni, callback e impostazioni degli otto SLX\\
-\bottomrule\end{longtable}
-Le matrici campionate e le traiettorie sono salvate: i grafici non sono
-l'unica evidenza disponibile. Le prove nominali LQGI sono in
-\path{results/data/lqgi_validation}; il confronto dei tre $M_o$ e i test
-sono in \path{results/data/coherent_review}.
+La matrice $A$ e i canali fisici provengono da \path{modello.mat};
+\path{incertezze.mat} conserva piante, peso e parametri estratti.
+\path{lqg.mat} e \path{lqgi.mat} contengono guadagni, costi e residui;
+\path{sintesi_hinf.mat} e \path{sintesi_mu.mat} conservano i controllori.
+Le firme di configurazione legano tali oggetti al modello e ai pesi.
+Usare soltanto un nome come Hinf2 senza identificare le matrici non
+sarebbe sufficiente a trasferire una conclusione robusta.
 
-Gli otto modelli studenti sono in \path{simulink/student_originals}.
-Il manifest \path{simulink/student_originals_manifest.json} permette
-di verificare l'integrità dei file mediante SHA-256. La cartella
-\path{results/data/final_simulink_validation} contiene gli esiti del
-collaudo locale e le verifiche dei quattro script. Gli schemi matematici
-dei capitoli rappresentano le interconnessioni, mentre una figura
-ricavata da Simulink deve provenire direttamente dal diagramma eseguito.
+\path{confronto.mat} conserva le risposte lineari nominali e degli
+impianti comuni; \path{ras.mat} contiene le traiettorie non lineari
+di tracking, disturbo e attrazione. I CSV \path{dieci_impianti.csv},
+\path{massa_nonlineare.csv} e \path{ras.csv} ne rendono leggibili le
+metriche. \path{rumore.csv} distingue esplicitamente campioni, massimi
+intercampione e RMS integrato; una figura a barre di tali metriche
+non viene presentata come una traccia temporale encoder.
+
+\path{simulink.mat} conserva parametri e acquisizioni degli Scope;
+\path{simulink.csv} identifica modello, campione, candidato e durata.
+\path{simulink_autonomo.csv} riguarda invece gli avvii con callback
+nominale. Le due verifiche hanno scopi distinti e non si sommano a una
+certificazione prestazionale. Gli estratti grafici diradati conservano
+il legame con la sorgente; i picchi di collaudo sono calcolati sui
+campioni integrali, prima del diradamento.
+
+Le figure aggiuntive della relazione sono esportate da
+\path{report/figures/editoriale/esporta.py}; le figure didattiche del
+capitolo LQG hanno un esportatore dedicato nella stessa cartella delle figure.
+Questi esportatori leggono i dati salvati e scrivono soltanto elementi
+per il documento. Gli schemi a blocchi sono rappresentazioni teoriche;
+le viste Simulink provengono dai diagrammi e non da un disegno che ne
+simuli l'interfaccia. Nei grafici, nominale, campioni e protocolli sono
+indicati nella didascalia, così da poter risalire alla prova pertinente.
+
+Le fonti didattiche sono la traccia \emph{Manipolatore planare 2R con SEA} e il materiale di Controllo Robusto del professor Salaris: cartelle Matlab, Slide e Appunti, con particolare riferimento al capitolo sulle incertezze e al \emph{riassunto controllo robusto}. Sono consultabili nella \href{https://drive.google.com/drive/folders/1IlimFEVGqS3JxOgKLfhpptMeCBRPsZXQ}{cartella del corso}. Le scelte di massa, tolleranze e target temporali restano ipotesi del progetto.
+
+Per i comandi si fa riferimento alla documentazione MathWorks di \href{https://www.mathworks.com/help/robust/ref/ureal.html}{\texttt{ureal}}, \href{https://www.mathworks.com/help/robust/ref/fitmagfrd.html}{\texttt{fitmagfrd}} e \href{https://www.mathworks.com/help/robust/ref/uss.musyn.html}{\texttt{musyn}}. Queste fonti descrivono gli strumenti; i numeri discussi nella relazione derivano dalle esecuzioni del progetto.

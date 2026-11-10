@@ -3,48 +3,46 @@ cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 if ~isfile(fullfile(p.risultati,'incertezze.mat')),run(fullfile(cartella,'incertezze_attuatori.m'));end
 a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;
 a=load(fullfile(p.risultati,'incertezze.mat')); modelli=a.modelli;
-a=load(fullfile(p.dati,'banca_validata.mat')); banca=a.banca;
-nomi=[string({banca.controllers.name}),"MuN1"]; controllori=[{banca.controllers.K},{banca.muRumore}];
-fileMu=fullfile(p.risultati,'sintesi_mu.mat');
-if ~isfile(fileMu),fileMu=fullfile(p.dati,'sintesi_mu.mat');end
-if isfile(fileMu)
-    a=load(fileMu); controllori=[controllori,{a.candidati{1}.K,a.candidati{2}.K}]; nomi=[nomi,"Mu_A","Mu_B"];
-end
-fileH=fullfile(p.risultati,'sintesi_hinf.mat');
-if ~isfile(fileH),fileH=fullfile(p.dati,'sintesi_hinf.mat');end
-if isfile(fileH)
-    a=load(fileH); controllori=[controllori,{a.sintesi.Kpid}];
-    nomi=[nomi,"PID_nuovo"];
-    % Le risintesi Hinf1/Hinf2 riproducono i comparatori: niente prove duplicate.
-end
+[nomi,controllori,~,correnti]=controllori_sea(p);
+firma=p.firma;
 
 %% 2 - Dieci realizzazioni comuni, piu nominale: stessa fisica per tutti
 % A e B sono descrizioni: a K e pianta fisica fissati la risposta e unica.
-righe=cell(numel(nomi)*(p.campioni+1),9); riga=0; risposte=cell(numel(nomi),p.campioni+1);
+righe=cell(numel(nomi)*(p.campioni+1),11); riga=0; risposte=cell(numel(nomi),p.campioni+1);
 for k=1:numel(nomi)
     for j=0:p.campioni
         if j==0,pianta=modello.P0;
-        else,pianta=modello.meccanica*blkdiag(modelli.campioniAtt(:,:,j),eye(2));end
+        else,pianta=modelli.campioniFisici(:,:,j);end
         [~,CL]=interconnessione_sea(pianta,p,size(controllori{k},2)-2,controllori{k});
         stabile=isstable(CL); polo=max(real(pole(CL)));
-        erroreDC=NaN; picco=NaN; disturbo=NaN; ts=NaN; overshoot=NaN;
+        erroreDC=NaN; picco=NaN; disturbo=NaN; ts=NaN; overshoot=NaN; cross=NaN; recupero=NaN;
         if stabile
             risposta=step(CL(1:4,1:2)*p.rAmp,p.tempo); risposte{k,j+1}=risposta;
             erroreDC=max(abs(dcgain(CL(1:2,1:2))-eye(2)),[],'all');
             picco=max(abs(risposta(:,3:4,:)),[],'all');
             yd=step(CL(1:2,3:4)*p.dAmp,p.tempo);
             disturbo=max(abs(yd),[],'all'); ts=0; overshoot=0;
+            cross=max([abs(risposta(:,1,2));abs(risposta(:,2,1))])/p.rAmp;
+            recupero=0;
+            for asse=1:2
+                ultimo=find(max(abs(yd(:,:,asse)),[],2)>p.recuperoTol,1,'last');
+                if ~isempty(ultimo)
+                    if ultimo==numel(p.tempo),recupero=Inf;else,recupero=max(recupero,p.tempo(ultimo+1));end
+                end
+            end
             for asse=1:2
                 info=stepinfo(risposta(:,asse,asse),p.tempo,p.rAmp*dcgain(CL(asse,asse)));
-                ts=max(ts,info.SettlingTime);
+                % Un assestamento non determinato entro la finestra non vale zero.
+                if ~isfinite(info.SettlingTime),ts=Inf;
+                else,ts=max(ts,info.SettlingTime);end
                 overshoot=max(overshoot,max(0,100*(max(risposta(:,asse,asse))/p.rAmp-1)));
             end
         end
-        riga=riga+1; righe(riga,:)={nomi(k),j,stabile,polo,erroreDC,picco,disturbo,ts,overshoot};
+        riga=riga+1; righe(riga,:)={nomi(k),j,stabile,polo,erroreDC,picco,disturbo,ts,overshoot,cross,recupero};
     end
 end
 impianti=cell2table(righe,'VariableNames',{'Controllore','Impianto','Stabile','PoloDominante', ...
-    'ErroreDC','PiccoComando','PiccoDisturboRad','Assestamento','OvershootPercent'});
+    'ErroreDC','PiccoComando','PiccoDisturboRad','Assestamento','OvershootPercent','Cross','RecuperoDisturbo'});
 writetable(impianti,fullfile(p.risultati,'dieci_impianti.csv'));
 
 %% 3 - Rumore encoder comune, ZOH esplicito e comando non saturato
@@ -54,14 +52,17 @@ for k=1:numel(nomi)
     ny=size(controllori{k},2)-2;
     [~,CL]=interconnessione_sea(modello.P0,p,ny,controllori{k});
     fprintf('Rumore ZOH e picchi intercampione: %s\n',nomi(k));
-    metriche=rumoreContinuo(CL(1:4,5:4+ny),v(:,1:ny),p.tempoRumore);
+    metriche=nan(1,6);
+    if isstable(CL),metriche=rumoreContinuo(CL(1:4,5:4+ny),v(:,1:ny),p.tempoRumore);end
     righe(k,:)=[{nomi(k)},num2cell(metriche)];
 end
 rumore=cell2table(righe,'VariableNames',{'Controllore','PiccoCampioni','RMSCampioni', ...
     'PiccoTraCampioni','RMSIntegrato','ErroreQuadratura','PiccoPosizioneRad'});
 writetable(rumore,fullfile(p.risultati,'rumore.csv'));
 
-%% 4 - Non lineare nominale: tracking e disturbo distinti
+%% 4 - Non lineare sui sette controllori correnti: tracking e disturbo
+nomiTutti=nomi; risposteTutte=risposte;
+nomi=nomi(correnti); controllori=controllori(correnti); risposte=risposte(correnti,:);
 fileRas=fullfile(p.risultati,'ras.mat');
 if p.modalita=="completa"
     righe=cell(2*numel(nomi),6); traiettorie=cell(numel(nomi),2);
@@ -74,6 +75,19 @@ if p.modalita=="completa"
     end
     nonlineare=cell2table(righe,'VariableNames',{'Controllore','ProvaTrackingDisturbo','Completato','Esito','PiccoU','PiccoQ'});
     writetable(nonlineare,fullfile(p.risultati,'nonlineare.csv'));
+    % Massa m2 isolata, tre valori, stesso riferimento e attuatore nominale.
+    carico=cell(3*numel(nomi),6); rr=0;
+    for k=1:numel(nomi)
+        for massa=p.m2*[1-p.rm2 1 1+p.rm2]
+            mj=modello; mj.fisica.m2=massa;
+            out=simula_sea(controllori{k},mj,p,struct('r',[p.rAmp;0],'tempo',p.tempo));
+            rr=rr+1;
+            carico(rr,:)={nomi(k),massa,out.esito,max(abs(out.u),[],'all'), ...
+                max(abs(out.q(end,:)-[p.rAmp 0]))/p.rAmp,out.completato};
+        end
+    end
+    carico=cell2table(carico,'VariableNames',{'Controllore','Massa2','Esito','PiccoU','ErroreFinale','Completato'});
+    writetable(carico,fullfile(p.risultati,'massa_nonlineare.csv'));
     %% 5 - RAS: cinque direzioni per tre distanze, nessuna frontiera dedotta
     punti=zeros(numel(p.rasRaggi)*numel(p.rasDirezioni),2);
     for j=1:numel(p.rasRaggi)
@@ -89,12 +103,12 @@ if p.modalita=="completa"
         end
     end
     ras=cell2table(righe,'VariableNames',{'Controllore','DeltaQ1deg','DeltaQ2deg','Esito','TempoFinale','SecondiCalcolo'});
-    save(fileRas,'ras','percorsi','punti','nonlineare','traiettorie','nomi','controllori','-v7');
+    save(fileRas,'ras','percorsi','punti','nonlineare','traiettorie','nomi','controllori','firma','-v7');
 else
     if ~isfile(fileRas),fileRas=fullfile(p.dati,'ras.mat');end
     assert(isfile(fileRas),'SEA:Cache','RAS assente: eseguire modalita completa.');
     a=load(fileRas); ras=a.ras; percorsi=a.percorsi; punti=a.punti;
-    assert(isequal(nomi,a.nomi) && isequaln(controllori,a.controllori), ...
+    assert(isfield(a,'firma') && isequal(a.firma,p.firma) && isequal(nomi,a.nomi) && isequaln(controllori,a.controllori), ...
         'SEA:CacheRAS','Controllori diversi dalla campagna RAS salvata.');
     nonlineare=a.nonlineare; traiettorie=a.traiettorie;
     disp('RAS CARICATA dalla campagna completa. Verifica locale LQG eseguita ora.');
@@ -102,11 +116,11 @@ else
     assert(locale.convergenza,'SEA:RASLocale','Verifica locale non convergente.');
 end
 writetable(ras,fullfile(p.risultati,'ras.csv'));
-save(fullfile(p.risultati,'confronto.mat'),'impianti','rumore','risposte','nomi','-v7');
+save(fullfile(p.risultati,'confronto.mat'),'impianti','rumore','risposte','nomi','nomiTutti','risposteTutte','firma','-v7');
 
 %% 6 - Grafici: origine all'equilibrio, traiettorie e classificazioni separate
 if p.figure
-    f=figure('Name','Dieci impianti fisici comuni','Color','w','Position',[20 20 1400 950]); theme(f,'light'); tiledlayout(3,4);
+    f=figure('Name','Dieci impianti fisici comuni','Color','w','Position',[20 20 1400 800]); theme(f,'light'); tiledlayout(2,4);
     for k=1:numel(nomi)
         nexttile;
         for j=1:p.campioni+1
@@ -115,7 +129,7 @@ if p.figure
         yline(5,'--k'); title(nomi(k),'Interpreter','none'); grid on; xlabel('s'); ylabel('delta q1 [deg]');
     end
     exportgraphics(f,fullfile(p.risultati,'dieci_impianti.png'),'Resolution',170);
-    f=figure('Name','RAS empirica','Color','w','Position',[20 20 1400 950]); theme(f,'light'); tiledlayout(3,4);
+    f=figure('Name','RAS empirica','Color','w','Position',[20 20 1400 800]); theme(f,'light'); tiledlayout(2,4);
     for k=1:numel(nomi)
         nexttile; hold on;
         for j=1:size(punti,1)
@@ -132,6 +146,52 @@ if p.figure
         xlim([-40 40]); ylim([-40 40]); xlabel('delta q1 [deg]'); ylabel('delta q2 [deg]');
     end
     exportgraphics(f,fullfile(p.risultati,'ras.png'),'Resolution',170);
+end
+
+%% Figure didattiche: stessi controllori, nominale e traiettorie gia calcolate
+if p.figure
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,2);
+for prova=1:2
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(1:2,prova)*p.rAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Gradino giunto "+prova);legend('LQG q1','LQG q2','LQGI q1','LQGI q2');
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(1:2,prova+2)*p.dAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Disturbo link "+prova);
+end
+exportgraphics(f,fullfile(p.risultati,'lqg_lqgi_risposte.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,1);
+for prova=1:2
+ nexttile;hold on
+ for k=1:2
+ [~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});y=step(CL(3:4,prova+2)*p.dAmp,p.tempo);plot(p.tempo,y);
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Comando [N m]');title("Disturbo link "+prova);legend('LQG u1','LQG u2','LQGI u1','LQGI u2');
+end
+exportgraphics(f,fullfile(p.risultati,'lqg_lqgi_comando.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,1);
+for prova=1:2
+ nexttile;hold on
+ for k=3:5
+ [~,CL]=interconnessione_sea(modello.P0,p,2,controllori{k});y=step(CL(1:2,prova+2)*p.dAmp,p.tempo);plot(p.tempo,rad2deg(y));
+ end
+ grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title("Disturbo link "+prova);legend('Hinf1 q1','Hinf1 q2','Hinf2 q1','Hinf2 q2','PID q1','PID q2');
+end
+exportgraphics(f,fullfile(p.risultati,'hinf_disturbi.png'),'Resolution',160);close(f);
+f=figure('Visible','off','Color','w');theme(f,'light');tiledlayout(2,2);
+for k=1:2
+ for prova=1:2
+ o=traiettorie{k,prova};[~,CL]=interconnessione_sea(modello.P0,p,4,controllori{k});
+ if prova==1,y=step(CL(1:2,1)*p.rAmp,o.tempo);else,y=step(CL(1:2,3)*p.dAmp,o.tempo);end
+ nexttile;plot(o.tempo,rad2deg(o.q),o.tempo,rad2deg(y),'--');grid on;xlabel('Tempo [s]');ylabel('Posizione [gradi]');title(nomi(k)+" prova "+prova);legend('NL q1','NL q2','Lineare q1','Lineare q2');
+ end
+end
+exportgraphics(f,fullfile(p.risultati,'lineare_nonlineare_lqg.png'),'Resolution',160);close(f);
+
 end
 
 function metriche=rumoreContinuo(sys,v,t)

@@ -1,10 +1,11 @@
-%% 1 - LQG: modello originale e coefficienti consolidati
+%% 1 - LQG: sintesi sul nominale della traccia
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.dati,'banca_validata.mat'),'banca'); banca=a.banca;
-A=banca.plant.Afull; B=banca.plant.Bfull; C=banca.plant.CfullMeas;
-Cq=banca.plant.CfullQ; Bd=banca.Bd; n=size(A,1);
-disp('LQG: coefficienti da main; verifiche CARE eseguite ora.');
-%% 2 - Q e R: le scale e i pesi della ricerca storica LQR30
+a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;
+A=modello.Afull; B=modello.Bfull; C=modello.Cfull;
+Cq=C(1:2,:); Bd=modello.Bdfull; n=size(A,1);
+disp('LQG: nuova sintesi nominale; pesi e covarianze conservati.');
+%% 2 - Q e R: scale fisiche e pesi del regolatore
 qs=p.rAmp; qds=banca.spec.omegaB*qs; ds=p.dAmp/min(diag(banca.plant.mechanicalParams.Ks));
 F=zeros(8,n); F(1:4,1:4)=eye(4); F(5:6,1:2)=-eye(2);
 F(5:6,5:6)=eye(2); F(7:8,7:8)=eye(2);
@@ -18,7 +19,7 @@ Gw=[Bd B]; Qn=banca.lqg.Qn; Rn=banca.lqg.Rn;
 Nr=(-Cq*((A-B*K)\B))\eye(2);
 residuoCARE=norm(A'*Plqr+Plqr*A-Plqr*B*(R\B')*Plqr+Q,'fro')/norm(Q,'fro');
 assert(residuoCARE<1e-8 && max(real(poliLqr))<0 && max(real(poliKalman))<0);
-assert(norm(K-banca.lqg.K,'fro')<1e-6 && norm(L-banca.lqg.L,'fro')<1e-6);
+
 %% 4 - Feedback sullo stato stimato; ingressi [r;q;theta]
 Klqg=ss(A-B*K-L*C,[B*Nr L],-K,[Nr zeros(2,4)]);
 Acl=[A -B*K;L*C A-B*K-L*C];
@@ -26,7 +27,7 @@ T=[eye(n) zeros(n);eye(n) -eye(n)];
 erroreSeparazione=norm(T*Acl/T-[A-B*K B*K;zeros(n) A-L*C],'fro');
 assert(erroreSeparazione<1e-8 && all(real(eig(Acl))<0));
 lqg=struct('K',Klqg,'Q',Q,'R',R,'Qn',Qn,'Rn',Rn,'L',L,'Nr',Nr, ...
-    'residuoCARE',residuoCARE,'erroreSeparazione',erroreSeparazione);
+    'residuoCARE',residuoCARE,'erroreSeparazione',erroreSeparazione,'Kstato',K,'firma',p.firma);
 save(fullfile(p.risultati,'lqg.mat'),'lqg','-v7');
 fprintf('CARE %.3g; separazione %.3g.\n',residuoCARE,erroreSeparazione);
 %% 5 - Sensibilita Kalman: cinque covarianze, stessa sequenza fisica

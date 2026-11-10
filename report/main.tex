@@ -28,39 +28,22 @@
 \renewcommand{\arraystretch}{1.12}
 \newcommand{\status}[1]{\texttt{#1}}
 \newcommand{\artifact}[1]{\texttt{#1}}
-\input{generated/m18_values.tex}
-\input{generated/revision_values.tex}
-\input{generated/hinf_final_values.tex}
-\input{generated/final_closure_values.tex}
-\input{generated/final_simulink_values.tex}
+\input{generated/finale_values.tex}
 \title{Controllo robusto di un manipolatore planare 2-DoF con Series Elastic Actuators}
 \author{Alessio de Dato \\ \small Matricola 635256 \\[0.8em]
 Valerio Rebechi \\ \small Matricola 722224}
-\date{01.11.2026}
+\date{04.11.2026}
 \begin{document}
 \hypersetup{pageanchor=false}
 \maketitle
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
 \begin{abstract}
-Si conserva il progetto del manipolatore planare SEA a due giunti, dalle
-equazioni non lineari alla linearizzazione a 14 stati, concentrando lo
-studio sulle incertezze dei due attuatori SISO. La stessa famiglia fisica,
-con frequenza naturale e smorzamento indipendenti nei due canali, viene
-descritta mediante parametri reali e mediante un peso dinamico concentrato.
-Il confronto segue il procedimento del corso: campionamento, scostamenti,
-inviluppo, fitting, perturbazioni normalizzate e LFT.
-LQG, LQGI, sensibilita mista, controllo a due gradi di liberta, PID
-strutturato e D--K rimangono strumenti per interpretare gli effetti
-dell'incertezza. Si distinguono analisi a controllore fissato e sintesi
-dedicate, verificandole sugli stessi dieci impianti fisici.
-I margini robusti non sostituiscono i target temporali e non risolvono
-l'amplificazione del rumore: i picchi fra campioni sono analizzati
-esplicitamente. Le sezioni empiriche RAS usano quindici condizioni iniziali,
-separando convergenza, mancata convergenza e limiti numerici.
-I risultati storici M4 sono conservati e identificati; nessuna garanzia
-viene trasferita al nuovo insieme senza una nuova analisi. Il percorso
-operativo accorpa i sorgenti esistenti e genera una consegna autonoma.
+Studiamo il controllo di un manipolatore planare a due giunti con attuatori elastici in serie e le due masse puntiformi assegnate dalla traccia. La massa del secondo link è un unico parametro incerto, comune a inerzia, termini centrifughi e gravità. Nei drive variano indipendentemente frequenza naturale e ritardo; lo smorzamento è noto.
+
+Confrontiamo una descrizione parametrica e una descrizione dinamica concentrata degli stessi attuatori. La presenza del ritardo variabile motiva una forma additiva, verificata mediante perturbazioni stabili e proprie. Le due rappresentazioni mantengono identica la meccanica incerta.
+
+Progettiamo controllori LQG, LQGI, $H_\infty$, PID strutturato e mediante iterazione D--K. Affianchiamo all'analisi di stabilità e prestazione robuste prove sui medesimi dieci impianti fisici, simulazioni non lineari e quindici condizioni iniziali per controllore. I risultati mostrano compromessi fra precisione, robustezza, ordine e sforzo di controllo; la sola norma pesata non basta a scegliere una soluzione utilizzabile.
 \end{abstract}
 \tableofcontents
 \listoffigures

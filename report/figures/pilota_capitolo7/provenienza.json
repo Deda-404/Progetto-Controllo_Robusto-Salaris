@@ -1,0 +1,20 @@
+{
+  "input_sha256": {
+    "lqg.mat": "7dad53f62643c01dcc82a40a4ac79c501228c2264ccce26f69cad1b82bd42160",
+    "lqgi.mat": "479b58e4c7d14620af5b1f5341457dc58f888ab6af6eb503ffcede6940cb0f58",
+    "modello.mat": "4552887a794602d959b8bda2def94cec377c84d9d2158a294782f7d45cc82dec",
+    "confronto.mat": "9ed244731610c4074c7f9c2630b1f85ff3a7e34922f57f9d7deca645006fef71",
+    "kalman.csv": "a9a47e94b2442cdf813ed384e06a0773655e50f191dcbcebaa173a69aaa24910",
+    "dieci_impianti.csv": "84da2f55731854ada3b10b9ac38352dc7523a55e99048dc898eea65587eafa29"
+  },
+  "operazioni": [
+    "lettura dati salvati",
+    "disegno curve salvate",
+    "autovalori delle matrici salvate",
+    "quadratura trapezoidale dell'errore salvato per illustrare xi"
+  ],
+  "nuove_sintesi": false,
+  "nuove_simulazioni": false,
+  "alpha_regolatore": 6.218530077516474,
+  "alpha_kalman": 9.318739887136978
+}

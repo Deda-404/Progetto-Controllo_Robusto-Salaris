@@ -1,3 +1,102 @@
+# Stato corrente — 04.11.2026, revisione definitiva completata
+
+Stesso ramo codex/sea-revisione-finale-semplificata e PR #47. Modello della traccia con sole m1/m2, cinque reali in A e due dinamiche più m2 in B. Sintesi, 14 post-analisi, 77 casi lineari, 14+21 non lineari, rumore e 105 RAS eseguiti. Cinque test correnti e otto verifiche PASS. Venti run Simulink e otto avvii autonomi PASS, ripetuti anche dalla ZIP estratta fuori dal repository con path pulito; rapida integrale, sette CSV identici, 33 ingressi testati verificati per hash.
+
+Relazione di 111 pagine e presentazione di 23 slide, tutte renderizzate e controllate, zero warning/riferimenti irrisolti; discorso 17:17 stimati. Gate tecnico e confezionamento COMPLETE/PASS. Accettazione prestazionale PARTIAL: nessun RP PASS; RS fallita per Hinf2/PID; rumore, offset e target non raggiunti restano espliciti. Nessun certificato globale, hardware o Lyapunov non lineare robusto; prova orale dal vivo non eseguita. Dettagli e fallimenti corretti degli helper in REVISIONE_TRACCIA_20261104.md e log correnti. Nessun merge, main invariato. Gli stati seguenti restano cronologia.
+
+---
+
+# Stato corrente — relazione integrale editoriale completata
+
+Metodo del capitolo 7 approvato dagli studenti ed esteso all'intera relazione. Recupero discorsivo di 13 capitoli e quattro appendici con riferimento main dbf6f00; 129 percorsi dell'indice mantenuti, due titoli adattati alle ipotesi attuali. Approfondimento del capitolo 5: fisica, parametri, peso, LFT e robustezza A/B. Matrice dei contenuti e limiti in [REVISIONE_EDITORIALE_INTEGRALE.md](REVISIONE_EDITORIALE_INTEGRALE.md).
+
+Quality gate tecnico editoriale COMPLETE/PASS: PDF integrale 108 pagine compilato, zero warning/overfull/underfull/riferimenti irrisolti, tutte le pagine renderizzate e controllate. Audit in EVIDENZE_EDITORIALI_INTEGRALI.json. 589 file protetti immutati, nessuna nuova campagna numerica. ZIP aggiornata esclusivamente nel PDF e manifest, 89 altri contenuti identici.
+
+Accettazione dei controllori PARTIAL: nessun RP PASS; nessuna copertura globale B, certificazione Lyapunov con carico o validazione hardware attribuita al recupero teorico. Risultato disponibile per la lettura degli studenti sul ramo della PR #47, con commit progressivi e senza merge. Gli stati seguenti sono registrazioni precedenti.
+
+---
+
+# Stato corrente — verifica finale editoriale
+
+Recupero discorsivo completato nei sorgenti di tutti i capitoli e appendici. Indice originale: 129 percorsi conservati, con due adattamenti di titolo necessari al carico unico e alle esecuzioni non ripetute. Compilazione integrale riuscita; controllo finale delle pagine e matrice di copertura in corso. 589 file numerici/eseguibili protetti invariati. Nessuna nuova campagna numerica né merge.
+
+---
+
+# Stato corrente — estensione editoriale integrale in corso
+
+Il metodo del capitolo 7 è stato approvato dagli studenti ed esteso alla relazione. Capitoli 1–6 ampliati; compilazione intermedia integrale riuscita. Restano recupero dei capitoli 8–13 e appendici, controllo di copertura e verifica del PDF finale. MATLAB, Simulink, controllori, parametri e risultati congelati; nessun merge.
+
+---
+
+# Stato corrente — solo pilota editoriale del capitolo 7
+
+Il metodo di recupero precedente non è stato approvato. Il lavoro è ora limitato al capitolo 7; nessuna estensione agli altri capitoli prima della verifica degli studenti. Modellazione A/B, controllori, script MATLAB, SLX e risultati numerici congelati.
+
+Pronto per lettura: report/Capitolo_7_Pilota.pdf, 19 pagine incluso indice; confronto con main e con lo stato precedente in [CAPITOLO_7_PILOTA_CONFRONTO.md](CAPITOLO_7_PILOTA_CONFRONTO.md). Recuperati tutti i 28 percorsi dell'indice con spiegazioni estese, esempi e matrici correnti. La griglia completa di 36 candidati e la vecchia traccia temporale di stima non sono dichiarate riprodotte.
+
+Quality gate tecnico pilota PASS: compilazione e controllo visivo, 561 file protetti invariati. Approvazione editoriale PENDING. Nessuna nuova sintesi o simulazione, nessun aggiornamento del PDF integrale o dello ZIP, nessun merge. Le registrazioni seguenti descrivono stati precedenti e non costituiscono approvazione della loro qualità didattica.
+
+---
+
+# Stato corrente — correzione conservativa PR #47
+
+Recuperati gli approfondimenti dei capitoli 5, 7–10 dal main dbf6f00, mantenendo carico, ritardo e rappresentazione additiva corretti. Sette candidati predefiniti; riferimenti disponibili su richiesta. Nessuna nuova sintesi Hinf/D-K, pesi e target invariati dopo riesame esplicito dei loro limiti. Otto SLX salvati con InitFcn automatica, senza nuova topologia o librerie.
+
+Quality gate verifiche COMPLETE: rapida, cinque test, otto avvii SLX autonomi nel repository; rapida, 20 run campionati e otto avvii autonomi nella ZIP estratta. Sei CSV identici. PDF di 68 pagine compilato senza warning e controllato. Commit correttivo 0e3ff48 pubblicato sullo stesso ramo e descrizione della PR #47 aggiornata. Nessun merge. Accettazione prestazionale PARTIAL: nessun RP PASS, µ_A/µ_B non raccomandati per tracking/rumore. Matrice dei contenuti e limiti in CORREZIONE_CONSERVATIVA.md. Gli stati sotto sono registrazioni precedenti e non descrivono la correzione in corso.
+
+---
+
+# Stato corrente — 02.11.2026, revisione finale con carico
+
+Implementazione e requisiti dell’incarico R01–R22 COMPLETE/PASS. Relazione 49 pagine e 23 slide compilate e controllate. Consegna autonoma: 33 sorgenti/ingressi identici, rapida e 20 SLX PASS dall’estrazione esterna, sei CSV identici e scarto Scope zero. Evidenze in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).
+
+Accettazione prestazionale PARTIAL: LQG/LQGI e i due candidati D-K mantengono RS A/B, ma NP/RP non sono raggiunte da queste famiglie; Hinf2/PID hanno NP ma non RS. Tutti i FAIL restano nei dati. Non dimostrate copertura globale di B e RAS certificata; nessuna validazione hardware o prova orale dal vivo. Discorso 16:50 stimati.
+
+Ramo `codex/sea-revisione-finale-semplificata`, da main `dbf6f00` con PR #46 integrata. [PR #47](https://github.com/Deda-404/Progetto_CR/pull/47) pubblicata, aperta e non in bozza; nessun conflitto con main rilevato da GitHub, nessun merge eseguito. Lavoro richiesto completato; revisione degli studenti come passo successivo. Le sezioni seguenti sono registrazioni dei precedenti stati del lavoro.
+
+---
+
+# Stato corrente — 02.11.2026, elaborati verificati
+
+Relazione 49 pagine e presentazione 23 slide COMPLETE/PASS, figure e tabelle coerenti con i risultati. Discorso 16:50 stimati, non cronometrato. In corso il collaudo dello ZIP estratto con path MATLAB ripristinato; poi pubblicazione della PR.
+
+---
+
+# Stato corrente — 02.11.2026, relazione verificata
+
+Relazione 49 pagine COMPLETE/PASS: struttura conservata, numeri collegati ai dati, PDF controllato. Campagna numerica e Simulink verificati; pacchetto estratto in collaudo e pubblicazione da completare.
+
+---
+
+# Stato corrente — 02.11.2026, semplificazione e allineamento simulink
+
+Il percorso accorpato resta unico. matrici_sea condivide le equazioni e controllori_sea evita elenchi incoerenti. La RAS riguarda solo i sette controllori correnti; le prove fissate restano nel confronto lineare. Gli otto SLX non sono duplicati né salvati: il runner aggiorna in memoria la massa effettiva nei generatori incorporati, i due drive, i guadagni e gli stati iniziali. Confrontate numericamente le funzioni meccaniche usate dai MATLAB Function con matrici_sea per ogni massa. Venti run di 2 s PASS con stati e Scope finiti; parametri e massa salvati. Cache coerenti anche nel formato della consegna. Quality gate COMPLETE/PASS; questo collaudo non certifica i target prestazionali.
+
+Elaborati e consegna in completamento. Le voci successive sono stati precedenti.
+
+---
+
+# Stato corrente — 02.11.2026, specifiche prestazionali
+
+Confrontati tre target (0.8 s/10%, 1.5 s/15%, 2 s/15%) e tre frequenze di riferimento (3, 4, 5 rad/s). Scelti Ts=2 s, Mp=15%, ess=5%, cross=25%, Mo=9/(s^2+6s+9). Il riferimento a 3 rad/s ha Ts=1.9447 s. We e Wu conservati. Le definizioni NS/NP/RS/RP e la soglia unitaria non cambiano. Recupero entro 0.5 gradi, picco e RMS del comando restano diagnostici senza limiti hardware. Risultati dei candidati conservati; nessun target rende automaticamente soddisfacenti tutti i K fissati. Quality gate COMPLETE/PASS per studio e coerenza, target dei controllori distinti nei CSV.
+
+Elaborati e consegna in completamento. Le voci successive sono stati precedenti.
+
+---
+
+# Stato corrente — 02.11.2026, controllori con carico
+
+Modello e analisi COMPLETE/PASS come implementazione; accettazione prestazionale PARTIAL. 28 analisi A/B, 105 RAS e 35 altre prove non lineari eseguite. Cinque test e pipeline rapida PASS. Elaborati compilati in prima verifica; consegna autonoma e pubblicazione ancora da completare. Le voci successive registrano gli stati precedenti.
+
+---
+
+# Stato corrente — revisione finale con carico
+
+Meccanica e A/B COMPLETE/PASS; 5 test MATLAB, copertura e LFT eseguite. Controllori,
+relazione e consegna NOT RUN sulle nuove ipotesi. Le evidenze sotto sono storiche.
+
+---
+
 # Stato corrente — 01.11.2026, revisione definitiva A/B
 
 Ramo `codex/revisione-definitiva-sea-salaris`, base main `0ed5611f`. Modellazione A/B e controllori accorpati implementati; nominale, CARE, campionamento e copertura dei casi provati verificati. Risultati scientifici positivi e negativi in [REVISIONE_DEFINITIVA.md](REVISIONE_DEFINITIVA.md).

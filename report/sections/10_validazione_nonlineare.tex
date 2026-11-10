@@ -1,50 +1,6 @@
 \chapter{Simulazioni, rumore e regione di attrazione}
 \section{Perché verifichiamo il comportamento non lineare}
-
-\paragraph*{RAS corrente semplificata.}
-Si usano cinque direzioni nel piano $(\delta q_1(0),\delta q_2(0))$,
-a distanze 5, 15 e 30 gradi dall'equilibrio: quindici condizioni per
-controllore, identiche per il confronto. Si pone
-$\delta\theta(0)=\delta q(0)$, conservando la deformazione elastica;
-le velocita e le deviazioni degli stati attuativi sono nulle.
-Gli stati dei controllori sono nulli, inclusi osservatori e integratori:
-lo stimatore parte dal modello di equilibrio e deve ricostruire
-lo spostamento iniziale non noto.
-Si integrano le equazioni non lineari per 15 s. Nell'ultimo secondo
-si richiedono posizioni sotto $0.5^\circ$, velocita sotto
-$0.5^\circ$/s e comando sotto 0.05 N m. Queste soglie non sono una
-dimostrazione della convergenza asintotica.
-Il grafico distingue convergenza (cerchio verde), mancata convergenza
-(quadrato rosso), superamento delle soglie di divergenza osservata
-(croce rossa), timeout (rombo magenta) ed errore numerico (piu nero).
-Timeout ed errori non sono classificati come instabilita fisica.
-Una similitudine numerica del controllore e il Jacobiano completo
-aiutano il solver stiff senza ridurre l'ordine. Nella campagna finale
-le 150 prove danno 117 convergenze, 24 mancate convergenze e 9
-divergenze osservate, senza timeout o errori numerici. I 20 esperimenti
-non lineari separati di tracking e disturbo terminano regolarmente.
-\input{generated/definitiva_ras.tex}
-\begin{figure}[H]\centering
-\includegraphics[width=\textwidth]{figures/definitiva/ras.png}
-\caption{Sezioni empiriche RAS e traiettorie. Origine: equilibrio
-$\bar q=[\pi/2,0]^T$. Nessuna frontiera rigorosa viene interpolata.}
-\end{figure}
-Tracking e disturbo sono simulati separatamente, con controllore e
-drive inclusi nello stato. Il rumore viene misurato anche fra campioni
-mediante propagazione ZOH: una griglia a 2 ms puo perdere impulsi veloci.
-\input{generated/definitiva_rumore.tex}
-\paragraph*{Approfondimenti originali e campagne storiche.}
-Le sezioni seguenti conservano i protocolli preesistenti, incluso
-Lyapunov. Non sono dipendenze del nuovo studio RAS e non trasferiscono
-garanzie ai nuovi controllori.
-
-La sintesi usa una linearizzazione attorno alla postura verticale. Vicino
-all'equilibrio questa approssimazione descrive bene le variazioni piccole,
-ma non rappresenta esattamente gravità, inerzia e termini di Coriolis
-quando il braccio si allontana dalla postura scelta. Abbiamo quindi
-reinserito le equazioni SEA complete nelle simulazioni MATLAB. In questo
-capitolo distinguiamo il comportamento osservato nelle traiettorie dalle
-condizioni matematiche sufficienti di stabilità.
+Il modello linearizzato descrive piccoli spostamenti attorno alla verticale. Quando il braccio si allontana, inerzia, Coriolis e gravità cambiano con gli angoli. Le simulazioni integrano perciò le equazioni meccaniche complete, i sei stati dei drive e tutti gli stati del controllore. La massa $m_2$ è presente nelle tre componenti meccaniche e rimane costante durante ogni esecuzione.
 
 \section{Che cos'è la regione di attrazione}
 La regione di attrazione, indicata qui con RAS, è l'insieme delle condizioni
@@ -61,6 +17,7 @@ abbiano lo stesso comportamento. Viceversa una traiettoria ancora lontana
 alla fine dell'orizzonte non dimostra necessariamente divergenza asintotica.
 Le prove di attrazione non contengono rumore persistente, riferimenti o
 disturbi applicati durante il moto.
+
 
 \section{La funzione di Lyapunov}
 Cerchiamo una funzione $V(z)=z^TPz$, con $P$ positiva definita. Possiamo
@@ -83,308 +40,270 @@ il bordo andando verso valori maggiori di $V$. Una regione interna così
 ottenuta è generalmente molto più piccola della vera RAS.
 
 \section{Applicazione allo stato aumentato completo}
-Con riferimento nullo tutti i controllori si scrivono
+La prova deve riguardare l'intera dinamica chiusa. Con riferimento,
+disturbo e rumore nulli, separiamo $x$, i 14 stati fisici, e $x_K$,
+gli stati del controllore. La misura incrementale è $C_mx$ e la legge
+ha la forma $u=C_Kx_K+D_yC_mx$. Pertanto
 \[
-\dot x_K=A_Kx_K+B_y C_mx,\qquad
-u=C_Kx_K+D_yC_mx,
-\quad A_{cl}=\begin{bmatrix}A+BD_yC_m&BC_K\\B_yC_m&A_K\end{bmatrix}.
+ z=\begin{bmatrix}x\\x_K\end{bmatrix},\quad
+ A_{cl}=\begin{bmatrix}A+BD_yC_m&BC_K\\B_yC_m&A_K\end{bmatrix}.
 \]
-$C_m$ seleziona quattro encoder per LQG/LQGI e i due giunti per i
-controllori robusti. Gli ordini aumentati sono 28, 30, 32, 36, 18 e 92
-rispettivamente per LQG, LQGI, $H_\infty$ 1-DoF, $H_\infty$ 2-DoF, PID e
-$K_\mu$. Le realizzazioni sono conservate integralmente, senza cancellare
-stati per rendere più favorevole la verifica di stabilità interna.
+Per LQG e LQGI $C_m$ seleziona quattro encoder; per le altre famiglie
+i due angoli link. Il segno di retroazione è già nelle matrici del
+controllore. Gli ordini aumentati sono \FinLQGOrdineChiuso, \FinLQGIOrdineChiuso, \FinHinfOneOrdineChiuso, \FinHinfTwoOrdineChiuso, \FinPIDOrdineChiuso, \FinMuAOrdineChiuso\ e \FinMuBOrdineChiuso,
+rispettivamente per LQG, LQGI, Hinf1, Hinf2, PID, Mu\_A e Mu\_B.
+Una verifica sulle sole otto equazioni meccaniche ignorerebbe la
+memoria del drive, dell'osservatore e del controllore.
 
-Per limitare il cattivo condizionamento proviamo anche un cambio di
-coordinate $z=T\zeta$, ottenuto con \texttt{balance}. Si risolve
-$A_b^TP_b+P_bA_b=-I$, dove $A_b=T^{-1}A_{cl}T$. Non cambia il controllore:
-in coordinate originali $P=T^{-T}P_bT^{-1}$ e $Q=T^{-T}T^{-1}$.
-Richiediamo positività numericamente separata da zero, un residuo assoluto
-e una stima prudente dell'arrotondamento complessivamente inferiori a
-$10^{-6}$ rispetto al termine $I$. Questo criterio conserva un margine
-negativo quasi unitario; un piccolo residuo relativo a matrici molto grandi
-non sarebbe sufficiente. I casi che non lo superano restano senza certificato.
-
-All'equilibrio scelto il resto SEA interessa le accelerazioni dei link e
-ammette una maggiorazione analitica $\|\phi(z)\|\leq c_f\|z\|^3$. Il codice
-combina i limiti sull'inversa dell'inerzia, $|1-\cos t|\leq t^2/2$,
-$|\sin t-t|\leq |t|^3/6$ e i termini di Coriolis. Con $E$ che inserisce
-questo resto nelle due accelerazioni si ottiene
+Un cambio di coordinate $z=T\zeta$ può migliorare il condizionamento
+numerico senza modificare la dinamica. Ponendo
+$A_b=T^{-1}A_{cl}T$ si risolverebbe
 \[
-\dot V\leq-(1-\varepsilon)\|\zeta\|^2+
-2\|P_bT^{-1}E\|c_f\|T\|^3\|\zeta\|^4.
+ A_b^TP_b+P_bA_b=-I,\qquad
+ P=T^{-T}P_bT^{-1},\qquad Q=T^{-T}T^{-1}.
 \]
-Un raggio che conserva metà del margine negativo definisce il sottolivello
-interno. La verifica riguarda il modello nominale con Padé del primo ordine,
-coppia non limitata e aritmetica double controllata numericamente; non è
-una prova con aritmetica intervallare né una garanzia per l'hardware incerto.
-Non confrontiamo direttamente raggi di stati con unità e coordinate diverse.
+L'ellissoide cambia espressione, ma rappresenta gli stessi stati fisici.
+Un residuo relativo piccolo non basta quando i coefficienti sono molto
+grandi: occorre che l'errore assoluto nell'equazione e l'arrotondamento
+siano piccoli rispetto al margine negativo che si intende usare.
+Anche la positività deve essere numericamente distinta da zero.
+Questi controlli sono condizioni da soddisfare per un certificato,
+non verifiche numeriche dichiarate riuscite per i candidati attuali.
+
+Il resto non lineare SEA entra nelle accelerazioni dei link. Vicino
+alla verticale, $1-\cos t$ è di ordine due e $\sin t-t$ di ordine tre.
+La variazione di $M^{-1}$ moltiplica forze incrementali di primo ordine;
+i termini di Coriolis contengono velocità e seno dell'angolo relativo.
+Questo spiega perché si possa cercare una stima cubica locale
+$\|f(z)\|\le c_f\|z\|^3$, con $\phi=Ef$.
+Per usarla occorre però maggiorare esplicitamente $M^{-1}$ e tutti i
+coefficienti sul dominio scelto, con la massa corretta. L'ordine del
+resto non fornisce da solo il valore valido di $c_f$.
+
+Se tali limiti e un errore numerico $\varepsilon<1$ fossero verificati,
+si avrebbe
+\[
+ \dot V\le-(1-\varepsilon)\|\zeta\|^2+
+ 2\|P_bT^{-1}E\|c_f\|T\|^3\|\zeta\|^4.
+\]
+Il termine quadratico domina abbastanza vicino all'origine. Per esempio,
+scegliere un raggio $r$ con
+\[
+ 2\|P_bT^{-1}E\|c_f\|T\|^3r^2<1-\varepsilon
+\]
+renderebbe negativa la derivata nel dominio corrispondente. Un
+sottolivello $\zeta^TP_b\zeta\le c$ contenuto nella sfera di raggio $r$
+si ottiene imponendo $c\le\lambda_{\min}(P_b)r^2$.
+È una costruzione sufficiente e conservativa: non individua la frontiera
+della vera RAS. Per i sette candidati della traccia non è disponibile
+una certificazione numerica di questi passaggi. Conserviamo quindi
+la derivazione come metodo, senza assegnare raggi o livelli certificati.
 
 \section{Sezione empirica e insieme interno}
-Per tutti e sei i controllori usiamo la stessa griglia
-$\{-60,-30,0,30,60\}^2$ gradi, con $\delta\theta=\delta q$, velocità nulle,
-attuatori all'equilibrio e stati interni inizialmente nulli. In LQG/LQGI
-questo significa $\hat x(0)=0$ e $\xi(0)=0$, anche quando il braccio è
-perturbato. Integrare per 12 s consente un confronto comune.
+Proviamo cinque direzioni per ciascuno dei raggi $5^\circ$, $15^\circ$ e $30^\circ$: 15 condizioni per controllore. Poniamo $\delta\theta=\delta q$, conservando la deformazione elastica di equilibrio, con velocità, stati dei drive e stati del controllore nulli.
 
-Un punto è classificato convergente se nell'ultimo secondo le posizioni di
-link e motori restano entro $0.5^\circ$, e le velocità entro 0.02 e
-0.05 rad/s rispettivamente. È un criterio empirico sulle grandezze fisiche,
-non una prova della convergenza esatta di tutti gli stati. Gli arresti per
-superamento del limite numerico $10^6$ e gli errori del solver sono indicati
-separatamente dai punti che terminano senza rispettare il criterio.
+L'orizzonte è 15 s. Classifichiamo come convergenza osservata una coda finale di un secondo con angoli link e motore entro $0.5^\circ$, velocità entro $0.5^\circ$/s e comando entro 0.05 N m. La mancata convergenza entro l'orizzonte non dimostra divergenza asintotica. Teniamo separati gli allontanamenti oltre le soglie numeriche, i timeout e gli errori del solver.
+
+\input{generated/finale_ras.tex}
+
+Mu\_A e Mu\_B convergono rispettivamente in \FinMuAConv/15 e \FinMuBConv/15 condizioni provate, pur avendo un errore di tracking significativo. La prova RAS ha infatti riferimento nullo: ritornare alla verticale non equivale a inseguire bene una nuova posizione. Hinf2 ha \FinHinfTwoDiv\ allontanamenti osservati; PID ha \FinPIDNonConv\ mancate convergenze nell'orizzonte, che restano distinte da una divergenza dimostrata. Questa lettura evita una classifica basata sul solo numero di punti favorevoli.
+
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=.98\textwidth]{figures/final_closure/ras_common_grid.png}
-\caption{Sezione nominale sulla stessa griglia fisica. Il bordo tratteggiato
-è il dominio di ricerca, non il confine della RAS. Il punto nero è
-l'equilibrio; gli arresti numerici non sono prove di divergenza matematica.
-Gli insiemi interni analitici disponibili sono troppo piccoli per essere
-distinti su questa scala e non vengono ingranditi.}\label{fig:ras-common}
+\includegraphics[width=.97\linewidth]{figures/definitiva/ras.png}
+\caption{Sezioni empiriche: cerchi verdi convergenti, quadrati rossi non convergenti entro 15 s, croci rosse per allontanamento osservato. Eventuali timeout e errori hanno simboli separati.}
 \end{figure}
-\input{generated/final_ras_table.tex}
-LQG e LQGI forniscono un insieme interno con controllo numerico superato,
-molto conservativo rispetto alle perturbazioni esplorate. Per i controllori
-robusti e il PID il giudizio sul certificato segue il controllo numerico
-riportato in tabella: la sola stabilità dei poli non autorizza a ignorare
-condizionamento e residuo.
-Il fallimento del controllo numerico non implica instabilità: i poli
-nominali restano Hurwitz e la linearizzazione garantisce stabilità locale,
-ma non accreditiamo quel particolare sottolivello calcolato.
-Il confronto empirico è descritto dai conteggi della stessa griglia;
-le ricerche radiali più dettagliate che seguono hanno
-un protocollo distinto e non vengono sommate a questi conteggi.
+
+L'esito dipende dalla sezione iniziale e dal tempo di osservazione. Non estendiamo una convergenza nominale a tutte le masse e a tutti i ritardi incerti. La stabilità robusta lineare e l'attrazione non lineare locale rispondono a domande diverse.
+
+
+Un insieme interno ottenuto da Lyapunov e una sezione simulata rispondono
+a domande diverse. Il primo include un continuo di stati, purché tutte
+le ipotesi della prova siano verificate; la seconda controlla soltanto
+le condizioni provate. Un grafico di punti non consente di interpolare
+una frontiera garantita. Al contrario, un insieme interno molto piccolo
+non significa che ogni stato esterno diverga: può essere il prezzo della
+maggiorazione prudente del resto o delle coordinate poco ben scalate.
 
 \section{Equazioni e scenari}
-La campagna integra direttamente in MATLAB le equazioni SEA con i
-parametri, gli attuatori e l'equilibrio descritti nei capitoli iniziali. La legge implementata è
-\[
- \delta u=C_Kx_K+D_K[r;\delta q],\qquad
- \dot x_K=A_Kx_K+B_K[r;\delta q],\qquad u=\bar\tau+\delta u.
-\]
-Si usa \texttt{ode23t}, con tolleranze relativa $10^{-5}$ e assoluta $10^{-7}$,
-passo massimo 0.005 s e uscita ogni 0.002 s. Queste prove usano MATLAB, non Simulink. Il confronto locale con la mappa
-lineare è verificato automaticamente per entrambi i controllori.
+Usiamo due prove nominali per ciascuno dei sette controllori della campagna: gradino di $5^\circ$ sul primo giunto e coppia costante di 0.5 N m sul primo link. L'orizzonte è 12 s. Partiamo dall'equilibrio, con stima e integratore nulli nelle coordinate incrementali. A queste prove affianchiamo tre masse $m_2=0.72,0.8,0.88$ kg, mantenendo nominali i drive: così isoliamo l'effetto della sola massa $m_2$.
 
-Gli scenari conservano gradini di 2, 5 e 8 gradi su ciascun giunto (4 s),
-disturbi lato link di 0.25, 0.5 e 1 N m (8 s), equilibrio e rumore (4 s).
-L'errore statico non lineare è stimato dalla media dell'ultimo 10\% della
-traiettoria. È una stima a orizzonte finito, da leggere insieme
-all'assestamento; il guadagno DC lineare è una quantità distinta.
+
+Per i controllori con due misure usiamo
+\[
+ \dot x_K=A_Kx_K+B_K[r;\delta q],\quad
+ \delta u=C_Kx_K+D_K[r;\delta q],\quad u=\bar\tau+\delta u.
+\]
+Per LQG/LQGI la misura comprende anche gli angoli motore. L'osservatore
+riceve il comando noto; il disturbo sui link rimane ignoto. Le posizioni
+fisiche sono assolute, mentre le misure fornite al controllore sono
+scostamenti dall'equilibrio. Confondere queste coordinate produrrebbe
+un comando anche nella configurazione nominale ferma.
+Vicino all'equilibrio le traiettorie lineari e non lineari devono essere
+confrontate con lo stesso stato iniziale, ingressi e controllore.
+All'aumentare dell'ampiezza, i termini trigonometrici, inerziali e di
+Coriolis rendono possibile un diverso transitorio. Il confronto locale
+non autorizza una conclusione globale sulla regione di attrazione.
+Il simulatore \texttt{simula\_sea} usa \texttt{ode15s} con tolleranze
+relativa $10^{-6}$ e assoluta $10^{-9}$, passo massimo 0.01 s e
+Jacobiano dello stato completo. Le coordinate interne del controllore
+sono riscalate per il solver con una similitudine, senza riduzione.
+La trasformazione inversa riporta lo stato finale nelle coordinate
+originali. Una differenza di coordinate interne non deve quindi essere
+interpretata come un diverso controllore.
 
 \section{Tracking, disturbi e rumore}
-Gli equilibri restano invariati entro $1.7\,10^{-12}$ rad per H-infinity e
-$2.3\,10^{-15}$ rad per Kmu. I gradini confermano l'assenza di overshoot
-nei due controllori. Per $K_\mu$ a 5 gradi si misurano $T_s=1.522,1.484$ s,
-errori relativi circa 6.03\%, 3.08\% e picchi di comando 0.796,0.199 N m.
-I risultati conservano i fallimenti delle specifiche temporali di assestamento e, per Kmu sul primo
-giunto, offset. Risposte e metriche di tutti i disturbi fisici sono salvate
-con il controllore che le ha prodotte.
+Il residuo all'ultimo istante è una misura a orizzonte finito; il guadagno
+DC deriva invece dall'equilibrio della chiusura lineare stabile.
+La deviazione massima sotto coppia e il tempo di recupero entro
+$0.5^\circ$ descrivono aspetti diversi. Il picco di coppia quantifica
+la richiesta massima; l'RMS quella media quadratica sull'intera prova.
+Non sono limiti di targa, poiché il modello non comprende saturazioni.
+Una simulazione completata significa che il solver ha raggiunto il tempo finale con valori finiti. Non significa che il tracking sia soddisfacente. Confrontiamo quindi anche errore finale, picco di posizione e coppia richiesta.
 
+\input{generated/finale_carico_nonlineare.tex}
+
+Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi della massa $m_2$ compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sulla sola massa $m_2$ non contraddicono la sua fragilità quando variano anche gli attuatori.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_tracking.png}
+\caption{Posizioni nelle sette prove non lineari nominali di tracking,
+dalle traiettorie salvate: riferimento di $5^\circ$ sul primo giunto,
+secondo riferimento nullo, orizzonte 12 s. Ogni pannello mantiene
+visibili entrambi i giunti, anche quando il tracking è insoddisfacente.}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_1.png}
+\caption{LQG, LQGI, Hinf1 e Hinf2: posizioni e comandi salvati con coppia
+costante di 0.5 N m sul primo link. Il riferimento è nullo. Ogni riga
+mostra un controllore; scale proprie permettono di leggere i compromessi.}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_2.png}
+\caption{La stessa prova di coppia sul primo link per PID, Mu\_A e Mu\_B.
+Posizioni e comandi sono ricavati dalle traiettorie non lineari salvate,
+con parametri nominali e orizzonte 12 s.}
+\end{figure}
+
+Il gradino e la coppia non sono la stessa prova. Nel primo caso il
+controllore deve spostare il robot verso una nuova posizione; nel secondo
+deve contrastare una forza esterna mantenendo la postura. Un prefiltro
+può migliorare il primo obiettivo sul nominale senza introdurre il
+modello interno necessario ad annullare il disturbo costante. Per il
+rumore si usa inoltre una prova separata, a riferimento e coppia nulli:
+altrimenti l'RMS mescolerebbe lo sforzo di inseguimento con quello prodotto
+dall'encoder e renderebbe meno chiara la diagnosi.
 
 \section{Tracking e disturbi del servo LQGI}
-La campagna \path{run_lqgi_validation.m} usa la stessa meccanica SEA,
-gli stessi attuatori nominali e il controllore LQGI a 16 stati: 14 stime e
-due integratori. Il modello aumentato non lineare ha 30 stati.
-I gradini di 2, 5 e 8 gradi sono osservati per 8 s, come nel confronto
-lineare, per osservare il servo lento senza modificarne il peso.
-I disturbi di 0.25, 0.5 e 1 N m usano 8 s; equilibrio e rumore usano 4 s.
+LQGI conserva il filtro di Kalman a 14 stati e aggiunge due memorie
+integrali dell'errore misurato. La chiusura completa ha 30 stati.
+Durante una coppia costante, l'integratore continua ad accumulare
+l'errore finché la coppia richiesta compensa il disturbo, nei casi
+stabili in cui esiste un equilibrio compatibile. Non riceve la posizione
+ideale al posto della misura: anche il rumore può entrare in questa
+memoria e deve essere valutato separatamente.
 
-La Figura~\ref{fig:lqgi-nl-tracking} confronta le traiettorie a 5 gradi
-con la chiusura lineare completa. L'accordo locale è verificato anche
-a piccolo segnale. L'overshoot è nullo nelle sei prove, ma la risposta
-resta lenta rispetto a 0.8 s. Il tempo non lineare della tabella è
-calcolato attorno alla media dell'ultimo 10\% della risposta; quello
-lineare di 5.046 s usa il valore DC analitico. La piccola differenza
-non viene interpretata come un miglioramento del controllore.
+Nel nominale il tracking lineare LQGI ha assestamento \FinLQGITs\ s, overshoot \FinLQGIMp\% e offset DC \FinLQGIEss\%. La lentezza è un compromesso della configurazione scelta. Le prove non lineari di sola massa $m_2$ riportano l'errore finale a 12 s per entrambi i controllori:
+
+I valori sono riportati nella tabella delle prove con sola massa $m_2$ della sezione precedente.
+
+Il confronto rende leggibile il limite del prefiltro nominale e l'effetto della correzione integrale nei casi stabili. I numeri sono residui a tempo finito, distinti da guadagni DC non lineari e da una prova per ogni valore della massa.
+
 \begin{figure}[htbp]\centering
-\includegraphics[width=.96\textwidth]{figures/lqgi/tracking_linear_nonlinear.png}
-\caption{LQGI, due gradini separati da 5 gradi: in alto il giunto
-comandato non lineare e lineare, insieme alla deviazione dell'altro;
-in basso entrambe le coppie incrementali. L'accordo locale conferma
-l'implementazione; la lentezza resta visibile.}\label{fig:lqgi-nl-tracking}
+\includegraphics[width=.95\linewidth]{figures/definitiva/lineare_nonlineare_lqg.png}
+\caption{LQG e LQGI: tracking al primo giunto e disturbo sul primo link.
+Le linee tratteggiate sono le corrispondenti chiusure lineari; le continue
+integrano la meccanica completa. Parametri e controllori coincidono.}
 \end{figure}
-
-Sotto 0.5 N m il massimo spostamento non lineare è circa 0.1271 rad,
-con picco di comando 1.2985 N m e RMS massimo 0.4471 N m.
-Il residuo massimo a 8 s è circa $1.71\,10^{-4}$ rad, mentre il
-residuo DC lineare è nullo: tempo finito e reiezione asintotica sono distinti.
-\begin{figure}[htbp]\centering
-\includegraphics[width=.96\textwidth]{figures/lqgi/disturbance_nonlinear.png}
-\caption{LQGI non lineare, riferimento nullo e coppia costante
-su un link alla volta. Le posizioni tornano progressivamente verso
-l'equilibrio; i comandi mantengono la compensazione. L'ultimo campione
-non è un guadagno DC.}
-\end{figure}
-
-Le prove di rumore usano il filtro di Kalman LQG e $r_1=5^\circ$.
-Confrontiamo assenza di rumore, quattro encoder indipendenti e la
-stessa sequenza encoder con quattro rumori di processo aggiunti.
-Le deviazioni standard dei campioni sono quelle assunte nel progetto:
-$0.05^\circ$ e 0.1 N m. Sono sequenze ZOH a 2 ms, distinte dalle
-intensità bianche continue di \texttt{lqe}. L'RMS dell'errore fisico
-include tutto il transitorio lento di 4 s, non soltanto il rumore a regime.
-L'integrazione viene separata a ogni cambio del campione ZOH, per evitare
-che il solver attraversi le discontinuità senza risolverle. Con gli stessi
-campioni, la chiusura lineare discretizzata esattamente a 2 ms e il modello
-non lineare differiscono al massimo di circa $4.69\,10^{-5}$ rad sulle
-posizioni nelle tre prove. Questa verifica locale riguarda
-l'implementazione, non estende il risultato a rumore di ampiezza arbitraria.
-\input{generated/lqgi_validation_results.tex}
-\begin{figure}[htbp]\centering
-\includegraphics[width=.88\textwidth]{figures/lqgi/encoder_noise.png}
-\caption{LQGI con quattro encoder rumorosi: errore misurato in alto
-e differenza di comando rispetto alla prova pulita in basso.
-L'integratore riceve l'errore encoder, senza sostituirlo con la posizione ideale.}
-\end{figure}
-
-La ricerca \path{run_lqgi_ras.m} usa i seguenti criteri di coda:
-posizioni link e motori entro 0.5 gradi, velocità rispettivamente
-entro 0.02 e 0.05 rad/s, traiettorie finite e limitate, senza crescita
-finale. Perturbiamo $q$ e $\theta$ della stessa quantità, con velocità
-nulle, attuatori all'equilibrio e $\hat x(0)=\xi(0)=0$.
-Tutti i 57 punti e gli estremi delle 36 direzioni convergono entro
-8 s; il raggio minimo è 60 gradi e il massimo circa 78.32 gradi,
-compatibile con le diagonali del box $\pm60^\circ$ sulle coordinate.
-La frontiera fisica non è stata individuata. Il comando massimo
-di circa 240.23 N m rende esplicito il limite della prova senza
-saturazioni: la sezione è empirica e non una RAS hardware certificata.
-\begin{figure}[htbp]\centering
-\includegraphics[width=.75\textwidth]{figures/lqgi/ras_empirical.png}
-\caption{Sezione empirica LQGI: tutti gli estremi radiali raggiungono
-il bordo del dominio esplorato. La curva non identifica il confine
-della vera regione di attrazione e non include vincoli di coppia.}
-\end{figure}
-
 
 \section{Rumore di misura: dal segnale encoder al comando}
-Le misure contengono campioni gaussiani indipendenti con
-$\sigma_y=0.05\pi/180$ rad e varianza $\sigma_y^2$, mantenuti costanti per
-2 ms. Questa varianza di campioni non è una densità spettrale continua.
-Nei controllori 2-DoF la legge è $u=K_rr+K_y(q+v)$: il segno di retroazione
-è incorporato in $K_y$. Con $q=Gu$, riferimento e disturbi nulli,
+
+Per un controllore 2-DoF poniamo $u=K_rr+K_y(q+v)$. Con $r=d=0$,
 \[
-T_{uv}=(I-K_yG)^{-1}K_y,\qquad T_{qv}=GT_{uv}.
+ T_{uv}=(I-K_yG)^{-1}K_y,\qquad T_{qv}=GT_{uv}.
 \]
-Le mappe ottenute dalla realizzazione completa sono confrontate con questa
-formula. Per LQG/LQGI la stessa costruzione considera tutti e quattro gli
-encoder. Le prove isolano misura, singolo encoder, coppia link, processo e
-la loro combinazione; solo la prova pulita e quella combinata includono il
-riferimento di 5 gradi.
+La mappa che trasmette il rumore al comando non è penalizzata
+esplicitamente dal costo $[r;d]\to[z_e;z_u]$. Un valore basso di quel
+costo può quindi accompagnarsi a coppie molto grandi sotto rumore.
+Usiamo campioni gaussiani con deviazione standard $0.05^\circ$,
+mantenuti per 2 ms. Questa varianza discreta non è una densità continua.
+Gli encoder producono la stessa sequenza casuale per ogni controllore. I controllori con due misure ricevono le prime due componenti; LQG e LQGI usano tutte e quattro. Il comando viene valutato anche fra gli istanti di campionamento, perché un impulso molto rapido può essere quasi invisibile nei soli valori ogni 2 ms.
 
-\input{generated/final_noise_table.tex}
-Un dettaglio cambia radicalmente l'interpretazione: osservare il comando
-soltanto ogni 2 ms può perdere impulsi molto più rapidi. Abbiamo propagato
-esattamente gli stati anche fra due cambi dei campioni, con una griglia
-logaritmica e uniforme dei ritardi interni. I picchi riportati sono massimi
-effettivamente raggiunti su questa scansione, non massimi globali dimostrati;
-l'RMS continuo è ottenuto con quadratura controllata per raffinamento.
-Le realizzazioni originale e riscalata devono concordare entro $10^{-4}$
-relativo, anche al ritardo del picco.
+\input{generated/finale_rumore.tex}
 
-Il controllore $H_\infty$ 2-DoF ha $D_y=0$, ma questo non elimina il
-problema: dinamiche molto rapide e un guadagno elevato in alta frequenza
-generano impulsi dopo ogni variazione encoder. Una trasmissione diretta
-nulla non rende piccolo il trasferimento alle frequenze finite. Per il PID
-$D_y$ è invece non nullo; la stima immediata per il giunto $i$ è
-$\sigma_y\sqrt{\sum_jD_{y,ij}^2}$, distinta dall'RMS integrato nel tempo.
+Hinf2 richiede coppie molto elevate sotto questa eccitazione, pur avendo una piccola norma nominale sul costo senza rumore. LQG e LQGI filtrano meglio le misure. La distinzione serve a evitare una scelta basata solo su $\gamma$. I valori sono risposte del modello privo di saturazione, non coppie erogabili da un motore reale.
+
+
+Il mantenimento ZOH consente una lettura precisa degli impulsi.
+Se $v_k$ rimane costante nell'intervallo di durata $h=0.002$ s,
+la realizzazione lineare della mappa encoder--comando soddisfa
+\[
+ x(t_k+\theta)=e^{A\theta}x(t_k)+
+ \left(\int_0^\theta e^{A\eta}B\,d\eta\right)v_k,\quad
+ u(t_k+\theta)=Cx(t_k+\theta)+Dv_k,\quad0\le\theta<h.
+\]
+La formula evita di trattare la sequenza mantenuta come una sinusoide
+oppure come rumore bianco continuo. Non richiede $A^{-1}$ e resta valida
+anche se $A$ è singolare. Il termine diretto può produrre un salto;
+modi dinamici molto rapidi possono produrre un picco subito dopo il
+salto anche con $D=0$. Per questo un campione ogni 2 ms può essere
+regolare mentre il massimo fra campioni è molto elevato.
+
+L'RMS temporale è
+$\sqrt{T^{-1}\int_0^T\|u(t)\|^2dt/2}$, distinto dalla media dei soli
+campioni ai bordi degli intervalli. I picchi salvati sono massimi
+osservati nella scansione fra campioni, non massimi globali dimostrati
+per ogni possibile sequenza gaussiana. La norma $H_\infty$ della mappa
+$T_{uv}$ descrive invece un guadagno energetico nel caso peggiore:
+non è numericamente uguale al picco di una specifica realizzazione.
+
 \begin{figure}[htbp]\centering
-\includegraphics[width=.96\textwidth]{figures/final_closure/noise_frequency_position.png}
-\caption{Trasferimento misura--comando e posizioni nella prova MATLAB con
-solo rumore encoder. L'attenuazione degli attuatori e della meccanica
-consente posizioni relativamente regolari anche quando il comando è critico.}
-\end{figure}
-\begin{figure}[htbp]\centering
-\includegraphics[width=.94\textwidth]{figures/final_closure/noise_intersample.png}
-\caption{Massimo del contributo encoder al comando tra i campioni ZOH.
-Ogni pannello usa la propria scala: una registrazione ogni 2 ms può
-sottostimare molto i picchi rapidi. Risultati MATLAB, non Scope Simulink.}
+\includegraphics[width=.95\linewidth]{figures/editoriale/rumore_confronto.png}
+\caption{Picco osservato e RMS del comando nella prova encoder comune,
+dai risultati salvati. La scala logaritmica mostra l'ampia differenza
+fra controllori; non rappresenta una traccia temporale o una saturazione.}
 \end{figure}
 
-Gli attuatori filtrano il comando prima che raggiunga i link, ma non
-rendono realizzabile una coppia di comando arbitrariamente grande.
-I pesi adottati bilanciano tracking, disturbo e sforzo sui canali della
-pianta generalizzata; il rumore encoder non è una richiesta esplicita di
-quella formulazione. Non riduciamo la varianza e non attribuiamo i grandi
-comandi a un errore di unità quando le matrici e i segnali sono coerenti.
-La presenza di impulsi molto grandi non dimostra da sola instabilità
-interna: i poli nominali sono verificati separatamente.
+Il drive e la meccanica possono attenuare le frequenze alte prima
+che raggiungano la posizione, lasciando comunque una richiesta di
+comando enorme. Una posizione apparentemente regolare non basta a
+valutare la fattibilità dell'attuazione. D'altra parte un comando grande
+non prova da solo instabilità interna, che viene controllata sui poli.
+Queste due verifiche vanno mantenute distinte.
 
-La diagnosi motiva la nuova sintesi dei Capitoli 8 e 9. Le prestazioni
-appena riportate restano quelle della prima formulazione e non vengono
-trasferite ai candidati. Filtri esterni, saturazione, anti-windup e
-riduzione d'ordine non sono introdotti.
 \input{sections/10_originali_simulink}
 
+\clearpage
 \section{Verifiche dedicate dei candidati con rumore}
-HinfN3/MuN1 affrontano la stessa pianta, equilibrio, condizioni iniziali,
-riferimento, disturbo e rumore delle rispettive baseline. Il protocollo
-MATLAB usa 4 s e seed 20261012/13/14. Otto scenari distinguono assenza
-di rumore, solo q1/q2, encoder indipendenti/correlati, sola coppia,
-solo processo e ingressi combinati. Varianza e $T_s=2$ ms sono invariati.
-La propagazione ZOH fra campioni controlla quadratura e accordo delle
-coordinate entro $10^{-4}$ relativo. La norma nominale $T_{uv}$ è
-complementare ai massimi temporali osservati.
-\input{generated/noise_redesign_isolated.tex}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\textwidth]{figures/noise_redesign/noise_before_after.png}
-\caption{Solo encoder indipendenti: tre seed, stessa pianta e varianza.
-La scala logaritmica mostra gli ordini di grandezza prima/dopo.}
-\label{fig:noise-redesign-comparison}\end{figure}
-\begin{figure}[htbp]\centering
-\includegraphics[width=\textwidth]{figures/noise_redesign/frequency_and_command.png}
-\caption{Mappe misura--comando e dettaglio dei campioni a 2 ms di mu.
-I campioni completano la lettura dei picchi fra campioni.}
-\label{fig:noise-redesign-frequency}\end{figure}
-Le Figure~\ref{fig:noise-redesign-comparison} e
-\ref{fig:noise-redesign-frequency} mostrano un miglioramento derivato
-dal controllore. Nel primo seed mu passa da 87.096 a 1.418 N m di picco
-e da 8.288 a 0.2753 N m di RMS integrato; entrambi migliorano di oltre
-dieci volte in ogni seed. I massimi finiti non garantiscono un limite
-continuo assoluto per ogni realizzazione gaussiana.
-\input{generated/noise_redesign_tracking.tex}
+La formulazione teorica dei Capitoli 8 e 9 richiederebbe un confronto
+abbinato: stessi parametri, condizioni iniziali, riferimento, coppia e
+sequenza encoder, cambiando soltanto il controllore. Sarebbe utile
+separare encoder singoli, encoder indipendenti o correlati, processo
+e ingressi combinati, per individuare quale canale genera il comando.
+Tali scenari spiegano come verificare una nuova sintesi senza
+attribuire al tuning un miglioramento causato dal cambio di eccitazione.
+Non sono una campagna aggiuntiva eseguita sui sette candidati della traccia.
+La prova encoder comune e i risultati già riportati sono quelli disponibili.
 
-\subsection{Otto nuove esecuzioni Simulink abbinate}
-I quattro originali H-infinity/mu lineari e non lineari sono eseguiti
-con baseline e candidato in R2026b, in cartelle distinte. Il setup
-seleziona soltanto $A_{k2},B_{k2},C_{k2},D_{k2}$ oppure Kmu, verificati
-prima/dopo e salvati nel Workspace con hash per matrice. La baseline è
-predefinita. Nessun parametro, selettore, solver, rumore o callback SLX
-cambia. Tutti gli otto run completano compilazione, simulazione e lettura
-dei segnali; gli otto SHA-256 originali restano identici.
-
-Il protocollo salvato usa encoder correlati, seed 20260826, riferimento
-e disturbo da 1 s, processo e orizzonte 10 s. H-infinity lineare mantiene
-feedback ideale: verifica interfaccia e comportamento, senza certificare
-attenuazione encoder. Il non lineare e i due mu ricevono misure rumorose.
-\input{generated/noise_redesign_simulink.tex}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/noise_redesign/simulink_before_after.png}
-\caption{Confronto dai nuovi Scope non lineari: posizione del primo giunto
-e modulo del comando in scala logaritmica da $10^{-4}$ N m. Lo scenario combinato è identico
-per baseline e candidato. La tabella usa entrambi gli attuatori e tutti i
-campioni registrati; il grafico non certifica il massimo continuo.}
-\end{figure}
-Mu non lineare migliora 48.21 volte sul picco e 9.446 sul massimo RMS
-per canale. Quest'ultimo comprende anche riferimento, disturbo e processo:
-è diverso dall'RMS encoder isolato. I dati Scope non certificano il
-massimo continuo o la compatibilità con un motore non documentato.
-Il compromesso è visibile anche nella posizione: nello scenario combinato
-mu non lineare ha overshoot q1 $10.67\%$ prima e $35.60\%$ dopo; l'errore
-medio q1 negli ultimi 1 s passa da $0.2301$ a $0.8529$ gradi.
-Queste metriche includono il disturbo simultaneo e non sono l'overshoot
-del gradino nominale isolato della Tabella~\ref{tab:noise-redesign-tracking}.
+\subsection{Esecuzioni Simulink abbinate}
+Il confronto numerico in uno SLX richiede lo stesso selettore di misura,
+solver, rumore, durata e disturbo. Occorre poi verificare che le matrici
+assegnate siano davvero quelle del candidato e che gli Scope acquisiscano
+gli stessi segnali. Un run completato controlla esecuzione e interfacce;
+non certifica il picco continuo fra campioni né la robustezza della
+famiglia. Le esecuzioni salvate descritte nella sezione precedente
+restano le evidenze disponibili, senza accreditarne altre a questa
+formulazione con rumore.
 
 \subsection{Attrazione e stato aumentato dei candidati}
-Ripetiamo griglia e Lyapunov nominale con 36 stati per HinfN3 e 96 per
-MuN1. I candidati usano coordinate bilanciate, \texttt{ode15s} e Jacobiano
-meccanico, con criteri di coda e orizzonte 12 s invariati. Il primo
-tentativo HinfN3 in \texttt{ode23t} incontra il limite di tempo ed è
-conservato come incompleto. I solver SLX restano invariati.
-\input{generated/noise_redesign_ras.tex}
-HinfN3 supera Lyapunov con un livello nominale molto piccolo,
-$\rho=2.506\,10^{-12}$, che non gli attribuisce robustezza. Dodici arresti
-lasciano la convergenza ignota. MuN1 converge nei 25 punti, ma il gate
-Lyapunov fallisce: residuo e arrotondamento non consentono un livello
-certificato. La regione osservata resta empirica.
+Un eventuale controllore riprogettato richiederebbe di ricostruire tutto
+lo stato aumentato. Se cambia l'ordine di $K$, cambiano anche dimensione
+del Jacobiano e funzione candidata di Lyapunov. Le condizioni iniziali
+fisiche dovrebbero restare comuni, con memoria del controllore
+esplicitamente fissata. La stabilità del linearizzato assicura un
+comportamento locale per la dinamica regolare nominale, ma non assegna
+un raggio numerico alla RAS. I 105 casi empirici qui documentati non
+si trasferiscono automaticamente a un diverso controllore, a masse
+variabili durante il moto o alla presenza di saturazioni.

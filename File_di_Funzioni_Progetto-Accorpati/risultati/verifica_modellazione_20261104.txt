@@ -1,0 +1,54 @@
+MODELLO
+    Massa2kg    RapportoNominale     M11      NormaKg    PoloLQGFissato
+    ________    ________________    ______    _______    ______________
+
+      0.72            0.9           0.5128    9.4783          -0.3
+       0.8              1            0.552     10.13          -0.3
+      0.88            1.1           0.5912    10.785          -0.3
+
+Nominale: 14 stati; m2 0.8 kg; errore interconnessione 0.
+    Tipo_wn_ritardo    Delta    Banda     Overshoot    MaxErroreRelativo
+    _______________    _____    ______    _________    _________________
+
+           1             -1     29.566     1.4893            0.27865
+           1           -0.5     32.175     1.4815            0.14467
+           1              0     34.783     1.4722         7.4562e-17
+           1            0.5     37.392     1.4615            0.15565
+           1              1     40.001     1.4492             0.3225
+           2             -1     34.783     1.4934            0.22221
+           2           -0.5     34.783      1.484            0.10526
+           2              0     34.783     1.4722         7.4562e-17
+           2            0.5     34.783     1.4576            0.09523
+           2              1     34.783     1.4401            0.18182
+
+INCERTEZZE
+  5×1 struct array with fields:
+
+    Name
+    Size
+    Type
+    Occurrences
+    Simplify
+
+             Forma              Stabile    Propria    PoloDestro     Norma
+    ________________________    _______    _______    __________    _______
+
+    "Additiva"                   true       true           -32      0.06829
+    "Moltiplicativa"             false      true        133.33          Inf
+    "Moltiplicativa inversa"     false      true        111.11          Inf
+
+    Ordine    MaxNormaNormalizzata    EccessoMediano    Stabile    Proprio    MaxNormaIndipendente
+    ______    ____________________    ______________    _______    _______    ____________________
+
+      1             0.98039                116.5           1          1              0.9479
+      2             0.98034               6.6099           1          1             0.94674
+      3             0.98007               1.0205           1          1             0.94364
+
+A/B: cinque reali / due dinamiche e una massa; peso additivo ordine 3.
+TEST
+Running seaFinaleTest
+.....
+Done seaFinaleTest
+__________
+
+GATE_MODELLAZIONE_PASS

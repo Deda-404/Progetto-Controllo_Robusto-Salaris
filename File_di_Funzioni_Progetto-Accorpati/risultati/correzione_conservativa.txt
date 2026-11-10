@@ -1,0 +1,182 @@
+SEA - rapida - MATLAB 26.2.0.3386108 (R2026b) - seed 20261101
+
+--- modello_sea ---
+    MassaEEkg    RapportoMassa2     M11     NormaKg    PoloLQGFissato
+    _________    ______________    _____    _______    ______________
+
+       0.1           0.125         0.601    10.949          -0.3
+       0.2            0.25          0.65    11.772          -0.3
+       0.3           0.375         0.699    12.597          -0.3
+
+Nominale: 14 stati; mEE 0.2 kg; errore interconnessione 0.
+    Tipo_wn_zeta_ritardo    Delta    Banda     Overshoot    MaxErroreRelativo
+    ____________________    _____    ______    _________    _________________
+
+             1                -1     31.305       1.484            0.1905
+             1              -0.5     33.044      1.4784          0.097651
+             1                 0     34.783      1.4722        7.4562e-17
+             1               0.5     36.523      1.4652           0.10253
+             1                 1     38.262      1.4576           0.21001
+             2                -1     39.223      3.7427           0.11109
+             2              -0.5     36.974      2.4686          0.052625
+             2                 0     34.783      1.4722        7.4562e-17
+             2               0.5     32.689      0.7482          0.047614
+             2                 1      30.72     0.28675            0.0909
+             3                -1     34.783      1.4934           0.22221
+             3              -0.5     34.783       1.484           0.10526
+             3                 0     34.783      1.4722        7.4562e-17
+             3               0.5     34.783      1.4576           0.09523
+             3                 1     34.783      1.4401           0.18182
+
+
+--- incertezze_attuatori ---
+  7×1 struct array with fields:
+
+    Name
+    Size
+    Type
+    Occurrences
+    Simplify
+
+             Forma              Stabile    Propria    PoloDestro     Norma
+    ________________________    _______    _______    __________    _______
+
+    "Additiva"                   true       true           -32      0.06829
+    "Moltiplicativa"             false      true        133.33          Inf
+    "Moltiplicativa inversa"     false      true        111.11          Inf
+
+    Ordine    MaxNormaNormalizzata    EccessoMediano    Stabile    Proprio    MaxNormaIndipendente
+    ______    ____________________    ______________    _______    _______    ____________________
+
+      1             0.98039               125.07           1          1             0.79699
+      2             0.98039               5.5966           1          1             0.86008
+      3             0.98037               1.0205           1          1              0.8788
+
+A/B: sette reali / due dinamiche e una massa; peso additivo ordine 3.
+
+--- progetto_lqg ---
+LQG: nuova sintesi nominale; pesi e covarianze conservati.
+CARE 1.05e-13; separazione 1.15e-13.
+    FattoreSigmaAssunta    PoloOsservatore    ErroreStimaRMS    ComandoRMS
+    ___________________    _______________    ______________    __________
+
+            0.5                -11.991          0.00028813        0.15195
+           0.75                -9.7874          0.00025192        0.10728
+              1                -8.5925          0.00022798        0.08303
+            1.5                -7.3886          0.00019766       0.057142
+              2                -6.8084          0.00017949        0.04367
+
+
+--- progetto_lqgi ---
+LQGI: 30 poli stabili; CARE 1.03e-13.
+
+--- progetto_hinf_tre_controllori ---
+CARICATI DALLA CAMPAGNA COMPLETA, nessuna nuova sintesi
+    Controllore    Ordine     NS      NormaComune    GuadagnoRumoreComando
+    ___________    ______    _____    ___________    _____________________
+
+    "Hinf1"          18      true        2.1633               286.43
+    "Hinf2"          22      true       0.03558           1.2608e+08
+    "PID_nuovo"       4      true       0.81587                18196
+
+
+--- progetto_mu ---
+D-K A/B CARICATE da esecuzione validata; non risintetizzate.
+RS/RP CARICATE dalla campagna completa; nuove verifiche nominali qui sotto.
+    Controllore               Sintesi                   Analisi        Ordine     NS      NormaNominale     NP      RS_lower    RS_upper      RS      RP_lower    RP_upper      RP         MetodoRP       FrequenzaCritica
+    ___________    _____________________________    _______________    ______    _____    _____________    _____    ________    ________    ______    ________    ________    ______    ______________    ________________
+
+      "LQG"        "Sintesi nominale con carico"    "A_parametrico"      14      true         2.1597       false      1.4593      1.4787    "PASS"       0               0    "FAIL"    "NP_FAIL"              53.667
+      "LQG"        "Sintesi nominale con carico"    "B_concentrato"      14      true         2.1597       false      1.1972      1.1996    "PASS"       0               0    "FAIL"    "NP_FAIL"              43.148
+      "LQGI"       "Sintesi nominale con carico"    "A_parametrico"      16      true         1.3239       false      1.4185      1.4385    "PASS"       0               0    "FAIL"    "NP_FAIL"              53.377
+      "LQGI"       "Sintesi nominale con carico"    "B_concentrato"      16      true         1.3239       false       1.155      1.1574    "PASS"       0               0    "FAIL"    "NP_FAIL"              43.863
+      "Hinf1"      "Sintesi nominale con carico"    "A_parametrico"      18      true         2.1633       false       1.337      1.3876    "PASS"       0               0    "FAIL"    "NP_FAIL"              78.438
+      "Hinf1"      "Sintesi nominale con carico"    "B_concentrato"      18      true         2.1633       false     0.94854     0.95043    "FAIL"       0               0    "FAIL"    "NP_FAIL"               78.52
+      "Hinf2"      "Sintesi nominale con carico"    "A_parametrico"      22      true        0.03558       true     0.055352    0.055671    "FAIL"       0        0.055671    "FAIL"    "LIMITE_DA_RS"         62.792
+      "Hinf2"      "Sintesi nominale con carico"    "B_concentrato"      22      true        0.03558       true     0.037139    0.037213    "FAIL"       0        0.037213    "FAIL"    "LIMITE_DA_RS"         62.897
+      "PID"        "Sintesi nominale con carico"    "A_parametrico"       4      true        0.81587       true      0.25217     0.25344    "FAIL"       0         0.25344    "FAIL"    "LIMITE_DA_RS"         15.319
+      "PID"        "Sintesi nominale con carico"    "B_concentrato"       4      true        0.81587       true      0.20038     0.20078    "FAIL"       0         0.20078    "FAIL"    "LIMITE_DA_RS"         69.328
+      "Mu_A"       "D-K su A"                       "A_parametrico"     294      true         6.6543       false      2.5314      2.6424    "PASS"       0               0    "FAIL"    "NP_FAIL"              20.785
+      "Mu_A"       "D-K su A"                       "B_concentrato"     294      true         6.6543       false      1.7804       1.784    "PASS"       0               0    "FAIL"    "NP_FAIL"              20.724
+      "Mu_B"       "D-K su B"                       "A_parametrico"      80      true         1.4815       false      2.5648      2.8257    "PASS"       0               0    "FAIL"    "NP_FAIL"               21.87
+      "Mu_B"       "D-K su B"                       "B_concentrato"      80      true         1.4815       false      1.9511       1.955    "PASS"       0               0    "FAIL"    "NP_FAIL"              26.786
+
+    Modello    Iterazione    Ordine     NS      NormaComune    ErroreDC    GuadagnoRumore
+    _______    __________    ______    _____    ___________    ________    ______________
+
+       1           1           82      true       1.0519       0.038232          887.41
+       1           2          276      true       6.6824              1          98.207
+       1           3          294      true       6.6543          0.998          4925.5
+       2           1           82      true       1.0519       0.038232          887.41
+       2           2           82      true       1.7583         0.2594       2.215e+05
+       2           3           80      true       1.4815        0.21924      2.8251e+05
+
+
+--- confronto_ras ---
+Rumore ZOH e picchi intercampione: LQG
+Rumore ZOH e picchi intercampione: LQGI
+Rumore ZOH e picchi intercampione: Hinf1
+Rumore ZOH e picchi intercampione: Hinf2
+Rumore ZOH e picchi intercampione: PID
+Rumore ZOH e picchi intercampione: Mu_A
+Rumore ZOH e picchi intercampione: Mu_B
+RAS CARICATA dalla campagna completa. Verifica locale LQG eseguita ora.
+                            Verifica                            Stato
+    ________________________________________________________    ______
+
+    "Equilibrio non lineare"                                    "PASS"
+    "Jacobiano indipendente delle equazioni"                    "PASS"
+    "Nominale A/B e LFT equivalenti"                            "PASS"
+    "Sette reali / due SISO dinamici e massa; ordine fisico"    "PASS"
+    "Copertura dinamica continua dei campioni SISO"             "PASS"
+    "Replay esatto dei dieci impianti comuni"                   "PASS"
+    "Esito stabilita interna da matrice esplicita"              "PASS"
+
+Percorso rapida terminato. Consultare CSV per PASS/FAIL scientifici.
+Simulink Hinf_linear_sim, corrente, campione 0...
+Simulink Hinf_linear_sim, corrente, campione 1...
+Simulink Hinf_nonlinear_sim, corrente, campione 0...
+Simulink Hinf_nonlinear_sim, corrente, campione 1...
+Simulink LQGI_linear_sim, corrente, campione 0...
+Simulink LQGI_linear_sim, corrente, campione 1...
+Simulink LQGI_nonlinear_sim, corrente, campione 0...
+Simulink LQGI_nonlinear_sim, corrente, campione 1...
+Simulink LQG_linear_sim, corrente, campione 0...
+Simulink LQG_linear_sim, corrente, campione 1...
+Simulink LQG_nonlinear_sim, corrente, campione 0...
+Simulink LQG_nonlinear_sim, corrente, campione 1...
+Simulink mu_linear_sim, Mu_A, campione 0...
+Simulink mu_linear_sim, Mu_A, campione 1...
+Simulink mu_linear_sim, Mu_B, campione 0...
+Simulink mu_linear_sim, Mu_B, campione 1...
+Simulink mu_nonlinear_sim, Mu_A, campione 0...
+Simulink mu_nonlinear_sim, Mu_A, campione 1...
+Simulink mu_nonlinear_sim, Mu_B, campione 0...
+Simulink mu_nonlinear_sim, Mu_B, campione 1...
+           Modello            TempoFinale    StatiFiniti    MassaDistale
+    ______________________    ___________    ___________    ____________
+
+    {'Hinf_linear_sim'   }         2            true             1
+    {'Hinf_nonlinear_sim'}         2            true             1
+    {'LQGI_linear_sim'   }         2            true             1
+    {'LQGI_nonlinear_sim'}         2            true             1
+    {'LQG_linear_sim'    }         2            true             1
+    {'LQG_nonlinear_sim' }         2            true             1
+    {'mu_linear_sim'     }         2            true             1
+    {'mu_nonlinear_sim'  }         2            true             1
+
+collaudo_simulink
+         id: 'ISCL'
+    message: 'To improve performance, use 'isscalar' instead of length comparison.'
+        fix: 1
+       line: 39
+     column: [90 104]
+
+confronto_ras
+controllori_sea
+progetto_mu
+         id: 'SAGROW'
+    message: 'Variable appears to change size on every loop iteration (within a script). Consider preallocating for speed.'
+        fix: 0
+       line: 124
+     column: [2 6]

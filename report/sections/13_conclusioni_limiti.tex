@@ -1,80 +1,58 @@
 \chapter{Conclusioni e limiti}
+Abbiamo studiato il manipolatore SEA con le due masse puntiformi della traccia: $m_1=1$ kg e $m_2=0.8$ kg. L'incertezza di $m_2$, fra 0.72 e 0.88 kg, entra coerentemente in inerzia, Coriolis e gravità. L'equilibrio verticale rimane valido, mentre la linearizzazione dipende dalla massa. I controlli indipendenti sul Jacobiano, sull'energia e sul contributo geometrico della massa distale verificano questa coerenza.
 
-\paragraph*{Conclusione della revisione sulle incertezze.}
-La rappresentazione parametrica rende leggibili origine e conseguenze
-delle dispersioni di $\omega_n$ e $\zeta$. Il modello concentrato viene
-costruito dalla medesima famiglia attraverso errori relativi, inviluppo
-e fitting; la stabilita di $E/W_I$ e verificata oltre alla copertura
-in modulo. Il ritardo comune permette la cancellazione analitica del
-Pad\'e, ma la scelta di tenerlo noto limita esplicitamente le conclusioni.
-Il confronto non certifica jitter, meccanica incerta o attuatori identificati.
+Il modello A comprende quattro parametri attuativi reali e una massa reale condivisa. Il modello B mantiene la stessa massa e sostituisce i soli drive con due perturbazioni dinamiche additive pesate. Il ritardo variabile è decisivo nella scelta: l'inversione del nominale di Padé introduce poli instabili negli errori moltiplicativi, mentre la differenza additiva permette perturbazioni stabili e proprie. Un peso di ordine 3 copre i casi dichiarati con un eccesso contenuto.
 
-Le analisi a K fissato separano la rappresentazione dalla prestazione
-fisica. Le nuove D--K mostrano che formulazione e struttura influenzano
-una ricerca numerica non convessa: B riesce nella campagna limitata
-dove A fallisce NP, senza che questo stabilisca una preferenza assoluta.
-Le prove comuni e il rumore intercampione impediscono di confondere
-RP con fattibilita hardware. La RAS e una sezione empirica di quindici
-punti, con stati iniziali e criteri dichiarati; errori numerici e timeout
-restano esiti ignoti.
+Le specifiche temporali adottate, 2 s e 15\% per assestamento e sovraelongazione, mantengono un compito significativo e sono coerenti con il riferimento desiderato. Precisione statica al 5\% e accoppiamento al 25\% restano richieste separate. Le definizioni e le soglie di NS, NP, RS e RP non cambiano.
 
-Il percorso finale riusa e accorpa i quattro script originari, conserva
-i controllori, dismette i vecchi runner dall'esecuzione ordinaria e
-genera una sola consegna dagli stessi sorgenti. Restano aperti dati
-sperimentali per tolleranze e ritardi, limiti di coppia e saturazioni,
-copertura dell'intero box mediante B e validazione hardware.
-I risultati negativi sono parte del progetto e non difetti da occultare.
+LQG e LQGI offrono stabilità robusta, con un compromesso fra rapidità, precisione e reiezione del disturbo. Hinf2 e PID mostrano che una buona prestazione nominale può coesistere con fragilità alle incertezze. Le sintesi D--K limitate e le prove di rumore impediscono di proclamare una soluzione migliore in ogni senso. Anche gli esiti negativi aiutano a capire quali obiettivi vengono realmente controllati da ciascun metodo.
 
-\paragraph*{Conclusioni storiche, riferite esclusivamente a M4.}
-Il seguito conserva la sintesi delle campagne precedenti, per rendere
-leggibili i risultati e gli approfondimenti originali.
+Restano limiti precisi. Le tolleranze sono ipotesi, non dati identificati. Padé approssima il ritardo e non certifica il comportamento con un ritardo esatto a ogni frequenza. La copertura di B non è dimostrata sull'intero box A. Le regioni di attrazione sono sezioni empiriche nominali. Il modello non include saturazione, attrito secco, giochi né variazioni della massa durante il moto.
 
-Il progetto sviluppa una catena dalla sintesi nominale alla
-verifica robusta, alle simulazioni non lineari e al confronto finale.
-La derivazione del limite inferiore conferma l'uso di $\sigma_{\min}$;
-la ricerca finita dei pesi mostra che la struttura 1-DoF rimane fortemente
-sovraelongata anche quando la norma è inferiore a uno.
+Per avvicinarsi a una realizzazione fisica servirebbero dati di targa, limiti di coppia, misure dei drive e una gestione dell'integratore in saturazione. Nel perimetro del progetto, il risultato è un confronto riproducibile in cui equazioni, famiglie incerte, controllori e simulazioni usano le stesse ipotesi e permettono di spiegare sia i vantaggi sia i limiti delle scelte.
 
-La vera sintesi 2-DoF, con riferimento e posizione misurata come ingressi
-del controllore e coppia disturbante lato link nella pianta, raggiunge
-norma \FinalGamma\ e tracking nominale senza overshoot. Tuttavia il
-margine RS circa 0.026 e i dieci impianti incerti instabili impediscono di considerare
-questa soluzione robusta. Anche la prova di rumore evidenzia un comando
-inaccettabilmente grande per una futura implementazione non protetta.
-Questo risultato negativo è parte della conclusione, non un dettaglio
-omesso perché il gradino nominale appare migliore.
+Il contributo centrale è il collegamento fra origine fisica e forma
+matematica dell'incertezza. Un'unica massa condivisa conserva le
+correlazioni meccaniche; quattro scalari attuativi mantengono il significato
+di frequenza naturale e ritardo; due blocchi dinamici concentrano
+invece gli scostamenti dei drive lasciando esplicita la massa $m_2$. La LFT
+permette di rendere visibili queste dipendenze, distinguendo numero di
+parametri, ripetizioni e stati. Il fit non è scelto soltanto perché
+segue una curva: si controllano stabilità, proprietà, norma continua e
+quanto il peso eccede l'inviluppo, oltre alla verifica su casi indipendenti.
 
-La D--K iteration sullo stesso problema produce Kmu di ordine \FinalMuOrder.
-La post-analisi restituisce margini RS circa 1.80 e RP circa 1.68,
-con dieci impianti incerti su dieci stabili. Kmu è quindi il candidato robusto del modello
-lineare incerto dichiarato; non soddisfa ancora tutti i target temporali.
-LQG mantiene il ruolo di riferimento nominale. I certificati Lyapunov,
-quando il controllo numerico riesce, riguardano il solo modello nominale.
+Lo stesso ragionamento collega i risultati dei controllori. LQG separa
+progetto del feedback e dello stimatore, ma tale separazione nominale
+non è di per sé una garanzia robusta. LQGI introduce il modello interno
+delle costanti e rende evidente il compromesso fra precisione e tempo
+di risposta. La sensibilità mista controlla trasferimenti pesati, mentre
+il model following distingue forma desiderata del tracking e feedback.
+La sintesi strutturata limita la libertà del controllore; la D--K
+aggiunge la famiglia incerta al progetto, ma resta una ricerca non
+convessa con ordine e compromessi da verificare a posteriori.
 
-Restano da studiare limiti reali di coppia e velocità, saturazioni,
-rate limit, attriti e ritardi misurati. Nessuno di questi dati è inventato.
-La seconda formulazione include il rumore come esogeno, conservando
-i due pesi e la famiglia incerta. I nuovi H-infinity attenuano il comando,
-ma restano non robusti. MuN1 di ordine 82 supera RS/RP, mantiene dieci
-impianti stabili e riduce il picco Simulink non lineare da 108.526 a
-2.251 N m. La mitigazione è verificata in tre seed MATLAB e negli
-originali, senza alterarne rumori o parametri. Rimangono l'offset q1
-di 8.243\%, target temporali parziali e un gate Lyapunov mu fallito.
-MuN1 è una proposta per gli studenti; la baseline rimane predefinita.
-Il miglioramento progettuale non certifica un limite hardware o un
-massimo assoluto per un rumore gaussiano non limitato.
+Anche le verifiche hanno ruoli diversi. I dieci impianti comuni
+mostrano esempi della dispersione fisica, senza dimostrare una probabilità
+di successo. I margini strutturati riguardano la famiglia lineare
+specificata. Le simulazioni non lineari controllano traiettorie complete
+a massa costante, e le quindici condizioni iniziali per candidato
+costituiscono soltanto sezioni empiriche nominali. La derivazione di
+Lyapunov spiega come si potrebbe ottenere un insieme interno, ma non
+aggiunge un certificato numerico ai risultati disponibili.
 
+La distinzione è particolarmente importante per il rumore. Una posizione
+regolare può nascondere impulsi di comando fra campioni, perché drive
+e meccanica filtrano la richiesta prima che raggiunga i link. Il
+campionamento dello Scope e la scansione intercampione non sono la
+stessa misura. Includere il rumore nel costo è una possibilità progettuale
+motivata da questa osservazione; la formulazione teorica non viene
+presentata come una nuova campagna eseguita.
 
-LQGI usa feedback stimato e integratore dell'errore misurato; la sua
-reiezione asintotica del disturbo nel lineare si accompagna a tracking
-lento. Gli otto modelli Simulink sono stati eseguiti, conservando la loro
-configurazione, e i segnali acquisiti confermano le differenze fra offset,
-tracking e sforzo di controllo. Il diagramma $H_\infty$ lineare seleziona
-misure ideali, mentre quello non lineare include il rumore encoder nel
-feedback: questa differenza va considerata prima del confronto. Nella
-prima formulazione gli impulsi fra campioni superano molto quelli
-visibili sulla sola griglia a 2 ms. Le nuove verifiche mantengono
-questa distinzione e confrontano tutte le statistiche sullo stesso
-protocollo. Le regioni interne
-di Lyapunov sono dichiarate soltanto dove il controllo numerico riesce;
-le altre sezioni rimangono evidenze empiriche con limiti espliciti.
+Gli otto SLX rendono leggibili le interfacce e permettono l'avvio con
+inizializzazione automatica. Il collaudo disponibile ne documenta
+l'esecuzione con parametri e controllori coerenti, senza trasformare
+il completamento dei run in un certificato prestazionale. Nel complesso,
+il progetto offre una catena verificabile di equazioni, dati, grafici
+e interpretazioni. Le proprietà non raggiunte restano esplicite e
+indicano quali aspetti richiederebbero identificazione e riprogettazione
+prima di un impiego sul manipolatore reale.

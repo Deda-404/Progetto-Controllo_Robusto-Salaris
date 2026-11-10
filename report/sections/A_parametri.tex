@@ -1,3 +1,8 @@
 \chapter{Parametri principali}\label{app:parametri}
-\input{tables/nominal_parameters.tex}
-I valori provengono da \artifact{sea\_params\_nominal.m} e dai dataset di equilibrio e modello completo. La tabella non introduce metadata di laboratorio o tolleranze non presenti nel progetto.
+La tabella completa dei parametri e delle incertezze è riportata nel Capitolo 2 (Tabella~\ref{tab:parametri-definitivi}). La massa distale nominale è $m_2=0.8$ kg e l'intervallo è $[0.72,0.88]$ kg. La medesima massa compare in tutte le equazioni meccaniche di A e B.
+
+Per ogni drive si assumono $\omega_{n,i}\in[34,46]$ rad/s e $\tau_{d,i}\in[12,18]$ ms, indipendenti fra canali. Lo smorzamento è noto, $\zeta=0.8$. Le percentuali sono ipotesi ingegneristiche e non intervalli identificati da misure. I parametri restano costanti durante ogni prova.
+
+Il punto di lavoro è $\bar q=[\pi/2,0]^T$ rad. I gradini di riferimento sono di $5^\circ$ e le coppie disturbanti di 0.5 N m, applicate separatamente. Il rumore encoder ha deviazione standard $\sigma_y=0.05^\circ$, quindi varianza $(0.05\pi/180)^2$ rad$^2$. Il segnale campionato con ZOH è distinto dalle intensità continue utilizzate nel progetto di Kalman.
+
+I sette candidati correnti sono LQG, LQGI, Hinf1, Hinf2, PID, Mu\_A e Mu\_B. I controllori storici rimangono disponibili come riferimenti a coefficienti fissati, senza trasferire garanzie ottenute su famiglie diverse. Le scale di rumore e disturbo, i pesi e le tolleranze sono centralizzati in \path{parametri_sea.m}.

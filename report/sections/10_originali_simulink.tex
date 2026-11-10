@@ -1,60 +1,56 @@
 \section{Implementazioni MATLAB/Simulink adottate}\label{sec:originali}
-Abbiamo predisposto una coppia di diagrammi, lineare e non lineare, per
-LQG, LQGI, $H_\infty$ e $\mu$-sintesi. I modelli lineari usano 14 stati
-fisici, quattro uscite encoder e otto ingressi nell'ordine
-$[u;d;w_{link};w_u]$. Le misure rumorose alimentano il controllore,
-mentre i rumori di processo sono applicati alla pianta.
+Gli otto modelli Simulink conservano la struttura lineare e non lineare delle famiglie LQG, LQGI, $H_\infty$/PID e $\mu$. Il comando \texttt{collaudo\_simulink} assegna matrici, controllori e parametri nel Workspace del modello e usa \texttt{SimulationInput} per ogni prova.
 
-LQG realizza $u=N_rr-K\hat x$ con un filtro di Kalman a 14 stati. LQGI
-mantiene lo stesso osservatore e aggiunge due integratori sull'errore
-misurato, $\dot\xi=r-q_{mis}$, con $u=-K_x\hat x-K_i\xi$.
-Il modello $H_\infty$ confronta tre rami: il controllore 1-DoF riceve
-$r-q_{mis}$, mentre 2-DoF e PID ricevono $[r;q_{mis}]$. Il modello
-$\mu$ usa $K_\mu$ con la stessa interfaccia a quattro ingressi.
-Le matrici dei rami 2-DoF condividono gli stati tra riferimento e misura.
+Nei generatori di parametri incorporati, la massa distale diventa $m_2$. È questo valore a raggiungere le funzioni di inerzia, Coriolis e gravità. Il runner confronta numericamente le loro espressioni con quelle MATLAB per ogni massa provata. I due drive ricevono separatamente frequenza, smorzamento e ritardo del medesimo campione; le callback automatiche non sovrascrivono questi dati.
 
-I modelli non lineari integrano gli otto stati meccanici assoluti,
-calcolano il disturbo sulle accelerazioni dei link e aggiungono i due
-attuatori LTI. Le misure sono riportate in deviazioni dall'equilibrio
-prima di essere usate dal controllore. L'inizializzazione esterna
-\path{setup_student_originals.m} restituisce tutte le matrici e i tipi
-Workspace necessari senza cambiare parametri o collegamenti interni.
+Le interfacce conservano un significato preciso. LQG usa
+$u=N_rr-K\hat x$ e quattro misure encoder; LQGI aggiunge
+$\dot\xi=r-q_{mis}$ e $u=-K_x\hat x-K_i\xi$. Hinf1 riceve l'errore,
+mentre Hinf2, PID e i controllori $\mu$ ricevono riferimento e misura
+separati. I rami di un controllore 2-DoF condividono la dinamica interna:
+non sono due copie indipendenti di $K$.
 
-La lettura dei diagrammi consente di controllare segni, interfacce,
-posizione dei disturbi e varianze impostate. I rumori encoder hanno
-deviazione standard $0.05^\circ$ e periodo di mantenimento 0.002 s.
-I rumori di processo hanno varianza 0.01 N$^2$ m$^2$ per canale;
-il seed dei blocchi è 20260826. Questo protocollo differisce dalla prova
-MATLAB di rumore isolato, che usa seed 20261012: non confrontiamo le
-singole traiettorie come se fossero la stessa realizzazione casuale.
+Le posizioni del modello non lineare sono assolute; al controllore
+arrivano invece le deviazioni dall'equilibrio. La coppia nominale viene
+aggiunta all'uscita incrementale del drive. Queste due conversioni
+rendono confrontabili le equazioni non lineari e il modello linearizzato.
+
+\subsection{Prove nella configurazione salvata}
+Il collaudo salvato comprende 20 simulazioni di 2 s: nominale e primo impianto fisico per ciascun modello, con entrambi i candidati nei due modelli $\mu$. Vengono controllati tempo finale, stati finiti e acquisizione completa degli Scope. Il massimo di uno Scope può mescolare grandezze con unità diverse: viene usato per controllare l'acquisizione, non come indice di prestazione.
+
+Gli otto file richiamano automaticamente l'inizializzazione all'avvio.
+Dopo aver estratto la consegna basta aprire un modello e premere Run:
+la callback individua gli script associati attraverso il percorso del
+modello, carica i dati coerenti e assegna il Workspace nominale.
+La massa del secondo link $m_2$ è un parametro esplicito dei generatori;
+i due drive ricevono le proprie realizzazioni. Non servono variabili
+lasciate da una sessione precedente. Il collaudo con SimulationInput
+rimane disponibile per variare massa e attuatori nei campioni comuni.
+La durata nominale e l'ampiezza delle coppie vanno lette separatamente
+dall'esito di completamento: il raggiungimento del tempo finale non è
+una certificazione di stabilità o prestazione.
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=\textwidth,trim=0 0 606 265,clip]{figures/student_exports/LQGI_linear_sim.png}
-\caption{Diagramma Simulink LQGI lineare: riferimento, integratore dell'errore misurato, feedback stimato, pianta a otto ingressi e rumori. Vista della parte di controllo esportata direttamente dal modello.}
-\label{fig:simulink-lqgi}\end{figure}
+\includegraphics[width=.98\linewidth,trim=0 0 606 265,clip]{figures/student_exports/LQGI_linear_sim.png}
+\caption{Struttura LQGI lineare: pianta, osservatore e integratore dell'errore misurato.}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=.98\linewidth,trim=0 0 580 110,clip]{figures/student_exports/LQGI_nonlinear_sim.png}
+\caption{La stessa legge di controllo con le equazioni non lineari del SEA. I valori della massa sono assegnati dal runner.}
+\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_Kalman.png}
 \caption{Sottosistema Kalman del diagramma LQGI: $\dot{\hat x}=A\hat x+Bu+L(y_{mis}-C\hat x)$. Gli ingressi sono il comando calcolato e le quattro misure.}
 \label{fig:simulink-kalman}\end{figure}
 
-La Figura~\ref{fig:simulink-lqgi-nonlinear} conserva l'architettura del
-servo e rende esplicita la sostituzione della pianta State-Space con le
-equazioni meccaniche non lineari. I dettagli delle
-Figure~\ref{fig:simulink-nonlinear-plant} e~\ref{fig:simulink-actuators}
-mostrano dove si calcolano le accelerazioni e dove il comando diventa
-coppia motrice. Il confronto usa la stessa famiglia LQGI, evitando di
-attribuire alla non linearità differenze dovute a controllori diversi.
-\begin{figure}[htbp]\centering
-\includegraphics[width=\textwidth,trim=0 0 580 110,clip]{figures/student_exports/LQGI_nonlinear_sim.png}
-\caption{Schema autentico LQGI non lineare: attuatori, coppia di equilibrio,
-equazioni SEA e integrazione degli otto stati meccanici. Le misure in
-deviazione chiudono sia l'osservatore sia l'integratore.}
-\label{fig:simulink-lqgi-nonlinear}\end{figure}
 \begin{figure}[htbp]\centering
 \includegraphics[width=.85\textwidth]{figures/student_exports/LQGI_nonlinear_plant.png}
 \caption{Dettaglio autentico della pianta non lineare: le equazioni del
 manipolatore ricevono lo stato, la coppia motrice e il disturbo lato link.}
 \label{fig:simulink-nonlinear-plant}\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=.75\textwidth]{figures/student_exports/LQGI_actuators.png}
 \caption{Attuatori del modello non lineare LQGI: due canali con secondo
@@ -62,6 +58,13 @@ ordine e approssimazione Padé del ritardo. Il rumore sul comando attraversa
 questa dinamica prima di arrivare ai rotori.}
 \label{fig:simulink-actuators}\end{figure}
 
+Le viste dei sottosistemi illustrano equazioni e flussi dei segnali;
+non sono curve di prestazione. Le misure alimentano sia l'innovazione
+sia l'integratore, mentre le coppie di processo entrano nella pianta.
+La verifica di un comando fisicamente realizzabile richiede limiti dei
+motori e saturazioni, che non sono disponibili in questo modello.
+
+\subsection{Selettori, rumore e risoluzione del comando}
 Nella Figura~\ref{fig:simulink-hinf-interface} il ramo centrale mostra
 l'ingresso separato di riferimento e misura nel controllore 2-DoF.
 Lo schema lineare conserva il selettore sulle misure ideali;
@@ -71,12 +74,14 @@ Figura~\ref{fig:simulink-mu-interface} mostra invece l'interfaccia
 $[r_1;r_2;q_{1,mis};q_{2,mis}]$ del controllore $\mu$, con misure rumorose
 effettivamente selezionate. Le viste sono ritagli delle esportazioni
 originali; nessun blocco o collegamento è stato ridisegnato.
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=\textwidth,trim=0 540 1380 510,clip]{figures/student_exports/Hinf_linear_sim.png}
 \caption{Dettaglio autentico del ramo H-infinity 2-DoF:
 il controllore dinamico riceve quattro ingressi e restituisce due comandi;
 nel modello lineare il feedback salvato usa le posizioni ideali.}
 \label{fig:simulink-hinf-interface}\end{figure}
+
 \begin{figure}[htbp]\centering
 \includegraphics[width=\textwidth,trim=0 0 740 0,clip]{figures/student_exports/mu_linear_sim.png}
 \caption{Interfaccia autentica $\mu$ lineare: riferimento e misura entrano
@@ -84,73 +89,44 @@ nel blocco di controllo; il comando alimenta la pianta con disturbi e
 rumori di processo. Le misure rumorose chiudono l'anello.}
 \label{fig:simulink-mu-interface}\end{figure}
 
-\subsection{Prove nella configurazione salvata}
-Abbiamo eseguito tutti gli otto diagrammi in MATLAB/Simulink R2026b,
-con le matrici dei controllori adottati. Caricamento, compilazione,
-simulazione e lettura dei segnali sono riusciti per ciascun modello.
-La compilazione ha risolto le interfacce dei blocchi e delle funzioni
-embedded. I diagrammi conservano integralmente la loro configurazione.
-La durata è 10 s, salvo LQG non lineare che termina a 4 s.
-Il riferimento $r=[5^\circ;0]$ e il disturbo $d=[0.5;0]$ N m
-iniziano entrambi a 1 s. I rumori di processo sono attivi: queste prove
-non sono gradini isolati in assenza di disturbi.
+La presenza di un generatore di rumore nel diagramma non dimostra che
+quel segnale sia selezionato in retroazione. Inoltre il rumore encoder
+si somma alla misura, mentre il rumore di processo entra nella pianta:
+confonderli cambia il trasferimento verso il comando. Nelle configurazioni
+con ingressi combinati, riferimento e coppia iniziano a 1 s e il rumore
+è quello impostato nei blocchi. Tale scenario è diverso dalla prova
+MATLAB di solo encoder a riferimento e disturbo nulli.
 
-Le curve delle Figure~\ref{fig:simulink-lqg-results}--\ref{fig:simulink-mu-results}
-provengono dai buffer degli Scope dei modelli eseguiti. Sono stati acquisiti
-le quattro posizioni, i due riferimenti e i due comandi per ramo;
-non sono presenti campioni NaN o Inf. Le tabelle riportano l'errore
-medio nell'ultimo secondo, che è un indicatore a tempo finito,
-non una dimostrazione di annullamento asintotico. I picchi sono massimi
-dei campioni registrati; gli RMS sono calcolati con integrazione temporale
-sulla griglia dello Scope.
-\input{generated/final_simulink_results.tex}
+\begin{figure}[p]\centering
+\includegraphics[width=.98\linewidth,height=.78\textheight,keepaspectratio]{figures/editoriale/scope_salvati.png}
+\caption{Estratti degli Scope già salvati, nominale non lineare LQG,
+LQGI e due candidati $\mu$. Posizioni incrementali e comandi sono
+separati; l'orizzonte disponibile è 2 s e non permette di dedurre
+l'assestamento di un servo lento. Gli estratti possono essere diradati:
+i picchi di collaudo usano l'acquisizione integrale. Nessun nuovo run.}
+\end{figure}
 
-LQG conserva un offset sotto disturbo, mentre LQGI lo riduce grazie
-alla memoria integrale. Il tracking LQGI resta lento. Il confronto
-lineare/non lineare mostra risposte vicine nello scenario adottato,
-con orizzonte diverso per LQG; non estendiamo questa osservazione
-a ogni condizione iniziale o a ogni impianto incerto.
+Queste curve mostrano l'esecuzione nelle condizioni del diagramma;
+non riproducono il protocollo pulito di tracking né la scansione
+intercampione del comando encoder. Il massimo dello Scope e il massimo
+continuo sono quindi informazioni diverse. Per verificare una futura
+modifica bisognerebbe mantenere fisse condizioni e selettori, confrontare
+i segnali con le stesse unità e ripetere l'analisi fra campioni dove
+necessario. Il collaudo di esecuzione rimane distinto da NS, NP, RS e RP.
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_simulink/LQG_linear_sim.png}
-\caption{Dati Scope di LQG lineare: posizioni incrementali e comandi con riferimento, disturbo e rumori nella configurazione del diagramma. L'offset persiste sotto disturbo.}
-\label{fig:simulink-lqg-results}\end{figure}
-\begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_simulink/LQGI_nonlinear_sim.png}
-\caption{Dati Scope di LQGI non lineare: la memoria integrale riduce l'offset, con transitorio lento e rumori attivi.}
-\label{fig:simulink-lqgi-results}\end{figure}
+\includegraphics[width=.95\linewidth]{figures/editoriale/scope_hinf_salvati.png}
+\caption{Scope H-infinity non lineare già acquisiti nel nominale: primo
+giunto dei tre rami e massimo modulo dei due comandi per ramo, fino a 2 s.
+Il comando usa una scala simmetrica logaritmica con zona lineare vicino
+a zero. Sono ingressi combinati del diagramma, distinti dalla prova
+MATLAB di solo encoder e dal gradino isolato.}
+\end{figure}
 
-\subsection{Selettori, rumore e risoluzione del comando}
-I tre rami $H_\infty$ sono eseguiti in parallelo. Nel diagramma lineare
-i selettori salvati usano le posizioni ideali: il rumore encoder viene
-generato, ma non alimenta il feedback selezionato. Nel non lineare
-sono selezionate le misure rumorose. Questa differenza spiega perché
-non si possa leggere il confronto lineare/non lineare come effetto
-della sola non linearità meccanica. Non abbiamo commutato i selettori.
-Le misure rumorose sono invece attive nei due diagrammi $\mu$.
-
-Le sequenze encoder acquisite hanno RMS vicino a $0.05^\circ$;
-nella configurazione salvata i quattro canali risultano correlati,
-con lo stesso segnale di rumore. La matrice diagonale adottata per
-il progetto Kalman resta un'ipotesi di sintesi, e la prova MATLAB
-isolata usa un diverso protocollo casuale. I valori di picco e RMS
-dei due esperimenti non devono coincidere.
-
-Il diagramma $H_\infty$ non lineare conferma il comando critico del
-2-DoF; anche PID e $K_\mu$ amplificano il rumore, mentre le posizioni
-restano molto più regolari. Si tratta di richieste del modello senza
-saturazioni, non di coppie che un attuatore reale può necessariamente
-erogare. Le griglie degli Scope sono non uniformi e non certificano
-il massimo continuo: un intervallo massimo inferiore a 2 ms non basta
-da solo a escludere impulsi di poche decine di microsecondi.
-La propagazione ZOH della prova MATLAB fornisce quindi un controllo
-complementare della sensibilità fra i campioni.
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_simulink/Hinf_nonlinear_sim.png}
-\caption{Dati Scope dei tre rami $H_\infty$ non lineari, con feedback rumoroso selezionato. La scala del comando è dominata dagli impulsi del 2-DoF.}
-\label{fig:simulink-hinf-results}\end{figure}
-\begin{figure}[htbp]\centering
-\includegraphics[width=.95\textwidth]{figures/final_simulink/mu_linear_sim.png}
-\caption{Dati Scope di $K_\mu$ lineare. Il comando è molto più oscillante delle posizioni; il buon tracking medio non risolve il limite di sensibilità al rumore.}
-\label{fig:simulink-mu-results}\end{figure}
+Il confronto fra i rami mostra perché la sola posizione non esaurisce
+la lettura di uno Scope. I segnali di comando possono differire molto
+anche se gli angoli hanno lo stesso ordine di grandezza. Le curve
+salvate durano soltanto 2 s: consentono di osservare l'avvio del moto
+e il comando, senza attribuire un regime finale a un servo che richiede
+più tempo. Allo stesso modo, gli estratti fino a 2000 punti non possono
+sostituire la scansione intercampione del rumore.
