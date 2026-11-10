@@ -5,73 +5,87 @@ Il segnale di controllo $u_i$ è una richiesta di coppia; il drive produce la co
  G_{a,i}(s)=\frac{\omega_{n,i}^2}{s^2+2\zeta_i\omega_{n,i}s+\omega_{n,i}^2}
  e^{-\tau_{d,i}s}.
 \]
-La dinamica del drive si trova a monte dell'inerzia del rotore, già contenuta nelle equazioni SEA. Non aggiungiamo un secondo modello meccanico del motore.
-
-Il guadagno statico unitario significa che una coppia costante richiesta
-viene riprodotta a regime dal modello del drive. Non significa risposta
-istantanea: il secondo ordine cambia modulo e fase durante il moto.
-$J_m$ e $B_m$ sono già nella meccanica e non vengono duplicati qui.
-Questa distinzione conserva il significato di coppia richiesta $u$
-e coppia effettiva $\tau$ applicata ai rotori.
+Il drive trasforma la richiesta $u_i$ nella coppia $\tau_i$ applicata
+al rotore. Il suo guadagno statico unitario, $G_{a,i}(0)=1$, indica
+che a regime una richiesta costante è riprodotta dal modello.
+Il transitorio dipende dal secondo ordine e dal ritardo. L'inerzia
+$J_m$ e lo smorzamento $B_m$ appartengono già alle equazioni dei
+rotori e compaiono una sola volta, a valle dei drive.
 
 \section{Scelta ingegneristica}
-I nominali sono $\omega_n=40$ rad/s, $\zeta=0.8$ e $\tau_d=15$ ms. La frequenza naturale consente un'attuazione più rapida dei modi instabili, mentre lo smorzamento limita il picco del secondo ordine. La frequenza naturale varia del $\pm15\%$, quindi fra 34 e 46 rad/s; lo smorzamento resta $\zeta=0.8$. Tolleranze costruttive, condizioni operative e approssimazioni del modello possono rendere un drive più rapido o più lento del nominale. Per il ritardo confrontiamo le variazioni $\pm10\%$, $\pm20\%$ e $\pm30\%$.
+Adottiamo $\omega_n=40$ rad/s, $\zeta=0.8$ e $\tau_d=15$ ms.
+La banda nominale di circa 34.78 rad/s consente ai drive di agire
+sulla scala temporale dei modi instabili. Fissiamo lo smorzamento
+a $0.8$ per ottenere un secondo ordine senza picco di risonanza
+nel modulo e per contenere il numero di parametri incerti.
 
-\input{generated/finale_ritardo.tex}
+Ammettiamo una variazione di $\pm15\%$ in $\omega_n$ (da 34 a 46
+rad/s) per rappresentare possibili differenze nella rapidità dei
+drive dovute a tolleranze, condizioni operative e semplificazioni
+del modello. La latenza può variare per effetto dell'elettronica e
+dell'elaborazione del comando. Per il ritardo assumiamo quindi
+$\pm20\%$, ossia $\tau_d\in[12,18]$ ms. Le variazioni di frequenza
+naturale e ritardo sono indipendenti, anche tra i due canali.
 
-Scegliamo $\tau_d\in[12,18]$ ms: a 40 rad/s l'estremo superiore produce circa $6.2^\circ$ di ulteriore fase rispetto al nominale. È un effetto significativo ma moderato, che merita di entrare nel confronto robusto. Tutti gli intervalli sono ipotesi di progetto. I parametri dei due canali variano indipendentemente.
-
-La banda nominale del drive è circa 34.78 rad/s. È superiore ai modi
-instabili del braccio, ma non infinitamente maggiore delle frequenze
-elastiche. Lo smorzamento 0.8 limita il picco del secondo ordine;
-la sensibilità ai parametri permette di distinguere l'effetto della
-frequenza naturale da quello del ritardo, senza moltiplicare
-combinazioni di tuning prive di una domanda precisa.
+Un ritardo maggiore introduce più ritardo di fase e può ridurre
+il margine di stabilità, soprattutto vicino alla frequenza di
+attraversamento dell'anello. Alla scala di 40 rad/s, l'estremo di
+18 ms aggiunge circa $6.2^\circ$ di ritardo di fase rispetto al
+nominale nel modello di Padé. Il valore quantifica l'effetto
+dell'ipotesi. L'intervallo di 3 ms per lato è una scelta didattica
+per studiare scostamenti apprezzabili attorno al nominale, in assenza
+di misure da cui stimare una tolleranza. Lo fissiamo come ipotesi
+comune per valutare i controllori sullo stesso insieme fisico.
 
 \section{Ritardo e Padé}
-Adottiamo Padé del primo ordine:
+Il ritardo puro $e^{-\tau_ds}$ non è razionale. Per ottenere una
+pianta in spazio di stato di dimensione finita usiamo
+l'approssimazione di Padé del primo ordine, come nella traccia.
+Con un solo stato riproduce il comportamento del ritardo alle
+basse frequenze:
 \[
  D(s;\tau_d)=\frac{1-\tau_ds/2}{1+\tau_ds/2},\qquad
  \dot x_d=-\frac{2}{\tau_d}x_d+\frac{2}{\tau_d}u,\quad y_d=2x_d-u.
 \]
-Variando $\tau_d$ cambiano i coefficienti della realizzazione, ma il ritardo mantiene un solo stato. Il drive ha quindi tre stati per ogni valore dei parametri. Il polo di Padé è $-2/\tau_d$ e lo zero è $+2/\tau_d$: quest'ultimo è essenziale per scegliere correttamente la forma dell'incertezza concentrata.
+Il polo è in $-2/\tau_d$ e lo zero in $+2/\tau_d$.
+I due termini simmetrici conservano il modulo unitario e danno
+una fase pari a $-2\arctan(\omega\tau_d/2)$. Lo zero
+nel semipiano destro rende il modello stabile ma a fase non minima:
+annullarlo con l'inverso introdurrebbe un polo instabile.
 
-Padé è un'approssimazione del ritardo puro. L'analisi A/B riguarda la famiglia razionale così definita; non certifica anche l'errore di approssimazione rispetto al ritardo esatto a tutte le frequenze.
-
-Lo zero destro rende il modello non a fase minima, pur lasciandolo
-stabile. Non è quindi possibile interpretare il ritardo come una sola
-attenuazione di modulo. A frequenze più alte l'approssimazione razionale
-si allontana dal ritardo esatto; il confronto nominale chiarisce questo
-limite senza trasformarlo in un'ulteriore incertezza non dichiarata.
+La Figura~\ref{fig:m3-pade} mostra che la fase di Padé segue quella
+del ritardo esatto alle basse frequenze e se ne discosta al crescere
+di $\omega\tau_d$. Il modello razionale e le analisi che seguono
+usano questa approssimazione in tutto l'intervallo dei ritardi.
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=.8\textwidth]{figures/student_baseline/delay_pade.png}
-\caption{Ritardo nominale di 15 ms e Padé del primo ordine. La figura
-riguarda il solo ritardo nominale, rimasto quello assegnato ai drive.}
+\caption{Ritardo nominale di 15 ms e Padé del primo ordine. Confronto di modulo e fase.}
 \label{fig:m3-pade}
 \end{figure}
 
 \section{Implementazione, verifica e interpretazione}
-La Figura~\ref{fig:attuatori} separa i due drive SISO dalla meccanica MIMO. Il disturbo entra direttamente sui link; la massa $m_2$ entra nelle equazioni meccaniche. Il sistema completo ha $8+3+3=14$ stati.
+Come mostra la Figura~\ref{fig:attuatori}, ciascun drive è SISO:
+$u_i$ genera la sola coppia $\tau_i$. La meccanica è MIMO perché
+inerzia e gravità accoppiano i giunti. Il disturbo entra direttamente
+sui link attraverso un ingresso separato. Agli otto stati meccanici
+si sommano tre stati per ciascun drive, due per il secondo ordine
+e uno per Padé. La cascata ha quindi $8+3+3=14$ stati. I drive
+aggiungono poli stabili e i due modi instabili della meccanica
+rimangono nella pianta in anello aperto.
 
 \begin{figure}[!htbp]\centering
 \resizebox{.92\textwidth}{!}{\input{figures/schemes/sea_attuatori.tex}}
 \caption{Dai due drive SISO al manipolatore accoppiato.}\label{fig:attuatori}
 \end{figure}
 
-La Figura~\ref{fig:singoli} varia un parametro alla volta, mantenendo nominali gli altri. La frequenza naturale sposta la velocità del drive; il ritardo di Padé cambia la fase senza cambiare il modulo. Queste differenze aiutano a interpretare la famiglia completa prima di usarla nelle sintesi.
+La Figura~\ref{fig:singoli} isola gli effetti delle due incertezze
+attuative mantenendo nominale l'altro parametro. Variando $\omega_n$
+la banda passa da circa 29.57 a 40.00 rad/s. Variando il ritardo
+le curve di modulo coincidono, mentre la fase cambia. Nel Capitolo~5 useremo
+queste variazioni per costruire le famiglie incerte della pianta.
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=.94\textwidth]{figures/definitiva/sensibilita_singoli_parametri.png}
 \caption{Cinque valori per ciascun parametro attuativo. A sinistra il modulo, a destra la fase.}\label{fig:singoli}
 \end{figure}
-
-Con cinque valori per parametro, mantenendo nominali gli altri, la banda varia da circa 29.57 a 40.00 rad/s per $\omega_n\in[34,46]$. Il ritardo all-pass di Padé conserva il modulo e modifica la fase. Un ritardo maggiore introduce più sfasamento e può ridurre i margini del sistema in retroazione. La variabilità del ritardo rappresenta elettronica, elaborazione dei segnali e dinamiche trascurate; lo smorzamento resta fisso e continua a comparire nel denominatore. Queste sono le due sole tipologie attuative della famiglia incerta del capitolo 5.
-Il Padé conserva un solo stato anche quando il ritardo cambia:
-la pianta ha quindi sempre otto stati meccanici e sei attuativi.
-
-In spazio di stato la cascata collega l'uscita dei drive all'ingresso
-di coppia della meccanica. Il disturbo lato link conserva una matrice
-d'ingresso separata. I drive aggiungono poli stabili, senza rimuovere
-i due modi instabili del robot. La verifica della cascata e quella
-delle proprietà PBH controllano quindi aspetti diversi della costruzione.

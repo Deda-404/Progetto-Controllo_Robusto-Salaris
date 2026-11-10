@@ -1,34 +1,41 @@
 \chapter{Modello dinamico del manipolatore SEA}
 \section{Coordinate e struttura meccanica}
-Il manipolatore è formato da due link planari. L'angolo $q_1$ è riferito all'orizzontale; $q_2$ è relativo al primo link, quindi l'orientamento assoluto del secondo è $q_1+q_2$. Le coordinate dei rotori sono $\theta_1,\theta_2$. Le masse $m_1=1$ kg e $m_2=0.8$ kg sono concentrate alle estremità dei rispettivi link, come nella traccia.
+Il manipolatore è formato da due link planari. L'angolo $q_1$ è riferito
+all'orizzontale e $q_2$ è relativo al primo link. L'orientamento assoluto
+del secondo è quindi $q_1+q_2$. Le coordinate dei rotori sono
+$\theta_1,\theta_2$. Come nella traccia, le masse $m_1=1$ kg e
+$m_2=0.8$ kg sono concentrate alle estremità dei rispettivi link.
+La sigla EE in Figura~\ref{fig:carico} indica l'estremità operativa,
+dove si trova la massa $m_2$.
 
-La massa distale è esclusivamente $m_2=0.8$ kg, concentrata all'estremità del secondo link. La sigla EE nella figura indica l'end-effector, cioè la posizione operativa del manipolatore. Le due masse della traccia esauriscono il modello meccanico assegnato.
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.88\textwidth]{figures/traccia/manipolatore_originale.png}
+\begin{figure}[!htbp]\centering
+\includegraphics[width=.70\textwidth]{figures/traccia/manipolatore_originale.png}
 \caption{Manipolatore SEA della traccia ufficiale del professor Salaris, prima pagina. I rotori M1 e M2 sono collegati ai link mediante le molle $k_1,k_2$; EE identifica l'estremità operativa.}\label{fig:carico}
 \end{figure}
 
-La Tabella~\ref{tab:parametri-definitivi} raccoglie tutti i dati nominali e le incertezze effettivamente utilizzate. Varia soltanto la massa del secondo link per la meccanica; nei drive variano frequenza naturale e ritardo. Queste percentuali sono ipotesi ingegneristiche, motivate dalla dinamica e dalla necessità di confrontare famiglie comprensibili. Lo zero nella colonna delle incertezze indica un parametro assunto noto ai fini del progetto, senza attribuirgli esattezza fisica.
+La Tabella~\ref{tab:parametri-definitivi} raccoglie dati nominali e
+incertezze. Per la meccanica varia soltanto $m_2$. Uno zero nella
+colonna delle incertezze indica che il parametro è assunto noto nel
+modello. Le ipotesi sui drive sono motivate nel Capitolo~4.
 
 \input{generated/parametri_definitivi.tex}
-\input{generated/finale_carico.tex}
-
-La coppia elastica dipende dalla differenza fra rotore e link.
-Se il rotore avanza rispetto al link, la molla esercita una coppia positiva
-sul braccio e una coppia opposta sul motore. Questo scambio spiega
-perché dobbiamo distinguere le due coordinate: comandare la posizione
-del rotore non impone istantaneamente quella del link.
-La misura di entrambe rende inoltre accessibile la deformazione,
-senza assumere una misura diretta delle velocità.
 
 \section{Equazioni del lato link e del lato motore}
-Definiamo la deformazione elastica $\delta=\theta-q$ e la coppia $\tau_{el}=K_s\delta$. Le equazioni sono
+Definiamo la deformazione elastica $\delta=\theta-q$ e la coppia
+$\tau_{el}=K_s\delta$, con $K_s=\operatorname{diag}(k_1,k_2)$.
+Le equazioni sono
 \begin{align}
 M(q)\ddot q+C(q,\dot q)\dot q+G(q)&=K_s(\theta-q)+d,\label{eq:link}\\
 J_m\ddot\theta+B_m\dot\theta&=\tau-K_s(\theta-q).\label{eq:motori}
 \end{align}
-Il modello fisico di base della traccia si ottiene ponendo $d=0$. Il termine $d$ è introdotto soltanto nelle verifiche come coppia esterna applicata direttamente ai link. Il comando del drive produce invece la coppia motore $\tau$. La coppia elastica agisce con segni opposti nelle due equazioni, coerentemente con lo scambio di energia fra rotori e braccio.
+$J_m$ e $B_m$ sono le matrici diagonali di inerzia e smorzamento dei
+rotori. Se il rotore avanza rispetto al link, la molla trascina il link
+e si oppone al moto relativo del rotore. Per questo la coppia elastica
+compare con segni opposti nelle due equazioni e il link può muoversi
+diversamente dal rotore. La coppia erogata $\tau$ agisce sui rotori.
+Il termine $d$ rappresenta invece una coppia esterna applicata
+direttamente ai link nelle verifiche di reiezione. Con $d=0$ si
+ottiene il modello assegnato dalla traccia.
 
 Con la massa $m_2$ del secondo link, la matrice d'inerzia è
 \[
@@ -43,62 +50,66 @@ C(q,\dot q)&=\begin{bmatrix}-h\dot q_2&-h(\dot q_1+\dot q_2)\\h\dot q_1&0\end{bm
 &h&=m_2l_1l_2\sin q_2,\\
 G(q)&=\begin{bmatrix}(m_1+m_2)gl_1\cos q_1+m_2gl_2\cos(q_1+q_2)\\m_2gl_2\cos(q_1+q_2)\end{bmatrix}.
 \end{align*}
-Aumentare $m_2$ modifica dunque sia le accelerazioni ottenute da una coppia sia l'effetto della gravità e delle velocità. Modificarla soltanto in $G$ descriverebbe un sistema fisico diverso.
+La stessa variazione di $m_2$ modifica l'inerzia, i termini che
+dipendono dalle velocità e la gravità. In ciascuna realizzazione
+del modello usiamo quindi lo stesso valore di $m_2$ in $M$, $C$ e $G$.
 
-Non introduciamo smorzamento viscoso lato link, perché non è previsto
-nelle equazioni assegnate; $B_m$ agisce sui rotori. Il vettore di gravità
-usa coseni degli angoli assoluti perché $q_1$ è misurato dall'orizzontale.
-Un'altra convenzione angolare cambierebbe l'aspetto delle formule:
-va conservata la stessa convenzione in equilibrio e simulazioni.
+Lo smorzamento viscoso $B_m$ agisce sui soli rotori. I coseni in $G$
+derivano dalla scelta di misurare gli angoli a partire dall'orizzontale.
 
-La positività dell'inerzia si verifica senza una lunga ricerca numerica:
+La matrice d'inerzia è simmetrica e $M_{11}>0$. Inoltre, per le lunghezze
+e le masse positive del modello,
 \[
 \det M=m_2l_1^2l_2^2\bigl(m_1+m_2\sin^2q_2\bigr)>0.
 \]
-Poiché anche $M_{11}>0$, $M$ è definita positiva per ogni configurazione e per tutte le masse considerate.
+Per il criterio di Sylvester, $M$ è definita positiva in ogni
+configurazione. L'energia cinetica dei link è quindi positiva per
+$\dot q\ne 0$ e, a configurazione fissata, le equazioni determinano
+univocamente le accelerazioni.
 
-La simmetria di $M$ deriva dall'energia cinetica. Insieme a $M_{11}>0$,
-il determinante positivo soddisfa il criterio di Sylvester: per ogni
-velocità non nulla l'energia cinetica è positiva. È una proprietà
-analitica, valida in tutto l'intervallo fisico della massa, non soltanto
-nei punti eventualmente campionati. La struttura di $C$ completa il
-bilancio energetico attraverso l'antisimmetria di $\dot M-2C$.
-I termini di Coriolis redistribuiscono l'energia fra coordinate,
-non rappresentano una dissipazione viscosa aggiunta.
+Derivando $M$ si verifica che $\dot M-2C$ è antisimmetrica, per cui
+$\dot q^T(\dot M-2C)\dot q=0$. Nel bilancio di potenza questo significa
+che $\dot q^TC\dot q$ compensa il termine dovuto alla variazione di $M$
+nella derivata dell'energia cinetica. La dissipazione viscosa del
+modello è invece associata a $B_m$.
 
 \section{Stato, ingressi e uscite}
-Lo stato meccanico è $x_m=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T\in\mathbb R^8$. Le accelerazioni si ricavano risolvendo
-\[
-\ddot q=M(q)^{-1}\bigl[K_s(\theta-q)-C\dot q-G+d\bigr],\qquad
-\ddot\theta=J_m^{-1}\bigl[\tau-B_m\dot\theta-K_s(\theta-q)\bigr].
-\]
-Nel calcolo MATLAB usiamo sistemi lineari con l'operatore \texttt{\textbackslash}. Le uscite di prestazione sono le posizioni articolari $q$. Per il filtro di Kalman assumiamo disponibili quattro encoder, che misurano $[q^T,\theta^T]^T$, senza misure dirette di velocità.
-
-Se indichiamo con $v_q$ e $v_\theta$ le velocità, il primo ordine è
+Lo stato meccanico è $x_m=[q^T,\dot q^T,\theta^T,\dot\theta^T]^T\in\mathbb R^8$.
+Ponendo $v_q=\dot q$ e $v_\theta=\dot\theta$, le
+Equazioni~\eqref{eq:link}--\eqref{eq:motori} diventano
 \[
  \frac{d}{dt}\begin{bmatrix}q\\v_q\\\theta\\v_\theta\end{bmatrix}
  =\begin{bmatrix}v_q\\M^{-1}(K_s(\theta-q)-Cv_q-G+d)\\
  v_\theta\\J_m^{-1}(\tau-B_mv_\theta-K_s(\theta-q))\end{bmatrix}.
 \]
-Questa forma chiarisce dove entra ciascuna coppia. Un disturbo sul link
-non è filtrato dal drive prima di raggiungere il braccio; il comando
-motore lo è. L'uscita regolata resta $q$, mentre $[q;\theta]$ è la
-misura disponibile al Kalman. Confondere queste due uscite cambierebbe
-l'informazione utilizzabile dal controllore.
+In MATLAB ricaviamo le accelerazioni risolvendo i sistemi lineari con
+l'operatore \texttt{\textbackslash}. Il comando $u$ del controllore
+attraversa il drive prima di diventare la coppia $\tau$ che compare
+nell'equazione dei rotori. Il disturbo $d$ entra direttamente
+nell'equazione dei link.
+
+Le posizioni $q$ sono le uscite da controllare. I quattro encoder
+forniscono le misure $[q^T,\theta^T]^T$, dalle quali si può ricavare la
+deformazione elastica. Le velocità fanno parte dello stato e non sono
+misurate direttamente.
 
 \section{Implementazione e verifiche}
-Le stesse espressioni di $M,C,G$ alimentano la dinamica e la linearizzazione. Una verifica indipendente usa il Jacobiano geometrico $J_{EE}$ della posizione distale:
+Le stesse espressioni di $M,C,G$ sono usate nella simulazione non
+lineare e nella costruzione del modello linearizzato. Come controllo
+indipendente sul contributo di $m_2$, usiamo il Jacobiano $J_{EE}$ della
+posizione della massa già assegnata all'estremità del secondo link.
+La velocità del punto è $J_{EE}\dot q$ e la sua quota ha gradiente
+$J_{EE,y}$. Dalle energie cinetica e potenziale della massa otteniamo
 \[
  M-M\big|_{m_2=0}=m_2J_{EE}^TJ_{EE},\qquad
  G-G\big|_{m_2=0}=m_2gJ_{EE,y}^T.
 \]
-Queste identità verificano il contributo della massa distale assegnata: il caso $m_2=0$ serve soltanto come riferimento algebrico per sottrarre quel contributo, senza invertire la matrice singolare e senza appartenere alla famiglia fisica studiata. È verificata anche l'antisimmetria di $\dot M-2C$, che esprime la coerenza energetica dei termini centrifughi e di Coriolis.
+La sottrazione isola il contributo di $m_2$ e permette, per esempio,
+di individuare un termine d'inerzia incrociato mancante. Qui
+$m_2=0$ serve soltanto a isolare i termini proporzionali a $m_2$.
 
 \section{Assunzioni e limiti del modello}
-Le molle sono lineari; il modello non include attrito secco, giochi, flessibilità distribuita dei link o saturazioni. Le inerzie dei motori e le rigidezze restano quelle della traccia. La massa $m_2$ rimane costante durante ogni prova. Le sue tolleranze possono descrivere differenze costruttive o un'identificazione imperfetta della massa equivalente concentrata del secondo link.
-
-Le inerzie sono riferite alle coordinate motore adottate e le molle sono
-lineari. Attrito secco, giochi e flessibilità distribuita richiederebbero
-altri termini. La coerenza energetica delle equazioni non dimostra quindi
-che ogni fenomeno reale sia incluso; verifica che i fenomeni dichiarati
-siano rappresentati senza contraddizioni interne.
+I link sono rigidi e le molle sono lineari. Il modello trascura
+attrito secco, giochi, flessibilità distribuita dei link e saturazioni.
+La massa $m_2$ è costante in ciascuna prova. La sua tolleranza
+rappresenta l'incertezza sulla massa equivalente del secondo link.

@@ -7,20 +7,37 @@ L'elasticità è utile per la misura indiretta della coppia e per la sicurezza d
 
 La massa $m_2$ è quella concentrata all'estremità del secondo link, come nella traccia. La sua incertezza modifica insieme inerzia, Coriolis e gravità. I drive presentano invece variazioni di frequenza naturale e ritardo, mentre lo smorzamento resta noto. Sono tre tipologie fisiche con ruoli diversi: la prima meccanica, le altre due attuative.
 
-Il filo conduttore è il confronto fra due rappresentazioni degli stessi
-attuatori e della stessa meccanica. La prima conserva i parametri fisici;
-la seconda concentra lo scostamento dei drive in dinamiche pesate.
-Osserviamo sia che cosa cambia nei margini sia che cosa rimane identico
-quando controllore e impianto fisico sono gli stessi. È questa distinzione
-a collegare la modellazione delle incertezze alla scelta del controllo.
+Le stesse variazioni fisiche si possono descrivere in modi diversi.
+Ci chiediamo quanto la rappresentazione scelta incida sulle conclusioni
+di robustezza e sulle decisioni di progetto, a parità di manipolatore e
+di sorgenti di incertezza.
 
 \section{Obiettivi di controllo}
-La traccia richiede di partire dal modello non lineare, scegliere e verificare un punto di equilibrio, introdurre gli attuatori con ritardo e costruire un insieme incerto di dimensione contenuta. Su questa base devono essere confrontati un controllo LQG, sintesi $H_\infty$ nominali, strutture di ordine ridotto, $\mu$-analysis e $\mu$-synthesis. Le prestazioni di interesse comprendono tracking di piccoli riferimenti articolari, reiezione di coppie esterne lato link, attenuazione del rumore, interazione MIMO e sforzo di controllo.
+Vogliamo stabilizzare il braccio nella configurazione verticale
+superiore e controllare le posizioni dei due link nelle sue vicinanze.
+Chiediamo al sistema di seguire piccoli riferimenti articolari, attenuare
+l'effetto delle coppie esterne e del rumore di misura, e limitare sia il
+comando di coppia sia il movimento indotto su un giunto quando si comanda
+l'altro.
 
-Nel progetto abbiamo adottato due principi metodologici. Il primo consiste nel dichiarare modello incerto, target e pesi, verificando ogni controllore sul problema a cui appartiene. Il secondo consiste nel separare quattro domande differenti: stabilità nominale, prestazione nominale, stabilità robusta e prestazione robusta. Un controllore può rispondere positivamente a una di esse e negativamente alle altre.
+Per raggiungere questi obiettivi confrontiamo LQG con e senza integratore,
+sintesi $H_\infty$ nominali, controllori a struttura fissata di ordine
+ridotto e sintesi mediante iterazione D--K. Studiamo anche come le
+incertezze fisiche e il modo in cui le rappresentiamo incidano sulla
+valutazione dei controllori.
+
+La stabilità nominale riguarda la chiusura in retroazione per i valori
+nominali. La prestazione nominale chiede anche che, su quell'impianto,
+siano rispettati i requisiti adottati. Le corrispondenti verifiche
+robuste estendono le due domande all'intera famiglia modellata.
+Un anello può quindi restare stabile al variare dei parametri e
+perdere, per esempio, la precisione di inseguimento richiesta.
 
 \section{Metodo di lavoro e classi di verifica}
-Il percorso progettuale procede dalle equazioni fisiche alla definizione degli obiettivi e delle verifiche. Dopo la verifica dell'equilibrio e dei Jacobiani, il modello viene esteso con gli attuatori nominali e con le incertezze parametriche e dinamiche. Le specifiche temporali vengono quindi collegate ai pesi frequenziali, consentendo di confrontare controllori con strutture diverse sullo stesso problema.
+La sintesi parte dalle equazioni non lineari, verificate e linearizzate
+nell'equilibrio scelto. Aggiungiamo poi i drive e costruiamo le famiglie
+incerte. Dichiariamo, per ciascun confronto, l'impianto, le specifiche
+e i pesi che traducono queste ultime in requisiti frequenziali.
 
 Le verifiche finali appartengono a classi che non possono essere aggregate indiscriminatamente:
 \begin{itemize}
@@ -33,11 +50,11 @@ Le verifiche finali appartengono a classi che non possono essere aggregate indis
 La distinzione evita, per esempio, di interpretare la frazione di campioni stabili come probabilità fisica o di usare una simulazione non lineare nominale come certificato robusto.
 
 \section{Organizzazione della relazione}
-I capitoli successivi seguono il ragionamento ingegneristico. I Capitoli 2--5 costruiscono il modello nominale e incerto; il Capitolo 6 definisce obiettivi e scale generali. I Capitoli 7--9 descrivono le sintesi LQG, $H_\infty$ e $\mu$; i pesi mixed-sensitivity sono introdotti nel Capitolo 8. I Capitoli 10 e 11 discutono validazione non lineare, RAS e prove pratiche di robustezza. Il Capitolo 12 confronta le famiglie studiate e ne valuta i ruoli; il Capitolo 13 raccoglie conclusioni, limiti e possibili sviluppi. I nomi dei file che producono i risultati sono raccolti nell'Appendice B.
+Il Capitolo 6 definisce obiettivi e scale generali. I Capitoli 7--9 descrivono le sintesi LQG, $H_\infty$ e $\mu$; i pesi mixed-sensitivity sono introdotti nel Capitolo 8. I Capitoli 10 e 11 discutono validazione non lineare, RAS e prove pratiche di robustezza. Il Capitolo 12 confronta le famiglie studiate e ne valuta i ruoli; il Capitolo 13 raccoglie conclusioni, limiti e possibili sviluppi. I nomi dei file che producono i risultati sono raccolti nell'Appendice B.
 
 Le fonti didattiche sono la traccia e il materiale del corso di Controllo
 Robusto: gli esempi MATLAB sulla modellazione delle incertezze, le slide
 su LFT e pesi e le parti degli Appunti e del riassunto dedicate a
 $H_\infty$ e $\mu$. Gli esempi guidano il metodo; parametri e conclusioni
 numeriche del manipolatore provengono dai dati del progetto.
-Le ipotesi liberamente scelte non sono attribuite al docente.
+Il modello meccanico del Capitolo 2 parte dalle coordinate e dalle coppie definite nella traccia.

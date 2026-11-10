@@ -1,3 +1,11 @@
+# Stato corrente — 10.11.2026, revisione dei capitoli 1–4
+
+Gate editoriale COMPLETE/PASS. Compilazione integrale di 110 pagine e controllo visivo dei capitoli 1–4. Confermati sui dati salvati i ranghi PBH 14/14 della pianta completa. Verificati in Python equilibrio, Jacobiani, proprietà dell'inerzia e scarto di fase del ritardo. MATLAB NOT RUN in questa sessione per errore 5201 all'avvio. Le evidenze numeriche validate del 4 novembre e lo stato prestazionale riportato sotto restano applicabili.
+
+Prossimo passo: lettura degli autori sul ramo di revisione. Il PDF compilato per l'audit è una copia locale di verifica. Gli elaborati di consegna pubblicati restano quelli del 4 novembre.
+
+---
+
 # Stato corrente — 04.11.2026, revisione definitiva completata
 
 Stesso ramo codex/sea-revisione-finale-semplificata e PR #47. Modello della traccia con sole m1/m2, cinque reali in A e due dinamiche più m2 in B. Sintesi, 14 post-analisi, 77 casi lineari, 14+21 non lineari, rumore e 105 RAS eseguiti. Cinque test correnti e otto verifiche PASS. Venti run Simulink e otto avvii autonomi PASS, ripetuti anche dalla ZIP estratta fuori dal repository con path pulito; rapida integrale, sette CSV identici, 33 ingressi testati verificati per hash.

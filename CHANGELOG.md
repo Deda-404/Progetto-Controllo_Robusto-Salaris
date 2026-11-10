@@ -4,6 +4,8 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Chiariti obiettivi, modello SEA, equilibrio, linearizzazione e costruzione della pianta nei capitoli 1–4. Tolte dal testo le tabelle esplorative su massa e ritardo. Conservati i dati sorgente, le figure, le equazioni e i parametri.
+
 ## 2026-11-01 — Collaudo e consegna definitiva
 
 - Percorso unico completo eseguito, A/B confrontati a controllore fissato e dopo le sintesi dedicate; risultati negativi preservati.
