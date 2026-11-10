@@ -2478,3 +2478,9 @@ Collaudo estratto COMPLETE/PASS (rapida, 8 verifiche, 20 run, 8 callback origina
 Per m2, fra mantenere la tabella esplorativa e spiegare la dipendenza nelle equazioni, si è scelta la seconda opzione. La tabella mostrava tre valori a una sola postura, mentre M, C e G spiegano direttamente quali termini variano. È stata conservata la verifica indipendente con il Jacobiano dell'estremità, che isola il contributo della massa assegnata e può individuare errori nei termini accoppiati.
 
 Per il ritardo si è mantenuto nel testo l'effetto di 18 ms rispetto al nominale a 40 rad/s. Il confronto fra tre tolleranze rimane nei dati. Lo sfasamento rende leggibile la scala dell'ipotesi, senza attribuire all'intervallo una provenienza sperimentale o usarlo come criterio per scegliere la prestazione dei controllori. Entrambe le decisioni riguardano l'esposizione e lasciano invariati parametri, modelli e verifiche scientifiche del progetto.
+
+## 2026-11-10 — Impaginazione finale e versione degli elaborati
+
+**Stato** — Applicato nella PR #48.
+
+Le due figure vengono collocate nel punto in cui servono alla lettura, con una riduzione delle sole larghezze LaTeX. Questa disposizione evita le pagine dedicate ai singoli grafici e conserva le immagini e le didascalie. Il PDF tracciato segue i sorgenti revisionati. La ZIP del 4 novembre resta la copia collaudata e conserva la relazione di quella consegna.

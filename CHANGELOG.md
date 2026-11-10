@@ -4,6 +4,8 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Rifinita l'impaginazione delle figure dei capitoli 2 e 3, ripristinata la guida ai capitoli 2–5 e precisata l'interpretazione dello sfasamento di Padé. Aggiornato il PDF integrale alla versione verificata di 108 pagine.
+
 - Chiariti obiettivi, modello SEA, equilibrio, linearizzazione e costruzione della pianta nei capitoli 1–4. Tolte dal testo le tabelle esplorative su massa e ritardo. Conservati i dati sorgente, le figure, le equazioni e i parametri.
 
 ## 2026-11-01 — Collaudo e consegna definitiva

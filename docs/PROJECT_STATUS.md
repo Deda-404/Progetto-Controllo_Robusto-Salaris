@@ -1,8 +1,8 @@
 # Stato corrente — 10.11.2026, revisione dei capitoli 1–4
 
-Gate editoriale COMPLETE/PASS. Compilazione integrale di 110 pagine e controllo visivo dei capitoli 1–4. Confermati sui dati salvati i ranghi PBH 14/14 della pianta completa. Verificati in Python equilibrio, Jacobiani, proprietà dell'inerzia e scarto di fase del ritardo. MATLAB NOT RUN in questa sessione per errore 5201 all'avvio. Le evidenze numeriche validate del 4 novembre e lo stato prestazionale riportato sotto restano applicabili.
+Gate editoriale COMPLETE/PASS. La versione finale di 108 pagine include le rifiniture della PR #48 ed è salvata nel repository. Controllate visivamente le pagine PDF 12–21 e verificati equazioni, riferimenti e identità dei sorgenti dal capitolo 5. Confermati sui dati salvati i ranghi PBH 14/14 della pianta completa. Verificati in Python equilibrio, Jacobiani, proprietà dell'inerzia e scarto di fase del ritardo. MATLAB NOT RUN in questa sessione per errore 5201 all'avvio. Le evidenze numeriche validate del 4 novembre e lo stato prestazionale riportato sotto restano applicabili.
 
-Prossimo passo: lettura degli autori sul ramo di revisione. Il PDF compilato per l'audit è una copia locale di verifica. Gli elaborati di consegna pubblicati restano quelli del 4 novembre.
+La revisione è disponibile sulla PR #48. La ZIP e la presentazione appartengono alla consegna del 4 novembre.
 
 ---
 
