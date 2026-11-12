@@ -1,3 +1,11 @@
+# Stato corrente — 12.11.2026, revisione del Capitolo 6
+
+Gate editoriale COMPLETE/PASS. Verificati sul codice e sui risultati salvati i target definitivi, le definizioni delle metriche, l'uso di Mo e dei pesi nelle sintesi e il protocollo di rumore. Assestamento al 2% del modello di riferimento verificato analiticamente. Nuove esecuzioni MATLAB e Simulink NOT RUN.
+
+PDF integrale di 107 pagine aggiornato e Capitolo 6 controllato visivamente (pagine PDF 29–30). Verificata l'identità dei contenuti degli altri capitoli e delle appendici. Il ramo dedicato parte dalla HEAD della PR #49. La ZIP conserva gli elaborati collaudati del 4 novembre. Prossimo passo — lettura del Capitolo 6 da parte degli autori.
+
+---
+
 # Stato corrente — 10.11.2026, revisione del Capitolo 5
 
 Gate editoriale COMPLETE/PASS. Verificati in codice e dati salvati la struttura a cinque reali con 17 occorrenze, i 25 casi di costruzione, i 30 di verifica e la selezione del peso di ordine 3. Controllati in Python l'estrazione manuale del parametro, gli zeri di Padé e la copertura dell'inviluppo sulla griglia esistente. Nuove esecuzioni MATLAB e Simulink NOT RUN. Le norme continue riportate provengono dalla campagna approvata.

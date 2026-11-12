@@ -2490,3 +2490,10 @@ Le due figure vengono collocate nel punto in cui servono alla lettura, con una r
 **Stato** — Applicato nel Capitolo 5 per la revisione degli autori.
 
 Le figure esistenti sono state mantenute perché rispondono a domande distinte su dinamica dei drive, porte LFT, forme di errore e costruzione del peso. Il grafico del peso conserva l'intera griglia usata dal fit. La lettura distingue il controllo visivo del modulo nei nodi dalla norma continua per singolo caso. La verifica indipendente sui 30 drive resta separata dalla selezione del peso e la copertura dell'intero rettangolo parametrico rimane una questione aperta.
+
+
+## 2026-11-12 — Presentazione dei target nel Capitolo 6
+
+**Stato** — Applicato nel ramo di revisione.
+
+Il capitolo presenta l'insieme definitivo di specifiche e lascia la storia dei livelli preliminari nei dati della campagna. Si mantiene il cross-coupling come criterio aggiuntivo scelto dal gruppo perché misura la risposta dell'altro giunto ed entra nel confronto dei controllori. La discussione della norma pesata è limitata alla scala del limite DC per il riferimento e rimanda alle prove al gradino per l'esito dei quattro target. La sezione sul rumore conserva il protocollo comune e rimanda ai capitoli successivi per le estensioni di sintesi e i risultati.
