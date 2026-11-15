@@ -124,9 +124,13 @@ def main():
           [[num(x[k]) for k in ["FattoreSigmaAssunta","PoloOsservatore","ErroreStimaRMS","ComandoRMS"]] for x in read("kalman")],
           "Sensibilità del Kalman a sequenza di rumore identica, senza riferimento né disturbo. Intensità assunte, non stimate da misure.")
     hinf=read("hinf")
-    table("hinf",["Controllore","Ordine","Norma comune",r"$\|T_{v\to u}\|_\infty$"],
-          [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
-          "Tutti nominalmente stabili. La norma comune include riferimento e disturbo; il rumore è valutato separatamente.")
+    methods={"Hinf1":r"\texttt{hinfsyn} 1-DoF", "Hinf2":r"\texttt{hinfsyn} 2-DoF",
+             "PID_nuovo":r"\texttt{hinfstruct} 2-DoF"}
+    table("hinf",["Controllore","Sintesi","Ordine","Norma comune",r"$\|T_{v\to u}\|_\infty$"],
+          [[esc(x["Controllore"].replace("_nuovo","")),methods[x["Controllore"]],x["Ordine"],
+            num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
+          "Risultati in frequenza sul nominale. Tutte le chiusure sono internamente stabili.",
+          "tab:cap8-norme")
     robust=read("confronto_robusto")
     assert len(robust)==14
     caption="Margini robusti: soglia unitaria. NP indica esclusione già sul nominale; RS indica un limite superiore dedotto dalla perdita di stabilità. Non sono misure dirette di RP."

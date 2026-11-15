@@ -1,3 +1,11 @@
+# Stato corrente — 15.11.2026, revisione del Capitolo 8
+
+Gate editoriale COMPLETE/PASS. Verifica in sola lettura con MATLAB e confronto Python sui MAT/CSV. Confermati lo scarto relativo di 3,12e-12 fra mixsyn e hinfsyn sul 1-DoF, gli ordini 18/22/4 e i valori del confronto comune. Solo Hinf2 rispetta i quattro target nominali. Il forte guadagno rumore–comando di Hinf2 e i FAIL RS di Hinf2 e PID sulle famiglie A/B restano riportati. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.
+
+PDF di 94 pagine e verifica visiva delle pagine PDF 40–48 completata. Il ramo parte dalla HEAD della PR #51. La ZIP resta la consegna collaudata il 4 novembre. Prossimo passo — revisione del Capitolo 8 da parte degli autori.
+
+---
+
 # Stato corrente — 15.11.2026, revisione del Capitolo 7
 
 Gate editoriale COMPLETE/PASS. Confrontate le annotazioni con la traccia, la sintesi e i risultati del 4 novembre. Verificati su MAT/CSV costi, guadagni, filtro, prefiltro e chiusure nominali a 28 e 30 stati. Confermati i quattro target nominali per LQG e l'assestamento di 5,05 s per LQGI rispetto alla soglia di 2 s. Per A e B resta documentato RS PASS e NP/RP FAIL sul criterio pesato comune. Nuove esecuzioni MATLAB e Simulink NOT RUN.

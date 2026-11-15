@@ -2504,3 +2504,10 @@ Il capitolo presenta l'insieme definitivo di specifiche e lascia la storia dei l
 La revisione parte dalla HEAD della PR #50. Si presentano per esteso le equazioni indispensabili per passare dalla pianta al regolatore, al filtro e al servo integrale. Si è scelto di mostrare la costruzione fisica di Q e le leggi di comando e di lasciare le matrici numeriche complete negli esportati e nei dati del repository. La griglia dei pesi appartiene alla ricerca storica e la sintesi corrente usa i pesi fissati nella banca validata. I grafici delle priorità e dei due punti di compromesso sono sostituiti nel testo dall'indicazione dei pesi e dal confronto tabellare con tutti i target. La figura della sensibilità sostituisce la tabella duplicata dei cinque fattori. Le verifiche della stabilità nominale e della separazione sono conservate in forma compatta.
 
 La tabella di tracking raccoglie metriche già calcolate. Il confronto distingue ingresso di coppia, variazione di massa e margini A/B. Gli esiti della prestazione pesata, l'assestamento LQGI oltre 2 s e i limiti dei modelli sono espliciti. Stato: proposto per la revisione degli autori.
+
+
+## 2026-11-15 — Presentazione del progetto H∞ nel Capitolo 8
+
+La sintesi corrente resta il riferimento. Si è scelto di presentare nello stesso percorso l'equivalenza del costo ottenuto con mixsyn e hinfsyn sul 1-DoF, il passaggio al riferimento separato con Mo e la sintesi a struttura PID. Per il confronto si usano una tabella in frequenza e una dei gradini nominali. L'esportatore aggiorna la sola presentazione della tabella in frequenza a partire da hinf.csv.
+
+Lo schema della pianta generalizzata contiene già il collegamento 2-DoF e sostituisce il secondo disegno ridondante. Rimangono i grafici dei pesi, del tracking, di S/T e delle risposte alle coppie di disturbo. Il nuovo schema dei percorsi G e Gd è illustrativo. La formulazione con rumore esplicito resta una possibile estensione, senza i fattori esemplificativi di Wn e senza attribuire altri controllori alla campagna. Stato: proposto per la revisione degli autori.
