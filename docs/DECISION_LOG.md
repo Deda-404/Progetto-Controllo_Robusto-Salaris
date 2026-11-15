@@ -2497,3 +2497,10 @@ Le figure esistenti sono state mantenute perché rispondono a domande distinte s
 **Stato** — Applicato nel ramo di revisione.
 
 Il capitolo presenta l'insieme definitivo di specifiche e lascia la storia dei livelli preliminari nei dati della campagna. Si mantiene il cross-coupling come criterio aggiuntivo scelto dal gruppo perché misura la risposta dell'altro giunto ed entra nel confronto dei controllori. La discussione della norma pesata è limitata alla scala del limite DC per il riferimento e rimanda alle prove al gradino per l'esito dei quattro target. La sezione sul rumore conserva il protocollo comune e rimanda ai capitoli successivi per le estensioni di sintesi e i risultati.
+
+
+## 2026-11-15 — Sintesi espositiva di LQG e LQGI nel Capitolo 7
+
+La revisione parte dalla HEAD della PR #50. Si presentano per esteso le equazioni indispensabili per passare dalla pianta al regolatore, al filtro e al servo integrale. Si è scelto di mostrare la costruzione fisica di Q e le leggi di comando e di lasciare le matrici numeriche complete negli esportati e nei dati del repository. La griglia dei pesi appartiene alla ricerca storica e la sintesi corrente usa i pesi fissati nella banca validata. I grafici delle priorità e dei due punti di compromesso sono sostituiti nel testo dall'indicazione dei pesi e dal confronto tabellare con tutti i target. La figura della sensibilità sostituisce la tabella duplicata dei cinque fattori. Le verifiche della stabilità nominale e della separazione sono conservate in forma compatta.
+
+La tabella di tracking raccoglie metriche già calcolate. Il confronto distingue ingresso di coppia, variazione di massa e margini A/B. Gli esiti della prestazione pesata, l'assestamento LQGI oltre 2 s e i limiti dei modelli sono espliciti. Stato: proposto per la revisione degli autori.
