@@ -1,3 +1,11 @@
+# Stato corrente — 16.11.2026, rifinitura della PR #52
+
+Gate editoriale COMPLETE/PASS. Corretto il richiamo a W_A nel §8.5. La figura dei disturbi è quella della campagna originale. Le serie numeriche corrispondenti alle due prove lineari non sono presenti nei risultati disponibili. Nuove sintesi e simulazioni MATLAB/Simulink NOT RUN.
+
+PDF integrale di 94 pagine ricompilato senza avvisi LaTeX, con controllo visivo delle pagine PDF 40–48 e confronto positivo con la versione precedente per gli altri capitoli e le appendici. Rifinitura sul ramo esistente della PR #52.
+
+---
+
 # Stato corrente — 15.11.2026, revisione del Capitolo 8
 
 Gate editoriale COMPLETE/PASS. Verifica in sola lettura con MATLAB e confronto Python sui MAT/CSV. Confermati lo scarto relativo di 3,12e-12 fra mixsyn e hinfsyn sul 1-DoF, gli ordini 18/22/4 e i valori del confronto comune. Solo Hinf2 rispetta i quattro target nominali. Il forte guadagno rumore–comando di Hinf2 e i FAIL RS di Hinf2 e PID sulle famiglie A/B restano riportati. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.

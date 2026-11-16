@@ -3263,3 +3263,12 @@ Revisione dalla HEAD della PR #51. Confrontate le pagine stampate 42–54 del PD
 Controllo in sola lettura con MATLAB PASS. Verificati l'ordine dei controllori, i segni delle interconnessioni, le mappe pesate, le tre chiusure stabili, le norme comuni, i guadagni rumore–comando e la realizzazione del PID dai blocchi salvati. Per i due controllori 1-DoF, norma 0,9534124589 su P1. Il primo controllo ha emesso avvisi per l'uso di zero su pesi MIMO e per la valutazione diretta di una mappa nulla. Il controllo ripetuto sui pesi scalari e sui singoli canali ha confermato gli esiti. Verifica Python su MAT/CSV e traiettorie salvate PASS, inclusi obiettivi e scarto di sintesi, target, rumore, RAS e robustezza. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.
 
 Compilazione integrale di 94 pagine e controllo visivo del Capitolo 8 (pagine PDF 40–48) PASS. L'audit finale non rileva avvisi LaTeX, riferimenti irrisolti o box fuori misura. Verificati contenuto e impaginazione dei capitoli esterni e delle appendici, esclusa la numerazione. La ZIP conserva l'hash della consegna collaudata. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-16 — Verifica finale della PR #52
+
+Corretto unicamente il richiamo del §8.5 al peso di incertezza. W_A descrive lo scostamento additivo degli attuatori nella famiglia B del Capitolo 5. W1 e W2 pesano errore e comando nella sintesi H∞. Il controllo dei richiami nei due capitoli conferma che W_I riguarda la sola forma inversa discussa nel Capitolo 5.
+
+Verificata la provenienza della figura dei disturbi. Lo script confronto_ras.m salva in confronto.mat le risposte ai riferimenti e riassume le risposte ai disturbi con picco di spostamento e recupero. Per i tre controllori, le curve lineari dei due ingressi di disturbo sono esportate nel PNG. Le traiettorie di ras.mat sono non lineari e non corrispondono alle due prove della figura. Conservato il PNG originale perché i dati disponibili non consentono di separare fedelmente le curve q1 e q2. Sintesi e simulazioni MATLAB/Simulink NOT RUN.
+
+Compilazione integrale di 94 pagine e controllo visivo delle pagine PDF 40–48 PASS. Verificati schema G/Gd, tabelle, pianta generalizzata, formule, collocazione delle figure e riferimenti. Il testo e la resa dei capitoli esterni e delle appendici coincidono con la versione precedente. Gate editoriale COMPLETE/PASS.

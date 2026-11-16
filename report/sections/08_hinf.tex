@@ -184,8 +184,9 @@ compromesso minimizzando
 \]
 La sensibilità complementare $T=I-S$ è la mappa da $r$ a $q$
 nel 1-DoF. Passiamo \texttt{W3=[]} perché il costo scelto ha due
-termini e lascia $T$ senza un peso diretto. Il peso $W_I$ del
-Capitolo 5 serve invece a descrivere l'incertezza dei drive.
+termini e lascia $T$ senza un peso diretto. Nel Capitolo 5, $W_A$
+scala l'incertezza additiva degli attuatori nella famiglia B.
+I pesi prestazionali $W_1$ e $W_2$ agiscono su errore e comando.
 
 La chiamata è \texttt{mixsyn(G,W1,W2,[],options)}, con $G$ da
 comando a posizioni dei link. La tolleranza relativa $10^{-4}$
