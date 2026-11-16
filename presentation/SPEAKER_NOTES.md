@@ -22,9 +22,9 @@ Seguire i due drive verso la meccanica.
 
 Spiegare lo zero destro di Padé prima del fit.
 
-## 5. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:43
+## 5. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:52
 
-Distinguere target temporali e soglie matematiche.
+Distinguere target temporali e norma pesata del solo riferimento.
 
 ## 6. LQR: il costo deriva dalle grandezze fisiche — Valerio, 0:42
 
@@ -42,7 +42,7 @@ Indicare i due integratori.
 
 Leggere il ruolo dei pesi.
 
-## 10. Due gradi di libertà, stati condivisi — Alessio, 0:43
+## 10. Due gradi di libertà, stati condivisi — Alessio, 0:45
 
 Seguire riferimento e feedback.
 
@@ -50,21 +50,21 @@ Seguire riferimento e feedback.
 
 Confrontare ordine e costo comune.
 
-## 12. μ: valore singolare strutturato — Valerio, 0:42
+## 12. μ: valore singolare strutturato — Valerio, 0:47
 
-Distinguere margine e mu.
+Distinguere margine RS e prestazione sul riferimento. Mostrare il ritorno fittizio rettangolare.
 
-## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:41
+## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:44
 
-Indicare i tre passi e gli esiti maggiori di uno.
+Indicare i tre passi della D–K su riferimento e disturbo. Le norme accanto sono sul solo riferimento.
 
 ## 14. La post-analisi distingue le due rappresentazioni — Alessio, 0:42
 
 Confrontare A e B a controllore fissato.
 
-## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:42
+## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:47
 
-Leggere una riga con NP PASS e RS FAIL. Distinguere il solo esito di assestamento a 5 s dagli altri criteri nominali.
+Mostrare RP di LQG in A e B e la perdita di RS per Hinf2 e PID. Ricordare che Ts è un requisito nominale distinto.
 
 ## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:41
 
@@ -94,6 +94,6 @@ Seguire osservatore e integratore.
 
 Indicare il cambio della pianta.
 
-## 23. Conclusioni e limiti verificati — Valerio, 0:43
+## 23. Conclusioni e limiti verificati — Valerio, 0:47
 
-Chiudere con il compromesso A/B e i limiti.
+Chiudere con il risultato di LQG sul riferimento e il ruolo delle prove separate.

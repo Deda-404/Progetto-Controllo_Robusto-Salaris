@@ -105,7 +105,7 @@ Candidati iniziali: $0.8/1.5/2$ s, con overshoot $10/15/15\%$.
 Assestamento del modello circa 1.94 s, risposta monotona.
 \par\medskip Coppie e recupero dal disturbo: diagnostica senza dati hardware.
 \end{columns}
-\medskip\bad{Le soglie normalizzate di NS, NP, RS e RP restano invariate.}
+\medskip\bad{NP e RP usano il solo riferimento. Le prove di disturbo sono separate.}
 \end{frame}
 
 \begin{frame}{LQR: il costo deriva dalle grandezze fisiche}
@@ -184,7 +184,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \item Hinf2 ottiene una piccola norma nominale.
 \item Il rumore non è incluso in questo costo: occorre verificarlo.
 \end{itemize}
-\bad{Una buona NP non garantisce robustezza né un comando utilizzabile.}
+\bad{La post-analisi NP/RP usa solo $r$. Qui le norme includono anche $d$.}
 \end{frame}
 
 
@@ -195,14 +195,14 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \[\mu_{\boldsymbol\Delta}(H)=\frac{1}{\min\{\bar\sigma(\Delta):\det(I-H\Delta)=0\}}\]
 \begin{itemize}
 \item NS: stabilità nominale.
-\item NP: stabilità e norma nominale $<1$.
+\item NP: stabilità e $\|T_{zr}\|_\infty<1$ sul nominale.
 \item RS: stabilità per tutta la famiglia.
-\item RP: stabilità e norma $<1$ per tutta la famiglia.
+\item RP: stabilità e $\|T_{zr}\|_\infty<1$ su tutta la famiglia.
 \end{itemize}
 \column{.43\textwidth}
 \begingroup\newcommand{\SeaDeltaLabel}{struttura A oppure B}
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/performance.tex}}\endgroup\par
-\small $\Delta_p$: blocco fittizio di prestazione.
+\small $\Delta_p$: ritorno fittizio da $z$ a $r$.
 \end{columns}
 \medskip\good{Margine inferiore $>1$: garanzia. Superiore $<1$: requisito escluso.}
 \end{frame}
@@ -214,12 +214,12 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \small Tre iterazioni, \texttt{MixedMU=on}, fit $[2,1]$, 121 frequenze.
 \column{.51\textwidth}\small
 \begin{tabular}{lrr}\toprule
-Candidato & Ordine & Norma nominale\\\midrule
-Mu\_A &\FinMuAOrdine&\FinMuANorma\\
-Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
+Candidato & Ordine & Norma $r$\\\midrule
+Mu\_A &\FinMuAOrdine&\FinMuANormaR\\
+Mu\_B &\FinMuBOrdine&\FinMuBNormaR\\\bottomrule
 \end{tabular}
 \par\medskip Obiettivo D--K: \FinDkA\ su A, \FinDkB\ su B. Soglia desiderata: 1.
-\par\medskip Post-analisi di ogni K su entrambi i modelli.
+\par\medskip D--K su $[r;d]$. Post-analisi su $r$ per ogni $K$.
 \end{columns}
 \medskip\bad{Ricerca limitata e non convessa: nessuna superiorità universale.}
 \end{frame}
@@ -234,11 +234,11 @@ Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
 \begin{frame}{Robustezza pesata e target temporali sono distinti}
 \centering\small\input{generated/finale_slide_esiti.tex}
 \begin{itemize}
-\item Costo comune. $T_s$: solo assestamento nominale entro $\FinTsLimit$ s.
-\item NP FAIL esclude già RP sul nominale.
-\item Se RS fallisce, anche RP è esclusa.
+\item $T_s$: solo assestamento nominale entro $\FinTsLimit$ s.
+\item NP$_r$ e RP$_r$: riferimento verso errore e comando pesati.
+\item Hinf2 e PID perdono stabilità nella famiglia.
 \end{itemize}
-\bad{I risultati negativi rimangono parte del confronto.}
+\good{LQG soddisfa RP sul riferimento in A e B.}
 \end{frame}
 
 
@@ -329,9 +329,9 @@ Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
 \item A conserva le dipendenze dei cinque parametri fisici.
 \item B concentra i drive in due dinamiche pesate; la massa resta esplicita.
 \item Ritardo variabile: forma additiva, peso di ordine \FinOrdinePeso.
-\item LQG e LQGI offrono stabilità robusta, con compromessi su precisione e rapidità.
-\item Hinf2 e PID mostrano i limiti del buon risultato nominale.
-\item D--K, rumore e RAS non forniscono una soluzione universalmente migliore.
+\item LQG soddisfa RS e RP sul riferimento in A e B.
+\item Hinf2 e PID soddisfano NP sul riferimento e falliscono RS.
+\item Le prove di coppia, rumore e RAS completano il confronto.
 \end{itemize}
 \medskip\good{Stessi impianti, risultati riproducibili e limiti dichiarati.}
 \end{frame}

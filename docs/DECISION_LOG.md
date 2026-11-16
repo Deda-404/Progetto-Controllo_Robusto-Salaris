@@ -2526,3 +2526,13 @@ Resta aperta la scelta progettuale sugli obiettivi prestazionali prevista dalla 
 Il limite di 5 s consente un movimento meno rapido in presenza delle dinamiche elastiche e dei ritardi dei drive. Il confronto preliminare a 0,8, 1,5 e 2 s conserva il ruolo storico. Il riferimento $M_o$ a 3 rad/s continua a descrivere un assestamento di circa 1,94 s. Le prove sui controllori usano 5 s come limite di accettazione.
 
 L'alternativa di aggiornare tutta la firma v3 avrebbe reso incompatibili le cache senza cambiare il problema dinamico. La posizione che conteneva Ts conserva il valore riservato 2 e l'esportatore applica il valore corrente di `p.Ts` ai CSV validati. Il confronto dell'intera firma e l'identità dei controllori restano obbligatori nei percorsi che li verificano. La modifica lascia la pianta generalizzata, Mo, i pesi e le soglie NS, NP, RS e RP ai valori validati.
+
+## 2026-11-16 — Post-analisi della prestazione sul solo riferimento
+
+**Stato** — Proposta per la revisione degli autori nella PR #55.
+
+La prestazione di tracking pesata usa $T_{zr}$, con due ingressi di riferimento e quattro uscite pesate. Il costo di sintesi resta quello già validato. La norma considera sia l'errore rispetto a Mo sia il comando. La soglia in norma resta unitaria. NS e RS si verificano sulla chiusura completa. La reiezione del disturbo di coppia e le risposte al rumore si valutano nelle prove dedicate.
+
+L'analisi su riferimento e coppia insieme resta documentata in `confronto_robusto.*`. Per il nuovo costo la cache `confronto_robusto_r.mat` richiede la versione `Tzr_v1`, la firma di configurazione e la stessa banca di controllori. `postanalisi_sea(true)` permette di rifare le 14 verifiche senza passare dalle sintesi.
+
+LQG e Mu_B passano ora NP sul riferimento. Entrambi soddisfano RS in A e B. Solo LQG soddisfa anche RP. Per Mu_B i due calcoli diretti di `robgain` restituiscono un limite superiore sotto uno. I tre risultati per ciascuna famiglia si leggono accanto alle risposte separate di coppia, comando e rumore.

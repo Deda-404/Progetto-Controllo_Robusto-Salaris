@@ -56,16 +56,24 @@ def interval(row, prefix):
     return f'[{num(row[prefix+"_lower"],4)}, {num(row[prefix+"_upper"],4)}]'
 
 
+def short_status(status):
+    return "INC." if status == "INCONCLUDENTE" else status
+
+
 def robust_rows(data):
-    rows=[]
+    rows = []
     for x in data:
-        method=x["MetodoRP"]
-        rp = "0 (NP)" if method=="NP_FAIL" else (
-            r"$\leq$"+num(x["RP_upper"],4)+" (RS)" if method=="LIMITE_DA_RS" else interval(x,"RP"))
-        norm = num(x["NormaNominale"],4) if x["NS"]=="1" else "NS FAIL"
-        np_result = "PASS" if x["NP"]=="1" else "FAIL"
-        rows.append([esc(x["Controllore"]),x["Analisi"][0],norm,np_result,
-                     interval(x,"RS"),x["RS"],rp])
+        method = x["MetodoRP"]
+        if method == "NP_FAIL":
+            rp, source = "0", r"$\mathrm{NP}_r$"
+        elif method == "LIMITE_DA_RS":
+            rp, source = r"$\leq$" + num(x["RP_r_upper"], 4), "RS"
+        else:
+            rp, source = interval(x, "RP_r"), r"\texttt{robgain}"
+        norm = num(x["NormaNominaleR"], 4) if x["NS"] == "1" else "NS FAIL"
+        rows.append([esc(x["Controllore"]), x["Analisi"][0], norm,
+                     "PASS" if x["NP_r"] == "1" else "FAIL",
+                     interval(x, "RS"), short_status(x["RS"]), rp, short_status(x["RP_r"]), source])
     return rows
 
 
@@ -140,10 +148,14 @@ def main():
             num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
           "Risultati in frequenza sul nominale. Tutte le chiusure sono internamente stabili.",
           "tab:cap8-norme")
-    robust=read("confronto_robusto")
-    assert len(robust)==14
-    caption="Norma ed esito nominale, intervallo ed esito RS, limite RP con la sua origine."
-    headers=["Controllore","A/B","Norma nom.","NP","Intervallo RS","RS","Margine RP"]
+    robust=read("confronto_robusto_r")
+    assert len(robust) == 14 and all(x["Mappa"] == "Tzr_v1" for x in robust)
+    caption=(r"Post-analisi sul solo riferimento. La norma è quella di $T_{zr}$ sul nominale. "
+             r"L'ultima colonna indica da dove proviene il margine $\mathrm{RP}_r$.")
+    if any(x["RS"] == "INCONCLUDENTE" or x["RP_r"] == "INCONCLUDENTE" for x in robust):
+        caption += " INC. indica un esito inconcludente."
+    headers=["Controllore","A/B",r"Norma $r$",r"$\mathrm{NP}_r$","Intervallo RS","RS",
+             r"Margine $\mathrm{RP}_r$",r"$\mathrm{RP}_r$","Origine"]
     table("robustezza",headers,robust_rows([x for x in robust if x["Controllore"] in CURRENT]),
           caption,"tab:cap9-robustezza")
     dk=[]
@@ -182,8 +194,10 @@ def main():
                          num(n["OvershootPercent"]),percent(n["ErroreDC"]),
                          num(100*float(n["Cross"])),"PASS" if ok else "FAIL"])
         rb=[x for x in robust if x['Controllore']==name]
-        finalrows.append([esc(name),'PASS' if ok else 'FAIL','PASS' if rb[0]['NP']=='1' else 'FAIL',
-                          '/'.join(x['RS'] for x in rb),'/'.join(x['RP'] for x in rb)])
+        assert [row["Analisi"][0] for row in rb] == ["A", "B"] and rb[0]["NP_r"] == rb[1]["NP_r"]
+        finalrows.append([esc(name),'PASS' if ok else 'FAIL','PASS' if rb[0]['NP_r']=='1' else 'FAIL',
+                          '/'.join(short_status(x['RS']) for x in rb),
+                          '/'.join(short_status(x['RP_r']) for x in rb)])
         disturbrows.append([esc(name),num(180/math.pi*float(n["PiccoDisturboRad"])),num(n["RecuperoDisturbo"]),maximum("RecuperoDisturbo")])
         v=next(x for x in noise if x["Controllore"]==name)
         noiserows.append([esc(name),num(v["PiccoCampioni"],4),num(v["PiccoTraCampioni"],4),num(v["RMSIntegrato"],4)])
@@ -200,14 +214,16 @@ def main():
                 a=x["Analisi"][0]
                 values[tag+"RS"+a]=num(x["RS_lower"],4)
                 values[tag+"RSesito"+a]=x["RS"]
-                values[tag+"RPesito"+a]=x["RP"]
-                values[tag+"Norma"]=num(x["NormaNominale"],4)
+                values[tag+"RPesito"+a]=x["RP_r"]
+                values[tag+"Norma"]=num(x["NormaNominaleRD"],4)
+                values[tag+"NormaR"]=num(x["NormaNominaleR"],4)
+                values[tag+"IntervalloRPR"+a]=interval(x,"RP_r")
                 values[tag+"Ordine"]=x["Ordine"]
                 values[tag+'OrdineChiuso']=str(14+int(x['Ordine']))
                 values[tag+'IntervalloRS'+a]=interval(x,'RS')
                 values[tag+'Frequenza'+a]=num(x['FrequenzaCritica'],4)
-    table('confronto_finale',['Controllore','Target nominali','NP comune','RS A/B','RP A/B'],finalrows,
-          'Confronto sul modello corrente: target temporali distinti dal costo pesato e dalle garanzie robuste.')
+    table('confronto_finale',['Controllore','Target nominali',r'$\mathrm{NP}_r$','RS A/B',r'$\mathrm{RP}_r$ A/B'],finalrows,
+          r'Target temporali, stabilità robusta e costo pesato del solo riferimento. Gli intervalli dei margini sono nel Capitolo 9.')
     table('frequenze',['Controllore','A/B',r'$\omega_{RS}$ [rad/s]'],
           [[esc(x['Controllore']),x['Analisi'][0],num(x['FrequenzaCritica'],4)] for x in robust],
           'Frequenze critiche restituite dall\'analisi di stabilità robusta dello stesso controllore su A e B.')
@@ -228,10 +244,12 @@ def main():
           [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4)] for x in hinf],"",slide=True)
     table("slide_rs",["Controllore","A","B"],
           [[esc(name)]+[num(next(x["RS_lower"] for x in robust if x["Controllore"]==name and x["Analisi"].startswith(a)),4) for a in ["A","B"]] for name in CURRENT],"",slide=True)
-    table("slide_esiti",["Controllore",r"$T_s$","NS","NP","RS A/B","RP A/B"],
-          [[esc(name),settling_results[name],"PASS" if next(x for x in robust if x["Controllore"]==name)["NS"]=="1" else "FAIL",
-            "PASS" if next(x for x in robust if x["Controllore"]==name)["NP"]=="1" else "FAIL"]+
-            ["/".join(x[key] for x in robust if x["Controllore"]==name) for key in ["RS","RP"]] for name in CURRENT],"",slide=True)
+    table("slide_esiti",["Controllore",r"$T_s$","NS",r"Norma $r$",r"$\mathrm{NP}_r$","RS A/B",r"$\mathrm{RP}_r$ A/B"],
+          [[esc(name),settling_results[name],"PASS" if all(x["NS"]=="1" for x in robust if x["Controllore"]==name) else "FAIL",
+            num(next(x["NormaNominaleR"] for x in robust if x["Controllore"]==name),4),
+            "PASS" if next(x for x in robust if x["Controllore"]==name)["NP_r"]=="1" else "FAIL"]+
+            ["/".join(short_status(x[key]) for x in robust if x["Controllore"]==name)
+             for key in ["RS","RP_r"]] for name in CURRENT],"",slide=True)
     table("slide_carico",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows[:2],"",slide=True)
     tex="\n".join(r"\newcommand{\Fin"+name+"}{"+value+"}" for name,value in values.items())+"\n"
     (GEN/"finale_values.tex").write_text(tex,encoding="utf-8")

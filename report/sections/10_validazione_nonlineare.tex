@@ -153,6 +153,10 @@ originali. Una differenza di coordinate interne non deve quindi essere
 interpretata come un diverso controllore.
 
 \section{Tracking, disturbi e rumore}
+
+Le prove di questa sezione osservano separatamente il riferimento,
+la coppia sui link e il rumore degli encoder. Nel Capitolo 9 la
+garanzia di prestazione pesata riguarda il solo riferimento.
 Il residuo all'ultimo istante è una misura a orizzonte finito; il guadagno
 DC deriva invece dall'equilibrio della chiusura lineare stabile.
 La deviazione massima sotto coppia e il tempo di recupero entro
@@ -165,26 +169,12 @@ Una simulazione completata significa che il solver ha raggiunto il tempo finale 
 
 Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi della massa $m_2$ compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sulla sola massa $m_2$ non contraddicono la sua fragilità quando variano anche gli attuatori.
 
-\begin{figure}[htbp]\centering
-\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_tracking.png}
+\begin{figure}[!htb]\centering
+\includegraphics[width=.96\linewidth,height=.63\textheight,keepaspectratio]{figures/editoriale/nonlineare_tracking.png}
 \caption{Posizioni nelle sette prove non lineari nominali di tracking,
 dalle traiettorie salvate: riferimento di $5^\circ$ sul primo giunto,
 secondo riferimento nullo, orizzonte 12 s. Ogni pannello mantiene
 visibili entrambi i giunti, anche quando il tracking è insoddisfacente.}
-\end{figure}
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_1.png}
-\caption{LQG, LQGI, Hinf1 e Hinf2: posizioni e comandi salvati con coppia
-costante di 0.5 N m sul primo link. Il riferimento è nullo. Ogni riga
-mostra un controllore; scale proprie permettono di leggere i compromessi.}
-\end{figure}
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.96\linewidth]{figures/editoriale/nonlineare_disturbo_2.png}
-\caption{La stessa prova di coppia sul primo link per PID, Mu\_A e Mu\_B.
-Posizioni e comandi sono ricavati dalle traiettorie non lineari salvate,
-con parametri nominali e orizzonte 12 s.}
 \end{figure}
 
 Il gradino e la coppia non sono la stessa prova. Nel primo caso il
@@ -196,6 +186,19 @@ rumore si usa inoltre una prova separata, a riferimento e coppia nulli:
 altrimenti l'RMS mescolerebbe lo sforzo di inseguimento con quello prodotto
 dall'encoder e renderebbe meno chiara la diagnosi.
 
+\begin{figure}[!htb]\centering
+\includegraphics[width=.96\linewidth,height=.417\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_1.png}
+\caption{LQG, LQGI, Hinf1 e Hinf2: posizioni e comandi salvati con coppia
+costante di 0.5 N m sul primo link. Il riferimento è nullo. Ogni riga
+mostra un controllore; scale proprie permettono di leggere i compromessi.}
+\par\medskip
+\includegraphics[width=.96\linewidth,height=.417\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_2.png}
+\caption{La stessa prova di coppia sul primo link per PID, Mu\_A e Mu\_B.
+Posizioni e comandi sono ricavati dalle traiettorie non lineari salvate,
+con parametri nominali e orizzonte 12 s.}
+\end{figure}
+
+\FloatBarrier
 \section{Tracking e disturbi del servo LQGI}
 LQGI conserva il filtro di Kalman a 14 stati e aggiunge due memorie
 integrali dell'errore misurato. La chiusura completa ha 30 stati.
@@ -275,7 +278,6 @@ Queste due verifiche vanno mantenute distinte.
 
 \input{sections/10_originali_simulink}
 
-\clearpage
 \section{Verifiche dedicate dei candidati con rumore}
 La formulazione teorica dei Capitoli 8 e 9 richiederebbe un confronto
 abbinato: stessi parametri, condizioni iniziali, riferimento, coppia e

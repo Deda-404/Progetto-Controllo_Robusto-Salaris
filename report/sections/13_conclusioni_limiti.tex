@@ -3,9 +3,15 @@ Abbiamo studiato il manipolatore SEA con le due masse puntiformi della traccia: 
 
 Il modello A comprende quattro parametri attuativi reali e una massa reale condivisa. Il modello B mantiene la stessa massa e sostituisce i soli drive con due perturbazioni dinamiche additive pesate. Il ritardo variabile è decisivo nella scelta: l'inversione del nominale di Padé introduce poli instabili negli errori moltiplicativi, mentre la differenza additiva permette perturbazioni stabili e proprie. Un peso di ordine 3 copre i casi dichiarati con un eccesso contenuto.
 
-Le specifiche temporali adottate prevedono \FinTsLimit\ s per l'assestamento e 15\% per la sovraelongazione. Il limite di assestamento tiene conto delle dinamiche elastiche e dei ritardi dei drive. Precisione statica al 5\% e accoppiamento al 25\% restano richieste separate. Le definizioni e le soglie di NS, NP, RS e RP non cambiano.
+Le specifiche temporali adottate prevedono \FinTsLimit\ s per l'assestamento e 15\% per la sovraelongazione. Il limite di assestamento tiene conto delle dinamiche elastiche e dei ritardi dei drive. Precisione statica al 5\% e accoppiamento al 25\% restano richieste separate. Per NP e RP la soglia unitaria si applica al costo pesato del solo riferimento. La stabilità nominale e robusta riguarda la chiusura completa.
 
-LQG e LQGI offrono stabilità robusta, con un compromesso fra rapidità, precisione e reiezione del disturbo. Hinf2 e PID mostrano che una buona prestazione nominale può coesistere con fragilità alle incertezze. Le sintesi D--K limitate e le prove di rumore impediscono di proclamare una soluzione migliore in ogni senso. Anche gli esiti negativi aiutano a capire quali obiettivi vengono realmente controllati da ciascun metodo.
+LQG e LQGI offrono stabilità robusta. Solo LQG soddisfa RP sul
+riferimento in entrambe le famiglie. La reiezione della coppia
+si valuta a parte con i picchi e i tempi di recupero delle prove.
+Hinf2 e PID mostrano che una buona prestazione nominale sul
+riferimento può coesistere con fragilità alle incertezze. Mu\_B
+mantiene RS e soddisfa la norma sul nominale, ma può superare il
+livello unitario quando la pianta varia. Le sintesi D--K limitate e le prove di rumore impediscono di proclamare una soluzione migliore in ogni senso. Anche gli esiti negativi aiutano a capire quali obiettivi vengono realmente controllati da ciascun metodo.
 
 Restano limiti precisi. Le tolleranze sono ipotesi, non dati identificati. Padé approssima il ritardo e non certifica il comportamento con un ritardo esatto a ogni frequenza. La copertura di B non è dimostrata sull'intero box A. Le regioni di attrazione sono sezioni empiriche nominali. Il modello non include saturazione, attrito secco, giochi né variazioni della massa durante il moto.
 

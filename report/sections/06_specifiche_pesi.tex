@@ -36,10 +36,13 @@ giunto non comandato, diviso per l'ampiezza del gradino. La soglia del 25\%, che
 a $1.25^\circ$ nell'altra articolazione. Per ciascun indice riportiamo
 il caso peggiore fra le prove sui due giunti.
 
-Questi obiettivi temporali affiancano le verifiche di stabilità e
-prestazione nominali e robuste. Nelle prove di disturbo riportiamo
-anche il picco di posizione e il tempo di rientro entro $0.5^\circ$,
-come indicatori del recupero.
+Questi obiettivi temporali affiancano le verifiche del Capitolo 9.
+La stabilità robusta (RS) riguarda la chiusura completa e le
+incertezze A e B. Per la prestazione nominale (NP) e robusta (RP)
+misuriamo il guadagno pesato dal solo riferimento, con coppie di
+disturbo e rumore encoder nulli. Nelle prove separate di disturbo
+riportiamo il picco di posizione e il tempo di rientro entro
+$0.5^\circ$, come indicatori del recupero.
 
 \section{Scelta della banda}
 Nel problema $H_\infty$ a due gradi di libertà (2-DoF) usiamo un
@@ -76,16 +79,17 @@ sollecitano i drive e possono eccitare la dinamica elastica.
 Nella pianta generalizzata 2-DoF del Capitolo 8, le uscite
 prestazionali sono $z_e=W_e(q-M_or)$ e $z_u=W_u u$. La sintesi
 cerca di ridurre l'amplificazione dagli ingressi esterni
-$w=[r;d]$ alle uscite $z=[z_e;z_u]$. Il confronto robusto fra
-A e B usa gli stessi pesi e lo stesso $M_o$. Il peso $W_A$
+$w=[r;d]$ alle uscite $z=[z_e;z_u]$. Nella post-analisi A e B
+mantengono gli stessi pesi e lo stesso $M_o$. La mappa per NP
+e RP è $T_{zr}$ e la soglia in norma è uno. Il peso $W_A$
 del Capitolo 5 descrive invece l'ampiezza delle perturbazioni
 attuative. Nel problema 1-DoF con \texttt{mixsyn}, gli stessi
 pesi prestazionali agiscono sull'errore diretto $r-q$ e sul comando.
 
-La condizione $\|T_{zw}\|_\infty<1$ limita il guadagno della mappa
-pesata. Per esempio, nel problema 2-DoF a disturbo nullo il blocco DC
-da $r$ a $z_e$ vale $W_e(0)(T_{qr}(0)-I_2)$. La norma della mappa
-completa limita in modulo ogni elemento di quel blocco.
+La condizione $\|T_{zr}\|_\infty<1$ limita il guadagno dal
+riferimento a entrambe le uscite pesate. Il blocco DC da $r$ a
+$z_e$ vale $W_e(0)(T_{qr}(0)-I_2)$. La norma di $T_{zr}$ limita
+in modulo ogni elemento di quel blocco.
 Dato $W_e(0)=(2/0.3)I_2$ e usando i riferimenti direttamente in
 radianti, la soglia unitaria implicherebbe un errore statico relativo
 inferiore al 15\% su ogni componente, per un gradino su un solo asse.
@@ -109,7 +113,7 @@ fra i campioni. L'RMS ne misura l'intensità quadratica media sulla
 durata della prova e sui due comandi. I due valori descrivono la
 risposta alla sequenza usata.
 
-Nella formulazione prestazionale comune, $w$ comprende riferimento
+Nella formulazione 2-DoF usata per la sintesi, $w$ comprende riferimento
 e disturbo sui link. Valutiamo il rumore encoder a parte nel
 Capitolo 10. I Capitoli 8 e 9 discutono anche l'estensione della
 sintesi con il rumore come ingresso esplicito. La sequenza a tratti

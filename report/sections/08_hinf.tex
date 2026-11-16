@@ -121,17 +121,20 @@ e la norma prende il caso peggiore fra tutte le frequenze,
 Il solver restituisce con $\gamma$ il livello raggiunto per la
 mappa di sintesi. Un livello inferiore a uno, confermato sulla
 realizzazione originale internamente stabile, soddisfa la
-specifica pesata nominale di quella mappa. Nelle verifiche
-distinguiamo stabilità nominale (NS), prestazione nominale pesata
-(NP) e le corrispondenti proprietà sull'insieme incerto (RS e RP,
-Capitolo~\ref{cap:mu}). I target temporali si verificano sulle
-risposte ai gradini.
+specifica pesata nominale di quella mappa. Nella post-analisi
+del Capitolo~\ref{cap:mu}, il calcolo di NP e RP usa l'ingresso
+$r$ e le uscite pesate 2-DoF, con il controllore già fissato.
+NS e RS riguardano la stabilità interna della chiusura completa.
+I target temporali si verificano sulle risposte ai gradini.
 
 Con la sensibilità mista usiamo $w=r$ e
 $z=[W_1(r-q);\,W_2u]$. Nel 2-DoF usiamo $w=[r;d]$ e
 $z=[W_e(q-M_or);\,W_uu]$. In quest'ultima mappa valutiamo
 anche l'effetto del disturbo e l'errore rispetto a una traiettoria
 desiderata. I due valori di sintesi si riferiscono a obiettivi diversi.
+Il confronto comune di questo capitolo conserva $[r;d]$ per tutti
+e tre i controllori. La post-analisi $T_{zr}$ del Capitolo~\ref{cap:mu}
+seleziona le sole colonne di $r$ dalla stessa interconnessione.
 
 \section{Dallo schema alla pianta generalizzata}
 \label{sec:generalizedplant}
@@ -424,7 +427,10 @@ La verifica RS del Capitolo~\ref{cap:mu} riguarda invece le famiglie
 lineari incerte A e B. Gli esiti A/B sono
 \FinHinfOneRSesitoA/\FinHinfOneRSesitoB\ per Hinf1,
 \FinHinfTwoRSesitoA/\FinHinfTwoRSesitoB\ per Hinf2 e
-\FinPIDRSesitoA/\FinPIDRSesitoB\ per il PID. Nessuno dei tre soddisfa RP.
+\FinPIDRSesitoA/\FinPIDRSesitoB\ per il PID. Hinf1 fallisce NP
+sul riferimento. Hinf2 e PID passano NP sul riferimento e perdono
+stabilità nella famiglia ammessa. Per questi tre controllori RP sul
+riferimento è quindi esclusa.
 
 \section{Estensione teorica con rumore esplicito}
 

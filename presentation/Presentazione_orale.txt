@@ -32,9 +32,9 @@ Regia: Spiegare lo zero destro di Padé prima del fit.
 
 SLIDE 5 — Specifiche: obiettivi temporali e norma pesata
 Studente: Valerio
-Tempo previsto: 0:52 (108 parole a 125 parole/min)
+Tempo previsto: 0:52 (109 parole a 125 parole/min)
 Testo da pronunciare:
-Separiamo le condizioni matematiche dagli obiettivi scelti da noi. Non cambiamo le definizioni di stabilità e prestazione robusta. Dopo il confronto fra tre alternative iniziali, il limite di assestamento è fissato a cinque secondi per tenere conto delle dinamiche elastiche e dei ritardi dei drive. I limiti di sovraelongazione, errore statico e accoppiamento sono rispettivamente quindici, cinque e venticinque per cento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. Quel tempo descrive la risposta del riferimento. I cinque secondi si applicano al manipolatore in anello chiuso. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
+Le specifiche del moto si affiancano alle verifiche di stabilità della chiusura e di prestazione pesata sul solo riferimento. Dopo il confronto fra tre alternative iniziali, il limite di assestamento è fissato a cinque secondi per tenere conto delle dinamiche elastiche e dei ritardi dei drive. I limiti di sovraelongazione, errore statico e accoppiamento sono rispettivamente quindici, cinque e venticinque per cento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. Quel tempo descrive la risposta del riferimento. I cinque secondi si applicano al manipolatore in anello chiuso. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
 Regia: Distinguere target temporali e soglie matematiche.
 
 SLIDE 6 — LQR: il costo deriva dalle grandezze fisiche
@@ -67,31 +67,31 @@ Regia: Leggere il ruolo dei pesi.
 
 SLIDE 10 — Due gradi di libertà, stati condivisi
 Studente: Alessio
-Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Tempo previsto: 0:45 (93 parole a 125 parole/min)
 Testo da pronunciare:
-La struttura a due gradi di libertà distingue il canale del riferimento dal feedback. Il riferimento passa attraverso il modello desiderato, mentre il controllore riceve riferimento e posizione. Le due partizioni del controllore condividono gli stessi stati: non sono due sistemi realizzati separatamente. Le uscite pesate sono errore rispetto al modello desiderato e comando; gli ingressi esogeni sono riferimento e disturbo lato link. La pianta generalizzata raccoglie questi segnali e permette una sintesi coerente. Usiamo la stessa interconnessione anche per confrontare tutte le altre famiglie sul costo comune.
+La struttura a due gradi di libertà distingue il canale del riferimento dal feedback. Il riferimento passa attraverso il modello desiderato, mentre il controllore riceve riferimento e posizione. Le due partizioni del controllore condividono gli stessi stati: non sono due sistemi realizzati separatamente. Le uscite pesate sono errore rispetto al modello desiderato e comando; gli ingressi esogeni sono riferimento e disturbo lato link. La pianta generalizzata raccoglie questi segnali e permette una sintesi coerente. Per il confronto di NP e RP usiamo la stessa interconnessione a controllore fissato e selezioniamo il solo riferimento.
 Regia: Seguire riferimento e feedback.
 
 SLIDE 11 — Ordine completo e ordine fissato: il compromesso rimane
 Studente: Valerio
 Tempo previsto: 0:42 (87 parole a 125 parole/min)
 Testo da pronunciare:
-Confrontiamo le due soluzioni dinamiche con un PID strutturato. Quest’ultimo mantiene due canali diagonali e una derivata filtrata, per un totale di quattro stati. Il tuning usa tre avvii perché il problema è non convesso. La tabella mostra l’ordine e la norma sul medesimo costo, evitando di confrontare valori di gamma associati a problemi diversi. Hinf2 ottiene una norma nominale molto piccola. Questo è un risultato utile, ma non basta: il costo non contiene il rumore di misura e non certifica la stabilità in presenza delle incertezze.
+Confrontiamo le due soluzioni dinamiche con un PID strutturato. Quest’ultimo mantiene due canali diagonali e una derivata filtrata, per un totale di quattro stati. Il tuning usa tre avvii perché il problema è non convesso. La tabella mostra l’ordine e la norma sul medesimo costo da riferimento e disturbo, come confronto fra le tre sintesi. Hinf2 ottiene una norma nominale molto piccola. Questo è un risultato utile, ma non basta: il costo non contiene il rumore di misura e non certifica la stabilità in presenza delle incertezze.
 Regia: Confrontare ordine e costo comune.
 
 SLIDE 12 — μ: valore singolare strutturato
 Studente: Valerio
-Tempo previsto: 0:42 (87 parole a 125 parole/min)
+Tempo previsto: 0:47 (97 parole a 125 parole/min)
 Testo da pronunciare:
-Mu cerca la perturbazione strutturata più piccola capace di destabilizzare la chiusura. La struttura conserva il significato dei parametri: copie della stessa massa non possono variare indipendentemente. Distinguiamo quattro proprietà. NS riguarda il nominale; NP aggiunge il vincolo sulla norma. RS richiede stabilità per tutta la famiglia, e RP aggiunge la prestazione. Il calcolo restituisce intervalli dei margini. Se il limite inferiore supera uno, il requisito è garantito; se il superiore è minore di uno, è escluso. Un intervallo che attraversa uno rimane inconcludente, senza arrotondamenti favorevoli.
+Mu cerca la perturbazione strutturata più piccola capace di destabilizzare la chiusura. La struttura conserva il significato dei parametri: copie della stessa massa non possono variare indipendentemente. NS e RS riguardano la stabilità della chiusura completa, sul nominale e sulla famiglia incerta. NP e RP aggiungono la norma dal riferimento verso errore e comando pesati, con coppia di disturbo e rumore nulli. Il calcolo restituisce intervalli dei margini. Se il limite inferiore supera uno, il requisito è garantito; se il superiore è minore di uno, è escluso. Un intervallo che attraversa uno rimane inconcludente, senza arrotondamenti favorevoli.
 Regia: Distinguere margine e mu.
 
 SLIDE 13 — D--K: stessi pesi e stessa inizializzazione
 Studente: Alessio
-Tempo previsto: 0:41 (85 parole a 125 parole/min)
+Tempo previsto: 0:44 (92 parole a 125 parole/min)
 Testo da pronunciare:
-La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Gli obiettivi ottenuti sono maggiori di uno, quindi non dichiariamo raggiunta la prestazione robusta. La tabella mostra anche l’ordine: gli scaling possono produrre controllori molto grandi. Questi risultati descrivono una ricerca limitata e non convessa, non una prova che una rappresentazione sia sempre migliore dell’altra.
-Regia: Indicare i tre passi e gli esiti maggiori di uno.
+La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Il costo delle due sintesi include riferimento e coppia e resta sopra uno. La tabella affianca a questi esiti la norma nominale del solo riferimento e l’ordine: gli scaling possono produrre controllori molto grandi. Questi risultati descrivono una ricerca limitata e non convessa, non una prova che una rappresentazione sia sempre migliore dell’altra.
+Regia: Distinguere il costo D–K dalla norma sul riferimento.
 
 SLIDE 14 — La post-analisi distingue le due rappresentazioni
 Studente: Alessio
@@ -102,10 +102,10 @@ Regia: Confrontare A e B a controllore fissato.
 
 SLIDE 15 — Robustezza pesata e target temporali sono distinti
 Studente: Alessio
-Tempo previsto: 0:52 (109 parole a 125 parole/min)
+Tempo previsto: 0:47 (98 parole a 125 parole/min)
 Testo da pronunciare:
-La separazione fra le quattro proprietà evita conclusioni scorrette. Un controllore può essere nominalmente stabile e non rispettare la norma comune; un altro può avere una buona norma nominale e perdere stabilità per piccole variazioni. Se NP fallisce, RP è già esclusa dal nominale. Se fallisce RS, anche RP è esclusa. La soglia pesata resta unitaria. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. I controllori LQG non sono sintetizzati minimizzando il costo H infinito, quindi il loro esito NP va letto accanto alle prestazioni per le quali sono stati progettati.
-Regia: Leggere una riga con NP PASS e RS FAIL.
+La tabella confronta assestamento nominale, stabilità e costo pesato sul solo riferimento. Solo LQG soddisfa RP in A e B. Hinf2 e PID rispettano la norma sul nominale, ma perdono stabilità entro l’incertezza ammessa. Mu_B passa NP e RS, ma fallisce RP sul guadagno. Negli altri tre casi la norma supera uno già sul nominale. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. Per il disturbo di coppia usiamo le prove dedicate, con i picchi e i tempi di rientro.
+Regia: Mostrare RP di LQG e il limite RS di Hinf2.
 
 SLIDE 16 — Dieci impianti: la stessa fisica per tutti
 Studente: Valerio
@@ -158,9 +158,9 @@ Regia: Indicare il cambio della pianta.
 
 SLIDE 23 — Conclusioni e limiti verificati
 Studente: Valerio
-Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Tempo previsto: 0:47 (98 parole a 125 parole/min)
 Testo da pronunciare:
-Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG e LQGI mostrano compromessi comprensibili fra stabilità, precisione e rapidità. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
+Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG soddisfa la prestazione robusta sul riferimento in entrambe le famiglie. La reiezione della coppia si valuta con le prove dedicate. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
 Regia: Chiudere con il compromesso A/B e i limiti.
 
 APPENDICE — POSSIBILI DOMANDE E RISPOSTE
@@ -180,7 +180,7 @@ Un margine RS maggiore su B significa che B è migliore?
 No. Le strutture e gli insiemi espansi sono differenti. Si confrontano vantaggi, conservatività e comportamento sugli stessi casi fisici.
 
 Perché NP e target temporali possono discordare?
-NP è un vincolo su un trasferimento pesato; assestamento, overshoot e errore statico sono metriche diverse e vengono controllate separatamente.
+NP impone un limite unitario alla norma dal riferimento verso errore e comando pesati. Assestamento, sovraelongazione ed errore statico si controllano sulle risposte ai gradini.
 
 Quale controllore approfondire per un movimento lento e preciso?
 LQGI è un candidato comprensibile per precisione e stabilità robusta, ma deve essere reso più rapido e verificato con limiti di coppia e anti-windup prima di un uso fisico.

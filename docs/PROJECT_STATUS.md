@@ -1,3 +1,13 @@
+# Stato corrente — 16.11.2026, prestazione sul solo riferimento
+
+Gate COMPLETE/PASS per la nuova post-analisi e gli elaborati. NP passa per LQG, Hinf2, PID e Mu_B. NS e RS sono state ricalcolate e i risultati coincidono con la campagna storica. LQG soddisfa RP nelle due famiglie. Mu_B perde il requisito pesato con pianta incerta pur superando NP e RS. La reiezione del disturbo di coppia resta documentata nelle prove dedicate.
+
+Validati in MATLAB i 14 casi A/B, i cinque test esistenti, il rifiuto della cache storica e il percorso rapido della post-analisi. La firma prestazionale `Tzr_v1` distingue i risultati correnti. Nuove sintesi e simulazioni NOT RUN.
+
+Relazione di 72 pagine con indice e 13 capitoli, verificata pagina per pagina. Presentazione in PDF e PowerPoint di 23 slide, verificata anche in PowerPoint 16.0. Tabella della slide 15 e note orali modificabili. Prossimo passo — revisione degli autori sulla PR #55.
+
+---
+
 # Stato corrente — 16.11.2026, limite di assestamento a 5 s
 
 Gate COMPLETE/PASS per soglia, cache ed elaborati. PID e Mu_B passano il solo assestamento nominale. LQG e Hinf2 restano gli unici a soddisfare i quattro target nominali. LQGI e Mu_A richiedono più di 5 s. I valori misurati e gli esiti NS, NP, RS e RP provengono dalla campagna validata.

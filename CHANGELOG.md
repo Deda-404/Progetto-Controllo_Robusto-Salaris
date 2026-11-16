@@ -4,6 +4,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Ricalcolate NP e RP sul solo riferimento per i sette controllori nelle due famiglie. Registrata la mappa `Tzr_v1` in risultati distinti dalla campagna storica. Ricalcolati NS e RS sulla chiusura completa, con margini RS identici.
+- Aggiornati relazione, tabelle, slide e discorso. Rimossi sommario iniziale, elenchi di figure e tabelle e appendici dal PDF. Raggruppate nel Capitolo 10 le figure delle prove di coppia e avvicinati gli Scope al testo.
+
 - Portato il limite di assestamento nominale a 5 s. L'esportatore legge la soglia MATLAB e mostra l'esito per il solo assestamento. La firma v3 conserva il valore riservato nella posizione storica di Ts.
 - Aggiornati relazione integrale, slide e discorso orale. Aggiunto il PowerPoint di 23 slide con la tabella degli esiti e il testo dell'esposizione modificabili.
 

@@ -88,8 +88,8 @@ comprese le occorrenze ripetute di uno stesso parametro.
 Chiudere queste porte ricostruisce il modello incerto. È la
 trasformazione frazionaria lineare (LFT). In MATLAB
 \texttt{lftdata} separa $N$ e $\Delta$ e \texttt{lft(Delta,N)}
-li ricompone nella convenzione qui usata. L'Appendice~\ref{app:matlab}
-riporta le connessioni.
+li ricompone nella convenzione qui usata. Il file
+\texttt{interconnessione\_sea.m} definisce le porte del chiuso.
 
 \section{\texorpdfstring{$\mu$}{mu}: valore singolare strutturato}
 
@@ -124,17 +124,18 @@ Una verifica su singole frequenze ha valore su quei punti.
 
 \begin{description}
  \item[NS] Sul nominale, con $\Delta=0$, la chiusura è internamente stabile.
- \item[NP] Sul nominale, la chiusura è stabile e
- $\|T_{zw}(0)\|_\infty<1$, dove $0$ indica $\Delta=0$.
+ \item[NP sul riferimento] La chiusura nominale è internamente
+ stabile e $\|T_{zr}(0)\|_\infty<1$, con $\Delta=0$.
  \item[RS] La chiusura resta internamente stabile per ogni perturbazione ammessa.
- \item[RP] Per ogni $\Delta$ in famiglia, la chiusura resta stabile e
- $\|T_{zw}(\Delta)\|_\infty<1$.
+ \item[RP sul riferimento] La chiusura è internamente stabile per
+ ogni perturbazione ammessa e $\|T_{zr}(\Delta)\|_\infty$ rimane sotto uno.
 \end{description}
 
 RP implica sia RS sia NP. Anche un sistema stabile su tutta la famiglia
 e preciso sul nominale può perdere prestazione per una variazione
 ammessa. Per verificare NP controlliamo prima i poli interni della
-chiusura nominale, poi il guadagno della sola mappa pesata.
+realizzazione nominale completa, poi il guadagno di $T_{zr}$.
+La coppia di disturbo ai link e il rumore encoder hanno prove dedicate.
 
 \subsection{RS: quanta incertezza tollera la chiusura}
 
@@ -163,19 +164,21 @@ valori completi, prima dell'arrotondamento in tabella.
 
 La stabilità interna fa decadere una deviazione iniziale a
 ingressi nulli. La prestazione specifica quanto vogliamo contenere
-lo scostamento e il comando. In questo progetto la mappa è
+lo scostamento e il comando. Per NP e RP usiamo
 \[
- w=\begin{bmatrix}r\\d\end{bmatrix},\qquad
- z=\begin{bmatrix}W_e(q-M_or)\\W_uu\end{bmatrix}.
+ T_{zr}: r\longmapsto z=\begin{bmatrix}W_e(q-M_or)\\W_uu\end{bmatrix},
+ \qquad d=0,\quad v=0,
 \]
-Il guadagno limite è uno su questa mappa pesata. I target del
+dove $v$ è il rumore encoder. La selezione esclude interamente
+i canali di disturbo e rumore dalla mappa di prestazione. La soglia
+del guadagno è uno. I target del
 Capitolo 6 su assestamento, sovraelongazione, errore statico e
 cross-coupling si verificano separatamente nelle prove al gradino.
 
 La Figura~\ref{fig:cap9-rp} mostra come ricondurre la verifica
 di guadagno a uno schema di ritorno. Al blocco fisico $\Delta$
-si affianca un blocco complesso pieno $\Delta_p$ da $z$ a $w$,
-di dimensione $4\times4$. Serve a rappresentare il limite di
+si affianca un blocco complesso pieno $\Delta_p$ da $z$ a $r$,
+di dimensione $2\times4$. Serve a rappresentare il limite di
 prestazione nel test con $\mu$.
 
 \begin{figure}[!htb]\centering
@@ -186,9 +189,9 @@ chiude un secondo ritorno sulle porte prestazionali.}
 \label{fig:cap9-rp}
 \end{figure}
 
-Per una valutazione diretta, \texttt{robgain(CL(5:8,:),1)} usa le
-quattro uscite pesate e i quattro ingressi rimasti in \texttt{CL},
-dopo aver escluso gli ingressi di rumore. Il comando scala le sole
+Per una valutazione diretta usiamo \texttt{robgain(Tzr,1)}, con
+\texttt{Tzr=CL(5:8,1:2)}. Le quattro righe sono le uscite pesate
+e le due colonne sono i riferimenti. Il comando scala le sole
 incertezze fisiche, a soglia di guadagno fissa. Cerca la scala alla
 quale si raggiunge il livello unitario. La perturbazione critica può
 violare il guadagno anche con poli stabili. Sostituendo i blocchi
@@ -207,25 +210,19 @@ Il codice decide in quest'ordine.
  perdita di stabilità pone un limite superiore anche al margine RP.
  Si registra l'intervallo da $0$ a \texttt{RS.UpperBound} con metodo
  \texttt{LIMITE\_DA\_RS}. Lo zero inferiore è conservativo.
- \item Negli altri casi si può usare \texttt{robgain} direttamente.
+ \item Negli altri casi usiamo \texttt{robgain} direttamente.
  Se il primo intervallo è invertito, il codice ripete il calcolo
- con opzioni numeriche diverse. Se l'intervallo finale resta
- invertito, l'esito resta inconcludente.
+ con opzioni numeriche diverse. Un intervallo invertito o che
+ contiene uno resta inconcludente. Per dichiarare RP soddisfatta
+ è richiesta anche la stabilità robusta della chiusura.
 \end{enumerate}
 
-Per i sette candidati valgono soltanto i primi due casi. LQG ha norma
-nominale \FinLQGNorma\ e intervalli RS \FinLQGIntervalloRSA\ su A
-e \FinLQGIntervalloRSB\ su B. Entrambi i limiti inferiori superano
-uno, quindi RS passa, mentre NP e RP falliscono già a incertezza nulla.
-
-Hinf2 ha norma nominale \FinHinfTwoNorma, quindi NP passa,
-ma gli intervalli RS sono \FinHinfTwoIntervalloRSA\ su A e
+Per esempio, Hinf2 ha norma sul riferimento \FinHinfTwoNormaR.
+Gli intervalli RS sono \FinHinfTwoIntervalloRSA\ su A e
 \FinHinfTwoIntervalloRSB\ su B. Su A il limite inferiore
-$0.04399$ garantisce stabilità fino a circa il $4.4\%$ delle
-semiampiezze nominalmente ammesse, tutte scalate insieme. La
-perturbazione critica ricade già entro la scala $0.04767$, ben
-all'interno della famiglia. Il limite superiore sotto uno esclude
-sia RS sia RP.
+garantisce stabilità fino a circa il $4.4\%$ delle semiampiezze
+nominalmente ammesse, tutte scalate insieme. Il limite superiore
+sotto uno esclude sia RS sia RP sulla famiglia dichiarata.
 
 \section{Sintesi con \texorpdfstring{$\mu$}{mu} e iterazione D--K}
 
@@ -246,8 +243,9 @@ $H_\infty$ scalata. La verifica finale usa la pianta originale.}
 \end{figure}
 
 Dalla stessa inizializzazione MuN1, \texttt{musyn} esegue tre
-iterazioni separate su A e B con gli stessi $W_e,W_u,M_o$. Il
-calcolo usa il trattamento misto reale/complesso, 121 frequenze
+iterazioni separate su A e B con gli stessi $W_e,W_u,M_o$.
+La sintesi mantiene gli ingressi $[r;d]$ del problema originale.
+Il calcolo usa il trattamento misto reale/complesso, 121 frequenze
 tra $10^{-2}$ e $10^4$ rad/s e ordini di fit $[2,1]$.
 
 Nella Tabella~\ref{tab:cap9-dk}, il picco $\mu$ è la stima superiore
@@ -275,34 +273,37 @@ La Tabella~\ref{tab:cap9-robustezza} ha due righe per ciascun
 controllore, valutato a coefficienti fissati su A e B. Tutte le
 chiusure nominali sono stabili. Per lo stesso controllore A e B
 hanno la stessa pianta a incertezza nulla, perciò coincidono le
-norme nominali alla precisione mostrata. NP confronta quella
-norma comune con uno. RS confronta con uno i due estremi
-dell'intervallo, per esempio \FinLQGIntervalloRSA\ per LQG in A.
-
-Nella colonna RP, $0$ (NP) significa che il livello unitario è
-già violato sul nominale. Un valore come $\leq0.04767$ (RS)
-pone un limite alla scala entro cui entrambi i requisiti di RP
-possono valere, perché la stabilità si perde già entro quella
-scala. Entrambe le notazioni sono deduzioni e in ogni riga danno
-RP \texttt{FAIL}.
+norme di $T_{zr}$ alla precisione riportata. L'ultima colonna
+identifica un calcolo diretto o una deduzione. Lo zero indica
+che NP esclude RP già sul nominale. Quando la stabilità è persa
+entro il raggio unitario, l'estremo superiore RS limita anche
+il margine RP.
 
 \input{generated/finale_robustezza.tex}
 
+\paragraph{NP e RS soddisfatte.}
+LQG e Mu\_B soddisfano entrambe le verifiche. Per LQG la norma scende da
+\FinLQGNorma\ su $[r;d]$ a \FinLQGNormaR\ sul solo riferimento.
+Il calcolo diretto dà margini RP \FinLQGIntervalloRPRA\ in A
+e \FinLQGIntervalloRPRB\ in B. Entrambi i limiti inferiori
+superano uno, con una riserva più piccola in B. Per Mu\_B la norma
+passa da \FinMuBNorma\ a \FinMuBNormaR, ma il calcolo diretto di RP
+dà \FinMuBIntervalloRPRA\ in A e \FinMuBIntervalloRPRB\ in B.
+In entrambi i casi il limite superiore è sotto uno. Mu\_B perde
+quindi il requisito di guadagno, pur mantenendo RS.
+
 \paragraph{RS soddisfatta, NP fallita.}
-LQG, LQGI, Hinf1, Mu\_A e Mu\_B mantengono la stabilità in A e B.
-Hinf1 in B ha limite inferiore \FinHinfOneRSB, quindi l'estensione
-certificata oltre la famiglia dichiarata è piccola. Per tutti e
-cinque la norma comune supera uno già sul nominale, compresi
-Mu\_A (\FinMuANorma) e Mu\_B (\FinMuBNorma). Per questo il
-miglioramento nella ricerca D--K non si traduce in RP.
+LQGI, Hinf1 e Mu\_A restano stabili in A e B. Hinf1 in B
+ha limite inferiore \FinHinfOneRSB, quindi l'estensione
+certificata oltre la famiglia dichiarata è piccola. La norma di
+$T_{zr}$ supera uno già sul nominale per tutti e tre e chiude
+la verifica RP con esito negativo.
 
 \paragraph{NP soddisfatta, RS fallita.}
 Hinf2 e PID superano il test pesato nominale. Per entrambi i
-limiti superiori RS nei due modelli sono sotto uno. Le
-perturbazioni critiche cadono nella famiglia dichiarata e
-rendono insufficiente la buona norma nominale. Il PID ha
-\FinPIDOrdine\ stati e norma \FinPIDNorma, con perdita
-di stabilità già entro una parte dell'incertezza prevista.
+limiti superiori RS sono sotto uno nei due modelli. La perdita
+di stabilità esclude RP. Il PID ha \FinPIDOrdine\ stati e norma
+\FinPIDNormaR\ sul riferimento.
 
 \subsection{Che cosa cambia fra A e B}
 
@@ -362,19 +363,18 @@ precisione, sensibilità al rumore e numero di stati.
 
 \section{Risultati raggiunti e limite sul costo robusto}
 
-L'analisi a controllore fissato e le due D--K, seguite dalla
-post-analisi, rispondono alla parte della traccia su metodi e
-confronto. \textbf{Nessuno dei sette candidati soddisfa RP sulla
-mappa comune, né in A né in B.} I controllori robustamente
-stabili superano la soglia pesata già sul nominale e quelli che
-la rispettano perdono stabilità entro le incertezze dichiarate.
+L'analisi a controllore fissato e le due D--K rispondono alla parte
+della traccia su metodi e confronto. LQG è l'unico candidato che
+soddisfa RP sul riferimento nelle due famiglie. La verifica
+precedente su $[r;d]$ escludeva RP per tutti i candidati.
+La selezione degli ingressi cambia la norma e il quesito
+prestazionale. I margini RS riguardano la stessa dinamica chiusa.
 
-La traccia chiede di considerare obiettivi prestazionali
-ragionevoli se il progetto robusto non raggiunge il livello
-fissato. Per conseguire RP resta aperta una decisione
-progettuale separata su come ribilanciare i requisiti di errore e
-comando e poi verificare di nuovo i candidati. Il confronto qui
-riportato usa le specifiche e i pesi effettivi del progetto.
+La garanzia di LQG riguarda il riferimento a coppie di disturbo
+e rumore nulli. Per la reiezione delle coppie si leggono le
+prove del Capitolo 11. Un obiettivo robusto che includa quelle
+coppie richiederebbe una verifica dedicata ed eventualmente un
+diverso bilanciamento dei requisiti di errore e comando.
 
 L'estensione teorica del Capitolo~\ref{cap:hinf} aggiungerebbe il
 rumore encoder fra gli ingressi esterni della pianta generalizzata,
