@@ -2511,3 +2511,10 @@ La tabella di tracking raccoglie metriche già calcolate. Il confronto distingue
 La sintesi corrente resta il riferimento. Si è scelto di presentare nello stesso percorso l'equivalenza del costo ottenuto con mixsyn e hinfsyn sul 1-DoF, il passaggio al riferimento separato con Mo e la sintesi a struttura PID. Per il confronto si usano una tabella in frequenza e una dei gradini nominali. L'esportatore aggiorna la sola presentazione della tabella in frequenza a partire da hinf.csv.
 
 Lo schema della pianta generalizzata contiene già il collegamento 2-DoF e sostituisce il secondo disegno ridondante. Rimangono i grafici dei pesi, del tracking, di S/T e delle risposte alle coppie di disturbo. Il nuovo schema dei percorsi G e Gd è illustrativo. La formulazione con rumore esplicito resta una possibile estensione, senza i fattori esemplificativi di Wn e senza attribuire altri controllori alla campagna. Stato: proposto per la revisione degli autori.
+
+
+## 2026-11-16 — Presentazione degli esiti robusti nel Capitolo 9
+
+Si è scelto di mostrare norma nominale, esiti NP/RS e margini nella stessa tabella, per leggere la causa del fallimento RP senza una seconda tabella di classificazione. La colonna RP distingue la deduzione dal nominale dal limite superiore ricavato da RS. Le frequenze critiche sono illustrate con LQG e restano disponibili nella tabella esportata e nei dati. Conservati gli schemi N–Δ, RP e D–K e il grafico dei margini e delle iterazioni. Il riepilogo dei comandi MATLAB è assorbito nei paragrafi pertinenti e nell'appendice esistente.
+
+Resta aperta la scelta progettuale sugli obiettivi prestazionali prevista dalla traccia. Il costo comune non è soddisfatto in modo robusto da alcuno dei sette candidati. La seconda D–K con rumore è presentata come estensione teorica della campagna corrente. Stato della revisione: proposta agli autori.
