@@ -64,7 +64,7 @@ Confrontare A e B a controllore fissato.
 
 ## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:42
 
-Leggere una riga con NP PASS e RS FAIL.
+Leggere una riga con NP PASS e RS FAIL. Distinguere il solo esito di assestamento a 5 s dagli altri criteri nominali.
 
 ## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:41
 

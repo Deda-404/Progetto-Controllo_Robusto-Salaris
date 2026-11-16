@@ -1,10 +1,10 @@
 # Scaletta e tempi
 
-23 slide; **2043 parole** di parlato a **125 parole/minuto**.
-Tempo di parlato 16:33; 22 cambi da 2 s portano la stima a **17:17**. Margine rispetto a 20 minuti: **2:43**.
+23 slide; **2094 parole** di parlato a **125 parole/minuto**.
+Tempo di parlato 16:56; 22 cambi da 2 s portano la stima a **17:40**. Margine rispetto a 20 minuti: **2:20**.
 Si tratta di una stima basata sul testo; la durata effettiva richiede una prova orale cronometrata.
 
-Alessio: 8:00; Valerio: 8:33. Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.
+Alessio: 8:14; Valerio: 8:42. Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.
 
 | Slide | Titolo | Studente | Parole | Parlato |
 |---|---|---|---:|---:|
@@ -12,17 +12,17 @@ Alessio: 8:00; Valerio: 8:33. Gli interventi alternano blocchi di circa tre slid
 | 2 | Manipolatore SEA: le due masse della traccia | Alessio | 101 | 0:49 |
 | 3 | Sei stati di attuatore completano il modello | Alessio | 98 | 0:48 |
 | 4 | A e B: stessa massa, diversa descrizione dei drive | Valerio | 99 | 0:48 |
-| 5 | Specifiche: obiettivi temporali e norma pesata | Valerio | 88 | 0:43 |
+| 5 | Specifiche: obiettivi temporali e norma pesata | Valerio | 108 | 0:52 |
 | 6 | LQR: il costo deriva dalle grandezze fisiche | Valerio | 87 | 0:42 |
 | 7 | LQG: quattro encoder e stato stimato | Valerio | 93 | 0:45 |
-| 8 | LQGI: memoria dell'errore misurato | Alessio | 89 | 0:43 |
+| 8 | LQGI: memoria dell'errore misurato | Alessio | 97 | 0:47 |
 | 9 | H infinito: sensibilità mista e pesi adottati | Alessio | 84 | 0:41 |
 | 10 | Due gradi di libertà, stati condivisi | Alessio | 88 | 0:43 |
 | 11 | Ordine completo e ordine fissato: il compromesso rimane | Valerio | 87 | 0:42 |
 | 12 | μ: valore singolare strutturato | Valerio | 87 | 0:42 |
 | 13 | D--K: stessi pesi e stessa inizializzazione | Alessio | 85 | 0:41 |
 | 14 | La post-analisi distingue le due rappresentazioni | Alessio | 86 | 0:42 |
-| 15 | Robustezza pesata e target temporali sono distinti | Alessio | 86 | 0:42 |
+| 15 | Robustezza pesata e target temporali sono distinti | Alessio | 109 | 0:52 |
 | 16 | Dieci impianti: la stessa fisica per tutti | Valerio | 84 | 0:41 |
 | 17 | Tracking e disturbi sugli impianti incerti | Valerio | 84 | 0:41 |
 | 18 | Il rumore encoder può dominare il comando | Valerio | 88 | 0:43 |

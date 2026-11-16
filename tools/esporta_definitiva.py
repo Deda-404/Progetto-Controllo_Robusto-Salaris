@@ -3,11 +3,13 @@ from pathlib import Path
 import csv
 import json
 import math
+import re
 import shutil
 from collections import Counter
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "File_di_Funzioni_Progetto-Accorpati/risultati"
+MATLAB = ROOT / "File_di_Funzioni_Progetto-Accorpati"
+DATA = MATLAB / "risultati"
 GEN = ROOT / "report/generated"
 FIG = ROOT / "report/figures/definitiva"
 CURRENT = ["LQG", "LQGI", "Hinf1", "Hinf2", "PID", "Mu_A", "Mu_B"]
@@ -83,6 +85,11 @@ def polynomial(coeff):
 
 
 def main():
+    parameters = (MATLAB / "parametri_sea.m").read_text(encoding="utf-8")
+    match = re.search(r"^p\.Ts\s*=\s*([0-9]+(?:\.[0-9]+)?)\s*;", parameters, re.MULTILINE)
+    if match is None:
+        raise ValueError("Soglia p.Ts non trovata in parametri_sea.m")
+    ts_limit = float(match[1])
     GEN.mkdir(exist_ok=True); FIG.mkdir(parents=True,exist_ok=True)
     for name in ["famiglia_attuatori","peso_incertezza","robustezza","ras","dieci_impianti",
                  "sensibilita_singoli_parametri","sensibilita_hinf","nominale",
@@ -91,7 +98,7 @@ def main():
     info=json.loads((DATA/"riassunto_numerico.json").read_text(encoding="utf-8"))
     assert info['fisica']['m2']==.8 and 'mEE' not in info['fisica']
     weights=read("ordini_peso"); selected=next(x for x in weights if int(x["Ordine"])==info['ordinePeso'])
-    values={"ResiduoEquilibrio":num(info["residuoEquilibrio"]),"ErroreJacobiano":num(info["erroreJacobiano"]),
+    values={"TsLimit":f"{ts_limit:g}","ResiduoEquilibrio":num(info["residuoEquilibrio"]),"ErroreJacobiano":num(info["erroreJacobiano"]),
             "ErroreAB":num(info["erroreAB"]),"ErroreLFT":num(info["erroreLFT"]),
             "Copertura":num(selected["MaxNormaNormalizzata"],4),"Holdout":num(selected["MaxNormaIndipendente"],4),
             "PesoFormula":r"\frac{"+polynomial(info["pesoNum"])+"}{"+polynomial(info["pesoDen"])+"}",
@@ -117,10 +124,10 @@ def main():
           f"Copertura continua dei {info['numeroFit']} casi di costruzione e verifica indipendente. Selezionato l'ordine {info['ordinePeso']}.")
     # Un solo elemento per ciascuna coppia di poli complessi coniugati.
     poles=[]
-    for re,im in sorted(zip(info["poliRe"],info["poliIm"]),reverse=True):
+    for real,im in sorted(zip(info["poliRe"],info["poliIm"]),reverse=True):
         if im < -1e-8:continue
-        label=num(re,4) if abs(im)<1e-8 else num(re,4)+r" $\pm j$ "+num(abs(im),4)
-        poles.append([label,"instabile" if re>0 else "stabile"])
+        label=num(real,4) if abs(im)<1e-8 else num(real,4)+r" $\pm j$ "+num(abs(im),4)
+        poles.append([label,"instabile" if real>0 else "stabile"])
     table("poli",[r"Poli meccanici [s$^{-1}$]","Esito"],poles,"Poli degli otto stati meccanici al carico nominale; le righe complesse rappresentano coppie coniugate.","tab:poli")
     table("kalman",[r"Fattore $\sigma$",r"Polo lento [s$^{-1}$]","Errore RMS [rad]","Comando RMS [N m]"],
           [[num(x[k]) for k in ["FattoreSigmaAssunta","PoloOsservatore","ErroreStimaRMS","ComandoRMS"]] for x in read("kalman")],
@@ -155,7 +162,7 @@ def main():
     states=["CONVERGENZA","MANCATA_CONVERGENZA","DIVERGENZA_OSSERVATA","TIMEOUT","ERRORE_NUMERICO"]
     rasrows=[]; plantrows=[]; timerows=[]; disturbrows=[]; noiserows=[]; loadrows=[]
     load=read("massa_nonlineare")
-    finalrows=[]
+    finalrows=[]; settling_results={}
     for name in CURRENT:
         counts=Counter(x["Esito"] for x in ras if x["Controllore"]==name)
         assert sum(counts.values())==15 and set(counts).issubset(states)
@@ -167,8 +174,13 @@ def main():
             return "0" if key=="ErroreDC" and abs(value)<1e-9 else num(value,4)
         plantrows.append([esc(name),f"{len(stable)}/10",maximum("ErroreDC",100),maximum("PiccoComando"),maximum("PiccoDisturboRad",180/math.pi)])
         n=next(x for x in plants if x["Controllore"]==name and x["Impianto"]=="0")
-        ok=(n["Stabile"]=="1" and float(n["Assestamento"])<=2 and float(n["OvershootPercent"])<=15 and float(n["ErroreDC"])<=.05 and float(n["Cross"])<=.25)
-        timerows.append([esc(name),num(n["Assestamento"]),num(n["OvershootPercent"]),percent(n["ErroreDC"]),num(100*float(n["Cross"])),"PASS" if ok else "FAIL"])
+        settled = n["Stabile"] == "1" and float(n["Assestamento"]) <= ts_limit
+        settling_results[name] = "PASS" if settled else "FAIL"
+        ok = (settled and float(n["OvershootPercent"]) <= 15
+              and float(n["ErroreDC"]) <= .05 and float(n["Cross"]) <= .25)
+        timerows.append([esc(name),num(n["Assestamento"]),settling_results[name],
+                         num(n["OvershootPercent"]),percent(n["ErroreDC"]),
+                         num(100*float(n["Cross"])),"PASS" if ok else "FAIL"])
         rb=[x for x in robust if x['Controllore']==name]
         finalrows.append([esc(name),'PASS' if ok else 'FAIL','PASS' if rb[0]['NP']=='1' else 'FAIL',
                           '/'.join(x['RS'] for x in rb),'/'.join(x['RP'] for x in rb)])
@@ -203,8 +215,8 @@ def main():
           "Quindici condizioni iniziali per controllore. Gli esiti numerici restano separati dall'attrazione osservata.")
     table("impianti",["Controllore","Stabili",r"Errore DC [\%]","Picco u [N m]",r"Picco $q_d$ [$^\circ$]"],plantrows,
           "Dieci impianti comuni: massimi sui soli casi stabili. Errore DC relativo e coppia link di 0.5 N m.")
-    table("temporali",["Controllore",r"$T_s$ [s]",r"$M_p$ [\%]",r"$e_{ss}$ [\%]",r"Cross [\%]","Target"],timerows,
-          r"Nominale corrente: target simultanei 2 s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.")
+    table("temporali",["Controllore",r"$T_s$ [s]",r"Esito $T_s$",r"$M_p$ [\%]",r"$e_{ss}$ [\%]",r"Cross [\%]","Esito congiunto"],timerows,
+          r"Nominale corrente: target simultanei \FinTsLimit\ s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.")
     table("disturbo",["Controllore",r"Picco $q_d$ [$^\circ$]","Recupero nom. [s]","Recupero max [s]"],disturbrows,
           "Coppie link separate: peggiore asse nominale e massimo fra campioni stabili. Infinito indica mancato rientro entro 0.5 gradi nell'orizzonte di 12 s.")
     table("rumore",["Controllore","Picco a 2 ms","Picco fra campioni","RMS integrato"],noiserows,
@@ -216,8 +228,8 @@ def main():
           [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4)] for x in hinf],"",slide=True)
     table("slide_rs",["Controllore","A","B"],
           [[esc(name)]+[num(next(x["RS_lower"] for x in robust if x["Controllore"]==name and x["Analisi"].startswith(a)),4) for a in ["A","B"]] for name in CURRENT],"",slide=True)
-    table("slide_esiti",["Controllore","NS","NP","RS A/B","RP A/B"],
-          [[esc(name),"PASS" if next(x for x in robust if x["Controllore"]==name)["NS"]=="1" else "FAIL",
+    table("slide_esiti",["Controllore",r"$T_s$","NS","NP","RS A/B","RP A/B"],
+          [[esc(name),settling_results[name],"PASS" if next(x for x in robust if x["Controllore"]==name)["NS"]=="1" else "FAIL",
             "PASS" if next(x for x in robust if x["Controllore"]==name)["NP"]=="1" else "FAIL"]+
             ["/".join(x[key] for x in robust if x["Controllore"]==name) for key in ["RS","RP"]] for name in CURRENT],"",slide=True)
     table("slide_carico",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows[:2],"",slide=True)

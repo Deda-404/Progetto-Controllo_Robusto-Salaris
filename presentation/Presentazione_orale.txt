@@ -32,9 +32,9 @@ Regia: Spiegare lo zero destro di Padé prima del fit.
 
 SLIDE 5 — Specifiche: obiettivi temporali e norma pesata
 Studente: Valerio
-Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Tempo previsto: 0:52 (108 parole a 125 parole/min)
 Testo da pronunciare:
-Separiamo le condizioni matematiche dagli obiettivi scelti da noi. Non cambiamo le definizioni di stabilità e prestazione robusta. Per il movimento abbiamo confrontato tre alternative semplici e adottato due secondi di assestamento, quindici per cento di sovraelongazione, cinque per cento di errore statico e venticinque per cento di accoppiamento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. La scelta è quindi collegata a una risposta concreta. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
+Separiamo le condizioni matematiche dagli obiettivi scelti da noi. Non cambiamo le definizioni di stabilità e prestazione robusta. Dopo il confronto fra tre alternative iniziali, il limite di assestamento è fissato a cinque secondi per tenere conto delle dinamiche elastiche e dei ritardi dei drive. I limiti di sovraelongazione, errore statico e accoppiamento sono rispettivamente quindici, cinque e venticinque per cento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. Quel tempo descrive la risposta del riferimento. I cinque secondi si applicano al manipolatore in anello chiuso. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
 Regia: Distinguere target temporali e soglie matematiche.
 
 SLIDE 6 — LQR: il costo deriva dalle grandezze fisiche
@@ -53,9 +53,9 @@ Regia: Seguire innovazione e comando.
 
 SLIDE 8 — LQGI: memoria dell'errore misurato
 Studente: Alessio
-Tempo previsto: 0:43 (89 parole a 125 parole/min)
+Tempo previsto: 0:47 (97 parole a 125 parole/min)
 Testo da pronunciare:
-LQGI aggiunge la memoria dell’errore misurato. Quando rimane un offset, l’integratore continua a modificare il comando finché quell’errore si riduce. Aumentiamo la pianta con due stati e ricaviamo insieme i guadagni sullo stato e sull’integrale da una sola Riccati. L’osservatore mantiene il nominale ed è alimentato dal comando effettivo. Il sistema chiuso contiene trenta stati. Nei casi stabili otteniamo precisione statica e reiezione della coppia costante, ma il transitorio è più lento. Non sono presenti saturazioni, quindi non attribuiamo al modello una gestione dell’anti-windup che non abbiamo implementato.
+LQGI aggiunge la memoria dell’errore misurato. Quando rimane un offset, l’integratore continua a modificare il comando finché quell’errore si riduce. Aumentiamo la pianta con due stati e ricaviamo insieme i guadagni sullo stato e sull’integrale da una sola Riccati. L’osservatore mantiene il nominale ed è alimentato dal comando effettivo. Il sistema chiuso contiene trenta stati. Nei casi stabili otteniamo precisione statica e reiezione della coppia costante, ma nel nominale l’assestamento dura circa cinque secondi e cinque centesimi, poco oltre il limite. Non sono presenti saturazioni, quindi non attribuiamo al modello una gestione dell’anti-windup che non abbiamo implementato.
 Regia: Indicare i due integratori.
 
 SLIDE 9 — H infinito: sensibilità mista e pesi adottati
@@ -102,9 +102,9 @@ Regia: Confrontare A e B a controllore fissato.
 
 SLIDE 15 — Robustezza pesata e target temporali sono distinti
 Studente: Alessio
-Tempo previsto: 0:42 (86 parole a 125 parole/min)
+Tempo previsto: 0:52 (109 parole a 125 parole/min)
 Testo da pronunciare:
-La separazione fra le quattro proprietà evita conclusioni scorrette. Un controllore può essere nominalmente stabile e non rispettare la norma comune; un altro può avere una buona norma nominale e perdere stabilità per piccole variazioni. Se NP fallisce, RP è già esclusa dal nominale. Se fallisce RS, anche RP è esclusa. Non cambiamo la soglia per ottenere risultati favorevoli. I controllori LQG non sono sintetizzati minimizzando il costo H infinito, quindi il loro esito NP va letto accanto alle prestazioni per le quali sono stati progettati.
+La separazione fra le quattro proprietà evita conclusioni scorrette. Un controllore può essere nominalmente stabile e non rispettare la norma comune; un altro può avere una buona norma nominale e perdere stabilità per piccole variazioni. Se NP fallisce, RP è già esclusa dal nominale. Se fallisce RS, anche RP è esclusa. La soglia pesata resta unitaria. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. I controllori LQG non sono sintetizzati minimizzando il costo H infinito, quindi il loro esito NP va letto accanto alle prestazioni per le quali sono stati progettati.
 Regia: Leggere una riga con NP PASS e RS FAIL.
 
 SLIDE 16 — Dieci impianti: la stessa fisica per tutti

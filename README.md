@@ -21,7 +21,7 @@ La modalità rapida ricalcola A/B, peso, campioni, LQG/LQGI, risposte e rumore, 
 - Drive: wn=40 rad/s ±15%, td=15 ms ±20%, zeta=0.8 noto. Due canali con variazioni indipendenti.
 - A: cinque reali indipendenti, wn1/td1/wn2/td2/m2. Le occorrenze ripetute restano correlate.
 - B: due perturbazioni dinamiche SISO additive e la stessa m2. Peso di ordine 3, verificato in norma sui 25 casi di costruzione e sui 30 indipendenti. Copertura globale non dimostrata.
-- Equilibrio verticale [pi/2;0], 14 stati fisici. Target conservati: Ts≤2 s, overshoot≤15%, errore statico≤5%, cross≤25%. Stessi pesi e modello desiderato nelle due D–K.
+- Equilibrio verticale [pi/2;0], 14 stati fisici. I target adottati sono Ts≤5 s, overshoot≤15%, errore statico≤5% e cross≤25%. Stessi pesi e modello desiderato nelle due D–K.
 
 Le tolleranze sono ipotesi ingegneristiche. La RAS è una sezione empirica nominale; i comandi sono risultati diagnostici senza limiti hardware assegnati. NS, NP, RS e RP rimangono proprietà distinte.
 
@@ -34,8 +34,8 @@ Cinque test indipendenti correnti: `runtests('tests/seaFinaleTest.m')`. `verific
 ## Elaborati
 
 - [Relazione integrale](report/Progetto_CR_Relazione_finale.pdf): 13 capitoli e quattro appendici.
-- [Presentazione](presentation/Progetto_CR_Presentazione.pdf): 23 slide, con il confronto A/B dopo il modello dei drive.
+- La presentazione contiene 23 slide ed è disponibile in [PDF](presentation/Progetto_CR_Presentazione.pdf) e [PowerPoint](presentation/Progetto_CR_Presentazione.pptx).
 - [Discorso orale](presentation/Presentazione_orale.txt) e [tempi stimati](presentation/OUTLINE_AND_TIMING.md).
 - [Consegna autonoma](delivery/Consegna_Progetto_SEA.zip), rigenerata dagli stessi sorgenti e dati.
 
-La compilazione usa i sorgenti LaTeX esistenti. `tools/esporta_definitiva.py` aggiorna le tabelle; gli esportatori delle figure leggono dati salvati. `tools/consegna_definitiva.py` verifica SHA-256 e integrità ZIP. Google Drive resta in sola lettura. La relazione collegata sopra incorpora le revisioni dei capitoli 1–9. Lo stato delle verifiche editoriali è in [PROJECT_STATUS.md](docs/PROJECT_STATUS.md). La ZIP rimane quella collaudata il 4 novembre e contiene la versione precedente del PDF.
+La compilazione usa i sorgenti LaTeX esistenti. `tools/esporta_definitiva.py` aggiorna le tabelle; gli esportatori delle figure leggono dati salvati. `tools/consegna_definitiva.py` verifica SHA-256 e integrità ZIP. Google Drive resta in sola lettura. La relazione incorpora le revisioni dei capitoli 1–9 e la specifica di assestamento aggiornata. Lo stato delle verifiche editoriali è in [PROJECT_STATUS.md](docs/PROJECT_STATUS.md). La ZIP rimane quella collaudata il 4 novembre e contiene la versione precedente del PDF.

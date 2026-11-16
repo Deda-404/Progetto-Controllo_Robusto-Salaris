@@ -424,7 +424,7 @@ accumula memoria se si muove durante il transitorio dell'altro giunto.
 \begin{table}[!htb]\centering
 \begin{tabular}{lrrr}\toprule
 Indicatore & LQG & LQGI & Target\\\midrule
-Assestamento [s] & \FinLQGTs & \FinLQGITs & $\leq 2$\\
+Assestamento [s] & \FinLQGTs & \FinLQGITs & $\leq\FinTsLimit$\\
 Sovraelongazione [\%] & \FinLQGMp & \FinLQGIMp & $\leq 15$\\
 Errore DC [\%] & \FinLQGEss & \FinLQGIEss & $\leq 5$\\
 Cross-coupling [\%] & \FinLQGCross & \FinLQGICross & $\leq 25$\\
@@ -439,7 +439,7 @@ per ciascun indicatore nei due gradini da $5^\circ$.}
 \paragraph{Tracking nominale.}
 La Tabella~\ref{tab:cap7-tracking} mostra che LQG soddisfa i quattro
 target. LQGI riduce cross-coupling e picco di comando in queste prove,
-ma richiede \FinLQGITs\ s per assestarsi e supera il limite di 2 s.
+ma richiede \FinLQGITs\ s per assestarsi e supera il limite di \FinTsLimit\ s.
 L'errore DC si calcola all'equilibrio del modello lineare. L'ultimo
 campione a 12 s può ancora includere una parte del transitorio.
 

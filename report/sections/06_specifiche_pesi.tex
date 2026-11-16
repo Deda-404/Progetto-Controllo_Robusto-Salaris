@@ -11,11 +11,12 @@ in ciascuna prova.
 La traccia ci chiede di scegliere requisiti ragionevoli. Adottiamo
 questi obiettivi per confrontare i controllori sulle stesse prove
 \[
- T_s\leq2\ \mathrm{s},\qquad M_p\leq15\%,\qquad
+ T_s\leq\FinTsLimit\ \mathrm{s},\qquad M_p\leq15\%,\qquad
  e_{ss}\leq5\%,\qquad c_{cross}\leq25\%.
 \]
-I 2 s fissano la scala di rapidità per un movimento graduale attorno
-all'equilibrio instabile. Calcoliamo $T_s$ con \texttt{stepinfo} sul
+Il limite di \FinTsLimit\ s lascia più tempo per completare il
+movimento attorno all'equilibrio instabile, tenendo conto delle
+dinamiche elastiche e dei ritardi degli attuatori. Calcoliamo $T_s$ con \texttt{stepinfo} sul
 giunto comandato, nella fascia del 2\% dell'escursione a regime attorno
 al valore finale. Per $M_p$, la sovraelongazione o \emph{overshoot},
 misuriamo quanto il picco del giunto comandato supera il riferimento
@@ -55,9 +56,9 @@ graduale verso la nuova posizione.
 \]
 Il secondo ordine criticamente smorzato ha guadagno statico unitario
 e raggiunge il riferimento in modo monotono. Con $\omega_M=3$ rad/s
-il solo modello si assesta al 2\% in circa $1.94$ s, in linea con la
-richiesta di 2 s. Verifichiamo l'assestamento del manipolatore sulle
-risposte in anello chiuso. Nel Capitolo 7 il fattore di $12$ rad/s
+il solo modello si assesta al 2\% in circa $1.94$ s. Questo tempo
+descrive la traiettoria desiderata. Il limite di \FinTsLimit\ s si
+applica alle risposte del manipolatore in anello chiuso. Nel Capitolo 7 il fattore di $12$ rad/s
 serve a definire la scala con cui normalizziamo le velocità nel costo LQR.
 
 La sintesi $H_\infty$ esprime le priorità di progetto attraverso

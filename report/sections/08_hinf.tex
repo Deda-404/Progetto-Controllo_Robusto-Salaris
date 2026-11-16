@@ -329,7 +329,7 @@ attorno al valore finale. L'errore DC si valuta rispetto al riferimento.
 \begin{table}[!htb]\centering
 \begin{tabular}{lrrrr}\toprule
 Indicatore & Hinf1 & Hinf2 & PID & Target\\\midrule
-Assestamento [s] & \FinHinfOneTs & \FinHinfTwoTs & \FinPIDTs & $\leq 2$\\
+Assestamento [s] & \FinHinfOneTs & \FinHinfTwoTs & \FinPIDTs & $\leq\FinTsLimit$\\
 Sovraelongazione [\%] & \FinHinfOneMp & \FinHinfTwoMp & \FinPIDMp & $\leq 15$\\
 Errore DC [\%] & \FinHinfOneEss & \FinHinfTwoEss & \FinPIDEss & $\leq 5$\\
 Cross-coupling [\%] & \FinHinfOneCross & \FinHinfTwoCross & \FinPIDCross & $\leq 25$\\
@@ -344,8 +344,8 @@ due gradini separati.}
 Nella Figura~\ref{fig:cap8-tracking}, Hinf1 supera ampiamente il
 riferimento e richiede il comando più alto in questi gradini.
 Hinf2 soddisfa i quattro target e segue da vicino il transitorio
-desiderato. Il PID annulla l'errore DC, ma supera le soglie di
-assestamento e cross-coupling.
+desiderato. Il PID annulla l'errore DC e si assesta entro
+\FinTsLimit\ s, ma supera la soglia di cross-coupling.
 
 \begin{figure}[H]\centering
 \includegraphics[width=.94\linewidth]{figures/editoriale/hinf_tracking_comando.png}

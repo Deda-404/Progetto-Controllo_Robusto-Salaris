@@ -4,6 +4,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Portato il limite di assestamento nominale a 5 s. L'esportatore legge la soglia MATLAB e mostra l'esito per il solo assestamento. La firma v3 conserva il valore riservato nella posizione storica di Ts.
+- Aggiornati relazione integrale, slide e discorso orale. Aggiunto il PowerPoint di 23 slide con la tabella degli esiti e il testo dell'esposizione modificabili.
+
 - Rivisto il Capitolo 9. Distinti NS, NP, RS e RP, spiegati gli intervalli dei margini e la provenienza degli esiti. Aggiornate le tabelle del capitolo e la relazione integrale di 92 pagine.
 
 - Corretto nel §8.5 il riferimento a W_A, peso dell'incertezza additiva degli attuatori della famiglia B.

@@ -2518,3 +2518,11 @@ Lo schema della pianta generalizzata contiene già il collegamento 2-DoF e sosti
 Si è scelto di mostrare norma nominale, esiti NP/RS e margini nella stessa tabella, per leggere la causa del fallimento RP senza una seconda tabella di classificazione. La colonna RP distingue la deduzione dal nominale dal limite superiore ricavato da RS. Le frequenze critiche sono illustrate con LQG e restano disponibili nella tabella esportata e nei dati. Conservati gli schemi N–Δ, RP e D–K e il grafico dei margini e delle iterazioni. Il riepilogo dei comandi MATLAB è assorbito nei paragrafi pertinenti e nell'appendice esistente.
 
 Resta aperta la scelta progettuale sugli obiettivi prestazionali prevista dalla traccia. Il costo comune non è soddisfatto in modo robusto da alcuno dei sette candidati. La seconda D–K con rumore è presentata come estensione teorica della campagna corrente. Stato della revisione: proposta agli autori.
+
+## 2026-11-16 — Limite di assestamento a 5 s
+
+**Stato** — Proposto sul ramo di aggiornamento per la revisione degli autori.
+
+Il limite di 5 s consente un movimento meno rapido in presenza delle dinamiche elastiche e dei ritardi dei drive. Il confronto preliminare a 0,8, 1,5 e 2 s conserva il ruolo storico. Il riferimento $M_o$ a 3 rad/s continua a descrivere un assestamento di circa 1,94 s. Le prove sui controllori usano 5 s come limite di accettazione.
+
+L'alternativa di aggiornare tutta la firma v3 avrebbe reso incompatibili le cache senza cambiare il problema dinamico. La posizione che conteneva Ts conserva il valore riservato 2 e l'esportatore applica il valore corrente di `p.Ts` ai CSV validati. Il confronto dell'intera firma e l'identità dei controllori restano obbligatori nei percorsi che li verificano. La modifica lascia la pianta generalizzata, Mo, i pesi e le soglie NS, NP, RS e RP ai valori validati.

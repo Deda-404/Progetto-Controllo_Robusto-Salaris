@@ -1,3 +1,13 @@
+# Stato corrente — 16.11.2026, limite di assestamento a 5 s
+
+Gate COMPLETE/PASS per soglia, cache ed elaborati. PID e Mu_B passano il solo assestamento nominale. LQG e Hinf2 restano gli unici a soddisfare i quattro target nominali. LQGI e Mu_A richiedono più di 5 s. I valori misurati e gli esiti NS, NP, RS e RP provengono dalla campagna validata.
+
+MATLAB R2026b ha superato i cinque test esistenti, gli otto controlli di `verifica_sea` e il caricamento rapido delle cache H∞, D–K e analisi robuste. È stata verificata anche l'identità della firma e dei controllori della RAS salvata. Verificati il rifiuto di una firma alterata e l'identità per hash del CSV robusto riesportato. `run_all`, nuove sintesi, analisi robuste e simulazioni MATLAB/Simulink NOT RUN.
+
+Relazione integrale di 92 pagine e PDF di 23 slide ricompilati e verificati. Il PowerPoint conserva le 23 slide e include la tabella modificabile degli esiti e le note orali. Verificate apertura e resa in PowerPoint. Prossimo passo — revisione degli autori della Pull Request da `main` dopo il merge #54.
+
+---
+
 # Stato corrente — 16.11.2026, revisione del Capitolo 9
 
 Gate editoriale COMPLETE/PASS. Verificati in sola lettura struttura A/B, LFT, norme nominali, casi critici salvati e provenienza delle tabelle D–K. Le 14 righe danno RP FAIL, con 10 esclusioni sul nominale e 4 limiti dedotti da RS. Resta aperta la scelta degli obiettivi per conseguire RP prevista dalla traccia. Nuove analisi robuste, sintesi e simulazioni NOT RUN.

@@ -93,16 +93,16 @@ Padé variabile: i rapporti $G_p/G_0$ e $G_0/G_p$ introducono poli instabili.
 \column{.47\textwidth}
 Gradini separati da $5^\circ$:
 \begin{itemize}
-\item $T_s\leq2$ s;
+\item $T_s\leq\FinTsLimit$ s;
 \item overshoot $\leq15\%$;
 \item errore statico $\leq5\%$;
 \item cross-coupling $\leq25\%$.
 \end{itemize}
 \column{.49\textwidth}\small
-Tre candidati: $0.8/1.5/2$ s, con overshoot $10/15/15\%$.
+Candidati iniziali: $0.8/1.5/2$ s, con overshoot $10/15/15\%$.
 \par\medskip Modello desiderato:
 \[ M_o=\frac{9}{s^2+6s+9}I_2. \]
-Assestamento circa 1.94 s, risposta monotona.
+Assestamento del modello circa 1.94 s, risposta monotona.
 \par\medskip Coppie e recupero dal disturbo: diagnostica senza dati hardware.
 \end{columns}
 \medskip\bad{Le soglie normalizzate di NS, NP, RS e RP restano invariate.}
@@ -148,7 +148,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \item Una CARE determina insieme $K_x$ e $K_i$.
 \item 14 stati fisici, 14 stimati, 2 integratori.
 \item Offset DC nullo nei casi lineari stabili.
-\item Nominale: $T_s=\FinLQGITs$ s; maggiore precisione, risposta più lenta.
+\item Nominale: $T_s=\FinLQGITs$ s, oltre il limite di $\FinTsLimit$ s.
 \end{itemize}
 \bad{Nessuna saturazione o anti-windup nel modello.}
 \end{frame}
@@ -234,7 +234,7 @@ Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
 \begin{frame}{Robustezza pesata e target temporali sono distinti}
 \centering\small\input{generated/finale_slide_esiti.tex}
 \begin{itemize}
-\item Costo comune, stessa soglia normalizzata.
+\item Costo comune. $T_s$: solo assestamento nominale entro $\FinTsLimit$ s.
 \item NP FAIL esclude già RP sul nominale.
 \item Se RS fallisce, anche RP è esclusa.
 \end{itemize}
