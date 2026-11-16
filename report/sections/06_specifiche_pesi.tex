@@ -1,76 +1,116 @@
 \chapter{Specifiche di prestazione}
 \section{Obiettivo e scenari}
-Le prove di tracking applicano separatamente ai due giunti un gradino di $5^\circ$ attorno all'equilibrio. Le prove di disturbo usano una coppia costante di 0.5 N m su un link alla volta. La massa $m_2$ rimane costante durante ogni prova. Queste ampiezze permettono di osservare il comportamento locale senza confonderlo con grandi movimenti del braccio.
+Vogliamo che il braccio raggiunga il riferimento in tempi ragionevoli,
+con poco superamento, un piccolo errore a regime e un movimento
+contenuto dell'altro giunto. Per valutare questi aspetti applichiamo
+un gradino di $5^\circ$ a un giunto alla volta, attorno all'equilibrio.
+Nelle prove di reiezione applichiamo invece un gradino di coppia di
+$0.5\,\mathrm{N\,m}$ a un link alla volta. La massa $m_2$ è costante
+in ciascuna prova.
 
-Separiamo tre tipi di criterio. La stabilità interna e le definizioni normalizzate di NS, NP, RS e RP sono condizioni matematiche. Assestamento, sovraelongazione, errore statico e accoppiamento sono invece scelte progettuali. Coppie, rumore e recupero dal disturbo sono anche indicatori diagnostici: senza dati di targa non assegniamo loro un limite hardware inventato.
-
-Abbiamo confrontato tre livelli: $(T_s,M_p)=(0.8\,\mathrm{s},10\%)$, $(1.5\,\mathrm{s},15\%)$ e $(2\,\mathrm{s},15\%)$, mantenendo errore statico al 5\% e accoppiamento al 25\%. Le prove a controllore fissato mostrano tempi di alcuni secondi, offset e oscillazioni che non scompaiono aumentando soltanto una soglia. Nessuno dei tre livelli rende automaticamente soddisfacenti tutti i controllori.
-
-Adottiamo il terzo livello:
+La traccia ci chiede di scegliere requisiti ragionevoli. Adottiamo
+questi obiettivi per confrontare i controllori sulle stesse prove
 \[
  T_s\leq2\ \mathrm{s},\qquad M_p\leq15\%,\qquad
  e_{ss}\leq5\%,\qquad c_{cross}\leq25\%.
 \]
-Due secondi restano una richiesta significativa per un equilibrio instabile, ma sono compatibili con un riferimento graduale. Il limite sull'errore statico mantiene precisione utile e quello sull'accoppiamento impedisce che il giunto non comandato si muova eccessivamente.
+I 2 s fissano la scala di rapidità per un movimento graduale attorno
+all'equilibrio instabile. Calcoliamo $T_s$ con \texttt{stepinfo} sul
+giunto comandato, nella fascia del 2\% dell'escursione a regime attorno
+al valore finale. Per $M_p$, la sovraelongazione o \emph{overshoot},
+misuriamo quanto il picco del giunto comandato supera il riferimento
+e lo esprimiamo in percentuale del gradino. Il 15\% consente quindi
+un superamento di $0.75^\circ$ per il gradino di $5^\circ$.
+L'indice $e_{ss}$ misura l'errore statico relativo. Nel confronto MIMO
+prendiamo il massimo valore assoluto fra gli elementi della differenza
+tra il guadagno statico da $r$ a $q$ e $I_2$. Questo criterio comprende
+lo scarto a regime sul giunto comandato e lo spostamento residuo
+dell'altro.
 
-Misuriamo $T_s$ nella banda del 2\% attorno al valore finale, controllando separatamente l'errore rispetto al riferimento. $M_p$ è il superamento del riferimento in percentuale. $c_{cross}$ è il massimo spostamento del giunto non comandato diviso per l'ampiezza richiesta. Un piccolo $T_s$ non compensa un errore statico grande.
+L'accoppiamento meccanico può muovere il secondo giunto quando
+comandiamo il primo, anche se il suo riferimento resta nullo.
+Per questo aggiungiamo un criterio sull'interazione transitoria.
+L'indice $c_{cross}$ è il massimo spostamento in valore assoluto del
+giunto non comandato, diviso per l'ampiezza del gradino. La soglia del 25\%, che abbiamo scelto per il confronto, corrisponde
+a $1.25^\circ$ nell'altra articolazione. Per ciascun indice riportiamo
+il caso peggiore fra le prove sui due giunti.
+
+Questi obiettivi temporali affiancano le verifiche di stabilità e
+prestazione nominali e robuste. Nelle prove di disturbo riportiamo
+anche il picco di posizione e il tempo di rientro entro $0.5^\circ$,
+come indicatori del recupero.
 
 \section{Scelta della banda}
-La scala di velocità $12$ rad/s usata nel costo LQR rimane distinta dalla dinamica del riferimento. Per il problema a due gradi di libertà scegliamo
+Nel problema $H_\infty$ a due gradi di libertà (2-DoF) usiamo un
+modello di riferimento per descrivere il movimento desiderato.
+Dato il riferimento $r$, il modello genera la traiettoria $q_m=M_o r$.
+La sintesi confronta la posizione reale $q$ con $q_m$ mediante
+l'errore $e_m=q-q_m=q-M_or$. In questo modo, a fronte di un gradino
+di riferimento, chiediamo al manipolatore di seguire una transizione
+graduale verso la nuova posizione.
 \[
- M_o(s)=\frac{9}{s^2+6s+9}I_2.
+ M_o(s)=\frac{\omega_M^2}{(s+\omega_M)^2}I_2
+       =\frac{9}{s^2+6s+9}I_2,
+ \qquad \omega_M=3\,\mathrm{rad/s}.
 \]
-È un secondo ordine criticamente smorzato: la risposta desiderata al gradino è monotona e si assesta in circa 1.94 s. Il confronto delle frequenze $3,4,5$ rad/s dà tempi rispettivamente di circa $1.94,1.46,1.17$ s. Scegliere 3 collega direttamente il modello desiderato al requisito di 2 s, senza cercare una particolare norma di sintesi.
+Il secondo ordine criticamente smorzato ha guadagno statico unitario
+e raggiunge il riferimento in modo monotono. Con $\omega_M=3$ rad/s
+il solo modello si assesta al 2\% in circa $1.94$ s, in linea con la
+richiesta di 2 s. Verifichiamo l'assestamento del manipolatore sulle
+risposte in anello chiuso. Nel Capitolo 7 il fattore di $12$ rad/s
+serve a definire la scala con cui normalizziamo le velocità nel costo LQR.
 
-Manteniamo pesi di primo ordine:
+La sintesi $H_\infty$ esprime le priorità di progetto attraverso
+pesi che agiscono sulle mappe ingresso-uscita. Un peso grande
+sull'errore richiede una risposta più piccola in quella banda
+per rispettare l'obiettivo pesato. Diamo più importanza alle basse
+frequenze con $W_e$, così da penalizzare scarti persistenti dal
+riferimento ed effetti lenti delle coppie di disturbo. Con $W_u$
+penalizziamo il comando, soprattutto le componenti rapide che
+sollecitano i drive e possono eccitare la dinamica elastica.
 \[
  W_e(s)=\frac{s/3+2}{s+0.3}I_2,\qquad
  W_u(s)=0.003\frac{s+80}{s/6+80}I_2.
 \]
-Il primo penalizza soprattutto gli errori lenti; il secondo aumenta il costo delle coppie rapide. Il problema comune valuta
-\[
- \left\|T_{[r;d]\,\to\,[W_e(q-M_or);W_uu]}\right\|_\infty<1.
-\]
-Non è un modo alternativo di definire $T_s$ o l'overshoot. Le prestazioni pesate e i target temporali vengono verificati separatamente. I pesi e $M_o$ sono identici nelle sintesi robuste A e B.
+Nella pianta generalizzata 2-DoF del Capitolo 8, le uscite
+prestazionali sono $z_e=W_e(q-M_or)$ e $z_u=W_u u$. La sintesi
+cerca di ridurre l'amplificazione dagli ingressi esterni
+$w=[r;d]$ alle uscite $z=[z_e;z_u]$. Il confronto robusto fra
+A e B usa gli stessi pesi e lo stesso $M_o$. Il peso $W_A$
+del Capitolo 5 descrive invece l'ampiezza delle perturbazioni
+attuative. Nel problema 1-DoF con \texttt{mixsyn}, gli stessi
+pesi prestazionali agiscono sull'errore diretto $r-q$ e sul comando.
 
-\paragraph*{Verifica della coerenza fra pesi e specifiche}
-Il modello desiderato ha guadagno statico uno e un transitorio coerente
-con i due secondi richiesti. Il peso sull'errore ha invece
-$W_e(0)=2/0.3=6.67$: un limite unitario sulla sola mappa pesata
-implicherebbe un errore statico inferiore a 0.15 per un ingresso
-unitario, non il 5\% richiesto. Quest'ultimo deve quindi essere
-verificato direttamente e non può essere dedotto da NP o RP.
-Analogamente, $W_u(0)=0.003$ non rappresenta una coppia massima:
-il livello unitario suggerisce una scala di guadagno, senza imporre
-un limite puntuale al comando. Gli ingressi $r$ e $d$ mantengono le
-unità rad e N m; il costo non è una percentuale di errore comune ai due.
-
-Manteniamo questi pesi per confrontare sullo stesso problema le famiglie
-studiate. Aumentare automaticamente il guadagno statico di $W_e$ a 20
-per tradurre il 5\% renderebbe più severa una sintesi che già non
-soddisfa RP. Ridurlo per ottenere un PASS indebolirebbe invece la
-richiesta di precisione. Nessuna di queste operazioni risolverebbe il
-rumore, che non è un ingresso del costo. La conclusione progettuale
-resta perciò limitata: $M_o$ esprime la rapidità desiderata, i pesi
-definiscono il compromesso frequenziale, mentre i quattro target
-temporali e il rumore costituiscono verifiche ulteriori necessarie.
+La condizione $\|T_{zw}\|_\infty<1$ limita il guadagno della mappa
+pesata. Per esempio, nel problema 2-DoF a disturbo nullo il blocco DC
+da $r$ a $z_e$ vale $W_e(0)(T_{qr}(0)-I_2)$. La norma della mappa
+completa limita in modulo ogni elemento di quel blocco.
+Dato $W_e(0)=(2/0.3)I_2$ e usando i riferimenti direttamente in
+radianti, la soglia unitaria implicherebbe un errore statico relativo
+inferiore al 15\% su ogni componente, per un gradino su un solo asse.
+Il 5\% adottato richiede quindi una verifica diretta. Allo stesso
+modo, l'assestamento, l'overshoot e il cross-coupling si valutano
+sulle risposte al gradino. Il peso $W_u$ definisce una penalità nel
+costo frequenziale, mentre il picco di coppia si rileva nelle prove.
 
 \section{Requisito aggiuntivo sul rumore encoder}
-Per confrontare la sensibilità alle misure usiamo lo stesso rumore su tutti i controllori: deviazione standard $0.05^\circ$, campioni ogni 2 ms mantenuti costanti fra un campione e il successivo, durata 4 s. Riferimento e disturbo sono nulli.
+Le fluttuazioni degli encoder possono provocare comandi rapidi e
+intensi anche quando le posizioni variano poco. Per questo osserviamo
+anche il comando. La traccia chiede di modellare i rumori di misura
+e di processo per LQG. Qui fissiamo una prova comune per confrontare
+i controllori con la stessa eccitazione sulle misure utilizzate.
 
-Misuriamo il picco del comando anche fra i campioni e il suo RMS nel tempo. Questo evita di sottostimare impulsi molto rapidi. Il rumore non è incluso nel costo robusto comune sopra: il suo effetto è quindi una verifica aggiuntiva, necessaria per interpretare l'utilità di un controllore. Per il disturbo riportiamo anche il tempo di rientro entro $0.5^\circ$, senza confonderlo con una soglia di robustezza.
+Assumiamo una deviazione standard di $0.05^\circ$ come ipotesi di
+progetto. Generiamo campioni gaussiani ogni 2 ms e li manteniamo
+costanti fra i campioni, per 4 s a riferimento e disturbo nulli.
+Il picco è la massima ampiezza osservata del comando, cercata anche
+fra i campioni. L'RMS ne misura l'intensità quadratica media sulla
+durata della prova e sui due comandi. I due valori descrivono la
+risposta alla sequenza usata.
 
-La richiesta di attenuare il rumore può essere formulata come un secondo
-problema di progetto, includendo una misura $q+W_n\nu$ nella pianta
-generalizzata. Questa estensione è spiegata nei capitoli 8 e 9, ma non
-attribuiamo ai controllori della famiglia della traccia risultati di una
-sintesi aggiuntiva che non è qui eseguita. La verifica comune usa le
-metriche salvate sotto la stessa eccitazione; una riduzione osservata
-su una sequenza non è un massimo garantito per un rumore non limitato.
-
-La banda del feedback, la frequenza di transizione del peso sull'errore
-e la rapidità del modello desiderato hanno ruoli distinti. Il feedback
-deve stabilizzare il punto instabile, il peso esprime il compromesso
-frequenziale, $M_o$ descrive il moto richiesto. Non si può assegnare
-un unico significato numerico a tutte e tre le frequenze, né dedurre
-il tempo di assestamento reale dalla sola frequenza del peso.
+Nella formulazione prestazionale comune, $w$ comprende riferimento
+e disturbo sui link. Valutiamo il rumore encoder a parte nel
+Capitolo 10. I Capitoli 8 e 9 discutono anche l'estensione della
+sintesi con il rumore come ingresso esplicito. La sequenza a tratti
+costante della prova è distinta dal modello di rumore bianco
+continuo usato per il filtro di Kalman.

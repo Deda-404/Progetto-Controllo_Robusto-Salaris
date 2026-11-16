@@ -3238,3 +3238,10 @@ Revisione circoscritta al Capitolo 5 dalla HEAD approvata della PR #48. Le note 
 Controlli indipendenti in Python e revisione del codice PASS. Confermati i cinque blocchi reali (17 occorrenze), la composizione dei campioni, l'algebra delle due ripetizioni manuali, gli zeri di Padé e il peso di ordine 3, stabile, a fase minima e di grado relativo due. Ricalcolato il solo inviluppo sulla griglia esistente, con picco a circa 31 rad/s e copertura in tutti i nodi. Norme continue e ricostruzione A/B riportate dai risultati MATLAB già salvati. Nuove esecuzioni MATLAB/Simulink NOT RUN. Nessuna nuova sintesi o ricerca del peso.
 
 Compilazione integrale di 107 pagine e controllo visivo delle pagine PDF 22–28 PASS. Nessun errore, avviso LaTeX, riferimento irrisolto o pagina vuota nel capitolo. Verificata l'identità dei sorgenti protetti e del testo e delle interruzioni di pagina dei capitoli 1–4, 6–13 e delle appendici nel PDF, salvo la numerazione. Aggiornato il PDF tracciato. La ZIP resta quella del 4 novembre. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-12 — Revisione annotata del Capitolo 6
+
+Le annotazioni alle pagine 22–23 del PDF del 4 novembre sono state confrontate con la traccia, il capitolo e il percorso operativo. Il §6.1 presenta i soli target definitivi, con le definizioni usate da confronto_ras.m. Nel §6.2 sono esplicitati il ruolo di Mo e i segnali pesati nei problemi 1-DoF e 2-DoF. La condizione unitaria sulla mappa pesata viene letta sul blocco DC di riferimento, per cui il limite è 15% per componente. Il §6.3 riassume la prova comune a 2 ms e la lettura di picco e RMS.
+
+Controlli su codice e dati salvati PASS. Confermati parametri, definizioni delle metriche, formule, uso del cross-coupling, protocollo di rumore e assestamento analitico di Mo a 1,944641 s. Nuove esecuzioni MATLAB e Simulink NOT RUN. Compilazione di 107 pagine e controllo visivo delle pagine PDF 29–30 PASS. Nessun avviso LaTeX o riferimento irrisolto. Verificati l'identità dei sorgenti protetti, il testo estratto e la suddivisione in pagine degli altri capitoli e delle appendici. Il PDF tracciato contiene la revisione. Gate editoriale COMPLETE/PASS.

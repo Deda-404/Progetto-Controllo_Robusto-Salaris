@@ -4,6 +4,8 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Chiariti nel Capitolo 6 gli indici temporali, il modello di riferimento, i pesi prestazionali e il protocollo comune per il rumore encoder. Aggiornata la relazione integrale di 107 pagine.
+
 - Chiariti nel Capitolo 5 la famiglia dei drive, l'estrazione della LFT, gli effetti dello zero destro e la scelta e verifica del peso additivo. Aggiornato il PDF integrale verificato di 107 pagine.
 
 - Rifinita l'impaginazione delle figure dei capitoli 2 e 3, ripristinata la guida ai capitoli 2–5 e precisata l'interpretazione dello sfasamento di Padé. Aggiornato il PDF integrale alla versione verificata di 108 pagine.
