@@ -2,26 +2,19 @@
 \section{Obiettivo e principio di modellazione}
 Vogliamo confrontare l'effetto della rappresentazione dell'incertezza, mantenendo uguale il sistema fisico. Per questo A e B condividono il nominale, il punto di lavoro, i segnali e la massa incerta $m_2$. Cambia soltanto il modo di descrivere le variazioni dei due drive.
 
-Un modello incerto deve descrivere una famiglia, non aggiungere errori
-arbitrari alle matrici. Una massa è costante per una particolare prova;
-un ritardo modifica insieme polo e zero del drive; lo stesso parametro
-può comparire in più equazioni. Conservare queste dipendenze impedisce
-di studiare robot matematicamente possibili ma estranei alle ipotesi fisiche.
+Nel modello A ogni drive ha una propria frequenza naturale e un
+proprio ritardo incerti. Nel modello B rappresentiamo lo scostamento
+di ciascun drive con un blocco dinamico SISO indipendente, limitato da
+un peso. Le tre grandezze fisiche soggette a incertezza sono frequenza
+naturale, ritardo e massa. In A i due parametri di ciascun drive
+e la massa condivisa danno cinque scalari reali indipendenti.
+In B la massa resta lo stesso parametro reale.
 
-La domanda centrale è come cambia l'analisi quando la variabilità degli
-stessi attuatori viene rappresentata mediante parametri fisici oppure
-concentrata in dinamiche pesate. Il confronto non richiede che B risulti
-migliore. Richiede di tenere fermi gli elementi che definiscono il robot:
-meccanica, equilibrio, ingressi, misure e controllore. Se cambiassimo anche
-la massa o rigenerassimo campioni diversi, non potremmo attribuire la
-differenza alla sola rappresentazione dell'incertezza.
-
-I range sono ipotesi di progetto, non intervalli di confidenza o misure
-sperimentali. Il campionamento entro quei range non li trasforma in una
-legge di probabilità dell'hardware. Rigidezze, inerzie dei motori, geometrie
-e smorzamenti restano assegnati: questo delimita il dominio delle garanzie,
-senza dichiarare che tali grandezze siano fisicamente esatte.
-
+Gli intervalli sono ipotesi di progetto e delimitano le variazioni
+studiate. Rigidezze, inerzie dei motori, geometrie e smorzamenti
+restano assegnati. Usiamo le stesse realizzazioni fisiche quando
+confrontiamo le due rappresentazioni, così le differenze si possono
+ricondurre alla famiglia incerta considerata.
 
 \section{Parametri reali \texttt{ureal}}
 Nel modello A ogni parametro si scrive come valore nominale più una variazione normalizzata. Per esempio,
@@ -30,122 +23,149 @@ Nel modello A ogni parametro si scrive come valore nominale più una variazione 
  \tau_{d,1}=0.015(1+0.2\delta_{t_1}),\quad
  m_2=0.8(1+0.1\delta_m),\qquad |\delta|\leq1.
 \]
-Abbiamo quattro parametri attuativi indipendenti e una sola massa reale comune: cinque scalari incerti. Tutte le occorrenze della massa in $M,C,G$ dipendono dalla stessa $\delta_m$. Le rigidezze e le inerzie dei motori sono note nel modello adottato.
-
+Le grandezze sono espresse in rad/s, s e kg. Il secondo drive usa la
+stessa parametrizzazione con due variabili indipendenti da quelle
+del primo. Lo smorzamento è fissato a $\zeta=0.8$.
 
 \paragraph*{Significato della normalizzazione.}
 Per una grandezza $\alpha$ scriviamo
 $\alpha=\bar\alpha(1+r_\alpha\delta_\alpha)$.
-Lo zero rappresenta il nominale, $+1$ e $-1$ i due estremi. La soglia
-unitaria ha così lo stesso significato per kg, secondi e coefficienti
-adimensionali. Le equazioni conservano invece le loro unità fisiche.
-Per ogni pianta un parametro reale rimane costante in frequenza:
-non può assumere un valore a bassa frequenza e un altro ad alta frequenza.
-Questo vincolo è parte dell'informazione conservata da A.
+Lo zero rappresenta il nominale, $-1$ e $+1$ gli estremi inferiore
+e superiore. La normalizzazione rende confrontabili variazioni con
+unità e tolleranze diverse. Nel blocco $\Delta$ ogni scalare ha
+limite unitario e i fattori che gli restituiscono la scala fisica
+restano nella parte nota. Fissata una realizzazione, il parametro
+reale ha lo stesso valore a tutte le frequenze.
 
 \paragraph*{Una sola massa meccanica condivisa.}
-La massa si scrive $m_2=0.8+0.08\delta_m$ kg. Agli estremi $\delta_m=-1,+1$ corrispondono 0.72 e 0.88 kg. La variazione può rappresentare tolleranze costruttive o un'identificazione imperfetta della massa concentrata del secondo link. La stessa massa modifica energia cinetica, Coriolis e gravità. Perturbare separatamente questi contributi ammetterebbe combinazioni prive di significato fisico. Per questo usiamo la medesima istanza reale in tutte le occorrenze.
-
-Le tre tipologie hanno ruoli complementari: $\omega_n$ cambia la rapidità del drive, $\tau_d$ lo sfasamento e $m_2$ la dinamica meccanica. Due attuatori indipendenti richiedono quattro scalari attuativi; aggiungendo la massa si ottengono cinque scalari, pur avendo soltanto tre tipologie fisiche. Gli altri parametri rimangono nominali per isolare questi effetti.
-
-All'equilibrio verticale la coppia rimane nulla per ogni massa ammessa, ma inerzia e derivata della gravità cambiano. Una coppia disturbante esterna non riproduce questo effetto. La massa rimane costante durante ogni simulazione; la famiglia non descrive una variazione improvvisa durante il moto.
+La massa si scrive $m_2=0.8+0.08\delta_m$ kg, con estremi 0.72 e 0.88 kg.
+La medesima istanza \texttt{ureal} entra in $M$, $C$ e $G$, in modo
+che inerzia, Coriolis e gravità corrispondano alla stessa massa. La
+coppia di equilibrio resta nulla nell'intero intervallo, mentre
+cambiano l'inerzia e la derivata della gravità. La massa è costante
+durante ogni prova.
 
 \paragraph*{Dal parametro fisico al secondo ordine SISO}
-Per ciascun attuatore la realizzazione è
+Per il blocco del secondo ordine, indicando con $u$ il suo
+ingresso, scriviamo
 \[
  \dot x=v,\qquad \dot v=\omega_n^2(u-x)-2\zeta\omega_nv.
 \]
-Le due coordinate descrivono il secondo ordine; segue un solo stato
-Padé. Il suo ordine rimane uguale per tutti i valori ammessi di ritardo.
-Non sommiamo un secondo errore di ritardo al blocco già parametrico.
-Questa realizzazione rende visibile il ruolo dei parametri: la frequenza
-naturale entra sia nel richiamo verso l'ingresso sia nel termine dissipativo;
-lo smorzamento agisce sulla velocità. Perturbare indipendentemente tutti
-i coefficienti cancellerebbe questa dipendenza fisica.
+La frequenza naturale entra sia nel termine di richiamo sia in quello
+di smorzamento. Nella cascata del drive si aggiunge lo stato del
+Padé, il cui ritardo modifica insieme polo e zero.
 
-\begin{figure}[htbp]\centering
+La Figura~\ref{fig:famiglia-drive} confronta i 25 casi SISO usati per
+costruire il peso con il drive nominale. La curva nera, o le croci
+nere nel piano dei poli, indica il nominale. In azzurro compaiono i
+casi della famiglia. A bassa frequenza i moduli si sovrappongono
+perché tutti i drive hanno guadagno statico unitario. Il Padé ha
+modulo unitario, perciò le differenze di banda nel modulo dipendono
+da $\omega_n$. In fase, al contributo del secondo ordine si aggiunge
+quello del ritardo, che a frequenza fissata aumenta in valore assoluto
+al crescere di $\tau_d$.
+
+\begin{figure}[!htbp]\centering
 \includegraphics[width=.96\textwidth]{figures/definitiva/famiglia_attuatori.png}
 \caption{Modulo, fase, poli e gradino della famiglia fisica dei drive.
 Il confronto SISO precede l'inserimento nella meccanica MIMO accoppiata.}
 \label{fig:famiglia-drive}
 \end{figure}
 
-Il modulo mostra la banda, la fase evidenzia anche il ritardo, i poli
-rendono leggibili rapidità e smorzamento, il gradino il transitorio.
-Nessuno di questi pannelli, da solo, dimostra robustezza del robot
-in retroazione. I drive restano indipendenti anche se i giunti si muovono
-in modo accoppiato attraverso la meccanica.
+Nel piano complesso la coppia coniugata del secondo ordine si sposta
+al variare di $\omega_n$, mentre il polo reale $-2/\tau_d$ si avvicina
+all'origine quando aumenta il ritardo. Tutti i poli dei drive mostrati
+sono a sinistra. Al gradino unitario le risposte arrivano alla stessa
+coppia a regime, con tempi e transitori diversi, visibili anche nella
+breve risposta iniziale di segno opposto dovuta allo zero destro.
+Studiare i drive separatamente permette di riconoscere questi effetti
+prima che si sommino a quelli della meccanica accoppiata. La stabilità
+dei singoli drive è distinta da quella del manipolatore in retroazione.
 
+\paragraph*{Pulling out the deltas.}
+Separiamo i coefficienti noti dai parametri incerti per poter esporre
+questi ultimi come ingressi e uscite di un blocco $\Delta$. La parte
+nota manda a $\Delta$ segnali ausiliari e usa ciò che ritorna per
+ricostruire i termini incerti delle equazioni. I segnali intermedi
+sono variabili del calcolo. Richiudendo le porte si deve ottenere
+esattamente la dinamica da cui siamo partiti.
 
-\paragraph*{Pulling out the deltas}
-Ponendo $d_\omega=\bar\omega_nr_\omega$ e mantenendo $\bar\zeta=0.8$ noto otteniamo
+Nell'esempio del secondo ordine scriviamo
+$\omega_n=\bar\omega_n+d_\omega\delta_\omega$, con
+$d_\omega=\bar\omega_nr_\omega$ e $\bar\zeta=0.8$. Prima formiamo
+$z_1=u-x$. Il blocco incerto moltiplica $z_1$ per $\delta_\omega$
+e il termine $d_\omega w_1$ si somma alla parte nominale.
+Ripetiamo la stessa operazione su $z_2$:
 \begin{align*}
  z_1&=u-x,& w_1&=\delta_\omega z_1,\\
  z_2&=\bar\omega_nz_1+d_\omega w_1-2\bar\zeta v,
  &w_2&=\delta_\omega z_2,\\
  \dot v&=\bar\omega_nz_2+d_\omega w_2,&\dot x&=v.
 \end{align*}
-Sostituendo i segnali $w_j$ si recuperano i prodotti originali.
-Lo scalare $\delta_\omega$ è ripetuto due volte con valore identico.
-Per Padé poniamo $\tau_d=\bar\tau_d(1+r_t\delta_t)$ e usiamo
+Sostituendo $w_1$ otteniamo $z_2=\omega_n(u-x)-2\bar\zeta v$.
+Sostituendo $w_2$ si ha $\dot v=\omega_nz_2$, da cui si ritrova
+l'equazione iniziale. Le due porte usano lo stesso $\delta_\omega$
+perché i due fattori $\omega_n$ provengono dalla stessa grandezza
+fisica.
+
+Per il Padé, con $\tau_d=\bar\tau_d(1+r_t\delta_t)$, la dipendenza è
+razionale:
 \[
  \dot x_d=-\frac{2}{\tau_d}x_d+\frac{2}{\tau_d}x,
  \qquad y=2x_d-x.
 \]
-Sostituire i segnali interni è un controllo utile per leggere il metodo:
-$w_1$ ricostruisce il primo fattore $\omega_n$ e $w_2$ il secondo; $\zeta$ resta un coefficiente noto. Le due occorrenze di $\delta_\omega$ non possono
-variare separatamente. Nel Padé, il cambiamento di $\tau_d$ modifica
-insieme polo e zero; lo stesso ritardo non è contato una seconda volta
-attraverso una perturbazione dinamica aggiuntiva.
+Qui $x$ è l'ingresso del Padé nella cascata SISO con il secondo ordine.
+Nella LFT il coefficiente $1/\tau_d$ usa ancora lo stesso $\delta_t$.
+Lo stesso principio vale per la massa, che compare anche nell'inversa
+della matrice d'inerzia del modello meccanico.
 
-
-La dipendenza da $1/\tau_d$ è razionale. La sua estrazione nella LFT
-mantiene lo stesso parametro reale, non una dinamica indipendente.
-Anche $M(q)^{-1}$ dipende dalla medesima massa che compare in gravità.
-La LFT estratta automaticamente con \texttt{lftdata} ha \FinOccorrenze\ occorrenze: cinque di $m_2$, cinque per ciascuna frequenza naturale e una per ciascun ritardo. La struttura completa è salvata nei dati insieme al nome e alla dimensione di ogni blocco. Sono cinque grandezze fisiche, indipendentemente dal numero delle loro ripetizioni algebriche. Una massa ripetuta in più coefficienti rimane sempre la stessa massa.
-\paragraph*{Parte nota e chiusura delle porte incerte}
-Una LFT separa la parte nota dalle perturbazioni. Se le porte incerte sono ordinate per prime, scriviamo
+\paragraph*{Parte nota e chiusura delle porte incerte.}
+Nello schema di Figura~\ref{fig:lft}, $M$ è il sistema noto che collega
+le porte fisiche a quelle ausiliarie. Scriviamo $u_{\rm f}=[u;d]$ per
+gli ingressi fisici e $y=[q;\theta]$ per le uscite. Il segnale $z_\Delta$
+esce da $M$ verso $\Delta$ e $w_\Delta$ rientra in $M$ dopo
+l'applicazione del blocco incerto:
 \[
  \begin{bmatrix}z_\Delta\\y\end{bmatrix}
- =M\begin{bmatrix}w_\Delta\\u\end{bmatrix},\qquad
+ =M\begin{bmatrix}w_\Delta\\u_{\rm f}\end{bmatrix},\qquad
  w_\Delta=\Delta z_\Delta,
 \]
 \[
  P_A=\mathcal F_u(M,\Delta)
  =M_{22}+M_{21}\Delta(I-M_{11}\Delta)^{-1}M_{12}.
 \]
-Il termine inverso rappresenta il ritorno fra le porte incerte.
-La LFT è una connessione, non un'approssimazione ulteriore del robot.
-Deve essere ben posta, cioè permettere di determinare univocamente i
-segnali interni. La parte nominale si ritrova ponendo $\Delta=0$;
-sostituendo uno specifico insieme di valori reali si ritrova una pianta
-fisica della famiglia.
+L'inverso risolve l'equazione interna
+$(I-M_{11}\Delta)z_\Delta=M_{12}u_{\rm f}$. La chiusura è ben posta
+quando la connessione determina univocamente i segnali interni.
+Ponendo $\Delta=0$ resta $M_{22}$, cioè il nominale. Fissando invece
+i cinque valori normalizzati e chiudendo le porte si recupera la
+pianta corrispondente nel modello razionale con Padé. La separazione
+LFT lascia invariato quel modello.
 
-
-La matrice $\Delta$ è diagonale a blocchi. Un parametro può comparire più volte nella LFT, perché entra in più coefficienti o attraverso prodotti e inversi. Queste ripetizioni rimangono correlate: non sono nuovi parametri fisici. La struttura estratta con \texttt{lftdata} e la sua ricostruzione sono verificate sostituendo gli stessi valori fisici.
-
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \resizebox{.85\textwidth}{!}{\input{figures/schemes/sea_delta.tex}}
-\caption{Separazione fra parte nota e blocchi incerti; le ripetizioni dello stesso parametro mantengono lo stesso valore.}\label{fig:lft}
+\caption{Parte nota $M$ e blocco incerto $\Delta$ in retroazione
+attraverso le porte ausiliarie. Le porte esterne mantengono gli
+ingressi e le misure fisiche.}\label{fig:lft}
 \end{figure}
 
-Nel procedimento numerico \texttt{lftdata} restituisce parte nota,
-struttura e normalizzazione. La ricostruzione usa
-\texttt{lft(Delta,M)} nella convenzione MATLAB; \texttt{usubs}
-reinserisce i parametri fisici. La realizzazione manuale del secondo
-ordine può avere una diversa dimensione da quella automatica dell'intero
-robot: non comprende Padé e meccanica. Non confondiamo quindi numero
-fisico di parametri, occorrenze nella LFT e ordine dinamico di 14 stati.
-
+Nel codice \texttt{lftdata} costruisce $M$ e $\Delta$ del modello A e
+\texttt{lft(Delta,M)} ne chiude le porte nella convenzione MATLAB.
+La struttura salvata ha \FinOccorrenze\ occorrenze scalari in cinque
+blocchi diagonali: cinque copie della massa, cinque per ciascuna
+frequenza naturale e una per ciascun ritardo. Entro ogni blocco le
+copie hanno tutte lo stesso valore. Le due copie dell'esempio manuale
+descrivono una realizzazione del solo secondo ordine. Il conteggio
+della LFT completa riguarda la realizzazione estratta e resta
+distinto sia dai cinque parametri indipendenti sia dai 14 stati
+della pianta.
 
 \section{Incertezza dinamica degli attuatori}
-Un blocco \texttt{ultidyn} rappresenta una dinamica stabile non nota
-entro un limite in norma. Diversamente da un parametro reale, non
-possiede un unico valore fisico come massa o ritardo. Il peso stabilisce
-quanto può essere grande lo scostamento alle diverse frequenze.
-La costruzione segue la catena famiglia fisica, errore, inviluppo, fit,
-normalizzazione e verifica: la forma va decisa prima di adattare il peso.
-
+In B un blocco \texttt{ultidyn} rappresenta uno scostamento dinamico
+stabile e proprio, di norma al più unitaria dopo la normalizzazione.
+Il peso dà allo scostamento la scala ammessa alle diverse frequenze.
+Prima di costruire il peso dobbiamo scegliere come misurare lo
+scostamento tra il drive perturbato $G_p$ e quello nominale $G_0$.
 
 Per costruire B partiamo dagli stessi drive campionati in A. Consideriamo le tre forme
 \begin{align*}
@@ -154,30 +174,39 @@ Per costruire B partiamo dagli stessi drive campionati in A. Consideriamo le tre
 \text{inversa:}\quad&G_p=G_0/(1-W_I\Delta_I), &E_I&=(G_p-G_0)/G_p.
 \end{align*}
 
-\begin{figure}[htbp]\centering
-\resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_forme.tex}}
+\begin{figure}[!htbp]\centering
+\resizebox{.80\linewidth}{!}{\input{figures/schemes/sea_forme.tex}}
 \caption{Forme SISO alternative. I simboli $W_A,W_M,W_I$ e i segni
-corrispondono alle tre formule; il ritorno nella forma inversa è interno al modello di errore.}
+corrispondono alle tre formule. Nella forma inversa il ritorno agisce a monte di $G_0$.}\label{fig:forme-drive}
 \end{figure}
 
-La forma additiva misura uno scostamento assoluto, la diretta uno
-scostamento relativo al nominale e l'inversa uno scostamento relativo
-alla pianta perturbata. In SISO l'ordine dei fattori non cambia il
-prodotto; in MIMO una perturbazione moltiplicativa all'ingresso o
-all'uscita non sarebbe in generale equivalente. La collocazione è
-quindi parte della definizione della famiglia, non una scelta grafica.
+Nella Figura~\ref{fig:forme-drive} l'additiva somma direttamente
+$W_A\Delta_A$ a $G_0$. La diretta moltiplica il nominale per
+$1+W_M\Delta_M$ e misura l'errore rispetto a $G_0$. L'inversa
+costruisce $G_p$ chiudendo il ritorno positivo prima di $G_0$.
+Risolvendo la connessione, il termine $W_I\Delta_I$ misura l'errore
+rispetto a $G_p$. Le due forme relative richiedono quindi una
+divisione per una funzione di trasferimento diversa prima di
+normalizzare l'errore con il peso.
 
 \paragraph*{Il problema dello zero destro.}
-Se nominale e perturbato avessero lo stesso fattore Padé, questo
-potrebbe cancellarsi analiticamente nel loro rapporto. Con ritardo
-variabile i due zeri non coincidono. Dividere per $G_0$ introduce
-il suo zero destro come polo dell'errore relativo; dividere per $G_p$
-introduce quello della pianta perturbata. Una curva di modulo ben
-coperta non elimina tale polo. È questo il motivo matematico per
-controllare la perturbazione normalizzata, non soltanto l'inviluppo.
+Lo zero di Padé è in $+2/\tau_d$. Passando da 15 a 18 ms si sposta
+da $+133.3$ a $+111.1$ s$^{-1}$. Nel rapporto
+$E_M=G_p/G_0-1$ il reciproco di $G_0$ trasforma lo zero nominale
+in un polo. Poiché $G_p$ non ha uno zero nello stesso punto, quel
+polo rimane a $+133.3$ s$^{-1}$. Analogamente,
+$E_I=1-G_0/G_p$ conserva il polo a $+111.1$ s$^{-1}$ dovuto
+al reciproco di $G_p$. I dati del confronto confermano che entrambi
+gli errori relativi sono propri ma instabili. L'errore additivo,
+nello stesso confronto, è stabile e ha norma circa 0.06829.
 
-
-Non basta che il modulo di $E/W$ sia piccolo: la perturbazione normalizzata deve essere stabile e propria. Se cambia il ritardo, lo zero destro di $G_0$ non si cancella nel rapporto $G_p/G_0$. Con $\tau_d=18$ ms, $E_M$ ha un polo a $+133.3$ s$^{-1}$ e $E_I$ a $+111.1$ s$^{-1}$. Il fit del solo modulo nasconderebbe questa incompatibilità con un blocco $\Delta$ stabile.
+Il modulo sull'asse immaginario può essere finito anche in presenza
+di un polo nel semipiano destro. Per rappresentare lo scostamento con
+un blocco stabile di norma limitata controlliamo la stabilità del
+rapporto $E/W$, oltre al suo modulo. Con un peso stabile e a fase
+minima, i poli instabili dei due errori relativi rimarrebbero nel
+rapporto. L'incompatibilità deriva qui dallo spostamento dello zero
+di Padé.
 
 Adottiamo quindi la forma additiva. La differenza fra due drive stabili e strettamente propri è stabile e propria, e non richiede di invertire uno zero destro. Per ciascun canale,
 \[
@@ -186,51 +215,84 @@ Adottiamo quindi la forma additiva. La differenza fra due drive stabili e strett
 I due blocchi dinamici sono indipendenti. La meccanica continua a dipendere dallo stesso parametro reale $m_2$; il suo effetto non entra nel peso del drive.
 
 
-\paragraph*{Dalla famiglia fisica al peso dinamico}
+\paragraph*{Dalla famiglia fisica al peso dinamico.}
+Per un singolo drive il dominio di $(\omega_n,\tau_d)$ è un rettangolo.
+I quattro vertici sono le combinazioni di 34 e 46 rad/s con 12 e
+18 ms. Li aggiungiamo ai venti drive dei dieci manipolatori comuni
+e al nominale. I 25 casi SISO comprendono così sia combinazioni
+estreme sia interne. La combinazione che dà lo scostamento
+maggiore può cambiare con la frequenza e può trovarsi all'interno
+del rettangolo. Altri 30 drive, estratti con seed indipendente,
+sono riservati alla verifica.
 
-\begin{figure}[htbp]\centering
-\resizebox{.96\linewidth}{!}{\input{figures/schemes/sea_fit.tex}}
-\caption{Campioni fisici, scostamenti additivi, inviluppo, fit e verifica
-continua della perturbazione normalizzata.}
+Per ogni caso $j$ calcoliamo $E_j=G_j-G_0$. Sulla griglia di
+frequenze prendiamo il maggiore modulo tra i 25 errori,
+$e_{\max}(\omega)=\max_j|E_j(\mathrm{j}\omega)|$. Il massimo è una
+curva di moduli campionati. Per usarlo nel modello dinamico
+cerchiamo una funzione di trasferimento razionale il cui modulo
+ne segua l'andamento. Questo è il fitting riassunto nella
+Figura~\ref{fig:fit-drive}.
+
+\begin{figure}[!htbp]\centering
+\resizebox{.88\linewidth}{!}{\input{figures/schemes/sea_fit.tex}}
+\caption{Dai campioni fisici al peso additivo. Il fit sulla griglia
+è seguito dalla verifica continua degli errori normalizzati.}
+\label{fig:fit-drive}
 \end{figure}
 
-I vertici esplorano combinazioni estreme, i campioni interni mostrano
-variazioni intermedie. Il massimo a una frequenza non deve appartenere
-sempre allo stesso attuatore né necessariamente a un vertice.
-Definiamo $e_{\max}(\omega)=\max_j|G_j(j\omega)-G_0(j\omega)|$.
-Questo massimo puntuale in generale non è una funzione di trasferimento
-causale. Serve quindi un fit razionale stabile che possa entrare nella LFT.
+Con \texttt{fitmagfrd} costruiamo candidati razionali di ordine 1, 2 e 3.
+L'ordine conta gli stati del peso e un ordine maggiore offre più
+libertà per seguire la forma dell'inviluppo. Il peso deve essere
+stabile, proprio e a fase minima. Il suo grado relativo deve lasciare
+proprio anche $E_j/W_A$: alle alte frequenze il peso può decadere
+al più con lo stesso ordine dell'errore. I drive e quindi le loro
+differenze decadono almeno come $1/s^2$. Il peso selezionato ha
+grado relativo due.
 
-\texttt{fitmagfrd} approssima il modulo ma, da solo, non dimostra
-copertura continua, proprietà e stabilità di $E_j/W_A$.
-Un peso troppo piccolo esclude casi osservati; uno molto grande li
-include ammettendo però molte dinamiche ulteriori. Un ordine basso
-non è automaticamente migliore se rende l'analisi molto conservativa.
-
-
-Il procedimento segue quello del corso: famiglia fisica, scostamenti, inviluppo, fitting e normalizzazione. I dieci manipolatori forniscono venti drive; aggiungiamo i quattro vertici del box SISO e il nominale. Sono 25 casi SISO, non 25 manipolatori. Su una griglia logaritmica calcoliamo l'inviluppo di $|G_j-G_0|$ e confrontiamo fit di ordine 1, 2 e 3 mediante \texttt{fitmagfrd}.
+Scaliamo ciascun candidato sulla massima norma continua degli errori
+normalizzati di costruzione, con un fattore aggiuntivo di 1.02.
+La tabella confronta tre indicatori. La massima norma è il caso
+peggiore tra i 25 valori di $\|E_j/W_A\|_\infty$. Per un rapporto
+stabile e proprio, ciascuna norma considera il massimo del modulo
+su tutte le frequenze. L'eccesso mediano è invece la mediana di
+$|W_A|/e_{\max}$ sulla griglia, con una soglia al denominatore
+per gli inviluppi quasi nulli. Valori molto maggiori di uno
+indicano un peso abbondante rispetto ai casi osservati. L'ultima
+colonna riporta la massima norma sui 30 casi tenuti fuori dal fit.
 
 \input{generated/finale_pesi.tex}
 
-Il peso viene scalato per coprire le norme continue $\|(G_j-G_0)/W_A\|_\infty$, con un piccolo margine del 2\%. Scegliamo l'ordine minimo che rispetta la copertura e un eccesso mediano non maggiore di 1.6. Risulta sufficiente l'ordine 3; gli ordini più bassi sono troppo conservativi. La funzione selezionata è
+Il codice sceglie il primo ordine con massima norma di costruzione
+al più unitaria ed eccesso mediano al più 1.6, poi controlla i casi
+indipendenti. I primi due ordini coprono i 25 casi ma superano la
+soglia di eccesso. L'ordine 3 soddisfa entrambi i criteri e supera
+la verifica indipendente. Il peso additivo $W_A$, salvato come
+\texttt{WI} nel codice, è
 \[
  W_A(s)=\FinPesoFormula.
 \]
-Il rapporto mediano peso/inviluppo quantifica l'abbondanza nelle
-frequenze campionate; la norma continua quantifica invece il massimo
-dell'errore normalizzato. Sono indicatori diversi e servono entrambi.
-La scelta fra tre ordini non pretende un ottimo fra tutte le funzioni
-possibili. Il peso selezionato ha grado relativo due, come richiesto
-perché i rapporti razionali dei drive rimangano propri; i suoi zeri
-devono inoltre consentire una normalizzazione stabile.
+I coefficienti mostrati sono arrotondati. La normalizzazione usa
+quelli a piena precisione conservati nei dati.
 
-
-I coefficienti mostrati sono arrotondati; la normalizzazione usa la funzione a piena precisione conservata nei dati.
-
-\begin{figure}[htbp]\centering
+\begin{figure}[!htbp]\centering
 \includegraphics[width=.9\textwidth]{figures/definitiva/peso_incertezza.png}
-\caption{Scostamenti additivi, inviluppo dei 25 casi e peso selezionato.}\label{fig:peso}
+\caption{Moduli degli scostamenti additivi dei 25 casi (azzurro),
+inviluppo campionato (nero tratteggiato) e peso selezionato (rosso).}
+\label{fig:peso}
 \end{figure}
+
+La Figura~\ref{fig:peso} mostra la griglia del fit da $10^{-3}$ a
+$10^4$ rad/s, con moduli in scala lineare. Gli scostamenti sono
+piccoli a bassa frequenza per il guadagno statico comune e
+decrescono ad alta frequenza per l'attenuazione dei drive.
+L'inviluppo ha il suo picco intorno a 31 rad/s, nella banda
+intermedia in cui gli effetti di frequenza naturale e ritardo
+separano maggiormente le risposte complesse. Il peso resta sopra
+l'inviluppo sulla griglia. Un peso troppo
+grande ammetterebbe scostamenti inutilmente ampi. Il grafico mostra
+la copertura sulla griglia, mentre il controllo
+$\|E_j/W_A\|_\infty\leq1$ verifica ciascun caso razionale anche tra
+i nodi e fuori dalla griglia.
 
 \paragraph*{Dai due SISO al robot.}
 La struttura attuativa finale è
@@ -246,40 +308,34 @@ mentre il drive descrive come il comando genera coppia.
 
 
 \section{Verifica e limiti}
-La massima norma normalizzata dei casi di costruzione è \FinCopertura; su trenta ulteriori drive estratti con seed indipendente è \FinHoldout. Le perturbazioni sono stabili e proprie. Per ciascuno dei dieci manipolatori sostituiamo in B
+La massima norma normalizzata è \FinCopertura\ nei 25 casi di
+costruzione e \FinHoldout\ nei 30 indipendenti. Le perturbazioni
+normalizzate sono stabili e proprie. Per ciascuno dei dieci
+manipolatori confrontati sostituiamo in B
 \[
  \Delta_i=\frac{G_{a,i}-G_0}{W_A}
 \]
-e la stessa massa usata in A: la differenza massima delle risposte in frequenza è \FinErroreAB. A e B ricostruiscono quindi gli stessi casi fisici provati.
+e usiamo la stessa massa di A. La massima differenza fra le risposte
+in frequenza sulla griglia di confronto è \FinErroreAB. Si
+ricostruiscono quindi, entro la precisione numerica, gli stessi
+impianti fisici provati.
 
-Questo controllo non dimostra l'inclusione dell'intero box parametrico in B. Inoltre B ammette dinamiche e fasi che possono non corrispondere a nessuna coppia fisica $(\omega_n,\tau_d)$. La maggiore libertà può rendere l'analisi conservativa. Le garanzie robuste vanno lette rispetto alla propria famiglia; un margine maggiore di uno espande due insiemi diversi e non definisce da solo il modello migliore.
+La verifica in norma copre tutte le frequenze per ciascun caso
+razionale esaminato. Per estendere la conclusione a tutto il
+rettangolo dei parametri servirebbe anche un limite valido
+per ogni coppia $(\omega_n,\tau_d)$, inclusi i punti non campionati.
+La ricostruzione dei casi provati lascia quindi aperta l'inclusione
+globale di A in B. In senso inverso B ammette dinamiche stabili
+entro il peso, anche con andamenti in fase che possono non
+corrispondere a un'unica coppia fisica costante.
 
-La norma continua controlla anche le frequenze fra i nodi e fuori dalla
-griglia del fit, nei limiti numerici della funzione razionale.
-I trenta casi indipendenti rafforzano la verifica, ma non costituiscono
-una prova per ogni punto del box. Non dimostriamo quindi $A\subseteq B$,
-né l'inclusione opposta. B ammette funzioni stabili pesate che possono
-non corrispondere ad alcuna coppia fisica dei parametri.
-
-La conseguenza si vede nei margini. A mantiene il legame fra parametri
-costanti e coefficienti in tutte le frequenze; B permette variazioni
-ulteriori. Un margine più restrittivo di B può dipendere da questa
-libertà, senza significare che gli attuatori siano peggiorati.
-Non deduciamo però un ordinamento universale: manca un'inclusione
-globale dimostrata e l'espansione oltre il raggio uno agisce su famiglie diverse.
-
-Il progetto nominale del capitolo 8 usa lo stesso robot di riferimento;
-la sua norma non include automaticamente tutte le variazioni.
-La $\mu$-analysis del capitolo 9 conserva tipi di blocco e ripetizioni,
-mentre le due D--K affrontano A e B con identici pesi prestazionali.
-A controllore e pianta fisica fissati la risposta è unica: cambiano
-la famiglia entro cui cerchiamo una perturbazione critica e la garanzia
-che possiamo attribuire a quel risultato.
-
-Il vantaggio di A è la leggibilità fisica dei parametri e delle loro
-relazioni. B rende più immediato il ruolo della frequenza attraverso
-un peso e due canali dinamici compatti, pagando possibile conservatività
-e perdita della corrispondenza univoca con la coppia del drive.
-In entrambi, la massa $m_2$ resta la stessa massa reale. Le conclusioni
-riguardano i modelli razionali, il punto di lavoro e i fenomeni ammessi;
-non ogni errore possibile di un manipolatore reale.
+A conserva le dipendenze tra i coefficienti imposte dai parametri
+fisici. B descrive attraverso il peso quanto scostamento è ammesso
+in frequenza. Questa libertà può rendere più restrittiva una
+verifica, se la perturbazione critica appartiene alla famiglia
+pesata. I margini del Capitolo 9 vanno quindi letti rispetto
+all'insieme di perturbazioni su cui sono calcolati. A controllore
+e impianto fisico fissati la risposta è la stessa. Cambia
+l'insieme entro cui si cerca la perturbazione critica, per cui i
+margini da soli non danno un ordinamento universale tra A e B.
+Il Capitolo 6 fissa le specifiche con cui confrontiamo i controllori.

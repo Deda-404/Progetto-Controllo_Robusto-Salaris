@@ -1,3 +1,11 @@
+# Stato corrente — 10.11.2026, revisione del Capitolo 5
+
+Gate editoriale COMPLETE/PASS. Verificati in codice e dati salvati la struttura a cinque reali con 17 occorrenze, i 25 casi di costruzione, i 30 di verifica e la selezione del peso di ordine 3. Controllati in Python l'estrazione manuale del parametro, gli zeri di Padé e la copertura dell'inviluppo sulla griglia esistente. Nuove esecuzioni MATLAB e Simulink NOT RUN. Le norme continue riportate provengono dalla campagna approvata.
+
+PDF integrale di 107 pagine aggiornato. Controllo visivo del Capitolo 5 (pagine PDF 22–28) e confronto dei contenuti protetti superati. La revisione è proposta sul ramo dedicato con base sulla PR #48. La ZIP e la presentazione restano quelle della consegna del 4 novembre. Prossimo passo: revisione del Capitolo 5 da parte degli autori.
+
+---
+
 # Stato corrente — 10.11.2026, revisione dei capitoli 1–4
 
 Gate editoriale COMPLETE/PASS. La versione finale di 108 pagine include le rifiniture della PR #48 ed è salvata nel repository. Controllate visivamente le pagine PDF 12–21 e verificati equazioni, riferimenti e identità dei sorgenti dal capitolo 5. Confermati sui dati salvati i ranghi PBH 14/14 della pianta completa. Verificati in Python equilibrio, Jacobiani, proprietà dell'inerzia e scarto di fase del ritardo. MATLAB NOT RUN in questa sessione per errore 5201 all'avvio. Le evidenze numeriche validate del 4 novembre e lo stato prestazionale riportato sotto restano applicabili.

@@ -2484,3 +2484,9 @@ Per il ritardo si è mantenuto nel testo l'effetto di 18 ms rispetto al nominale
 **Stato** — Applicato nella PR #48.
 
 Le due figure vengono collocate nel punto in cui servono alla lettura, con una riduzione delle sole larghezze LaTeX. Questa disposizione evita le pagine dedicate ai singoli grafici e conserva le immagini e le didascalie. Il PDF tracciato segue i sorgenti revisionati. La ZIP del 4 novembre resta la copia collaudata e conserva la relazione di quella consegna.
+
+## 2026-11-10 — Presentazione e verifica della famiglia incerta
+
+**Stato** — Applicato nel Capitolo 5 per la revisione degli autori.
+
+Le figure esistenti sono state mantenute perché rispondono a domande distinte su dinamica dei drive, porte LFT, forme di errore e costruzione del peso. Il grafico del peso conserva l'intera griglia usata dal fit. La lettura distingue il controllo visivo del modulo nei nodi dalla norma continua per singolo caso. La verifica indipendente sui 30 drive resta separata dalla selezione del peso e la copertura dell'intero rettangolo parametrico rimane una questione aperta.
