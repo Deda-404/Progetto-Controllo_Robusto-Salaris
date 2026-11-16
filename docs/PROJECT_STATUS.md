@@ -1,3 +1,11 @@
+# Stato corrente — 16.11.2026, revisione del Capitolo 9
+
+Gate editoriale COMPLETE/PASS. Verificati in sola lettura struttura A/B, LFT, norme nominali, casi critici salvati e provenienza delle tabelle D–K. Le 14 righe danno RP FAIL, con 10 esclusioni sul nominale e 4 limiti dedotti da RS. Resta aperta la scelta degli obiettivi per conseguire RP prevista dalla traccia. Nuove analisi robuste, sintesi e simulazioni NOT RUN.
+
+PDF integrale di 92 pagine ricompilato e pagine PDF 49–56 controllate. Verificata l'identità dei capitoli esterni e delle appendici, al netto della numerazione. Ramo basato sulla HEAD corretta della PR #52. ZIP di consegna invariata. Prossimo passo — revisione del Capitolo 9 da parte degli autori.
+
+---
+
 # Stato corrente — 16.11.2026, rifinitura della PR #52
 
 Gate editoriale COMPLETE/PASS. Corretto il richiamo a W_A nel §8.5. La figura dei disturbi è quella della campagna originale. Le serie numeriche corrispondenti alle due prove lineari non sono presenti nei risultati disponibili. Nuove sintesi e simulazioni MATLAB/Simulink NOT RUN.
