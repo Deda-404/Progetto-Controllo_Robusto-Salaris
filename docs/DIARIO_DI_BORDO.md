@@ -3254,3 +3254,21 @@ Confrontate le pagine stampate 24–41 del PDF annotato con la traccia, il capit
 Controlli indipendenti in Python sui dati salvati PASS. Verificati Q, R, guadagni rispetto alle equazioni di Riccati, covarianze, prefiltro, stabilizzabilità aumentata, poli e separazione nelle chiusure a 28 e 30 stati. Il primo controllo LQGI ha rilevato poli positivi a causa della negazione di una matrice letta come intero senza segno da SciPy. Convertite le matrici in virgola mobile prima dell'algebra, il controllo ha confermato la stabilità. Confermati i valori delle metriche nei MAT/CSV e la provenienza delle traiettorie di tracking tramite SHA-256 del MAT originario. Nuove esecuzioni MATLAB e Simulink NOT RUN.
 
 Compilazione integrale di 98 pagine e controllo visivo delle pagine PDF 30–39 PASS. Assenza di avvisi LaTeX, box fuori misura e riferimenti irrisolti. Confronto del testo e della resa pagina per pagina dei capitoli 1–6, 8–13 e delle appendici superato, esclusa la numerazione. La ZIP mantiene l'hash della consegna del 4 novembre. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-15 — Revisione annotata del Capitolo 8
+
+Revisione dalla HEAD della PR #51. Confrontate le pagine stampate 42–54 del PDF del 4 novembre con traccia, sorgente, percorso operativo e dati salvati. Aggiunto uno schema dei percorsi G/Gd. Anticipato lo schema della pianta generalizzata e tolta l'illustrazione 2-DoF duplicata dal capitolo. Chiariti il ruolo dei pesi, la diversa definizione dell'errore, l'accordo mixsyn/hinfsyn sul 1-DoF, le porte del 2-DoF e il significato dell'ordine del PID. Il confronto su mappa comune e i target temporali hanno tabelle distinte. Chiarita la lettura del grafico dei disturbi usando i pannelli e le etichette originali q1/q2. Sintetizzata la formulazione teorica con rumore esplicito.
+
+Controllo in sola lettura con MATLAB PASS. Verificati l'ordine dei controllori, i segni delle interconnessioni, le mappe pesate, le tre chiusure stabili, le norme comuni, i guadagni rumore–comando e la realizzazione del PID dai blocchi salvati. Per i due controllori 1-DoF, norma 0,9534124589 su P1. Il primo controllo ha emesso avvisi per l'uso di zero su pesi MIMO e per la valutazione diretta di una mappa nulla. Il controllo ripetuto sui pesi scalari e sui singoli canali ha confermato gli esiti. Verifica Python su MAT/CSV e traiettorie salvate PASS, inclusi obiettivi e scarto di sintesi, target, rumore, RAS e robustezza. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.
+
+Compilazione integrale di 94 pagine e controllo visivo del Capitolo 8 (pagine PDF 40–48) PASS. L'audit finale non rileva avvisi LaTeX, riferimenti irrisolti o box fuori misura. Verificati contenuto e impaginazione dei capitoli esterni e delle appendici, esclusa la numerazione. La ZIP conserva l'hash della consegna collaudata. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-16 — Verifica finale della PR #52
+
+Corretto unicamente il richiamo del §8.5 al peso di incertezza. W_A descrive lo scostamento additivo degli attuatori nella famiglia B del Capitolo 5. W1 e W2 pesano errore e comando nella sintesi H∞. Il controllo dei richiami nei due capitoli conferma che W_I riguarda la sola forma inversa discussa nel Capitolo 5.
+
+Verificata la provenienza della figura dei disturbi. Lo script confronto_ras.m salva in confronto.mat le risposte ai riferimenti e riassume le risposte ai disturbi con picco di spostamento e recupero. Per i tre controllori, le curve lineari dei due ingressi di disturbo sono esportate nel PNG. Le traiettorie di ras.mat sono non lineari e non corrispondono alle due prove della figura. Conservato il PNG originale perché i dati disponibili non consentono di separare fedelmente le curve q1 e q2. Sintesi e simulazioni MATLAB/Simulink NOT RUN.
+
+Compilazione integrale di 94 pagine e controllo visivo delle pagine PDF 40–48 PASS. Verificati schema G/Gd, tabelle, pianta generalizzata, formule, collocazione delle figure e riferimenti. Il testo e la resa dei capitoli esterni e delle appendici coincidono con la versione precedente. Gate editoriale COMPLETE/PASS.

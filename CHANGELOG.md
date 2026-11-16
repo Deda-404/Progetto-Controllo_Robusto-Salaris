@@ -4,6 +4,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Corretto nel §8.5 il riferimento a W_A, peso dell'incertezza additiva degli attuatori della famiglia B.
+
+- Rivisto il Capitolo 8 dalle annotazioni del PDF del 4 novembre. Chiariti percorsi di segnale, pesi, confronto mixsyn/hinfsyn, architettura 2-DoF e PID. Separate le tabelle in frequenza e di tracking con i dati salvati. Aggiornata la relazione integrale di 94 pagine.
+
 - Rivisto il Capitolo 7 dalle annotazioni del PDF del 4 novembre. Semplificati pesi LQR, Kalman e sintesi integrale. Riuniti i target nominali in una tabella e chiariti disturbo, massa incerta e limiti di robustezza. Aggiornata la relazione integrale di 98 pagine.
 
 - Chiariti nel Capitolo 6 gli indici temporali, il modello di riferimento, i pesi prestazionali e il protocollo comune per il rumore encoder. Aggiornata la relazione integrale di 107 pagine.
