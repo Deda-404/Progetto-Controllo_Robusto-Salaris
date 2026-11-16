@@ -27,7 +27,7 @@ Le tolleranze sono ipotesi ingegneristiche. La RAS è una sezione empirica nomin
 
 ## Risultati e verifiche
 
-Lo stato, gli esiti favorevoli e negativi e le verifiche effettivamente eseguite sono in [REVISIONE_TRACCIA_20261104.md](docs/REVISIONE_TRACCIA_20261104.md). I MAT/CSV sotto `File_di_Funzioni_Progetto-Accorpati/risultati` alimentano le tabelle e le figure. `confronto_robusto_r.*` identifica la post-analisi corrente `Tzr_v1`. `confronto_robusto.*` conserva la campagna storica su riferimento e disturbo.
+Lo stato, gli esiti favorevoli e negativi e le verifiche effettivamente eseguite sono in [REVISIONE_TRACCIA_20261104.md](docs/REVISIONE_TRACCIA_20261104.md). I MAT/CSV sotto `File_di_Funzioni_Progetto-Accorpati/risultati` alimentano le tabelle e le figure. `confronto_robusto_r.*` identifica la post-analisi corrente `Tzr_v1`. `confronto_robusto.*` conserva la campagna storica su riferimento e disturbo. Con i dati validati disponibili, `studio_mu_riferimento` ricalcola il riesame dei controllori salvati e ripete le prove nominali sui candidati che passano RP in A e B. I risultati separati si trovano in `risultati/studio_mu_riferimento/`. MuN1 è il comparatore recuperato dall'inizializzazione comune dei due percorsi D–K.
 
 Cinque test indipendenti correnti: `runtests('tests/seaFinaleTest.m')`. `verifica_sea` esegue otto controlli scientifici del percorso. I vecchi runner e i risultati in `analysis`, `controllers`, `results` e parte della documentazione restano patrimonio storico; i loro esiti non sono trasferiti alla configurazione corrente. `dati/banca_validata.mat` conserva costi e riferimenti fissati, senza sostituire le sintesi correnti.
 

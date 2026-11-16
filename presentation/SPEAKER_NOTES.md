@@ -54,17 +54,17 @@ Confrontare ordine e costo comune.
 
 Distinguere margine RS e prestazione sul riferimento. Mostrare il ritorno fittizio rettangolare.
 
-## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:44
+## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:48
 
-Indicare i tre passi della D–K su riferimento e disturbo. Le norme accanto sono sul solo riferimento.
+Indicare il costo D–K su riferimento e disturbo. MuN1 precede il primo aggiornamento del controllore e passa RP sul riferimento in A e B.
 
 ## 14. La post-analisi distingue le due rappresentazioni — Alessio, 0:42
 
 Confrontare A e B a controllore fissato.
 
-## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:47
+## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:52
 
-Mostrare RP di LQG in A e B e la perdita di RS per Hinf2 e PID. Ricordare che Ts è un requisito nominale distinto.
+Mostrare RP di LQG nei sette controllori del confronto e la perdita di RS per Hinf2 e PID. Ricordare che Ts è un requisito nominale distinto.
 
 ## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:41
 
@@ -94,6 +94,6 @@ Seguire osservatore e integratore.
 
 Indicare il cambio della pianta.
 
-## 23. Conclusioni e limiti verificati — Valerio, 0:47
+## 23. Conclusioni e limiti verificati — Valerio, 0:56
 
-Chiudere con il risultato di LQG sul riferimento e il ruolo delle prove separate.
+Chiudere con il risultato di LQG, il limite di errore statico di MuN1 e il ruolo delle prove separate.

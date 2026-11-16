@@ -45,7 +45,7 @@ end
 if p.figure
     f=figure('Name','Robustezza A/B e D-K','Color','w'); theme(f,'light'); tiledlayout(1,2);
     nexttile; margini=reshape(confronto.RS_lower,2,[])'; bar(margini); yline(1,'--k');
-    set(gca,'XTick',1:numel(correnti),'XTickLabel',nomi(correnti)); xtickangle(45); grid on;
+    set(gca,'XTick',1:numel(nomi),'XTickLabel',nomi); xtickangle(45); grid on;
     ylabel('Limite inferiore RS'); legend('A parametrico','B concentrato');
     nexttile; plot(storia{1}.Iterazione,storia{1}.PeakMu,'o-',storia{2}.Iterazione,storia{2}.PeakMu,'s-');
     yline(1,'--k'); grid on; xlabel('Iterazione'); ylabel('Picco mu'); legend('Sintesi A','Sintesi B');

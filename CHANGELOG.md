@@ -4,6 +4,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Verificati i sei passi D–K salvati su A e B, con cinque controllori distinti. MuN1, inizializzazione comune, passa RP sul riferimento in entrambe le famiglie. Le prove nominali separate mostrano un errore statico dell'8,24%.
+- Aggiunte la diagnosi di Mu_A e Mu_B e la tabella di confronto con MuN1. Tolta la colonna Origine dalla Tabella 9.2 e corretta l'etichettatura del grafico in `progetto_mu.m`. Aggiornati relazione, slide e note orali.
+
 - Ricalcolate NP e RP sul solo riferimento per i sette controllori nelle due famiglie. Registrata la mappa `Tzr_v1` in risultati distinti dalla campagna storica. Ricalcolati NS e RS sulla chiusura completa, con margini RS identici.
 - Aggiornati relazione, tabelle, slide e discorso. Rimossi sommario iniziale, elenchi di figure e tabelle e appendici dal PDF. Raggruppate nel Capitolo 10 le figure delle prove di coppia e avvicinati gli Scope al testo.
 

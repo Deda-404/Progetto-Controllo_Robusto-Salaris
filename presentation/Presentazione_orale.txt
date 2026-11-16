@@ -88,10 +88,10 @@ Regia: Distinguere margine e mu.
 
 SLIDE 13 — D--K: stessi pesi e stessa inizializzazione
 Studente: Alessio
-Tempo previsto: 0:44 (92 parole a 125 parole/min)
+Tempo previsto: 0:48 (101 parole a 125 parole/min)
 Testo da pronunciare:
-La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Il costo delle due sintesi include riferimento e coppia e resta sopra uno. La tabella affianca a questi esiti la norma nominale del solo riferimento e l’ordine: gli scaling possono produrre controllori molto grandi. Questi risultati descrivono una ricerca limitata e non convessa, non una prova che una rappresentazione sia sempre migliore dell’altra.
-Regia: Distinguere il costo D–K dalla norma sul riferimento.
+La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Il costo delle due sintesi include riferimento e coppia e resta sopra uno. La tabella affianca norma e RP sul solo riferimento. MuN1, lo stesso controllore iniziale delle due ricerche, passa RP in entrambe le famiglie. Richiede meno coppia nel tracking rispetto a LQG. Il suo errore statico è dell’otto virgola ventiquattro per cento e il picco sotto rumore è più alto.
+Regia: Indicare MuN1 come inizializzazione comune e leggere il limite sull’errore statico.
 
 SLIDE 14 — La post-analisi distingue le due rappresentazioni
 Studente: Alessio
@@ -102,9 +102,9 @@ Regia: Confrontare A e B a controllore fissato.
 
 SLIDE 15 — Robustezza pesata e target temporali sono distinti
 Studente: Alessio
-Tempo previsto: 0:47 (98 parole a 125 parole/min)
+Tempo previsto: 0:52 (109 parole a 125 parole/min)
 Testo da pronunciare:
-La tabella confronta assestamento nominale, stabilità e costo pesato sul solo riferimento. Solo LQG soddisfa RP in A e B. Hinf2 e PID rispettano la norma sul nominale, ma perdono stabilità entro l’incertezza ammessa. Mu_B passa NP e RS, ma fallisce RP sul guadagno. Negli altri tre casi la norma supera uno già sul nominale. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. Per il disturbo di coppia usiamo le prove dedicate, con i picchi e i tempi di rientro.
+La tabella confronta assestamento nominale, stabilità e costo pesato sul solo riferimento. Fra i sette della tabella, LQG soddisfa RP in A e B. MuN1 compare nel riesame della slide D–K. Hinf2 e PID rispettano la norma sul nominale, ma perdono stabilità entro l’incertezza ammessa. Mu_B passa NP e RS, ma fallisce RP sul guadagno. Negli altri tre casi la norma supera uno già sul nominale. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. Per il disturbo di coppia usiamo le prove dedicate, con i picchi e i tempi di rientro.
 Regia: Mostrare RP di LQG e il limite RS di Hinf2.
 
 SLIDE 16 — Dieci impianti: la stessa fisica per tutti
@@ -158,9 +158,9 @@ Regia: Indicare il cambio della pianta.
 
 SLIDE 23 — Conclusioni e limiti verificati
 Studente: Valerio
-Tempo previsto: 0:47 (98 parole a 125 parole/min)
+Tempo previsto: 0:56 (116 parole a 125 parole/min)
 Testo da pronunciare:
-Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG soddisfa la prestazione robusta sul riferimento in entrambe le famiglie. La reiezione della coppia si valuta con le prove dedicate. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
+Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG soddisfa la prestazione robusta sul riferimento in entrambe le famiglie e rispetta i quattro target nominali. Nel riesame MuN1 passa RP e supera il limite di errore statico. La reiezione della coppia si valuta con le prove dedicate. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
 Regia: Chiudere con il compromesso A/B e i limiti.
 
 APPENDICE — POSSIBILI DOMANDE E RISPOSTE

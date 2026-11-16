@@ -213,15 +213,17 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/dk.tex}}
 \small Tre iterazioni, \texttt{MixedMU=on}, fit $[2,1]$, 121 frequenze.
 \column{.51\textwidth}\small
-\begin{tabular}{lrr}\toprule
-Candidato & Ordine & Norma $r$\\\midrule
-Mu\_A &\FinMuAOrdine&\FinMuANormaR\\
-Mu\_B &\FinMuBOrdine&\FinMuBNormaR\\\bottomrule
-\end{tabular}
+{\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrr}\toprule
+Candidato & Ordine & Norma $r$ & RP A/B\\\midrule
+Mu\_A &\FinMuAOrdine&\FinMuANormaR&\FinMuARPesitoA/\FinMuARPesitoB\\
+Mu\_B &\FinMuBOrdine&\FinMuBNormaR&\FinMuBRPesitoA/\FinMuBRPesitoB\\
+MuN1 &\FinMuNOneOrdine&\FinMuNOneNormaR&\FinMuNOneEsitoRPA/\FinMuNOneEsitoRPB\\\bottomrule
+\end{tabular}}
 \par\medskip Obiettivo D--K: \FinDkA\ su A, \FinDkB\ su B. Soglia desiderata: 1.
-\par\medskip D--K su $[r;d]$. Post-analisi su $r$ per ogni $K$.
+\par\medskip D--K su $[r;d]$. MuN1 è il controllore iniziale comune.
 \end{columns}
-\medskip\bad{Ricerca limitata e non convessa: nessuna superiorità universale.}
+\medskip\bad{MuN1 soddisfa RP sul riferimento, con errore statico nominale \FinMuNOneDC\%.}
 \end{frame}
 
 \begin{frame}{La post-analisi distingue le due rappresentazioni}

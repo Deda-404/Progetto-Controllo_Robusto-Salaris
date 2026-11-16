@@ -60,20 +60,21 @@ def short_status(status):
     return "INC." if status == "INCONCLUDENTE" else status
 
 
+def rp_margin(row):
+    if row["MetodoRP"] == "NP_FAIL":
+        return "0"
+    if row["MetodoRP"] == "LIMITE_DA_RS":
+        return r"$\leq$" + num(row["RP_r_upper"], 4)
+    return interval(row, "RP_r")
+
+
 def robust_rows(data):
     rows = []
     for x in data:
-        method = x["MetodoRP"]
-        if method == "NP_FAIL":
-            rp, source = "0", r"$\mathrm{NP}_r$"
-        elif method == "LIMITE_DA_RS":
-            rp, source = r"$\leq$" + num(x["RP_r_upper"], 4), "RS"
-        else:
-            rp, source = interval(x, "RP_r"), r"\texttt{robgain}"
         norm = num(x["NormaNominaleR"], 4) if x["NS"] == "1" else "NS FAIL"
         rows.append([esc(x["Controllore"]), x["Analisi"][0], norm,
                      "PASS" if x["NP_r"] == "1" else "FAIL",
-                     interval(x, "RS"), short_status(x["RS"]), rp, short_status(x["RP_r"]), source])
+                     interval(x, "RS"), short_status(x["RS"]), rp_margin(x), short_status(x["RP_r"])])
     return rows
 
 
@@ -151,11 +152,11 @@ def main():
     robust=read("confronto_robusto_r")
     assert len(robust) == 14 and all(x["Mappa"] == "Tzr_v1" for x in robust)
     caption=(r"Post-analisi sul solo riferimento. La norma è quella di $T_{zr}$ sul nominale. "
-             r"L'ultima colonna indica da dove proviene il margine $\mathrm{RP}_r$.")
+             r"Si riportano gli intervalli e gli esiti sulle famiglie A e B.")
     if any(x["RS"] == "INCONCLUDENTE" or x["RP_r"] == "INCONCLUDENTE" for x in robust):
         caption += " INC. indica un esito inconcludente."
     headers=["Controllore","A/B",r"Norma $r$",r"$\mathrm{NP}_r$","Intervallo RS","RS",
-             r"Margine $\mathrm{RP}_r$",r"$\mathrm{RP}_r$","Origine"]
+             r"Margine $\mathrm{RP}_r$",r"$\mathrm{RP}_r$"]
     table("robustezza",headers,robust_rows([x for x in robust if x["Controllore"] in CURRENT]),
           caption,"tab:cap9-robustezza")
     dk=[]
@@ -251,6 +252,40 @@ def main():
             ["/".join(short_status(x[key]) for x in robust if x["Controllore"]==name)
              for key in ["RS","RP_r"]] for name in CURRENT],"",slide=True)
     table("slide_carico",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows[:2],"",slide=True)
+    study = "studio_mu_riferimento/"
+    iterations = read(study + "iterazioni")
+    nominal_tests = read(study + "prove_nominali")
+    assert len(iterations) == 12 and all(x["Mappa"] == "Tzr_v1" for x in iterations)
+    mu = [x for x in iterations if x["Controllore"] == "DK_A_1"]
+    assert [x["Analisi"][0] for x in mu] == ["A", "B"]
+    mu_test = next(x for x in nominal_tests if x["Controllore"] == "MuN1")
+    lqg_test = next(x for x in nominal_tests if x["Controllore"] == "LQG")
+    comparison = []
+    for name in ["LQG", "LQGI", "Mu_A", "Mu_B", "MuN1"]:
+        pair = mu if name == "MuN1" else [x for x in robust if x["Controllore"] == name]
+        metrics = mu_test if name == "MuN1" else next(
+            x for x in plants if x["Controllore"] == name and x["Impianto"] == "0")
+        comparison.append([esc(name), num(pair[0]["NormaNominaleR"], 4),
+                           "PASS" if pair[0]["NP_r"] == "1" else "FAIL",
+                           *[num(x["RS_lower"], 4) for x in pair], *map(rp_margin, pair),
+                           num(metrics["Assestamento"], 4), percent(metrics["ErroreDC"])])
+    table("riesame_mu_r", ["Controllore", r"Norma $r$", r"$\mathrm{NP}_r$", "RS A", "RS B",
+                           r"$\mathrm{RP}_r$ A", r"$\mathrm{RP}_r$ B", r"$T_s$ [s]", r"$e_{ss}$ [\%]"],
+          comparison, r"Confronto con MuN1. Per RS è mostrato il limite inferiore. Per RP sul riferimento valgono gli intervalli di guadagno o i limiti dedotti della Tabella~\ref{tab:cap9-robustezza}.",
+          "tab:cap9-riesame-r")
+    values.update({"MuNOneNormaR": num(mu[0]["NormaNominaleR"], 4),
+                   "MuNOneOrdine": mu[0]["Ordine"],
+                   "MuNOneEsitoRPA": mu[0]["RP_r"], "MuNOneEsitoRPB": mu[1]["RP_r"],
+                   "MuNOneRPA": rp_margin(mu[0]), "MuNOneRPB": rp_margin(mu[1]),
+                   "MuNOneTs": num(mu_test["Assestamento"], 4), "MuNOneDC": percent(mu_test["ErroreDC"]),
+                   "MuNOneMp": num(mu_test["OvershootPercent"]), "MuNOneCross": percent(mu_test["Cross"]),
+                   "MuNOnePiccoComando": num(mu_test["PiccoComandoTracking"], 4),
+                   "MuNOneRMSComando": num(mu_test["RMSComandoTracking"], 4),
+                   "LQGRMSComando": num(lqg_test["RMSComandoTracking"], 4),
+                   "LQGDisturboStudio": num(math.degrees(float(lqg_test["PiccoDisturboRad"])), 4),
+                   "MuNOneDisturbo": num(math.degrees(float(mu_test["PiccoDisturboRad"])), 4),
+                   "MuNOneRumore": num(mu_test["PiccoRumore"], 4),
+                   "MuNOneRMSRumore": num(mu_test["RMSRumore"], 4)})
     tex="\n".join(r"\newcommand{\Fin"+name+"}{"+value+"}" for name,value in values.items())+"\n"
     (GEN/"finale_values.tex").write_text(tex,encoding="utf-8")
     (ROOT/"presentation/generated/finale_values.tex").write_text(tex,encoding="utf-8")

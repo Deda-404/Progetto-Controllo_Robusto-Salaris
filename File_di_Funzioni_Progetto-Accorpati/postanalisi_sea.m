@@ -1,13 +1,22 @@
-function confronto=postanalisi_sea(ricalcola)
+function [confronto,analisi]=postanalisi_sea(ricalcola,banca)
 %POSTANALISI_SEA Valuta NP/RP sul riferimento con i controllori salvati.
 % POSTANALISI_SEA(true) aggiorna l'analisi senza eseguire sintesi.
+% Una banca esplicita usa lo stesso calcolo senza scrivere i risultati ufficiali.
 arguments
     ricalcola (1,1) logical = false
+    banca (1,1) struct = struct()
 end
 p=parametri_sea;
 mappa="Tzr_v1";
 firma=p.firma;
-[nomi,K,origine]=controllori_sea(p);
+ufficiale=isempty(fieldnames(banca));
+if ufficiale
+    [nomi,K,origine]=controllori_sea(p);
+else
+    assert(ricalcola,'SEA:Banca','Per una banca esplicita occorre ricalcolare.');
+    nomi=banca.nomi; K=banca.K; origine=banca.origine;
+    assert(numel(nomi)==numel(K) && numel(nomi)==numel(origine));
+end
 a=load(fullfile(p.risultati,'incertezze.mat'),'modelli'); u=a.modelli;
 assert(isequal(u.firma,firma),'SEA:Cache','Modelli incerti incoerenti.');
 piante={u.PA,u.PB}; famiglie=["A_parametrico","B_concentrato"];
@@ -92,9 +101,14 @@ if ricalcola
     confronto=cell2table(righe,'VariableNames',{'Controllore','Sintesi','Analisi','Ordine','NS', ...
         'NormaNominaleR','NP_r','RS_lower','RS_upper','RS','RP_r_lower','RP_r_upper','RP_r', ...
         'MetodoRP','FrequenzaCritica','NormaNominaleRD','Mappa'});
-    save(file,'analisi','confronto','nomi','K','origine','firma','mappa','-v7');
+    if ufficiale
+        save(file,'analisi','confronto','nomi','K','origine','firma','mappa','-v7');
+    end
 end
-writetable(confronto,fullfile(p.risultati,'confronto_robusto_r.csv')); disp(confronto);
+if ufficiale
+    writetable(confronto,fullfile(p.risultati,'confronto_robusto_r.csv'));
+end
+disp(confronto);
 end
 
 function ok=vicine(a,b)

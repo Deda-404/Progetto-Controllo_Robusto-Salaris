@@ -1,10 +1,10 @@
 # Scaletta e tempi
 
-23 slide; **2116 parole** di parlato a **125 parole/minuto**.
-Tempo di parlato 17:05; 22 cambi da 2 s portano la stima a **17:49**. Margine rispetto a 20 minuti: **2:11**.
+23 slide; **2154 parole** di parlato a **125 parole/minuto**.
+Tempo di parlato 17:23; 22 cambi da 2 s portano la stima a **18:07**. Margine rispetto a 20 minuti: **1:53**.
 Si tratta di una stima basata sul testo; la durata effettiva richiede una prova orale cronometrata.
 
-Alessio: 8:14; Valerio: 8:51. Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.
+Alessio: 8:23; Valerio: 9:00. Gli interventi alternano blocchi di circa tre slide. Titoli, regia e appendice non sono conteggiati.
 
 | Slide | Titolo | Studente | Parole | Parlato |
 |---|---|---|---:|---:|
@@ -20,9 +20,9 @@ Alessio: 8:14; Valerio: 8:51. Gli interventi alternano blocchi di circa tre slid
 | 10 | Due gradi di libertà, stati condivisi | Alessio | 93 | 0:45 |
 | 11 | Ordine completo e ordine fissato: il compromesso rimane | Valerio | 87 | 0:42 |
 | 12 | μ: valore singolare strutturato | Valerio | 97 | 0:47 |
-| 13 | D--K: stessi pesi e stessa inizializzazione | Alessio | 92 | 0:44 |
+| 13 | D--K: stessi pesi e stessa inizializzazione | Alessio | 101 | 0:48 |
 | 14 | La post-analisi distingue le due rappresentazioni | Alessio | 86 | 0:42 |
-| 15 | Robustezza pesata e target temporali sono distinti | Alessio | 98 | 0:47 |
+| 15 | Robustezza pesata e target temporali sono distinti | Alessio | 109 | 0:52 |
 | 16 | Dieci impianti: la stessa fisica per tutti | Valerio | 84 | 0:41 |
 | 17 | Tracking e disturbi sugli impianti incerti | Valerio | 84 | 0:41 |
 | 18 | Il rumore encoder può dominare il comando | Valerio | 88 | 0:43 |
@@ -30,6 +30,6 @@ Alessio: 8:14; Valerio: 8:51. Gli interventi alternano blocchi di circa tre slid
 | 20 | Regione di attrazione: una sezione empirica | Alessio | 89 | 0:43 |
 | 21 | Simulink lineare: servo LQGI | Valerio | 83 | 0:40 |
 | 22 | Simulink non lineare: la stessa legge di controllo | Valerio | 88 | 0:43 |
-| 23 | Conclusioni e limiti verificati | Valerio | 98 | 0:47 |
+| 23 | Conclusioni e limiti verificati | Valerio | 116 | 0:56 |
 
 Massa e incertezze sono centrali nelle slide 2, 3, 4 e 16. La slide 19 isola la massa m2; le slide 21 e 22 mostrano la stessa architettura LQGI con pianta lineare e non lineare.

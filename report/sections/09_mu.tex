@@ -273,8 +273,8 @@ La Tabella~\ref{tab:cap9-robustezza} ha due righe per ciascun
 controllore, valutato a coefficienti fissati su A e B. Tutte le
 chiusure nominali sono stabili. Per lo stesso controllore A e B
 hanno la stessa pianta a incertezza nulla, perciò coincidono le
-norme di $T_{zr}$ alla precisione riportata. L'ultima colonna
-identifica un calcolo diretto o una deduzione. Lo zero indica
+norme di $T_{zr}$ alla precisione riportata. La provenienza del
+margine è registrata nei risultati MATLAB. Lo zero indica
 che NP esclude RP già sul nominale. Quando la stabilità è persa
 entro il raggio unitario, l'estremo superiore RS limita anche
 il margine RP.
@@ -291,6 +291,16 @@ passa da \FinMuBNorma\ a \FinMuBNormaR, ma il calcolo diretto di RP
 dà \FinMuBIntervalloRPRA\ in A e \FinMuBIntervalloRPRB\ in B.
 In entrambi i casi il limite superiore è sotto uno. Mu\_B perde
 quindi il requisito di guadagno, pur mantenendo RS.
+
+Nei due casi critici salvati di Mu\_B il massimo è a frequenza
+zero in A e a circa $1.6\cdot10^{-5}$ rad/s in B. L'errore
+pesato vale circa $1.00$, a fronte di $0.0089$ per il comando
+pesato, e prevale il secondo giunto. Nei casi trovati il risultato
+è quasi interamente dovuto alla massa $m_2$ di circa $0.7825$ kg.
+Variando solo la massa si ritrova il livello unitario, mentre
+mantenendo la massa nominale e le altre perturbazioni critiche
+il guadagno resta circa $0.985$. È una verifica sui casi critici
+trovati, alla frequenza indicata.
 
 \paragraph{RS soddisfatta, NP fallita.}
 LQGI, Hinf1 e Mu\_A restano stabili in A e B. Hinf1 in B
@@ -356,21 +366,59 @@ encoder a coppie richieste.
 Su A il picco della ricerca diminuisce, mentre la norma nominale
 comune sale da $0.6822$ al valore finale \FinMuANorma. Anche
 l'errore DC e il guadagno rumore--comando sono più alti nel
-candidato finale. La ricerca usa un costo scalato sulle incertezze
-che non contiene un ingresso di rumore encoder. I risultati del
-riesame rendono visibile il compromesso tra costo di sintesi,
-precisione, sensibilità al rumore e numero di stati.
+candidato finale. Per Mu\_A il massimo della norma sul riferimento
+cade a frequenza zero. Nella direzione più amplificata, dominata
+dal secondo riferimento, il contributo dell'errore pesato vale
+circa $1.885$ e quello del comando circa $0.014$. L'errore
+statico arriva al $28\%$ e pesa soprattutto sul secondo giunto.
+La discesa del picco $\mu$ nella sintesi su riferimento e coppia
+non richiede che diminuisca anche l'errore statico nominale.
+
+\subsection{Confronto del controllore iniziale con i finali}
+
+Abbiamo verificato ciascun controllore salvato su A e B a
+coefficienti fissati. Per scegliere un candidato chiediamo
+prima NP, RS e RP sul riferimento in entrambe le famiglie.
+Poi rileggiamo i risultati con le specifiche temporali e le
+prove di coppia e rumore. Le sei righe dei percorsi D--K
+comprendono cinque controllori distinti. MuN1, comune al passo
+1, proviene dalla precedente sintesi con rumore encoder.
+
+\input{generated/finale_riesame_mu_r.tex}
+
+MuN1 soddisfa RP sia in A sia in B, con intervalli di guadagno
+\FinMuNOneRPA\ e \FinMuNOneRPB. I suoi margini RS sono anch'essi
+sopra uno. Il confronto \hbox{a controllore fissato} permette quindi
+di affiancare a LQG una soluzione $\mu$ già disponibile.
+Una nuova sintesi sul solo riferimento avrebbe selezionato
+in $P$ gli ingressi $[r;u]$, tenendo $[z;r;q]$ in uscita.
+Il costo avrebbe avuto due ingressi esterni al posto di quattro.
+La coppia sui link sarebbe rimasta un ingresso fisico per le
+prove successive. Il PASS di MuN1 in entrambe le famiglie ha
+chiuso la ricerca prima di quel nuovo tentativo.
+
+Nelle prove nominali MuN1 si assesta in \FinMuNOneTs\ s,
+con sovraelongazione \FinMuNOneMp\% e cross-coupling
+\FinMuNOneCross\%. Il suo errore DC di \FinMuNOneDC\%
+supera il limite del $5\%$. Il picco di comando nel tracking
+scende da \FinLQGTrackPeak\ a \FinMuNOnePiccoComando\ N m e
+l'RMS da \FinLQGRMSComando\ a \FinMuNOneRMSComando\ N m.
+A coppia applicata, il picco di posizione sale da
+\FinLQGDisturboStudio$^\circ$ a \FinMuNOneDisturbo$^\circ$.
+Nel caso peggiore entrambi restano fuori fascia a 12 s. Il picco sotto rumore sale da
+\FinLQGPeak\ a \FinMuNOneRumore\ N m e l'RMS da
+\FinLQGRms\ a \FinMuNOneRMSRumore\ N m. LQG resta la scelta
+più equilibrata per le specifiche e le prove considerate.
 
 \section{Risultati raggiunti e limite sul costo robusto}
 
 L'analisi a controllore fissato e le due D--K rispondono alla parte
-della traccia su metodi e confronto. LQG è l'unico candidato che
-soddisfa RP sul riferimento nelle due famiglie. La verifica
-precedente su $[r;d]$ escludeva RP per tutti i candidati.
-La selezione degli ingressi cambia la norma e il quesito
-prestazionale. I margini RS riguardano la stessa dinamica chiusa.
+della traccia su metodi e confronto. Fra i sette controllori
+del confronto principale, LQG soddisfa RP sul riferimento nelle due
+famiglie. Il riesame aggiunge MuN1 come secondo caso verificato.
+La verifica storica su $[r;d]$ escludeva RP per i sette controllori.
 
-La garanzia di LQG riguarda il riferimento a coppie di disturbo
+La garanzia di LQG e MuN1 riguarda il riferimento a coppie di disturbo
 e rumore nulli. Per la reiezione delle coppie si leggono le
 prove del Capitolo 11. Un obiettivo robusto che includa quelle
 coppie richiederebbe una verifica dedicata ed eventualmente un

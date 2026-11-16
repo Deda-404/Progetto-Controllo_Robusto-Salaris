@@ -1,3 +1,13 @@
+# Stato corrente — 16.11.2026, confronto con MuN1
+
+Gate COMPLETE/PASS per il riesame dei controllori salvati. MuN1 è l'unico fra i cinque controllori distinti del riesame D–K a passare RP sul riferimento su A e B. Nel confronto nominale con LQG riduce il picco di comando di tracking, supera il limite di errore statico e mostra picchi più alti sotto coppia e rumore. LQG resta il riferimento per i quattro target nominali. La condizione per nuove D–K sul riferimento rimane insoddisfatta.
+
+Verificati i sei passi su A/B, le diagnosi dei picchi di Mu_A e Mu_B, il protocollo nominale comune, il percorso rapido con il grafico e cinque test MATLAB. Le due nuove sintesi D–K, la ritaratura LQGI e le nuove prove non lineari/Simulink sono NOT RUN.
+
+Relazione di 73 pagine e presentazione di 23 slide aggiornate e verificate. Il lavoro prosegue sulla PR #55. Prossimo passo — revisione degli autori del confronto e dei tre elaborati.
+
+---
+
 # Stato corrente — 16.11.2026, prestazione sul solo riferimento
 
 Gate COMPLETE/PASS per la nuova post-analisi e gli elaborati. NP passa per LQG, Hinf2, PID e Mu_B. NS e RS sono state ricalcolate e i risultati coincidono con la campagna storica. LQG soddisfa RP nelle due famiglie. Mu_B perde il requisito pesato con pianta incerta pur superando NP e RS. La reiezione del disturbo di coppia resta documentata nelle prove dedicate.

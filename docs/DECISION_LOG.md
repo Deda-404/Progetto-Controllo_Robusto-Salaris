@@ -2536,3 +2536,11 @@ La prestazione di tracking pesata usa $T_{zr}$, con due ingressi di riferimento 
 L'analisi su riferimento e coppia insieme resta documentata in `confronto_robusto.*`. Per il nuovo costo la cache `confronto_robusto_r.mat` richiede la versione `Tzr_v1`, la firma di configurazione e la stessa banca di controllori. `postanalisi_sea(true)` permette di rifare le 14 verifiche senza passare dalle sintesi.
 
 LQG e Mu_B passano ora NP sul riferimento. Entrambi soddisfano RS in A e B. Solo LQG soddisfa anche RP. Per Mu_B i due calcoli diretti di `robgain` restituiscono un limite superiore sotto uno. I tre risultati per ciascuna famiglia si leggono accanto alle risposte separate di coppia, comando e rumore.
+
+## 2026-11-16 — Confronto con l’inizializzazione MuN1
+
+**Stato** — Proposta per il confronto nella PR #55. La banca ufficiale conserva i sette controllori.
+
+Il riesame usa la stessa post-analisi sul riferimento per ciascun controllore salvato, in A e B. La scelta richiede RP su entrambe le famiglie e tiene conto dei transitori, della precisione e della risposta alla coppia e al rumore nelle prove nominali. MuN1 è lo stesso controllore all'inizio dei due percorsi D–K e proviene dalla campagna con rumore encoder. Ottiene la seconda garanzia RP sul riferimento oltre a LQG, con riserva maggiore sulla norma pesata.
+
+Una nuova D–K avrebbe ottimizzato $T_{zr}$ scegliendo gli ingressi $[r;u]$ della pianta generalizzata, con gli stessi pesi e incertezze. Il doppio PASS di un controllore salvato soddisfa la condizione richiesta per fermare la ricerca. L'errore statico di MuN1 supera 5% e il suo comando sotto rumore è più elevato. Il confronto lascia LQG come scelta per il rispetto dei quattro target nominali e per i risultati nella prova encoder comune.
