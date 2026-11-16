@@ -1,3 +1,11 @@
+# Stato corrente — 15.11.2026, revisione del Capitolo 7
+
+Gate editoriale COMPLETE/PASS. Confrontate le annotazioni con la traccia, la sintesi e i risultati del 4 novembre. Verificati su MAT/CSV costi, guadagni, filtro, prefiltro e chiusure nominali a 28 e 30 stati. Confermati i quattro target nominali per LQG e l'assestamento di 5,05 s per LQGI rispetto alla soglia di 2 s. Per A e B resta documentato RS PASS e NP/RP FAIL sul criterio pesato comune. Nuove esecuzioni MATLAB e Simulink NOT RUN.
+
+PDF integrale aggiornato (98 pagine), con verifica visiva del Capitolo 7 (pagine PDF 30–39) e confronto dei capitoli esterni e delle appendici. La revisione parte dalla HEAD della PR #50. La ZIP resta quella della consegna collaudata del 4 novembre. Prossimo passo — revisione del Capitolo 7 da parte degli autori.
+
+---
+
 # Stato corrente — 12.11.2026, revisione del Capitolo 6
 
 Gate editoriale COMPLETE/PASS. Verificati sul codice e sui risultati salvati i target definitivi, le definizioni delle metriche, l'uso di Mo e dei pesi nelle sintesi e il protocollo di rumore. Assestamento al 2% del modello di riferimento verificato analiticamente. Nuove esecuzioni MATLAB e Simulink NOT RUN.
