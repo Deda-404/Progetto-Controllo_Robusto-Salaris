@@ -4,6 +4,18 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Rivisto il Capitolo 9. Distinti NS, NP, RS e RP, spiegati gli intervalli dei margini e la provenienza degli esiti. Aggiornate le tabelle del capitolo e la relazione integrale di 92 pagine.
+
+- Corretto nel §8.5 il riferimento a W_A, peso dell'incertezza additiva degli attuatori della famiglia B.
+
+- Rivisto il Capitolo 8 dalle annotazioni del PDF del 4 novembre. Chiariti percorsi di segnale, pesi, confronto mixsyn/hinfsyn, architettura 2-DoF e PID. Separate le tabelle in frequenza e di tracking con i dati salvati. Aggiornata la relazione integrale di 94 pagine.
+
+- Rivisto il Capitolo 7 dalle annotazioni del PDF del 4 novembre. Semplificati pesi LQR, Kalman e sintesi integrale. Riuniti i target nominali in una tabella e chiariti disturbo, massa incerta e limiti di robustezza. Aggiornata la relazione integrale di 98 pagine.
+
+- Chiariti nel Capitolo 6 gli indici temporali, il modello di riferimento, i pesi prestazionali e il protocollo comune per il rumore encoder. Aggiornata la relazione integrale di 107 pagine.
+
+- Chiariti nel Capitolo 5 la famiglia dei drive, l'estrazione della LFT, gli effetti dello zero destro e la scelta e verifica del peso additivo. Aggiornato il PDF integrale verificato di 107 pagine.
+
 - Rifinita l'impaginazione delle figure dei capitoli 2 e 3, ripristinata la guida ai capitoli 2–5 e precisata l'interpretazione dello sfasamento di Padé. Aggiornato il PDF integrale alla versione verificata di 108 pagine.
 
 - Chiariti obiettivi, modello SEA, equilibrio, linearizzazione e costruzione della pianta nei capitoli 1–4. Tolte dal testo le tabelle esplorative su massa e ritardo. Conservati i dati sorgente, le figure, le equazioni e i parametri.

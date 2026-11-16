@@ -1,10 +1,11 @@
 \begin{table}[htbp]\centering\small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lrrr}\toprule
-Controllore & Ordine & Norma comune & $\|T_{v\to u}\|_\infty$\\\midrule
-Hinf1 & 18 & \num{2.131} & \num{271}\\
-Hinf2 & 22 & \num{0.0312} & \num{1.68e+08}\\
-PID & 4 & \num{0.8298} & \num{2.48e+05}\\
+\begin{tabular}{lrrrr}\toprule
+Controllore & Sintesi & Ordine & Norma comune & $\|T_{v\to u}\|_\infty$\\\midrule
+Hinf1 & \texttt{hinfsyn} 1-DoF & 18 & \num{2.131} & \num{271}\\
+Hinf2 & \texttt{hinfsyn} 2-DoF & 22 & \num{0.0312} & \num{1.68e+08}\\
+PID & \texttt{hinfstruct} 2-DoF & 4 & \num{0.8298} & \num{2.48e+05}\\
 \bottomrule\end{tabular}
-\caption{Tutti nominalmente stabili. La norma comune include riferimento e disturbo; il rumore è valutato separatamente.}
+\caption{Risultati in frequenza sul nominale. Tutte le chiusure sono internamente stabili.}
+\label{tab:cap8-norme}
 \end{table}

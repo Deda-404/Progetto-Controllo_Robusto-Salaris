@@ -1,3 +1,51 @@
+# Stato corrente — 16.11.2026, revisione del Capitolo 9
+
+Gate editoriale COMPLETE/PASS. Verificati in sola lettura struttura A/B, LFT, norme nominali, casi critici salvati e provenienza delle tabelle D–K. Le 14 righe danno RP FAIL, con 10 esclusioni sul nominale e 4 limiti dedotti da RS. Resta aperta la scelta degli obiettivi per conseguire RP prevista dalla traccia. Nuove analisi robuste, sintesi e simulazioni NOT RUN.
+
+PDF integrale di 92 pagine ricompilato e pagine PDF 49–56 controllate. Verificata l'identità dei capitoli esterni e delle appendici, al netto della numerazione. Ramo basato sulla HEAD corretta della PR #52. ZIP di consegna invariata. Prossimo passo — revisione del Capitolo 9 da parte degli autori.
+
+---
+
+# Stato corrente — 16.11.2026, rifinitura della PR #52
+
+Gate editoriale COMPLETE/PASS. Corretto il richiamo a W_A nel §8.5. La figura dei disturbi è quella della campagna originale. Le serie numeriche corrispondenti alle due prove lineari non sono presenti nei risultati disponibili. Nuove sintesi e simulazioni MATLAB/Simulink NOT RUN.
+
+PDF integrale di 94 pagine ricompilato senza avvisi LaTeX, con controllo visivo delle pagine PDF 40–48 e confronto positivo con la versione precedente per gli altri capitoli e le appendici. Rifinitura sul ramo esistente della PR #52.
+
+---
+
+# Stato corrente — 15.11.2026, revisione del Capitolo 8
+
+Gate editoriale COMPLETE/PASS. Verifica in sola lettura con MATLAB e confronto Python sui MAT/CSV. Confermati lo scarto relativo di 3,12e-12 fra mixsyn e hinfsyn sul 1-DoF, gli ordini 18/22/4 e i valori del confronto comune. Solo Hinf2 rispetta i quattro target nominali. Il forte guadagno rumore–comando di Hinf2 e i FAIL RS di Hinf2 e PID sulle famiglie A/B restano riportati. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.
+
+PDF di 94 pagine e verifica visiva delle pagine PDF 40–48 completata. Il ramo parte dalla HEAD della PR #51. La ZIP resta la consegna collaudata il 4 novembre. Prossimo passo — revisione del Capitolo 8 da parte degli autori.
+
+---
+
+# Stato corrente — 15.11.2026, revisione del Capitolo 7
+
+Gate editoriale COMPLETE/PASS. Confrontate le annotazioni con la traccia, la sintesi e i risultati del 4 novembre. Verificati su MAT/CSV costi, guadagni, filtro, prefiltro e chiusure nominali a 28 e 30 stati. Confermati i quattro target nominali per LQG e l'assestamento di 5,05 s per LQGI rispetto alla soglia di 2 s. Per A e B resta documentato RS PASS e NP/RP FAIL sul criterio pesato comune. Nuove esecuzioni MATLAB e Simulink NOT RUN.
+
+PDF integrale aggiornato (98 pagine), con verifica visiva del Capitolo 7 (pagine PDF 30–39) e confronto dei capitoli esterni e delle appendici. La revisione parte dalla HEAD della PR #50. La ZIP resta quella della consegna collaudata del 4 novembre. Prossimo passo — revisione del Capitolo 7 da parte degli autori.
+
+---
+
+# Stato corrente — 12.11.2026, revisione del Capitolo 6
+
+Gate editoriale COMPLETE/PASS. Verificati sul codice e sui risultati salvati i target definitivi, le definizioni delle metriche, l'uso di Mo e dei pesi nelle sintesi e il protocollo di rumore. Assestamento al 2% del modello di riferimento verificato analiticamente. Nuove esecuzioni MATLAB e Simulink NOT RUN.
+
+PDF integrale di 107 pagine aggiornato e Capitolo 6 controllato visivamente (pagine PDF 29–30). Verificata l'identità dei contenuti degli altri capitoli e delle appendici. Il ramo dedicato parte dalla HEAD della PR #49. La ZIP conserva gli elaborati collaudati del 4 novembre. Prossimo passo — lettura del Capitolo 6 da parte degli autori.
+
+---
+
+# Stato corrente — 10.11.2026, revisione del Capitolo 5
+
+Gate editoriale COMPLETE/PASS. Verificati in codice e dati salvati la struttura a cinque reali con 17 occorrenze, i 25 casi di costruzione, i 30 di verifica e la selezione del peso di ordine 3. Controllati in Python l'estrazione manuale del parametro, gli zeri di Padé e la copertura dell'inviluppo sulla griglia esistente. Nuove esecuzioni MATLAB e Simulink NOT RUN. Le norme continue riportate provengono dalla campagna approvata.
+
+PDF integrale di 107 pagine aggiornato. Controllo visivo del Capitolo 5 (pagine PDF 22–28) e confronto dei contenuti protetti superati. La revisione è proposta sul ramo dedicato con base sulla PR #48. La ZIP e la presentazione restano quelle della consegna del 4 novembre. Prossimo passo: revisione del Capitolo 5 da parte degli autori.
+
+---
+
 # Stato corrente — 10.11.2026, revisione dei capitoli 1–4
 
 Gate editoriale COMPLETE/PASS. La versione finale di 108 pagine include le rifiniture della PR #48 ed è salvata nel repository. Controllate visivamente le pagine PDF 12–21 e verificati equazioni, riferimenti e identità dei sorgenti dal capitolo 5. Confermati sui dati salvati i ranghi PBH 14/14 della pianta completa. Verificati in Python equilibrio, Jacobiani, proprietà dell'inerzia e scarto di fase del ritardo. MATLAB NOT RUN in questa sessione per errore 5201 all'avvio. Le evidenze numeriche validate del 4 novembre e lo stato prestazionale riportato sotto restano applicabili.

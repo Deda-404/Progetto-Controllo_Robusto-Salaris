@@ -61,7 +61,9 @@ def robust_rows(data):
         rp = "0 (NP)" if method=="NP_FAIL" else (
             r"$\leq$"+num(x["RP_upper"],4)+" (RS)" if method=="LIMITE_DA_RS" else interval(x,"RP"))
         norm = num(x["NormaNominale"],4) if x["NS"]=="1" else "NS FAIL"
-        rows.append([esc(x["Controllore"]),x["Analisi"][0],norm,interval(x,"RS"),rp])
+        np_result = "PASS" if x["NP"]=="1" else "FAIL"
+        rows.append([esc(x["Controllore"]),x["Analisi"][0],norm,np_result,
+                     interval(x,"RS"),x["RS"],rp])
     return rows
 
 
@@ -124,23 +126,31 @@ def main():
           [[num(x[k]) for k in ["FattoreSigmaAssunta","PoloOsservatore","ErroreStimaRMS","ComandoRMS"]] for x in read("kalman")],
           "Sensibilità del Kalman a sequenza di rumore identica, senza riferimento né disturbo. Intensità assunte, non stimate da misure.")
     hinf=read("hinf")
-    table("hinf",["Controllore","Ordine","Norma comune",r"$\|T_{v\to u}\|_\infty$"],
-          [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
-          "Tutti nominalmente stabili. La norma comune include riferimento e disturbo; il rumore è valutato separatamente.")
+    methods={"Hinf1":r"\texttt{hinfsyn} 1-DoF", "Hinf2":r"\texttt{hinfsyn} 2-DoF",
+             "PID_nuovo":r"\texttt{hinfstruct} 2-DoF"}
+    table("hinf",["Controllore","Sintesi","Ordine","Norma comune",r"$\|T_{v\to u}\|_\infty$"],
+          [[esc(x["Controllore"].replace("_nuovo","")),methods[x["Controllore"]],x["Ordine"],
+            num(x["NormaComune"],4),num(x["GuadagnoRumoreComando"])] for x in hinf],
+          "Risultati in frequenza sul nominale. Tutte le chiusure sono internamente stabili.",
+          "tab:cap8-norme")
     robust=read("confronto_robusto")
     assert len(robust)==14
-    caption="Margini robusti: soglia unitaria. NP indica esclusione già sul nominale; RS indica un limite superiore dedotto dalla perdita di stabilità. Non sono misure dirette di RP."
-    headers=["Controllore","A/B","Norma nominale","Margine RS","Margine RP"]
-    table("robustezza",headers,robust_rows([x for x in robust if x["Controllore"] in CURRENT]),caption)
+    caption="Norma ed esito nominale, intervallo ed esito RS, limite RP con la sua origine."
+    headers=["Controllore","A/B","Norma nom.","NP","Intervallo RS","RS","Margine RP"]
+    table("robustezza",headers,robust_rows([x for x in robust if x["Controllore"] in CURRENT]),
+          caption,"tab:cap9-robustezza")
     dk=[]
     for i,name in enumerate(["A","B"],1):
         for x in read(f"dk_{i}"):
             dk.append([name,x["Iterazione"],num(x["PeakMu"],4),num(x["GammaScalata"],4),x["Ordine"]])
     table("dk",["Sintesi","Iterazione",r"Picco $\mu$",r"$\gamma$ scalata","Ordine K"],dk,
-          "Stessi pesi e stesso controllore iniziale. Il risultato di sintesi non sostituisce la post-analisi continua.")
+          "Risultati dei passi D e K con gli stessi pesi e la stessa inizializzazione.",
+          "tab:cap9-dk")
     table("riesame_mu",["Modello","Passo","Ordine","Norma comune",r"Errore DC [\%]","Guadagno rumore"],
-          [[x["Modello"],x["Iterazione"],x["Ordine"],num(x["NormaComune"],4),percent(x["ErroreDC"]),num(x["GuadagnoRumore"],4)] for x in read("riesame_mu")],
-          "Riesame dei candidati D--K: la prima riga di ogni modello è il medesimo punto iniziale. Il guadagno del rumore è una norma, non un picco di coppia.")
+          [[{"1":"A","2":"B"}[x["Modello"]],x["Iterazione"],x["Ordine"],
+            num(x["NormaComune"],4),percent(x["ErroreDC"]),num(x["GuadagnoRumore"],4)] for x in read("riesame_mu")],
+          "Riesame sulla stessa pianta nominale. Il passo 1 usa il controllore iniziale comune.",
+          "tab:cap9-riesame")
     ras=read("ras"); plants=read("dieci_impianti"); noise=read("rumore")
     states=["CONVERGENZA","MANCATA_CONVERGENZA","DIVERGENZA_OSSERVATA","TIMEOUT","ERRORE_NUMERICO"]
     rasrows=[]; plantrows=[]; timerows=[]; disturbrows=[]; noiserows=[]; loadrows=[]

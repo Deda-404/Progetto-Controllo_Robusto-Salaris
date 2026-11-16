@@ -3230,3 +3230,54 @@ Compilazione integrale con latexmk/pdflatex: 110 pagine. Ispezionate le pagine P
 Integrate la figura del manipolatore nella pagina di apertura del capitolo 2 e la figura dei poli nella pagina della tabella e del testo di §3.3. Le prime prove lasciavano ancora pagine poco utilizzate. La disposizione finale colloca le due figure accanto al testo pertinente con larghezze rispettivamente del 64% e del 68% dell'area di testo. I file delle figure sono quelli originali. Ripristinata in §1.4 la guida ai capitoli 2–5. In §4.2 lo scarto di fase di 6,2 gradi a 40 rad/s è riferito al drive e la valutazione del margine è ricondotta all'anello completo.
 
 Ricompilata la relazione integrale con latexmk/pdflatex in 108 pagine. Controllo visivo delle pagine PDF 12–21 e controllo del log finale PASS, con riferimenti risolti e senza avvisi LaTeX o box fuori misura. Equazioni, etichette, riferimenti e ingressi delle tabelle sono identici alla prima revisione. Dal capitolo 5 il testo estratto e la suddivisione in pagine coincidono con quelli del PDF precedente, al netto dei numeri di pagina. Aggiornato il PDF nel repository. La ZIP resta la consegna collaudata del 4 novembre. Gate editoriale COMPLETE/PASS. Nuove esecuzioni MATLAB e Simulink NOT RUN per questa rifinitura editoriale.
+
+## 2026-11-10 — Revisione annotata del Capitolo 5
+
+Revisione circoscritta al Capitolo 5 dalla HEAD approvata della PR #48. Le note del PDF del 4 novembre sono state confrontate con la traccia, le equazioni, il codice operativo e i dati salvati. Chiarite lettura dei quattro pannelli, estrazione e chiusura della LFT, forme relative in presenza dello zero destro, provenienza dei 25 casi di costruzione e 30 di verifica, significato delle metriche e limiti del confronto A/B. Conservate le cinque figure. Solo collocazione, due larghezze di inclusione e didascalie sono state adattate.
+
+Controlli indipendenti in Python e revisione del codice PASS. Confermati i cinque blocchi reali (17 occorrenze), la composizione dei campioni, l'algebra delle due ripetizioni manuali, gli zeri di Padé e il peso di ordine 3, stabile, a fase minima e di grado relativo due. Ricalcolato il solo inviluppo sulla griglia esistente, con picco a circa 31 rad/s e copertura in tutti i nodi. Norme continue e ricostruzione A/B riportate dai risultati MATLAB già salvati. Nuove esecuzioni MATLAB/Simulink NOT RUN. Nessuna nuova sintesi o ricerca del peso.
+
+Compilazione integrale di 107 pagine e controllo visivo delle pagine PDF 22–28 PASS. Nessun errore, avviso LaTeX, riferimento irrisolto o pagina vuota nel capitolo. Verificata l'identità dei sorgenti protetti e del testo e delle interruzioni di pagina dei capitoli 1–4, 6–13 e delle appendici nel PDF, salvo la numerazione. Aggiornato il PDF tracciato. La ZIP resta quella del 4 novembre. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-12 — Revisione annotata del Capitolo 6
+
+Le annotazioni alle pagine 22–23 del PDF del 4 novembre sono state confrontate con la traccia, il capitolo e il percorso operativo. Il §6.1 presenta i soli target definitivi, con le definizioni usate da confronto_ras.m. Nel §6.2 sono esplicitati il ruolo di Mo e i segnali pesati nei problemi 1-DoF e 2-DoF. La condizione unitaria sulla mappa pesata viene letta sul blocco DC di riferimento, per cui il limite è 15% per componente. Il §6.3 riassume la prova comune a 2 ms e la lettura di picco e RMS.
+
+Controlli su codice e dati salvati PASS. Confermati parametri, definizioni delle metriche, formule, uso del cross-coupling, protocollo di rumore e assestamento analitico di Mo a 1,944641 s. Nuove esecuzioni MATLAB e Simulink NOT RUN. Compilazione di 107 pagine e controllo visivo delle pagine PDF 29–30 PASS. Nessun avviso LaTeX o riferimento irrisolto. Verificati l'identità dei sorgenti protetti, il testo estratto e la suddivisione in pagine degli altri capitoli e delle appendici. Il PDF tracciato contiene la revisione. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-15 — Revisione annotata del Capitolo 7
+
+Confrontate le pagine stampate 24–41 del PDF annotato con la traccia, il capitolo, gli script e i risultati della campagna. Ridotti ripetizioni, matrici estese, score storico e dettagli numerici accessori. Chiariti normalizzazione e termini misti di Q, prefiltro, covarianze, sensibilità a rumore fissato, separazione, segni e conteggio degli stati LQGI. Riorganizzati confronto nominale, prova di coppia esterna, prove con sola massa variata e robustezza lineare. La maggiore parte reale dei poli del regolatore era riportata in due modi nel capitolo. Il valore −6,219 s⁻¹ è quello confermato dalle matrici correnti.
+
+Controlli indipendenti in Python sui dati salvati PASS. Verificati Q, R, guadagni rispetto alle equazioni di Riccati, covarianze, prefiltro, stabilizzabilità aumentata, poli e separazione nelle chiusure a 28 e 30 stati. Il primo controllo LQGI ha rilevato poli positivi a causa della negazione di una matrice letta come intero senza segno da SciPy. Convertite le matrici in virgola mobile prima dell'algebra, il controllo ha confermato la stabilità. Confermati i valori delle metriche nei MAT/CSV e la provenienza delle traiettorie di tracking tramite SHA-256 del MAT originario. Nuove esecuzioni MATLAB e Simulink NOT RUN.
+
+Compilazione integrale di 98 pagine e controllo visivo delle pagine PDF 30–39 PASS. Assenza di avvisi LaTeX, box fuori misura e riferimenti irrisolti. Confronto del testo e della resa pagina per pagina dei capitoli 1–6, 8–13 e delle appendici superato, esclusa la numerazione. La ZIP mantiene l'hash della consegna del 4 novembre. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-15 — Revisione annotata del Capitolo 8
+
+Revisione dalla HEAD della PR #51. Confrontate le pagine stampate 42–54 del PDF del 4 novembre con traccia, sorgente, percorso operativo e dati salvati. Aggiunto uno schema dei percorsi G/Gd. Anticipato lo schema della pianta generalizzata e tolta l'illustrazione 2-DoF duplicata dal capitolo. Chiariti il ruolo dei pesi, la diversa definizione dell'errore, l'accordo mixsyn/hinfsyn sul 1-DoF, le porte del 2-DoF e il significato dell'ordine del PID. Il confronto su mappa comune e i target temporali hanno tabelle distinte. Chiarita la lettura del grafico dei disturbi usando i pannelli e le etichette originali q1/q2. Sintetizzata la formulazione teorica con rumore esplicito.
+
+Controllo in sola lettura con MATLAB PASS. Verificati l'ordine dei controllori, i segni delle interconnessioni, le mappe pesate, le tre chiusure stabili, le norme comuni, i guadagni rumore–comando e la realizzazione del PID dai blocchi salvati. Per i due controllori 1-DoF, norma 0,9534124589 su P1. Il primo controllo ha emesso avvisi per l'uso di zero su pesi MIMO e per la valutazione diretta di una mappa nulla. Il controllo ripetuto sui pesi scalari e sui singoli canali ha confermato gli esiti. Verifica Python su MAT/CSV e traiettorie salvate PASS, inclusi obiettivi e scarto di sintesi, target, rumore, RAS e robustezza. Nuove sintesi, simulazioni MATLAB e Simulink NOT RUN.
+
+Compilazione integrale di 94 pagine e controllo visivo del Capitolo 8 (pagine PDF 40–48) PASS. L'audit finale non rileva avvisi LaTeX, riferimenti irrisolti o box fuori misura. Verificati contenuto e impaginazione dei capitoli esterni e delle appendici, esclusa la numerazione. La ZIP conserva l'hash della consegna collaudata. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-16 — Verifica finale della PR #52
+
+Corretto unicamente il richiamo del §8.5 al peso di incertezza. W_A descrive lo scostamento additivo degli attuatori nella famiglia B del Capitolo 5. W1 e W2 pesano errore e comando nella sintesi H∞. Il controllo dei richiami nei due capitoli conferma che W_I riguarda la sola forma inversa discussa nel Capitolo 5.
+
+Verificata la provenienza della figura dei disturbi. Lo script confronto_ras.m salva in confronto.mat le risposte ai riferimenti e riassume le risposte ai disturbi con picco di spostamento e recupero. Per i tre controllori, le curve lineari dei due ingressi di disturbo sono esportate nel PNG. Le traiettorie di ras.mat sono non lineari e non corrispondono alle due prove della figura. Conservato il PNG originale perché i dati disponibili non consentono di separare fedelmente le curve q1 e q2. Sintesi e simulazioni MATLAB/Simulink NOT RUN.
+
+Compilazione integrale di 94 pagine e controllo visivo delle pagine PDF 40–48 PASS. Verificati schema G/Gd, tabelle, pianta generalizzata, formule, collocazione delle figure e riferimenti. Il testo e la resa dei capitoli esterni e delle appendici coincidono con la versione precedente. Gate editoriale COMPLETE/PASS.
+
+
+## 2026-11-16 — Revisione annotata del Capitolo 9
+
+Confrontate le pagine stampate 55–64 del PDF del 4 novembre con la traccia, il percorso operativo e i risultati salvati. Semplificate la normalizzazione, la partizione N–Δ e la spiegazione di μ. Riunite le quattro proprietà e spiegate le soglie degli intervalli. La tabella principale espone NP e RS oltre ai valori di origine per RP. Il motivo del fallimento RP è letto per gruppi di controllori e illustrato con LQG e Hinf2. Spiegate le frequenze critiche e la distinzione tra il grafico RS, gli indicatori D–K e il riesame sul nominale. Ridimensionato lo schema RP, ridotto il richiamo alla D–K con rumore e rimosso il riepilogo autonomo dei comandi MATLAB.
+
+Controllo MATLAB in sola lettura PASS. Verificati i cinque blocchi reali di A, i tre blocchi di B, la stessa massa con cinque occorrenze, la convenzione LFT e le 14 norme nominali con i controllori salvati. La sostituzione delle quattro perturbazioni RS critiche di Hinf2 e PID ha restituito poli prossimi all'asse immaginario alle frequenze archiviate. Verificati il medesimo MuN1 iniziale e le righe D–K e di riesame. Confronto Python tra MAT, CSV e valori delle tabelle PASS, dopo aver gestito il formato delle strutture MATLAB annidate. Confermati 10 casi NP_FAIL e 4 LIMITE_DA_RS. Nuove analisi robuste, sintesi e simulazioni NOT RUN.
+
+Compilazione integrale di 92 pagine e controllo visivo delle pagine PDF 49–56 PASS. Log senza avvisi LaTeX, riferimenti irrisolti o box fuori misura. Capitoli esterni e appendici confrontati pagina per pagina, al netto della numerazione. La ZIP mantiene l'hash della consegna collaudata. Gate editoriale COMPLETE/PASS.

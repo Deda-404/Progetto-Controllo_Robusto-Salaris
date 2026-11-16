@@ -2484,3 +2484,37 @@ Per il ritardo si è mantenuto nel testo l'effetto di 18 ms rispetto al nominale
 **Stato** — Applicato nella PR #48.
 
 Le due figure vengono collocate nel punto in cui servono alla lettura, con una riduzione delle sole larghezze LaTeX. Questa disposizione evita le pagine dedicate ai singoli grafici e conserva le immagini e le didascalie. Il PDF tracciato segue i sorgenti revisionati. La ZIP del 4 novembre resta la copia collaudata e conserva la relazione di quella consegna.
+
+## 2026-11-10 — Presentazione e verifica della famiglia incerta
+
+**Stato** — Applicato nel Capitolo 5 per la revisione degli autori.
+
+Le figure esistenti sono state mantenute perché rispondono a domande distinte su dinamica dei drive, porte LFT, forme di errore e costruzione del peso. Il grafico del peso conserva l'intera griglia usata dal fit. La lettura distingue il controllo visivo del modulo nei nodi dalla norma continua per singolo caso. La verifica indipendente sui 30 drive resta separata dalla selezione del peso e la copertura dell'intero rettangolo parametrico rimane una questione aperta.
+
+
+## 2026-11-12 — Presentazione dei target nel Capitolo 6
+
+**Stato** — Applicato nel ramo di revisione.
+
+Il capitolo presenta l'insieme definitivo di specifiche e lascia la storia dei livelli preliminari nei dati della campagna. Si mantiene il cross-coupling come criterio aggiuntivo scelto dal gruppo perché misura la risposta dell'altro giunto ed entra nel confronto dei controllori. La discussione della norma pesata è limitata alla scala del limite DC per il riferimento e rimanda alle prove al gradino per l'esito dei quattro target. La sezione sul rumore conserva il protocollo comune e rimanda ai capitoli successivi per le estensioni di sintesi e i risultati.
+
+
+## 2026-11-15 — Sintesi espositiva di LQG e LQGI nel Capitolo 7
+
+La revisione parte dalla HEAD della PR #50. Si presentano per esteso le equazioni indispensabili per passare dalla pianta al regolatore, al filtro e al servo integrale. Si è scelto di mostrare la costruzione fisica di Q e le leggi di comando e di lasciare le matrici numeriche complete negli esportati e nei dati del repository. La griglia dei pesi appartiene alla ricerca storica e la sintesi corrente usa i pesi fissati nella banca validata. I grafici delle priorità e dei due punti di compromesso sono sostituiti nel testo dall'indicazione dei pesi e dal confronto tabellare con tutti i target. La figura della sensibilità sostituisce la tabella duplicata dei cinque fattori. Le verifiche della stabilità nominale e della separazione sono conservate in forma compatta.
+
+La tabella di tracking raccoglie metriche già calcolate. Il confronto distingue ingresso di coppia, variazione di massa e margini A/B. Gli esiti della prestazione pesata, l'assestamento LQGI oltre 2 s e i limiti dei modelli sono espliciti. Stato: proposto per la revisione degli autori.
+
+
+## 2026-11-15 — Presentazione del progetto H∞ nel Capitolo 8
+
+La sintesi corrente resta il riferimento. Si è scelto di presentare nello stesso percorso l'equivalenza del costo ottenuto con mixsyn e hinfsyn sul 1-DoF, il passaggio al riferimento separato con Mo e la sintesi a struttura PID. Per il confronto si usano una tabella in frequenza e una dei gradini nominali. L'esportatore aggiorna la sola presentazione della tabella in frequenza a partire da hinf.csv.
+
+Lo schema della pianta generalizzata contiene già il collegamento 2-DoF e sostituisce il secondo disegno ridondante. Rimangono i grafici dei pesi, del tracking, di S/T e delle risposte alle coppie di disturbo. Il nuovo schema dei percorsi G e Gd è illustrativo. La formulazione con rumore esplicito resta una possibile estensione, senza i fattori esemplificativi di Wn e senza attribuire altri controllori alla campagna. Stato: proposto per la revisione degli autori.
+
+
+## 2026-11-16 — Presentazione degli esiti robusti nel Capitolo 9
+
+Si è scelto di mostrare norma nominale, esiti NP/RS e margini nella stessa tabella, per leggere la causa del fallimento RP senza una seconda tabella di classificazione. La colonna RP distingue la deduzione dal nominale dal limite superiore ricavato da RS. Le frequenze critiche sono illustrate con LQG e restano disponibili nella tabella esportata e nei dati. Conservati gli schemi N–Δ, RP e D–K e il grafico dei margini e delle iterazioni. Il riepilogo dei comandi MATLAB è assorbito nei paragrafi pertinenti e nell'appendice esistente.
+
+Resta aperta la scelta progettuale sugli obiettivi prestazionali prevista dalla traccia. Il costo comune non è soddisfatto in modo robusto da alcuno dei sette candidati. La seconda D–K con rumore è presentata come estensione teorica della campagna corrente. Stato della revisione: proposta agli autori.
