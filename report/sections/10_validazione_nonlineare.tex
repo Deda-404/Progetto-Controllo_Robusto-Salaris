@@ -1,311 +1,222 @@
 \chapter{Simulazioni, rumore e regione di attrazione}
-\section{Perché verifichiamo il comportamento non lineare}
-Il modello linearizzato descrive piccoli spostamenti attorno alla verticale. Quando il braccio si allontana, inerzia, Coriolis e gravità cambiano con gli angoli. Le simulazioni integrano perciò le equazioni meccaniche complete, i sei stati dei drive e tutti gli stati del controllore. La massa $m_2$ è presente nelle tre componenti meccaniche e rimane costante durante ogni esecuzione.
 
-\section{Che cos'è la regione di attrazione}
-La regione di attrazione, indicata qui con RAS, è l'insieme delle condizioni
-iniziali da cui il sistema deterministico ritorna all'equilibrio. Non basta
-che una posizione articolare sia vicina al riferimento: anche velocità,
-deformazioni elastiche, attuatori e stati interni del controllore devono
-essere considerati. Lo stato aumentato $z$ raccoglie queste deviazioni.
-Per LQG comprende anche l'osservatore e per LQGI i due integratori.
+\section{Perché simulare il modello non lineare}
+I controllori sono progettati attorno all'equilibrio verticale. La
+linearizzazione descrive bene piccoli spostamenti, mentre a distanza
+maggiore cambiano la matrice d'inerzia, i termini di Coriolis e le
+coppie gravitazionali. Nelle simulazioni usiamo quindi le equazioni
+complete dei link e dei rotori, accoppiati dalle molle SEA. Manteniamo
+la dinamica dei drive e del controllore, inclusi gli stati dello
+stimatore e gli integratori quando presenti. In questo modo verifichiamo
+se il robot torna alla postura iniziale o segue un nuovo riferimento
+anche quando valgono le equazioni non lineari.
 
-Una figura nel piano $(\delta q_1,\delta q_2)$ è soltanto una sezione della
-RAS: fissa tutte le altre condizioni iniziali. Una simulazione che converge
-individua un punto favorevole, ma non dimostra che tutti i punti vicini
-abbiano lo stesso comportamento. Viceversa una traiettoria ancora lontana
-alla fine dell'orizzonte non dimostra necessariamente divergenza asintotica.
-Le prove di attrazione non contengono rumore persistente, riferimenti o
-disturbi applicati durante il moto.
+\section{Regione di attrazione e prove iniziali}
+La regione di attrazione (RAS) raccoglie gli stati iniziali dai quali
+l'anello chiuso torna all'equilibrio con riferimento incrementale,
+disturbo e rumore nulli. Lo stato comprende angoli, velocità,
+deformazioni elastiche e memoria di drive e controllore. La stabilità
+della linearizzazione giustifica la convergenza abbastanza vicino
+all'equilibrio, senza fissarne la distanza massima.
 
+Una funzione di Lyapunov quadratica $V(z)=z^T Pz$, con $P$ positiva
+definita, misura lo scostamento per lo stato completo $z$. Per
+certificare un insieme interno alla RAS occorrerebbe dimostrare che
+$\dot V$ è strettamente negativa fuori dall'equilibrio in tutto un
+sottolivello di $V$. Per questi sette controllori non è disponibile
+un sottolivello certificato numericamente. La campagna valuta invece
+punti iniziali specifici, dai quali si possono leggere le traiettorie
+e il relativo esito.
 
-\section{La funzione di Lyapunov}
-Cerchiamo una funzione $V(z)=z^TPz$, con $P$ positiva definita. Possiamo
-leggerla come una misura quadratica della distanza dall'equilibrio; non è
-necessariamente l'energia meccanica del braccio. Se $V$ diminuisce lungo
-ogni traiettoria non nulla di una regione, il sistema si muove verso
-valori più piccoli di questa distanza.
+\subsection{Come leggere le sezioni empiriche}
+Gli assi della Figura~\ref{fig:ras-empirica} sono gli scostamenti iniziali
+dei due angoli dei link dalla verticale, in gradi. Per ciascuno dei
+raggi $5^\circ$, $15^\circ$ e $30^\circ$ proviamo cinque direzioni
+equidistanti, partendo dall'asse positivo del primo giunto.
+I motori sono spostati quanto i link ($\delta\theta=\delta q$), così
+la deformazione delle molle parte dal suo valore di equilibrio.
+Le velocità e gli stati incrementali dei drive e del controllore
+partono da zero. Si ottengono 15 condizioni per controllore con
+impianto nominale e orizzonte di 15 s.
 
-Scrivendo $\dot z=A_{cl}z+\phi(z)$ e assumendo $A_{cl}$ Hurwitz, l'equazione
-di Lyapunov fornisce
-\[
-A_{cl}^TP+PA_{cl}=-Q,\qquad Q\succ0,
-\qquad \dot V=-z^TQz+2z^TP\phi(z).
-\]
-Il primo termine è negativo; il secondo descrive il resto non lineare.
-La positività di $P$ da sola non basta: occorre controllare il secondo
-termine in tutta la regione proposta. Un sottolivello $V\leq c$ con
-derivata negativa è invariante, perché una traiettoria non può attraversare
-il bordo andando verso valori maggiori di $V$. Una regione interna così
-ottenuta è generalmente molto più piccola della vera RAS.
-
-\section{Applicazione allo stato aumentato completo}
-La prova deve riguardare l'intera dinamica chiusa. Con riferimento,
-disturbo e rumore nulli, separiamo $x$, i 14 stati fisici, e $x_K$,
-gli stati del controllore. La misura incrementale è $C_mx$ e la legge
-ha la forma $u=C_Kx_K+D_yC_mx$. Pertanto
-\[
- z=\begin{bmatrix}x\\x_K\end{bmatrix},\quad
- A_{cl}=\begin{bmatrix}A+BD_yC_m&BC_K\\B_yC_m&A_K\end{bmatrix}.
-\]
-Per LQG e LQGI $C_m$ seleziona quattro encoder; per le altre famiglie
-i due angoli link. Il segno di retroazione è già nelle matrici del
-controllore. Gli ordini aumentati sono \FinLQGOrdineChiuso, \FinLQGIOrdineChiuso, \FinHinfOneOrdineChiuso, \FinHinfTwoOrdineChiuso, \FinPIDOrdineChiuso, \FinMuAOrdineChiuso\ e \FinMuBOrdineChiuso,
-rispettivamente per LQG, LQGI, Hinf1, Hinf2, PID, Mu\_A e Mu\_B.
-Una verifica sulle sole otto equazioni meccaniche ignorerebbe la
-memoria del drive, dell'osservatore e del controllore.
-
-Un cambio di coordinate $z=T\zeta$ può migliorare il condizionamento
-numerico senza modificare la dinamica. Ponendo
-$A_b=T^{-1}A_{cl}T$ si risolverebbe
-\[
- A_b^TP_b+P_bA_b=-I,\qquad
- P=T^{-T}P_bT^{-1},\qquad Q=T^{-T}T^{-1}.
-\]
-L'ellissoide cambia espressione, ma rappresenta gli stessi stati fisici.
-Un residuo relativo piccolo non basta quando i coefficienti sono molto
-grandi: occorre che l'errore assoluto nell'equazione e l'arrotondamento
-siano piccoli rispetto al margine negativo che si intende usare.
-Anche la positività deve essere numericamente distinta da zero.
-Questi controlli sono condizioni da soddisfare per un certificato,
-non verifiche numeriche dichiarate riuscite per i candidati attuali.
-
-Il resto non lineare SEA entra nelle accelerazioni dei link. Vicino
-alla verticale, $1-\cos t$ è di ordine due e $\sin t-t$ di ordine tre.
-La variazione di $M^{-1}$ moltiplica forze incrementali di primo ordine;
-i termini di Coriolis contengono velocità e seno dell'angolo relativo.
-Questo spiega perché si possa cercare una stima cubica locale
-$\|f(z)\|\le c_f\|z\|^3$, con $\phi=Ef$.
-Per usarla occorre però maggiorare esplicitamente $M^{-1}$ e tutti i
-coefficienti sul dominio scelto, con la massa corretta. L'ordine del
-resto non fornisce da solo il valore valido di $c_f$.
-
-Se tali limiti e un errore numerico $\varepsilon<1$ fossero verificati,
-si avrebbe
-\[
- \dot V\le-(1-\varepsilon)\|\zeta\|^2+
- 2\|P_bT^{-1}E\|c_f\|T\|^3\|\zeta\|^4.
-\]
-Il termine quadratico domina abbastanza vicino all'origine. Per esempio,
-scegliere un raggio $r$ con
-\[
- 2\|P_bT^{-1}E\|c_f\|T\|^3r^2<1-\varepsilon
-\]
-renderebbe negativa la derivata nel dominio corrispondente. Un
-sottolivello $\zeta^TP_b\zeta\le c$ contenuto nella sfera di raggio $r$
-si ottiene imponendo $c\le\lambda_{\min}(P_b)r^2$.
-È una costruzione sufficiente e conservativa: non individua la frontiera
-della vera RAS. Per i sette candidati della traccia non è disponibile
-una certificazione numerica di questi passaggi. Conserviamo quindi
-la derivazione come metodo, senza assegnare raggi o livelli certificati.
-
-\section{Sezione empirica e insieme interno}
-Proviamo cinque direzioni per ciascuno dei raggi $5^\circ$, $15^\circ$ e $30^\circ$: 15 condizioni per controllore. Poniamo $\delta\theta=\delta q$, conservando la deformazione elastica di equilibrio, con velocità, stati dei drive e stati del controllore nulli.
-
-L'orizzonte è 15 s. Classifichiamo come convergenza osservata una coda finale di un secondo con angoli link e motore entro $0.5^\circ$, velocità entro $0.5^\circ$/s e comando entro 0.05 N m. La mancata convergenza entro l'orizzonte non dimostra divergenza asintotica. Teniamo separati gli allontanamenti oltre le soglie numeriche, i timeout e gli errori del solver.
-
-\input{generated/finale_ras.tex}
-
-Mu\_A e Mu\_B convergono rispettivamente in \FinMuAConv/15 e \FinMuBConv/15 condizioni provate, pur avendo un errore di tracking significativo. La prova RAS ha infatti riferimento nullo: ritornare alla verticale non equivale a inseguire bene una nuova posizione. Hinf2 ha \FinHinfTwoDiv\ allontanamenti osservati; PID ha \FinPIDNonConv\ mancate convergenze nell'orizzonte, che restano distinte da una divergenza dimostrata. Questa lettura evita una classifica basata sul solo numero di punti favorevoli.
-
+Per contare una convergenza osservata, nell'ultimo secondo campionato
+gli angoli di link e motori devono restare entro $0.5^\circ$,
+le velocità entro $0.5^\circ$/s e il comando incrementale entro
+0.05 N\,m. I quadrati indicano traiettorie che arrivano a 15 s senza
+rispettare il criterio. Le croci indicano un arresto per superamento
+delle soglie di posizione o velocità durante il moto. Timeout
+(limite di calcolo) ed errore numerico hanno categorie proprie,
+entrambe senza casi in questa campagna.
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=.97\linewidth]{figures/definitiva/ras.png}
-\caption{Sezioni empiriche: cerchi verdi convergenti, quadrati rossi non convergenti entro 15 s, croci rosse per allontanamento osservato. Eventuali timeout e errori hanno simboli separati.}
+\includegraphics[width=\linewidth]{figures/definitiva/ras.png}
+\caption{Sezioni della RAS. I segni indicano le condizioni iniziali
+(cerchi verdi per convergenza, quadrati rossi per mancata convergenza,
+croci rosse per allontanamento osservato). Le curve grigie seguono
+gli angoli durante il moto. Il punto nero è la postura di equilibrio.}
+\label{fig:ras-empirica}
+\end{figure}
+\input{generated/finale_ras.tex}
+
+Hinf2 ha \FinHinfTwoDiv\ arresti per allontanamento. Per esempio,
+la croce sul semiasse positivo parte da $(30^\circ,0^\circ)$:
+la traiettoria supera una soglia di arresto già attorno a 0.087 s
+(\texttt{ras.csv}). Le soglie di arresto sono $4\pi$ rad e
+1000 rad/s in modulo per angoli incrementali e velocità. Nel PID tutte le
+\FinPIDNonConv\ traiettorie raggiungono l'orizzonte senza soddisfare
+il criterio finale. Quest'ultimo esito può dipendere anche da un
+transitorio lento. Mu\_A e Mu\_B convergono in tutte le condizioni
+provate, pur mostrando errori rilevanti quando il riferimento cambia.
+I punti verdi documentano il ritorno alla verticale nelle condizioni
+provate. Fra un punto e l'altro, o cambiando velocità iniziale,
+massa o ritardi, la convergenza rimane da verificare.
+
+\section{Prove di movimento e di coppia}
+Partiamo dall'equilibrio per tutte le prove di 12 s. Nel tracking,
+applichiamo un gradino di $5^\circ$ al riferimento del primo giunto
+e chiediamo al secondo di restare fermo. Nel rigetto, il riferimento
+resta a zero e una coppia costante di 0.5 N\,m agisce direttamente
+sul primo link. Per isolare la massa ripetiamo il tracking con
+$m_2=0.72$, $0.8$ e $0.88$ kg, fissa durante ogni prova, con drive
+nominali. Il rumore encoder ha un esperimento separato nella
+Sezione~\ref{sec:rumore-encoder}.
+
+Il controllore legge scostamenti dall'equilibrio. LQG e LQGI usano
+quattro encoder, gli altri controllori i due encoder dei link. Il
+comando incrementale passa per la dinamica dei drive e la coppia di
+equilibrio viene aggiunta alla coppia motrice nella meccanica.
+\texttt{simula\_sea} integra l'anello con \texttt{ode15s}, tolleranze
+relativa $10^{-6}$ e assoluta $10^{-9}$ e passo massimo 0.01 s.
+Le traiettorie di tracking e coppia sono conservate in \texttt{ras.mat}
+e il quadro delle esecuzioni è in \texttt{nonlineare.csv}.
+
+\subsection{Tracking e variazione della massa}
+Nella Figura~\ref{fig:tracking-nl}, LQG e Hinf2 arrivano vicino a
+$5^\circ$ rapidamente nel nominale, mentre LQGI raggiunge la
+stessa posizione con maggiore gradualità. Il PID raggiunge anch'esso
+il riferimento a 12 s. Hinf1 ha un picco superiore a $10^\circ$ e
+mantiene uno scarto visibile. Mu\_A e Mu\_B si fermano sotto
+il riferimento. Il secondo giunto mostra l'accoppiamento durante
+il movimento.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth,height=.66\textheight,keepaspectratio]{figures/editoriale/nonlineare_tracking.png}
+\caption{Tracking non lineare nominale. La linea tratteggiata colorata
+mostra il secondo giunto e la linea puntinata orizzontale il
+riferimento di $5^\circ$ del primo.}
+\label{fig:tracking-nl}
 \end{figure}
 
-L'esito dipende dalla sezione iniziale e dal tempo di osservazione. Non estendiamo una convergenza nominale a tutte le masse e a tutti i ritardi incerti. La stabilità robusta lineare e l'attrazione non lineare locale rispondono a domande diverse.
-
-
-Un insieme interno ottenuto da Lyapunov e una sezione simulata rispondono
-a domande diverse. Il primo include un continuo di stati, purché tutte
-le ipotesi della prova siano verificate; la seconda controlla soltanto
-le condizioni provate. Un grafico di punti non consente di interpolare
-una frontiera garantita. Al contrario, un insieme interno molto piccolo
-non significa che ogni stato esterno diverga: può essere il prezzo della
-maggiorazione prudente del resto o delle coordinate poco ben scalate.
-
-\section{Equazioni e scenari}
-Usiamo due prove nominali per ciascuno dei sette controllori della campagna: gradino di $5^\circ$ sul primo giunto e coppia costante di 0.5 N m sul primo link. L'orizzonte è 12 s. Partiamo dall'equilibrio, con stima e integratore nulli nelle coordinate incrementali. A queste prove affianchiamo tre masse $m_2=0.72,0.8,0.88$ kg, mantenendo nominali i drive: così isoliamo l'effetto della sola massa $m_2$.
-
-
-Per i controllori con due misure usiamo
-\[
- \dot x_K=A_Kx_K+B_K[r;\delta q],\quad
- \delta u=C_Kx_K+D_K[r;\delta q],\quad u=\bar\tau+\delta u.
-\]
-Per LQG/LQGI la misura comprende anche gli angoli motore. L'osservatore
-riceve il comando noto; il disturbo sui link rimane ignoto. Le posizioni
-fisiche sono assolute, mentre le misure fornite al controllore sono
-scostamenti dall'equilibrio. Confondere queste coordinate produrrebbe
-un comando anche nella configurazione nominale ferma.
-Vicino all'equilibrio le traiettorie lineari e non lineari devono essere
-confrontate con lo stesso stato iniziale, ingressi e controllore.
-All'aumentare dell'ampiezza, i termini trigonometrici, inerziali e di
-Coriolis rendono possibile un diverso transitorio. Il confronto locale
-non autorizza una conclusione globale sulla regione di attrazione.
-Il simulatore \texttt{simula\_sea} usa \texttt{ode15s} con tolleranze
-relativa $10^{-6}$ e assoluta $10^{-9}$, passo massimo 0.01 s e
-Jacobiano dello stato completo. Le coordinate interne del controllore
-sono riscalate per il solver con una similitudine, senza riduzione.
-La trasformazione inversa riporta lo stato finale nelle coordinate
-originali. Una differenza di coordinate interne non deve quindi essere
-interpretata come un diverso controllore.
-
-\section{Tracking, disturbi e rumore}
-
-Le prove di questa sezione osservano separatamente il riferimento,
-la coppia sui link e il rumore degli encoder. Nel Capitolo 9 la
-garanzia di prestazione pesata riguarda il solo riferimento.
-Il residuo all'ultimo istante è una misura a orizzonte finito; il guadagno
-DC deriva invece dall'equilibrio della chiusura lineare stabile.
-La deviazione massima sotto coppia e il tempo di recupero entro
-$0.5^\circ$ descrivono aspetti diversi. Il picco di coppia quantifica
-la richiesta massima; l'RMS quella media quadratica sull'intera prova.
-Non sono limiti di targa, poiché il modello non comprende saturazioni.
-Una simulazione completata significa che il solver ha raggiunto il tempo finale con valori finiti. Non significa che il tracking sia soddisfacente. Confrontiamo quindi anche errore finale, picco di posizione e coppia richiesta.
-
+La sovraelongazione misura quanto la risposta supera il riferimento.
+Il tempo di assestamento lineare è riferito al valore finale del
+canale, mentre l'errore statico lineare confronta il guadagno DC
+della chiusura stabile con il riferimento. Per il non lineare
+riportiamo il residuo a 12 s. Nella prova di sola massa
+(Tabella~\ref{tab:tracking-massa}) è l'errore maggiore fra i due giunti,
+in percentuale dei $5^\circ$ richiesti. LQG sale da circa 0.16\%
+al nominale a 6--7\% agli estremi. LQGI, Hinf2 e PID mantengono
+residui piccoli nelle tre prove, mentre Hinf1, Mu\_A e Mu\_B
+conservano uno scarto. Qui varia soltanto $m_2$. Gli effetti della
+variazione congiunta dei drive sono discussi nel Capitolo 11.
 \input{generated/finale_carico_nonlineare.tex}
 
-Il prefiltro LQG è esatto soltanto per il nominale lineare; agli estremi della massa $m_2$ compare offset. L'azione integrale LQGI mantiene invece precisione nei casi provati. I piccoli errori di Hinf2 sulla sola massa $m_2$ non contraddicono la sua fragilità quando variano anche gli attuatori.
+\subsection{Rigetto della coppia al primo link}
+Nelle Figure~\ref{fig:coppia-nl-1} e~\ref{fig:coppia-nl-2} la prova
+inizia dalla verticale. La coppia esterna sposta il braccio e la
+retroazione genera il comando per contrastarla. LQGI e PID
+riportano entrambi i giunti vicino a zero. LQG si ferma con il primo
+giunto spostato di circa $4.1^\circ$. Hinf2 ha uno scostamento
+contenuto in questa prova nominale. Hinf1 e i due finali D--K
+mostrano un residuo dopo il transitorio.
 
-\begin{figure}[!htb]\centering
-\includegraphics[width=.96\linewidth,height=.63\textheight,keepaspectratio]{figures/editoriale/nonlineare_tracking.png}
-\caption{Posizioni nelle sette prove non lineari nominali di tracking,
-dalle traiettorie salvate: riferimento di $5^\circ$ sul primo giunto,
-secondo riferimento nullo, orizzonte 12 s. Ogni pannello mantiene
-visibili entrambi i giunti, anche quando il tracking è insoddisfacente.}
+Il picco di posizione dice quanto il robot si allontana dalla
+postura. Il residuo dice dove si trova a 12 s. Il recupero, nelle
+prove lineari del Capitolo 11, misura quando e se rientra nella fascia
+di $0.5^\circ$. Il picco di coppia è la richiesta istantanea massima
+a monte dei drive. Il PID, ad esempio, richiede circa 2.18 N\,m di
+picco in questa prova, contro circa 1.30 N\,m per LQGI. Le scale delle
+figure variano per pannello. Il completamento delle 14 simulazioni
+attesta il raggiungimento dell'orizzonte, con prestazioni da leggere
+sulle singole traiettorie.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth,height=.45\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_1.png}
+\caption{Coppia costante sul primo link, con riferimento nullo.
+A sinistra lo spostamento dei giunti. A destra il comando richiesto
+dai controllori LQG, LQGI, Hinf1 e Hinf2.}
+\label{fig:coppia-nl-1}
 \end{figure}
-
-Il gradino e la coppia non sono la stessa prova. Nel primo caso il
-controllore deve spostare il robot verso una nuova posizione; nel secondo
-deve contrastare una forza esterna mantenendo la postura. Un prefiltro
-può migliorare il primo obiettivo sul nominale senza introdurre il
-modello interno necessario ad annullare il disturbo costante. Per il
-rumore si usa inoltre una prova separata, a riferimento e coppia nulli:
-altrimenti l'RMS mescolerebbe lo sforzo di inseguimento con quello prodotto
-dall'encoder e renderebbe meno chiara la diagnosi.
-
-\begin{figure}[!htb]\centering
-\includegraphics[width=.96\linewidth,height=.417\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_1.png}
-\caption{LQG, LQGI, Hinf1 e Hinf2: posizioni e comandi salvati con coppia
-costante di 0.5 N m sul primo link. Il riferimento è nullo. Ogni riga
-mostra un controllore; scale proprie permettono di leggere i compromessi.}
-\par\medskip
-\includegraphics[width=.96\linewidth,height=.417\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_2.png}
-\caption{La stessa prova di coppia sul primo link per PID, Mu\_A e Mu\_B.
-Posizioni e comandi sono ricavati dalle traiettorie non lineari salvate,
-con parametri nominali e orizzonte 12 s.}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth,height=.39\textheight,keepaspectratio]{figures/editoriale/nonlineare_disturbo_2.png}
+\caption{Stessa prova di coppia per PID, Mu\_A e Mu\_B. Per leggere
+il residuo si confrontano gli angoli con zero a 12 s.}
+\label{fig:coppia-nl-2}
 \end{figure}
 
 \FloatBarrier
-\section{Tracking e disturbi del servo LQGI}
-LQGI conserva il filtro di Kalman a 14 stati e aggiunge due memorie
-integrali dell'errore misurato. La chiusura completa ha 30 stati.
-Durante una coppia costante, l'integratore continua ad accumulare
-l'errore finché la coppia richiesta compensa il disturbo, nei casi
-stabili in cui esiste un equilibrio compatibile. Non riceve la posizione
-ideale al posto della misura: anche il rumore può entrare in questa
-memoria e deve essere valutato separatamente.
-
-Nel nominale il tracking lineare LQGI ha assestamento \FinLQGITs\ s, overshoot \FinLQGIMp\% e offset DC \FinLQGIEss\%. La lentezza è un compromesso della configurazione scelta. Le prove non lineari di sola massa $m_2$ riportano l'errore finale a 12 s per entrambi i controllori:
-
-I valori sono riportati nella tabella delle prove con sola massa $m_2$ della sezione precedente.
-
-Il confronto rende leggibile il limite del prefiltro nominale e l'effetto della correzione integrale nei casi stabili. I numeri sono residui a tempo finito, distinti da guadagni DC non lineari e da una prova per ogni valore della massa.
+\subsection{Che cosa cambia con il servo LQGI}
+Il prefiltro LQG è tarato per ottenere il guadagno statico desiderato
+sul modello lineare nominale. Quando cambia la massa o interviene una
+coppia costante, può servire una correzione di equilibrio diversa.
+In LQGI l'integratore accumula l'errore misurato finché il comando
+lo compensa, nei casi stabili con un equilibrio compatibile.
+La Figura~\ref{fig:servo-lin-nl} mostra il rientro sotto coppia sia
+nelle curve lineari sia nelle corrispondenti curve non lineari.
+Il vantaggio in precisione ha un prezzo nel transitorio: nel nominale
+lineare il servo si assesta in circa \FinLQGITs\ s, oltre i
+\FinTsLimit\ s richiesti, con sovraelongazione e offset DC nulli.
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=.95\linewidth]{figures/definitiva/lineare_nonlineare_lqg.png}
-\caption{LQG e LQGI: tracking al primo giunto e disturbo sul primo link.
-Le linee tratteggiate sono le corrispondenti chiusure lineari; le continue
-integrano la meccanica completa. Parametri e controllori coincidono.}
+\includegraphics[width=\linewidth]{figures/definitiva/lineare_nonlineare_lqg.png}
+\caption{Confronto LQG/LQGI a parametri nominali. In alto il gradino
+di riferimento e in basso la coppia costante. Tratteggio per il
+modello linearizzato e linea continua per quello non lineare.
+Nella prova di coppia il riferimento è zero.}
+\label{fig:servo-lin-nl}
 \end{figure}
 
-\section{Rumore di misura: dal segnale encoder al comando}
+\section{Rumore di misura e comando}\label{sec:rumore-encoder}
+Un errore dell'encoder entra nella retroazione come se il robot
+si fosse mosso. Il controllore reagisce chiedendo coppia. Drive e
+meccanica attenuano parte delle componenti rapide, per cui una
+posizione apparentemente regolare può accompagnarsi a un comando
+molto grande. La stabilità interna è verificata sui poli della
+chiusura e l'amplificazione del rumore è una proprietà distinta.
+Le covarianze di rumore entrano nel progetto del filtro di Kalman.
+Nei costi pesati di questo confronto il rumore encoder è invece
+un ingresso separato: è nullo sia nella mappa con riferimento e
+coppia sia in quella sul solo riferimento.
 
-Per un controllore 2-DoF poniamo $u=K_rr+K_y(q+v)$. Con $r=d=0$,
-\[
- T_{uv}=(I-K_yG)^{-1}K_y,\qquad T_{qv}=GT_{uv}.
-\]
-La mappa che trasmette il rumore al comando non è penalizzata
-esplicitamente dal costo $[r;d]\to[z_e;z_u]$. Un valore basso di quel
-costo può quindi accompagnarsi a coppie molto grandi sotto rumore.
-Usiamo campioni gaussiani con deviazione standard $0.05^\circ$,
-mantenuti per 2 ms. Questa varianza discreta non è una densità continua.
-Gli encoder producono la stessa sequenza casuale per ogni controllore. I controllori con due misure ricevono le prime due componenti; LQG e LQGI usano tutte e quattro. Il comando viene valutato anche fra gli istanti di campionamento, perché un impulso molto rapido può essere quasi invisibile nei soli valori ogni 2 ms.
+La prova nominale dura 4 s con riferimento e disturbo nulli.
+La stessa sequenza gaussiana di deviazione standard $0.05^\circ$
+è mantenuta costante per intervalli di 2 ms (ZOH). LQG e LQGI
+usano tutte e quattro le componenti, gli altri le prime due.
+La risposta lineare è valutata anche all'interno degli intervalli:
+dopo un cambio di campione il controllore può generare un impulso
+brevissimo che la griglia da 2 ms o uno Scope diradato non risolvono.
+Il picco è il massimo osservato sui due canali nella scansione.
+L'RMS usa il quadrato del comando integrato nel tempo e mediato
+fra i due canali, poi ne prende la radice.
 
 \input{generated/finale_rumore.tex}
 
-Hinf2 richiede coppie molto elevate sotto questa eccitazione, pur avendo una piccola norma nominale sul costo senza rumore. LQG e LQGI filtrano meglio le misure. La distinzione serve a evitare una scelta basata solo su $\gamma$. I valori sono risposte del modello privo di saturazione, non coppie erogabili da un motore reale.
-
-
-Il mantenimento ZOH consente una lettura precisa degli impulsi.
-Se $v_k$ rimane costante nell'intervallo di durata $h=0.002$ s,
-la realizzazione lineare della mappa encoder--comando soddisfa
-\[
- x(t_k+\theta)=e^{A\theta}x(t_k)+
- \left(\int_0^\theta e^{A\eta}B\,d\eta\right)v_k,\quad
- u(t_k+\theta)=Cx(t_k+\theta)+Dv_k,\quad0\le\theta<h.
-\]
-La formula evita di trattare la sequenza mantenuta come una sinusoide
-oppure come rumore bianco continuo. Non richiede $A^{-1}$ e resta valida
-anche se $A$ è singolare. Il termine diretto può produrre un salto;
-modi dinamici molto rapidi possono produrre un picco subito dopo il
-salto anche con $D=0$. Per questo un campione ogni 2 ms può essere
-regolare mentre il massimo fra campioni è molto elevato.
-
-L'RMS temporale è
-$\sqrt{T^{-1}\int_0^T\|u(t)\|^2dt/2}$, distinto dalla media dei soli
-campioni ai bordi degli intervalli. I picchi salvati sono massimi
-osservati nella scansione fra campioni, non massimi globali dimostrati
-per ogni possibile sequenza gaussiana. La norma $H_\infty$ della mappa
-$T_{uv}$ descrive invece un guadagno energetico nel caso peggiore:
-non è numericamente uguale al picco di una specifica realizzazione.
+In Figura~\ref{fig:rumore-comando}, la scala logaritmica mette in
+evidenza la distanza tra i casi. Per Hinf2 il picco ai soli istanti
+di campionamento è 18.7 N\,m. Fra campioni si osservano circa
+$3.67\cdot 10^5$ N\,m e l'RMS integrato è circa $1.07\cdot 10^4$
+N\,m. Mu\_A e Mu\_B mostrano anch'essi picchi intercampione
+molto superiori ai valori letti ogni 2 ms. LQG, LQGI e Hinf1
+restano sotto 0.5 N\,m di picco nella sequenza comune. Sono
+richieste teoriche in assenza di saturazione. La scansione
+quantifica questa realizzazione di rumore, senza stimare un massimo
+valido per ogni sequenza possibile o un limite dei motori.
 
 \begin{figure}[htbp]\centering
-\includegraphics[width=.95\linewidth]{figures/editoriale/rumore_confronto.png}
-\caption{Picco osservato e RMS del comando nella prova encoder comune,
-dai risultati salvati. La scala logaritmica mostra l'ampia differenza
-fra controllori; non rappresenta una traccia temporale o una saturazione.}
+\includegraphics[width=\linewidth]{figures/editoriale/rumore_confronto.png}
+\caption{Picco osservato anche fra campioni e RMS integrato del
+comando. Le barre confrontano la stessa prova encoder per tutti
+i controllori su scala logaritmica.}
+\label{fig:rumore-comando}
 \end{figure}
 
-Il drive e la meccanica possono attenuare le frequenze alte prima
-che raggiungano la posizione, lasciando comunque una richiesta di
-comando enorme. Una posizione apparentemente regolare non basta a
-valutare la fattibilità dell'attuazione. D'altra parte un comando grande
-non prova da solo instabilità interna, che viene controllata sui poli.
-Queste due verifiche vanno mantenute distinte.
-
 \input{sections/10_originali_simulink}
-
-\section{Verifiche dedicate dei candidati con rumore}
-La formulazione teorica dei Capitoli 8 e 9 richiederebbe un confronto
-abbinato: stessi parametri, condizioni iniziali, riferimento, coppia e
-sequenza encoder, cambiando soltanto il controllore. Sarebbe utile
-separare encoder singoli, encoder indipendenti o correlati, processo
-e ingressi combinati, per individuare quale canale genera il comando.
-Tali scenari spiegano come verificare una nuova sintesi senza
-attribuire al tuning un miglioramento causato dal cambio di eccitazione.
-Non sono una campagna aggiuntiva eseguita sui sette candidati della traccia.
-La prova encoder comune e i risultati già riportati sono quelli disponibili.
-
-\subsection{Esecuzioni Simulink abbinate}
-Il confronto numerico in uno SLX richiede lo stesso selettore di misura,
-solver, rumore, durata e disturbo. Occorre poi verificare che le matrici
-assegnate siano davvero quelle del candidato e che gli Scope acquisiscano
-gli stessi segnali. Un run completato controlla esecuzione e interfacce;
-non certifica il picco continuo fra campioni né la robustezza della
-famiglia. Le esecuzioni salvate descritte nella sezione precedente
-restano le evidenze disponibili, senza accreditarne altre a questa
-formulazione con rumore.
-
-\subsection{Attrazione e stato aumentato dei candidati}
-Un eventuale controllore riprogettato richiederebbe di ricostruire tutto
-lo stato aumentato. Se cambia l'ordine di $K$, cambiano anche dimensione
-del Jacobiano e funzione candidata di Lyapunov. Le condizioni iniziali
-fisiche dovrebbero restare comuni, con memoria del controllore
-esplicitamente fissata. La stabilità del linearizzato assicura un
-comportamento locale per la dinamica regolare nominale, ma non assegna
-un raggio numerico alla RAS. I 105 casi empirici qui documentati non
-si trasferiscono automaticamente a un diverso controllore, a masse
-variabili durante il moto o alla presenza di saturazioni.

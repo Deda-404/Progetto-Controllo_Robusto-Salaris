@@ -4,6 +4,9 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Rivisti i Capitoli 10–13. Esplicitati il protocollo RAS, il significato di picco e RMS sotto rumore e le condizioni dei collaudi Simulink. La tabella finale distingue NS/RS, target nominali e NP/RP sulle mappe di riferimento e riferimento–coppia.
+- Aggiornati elaborati e note orali. Ingranditi i pannelli scelti per tracking e RAS nelle slide e conservata la tabella PowerPoint modificabile. Il parlato stimato con i cambi di slide è di 17:17.
+
 - Verificati i sei passi D–K salvati su A e B, con cinque controllori distinti. MuN1, inizializzazione comune, passa RP sul riferimento in entrambe le famiglie. Le prove nominali separate mostrano un errore statico dell'8,24%.
 - Aggiunte la diagnosi di Mu_A e Mu_B e la tabella di confronto con MuN1. Tolta la colonna Origine dalla Tabella 9.2 e corretta l'etichettatura del grafico in `progetto_mu.m`. Aggiornati relazione, slide e note orali.
 

@@ -1,3 +1,13 @@
+# Stato corrente — 21.11.2026, revisione finale dei Capitoli 10–13
+
+Gate editoriale COMPLETE/PASS. Relazione integrale di 70 pagine con 13 capitoli e 42 figure, PDF e PowerPoint di 23 slide. Verificati compilazione, riferimenti, impaginazione, identità visiva e testuale dei Capitoli 1–9 con la HEAD iniziale, rendering PowerPoint 16.0 e tabella modificabile della slide 15. Il parlato stimato con i cambi slide è 17:17 a 125 parole/minuto. Prova dal vivo NOT RUN.
+
+MATLAB R2026b: 5/5 test del percorso corrente. Controllate le norme sulle due mappe in 16 chiusure nominali, le corrispondenze MAT/CSV per robustezza sul riferimento, RAS, non lineare e riesame D–K, e l'identità dei controllori salvati. Esiti robusti confrontati con gli intervalli salvati. Nuove sintesi, ricalcolo integrale dei margini e nuove campagne non lineari e Simulink NOT RUN.
+
+LQG e Hinf2 rispettano i quattro target nominali. LQG e MuN1 passano RP sul riferimento in A e B, con errore statico di MuN1 oltre il 5%. Tutti i sette controllori della banca falliscono RP sulla mappa completa. Copertura globale di B, RAS certificata e verifica hardware restano aperte. Prossimo passo — lettura finale degli autori sulla PR #55.
+
+---
+
 # Stato corrente — 16.11.2026, confronto con MuN1
 
 Gate COMPLETE/PASS per il riesame dei controllori salvati. MuN1 è l'unico fra i cinque controllori distinti del riesame D–K a passare RP sul riferimento su A e B. Nel confronto nominale con LQG riduce il picco di comando di tracking, supera il limite di errore statico e mostra picchi più alti sotto coppia e rumore. LQG resta il riferimento per i quattro target nominali. La condizione per nuove D–K sul riferimento rimane insoddisfatta.

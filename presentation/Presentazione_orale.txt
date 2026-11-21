@@ -32,10 +32,10 @@ Regia: Spiegare lo zero destro di Padé prima del fit.
 
 SLIDE 5 — Specifiche: obiettivi temporali e norma pesata
 Studente: Valerio
-Tempo previsto: 0:52 (109 parole a 125 parole/min)
+Tempo previsto: 0:48 (98 parole a 125 parole/min)
 Testo da pronunciare:
-Le specifiche del moto si affiancano alle verifiche di stabilità della chiusura e di prestazione pesata sul solo riferimento. Dopo il confronto fra tre alternative iniziali, il limite di assestamento è fissato a cinque secondi per tenere conto delle dinamiche elastiche e dei ritardi dei drive. I limiti di sovraelongazione, errore statico e accoppiamento sono rispettivamente quindici, cinque e venticinque per cento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. Quel tempo descrive la risposta del riferimento. I cinque secondi si applicano al manipolatore in anello chiuso. Le coppie rimangono indicatori diagnostici, perché non disponiamo di limiti hardware assegnati.
-Regia: Distinguere target temporali e soglie matematiche.
+I target del moto si applicano insieme sul nominale. Dopo il confronto fra tre soglie iniziali, abbiamo scelto cinque secondi per l’assestamento. I limiti di sovraelongazione, errore statico e accoppiamento sono quindici, cinque e venticinque per cento. Il modello desiderato è un secondo ordine criticamente smorzato che si assesta in circa un secondo e novantaquattro. Il limite di cinque secondi si applica invece alla risposta del manipolatore in anello chiuso. Per il costo pesato distinguiamo la mappa con riferimento e coppia dalla post-analisi sul solo riferimento. Le coppie richieste restano indicatori diagnostici in assenza di limiti hardware.
+Regia: Distinguere i quattro target nominali dalle due mappe pesate.
 
 SLIDE 6 — LQR: il costo deriva dalle grandezze fisiche
 Studente: Valerio
@@ -53,7 +53,7 @@ Regia: Seguire innovazione e comando.
 
 SLIDE 8 — LQGI: memoria dell'errore misurato
 Studente: Alessio
-Tempo previsto: 0:47 (97 parole a 125 parole/min)
+Tempo previsto: 0:48 (98 parole a 125 parole/min)
 Testo da pronunciare:
 LQGI aggiunge la memoria dell’errore misurato. Quando rimane un offset, l’integratore continua a modificare il comando finché quell’errore si riduce. Aumentiamo la pianta con due stati e ricaviamo insieme i guadagni sullo stato e sull’integrale da una sola Riccati. L’osservatore mantiene il nominale ed è alimentato dal comando effettivo. Il sistema chiuso contiene trenta stati. Nei casi stabili otteniamo precisione statica e reiezione della coppia costante, ma nel nominale l’assestamento dura circa cinque secondi e cinque centesimi, poco oltre il limite. Non sono presenti saturazioni, quindi non attribuiamo al modello una gestione dell’anti-windup che non abbiamo implementato.
 Regia: Indicare i due integratori.
@@ -88,10 +88,10 @@ Regia: Distinguere margine e mu.
 
 SLIDE 13 — D--K: stessi pesi e stessa inizializzazione
 Studente: Alessio
-Tempo previsto: 0:48 (101 parole a 125 parole/min)
+Tempo previsto: 0:46 (94 parole a 125 parole/min)
 Testo da pronunciare:
-La sintesi D–K alterna il progetto del controllore con scaling fissati e l’analisi della struttura incerta. Eseguiamo una sintesi su A e una su B, mantenendo uguali pesi, modello desiderato e controllore iniziale. Limitiamo il procedimento a tre iterazioni. Il costo delle due sintesi include riferimento e coppia e resta sopra uno. La tabella affianca norma e RP sul solo riferimento. MuN1, lo stesso controllore iniziale delle due ricerche, passa RP in entrambe le famiglie. Richiede meno coppia nel tracking rispetto a LQG. Il suo errore statico è dell’otto virgola ventiquattro per cento e il picco sotto rumore è più alto.
-Regia: Indicare MuN1 come inizializzazione comune e leggere il limite sull’errore statico.
+La D–K alterna la sintesi con scaling fissati e l’analisi della struttura incerta. Manteniamo pesi, modello desiderato e controllore iniziale uguali su A e B. Dopo tre iterazioni l’obiettivo di sintesi con riferimento e coppia resta sopra uno. La tabella mostra invece la post-analisi sulla mappa del solo riferimento. MuN1, inizializzazione comune e candidato aggiuntivo, passa RP sul riferimento in entrambe le famiglie. Richiede meno comando durante il tracking, con errore statico dell’otto virgola ventiquattro per cento e picchi di posizione sotto coppia e di comando sotto rumore più alti di LQG.
+Regia: Indicare le due mappe e il limite di errore statico di MuN1.
 
 SLIDE 14 — La post-analisi distingue le due rappresentazioni
 Studente: Alessio
@@ -102,66 +102,66 @@ Regia: Confrontare A e B a controllore fissato.
 
 SLIDE 15 — Robustezza pesata e target temporali sono distinti
 Studente: Alessio
-Tempo previsto: 0:52 (109 parole a 125 parole/min)
+Tempo previsto: 0:45 (93 parole a 125 parole/min)
 Testo da pronunciare:
-La tabella confronta assestamento nominale, stabilità e costo pesato sul solo riferimento. Fra i sette della tabella, LQG soddisfa RP in A e B. MuN1 compare nel riesame della slide D–K. Hinf2 e PID rispettano la norma sul nominale, ma perdono stabilità entro l’incertezza ammessa. Mu_B passa NP e RS, ma fallisce RP sul guadagno. Negli altri tre casi la norma supera uno già sul nominale. Con cinque secondi PID e Mu_B rispettano il solo requisito di assestamento nominale. Il PID supera il limite di accoppiamento e Mu_B quello di errore statico. Per il disturbo di coppia usiamo le prove dedicate, con i picchi e i tempi di rientro.
-Regia: Mostrare RP di LQG e il limite RS di Hinf2.
+La tabella affianca il solo assestamento nominale e gli esiti di stabilità e di prestazione sul riferimento per i sette controllori. LQG passa RP in A e B. MuN1 compare nel riesame D–K. Hinf2 e PID rispettano la norma sul nominale e perdono stabilità entro l’incertezza ammessa. Mu_B mantiene la stabilità robusta e passa NP sul riferimento, ma fallisce RP sul riferimento. PID e Mu_B rientrano nei cinque secondi, ma superano rispettivamente il limite di accoppiamento e di errore statico. Nel confronto storico con riferimento e coppia, tutti e sette falliscono RP.
+Regia: Leggere la tabella sul riferimento e richiamare l’esito del problema completo.
 
 SLIDE 16 — Dieci impianti: la stessa fisica per tutti
 Studente: Valerio
-Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Tempo previsto: 0:34 (70 parole a 125 parole/min)
 Testo da pronunciare:
-Per le simulazioni estraiamo una sola volta dieci combinazioni fisiche, con seed fissato. Ogni combinazione contiene entrambe le coppie di parametri attuativi e la massa. Tutti i controllori ricevono esattamente questi impianti. Per B non generiamo una popolazione diversa: ricostruiamo gli stessi drive usando le perturbazioni additive normalizzate. A parità di controllore e di impianto, la risposta deve quindi coincidere. Prima delle metriche temporali controlliamo la stabilità interna. I casi instabili rimangono nel conteggio e non ricevono prestazioni finite che potrebbero renderli artificialmente confrontabili.
-Regia: Ricordare la stessa settupla per tutti.
+Estraiamo una sola volta dieci quintuple con seed fissato. Ciascuna contiene frequenza naturale e ritardo per ciascun drive, oltre alla massa. Per B ricostruiamo gli stessi drive con le perturbazioni additive. A parità di pianta e controllore le risposte coincidono, mentre i margini dipendono da tutto l’insieme ammesso. Prima delle metriche controlliamo i poli della chiusura. I casi instabili rimangono nel conteggio e le loro metriche temporali restano non definite.
+Regia: Seguire la stessa quintupla da A alla ricostruzione in B.
 
 SLIDE 17 — Tracking e disturbi sugli impianti incerti
 Studente: Valerio
-Tempo previsto: 0:41 (84 parole a 125 parole/min)
+Tempo previsto: 0:42 (87 parole a 125 parole/min)
 Testo da pronunciare:
-Le curve mostrano il primo giunto sotto un riferimento di cinque gradi, mentre le metriche comprendono entrambi gli assi. La dispersione rende visibile quanto il risultato cambia nella famiglia fisica. Misuriamo separatamente errore statico, assestamento, sovraelongazione e movimento del giunto non comandato. Per il disturbo applichiamo mezzo newton metro direttamente al link e controlliamo il recupero. Dieci casi riusciti non dimostrano una garanzia su tutti i parametri. Un caso instabile, invece, basta a mostrare un limite concreto: per questo le simulazioni accompagnano l’analisi robusta.
-Regia: Indicare la dispersione delle risposte.
+Le curve mostrano il primo giunto con un gradino di cinque gradi. Le metriche comprendono anche il secondo giunto. Il grafico mostra poche curve per Hinf2 perché nove campioni su dieci sono instabili. Il PID ne perde due. Nella prova separata applichiamo mezzo newton metro direttamente a un link e misuriamo il rientro intorno all’equilibrio. LQGI rientra anche nel caso stabile peggiore in circa tre secondi e mezzo. I dieci impianti mostrano la dispersione e i controesempi di stabilità. La garanzia riguarda la famiglia dichiarata nell’analisi robusta.
+Regia: Collegare il numero di curve ai casi stabili e distinguere tracking e coppia.
 
 SLIDE 18 — Il rumore encoder può dominare il comando
 Studente: Valerio
-Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Tempo previsto: 0:41 (85 parole a 125 parole/min)
 Testo da pronunciare:
-Il rumore viene applicato senza riferimento e senza disturbo, con la stessa sequenza e la stessa deviazione standard per tutti. Manteniamo ogni campione per due millisecondi. Non osserviamo soltanto gli istanti campionati, perché alcuni controllori producono impulsi molto rapidi fra un campione e il successivo. La tabella riporta quindi picchi e RMS integrati. Hinf2 amplifica fortemente le misure e richiede coppie molto elevate. La sua buona norma sul costo senza rumore non lo rende una soluzione utilizzabile. LQG e LQGI mostrano invece il beneficio del filtraggio delle misure.
-Regia: Confrontare gli ordini di grandezza del comando.
+Il rumore encoder entra nella retroazione come un movimento apparente. Manteniamo ogni campione per due millisecondi. In Hinf2 leggiamo circa diciannove newton metro agli istanti campionati, ma fra campioni emergono impulsi molto più grandi. La posizione può apparire regolare perché i drive e la meccanica attenuano i cambiamenti rapidi. Il picco mostra la massima richiesta osservata e l’RMS sintetizza lo sforzo sull’intera prova. MuN1 chiede più comando di LQG. I valori sono richieste del modello senza saturazione. La stabilità interna viene verificata separatamente sui poli.
+Regia: Indicare il picco intercampione di Hinf2 e ricordare l’assenza di saturazioni.
 
 SLIDE 19 — Massa del secondo link e movimento non lineare
 Studente: Alessio
-Tempo previsto: 0:46 (95 parole a 125 parole/min)
+Tempo previsto: 0:40 (82 parole a 125 parole/min)
 Testo da pronunciare:
-Per isolare l’effetto meccanico ripetiamo il movimento non lineare con masse del secondo link pari a zero virgola settantadue, zero virgola otto e zero virgola ottantotto chilogrammi, mantenendo nominali i drive. Il riferimento è sempre cinque gradi al primo giunto. LQG usa un prefiltro calcolato per la massa centrale: agli estremi compare un errore finale. LQGI osserva l’errore misurato e lo corregge attraverso l’integratore. La massa entra contemporaneamente nelle accelerazioni, nei termini di velocità e nella gravità. Rimane costante durante ogni prova: le prove descrivono una massa costante, non una variazione improvvisa durante il moto.
-Regia: Indicare gli estremi di massa.
+Ripetiamo il movimento non lineare a tre masse del secondo link, mantenendo nominali i drive. Applichiamo sempre cinque gradi al primo giunto. La tabella mostra il residuo a dodici secondi. LQG usa un prefiltro per la massa nominale e lascia circa sei o sette per cento di scarto agli estremi. LQGI accumula l’errore misurato e lo corregge. Nel nominale lineare il suo assestamento supera di poco cinque secondi. La massa entra in inerzia, Coriolis e gravità e resta fissa durante ciascuna prova.
+Regia: Leggere i residui alle tre masse e richiamare il compromesso sull’assestamento.
 
 SLIDE 20 — Regione di attrazione: una sezione empirica
 Studente: Alessio
 Tempo previsto: 0:43 (89 parole a 125 parole/min)
 Testo da pronunciare:
-La regione di attrazione comprende tutti gli stati dai quali il sistema non lineare torna all’equilibrio. Qui osserviamo soltanto una sezione: cinque direzioni per tre raggi, con angoli dei rotori spostati come quelli dei link e altri stati inizialmente nulli. Usiamo quindici secondi e condizioni finali su posizione, velocità e comando. I cerchi verdi indicano convergenza osservata. Mancata convergenza, allontanamento, timeout ed errore numerico sono classificazioni separate. Non disegniamo una frontiera certificata attraverso pochi punti e non estendiamo il risultato nominale a tutte le masse e tutti i ritardi.
-Regia: Leggere simboli e sezione iniziale.
+La regione di attrazione comprende gli stati dai quali l’anello non lineare torna all’equilibrio. Qui vediamo una sezione: cinque direzioni per tre raggi, motori spostati quanto i link e gli altri stati incrementali inizialmente nulli. I cerchi verdi soddisfano il criterio finale su posizione, velocità e comando. I quadrati indicano che a quindici secondi il criterio non è raggiunto. Le due croci di Hinf2 indicano uno stop anticipato per allontanamento. Ogni simbolo riguarda un punto iniziale e le traiettorie grigie mostrano il moto. La frontiera continua resta da certificare.
+Regia: Indicare la croce a trenta gradi e spiegare la differenza rispetto al quadrato.
 
 SLIDE 21 — Simulink lineare: servo LQGI
 Studente: Valerio
-Tempo previsto: 0:40 (83 parole a 125 parole/min)
+Tempo previsto: 0:32 (66 parole a 125 parole/min)
 Testo da pronunciare:
-Nel modello Simulink lineare riconosciamo la stessa architettura LQGI spiegata prima: pianta fisica, osservatore e integratore dell’errore misurato. Le matrici della pianta vengono ricalcolate con la massa della prova. L’osservatore mantiene invece il nominale: adattarlo al campione gli darebbe una conoscenza che non fa parte del problema. Il runner assegna parametri e stati iniziali senza dipendere da variabili lasciate nel Workspace. In questo modo il confronto con le equazioni MATLAB riguarda lo stesso sistema, con gli stessi significati per comando, disturbo e misure.
-Regia: Seguire osservatore e integratore.
+Nel modello lineare il riferimento arriva all’integratore. Gli encoder alimentano sia la retroazione sia l’osservatore, che usa anche il comando calcolato. Il disturbo agisce direttamente sul link e la pianta produce le posizioni. Nelle prove di massa cambiano le matrici della pianta, mentre lo stimatore mantiene quelle nominali. Il diagramma permette di seguire il percorso dei segnali, lo stesso usato per confrontare modello MATLAB e Simulink.
+Regia: Seguire riferimento, misure, comando e disturbo lato link.
 
 SLIDE 22 — Simulink non lineare: la stessa legge di controllo
 Studente: Valerio
-Tempo previsto: 0:43 (88 parole a 125 parole/min)
+Tempo previsto: 0:39 (81 parole a 125 parole/min)
 Testo da pronunciare:
-Nel modello non lineare sostituiamo la pianta linearizzata con le equazioni del SEA, mantenendo la legge di controllo. Il runner aggiorna in memoria i generatori incorporati con la massa m2 della prova e assegna separatamente i parametri dei due drive. Non duplichiamo gli SLX. Le venti esecuzioni comprendono nominale e primo campione comune, con entrambi i candidati robusti nei modelli dedicati. Controlliamo il tempo finale, gli stati finiti e l’acquisizione degli Scope. Superare questo collaudo conferma l’esecuzione e la coerenza dei dati, non il rispetto automatico delle prestazioni.
-Regia: Indicare il cambio della pianta.
+Nel modello non lineare la stessa legge di controllo agisce sulle equazioni complete del SEA. Le venti esecuzioni salvate durano due secondi. Per ogni modello usiamo il nominale e il primo dei dieci campioni, con entrambi i finali D–K nei modelli mu. Controlliamo tempo finale, stati finiti e acquisizione degli Scope. I grafici mostrano il moto iniziale e il comando. Per misurare l’assestamento del servo e i picchi fra campioni usiamo le prove dedicate, con orizzonte o risoluzione più adatti.
+Regia: Chiarire il ruolo del campione 1 e la lettura dei due secondi di Scope.
 
 SLIDE 23 — Conclusioni e limiti verificati
 Studente: Valerio
-Tempo previsto: 0:56 (116 parole a 125 parole/min)
+Tempo previsto: 0:44 (90 parole a 125 parole/min)
 Testo da pronunciare:
-Il modello parametrico conserva la spiegazione fisica delle variazioni. Quello concentrato descrive i drive con due perturbazioni pesate, lasciando esplicita la massa meccanica, ma concede dinamiche più generali. Il ritardo variabile rende necessaria una scelta attenta della forma di incertezza; qui la forma additiva è stabile e verificabile. LQG soddisfa la prestazione robusta sul riferimento in entrambe le famiglie e rispetta i quattro target nominali. Nel riesame MuN1 passa RP e supera il limite di errore statico. La reiezione della coppia si valuta con le prove dedicate. Le altre famiglie chiariscono i limiti della sola norma nominale e della sintesi robusta. Restano copertura campionata, RAS empirica e assenza di saturazioni: limiti espliciti di un confronto riproducibile.
-Regia: Chiudere con il compromesso A/B e i limiti.
+A lega le variazioni a frequenze, ritardi e massa. B usa due dinamiche additive pesate e mantiene la massa esplicita. LQG unisce i quattro target nominali alla prestazione robusta sul riferimento e a un comando contenuto sotto rumore. MuN1 dispone di maggiore riserva pesata sul riferimento e supera il limite di errore statico. Nel problema completo riferimento e coppia, nessuno dei sette passa la prestazione robusta. Chiudiamo con tre limiti: copertura di B verificata per campioni, regione di attrazione osservata per punti e simulazioni senza saturazioni né prove sul robot.
+Regia: Chiudere con l’esito sulla mappa completa e i limiti sperimentali.
 
 APPENDICE — POSSIBILI DOMANDE E RISPOSTE
 Perché m2 non modifica soltanto G?

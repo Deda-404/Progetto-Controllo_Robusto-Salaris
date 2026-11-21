@@ -2544,3 +2544,11 @@ LQG e Mu_B passano ora NP sul riferimento. Entrambi soddisfano RS in A e B. Solo
 Il riesame usa la stessa post-analisi sul riferimento per ciascun controllore salvato, in A e B. La scelta richiede RP su entrambe le famiglie e tiene conto dei transitori, della precisione e della risposta alla coppia e al rumore nelle prove nominali. MuN1 è lo stesso controllore all'inizio dei due percorsi D–K e proviene dalla campagna con rumore encoder. Ottiene la seconda garanzia RP sul riferimento oltre a LQG, con riserva maggiore sulla norma pesata.
 
 Una nuova D–K avrebbe ottimizzato $T_{zr}$ scegliendo gli ingressi $[r;u]$ della pianta generalizzata, con gli stessi pesi e incertezze. Il doppio PASS di un controllore salvato soddisfa la condizione richiesta per fermare la ricerca. L'errore statico di MuN1 supera 5% e il suo comando sotto rumore è più elevato. Il confronto lascia LQG come scelta per il rispetto dei quattro target nominali e per i risultati nella prova encoder comune.
+
+## 2026-11-21 — Esposizione delle verifiche finali
+
+**Decisione.** Usare le prove salvate come evidenza per i Capitoli 10–13. Per Lyapunov basta enunciare il criterio di certificazione su un sottolivello. Le tabelle della RAS, della massa e del rumore documentano esiti distinti che servono a leggere i grafici e i compromessi.
+
+**Alternative.** Una derivazione completa di Lyapunov richiederebbe un sottolivello verificato numericamente; cancellare la tabella della massa o il caso di rumore estremo toglierebbe evidenza quantitativa per l'integratore e per il comando intercampione. Le slide mostrano tre pannelli rappresentativi per rendere leggibili le curve.
+
+**Conseguenze.** Il confronto usa i quattro target nominali e le due mappe pesate, con proprietà robuste legate alla famiglia dichiarata. Le conclusioni sul rumore, sugli Scope e sulla RAS restano circoscritte agli ingressi e agli orizzonti delle prove. Gate editoriale COMPLETE/PASS. Le limitazioni prestazionali e sperimentali restano quelle documentate.

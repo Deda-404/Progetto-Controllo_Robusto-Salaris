@@ -176,6 +176,7 @@ def main():
     rasrows=[]; plantrows=[]; timerows=[]; disturbrows=[]; noiserows=[]; loadrows=[]
     load=read("massa_nonlineare")
     finalrows=[]; settling_results={}
+    full=read("confronto_robusto")
     for name in CURRENT:
         counts=Counter(x["Esito"] for x in ras if x["Controllore"]==name)
         assert sum(counts.values())==15 and set(counts).issubset(states)
@@ -196,9 +197,16 @@ def main():
                          num(100*float(n["Cross"])),"PASS" if ok else "FAIL"])
         rb=[x for x in robust if x['Controllore']==name]
         assert [row["Analisi"][0] for row in rb] == ["A", "B"] and rb[0]["NP_r"] == rb[1]["NP_r"]
-        finalrows.append([esc(name),'PASS' if ok else 'FAIL','PASS' if rb[0]['NP_r']=='1' else 'FAIL',
-                          '/'.join(short_status(x['RS']) for x in rb),
-                          '/'.join(short_status(x['RP_r']) for x in rb)])
+        complete = [x for x in full if x["Controllore"] == name]
+        assert [row["Analisi"][0] for row in complete] == ["A", "B"]
+        assert all(x["NS"] == y["NS"] and x["RS"] == y["RS"] for x, y in zip(rb, complete))
+        assert complete[0]["NP"] == complete[1]["NP"]
+        finalrows.append([
+            esc(name), 'PASS' if ok else 'FAIL', 'PASS' if all(x["NS"] == "1" for x in rb) else 'FAIL',
+            '/'.join(short_status(x['RS']) for x in rb),
+            'PASS' if rb[0]['NP_r'] == '1' else 'FAIL', '/'.join(short_status(x['RP_r']) for x in rb),
+            'PASS' if complete[0]['NP'] == '1' else 'FAIL', '/'.join(short_status(x['RP']) for x in complete),
+        ])
         disturbrows.append([esc(name),num(180/math.pi*float(n["PiccoDisturboRad"])),num(n["RecuperoDisturbo"]),maximum("RecuperoDisturbo")])
         v=next(x for x in noise if x["Controllore"]==name)
         noiserows.append([esc(name),num(v["PiccoCampioni"],4),num(v["PiccoTraCampioni"],4),num(v["RMSIntegrato"],4)])
@@ -208,6 +216,10 @@ def main():
         values.update({tag+"Stable":str(len(stable)),tag+"Conv":str(counts["CONVERGENZA"]),tag+"Peak":num(v["PiccoTraCampioni"],3),tag+"Rms":num(v["RMSIntegrato"],3),tag+"Ts":num(n["Assestamento"]),tag+"Ess":percent(n["ErroreDC"])})
         values.update({tag+'Mp':num(n['OvershootPercent']),tag+'Cross':num(100*float(n['Cross'])),
                        tag+'TrackPeak':num(n['PiccoComando']),tag+'Target':'PASS' if ok else 'FAIL'})
+        if name == "LQGI":
+            values["LQGIRecuperoMax"] = maximum("RecuperoDisturbo")
+        if name == "Hinf2":
+            values["HinfTwoPiccoCampioni"] = num(v["PiccoCampioni"])
         values.update({tag+'NonConv':str(counts['MANCATA_CONVERGENZA']),
                        tag+'Div':str(counts['DIVERGENZA_OSSERVATA'])})
         for x in robust:
@@ -223,23 +235,31 @@ def main():
                 values[tag+'OrdineChiuso']=str(14+int(x['Ordine']))
                 values[tag+'IntervalloRS'+a]=interval(x,'RS')
                 values[tag+'Frequenza'+a]=num(x['FrequenzaCritica'],4)
-    table('confronto_finale',['Controllore','Target nominali',r'$\mathrm{NP}_r$','RS A/B',r'$\mathrm{RP}_r$ A/B'],finalrows,
-          r'Target temporali, stabilità robusta e costo pesato del solo riferimento. Gli intervalli dei margini sono nel Capitolo 9.')
+    table('confronto_finale',
+          ['Controllore', 'Target', 'NS', 'RS A/B', r'$\mathrm{NP}_r$', r'$\mathrm{RP}_r$ A/B',
+           r'$\mathrm{NP}_{rd}$', r'$\mathrm{RP}_{rd}$ A/B'], finalrows,
+          'Sette controllori della banca. Target indica il rispetto congiunto delle quattro specifiche nominali. '
+          'I pedici r e rd indicano la mappa sul riferimento e quella su riferimento e coppia.',
+          'tab:confronto-per-ruolo')
     table('frequenze',['Controllore','A/B',r'$\omega_{RS}$ [rad/s]'],
           [[esc(x['Controllore']),x['Analisi'][0],num(x['FrequenzaCritica'],4)] for x in robust],
           'Frequenze critiche restituite dall\'analisi di stabilità robusta dello stesso controllore su A e B.')
     table("ras",["Controllore","Conv.","Non conv.","Allont.","Timeout","Errore"],rasrows,
           "Quindici condizioni iniziali per controllore. Gli esiti numerici restano separati dall'attrazione osservata.")
     table("impianti",["Controllore","Stabili",r"Errore DC [\%]","Picco u [N m]",r"Picco $q_d$ [$^\circ$]"],plantrows,
-          "Dieci impianti comuni: massimi sui soli casi stabili. Errore DC relativo e coppia link di 0.5 N m.")
+          "Dieci impianti comuni. Massimi sui casi stabili: errore DC e comando nel tracking, "
+          "picco di posizione sotto coppia lato link di 0.5 N m.", "tab:impianti-comuni")
     table("temporali",["Controllore",r"$T_s$ [s]",r"Esito $T_s$",r"$M_p$ [\%]",r"$e_{ss}$ [\%]",r"Cross [\%]","Esito congiunto"],timerows,
-          r"Nominale corrente: target simultanei \FinTsLimit\ s, 15\%, 5\%, 25\%. Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.")
+          r"Nominale corrente. Target simultanei \FinTsLimit\ s, 15\%, 5\%, 25\%. "
+          "Il tempo di assestamento è misurato rispetto al valore finale, l'errore DC rispetto al riferimento.",
+          "tab:quattro-target")
     table("disturbo",["Controllore",r"Picco $q_d$ [$^\circ$]","Recupero nom. [s]","Recupero max [s]"],disturbrows,
           "Coppie link separate: peggiore asse nominale e massimo fra campioni stabili. Infinito indica mancato rientro entro 0.5 gradi nell'orizzonte di 12 s.")
     table("rumore",["Controllore","Picco a 2 ms","Picco fra campioni","RMS integrato"],noiserows,
           "Comando in N m: rumore encoder comune, ZOH 2 ms, 4 s. Picchi osservati senza saturazione; RMS medio fra canali.")
     table("carico_nonlineare",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows,
-          r"Errore finale non lineare relativo [\%] a 12 s, riferimento di 5 gradi al primo giunto; drive nominali. Non è una misura asintotica.")
+          r"Errore finale non lineare relativo [\%] a 12 s. Riferimento di 5 gradi al primo giunto, drive nominali.",
+          "tab:tracking-massa")
     # Tabelle compatte per le slide: un'unica fonte numerica.
     table("slide_hinf",["Soluzione","Ordine","Norma comune"],
           [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4)] for x in hinf],"",slide=True)
@@ -273,7 +293,8 @@ def main():
                            r"$\mathrm{RP}_r$ A", r"$\mathrm{RP}_r$ B", r"$T_s$ [s]", r"$e_{ss}$ [\%]"],
           comparison, r"Confronto con MuN1. Per RS è mostrato il limite inferiore. Per RP sul riferimento valgono gli intervalli di guadagno o i limiti dedotti della Tabella~\ref{tab:cap9-robustezza}.",
           "tab:cap9-riesame-r")
-    values.update({"MuNOneNormaR": num(mu[0]["NormaNominaleR"], 4),
+    values.update({"MuNOneNorma": num(mu[0]["NormaNominaleRD"], 4),
+                   "MuNOneNormaR": num(mu[0]["NormaNominaleR"], 4),
                    "MuNOneOrdine": mu[0]["Ordine"],
                    "MuNOneEsitoRPA": mu[0]["RP_r"], "MuNOneEsitoRPB": mu[1]["RP_r"],
                    "MuNOneRPA": rp_margin(mu[0]), "MuNOneRPB": rp_margin(mu[1]),
