@@ -2552,3 +2552,17 @@ Una nuova D–K avrebbe ottimizzato $T_{zr}$ scegliendo gli ingressi $[r;u]$ del
 **Alternative.** Una derivazione completa di Lyapunov richiederebbe un sottolivello verificato numericamente; cancellare la tabella della massa o il caso di rumore estremo toglierebbe evidenza quantitativa per l'integratore e per il comando intercampione. Le slide mostrano tre pannelli rappresentativi per rendere leggibili le curve.
 
 **Conseguenze.** Il confronto usa i quattro target nominali e le due mappe pesate, con proprietà robuste legate alla famiglia dichiarata. Le conclusioni sul rumore, sugli Scope e sulla RAS restano circoscritte agli ingressi e agli orizzonti delle prove. Gate editoriale COMPLETE/PASS. Le limitazioni prestazionali e sperimentali restano quelle documentate.
+
+## 2026-11-24 — MuN1 sulla mappa completa e lettura della D–K
+
+**Stato** — Proposta per la revisione degli autori nella PR di consegna.
+
+La verifica su Tz[r;d] completa il confronto: MuN1 soddisfa RP su entrambe le mappe e famiglie, mentre i sette controllori della banca la falliscono. La banca ufficiale resta di sette controllori; MuN1 compare nella tabella finale come riga distinta del riesame D–K. Il picco µ della ricerca scende mentre la prestazione effettiva peggiora: l'esito RP si legge sulla post-analisi, non sul limite superiore della D–K. Pesi, incertezze e definizioni NS/NP/RS/RP invariati.
+
+## 2026-11-24 — Modelli Simulink salvati in R2026a
+
+**Decisione.** Usare gli SLX degli autori salvati in R2026a, con la sola callback `InitFcn` del progetto, al posto di quelli del 4 novembre salvati in R2026b.
+
+**Alternative.** Esportare i modelli del 4 novembre da R2026b (nessuna installazione disponibile); consegnare in R2026b dichiarando il requisito.
+
+**Conseguenze.** I modelli si aprono in R2026a e nelle release successive. Le modifiche per i campioni (m2, Gact1/Gact2) restano applicate in memoria dal runner, come già previsto. `LQG_linear_sim` richiede anche DSP System Toolbox. I collaudi Simulink vanno ripetuti con i nuovi file.

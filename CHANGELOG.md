@@ -4,6 +4,10 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Revisione definitiva per l'elaborato del 01.12.2026: cartella di consegna autonoma con `supporto/`, `test/`, `simulink/`, `elaborati/`, README operativo, LEGGIMI, manifest SHA-256 e ZIP. LQG e LQGI accorpati; confronto delle cache a tolleranza.
+- Verifica RP sulla mappa completa Tz[r;d] con MuN1 (PASS in A e B) e nuova sezione del Capitolo 9 sulla lettura della D–K. Motivazione quantitativa delle soglie (Capitolo 6) e varianza di stima (Capitolo 7).
+- SLX degli autori salvati in R2026a con la callback del progetto. Pulizia del repository da 1300 a 208 file tracciati.
+
 - Rivisti i Capitoli 10–13. Esplicitati il protocollo RAS, il significato di picco e RMS sotto rumore e le condizioni dei collaudi Simulink. La tabella finale distingue NS/RS, target nominali e NP/RP sulle mappe di riferimento e riferimento–coppia.
 - Aggiornati elaborati e note orali. Ingranditi i pannelli scelti per tracking e RAS nelle slide e conservata la tabella PowerPoint modificabile. Il parlato stimato con i cambi di slide è di 17:17.
 

@@ -1,3 +1,11 @@
+# Stato corrente — 24.11.2026, revisione definitiva per il 01.12.2026
+
+Cartella di consegna autonoma riorganizzata e commentata; repository ripulito (208 file tracciati). MuN1 soddisfa RP anche sulla mappa completa Tz[r;d] in A e B (verifica R2026a); i sette controllori della banca la falliscono. Relazione, slide e PowerPoint aggiornati. Gli SLX sono i modelli degli autori salvati in R2026a con la callback del progetto.
+
+Verifiche R2026a: 5/5 test unitari, verifica RP sulla mappa completa. Da completare: `run_all('rapida')` e collaudi Simulink sul codice riorganizzato da cartella estratta. Pubblicazione della PR in attesa dell'installazione della GitHub App sul repository.
+
+---
+
 # Stato corrente — 21.11.2026, revisione finale dei Capitoli 10–13
 
 Gate editoriale COMPLETE/PASS. Relazione integrale di 70 pagine con 13 capitoli e 42 figure, PDF e PowerPoint di 23 slide. Verificati compilazione, riferimenti, impaginazione, identità visiva e testuale dei Capitoli 1–9 con la HEAD iniziale, rendering PowerPoint 16.0 e tabella modificabile della slide 15. Il parlato stimato con i cambi slide è 17:17 a 125 parole/minuto. Prova dal vivo NOT RUN.
