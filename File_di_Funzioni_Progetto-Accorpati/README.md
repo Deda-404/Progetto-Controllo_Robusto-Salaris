@@ -66,4 +66,11 @@ Margini RP di MuN1 su Tz[r;d]: [1.599, 1.897] in A e [1.533, 1.536] in B (`risul
 
 ## Release e verifiche
 
-<!-- RELEASE -->
+| Prova | Release | Esito |
+|---|---|---|
+| Campagna completa (sintesi H∞ e D–K, µ-analysis su Tzr, RAS, 20 collaudi Simulink) | R2026b, 04.11.2026 | PASS (`verifica_numerica_20261104.txt`) |
+| RP sulla mappa completa Tz[r;d] per MuN1 e i sette controllori | R2026a, 24.11.2026 | eseguita (`verifica_rp_mappa_completa_20261124.*`) |
+| ZIP estratto: manifest 95/95, 5/5 test unitari, `run_all` rapida, 8/8 verifiche, 8 SLX avviati dalla callback, 20/20 collaudi Simulink | R2026a, 24.11.2026 | PASS (`collaudo_consegna_20261124.txt`) |
+| `run_all('completa')` sul codice riorganizzato | — | NOT RUN (ore di calcolo; i risultati caricati vengono dalla campagna del 04.11) |
+
+Gli SLX sono salvati in R2026a e si aprono in R2026a e nelle release successive.

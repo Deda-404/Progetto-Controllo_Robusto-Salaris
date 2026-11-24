@@ -1,0 +1,22 @@
+COLLAUDO DELLA CONSEGNA DA ZIP ESTRATTO - 24 novembre 2026
+MATLAB 26.1.0.3312084 (R2026a) Update 4, Windows 11, PC di Valerio Rebechi.
+ZIP Progetto_Controllo_Robusto_SEA_01-12-2026.zip (27 506 285 byte,
+SHA-256 9f3e85660fd9bd76188762574cd0837c82d32a0e584574af55d3e7f1c6a7ae52)
+estratto in una cartella temporanea, fuori dal repository; restoredefaultpath.
+
+Integrita: 95/95 file del manifest con SHA-256 corrispondente.         PASS
+runtests('test/seaFinaleTest.m'): 5/5 (4.9 s).                         PASS
+run_all('rapida') con SEA_FIGURE=off: completato in 45.8 s; LQG e
+  LQGI risintetizzati (residuo CARE 2.1e-13 e 2.4e-13); H-inf, D-K e
+  RAS caricati dalla campagna completa; verifiche.csv 8/8 PASS.         PASS
+  RP sulla mappa completa: NOT RUN in rapida (vedi
+  verifica_rp_mappa_completa_20261124.csv).
+Norme nominali Tz[r;d] (mappa_completa_nominale.csv): MuN1 0.6822,
+  LQG 2.1685, LQGI 1.2611, Hinf1 2.1309, Hinf2 0.0312, PID 0.8298,
+  Mu_A 1.8951, Mu_B 1.0875.
+Licenze: Control System, Robust Control, Simulink, DSP System Toolbox 26.1.
+8 SLX: load_system, InitFcn del progetto, sim 2 s con dati caricati
+  dalla sola callback: 8/8.                                             PASS
+collaudo_simulink: 20/20 simulazioni da 2 s (292 s); picchi Scope
+  coincidenti con simulink.csv del 4 novembre entro lo 0.5 %.           PASS
+Gli SLX non sono stati salvati: hash invariati dopo la prova.
