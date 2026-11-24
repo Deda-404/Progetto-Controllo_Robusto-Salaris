@@ -1,5 +1,20 @@
 function esiti=verifica_sea
-%VERIFICA_SEA Test fisici e dinamici indipendenti, senza trasferire garanzie.
+%VERIFICA_SEA Otto controlli scientifici del percorso (eseguiti da run_all).
+%
+%  1 Equilibrio: dinamica_sea(xbar,taubar)=0.
+%  2 Jacobiano per differenze finite centrali = matrice A analitica.
+%  3 Nominali di A, B e ricostruzione LFT coincidenti.
+%  4 Struttura dell'incertezza: 5 blocchi in A, 3 in B, 14 stati.
+%  5 Ogni drive campionato e coperto dal peso WI (Delta stabile, |Delta|<=1).
+%  6 I dieci impianti si rigenerano identici con lo stesso seed.
+%  7 La stabilita interna calcolata con la matrice esplicita del chiuso
+%    coincide con isstable sul chiuso costruito da interconnessione_sea.
+%  8 Controllabilita e osservabilita complete con il test PBH
+%    rank[lambda*I-A, B]=14 e rank[lambda*I-A; C]=14 per ogni autovalore
+%    (piu robusto numericamente del rango di ctrb/obsv, che usa potenze di A).
+% Ogni controllo e un assert: se fallisce, run_all si ferma con un errore.
+% Questi sono test del software e del modello, non specifiche di controllo:
+% un controllore puo fallire RP mentre tutte le verifiche sono PASS.
 p=parametri_sea; a=load(fullfile(p.risultati,'modello.mat')); m=a.modello;
 a=load(fullfile(p.risultati,'incertezze.mat')); u=a.modelli;
 [~,controllori]=controllori_sea(p);

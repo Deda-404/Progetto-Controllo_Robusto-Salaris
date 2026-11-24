@@ -1,18 +1,47 @@
-%% 1 - Unica famiglia fisica: quattro parametri attuativi e la massa m2 comune
+%% INCERTEZZE_ATTUATORI - Famiglie di incertezza A e B (Capitolo 5)
+%
+% Obiettivo: descrivere lo stesso insieme fisico di impianti in due modi.
+%
+%   A (parametrica): cinque scalari reali indipendenti
+%       m2, wn1, td1, wn2, td2      (zeta resta noto)
+%     Ogni drive e Gi(s)=wn_i^2/(s^2+2 zeta wn_i s+wn_i^2)*Pade(td_i).
+%
+%   B (concentrata): la stessa massa reale m2 e, per ciascun drive, una
+%     perturbazione dinamica additiva
+%       Gi(s) = G0(s) + WI(s)*Delta_i(s),   ||Delta_i||_inf <= 1
+%     WI(s) e un peso stabile che "copre" lo scostamento dei drive reali.
+%
+% Perche la forma additiva: la forma moltiplicativa (Gp-G0)/G0 richiede di
+% invertire G0, che contiene lo zero a parte reale positiva della Pade
+% (s=2/td): il risultato e instabile e la sua norma H-infinito non esiste.
+% La sezione 3 lo verifica numericamente.
+%
+% Salva: risultati/incertezze.mat, parametri_dieci_impianti.csv,
+% forme_incertezza.csv, ordini_peso.csv, candidati_ritardo.csv e le figure
+% famiglia_attuatori.png, peso_incertezza.png.
+
+%% 1 - Famiglia A: quattro parametri attuativi e la massa m2 comune
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 a=load(fullfile(p.risultati,'modello.mat')); modello=a.modello;
 assert(isequal(modello.firma,p.firma),'SEA:Cache','Rigenerare modello_sea.');
 s=tf('s'); G0=modello.G0;
 attA=cell(1,2);
 for giunto=1:2
+    % ureal: parametro reale incerto. 'Percentage' fissa l'intervallo
+    % simmetrico intorno al nominale: wn in [34,46] rad/s, td in [12,18] ms.
     wn=ureal(char("wn"+giunto),p.wn,'Percentage',100*p.rwn);
     zeta=p.zeta; % Noto ai fini del progetto, nessun blocco incerto.
     td=ureal(char("td"+giunto),p.ritardo,'Percentage',100*p.rritardo);
-    % Pade: xdot=-2/td*x+2/td*u, y=2*x-u. Sempre un solo stato.
+    % Pade realizzata con un solo stato: xdot=-2/td*x+2/td*u, y=2*x-u.
+    % Cosi td compare una sola volta per drive (meno ripetizioni nella LFT).
     ritardo=ss(-2/td,2/td,2,-1);
     attA{giunto}=ss([0 1;-wn^2 -2*zeta*wn],[0;wn^2],[1 0],0)*ritardo;
 end
+% Impianto incerto A: meccanica (con m2 incerta) in serie ai due drive.
 GaA=append(attA{:}); PA=modello.meccanicaIncerta*blkdiag(GaA,eye(2));
+% usample estrae campioni casuali dell'insieme incerto (distribuzione
+% uniforme sugli intervalli dei ureal). Il seed fisso rende i dieci
+% impianti identici a ogni esecuzione e uguali per tutti i controllori.
 statoRng=rng; rng(p.seed,'twister');
 [campioniFisici,estrazioni]=usample(PA,p.campioni); rng(statoRng);
 parametri=[[estrazioni.wn1]',[estrazioni.td1]', ...
@@ -24,8 +53,15 @@ end
 writetable(array2table(parametri,'VariableNames',{'wn1','td1','wn2','td2','m2'}), ...
     fullfile(p.risultati,'parametri_dieci_impianti.csv'));
 
-%% 2 - LFT completa: nomi fisici distinti dalle ripetizioni algebriche
+%% 2 - Forma LFT di A: P = Fu(M, Delta)
+% lftdata separa il modello incerto nella parte nota M e nella matrice
+% diagonale Delta delle incertezze normalizzate. "blocchi" riporta per
+% ciascun parametro il numero di occorrenze (ripetizioni) in Delta: un
+% parametro che compare piu volte nelle equazioni genera un blocco reale
+% ripetuto, non blocchi indipendenti.
 [M,Delta,blocchi]=lftdata(PA); ricostruito=lft(Delta,M); erroreLFT=0;
+% Verifica: richiudendo la LFT con i valori estratti si ottengono gli
+% stessi dieci impianti campionati.
 for j=1:p.campioni
     riassemblato=usubs(ricostruito,estrazioni(j));
     erroreLFT=max(erroreLFT,max(abs(freqresp(campioniFisici(:,:,j),p.omega)- ...
@@ -33,12 +69,19 @@ for j=1:p.campioni
 end
 assert(erroreLFT<1e-8); disp(blocchi);
 
-%% 3 - Tre forme: il modulo non basta a certificare una perturbazione stabile
+%% 3 - Tre forme di incertezza a confronto sul caso td massimo
+% Additiva Gp-G0, moltiplicativa (Gp-G0)/G0, moltiplicativa inversa
+% (Gp-G0)/Gp. Le ultime due dividono per un drive a fase non minima: lo
+% zero RHP della Pade diventa un polo instabile, la norma H-infinito non e
+% definita (valore Inf in tabella). Il modulo in frequenza da solo non
+% basta: serve anche la stabilita della perturbazione.
 forme=cell(3,5); nomiForme=["Additiva","Moltiplicativa","Moltiplicativa inversa"];
 Gp=drive(p.wn,p.zeta,p.ritardo*(1+p.rritardo));
 erroriForme={Gp-G0,(Gp-G0)/G0,(Gp-G0)/Gp};
 for j=1:3
+    % minreal elimina coppie polo-zero che si cancellano numericamente.
     Ej=minreal(erroriForme{j},1e-8);
+    % norm(.,inf) e la norma H-infinito: picco del modulo in frequenza.
     valore=Inf; if isstable(Ej),valore=norm(Ej,inf);end
     forme(j,:)={nomiForme(j),isstable(Ej),isproper(Ej),max(real(pole(Ej))),valore};
 end
@@ -46,7 +89,10 @@ tabellaForme=cell2table(forme,'VariableNames',{'Forma','Stabile','Propria','Polo
 writetable(tabellaForme,fullfile(p.risultati,'forme_incertezza.csv')); disp(tabellaForme);
 % Si adotta Gp=G0+WI*Delta: nessuna inversione dello zero RHP del drive.
 
-%% 4 - Venti drive comuni, quattro vertici SISO e nominale
+%% 4 - Campioni dei drive usati per costruire il peso WI
+% 25 drive: i 20 dei dieci impianti (due per impianto) e i 4 vertici del
+% rettangolo (wn,td) piu il nominale. Per ognuno si calcola lo scostamento
+% additivo |G(jw)-G0(jw)| su tutta la griglia di frequenza.
 [a1,a2]=ndgrid([-1 1]); corner=[a1(:),a2(:);0 0];
 coppie=[parametri(:,1),repmat(p.zeta,p.campioni,1),parametri(:,2); ...
     parametri(:,3),repmat(p.zeta,p.campioni,1),parametri(:,4); ...
@@ -59,8 +105,8 @@ for j=1:nCampioni
     assert(isstable(errori{j}) && isproper(errori{j}));
     scostamenti(:,j)=abs(squeeze(freqresp(errori{j},p.omega)));
 end
-inviluppo=max(scostamenti,[],2);
-% Hold-out: campioni indipendenti usati solo per verifica, mai per il fit.
+inviluppo=max(scostamenti,[],2);  % inviluppo superiore degli scostamenti
+% Hold-out: 30 campioni indipendenti usati solo per verifica, mai per il fit.
 rng(p.seed+1,'twister'); verifica=rand(30,2)*2-1; rng(statoRng);
 erroriVerifica=cell(30,1);
 for j=1:30
@@ -68,7 +114,14 @@ for j=1:30
         p.zeta,p.ritardo*(1+p.rritardo*verifica(j,2)))-G0,1e-8);
 end
 
-%% 5 - Fit semplice, copertura continua dei campioni e controllo indipendente
+%% 5 - Fit del peso WI e verifica della copertura
+% fitmagfrd approssima un dato di solo modulo con una funzione di
+% trasferimento stabile e a fase minima dell'ordine richiesto (qui 1, 2, 3;
+% l'ultimo argomento 1 impone che il fit stia sopra i dati). Il peso viene
+% poi scalato in modo che |errore/WI| <= 1 per tutti i 25 campioni,
+% con un margine del 2% (p.marginePeso).
+% Copertura: max_j ||E_j/WI||_inf <= 1 significa che ogni drive campionato
+% e rappresentato da una Delta stabile con norma <= 1.
 pesi=cell(3,1); metriche=zeros(3,6);
 for ordine=1:3
     peso=tf(fitmagfrd(frd(inviluppo,p.omega),ordine,min(ordine,2),[],1));
@@ -79,6 +132,7 @@ for ordine=1:3
     copertura=0; indipendente=0;
     for j=1:nCampioni,copertura=max(copertura,norm(errori{j}/peso,inf));end
     for j=1:30,indipendente=max(indipendente,norm(erroriVerifica{j}/peso,inf));end
+    % Eccesso mediano: quanto il peso sovrastima l'inviluppo (conservativita).
     eccesso=median(squeeze(abs(freqresp(peso,p.omega)))./max(inviluppo,1e-12));
     metriche(ordine,:)=[ordine,copertura,eccesso,isstable(peso),isproper(peso),indipendente];
     pesi{ordine}=peso;
@@ -90,16 +144,24 @@ WI=pesi{scelta}; assert(metriche(scelta,6)<=1,'SEA:Holdout','Copertura indipende
 tabellaPesi=array2table(metriche,'VariableNames', ...
     {'Ordine','MaxNormaNormalizzata','EccessoMediano','Stabile','Proprio','MaxNormaIndipendente'});
 writetable(tabellaPesi,fullfile(p.risultati,'ordini_peso.csv')); disp(tabellaPesi);
+% LIMITE: la copertura e verificata su 25 campioni di costruzione e 30
+% indipendenti, non dimostrata per ogni punto del rettangolo (wn,td).
 % Non si deduce l'inclusione globale del box da campioni o da soli vertici.
 
-%% 6 - Due perturbazioni SISO additive e la stessa massa reale di A
+%% 6 - Famiglia B: due perturbazioni SISO additive e la stessa massa reale di A
+% ultidyn crea un blocco dinamico LTI incerto, stabile, con ||Delta||_inf<=1.
+% I due drive hanno blocchi indipendenti (Delta_act1, Delta_act2); la massa
+% m2 resta lo stesso ureal di A, quindi A e B condividono la meccanica.
 D1=ultidyn('Delta_act1',[1 1]); D2=ultidyn('Delta_act2',[1 1]);
 GaB=append(G0+WI*D1,G0+WI*D2);
 PB=modello.meccanicaIncerta*blkdiag(GaB,eye(2));
+% A e B devono avere lo stesso impianto nominale P0.
 erroreA=max(abs(freqresp(PA.NominalValue,p.omega)-freqresp(modello.P0,p.omega)),[],'all');
 erroreB=max(abs(freqresp(PB.NominalValue,p.omega)-freqresp(modello.P0,p.omega)),[],'all');
 assert(max(erroreA,erroreB)<p.tolNominale);
-% Ricostruzione B degli stessi impianti fisici, incluse le masse estratte.
+% Ricostruzione B degli stessi impianti fisici, incluse le masse estratte:
+% Delta_i = (G_i - G0)/WI. Se e stabile, propria e con norma <= 1, il
+% campione di A appartiene anche all'insieme B.
 erroreAB=0;
 for j=1:p.campioni
     delta1=minreal(errori{j}/WI,1e-7);
@@ -109,6 +171,8 @@ for j=1:p.campioni
     erroreAB=max(erroreAB,max(abs(freqresp(riassemblato,p.omega)-freqresp(campioniFisici(:,:,j),p.omega)),[],'all'));
 end
 assert(erroreAB<1e-7);
+% Confronto fra tolleranze di ritardo del 10, 20 e 30%: scarto additivo
+% massimo e scarto di fase alla pulsazione naturale del drive.
 ritardi=zeros(numel(p.ritardiCandidati),3);
 for j=1:numel(p.ritardiCandidati)
     td=p.ritardo*(1+p.ritardiCandidati(j)); Gj=drive(p.wn,p.zeta,td);
@@ -125,7 +189,7 @@ modelli=struct('PA',PA,'PB',PB,'GaA',GaA,'GaB',GaB,'WI',WI,'M',M,'Delta',Delta, 
 save(fullfile(p.risultati,'incertezze.mat'),'modelli','-v7');
 fprintf('A/B: cinque reali / due dinamiche e una massa; peso additivo ordine %d.\n',scelta);
 
-%% 7 - Grafici SISO: modulo, fase, poli e tempo della stessa famiglia
+%% 7 - Grafici SISO: modulo, fase, poli e risposta al gradino della famiglia
 if p.figure
     f=figure('Name','Famiglia parametrica degli attuatori','Color','w'); theme(f,'light'); tiledlayout(2,2);
     for j=1:nCampioni
@@ -150,6 +214,8 @@ if p.figure
     exportgraphics(f,fullfile(p.risultati,'peso_incertezza.png'),'Resolution',170);
 end
 
+%% Funzione locale
 function G=drive(wn,zeta,td)
+% Drive SISO: secondo ordine con guadagno statico unitario e Pade(1).
 s=tf('s'); G=wn^2/(s^2+2*zeta*wn*s+wn^2)*(1-td*s/2)/(1+td*s/2);
 end

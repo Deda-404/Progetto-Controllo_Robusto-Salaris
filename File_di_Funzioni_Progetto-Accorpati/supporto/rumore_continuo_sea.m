@@ -1,4 +1,16 @@
 function metriche=rumore_continuo_sea(sys,v,t)
+%RUMORE_CONTINUO_SEA Rumore encoder campionato e mantenuto (ZOH), Capitolo 11.
+%
+% sys: canali rumore -> [q1 q2 u1 u2] del chiuso; v: campioni gaussiani
+% (sigma 0.05 gradi) ogni dt=2 ms, tenuti costanti fino al campione
+% successivo. Non e rumore bianco continuo: e una sequenza a gradini, la
+% cui varianza vale sigma^2 in ogni istante.
+% c2d(...,'zoh') discretizza esattamente il chiuso per ingressi costanti a
+% tratti, quindi la risposta agli istanti di campionamento e esatta.
+% Fra due campioni il comando continua a evolvere: il picco intercampione
+% e l'RMS integrato si ottengono valutando lo stato a istanti intermedi.
+% Uscite: [picco ai campioni, RMS ai campioni, picco intercampione,
+%          RMS integrato, errore di quadratura, picco di posizione].
 % Propagazione ZOH esatta, ripresa dalla diagnostica originale del progetto.
 % La scansione temporale verifica picchi osservati; non un massimo rigoroso.
 dt=t(2)-t(1); [T,A]=balance(sys.A); modello=ss(A,T\sys.B,sys.C*T,sys.D);

@@ -1,8 +1,18 @@
 classdef seaFinaleTest < matlab.unittest.TestCase
+%SEAFINALETEST Cinque test unitari indipendenti del modello fisico.
+% Esecuzione dalla cartella di consegna: runtests('test/seaFinaleTest.m')
+%  - equilibrioEJacobiano: equilibrio esatto e Jacobiano numerico = A;
+%  - contributoPuntiforme: il contributo di m2 a M e G e quello di una massa
+%    puntiforme, m2*J'J e m2*g*J(2,:)' (J = Jacobiano cinematico della punta);
+%  - stessaFamigliaAB: blocchi e intervalli di A e B (m2, wn, td);
+%  - massaAiBordi: linearizzazione corretta anche con m2 agli estremi;
+%  - energiaCoriolis: dM/dt - 2C antisimmetrica (proprieta di passivita).
+% Richiede i MAT di risultati/ (modello.mat, incertezze.mat).
     methods (TestClassSetup)
         function percorso(t)
             root=fileparts(fileparts(mfilename('fullpath')));
-            t.applyFixture(matlab.unittest.fixtures.PathFixture(fullfile(root,'File_di_Funzioni_Progetto-Accorpati')));
+            t.applyFixture(matlab.unittest.fixtures.PathFixture(root));
+            t.applyFixture(matlab.unittest.fixtures.PathFixture(fullfile(root,'supporto')));
         end
     end
     methods (Test)

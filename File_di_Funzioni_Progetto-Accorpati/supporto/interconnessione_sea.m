@@ -1,7 +1,22 @@
 function [P,CL]=interconnessione_sea(pianta,p,ny,K)
-%INTERCONNESSIONE_SEA Pianta generalizzata e misura nelle convenzioni comuni.
-% P: [r;d;u] -> [We*(q-Mo*r);Wu*u;r;y].
-% CL: [r;d;v] -> [q;u;ze;zu], rumore v aggiunto ai soli encoder.
+%INTERCONNESSIONE_SEA Pianta generalizzata comune a sintesi e analisi (Cap. 6, 8, 9).
+%
+%   P = interconnessione_sea(pianta,p,ny)       pianta generalizzata
+%   [P,CL] = interconnessione_sea(pianta,p,ny,K) anche il chiuso con K
+%
+% pianta: impianto [u1 u2 d1 d2] -> [q1 q2 theta1 theta2] (nominale, A o B).
+% ny=2: il controllore misura solo q; ny=4: misura q e theta.
+%
+% P: [r;d;u] -> [We*(q-Mo*r); Wu*u; r; y].
+%   e = q - Mo*r e l'errore rispetto al modello desiderato Mo, non
+%   rispetto al gradino: si chiede di seguire una risposta realistica
+%   (assestamento ~2 s) invece di un gradino istantaneo.
+%   ze = We*e, zu = Wu*u sono le uscite prestazionali pesate.
+% CL: [r;d;v] -> [q;u;ze;zu], con rumore v aggiunto ai soli encoder.
+% Le soglie NP/RP sono ||CL(ze,zu <- r)||<1 oppure ||CL(ze,zu <- r,d)||<1.
+% Pesi (stessi in tutto il progetto, vedi parametri_sea):
+%   We(s)=(s/3+2)/(s+0.3), Wu(s)=0.003(s+80)/(s/6+80), Mo(s)=9/(s+3)^2,
+% tutti diagonali 2x2 (stesso peso sui due giunti, nessun accoppiamento).
 arguments
     pianta
     p (1,1) struct

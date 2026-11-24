@@ -1,5 +1,11 @@
 function [nomi,K,origine,correnti]=controllori_sea(p,includiRiferimenti)
-%CONTROLLORI_SEA Sette candidati finali; riferimenti solo su richiesta esplicita.
+%CONTROLLORI_SEA Elenco dei controllori confrontati (Capitolo 12).
+%
+% Sette controllori ufficiali: LQG, LQGI, Hinf1, Hinf2, PID, Mu_A, Mu_B,
+% letti dai MAT della campagna corrente (con controllo di firma).
+% Con includiRiferimenti=true si aggiungono i controllori storici fissati
+% di banca_validata.mat ("_fisso") e MuN1, il controllore iniziale comune
+% alle due D-K. Tutti hanno ingressi [r1 r2 y...] e uscite [u1 u2].
 if nargin<2,includiRiferimenti=false;end
 a=load(fullfile(p.dati,'banca_validata.mat')); b=a.banca;
 nomi=[string({b.controllers.name})+"_fisso","MuN1_fisso"];

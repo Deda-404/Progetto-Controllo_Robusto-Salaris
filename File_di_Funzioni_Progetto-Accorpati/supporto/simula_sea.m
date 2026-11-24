@@ -1,5 +1,18 @@
 function risultato=simula_sea(K,modello,p,scenario,attuatori)
-%SIMULA_SEA Non lineare con controllore completo e attuatori fisici espliciti.
+%SIMULA_SEA Simulazione non lineare in anello chiuso (Capitolo 10, RAS).
+%
+% Integra insieme: dinamica non lineare del manipolatore (dinamica_sea),
+% drive lineari (attuatori, 6 stati) e controllore K lineare. Lo stato
+% simulato e lo scostamento dall'equilibrio: z=[dx (8); drive (6); K (nk)].
+% La coppia applicata e taubar + uscita dei drive: il controllore lavora
+% sugli scostamenti, come nel progetto lineare.
+% scenario.r: gradino di riferimento; scenario.d: disturbo di coppia;
+% scenario.dq: condizione iniziale (RAS); scenario.tempo: orizzonte.
+% Solver: ode15s (sistema rigido: molle SEA e drive veloci) con Jacobiano
+% calcolato per differenze centrali, tolleranze RelTol 1e-6, AbsTol 1e-9.
+% L'evento "evento" ferma l'integrazione se lo stato supera le soglie di
+% divergenza; il timer ferma calcoli troppo lunghi (TIMEOUT, che non e una
+% prova di instabilita).
 arguments
     K
     modello (1,1) struct
