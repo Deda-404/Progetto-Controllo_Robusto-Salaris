@@ -1,12 +1,12 @@
 {
-  "words": 2043,
+  "words": 2044,
   "speed_words_per_minute": 125,
   "transition_seconds": 2,
   "spoken_seconds": 993,
   "total_seconds": 1037,
   "speaker_seconds": {
-    "Alessio": 480,
-    "Valerio": 513
+    "Alessio": 489,
+    "Valerio": 504
   },
   "records": [
     {
@@ -45,9 +45,9 @@
       "slide": 5,
       "title": "Specifiche: obiettivi temporali e norma pesata",
       "speaker": "Valerio",
-      "words": 88,
-      "seconds": 43,
-      "cue": "Distinguere target temporali e soglie matematiche."
+      "words": 98,
+      "seconds": 48,
+      "cue": "Distinguere i quattro target nominali dalle due mappe pesate."
     },
     {
       "slide": 6,
@@ -69,8 +69,8 @@
       "slide": 8,
       "title": "LQGI: memoria dell'errore misurato",
       "speaker": "Alessio",
-      "words": 89,
-      "seconds": 43,
+      "words": 98,
+      "seconds": 48,
       "cue": "Indicare i due integratori."
     },
     {
@@ -85,8 +85,8 @@
       "slide": 10,
       "title": "Due gradi di libertà, stati condivisi",
       "speaker": "Alessio",
-      "words": 88,
-      "seconds": 43,
+      "words": 93,
+      "seconds": 45,
       "cue": "Seguire riferimento e feedback."
     },
     {
@@ -101,17 +101,17 @@
       "slide": 12,
       "title": "μ: valore singolare strutturato",
       "speaker": "Valerio",
-      "words": 87,
-      "seconds": 42,
+      "words": 97,
+      "seconds": 47,
       "cue": "Distinguere margine e mu."
     },
     {
       "slide": 13,
       "title": "D--K: stessi pesi e stessa inizializzazione",
       "speaker": "Alessio",
-      "words": 85,
-      "seconds": 41,
-      "cue": "Indicare i tre passi e gli esiti maggiori di uno."
+      "words": 94,
+      "seconds": 46,
+      "cue": "Indicare le due mappe e il limite di errore statico di MuN1."
     },
     {
       "slide": 14,
@@ -125,41 +125,41 @@
       "slide": 15,
       "title": "Robustezza pesata e target temporali sono distinti",
       "speaker": "Alessio",
-      "words": 86,
-      "seconds": 42,
-      "cue": "Leggere una riga con NP PASS e RS FAIL."
+      "words": 93,
+      "seconds": 45,
+      "cue": "Leggere la tabella sul riferimento e richiamare l’esito del problema completo."
     },
     {
       "slide": 16,
       "title": "Dieci impianti: la stessa fisica per tutti",
       "speaker": "Valerio",
-      "words": 84,
-      "seconds": 41,
-      "cue": "Ricordare la stessa settupla per tutti."
+      "words": 70,
+      "seconds": 34,
+      "cue": "Seguire la stessa quintupla da A alla ricostruzione in B."
     },
     {
       "slide": 17,
       "title": "Tracking e disturbi sugli impianti incerti",
       "speaker": "Valerio",
-      "words": 84,
-      "seconds": 41,
-      "cue": "Indicare la dispersione delle risposte."
+      "words": 87,
+      "seconds": 42,
+      "cue": "Collegare il numero di curve ai casi stabili e distinguere tracking e coppia."
     },
     {
       "slide": 18,
       "title": "Il rumore encoder può dominare il comando",
       "speaker": "Valerio",
-      "words": 88,
-      "seconds": 43,
-      "cue": "Confrontare gli ordini di grandezza del comando."
+      "words": 85,
+      "seconds": 41,
+      "cue": "Indicare il picco intercampione di Hinf2 e ricordare l’assenza di saturazioni."
     },
     {
       "slide": 19,
       "title": "Massa del secondo link e movimento non lineare",
       "speaker": "Alessio",
-      "words": 95,
-      "seconds": 46,
-      "cue": "Indicare gli estremi di massa."
+      "words": 82,
+      "seconds": 40,
+      "cue": "Leggere i residui alle tre masse e richiamare il compromesso sull’assestamento."
     },
     {
       "slide": 20,
@@ -167,31 +167,31 @@
       "speaker": "Alessio",
       "words": 89,
       "seconds": 43,
-      "cue": "Leggere simboli e sezione iniziale."
+      "cue": "Indicare la croce a trenta gradi e spiegare la differenza rispetto al quadrato."
     },
     {
       "slide": 21,
       "title": "Simulink lineare: servo LQGI",
       "speaker": "Valerio",
-      "words": 83,
-      "seconds": 40,
-      "cue": "Seguire osservatore e integratore."
+      "words": 66,
+      "seconds": 32,
+      "cue": "Seguire riferimento, misure, comando e disturbo lato link."
     },
     {
       "slide": 22,
       "title": "Simulink non lineare: la stessa legge di controllo",
       "speaker": "Valerio",
-      "words": 88,
-      "seconds": 43,
-      "cue": "Indicare il cambio della pianta."
+      "words": 81,
+      "seconds": 39,
+      "cue": "Chiarire il ruolo del campione 1 e la lettura dei due secondi di Scope."
     },
     {
       "slide": 23,
       "title": "Conclusioni e limiti verificati",
       "speaker": "Valerio",
-      "words": 88,
-      "seconds": 43,
-      "cue": "Chiudere con il compromesso A/B e i limiti."
+      "words": 90,
+      "seconds": 44,
+      "cue": "Chiudere con l’esito sulla mappa completa e i limiti sperimentali."
     }
   ],
   "status": "PASS: estimate only; live rehearsal still required"

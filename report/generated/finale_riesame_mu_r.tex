@@ -1,0 +1,13 @@
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrrrr}\toprule
+Controllore & Norma $r$ & $\mathrm{NP}_r$ & RS A & RS B & $\mathrm{RP}_r$ A & $\mathrm{RP}_r$ B & $T_s$ [s] & $e_{ss}$ [\%]\\\midrule
+LQG & \num{0.9866} & PASS & \num{1.454} & \num{1.195} & [\num{1.115}, \num{1.173}] & [\num{1.011}, \num{1.013}] & \num{0.6709} & 0\\
+LQGI & \num{1.237} & FAIL & \num{1.406} & \num{1.152} & 0 & 0 & \num{5.046} & 0\\
+Mu\_A & \num{1.885} & FAIL & \num{2.662} & \num{1.956} & 0 & 0 & \num{5.128} & \num{28}\\
+Mu\_B & \num{0.9851} & PASS & \num{2.469} & \num{1.825} & [\num{0.09937}, \num{0.2187}] & [\num{0.2183}, \num{0.2188}] & \num{3.405} & \num{14.8}\\
+MuN1 & \num{0.5978} & PASS & \num{2.315} & \num{2.328} & [\num{1.205}, \num{2.434}] & [\num{2.119}, \num{2.124}] & \num{1.568} & \num{8.24}\\
+\bottomrule\end{tabular}
+\caption{Confronto con MuN1. Per RS è mostrato il limite inferiore. Per RP sul riferimento valgono gli intervalli di guadagno o i limiti dedotti della Tabella~\ref{tab:cap9-robustezza}.}
+\label{tab:cap9-riesame-r}
+\end{table}

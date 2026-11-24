@@ -1,3 +1,4 @@
+\newcommand{\FinTsLimit}{5}
 \newcommand{\FinResiduoEquilibrio}{\num{5.84e-14}}
 \newcommand{\FinErroreJacobiano}{\num{6.17e-11}}
 \newcommand{\FinErroreAB}{\num{1.32e-14}}
@@ -32,15 +33,18 @@
 \newcommand{\FinLQGDiv}{0}
 \newcommand{\FinLQGRSA}{\num{1.454}}
 \newcommand{\FinLQGRSesitoA}{PASS}
-\newcommand{\FinLQGRPesitoA}{FAIL}
+\newcommand{\FinLQGRPesitoA}{PASS}
 \newcommand{\FinLQGNorma}{\num{2.168}}
+\newcommand{\FinLQGNormaR}{\num{0.9866}}
+\newcommand{\FinLQGIntervalloRPRA}{[\num{1.115}, \num{1.173}]}
 \newcommand{\FinLQGOrdine}{14}
 \newcommand{\FinLQGOrdineChiuso}{28}
 \newcommand{\FinLQGIntervalloRSA}{[\num{1.454}, \num{1.505}]}
 \newcommand{\FinLQGFrequenzaA}{\num{57.56}}
 \newcommand{\FinLQGRSB}{\num{1.195}}
 \newcommand{\FinLQGRSesitoB}{PASS}
-\newcommand{\FinLQGRPesitoB}{FAIL}
+\newcommand{\FinLQGRPesitoB}{PASS}
+\newcommand{\FinLQGIntervalloRPRB}{[\num{1.011}, \num{1.013}]}
 \newcommand{\FinLQGIntervalloRSB}{[\num{1.195}, \num{1.197}]}
 \newcommand{\FinLQGFrequenzaB}{\num{42.8}}
 \newcommand{\FinLQGIStable}{10}
@@ -53,12 +57,15 @@
 \newcommand{\FinLQGICross}{\num{3.6}}
 \newcommand{\FinLQGITrackPeak}{\num{0.822}}
 \newcommand{\FinLQGITarget}{FAIL}
+\newcommand{\FinLQGIRecuperoMax}{\num{3.562}}
 \newcommand{\FinLQGINonConv}{0}
 \newcommand{\FinLQGIDiv}{0}
 \newcommand{\FinLQGIRSA}{\num{1.406}}
 \newcommand{\FinLQGIRSesitoA}{PASS}
 \newcommand{\FinLQGIRPesitoA}{FAIL}
 \newcommand{\FinLQGINorma}{\num{1.261}}
+\newcommand{\FinLQGINormaR}{\num{1.237}}
+\newcommand{\FinLQGIIntervalloRPRA}{[\num{0}, \num{0}]}
 \newcommand{\FinLQGIOrdine}{16}
 \newcommand{\FinLQGIOrdineChiuso}{30}
 \newcommand{\FinLQGIIntervalloRSA}{[\num{1.406}, \num{1.455}]}
@@ -66,6 +73,7 @@
 \newcommand{\FinLQGIRSB}{\num{1.152}}
 \newcommand{\FinLQGIRSesitoB}{PASS}
 \newcommand{\FinLQGIRPesitoB}{FAIL}
+\newcommand{\FinLQGIIntervalloRPRB}{[\num{0}, \num{0}]}
 \newcommand{\FinLQGIIntervalloRSB}{[\num{1.152}, \num{1.155}]}
 \newcommand{\FinLQGIFrequenzaB}{\num{42.74}}
 \newcommand{\FinHinfOneStable}{10}
@@ -84,6 +92,8 @@
 \newcommand{\FinHinfOneRSesitoA}{PASS}
 \newcommand{\FinHinfOneRPesitoA}{FAIL}
 \newcommand{\FinHinfOneNorma}{\num{2.131}}
+\newcommand{\FinHinfOneNormaR}{\num{2.075}}
+\newcommand{\FinHinfOneIntervalloRPRA}{[\num{0}, \num{0}]}
 \newcommand{\FinHinfOneOrdine}{18}
 \newcommand{\FinHinfOneOrdineChiuso}{32}
 \newcommand{\FinHinfOneIntervalloRSA}{[\num{1.407}, \num{1.424}]}
@@ -91,6 +101,7 @@
 \newcommand{\FinHinfOneRSB}{\num{1.014}}
 \newcommand{\FinHinfOneRSesitoB}{PASS}
 \newcommand{\FinHinfOneRPesitoB}{FAIL}
+\newcommand{\FinHinfOneIntervalloRPRB}{[\num{0}, \num{0}]}
 \newcommand{\FinHinfOneIntervalloRSB}{[\num{1.014}, \num{1.018}]}
 \newcommand{\FinHinfOneFrequenzaB}{\num{78.99}}
 \newcommand{\FinHinfTwoStable}{1}
@@ -103,12 +114,15 @@
 \newcommand{\FinHinfTwoCross}{\num{0.855}}
 \newcommand{\FinHinfTwoTrackPeak}{\num{0.821}}
 \newcommand{\FinHinfTwoTarget}{PASS}
+\newcommand{\FinHinfTwoPiccoCampioni}{\num{18.7}}
 \newcommand{\FinHinfTwoNonConv}{0}
 \newcommand{\FinHinfTwoDiv}{2}
 \newcommand{\FinHinfTwoRSA}{\num{0.04399}}
 \newcommand{\FinHinfTwoRSesitoA}{FAIL}
 \newcommand{\FinHinfTwoRPesitoA}{FAIL}
 \newcommand{\FinHinfTwoNorma}{\num{0.0312}}
+\newcommand{\FinHinfTwoNormaR}{\num{0.03115}}
+\newcommand{\FinHinfTwoIntervalloRPRA}{[\num{0}, \num{0.04767}]}
 \newcommand{\FinHinfTwoOrdine}{22}
 \newcommand{\FinHinfTwoOrdineChiuso}{36}
 \newcommand{\FinHinfTwoIntervalloRSA}{[\num{0.04399}, \num{0.04767}]}
@@ -116,6 +130,7 @@
 \newcommand{\FinHinfTwoRSB}{\num{0.04025}}
 \newcommand{\FinHinfTwoRSesitoB}{FAIL}
 \newcommand{\FinHinfTwoRPesitoB}{FAIL}
+\newcommand{\FinHinfTwoIntervalloRPRB}{[\num{0}, \num{0.04033}]}
 \newcommand{\FinHinfTwoIntervalloRSB}{[\num{0.04025}, \num{0.04033}]}
 \newcommand{\FinHinfTwoFrequenzaB}{\num{62.74}}
 \newcommand{\FinPIDStable}{8}
@@ -134,6 +149,8 @@
 \newcommand{\FinPIDRSesitoA}{FAIL}
 \newcommand{\FinPIDRPesitoA}{FAIL}
 \newcommand{\FinPIDNorma}{\num{0.8298}}
+\newcommand{\FinPIDNormaR}{\num{0.8298}}
+\newcommand{\FinPIDIntervalloRPRA}{[\num{0}, \num{0.2345}]}
 \newcommand{\FinPIDOrdine}{4}
 \newcommand{\FinPIDOrdineChiuso}{18}
 \newcommand{\FinPIDIntervalloRSA}{[\num{0.231}, \num{0.2345}]}
@@ -141,6 +158,7 @@
 \newcommand{\FinPIDRSB}{\num{0.1702}}
 \newcommand{\FinPIDRSesitoB}{FAIL}
 \newcommand{\FinPIDRPesitoB}{FAIL}
+\newcommand{\FinPIDIntervalloRPRB}{[\num{0}, \num{0.171}]}
 \newcommand{\FinPIDIntervalloRSB}{[\num{0.1702}, \num{0.171}]}
 \newcommand{\FinPIDFrequenzaB}{\num{18.54}}
 \newcommand{\FinMuAStable}{10}
@@ -159,6 +177,8 @@
 \newcommand{\FinMuARSesitoA}{PASS}
 \newcommand{\FinMuARPesitoA}{FAIL}
 \newcommand{\FinMuANorma}{\num{1.895}}
+\newcommand{\FinMuANormaR}{\num{1.885}}
+\newcommand{\FinMuAIntervalloRPRA}{[\num{0}, \num{0}]}
 \newcommand{\FinMuAOrdine}{242}
 \newcommand{\FinMuAOrdineChiuso}{256}
 \newcommand{\FinMuAIntervalloRSA}{[\num{2.662}, \num{3.447}]}
@@ -166,6 +186,7 @@
 \newcommand{\FinMuARSB}{\num{1.956}}
 \newcommand{\FinMuARSesitoB}{PASS}
 \newcommand{\FinMuARPesitoB}{FAIL}
+\newcommand{\FinMuAIntervalloRPRB}{[\num{0}, \num{0}]}
 \newcommand{\FinMuAIntervalloRSB}{[\num{1.956}, \num{1.96}]}
 \newcommand{\FinMuAFrequenzaB}{\num{23.01}}
 \newcommand{\FinMuBStable}{10}
@@ -184,6 +205,8 @@
 \newcommand{\FinMuBRSesitoA}{PASS}
 \newcommand{\FinMuBRPesitoA}{FAIL}
 \newcommand{\FinMuBNorma}{\num{1.087}}
+\newcommand{\FinMuBNormaR}{\num{0.9851}}
+\newcommand{\FinMuBIntervalloRPRA}{[\num{0.09937}, \num{0.2187}]}
 \newcommand{\FinMuBOrdine}{106}
 \newcommand{\FinMuBOrdineChiuso}{120}
 \newcommand{\FinMuBIntervalloRSA}{[\num{2.469}, \num{2.549}]}
@@ -191,5 +214,24 @@
 \newcommand{\FinMuBRSB}{\num{1.825}}
 \newcommand{\FinMuBRSesitoB}{PASS}
 \newcommand{\FinMuBRPesitoB}{FAIL}
+\newcommand{\FinMuBIntervalloRPRB}{[\num{0.2183}, \num{0.2188}]}
 \newcommand{\FinMuBIntervalloRSB}{[\num{1.825}, \num{1.829}]}
 \newcommand{\FinMuBFrequenzaB}{\num{32.42}}
+\newcommand{\FinMuNOneNorma}{\num{0.6822}}
+\newcommand{\FinMuNOneNormaR}{\num{0.5978}}
+\newcommand{\FinMuNOneOrdine}{82}
+\newcommand{\FinMuNOneEsitoRPA}{PASS}
+\newcommand{\FinMuNOneEsitoRPB}{PASS}
+\newcommand{\FinMuNOneRPA}{[\num{1.205}, \num{2.434}]}
+\newcommand{\FinMuNOneRPB}{[\num{2.119}, \num{2.124}]}
+\newcommand{\FinMuNOneTs}{\num{1.568}}
+\newcommand{\FinMuNOneDC}{\num{8.24}}
+\newcommand{\FinMuNOneMp}{\num{0}}
+\newcommand{\FinMuNOneCross}{\num{11.2}}
+\newcommand{\FinMuNOnePiccoComando}{\num{0.7738}}
+\newcommand{\FinMuNOneRMSComando}{\num{0.5263}}
+\newcommand{\FinLQGRMSComando}{\num{0.6057}}
+\newcommand{\FinLQGDisturboStudio}{\num{8.843}}
+\newcommand{\FinMuNOneDisturbo}{\num{19.14}}
+\newcommand{\FinMuNOneRumore}{\num{1.224}}
+\newcommand{\FinMuNOneRMSRumore}{\num{0.2605}}

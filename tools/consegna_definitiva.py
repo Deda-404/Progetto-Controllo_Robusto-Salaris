@@ -83,11 +83,11 @@ def main():
     mapping = {Path("run_all.m"): ROOT / "run_all.m"}
     mapping.update({Path(f.name): f for f in SOURCE.glob("*.m")})
     mapping[Path("dati/banca_validata.mat")] = SOURCE / "dati/banca_validata.mat"
-    for name in ["sintesi_hinf", "sintesi_mu", "confronto_robusto", "ras"]:
+    for name in ["sintesi_hinf", "sintesi_mu", "confronto_robusto_r", "ras"]:
         mapping[Path(f"dati/{name}.mat")] = SOURCE / f"risultati/{name}.mat"
     for source in (SOURCE / "risultati").iterdir():
         correnti={"candidati_massa","candidati_ritardo","candidati_specifiche","candidati_riferimento",
-                  "confronto_robusto","dieci_impianti","dk_1","dk_2","forme_incertezza","hinf",
+                  "confronto_robusto","confronto_robusto_r","dieci_impianti","dk_1","dk_2","forme_incertezza","hinf",
                   "kalman","massa_nonlineare","nonlineare","ordini_peso","parametri_dieci_impianti",
                   "ras","riesame_mu","rumore","sensibilita_attuatori","simulink","simulink_autonomo",
                   "esecuzione_rapida","verifiche","riassunto_numerico","oral_timing","code_analyzer",
@@ -101,7 +101,7 @@ def main():
     for name in ["sea_link_inertia", "sea_coriolis", "sea_gravity", "sea_elastic_torque"]:
         mapping[Path(f"simulink/support/{name}.m")] = ROOT / f"src/model/{name}.m"
     for name in ["report/Progetto_CR_Relazione_finale.pdf", "presentation/Progetto_CR_Presentazione.pdf",
-                 "presentation/Presentazione_orale.txt"]:
+                 "presentation/Progetto_CR_Presentazione.pptx", "presentation/Presentazione_orale.txt"]:
         mapping[Path("relazione") / Path(name).name] = ROOT / name
     mapping[Path("REVISIONE_TRACCIA_20261104.md")] = ROOT / "docs/REVISIONE_TRACCIA_20261104.md"
     expected = {str(path.as_posix()) for path in mapping} | {"LEGGIMI.txt", "MANIFEST_SHA256.json"}

@@ -4,6 +4,18 @@ Tutte le modifiche tecniche rilevanti del progetto sono documentate in questo fi
 
 ## Unreleased
 
+- Rivisti i Capitoli 10–13. Esplicitati il protocollo RAS, il significato di picco e RMS sotto rumore e le condizioni dei collaudi Simulink. La tabella finale distingue NS/RS, target nominali e NP/RP sulle mappe di riferimento e riferimento–coppia.
+- Aggiornati elaborati e note orali. Ingranditi i pannelli scelti per tracking e RAS nelle slide e conservata la tabella PowerPoint modificabile. Il parlato stimato con i cambi di slide è di 17:17.
+
+- Verificati i sei passi D–K salvati su A e B, con cinque controllori distinti. MuN1, inizializzazione comune, passa RP sul riferimento in entrambe le famiglie. Le prove nominali separate mostrano un errore statico dell'8,24%.
+- Aggiunte la diagnosi di Mu_A e Mu_B e la tabella di confronto con MuN1. Tolta la colonna Origine dalla Tabella 9.2 e corretta l'etichettatura del grafico in `progetto_mu.m`. Aggiornati relazione, slide e note orali.
+
+- Ricalcolate NP e RP sul solo riferimento per i sette controllori nelle due famiglie. Registrata la mappa `Tzr_v1` in risultati distinti dalla campagna storica. Ricalcolati NS e RS sulla chiusura completa, con margini RS identici.
+- Aggiornati relazione, tabelle, slide e discorso. Rimossi sommario iniziale, elenchi di figure e tabelle e appendici dal PDF. Raggruppate nel Capitolo 10 le figure delle prove di coppia e avvicinati gli Scope al testo.
+
+- Portato il limite di assestamento nominale a 5 s. L'esportatore legge la soglia MATLAB e mostra l'esito per il solo assestamento. La firma v3 conserva il valore riservato nella posizione storica di Ts.
+- Aggiornati relazione integrale, slide e discorso orale. Aggiunto il PowerPoint di 23 slide con la tabella degli esiti e il testo dell'esposizione modificabili.
+
 - Rivisto il Capitolo 9. Distinti NS, NP, RS e RP, spiegati gli intervalli dei margini e la provenienza degli esiti. Aggiornate le tabelle del capitolo e la relazione integrale di 92 pagine.
 
 - Corretto nel §8.5 il riferimento a W_A, peso dell'incertezza additiva degli attuatori della famiglia B.

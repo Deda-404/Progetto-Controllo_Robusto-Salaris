@@ -22,9 +22,9 @@ Seguire i due drive verso la meccanica.
 
 Spiegare lo zero destro di Padé prima del fit.
 
-## 5. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:43
+## 5. Specifiche: obiettivi temporali e norma pesata — Valerio, 0:48
 
-Distinguere target temporali e soglie matematiche.
+Distinguere i quattro target nominali dalle due mappe pesate.
 
 ## 6. LQR: il costo deriva dalle grandezze fisiche — Valerio, 0:42
 
@@ -34,7 +34,7 @@ Indicare le scale fisiche.
 
 Seguire innovazione e comando.
 
-## 8. LQGI: memoria dell'errore misurato — Alessio, 0:43
+## 8. LQGI: memoria dell'errore misurato — Alessio, 0:48
 
 Indicare i due integratori.
 
@@ -42,7 +42,7 @@ Indicare i due integratori.
 
 Leggere il ruolo dei pesi.
 
-## 10. Due gradi di libertà, stati condivisi — Alessio, 0:43
+## 10. Due gradi di libertà, stati condivisi — Alessio, 0:45
 
 Seguire riferimento e feedback.
 
@@ -50,50 +50,50 @@ Seguire riferimento e feedback.
 
 Confrontare ordine e costo comune.
 
-## 12. μ: valore singolare strutturato — Valerio, 0:42
+## 12. μ: valore singolare strutturato — Valerio, 0:47
 
 Distinguere margine e mu.
 
-## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:41
+## 13. D--K: stessi pesi e stessa inizializzazione — Alessio, 0:46
 
-Indicare i tre passi e gli esiti maggiori di uno.
+Indicare le due mappe e il limite di errore statico di MuN1.
 
 ## 14. La post-analisi distingue le due rappresentazioni — Alessio, 0:42
 
 Confrontare A e B a controllore fissato.
 
-## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:42
+## 15. Robustezza pesata e target temporali sono distinti — Alessio, 0:45
 
-Leggere una riga con NP PASS e RS FAIL.
+Leggere la tabella sul riferimento e richiamare l’esito del problema completo.
 
-## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:41
+## 16. Dieci impianti: la stessa fisica per tutti — Valerio, 0:34
 
-Ricordare la stessa settupla per tutti.
+Seguire la stessa quintupla da A alla ricostruzione in B.
 
-## 17. Tracking e disturbi sugli impianti incerti — Valerio, 0:41
+## 17. Tracking e disturbi sugli impianti incerti — Valerio, 0:42
 
-Indicare la dispersione delle risposte.
+Collegare il numero di curve ai casi stabili e distinguere tracking e coppia.
 
-## 18. Il rumore encoder può dominare il comando — Valerio, 0:43
+## 18. Il rumore encoder può dominare il comando — Valerio, 0:41
 
-Confrontare gli ordini di grandezza del comando.
+Indicare il picco intercampione di Hinf2 e ricordare l’assenza di saturazioni.
 
-## 19. Massa del secondo link e movimento non lineare — Alessio, 0:46
+## 19. Massa del secondo link e movimento non lineare — Alessio, 0:40
 
-Indicare gli estremi di massa.
+Leggere i residui alle tre masse e richiamare il compromesso sull’assestamento.
 
 ## 20. Regione di attrazione: una sezione empirica — Alessio, 0:43
 
-Leggere simboli e sezione iniziale.
+Indicare la croce a trenta gradi e spiegare la differenza rispetto al quadrato.
 
-## 21. Simulink lineare: servo LQGI — Valerio, 0:40
+## 21. Simulink lineare: servo LQGI — Valerio, 0:32
 
-Seguire osservatore e integratore.
+Seguire riferimento, misure, comando e disturbo lato link.
 
-## 22. Simulink non lineare: la stessa legge di controllo — Valerio, 0:43
+## 22. Simulink non lineare: la stessa legge di controllo — Valerio, 0:39
 
-Indicare il cambio della pianta.
+Chiarire il ruolo del campione 1 e la lettura dei due secondi di Scope.
 
-## 23. Conclusioni e limiti verificati — Valerio, 0:43
+## 23. Conclusioni e limiti verificati — Valerio, 0:44
 
-Chiudere con il compromesso A/B e i limiti.
+Chiudere con l’esito sulla mappa completa e i limiti sperimentali.

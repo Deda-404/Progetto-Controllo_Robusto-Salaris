@@ -1,3 +1,43 @@
+# Stato corrente — 21.11.2026, revisione finale dei Capitoli 10–13
+
+Gate editoriale COMPLETE/PASS. Relazione integrale di 70 pagine con 13 capitoli e 42 figure, PDF e PowerPoint di 23 slide. Verificati compilazione, riferimenti, impaginazione, identità visiva e testuale dei Capitoli 1–9 con la HEAD iniziale, rendering PowerPoint 16.0 e tabella modificabile della slide 15. Il parlato stimato con i cambi slide è 17:17 a 125 parole/minuto. Prova dal vivo NOT RUN.
+
+MATLAB R2026b: 5/5 test del percorso corrente. Controllate le norme sulle due mappe in 16 chiusure nominali, le corrispondenze MAT/CSV per robustezza sul riferimento, RAS, non lineare e riesame D–K, e l'identità dei controllori salvati. Esiti robusti confrontati con gli intervalli salvati. Nuove sintesi, ricalcolo integrale dei margini e nuove campagne non lineari e Simulink NOT RUN.
+
+LQG e Hinf2 rispettano i quattro target nominali. LQG e MuN1 passano RP sul riferimento in A e B, con errore statico di MuN1 oltre il 5%. Tutti i sette controllori della banca falliscono RP sulla mappa completa. Copertura globale di B, RAS certificata e verifica hardware restano aperte. Prossimo passo — lettura finale degli autori sulla PR #55.
+
+---
+
+# Stato corrente — 16.11.2026, confronto con MuN1
+
+Gate COMPLETE/PASS per il riesame dei controllori salvati. MuN1 è l'unico fra i cinque controllori distinti del riesame D–K a passare RP sul riferimento su A e B. Nel confronto nominale con LQG riduce il picco di comando di tracking, supera il limite di errore statico e mostra picchi più alti sotto coppia e rumore. LQG resta il riferimento per i quattro target nominali. La condizione per nuove D–K sul riferimento rimane insoddisfatta.
+
+Verificati i sei passi su A/B, le diagnosi dei picchi di Mu_A e Mu_B, il protocollo nominale comune, il percorso rapido con il grafico e cinque test MATLAB. Le due nuove sintesi D–K, la ritaratura LQGI e le nuove prove non lineari/Simulink sono NOT RUN.
+
+Relazione di 73 pagine e presentazione di 23 slide aggiornate e verificate. Il lavoro prosegue sulla PR #55. Prossimo passo — revisione degli autori del confronto e dei tre elaborati.
+
+---
+
+# Stato corrente — 16.11.2026, prestazione sul solo riferimento
+
+Gate COMPLETE/PASS per la nuova post-analisi e gli elaborati. NP passa per LQG, Hinf2, PID e Mu_B. NS e RS sono state ricalcolate e i risultati coincidono con la campagna storica. LQG soddisfa RP nelle due famiglie. Mu_B perde il requisito pesato con pianta incerta pur superando NP e RS. La reiezione del disturbo di coppia resta documentata nelle prove dedicate.
+
+Validati in MATLAB i 14 casi A/B, i cinque test esistenti, il rifiuto della cache storica e il percorso rapido della post-analisi. La firma prestazionale `Tzr_v1` distingue i risultati correnti. Nuove sintesi e simulazioni NOT RUN.
+
+Relazione di 72 pagine con indice e 13 capitoli, verificata pagina per pagina. Presentazione in PDF e PowerPoint di 23 slide, verificata anche in PowerPoint 16.0. Tabella della slide 15 e note orali modificabili. Prossimo passo — revisione degli autori sulla PR #55.
+
+---
+
+# Stato corrente — 16.11.2026, limite di assestamento a 5 s
+
+Gate COMPLETE/PASS per soglia, cache ed elaborati. PID e Mu_B passano il solo assestamento nominale. LQG e Hinf2 restano gli unici a soddisfare i quattro target nominali. LQGI e Mu_A richiedono più di 5 s. I valori misurati e gli esiti NS, NP, RS e RP provengono dalla campagna validata.
+
+MATLAB R2026b ha superato i cinque test esistenti, gli otto controlli di `verifica_sea` e il caricamento rapido delle cache H∞, D–K e analisi robuste. È stata verificata anche l'identità della firma e dei controllori della RAS salvata. Verificati il rifiuto di una firma alterata e l'identità per hash del CSV robusto riesportato. `run_all`, nuove sintesi, analisi robuste e simulazioni MATLAB/Simulink NOT RUN.
+
+Relazione integrale di 92 pagine e PDF di 23 slide ricompilati e verificati. Il PowerPoint conserva le 23 slide e include la tabella modificabile degli esiti e le note orali. Verificate apertura e resa in PowerPoint. Prossimo passo — revisione degli autori della Pull Request da `main` dopo il merge #54.
+
+---
+
 # Stato corrente — 16.11.2026, revisione del Capitolo 9
 
 Gate editoriale COMPLETE/PASS. Verificati in sola lettura struttura A/B, LFT, norme nominali, casi critici salvati e provenienza delle tabelle D–K. Le 14 righe danno RP FAIL, con 10 esclusioni sul nominale e 4 limiti dedotti da RS. Resta aperta la scelta degli obiettivi per conseguire RP prevista dalla traccia. Nuove analisi robuste, sintesi e simulazioni NOT RUN.

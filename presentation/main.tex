@@ -93,19 +93,19 @@ Padé variabile: i rapporti $G_p/G_0$ e $G_0/G_p$ introducono poli instabili.
 \column{.47\textwidth}
 Gradini separati da $5^\circ$:
 \begin{itemize}
-\item $T_s\leq2$ s;
+\item $T_s\leq\FinTsLimit$ s;
 \item overshoot $\leq15\%$;
 \item errore statico $\leq5\%$;
 \item cross-coupling $\leq25\%$.
 \end{itemize}
 \column{.49\textwidth}\small
-Tre candidati: $0.8/1.5/2$ s, con overshoot $10/15/15\%$.
+Candidati iniziali: $0.8/1.5/2$ s, con overshoot $10/15/15\%$.
 \par\medskip Modello desiderato:
 \[ M_o=\frac{9}{s^2+6s+9}I_2. \]
-Assestamento circa 1.94 s, risposta monotona.
+Assestamento del modello circa 1.94 s, risposta monotona.
 \par\medskip Coppie e recupero dal disturbo: diagnostica senza dati hardware.
 \end{columns}
-\medskip\bad{Le soglie normalizzate di NS, NP, RS e RP restano invariate.}
+\medskip\bad{La post-analisi NP e RP sul riferimento usa $T_{zr}$. Il costo completo include la coppia.}
 \end{frame}
 
 \begin{frame}{LQR: il costo deriva dalle grandezze fisiche}
@@ -148,7 +148,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \item Una CARE determina insieme $K_x$ e $K_i$.
 \item 14 stati fisici, 14 stimati, 2 integratori.
 \item Offset DC nullo nei casi lineari stabili.
-\item Nominale: $T_s=\FinLQGITs$ s; maggiore precisione, risposta più lenta.
+\item Nominale: $T_s=\FinLQGITs$ s, oltre il limite di $\FinTsLimit$ s.
 \end{itemize}
 \bad{Nessuna saturazione o anti-windup nel modello.}
 \end{frame}
@@ -184,7 +184,7 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \item Hinf2 ottiene una piccola norma nominale.
 \item Il rumore non è incluso in questo costo: occorre verificarlo.
 \end{itemize}
-\bad{Una buona NP non garantisce robustezza né un comando utilizzabile.}
+\bad{La post-analisi NP/RP usa solo $r$. Qui le norme includono anche $d$.}
 \end{frame}
 
 
@@ -195,14 +195,14 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \[\mu_{\boldsymbol\Delta}(H)=\frac{1}{\min\{\bar\sigma(\Delta):\det(I-H\Delta)=0\}}\]
 \begin{itemize}
 \item NS: stabilità nominale.
-\item NP: stabilità e norma nominale $<1$.
+\item NP: stabilità e $\|T_{zr}\|_\infty<1$ sul nominale.
 \item RS: stabilità per tutta la famiglia.
-\item RP: stabilità e norma $<1$ per tutta la famiglia.
+\item RP: stabilità e $\|T_{zr}\|_\infty<1$ su tutta la famiglia.
 \end{itemize}
 \column{.43\textwidth}
 \begingroup\newcommand{\SeaDeltaLabel}{struttura A oppure B}
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/performance.tex}}\endgroup\par
-\small $\Delta_p$: blocco fittizio di prestazione.
+\small $\Delta_p$: ritorno fittizio da $z$ a $r$.
 \end{columns}
 \medskip\good{Margine inferiore $>1$: garanzia. Superiore $<1$: requisito escluso.}
 \end{frame}
@@ -213,15 +213,17 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/dk.tex}}
 \small Tre iterazioni, \texttt{MixedMU=on}, fit $[2,1]$, 121 frequenze.
 \column{.51\textwidth}\small
-\begin{tabular}{lrr}\toprule
-Candidato & Ordine & Norma nominale\\\midrule
-Mu\_A &\FinMuAOrdine&\FinMuANorma\\
-Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
-\end{tabular}
+{\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrr}\toprule
+Candidato & Ordine & Norma $r$ & $\mathrm{RP}_r$ A/B\\\midrule
+Mu\_A &\FinMuAOrdine&\FinMuANormaR&\FinMuARPesitoA/\FinMuARPesitoB\\
+Mu\_B &\FinMuBOrdine&\FinMuBNormaR&\FinMuBRPesitoA/\FinMuBRPesitoB\\
+MuN1 &\FinMuNOneOrdine&\FinMuNOneNormaR&\FinMuNOneEsitoRPA/\FinMuNOneEsitoRPB\\\bottomrule
+\end{tabular}}
 \par\medskip Obiettivo D--K: \FinDkA\ su A, \FinDkB\ su B. Soglia desiderata: 1.
-\par\medskip Post-analisi di ogni K su entrambi i modelli.
+\par\medskip D--K su $[r;d]$. MuN1 è il controllore iniziale comune.
 \end{columns}
-\medskip\bad{Ricerca limitata e non convessa: nessuna superiorità universale.}
+\medskip\bad{MuN1 soddisfa RP sul riferimento, con errore statico nominale \FinMuNOneDC\%.}
 \end{frame}
 
 \begin{frame}{La post-analisi distingue le due rappresentazioni}
@@ -234,11 +236,11 @@ Mu\_B &\FinMuBOrdine&\FinMuBNorma\\\bottomrule
 \begin{frame}{Robustezza pesata e target temporali sono distinti}
 \centering\small\input{generated/finale_slide_esiti.tex}
 \begin{itemize}
-\item Costo comune, stessa soglia normalizzata.
-\item NP FAIL esclude già RP sul nominale.
-\item Se RS fallisce, anche RP è esclusa.
+\item $T_s$: solo assestamento nominale entro $\FinTsLimit$ s.
+\item NP$_r$ e RP$_r$: riferimento verso errore e comando pesati.
+\item Hinf2 e PID perdono stabilità nella famiglia.
 \end{itemize}
-\bad{I risultati negativi rimangono parte del confronto.}
+\good{LQG soddisfa RP sul riferimento in A e B.}
 \end{frame}
 
 
@@ -258,13 +260,17 @@ Mu\_B &\FinMuBStable\\\bottomrule
 \column{.52\textwidth}
 \includegraphics[width=\linewidth]{../report/figures/definitiva/famiglia_attuatori.png}
 \end{columns}
-\small B ricostruisce gli stessi drive con $\Delta_i=(G_{a,i}-G_0)/W_A$, stessa massa.
+\small B ricostruisce gli stessi drive. I margini A/B si riferiscono alle rispettive famiglie.
 \end{frame}
 
 \begin{frame}{Tracking e disturbi sugli impianti incerti}
-\includegraphics[width=\textwidth,height=.65\textheight,keepaspectratio]{../report/figures/definitiva/dieci_impianti.png}
-\par\small Gradino $5^\circ$, 12 s. I casi instabili sono conteggiati, senza metriche temporali.
-\par\small Coppia link 0.5 N m: picco, recupero e comando nei CSV e nella relazione.
+\centering
+% Tre pannelli alla scala originale del grafico completo, uno per controllore.
+\includegraphics[width=.29\linewidth,trim=0 281 670 0,clip]{../report/figures/definitiva/dieci_impianti.png}\hfill
+\includegraphics[width=.29\linewidth,trim=222 281 446 0,clip]{../report/figures/definitiva/dieci_impianti.png}\hfill
+\includegraphics[width=.29\linewidth,trim=668 281 0 0,clip]{../report/figures/definitiva/dieci_impianti.png}
+\par\medskip\raggedright\small Gradino $5^\circ$, 12 s. Hinf2 è stabile in \FinHinfTwoStable/10 campioni e PID in \FinPIDStable/10.
+\par\small Sotto coppia di 0.5 N\,m, LQGI rientra in circa \FinLQGIRecuperoMax\ s nel caso peggiore.
 \end{frame}
 
 \begin{frame}{Il rumore encoder può dominare il comando}
@@ -277,11 +283,12 @@ LQG &\FinLQGPeak&\FinLQGRms\\
 LQGI &\FinLQGIPeak&\FinLQGIRms\\
 Hinf2 &\FinHinfTwoPeak&\FinHinfTwoRms\\
 Mu\_A &\FinMuAPeak&\FinMuARms\\
-Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
+Mu\_B &\FinMuBPeak&\FinMuBRms\\
+MuN1 &\FinMuNOneRumore&\FinMuNOneRMSRumore\\\bottomrule
 \end{tabular}
 \end{center}
-\small Propagazione ZOH; verifica anche fra campioni, RMS raffinato entro il 2\%.
-\par\medskip\bad{Hinf2 non è utilizzabile sulla base del solo buon costo nominale.}
+\small Hinf2: a 2 ms si leggono \FinHinfTwoPiccoCampioni\ N\,m. Fra campioni emergono impulsi più grandi.
+\par\medskip\bad{Valori teorici del comando in assenza di saturazione.}
 \end{frame}
 
 \begin{frame}{Massa del secondo link e movimento non lineare}
@@ -290,7 +297,7 @@ Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
 \small Errore finale relativo in percentuale; massa $m_2$ del secondo link in colonna.
 \begin{itemize}
 \item LQG: prefiltro adattato al nominale, offset agli estremi.
-\item LQGI: l'integratore corregge l'errore misurato.
+\item LQGI: l'integratore corregge l'errore, con $T_s=\FinLQGITs$ s nel nominale lineare.
 \item La stessa massa modifica inerzia, Coriolis e gravità.
 \item La massa $m_2$ è costante in ogni prova: nessun evento di presa o rilascio.
 \end{itemize}
@@ -298,41 +305,36 @@ Mu\_B &\FinMuBPeak&\FinMuBRms\\\bottomrule
 \end{frame}
 
 \begin{frame}{Regione di attrazione: una sezione empirica}
-\begin{columns}[T]
-\column{.37\textwidth}\small
-15 condizioni: cinque direzioni, raggi $5,15,30^\circ$.
-\par\medskip $\delta\theta=\delta q$, altri stati nulli; orizzonte 15 s.
-\par\medskip LQG: \FinLQGConv/15 convergenze.
-\par LQGI: \FinLQGIConv/15.
-\par\medskip Timeout, errore e allontanamento osservato sono distinti.
-\column{.61\textwidth}
-\includegraphics[width=\linewidth]{../report/figures/definitiva/ras.png}
-\end{columns}
-\small Non sono frontiere certificate, né una garanzia su tutte le masse e tutti i ritardi.
+\centering
+% Ritagli LQGI, Hinf2 e PID dal grafico completo della relazione.
+\includegraphics[width=.28\linewidth,trim=222 282 449 0,clip]{../report/figures/definitiva/ras.png}\hfill
+\includegraphics[width=.28\linewidth,trim=672 282 0 0,clip]{../report/figures/definitiva/ras.png}\hfill
+\includegraphics[width=.28\linewidth,trim=0 0 672 282,clip]{../report/figures/definitiva/ras.png}
+\par\medskip\raggedright\small 15 punti in 5 direzioni, raggi $5,15,30^\circ$. Motori spostati quanto i link, altri stati nulli.
+\par\small Cerchio: convergenza. Quadrato: criterio mancato a 15 s. Croce: arresto per allontanamento.
 \end{frame}
 
 \begin{frame}{Simulink lineare: servo LQGI}
 \includegraphics[width=\textwidth,height=.65\textheight,keepaspectratio,trim=0 0 606 265,clip]{../report/figures/student_exports/LQGI_linear_sim.png}
 \par\small Matrici della pianta con la massa $m_2$; osservatore fisso sul nominale.
-\par\small Riferimento, disturbo lato link, encoder e comando mantengono gli stessi segnali.
+\par\small Il riferimento entra nell'integratore, gli encoder nella retroazione. Il disturbo agisce sul link.
 \end{frame}
 
 \begin{frame}{Simulink non lineare: la stessa legge di controllo}
 \includegraphics[width=\textwidth,height=.56\textheight,keepaspectratio,trim=0 0 580 110,clip]{../report/figures/student_exports/LQGI_nonlinear_sim.png}
 \par\small Il Workspace fornisce $m_2$ ai generatori incorporati; frequenza e ritardo variano, $\zeta$ resta noto.
-\par\small 20 run su otto SLX: nominale e primo campione, Mu\_A e Mu\_B nei modelli robusti.
-\par\small Tempo finale, stati e Scope verificati; questo controllo non sostituisce i target prestazionali.
+\par\small 20 esecuzioni da 2 s. Nominale e campione 1, Mu\_A e Mu\_B nei modelli $\mu$.
+\par\small Scope acquisiti. Per assestamento e picchi intercampione servono le prove dedicate.
 \end{frame}
 
 \begin{frame}{Conclusioni e limiti verificati}
 \begin{itemize}
 \item A conserva le dipendenze dei cinque parametri fisici.
 \item B concentra i drive in due dinamiche pesate; la massa resta esplicita.
-\item Ritardo variabile: forma additiva, peso di ordine \FinOrdinePeso.
-\item LQG e LQGI offrono stabilità robusta, con compromessi su precisione e rapidità.
-\item Hinf2 e PID mostrano i limiti del buon risultato nominale.
-\item D--K, rumore e RAS non forniscono una soluzione universalmente migliore.
+\item LQG soddisfa i quattro target nominali e RP sul riferimento in A e B.
+\item MuN1 passa RP sul riferimento, con errore statico \FinMuNOneDC\%.
+\item Sulla mappa riferimento--coppia, nessuno dei sette passa RP.
+\item Restano aperte copertura globale di B, RAS certificata e prove con saturazioni sul robot.
 \end{itemize}
-\medskip\good{Stessi impianti, risultati riproducibili e limiti dichiarati.}
 \end{frame}
 \end{document}

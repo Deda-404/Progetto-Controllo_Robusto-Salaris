@@ -1,10 +1,10 @@
 \providecommand{\SeaDeltaLabel}{cinque blocchi fisici}
 \begin{tikzpicture}[>=stealth,thick,b/.style={draw,align=center,minimum height=1cm,minimum width=3.1cm}]
-\node[b] (n) at (0,0) {$N$\\$[w_\Delta;w]\mapsto[v_\Delta;z]$};
+\node[b] (n) at (0,0) {$N$\\$[w_\Delta;r]\mapsto[v_\Delta;z]$};
 \node[b] (d) at (0,2) {$\Delta$: \SeaDeltaLabel};
-\node[b] (p) at (0,-2) {$\Delta_p$: pieno $4\times4$};
+\node[b] (p) at (0,-2) {$\Delta_p$: pieno $2\times4$};
 \draw[->] (n.east |- 0,.3)--(3,.3)--(3,2)--(d.east);
 \draw[->] (d.west)--(-3,2)--(-3,.3)--(n.west |- 0,.3);
 \draw[->] (n.east |- 0,-.3)--(3,-.3)--(3,-2)--node[below]{$z$}(p.east);
-\draw[->] (p.west)--node[below]{$w$}(-3,-2)--(-3,-.3)--(n.west |- 0,-.3);
+\draw[->] (p.west)--node[below]{$r$}(-3,-2)--(-3,-.3)--(n.west |- 0,-.3);
 \end{tikzpicture}

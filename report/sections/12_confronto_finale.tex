@@ -1,61 +1,118 @@
 \chapter{Confronto finale e scelta per ruolo}
-Il confronto non individua un controllore che soddisfi contemporaneamente ogni obiettivo. Le famiglie mettono in evidenza compromessi diversi, che diventano più chiari quando massa e ritardi variano insieme.
 
-La scelta distingue quattro livelli. Prima serve la stabilità interna
-nominale, altrimenti il transitorio non è utilizzabile. Poi si valuta la
-prestazione richiesta, sia attraverso il costo pesato sia attraverso
-tracking e disturbo. Si chiede quindi che la stabilità e, se possibile,
-la prestazione resistano alle incertezze. Infine si considera l'impiego
-del comando: ordine, rumore e assenza di limiti hardware identificati
-impediscono di trattare ogni soluzione matematica come immediatamente
-realizzabile. La tabella rende leggibili questi livelli senza
-sostituire gli intervalli completi del Capitolo 9.
+\section{Requisiti e mappe di prestazione}
+I quattro target nominali si applicano simultaneamente:
+$T_s\leq \FinTsLimit$ s, sovraelongazione $\leq15\%$,
+errore statico $\leq5\%$ e cross-coupling $\leq25\%$.
+Nella banca originaria li soddisfano LQG e Hinf2.
+LQGI e Mu\_A superano il limite di assestamento. PID e
+Mu\_B rientrano nei \FinTsLimit\ s, con un superamento
+rispettivamente nell'accoppiamento e nell'errore statico.
+Le misure sono nella Tabella~\ref{tab:quattro-target}.
+
+NS richiede stabilità interna al nominale. RS la richiede su
+tutta la famiglia incerta scelta, A o B. NP richiede NS e
+norma del costo pesato inferiore a uno al nominale. RP
+richiede RS e il rispetto della stessa soglia per la famiglia.
+Per NP e RP è quindi necessario dichiarare quali ingressi
+alimentano errore e comando pesati. Nella mappa completa
+$T_{z[r;d]}$ entrano riferimento e disturbo di coppia.
+Nella post-analisi $T_{zr}$ entra il solo riferimento con
+disturbo e rumore nulli. Le prove encoder valutano il
+canale di misura a parte.
 
 \input{generated/finale_confronto_finale.tex}
 
-LQG stabilizza in modo robusto entrambe le rappresentazioni e limita bene il comando prodotto dal rumore. Il prefiltro offre precisione sul nominale, ma non corregge automaticamente l'offset dovuto a una massa $m_2$ diversa o a una coppia costante. È una soluzione utile per mostrare il ruolo dello stato stimato e il limite di un inseguimento senza integrazione.
+La Tabella~\ref{tab:confronto-per-ruolo} affianca gli esiti.
+Tutti i sette controllori sono nominalmente stabili. Per
+la mappa completa Hinf2 e PID passano NP ma perdono RS
+e quindi RP. Negli altri cinque casi è già il nominale a
+escludere RP. LQG passa RP sul solo riferimento in entrambe
+le rappresentazioni. La sua riserva in B è piccola
+(margine \FinLQGIntervalloRPRB). Mu\_B passa NP sul
+riferimento e RS, ma uno scostamento della pianta può
+portare il costo a uno. Il Capitolo 9 riporta gli intervalli
+e i motivi dei singoli esiti.
 
-LQGI aggiunge soltanto due stati e mantiene la stabilità robusta. L'integratore corregge l'errore misurato nei casi stabili e rende il tracking meno sensibile alla massa. Il prezzo osservato è il tempo di assestamento, che supera il target scelto. Per un compito di posizionamento lento e preciso è il candidato più comprensibile da approfondire, senza dichiararlo già conforme a tutte le specifiche.
+\section{Quali compromessi mostra ogni controllore}
+\begin{description}
+\item[LQG.] La stima da quattro encoder e il prefiltro danno
+tracking nominale rapido e un comando contenuto nella
+prova encoder. Il prefiltro dipende dalla pianta nominale.
+Con massa diversa o sotto coppia costante rimane un offset
+nelle prove corrispondenti.
+\item[LQGI.] Due stati integrali correggono l'errore persistente
+nei casi stabili. Il vantaggio emerge con la massa variata
+e con la coppia costante, con assestamento nominale di circa
+\FinLQGITs\ s e NP sul riferimento fallita.
+\item[$H_\infty$ 1-DoF.] La sensibilità mista dà RS su A e B
+e una bassa richiesta di comando sotto encoder rumorosi.
+Sul gradino la sovraelongazione supera il limite e il
+tracking ha un errore statico rilevante.
+\item[$H_\infty$ 2-DoF.] I canali distinti per riferimento
+e retroazione migliorano il nominale. La stabilità si
+perde entro entrambe le famiglie e il comando sotto
+rumore è il maggiore della campagna.
+\item[PID strutturato.] L'ordine contenuto rende la legge
+leggibile. Il tracking nominale ha offset DC nullo, con
+cross-coupling eccessivo. I margini RS e i casi instabili
+indicano la fragilità al variare della pianta.
+\item[Mu\_A e Mu\_B.] I finali D--K danno RS in A e B.
+Mu\_A ha il margine RS più alto della banca in A, ma
+l'errore statico del canale peggiore è circa \FinMuAEss\%.
+Mu\_B riduce l'errore a circa \FinMuBEss\% e passa NP
+sul riferimento, con RP sul riferimento fallita.
+Gli ordini \FinMuAOrdine\ e \FinMuBOrdine\ e i picchi
+encoder \FinMuAPeak\ e \FinMuBPeak\ N\,m pesano sulla
+possibilità di realizzazione.
+\end{description}
 
-Hinf1 mostra come la sensibilità mista controlli trasferimenti pesati senza garantire una buona forma del transitorio. Passare alla struttura 2-DoF permette a Hinf2 di seguire molto meglio il modello desiderato sul nominale. Tuttavia il suo margine robusto è piccolo e il rumore genera coppie molto elevate. La piccola norma nominale è quindi un risultato matematico corretto, ma insufficiente a motivarne l'uso.
+\section{MuN1 nel riesame D--K}
+MuN1 è il controllore iniziale comune dei due percorsi D--K.
+Il riesame lo valuta separatamente dai sette. Passa NS e RS
+e soddisfa NP e RP sul riferimento in A e B
+(Tabella~\ref{tab:cap9-riesame-r}). La norma sul
+riferimento è \FinMuNOneNormaR, con margine RP
+\FinMuNOneRPA\ in A e \FinMuNOneRPB\ in B.
+La norma nominale della mappa completa è \FinMuNOneNorma.
+Per la RP completa di MuN1 mancano i margini del riesame
+su quella mappa.
 
-Il PID strutturato contiene pochi stati e conserva una legge facilmente riconoscibile. Ottiene NP sul costo comune, ma non RS. La semplicità della struttura non elimina l'accoppiamento del braccio né il ritardo dei drive: i due canali diagonali hanno una libertà limitata per affrontarli.
+Nelle prove lineari nominali MuN1 si assesta in
+\FinMuNOneTs\ s e limita il picco di comando di
+tracking a \FinMuNOnePiccoComando\ N\,m, rispetto
+a \FinLQGTrackPeak\ N\,m di LQG. L'errore statico
+di \FinMuNOneDC\% supera il 5\%. Sotto coppia espone
+il braccio a un picco di \FinMuNOneDisturbo$^\circ$,
+contro \FinLQGDisturboStudio$^\circ$ di LQG, e
+entrambi mancano il rientro entro 12 s nel caso peggiore.
+Nel rumore comune il suo picco e RMS sono
+\FinMuNOneRumore\ e \FinMuNOneRMSRumore\ N\,m,
+contro \FinLQGPeak\ e \FinLQGRms\ N\,m. Sono prove
+separate dalla campagna non lineare e dai dieci impianti.
 
-La D--K incorpora la struttura incerta, ma il problema non è convesso e gli scaling aumentano l'ordine. Mu\_A e Mu\_B hanno rispettivamente \FinMuAOrdine\ e \FinMuBOrdine\ stati e norme comuni \FinMuANorma\ e \FinMuBNorma. Gli errori DC sono \FinMuAEss\% e \FinMuBEss\%; i picchi encoder osservati sono \FinMuAPeak\ e \FinMuBPeak\ N m. Queste grandezze vanno lette insieme ai margini e ai campioni: la provenienza da una sintesi robusta, da sola, non giustifica l'adozione del candidato.
+\section{Scelta rispetto all'obiettivo}
+A permette di ricondurre un modo critico a un parametro
+come $m_2$ o il ritardo. B concentra i drive in
+perturbazioni dinamiche e rende diretto il confronto
+con l'inviluppo in frequenza, al prezzo di ammettere
+dinamiche più libere. Per LQG e i finali D--K i limiti
+inferiori RS sono più piccoli in B, mentre per MuN1
+risultano vicini e il limite inferiore in B è leggermente
+superiore. Il margine dipende dal controllore e
+dall'insieme ammesso, oltre che dalla mappa prestazionale
+quando si valuta RP.
 
-
-A conserva il significato di ogni variazione. Una massa più grande modifica insieme inerzia e gravità; un ritardo più grande sposta insieme il polo e lo zero di Padé. Questa correlazione evita che l'analisi combini coefficienti fisicamente incompatibili. È la descrizione naturale quando gli intervalli dei parametri sono noti e il modello fisico è credibile.
-
-Il costo è la complessità della struttura reale ripetuta: cinque grandezze non significano cinque sole porte. Prodotti, inversi e ripetizioni possono rendere più impegnative l'analisi e la sintesi. La fedeltà della famiglia non rende automaticamente semplice il calcolo.
-
-
-B riassume gli scostamenti dei drive in due perturbazioni dinamiche e un peso comune. Il procedimento SISO rende leggibile il passaggio dalla famiglia all'inviluppo e al fit. La massa $m_2$ resta esplicita nella meccanica: il confronto riguarda davvero il modo di rappresentare gli attuatori.
-
-Il prezzo è la libertà concessa a dinamiche che non corrispondono necessariamente a frequenze e ritardi fisici della famiglia. Questa libertà può ridurre i margini dimostrabili. Inoltre il peso è verificato su un insieme finito di casi: la copertura globale resta un limite dichiarato.
-
-Le due rappresentazioni sono quindi strumenti complementari. A aiuta a spiegare l'origine fisica delle variazioni; B offre una descrizione dinamica compatta dei drive coperti. Nei dieci impianti ricostruiti, a controllore fissato, producono la stessa risposta. Sono le garanzie sull'insieme ammesso a cambiare.
-
-\section{Scelta rispetto alla seconda formulazione}
-L'amplificazione encoder suggerisce di includere questo ingresso nella
-pianta generalizzata, come discusso nei Capitoli 8 e 9. Il criterio di
-scelta dovrebbe allora verificare che il vantaggio sul rumore non venga
-pagato con perdita di RS, offset o comando eccessivo durante tracking
-e disturbo. Anche il valore di RP andrebbe ricalcolato sul problema
-ampliato, senza trasferire quello del costo privo di rumore.
-
-Per il modello della traccia questa rimane una direzione teorica, senza
-ulteriori candidati verificati da adottare. Le sintesi disponibili non
-forniscono un unico controllore conforme a tutte le richieste. LQG è
-un riferimento utile per rapidità e rumore nominali; LQGI è il candidato
-da approfondire quando la precisione sotto carico e disturbo costanti
-conta più della rapidità. Hinf2 rimane un comparatore nominale, mentre
-Mu\_A e Mu\_B mostrano i limiti della ricerca robusta effettuata e
-non sono raccomandati come soluzioni operative.
-
-Una futura scelta sperimentale richiederebbe limiti reali di coppia e
-velocità, saturazioni e gestione dell'integratore, frequenza di
-campionamento e ritardo misurato. Aggiungere tali vincoli cambierebbe il
-problema e richiederebbe nuove verifiche: non li assumiamo già soddisfatti
-dalle prove senza saturazione. Il valore del confronto è mostrare
-quale proprietà offre ciascun metodo e quale requisito rimane aperto,
-anziché assegnare una superiorità generale al metodo più sofisticato.
+LQG è la scelta per soddisfare i quattro target nominali
+insieme a RS, RP sul riferimento e basso comando
+nella prova encoder. Per un compito dominato da
+precisione sotto carico costante, LQGI documenta il
+vantaggio dell'integratore con un transitorio più lento.
+MuN1 è un comparatore per riserva pesata e sforzo durante
+il tracking, con il limite sulla precisione statica.
+I casi di perdita di stabilità e le richieste teoriche
+di coppia elevate restano ostacoli per la scelta
+operativa. L'inclusione del rumore nella sintesi e la
+verifica con saturazioni richiederebbero un nuovo
+confronto sugli stessi ingressi e impianti.
+\FloatBarrier

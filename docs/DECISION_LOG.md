@@ -2518,3 +2518,37 @@ Lo schema della pianta generalizzata contiene già il collegamento 2-DoF e sosti
 Si è scelto di mostrare norma nominale, esiti NP/RS e margini nella stessa tabella, per leggere la causa del fallimento RP senza una seconda tabella di classificazione. La colonna RP distingue la deduzione dal nominale dal limite superiore ricavato da RS. Le frequenze critiche sono illustrate con LQG e restano disponibili nella tabella esportata e nei dati. Conservati gli schemi N–Δ, RP e D–K e il grafico dei margini e delle iterazioni. Il riepilogo dei comandi MATLAB è assorbito nei paragrafi pertinenti e nell'appendice esistente.
 
 Resta aperta la scelta progettuale sugli obiettivi prestazionali prevista dalla traccia. Il costo comune non è soddisfatto in modo robusto da alcuno dei sette candidati. La seconda D–K con rumore è presentata come estensione teorica della campagna corrente. Stato della revisione: proposta agli autori.
+
+## 2026-11-16 — Limite di assestamento a 5 s
+
+**Stato** — Proposto sul ramo di aggiornamento per la revisione degli autori.
+
+Il limite di 5 s consente un movimento meno rapido in presenza delle dinamiche elastiche e dei ritardi dei drive. Il confronto preliminare a 0,8, 1,5 e 2 s conserva il ruolo storico. Il riferimento $M_o$ a 3 rad/s continua a descrivere un assestamento di circa 1,94 s. Le prove sui controllori usano 5 s come limite di accettazione.
+
+L'alternativa di aggiornare tutta la firma v3 avrebbe reso incompatibili le cache senza cambiare il problema dinamico. La posizione che conteneva Ts conserva il valore riservato 2 e l'esportatore applica il valore corrente di `p.Ts` ai CSV validati. Il confronto dell'intera firma e l'identità dei controllori restano obbligatori nei percorsi che li verificano. La modifica lascia la pianta generalizzata, Mo, i pesi e le soglie NS, NP, RS e RP ai valori validati.
+
+## 2026-11-16 — Post-analisi della prestazione sul solo riferimento
+
+**Stato** — Proposta per la revisione degli autori nella PR #55.
+
+La prestazione di tracking pesata usa $T_{zr}$, con due ingressi di riferimento e quattro uscite pesate. Il costo di sintesi resta quello già validato. La norma considera sia l'errore rispetto a Mo sia il comando. La soglia in norma resta unitaria. NS e RS si verificano sulla chiusura completa. La reiezione del disturbo di coppia e le risposte al rumore si valutano nelle prove dedicate.
+
+L'analisi su riferimento e coppia insieme resta documentata in `confronto_robusto.*`. Per il nuovo costo la cache `confronto_robusto_r.mat` richiede la versione `Tzr_v1`, la firma di configurazione e la stessa banca di controllori. `postanalisi_sea(true)` permette di rifare le 14 verifiche senza passare dalle sintesi.
+
+LQG e Mu_B passano ora NP sul riferimento. Entrambi soddisfano RS in A e B. Solo LQG soddisfa anche RP. Per Mu_B i due calcoli diretti di `robgain` restituiscono un limite superiore sotto uno. I tre risultati per ciascuna famiglia si leggono accanto alle risposte separate di coppia, comando e rumore.
+
+## 2026-11-16 — Confronto con l’inizializzazione MuN1
+
+**Stato** — Proposta per il confronto nella PR #55. La banca ufficiale conserva i sette controllori.
+
+Il riesame usa la stessa post-analisi sul riferimento per ciascun controllore salvato, in A e B. La scelta richiede RP su entrambe le famiglie e tiene conto dei transitori, della precisione e della risposta alla coppia e al rumore nelle prove nominali. MuN1 è lo stesso controllore all'inizio dei due percorsi D–K e proviene dalla campagna con rumore encoder. Ottiene la seconda garanzia RP sul riferimento oltre a LQG, con riserva maggiore sulla norma pesata.
+
+Una nuova D–K avrebbe ottimizzato $T_{zr}$ scegliendo gli ingressi $[r;u]$ della pianta generalizzata, con gli stessi pesi e incertezze. Il doppio PASS di un controllore salvato soddisfa la condizione richiesta per fermare la ricerca. L'errore statico di MuN1 supera 5% e il suo comando sotto rumore è più elevato. Il confronto lascia LQG come scelta per il rispetto dei quattro target nominali e per i risultati nella prova encoder comune.
+
+## 2026-11-21 — Esposizione delle verifiche finali
+
+**Decisione.** Usare le prove salvate come evidenza per i Capitoli 10–13. Per Lyapunov basta enunciare il criterio di certificazione su un sottolivello. Le tabelle della RAS, della massa e del rumore documentano esiti distinti che servono a leggere i grafici e i compromessi.
+
+**Alternative.** Una derivazione completa di Lyapunov richiederebbe un sottolivello verificato numericamente; cancellare la tabella della massa o il caso di rumore estremo toglierebbe evidenza quantitativa per l'integratore e per il comando intercampione. Le slide mostrano tre pannelli rappresentativi per rendere leggibili le curve.
+
+**Conseguenze.** Il confronto usa i quattro target nominali e le due mappe pesate, con proprietà robuste legate alla famiglia dichiarata. Le conclusioni sul rumore, sugli Scope e sulla RAS restano circoscritte agli ingressi e agli orizzonti delle prove. Gate editoriale COMPLETE/PASS. Le limitazioni prestazionali e sperimentali restano quelle documentate.

@@ -1,58 +1,63 @@
 \chapter{Conclusioni e limiti}
-Abbiamo studiato il manipolatore SEA con le due masse puntiformi della traccia: $m_1=1$ kg e $m_2=0.8$ kg. L'incertezza di $m_2$, fra 0.72 e 0.88 kg, entra coerentemente in inerzia, Coriolis e gravità. L'equilibrio verticale rimane valido, mentre la linearizzazione dipende dalla massa. I controlli indipendenti sul Jacobiano, sull'energia e sul contributo geometrico della massa distale verificano questa coerenza.
 
-Il modello A comprende quattro parametri attuativi reali e una massa reale condivisa. Il modello B mantiene la stessa massa e sostituisce i soli drive con due perturbazioni dinamiche additive pesate. Il ritardo variabile è decisivo nella scelta: l'inversione del nominale di Padé introduce poli instabili negli errori moltiplicativi, mentre la differenza additiva permette perturbazioni stabili e proprie. Un peso di ordine 3 copre i casi dichiarati con un eccesso contenuto.
+\paragraph*{Modello e verifiche}
+Il modello del manipolatore SEA della traccia comprende la
+meccanica dei due link, le molle fra link e rotori e la
+dinamica dei drive. Attorno alla verticale abbiamo progettato
+e confrontato controllori LQG con e senza integratore,
+$H_\infty$ in diverse strutture e due finali $\mu$.
+Alle verifiche sulla chiusura lineare affianchiamo
+simulazioni non lineari, prove su dieci impianti e collaudi
+Simulink con parametri assegnati.
 
-Le specifiche temporali adottate, 2 s e 15\% per assestamento e sovraelongazione, mantengono un compito significativo e sono coerenti con il riferimento desiderato. Precisione statica al 5\% e accoppiamento al 25\% restano richieste separate. Le definizioni e le soglie di NS, NP, RS e RP non cambiano.
+\paragraph*{Descrizione delle incertezze}
+In A la massa distale condivisa conserva il legame fisico fra
+inerzia, Coriolis e gravità. Le frequenze naturali e i ritardi
+restano parametri di ciascun drive. B mantiene la massa e
+raccoglie gli scostamenti dei drive in due perturbazioni
+dinamiche additive, scalate da un peso di ordine
+\FinOrdinePeso. L'additiva evita i poli instabili che
+comparirebbero dividendo per il nominale con lo zero destro
+di Padé. I campioni ricostruiti permettono di confrontare le
+due rappresentazioni a impianto fisico fissato. Le garanzie
+restano legate alla rispettiva famiglia incerta.
 
-LQG e LQGI offrono stabilità robusta, con un compromesso fra rapidità, precisione e reiezione del disturbo. Hinf2 e PID mostrano che una buona prestazione nominale può coesistere con fragilità alle incertezze. Le sintesi D--K limitate e le prove di rumore impediscono di proclamare una soluzione migliore in ogni senso. Anche gli esiti negativi aiutano a capire quali obiettivi vengono realmente controllati da ciascun metodo.
+\paragraph*{Prestazioni e scelta}
+LQG combina rapidità, precisione nominale, RS e RP sul solo
+riferimento in A e B. LQGI corregge l'offset dovuto a una
+coppia costante nei casi stabili, con un tempo di risposta
+oltre il target. Hinf2 e PID mostrano quanto la buona norma
+nominale possa convivere con la perdita di stabilità nei
+campioni incerti. Mu\_A e Mu\_B mantengono RS, con limiti
+nella precisione e nella risposta al rumore.
+Le due D--K sono state limitate a tre passi salvati
+per rappresentazione. Il risultato dipende da quella
+ricerca e dalla mappa scelta. MuN1 aggiunge una garanzia
+sul riferimento con maggiore
+riserva pesata, al costo di errore statico oltre il 5\%
+e maggiore esposizione alla coppia e al rumore rispetto
+a LQG nelle prove dedicate. Nessuno dei sette controllori
+della banca passa RP sulla mappa completa riferimento--disturbo.
+I margini di MuN1 discussi nel riesame riguardano la mappa
+sul riferimento.
 
-Restano limiti precisi. Le tolleranze sono ipotesi, non dati identificati. Padé approssima il ritardo e non certifica il comportamento con un ritardo esatto a ogni frequenza. La copertura di B non è dimostrata sull'intero box A. Le regioni di attrazione sono sezioni empiriche nominali. Il modello non include saturazione, attrito secco, giochi né variazioni della massa durante il moto.
+\paragraph*{Limiti sperimentali e modellistici}
+Gli intervalli sono ipotesi di progetto, da confrontare con
+misure dei drive e del manipolatore. Padé del primo ordine
+approssima il ritardo. Il fit additivo copre i casi verificati,
+con copertura globale del box A ancora da dimostrare.
+I dieci campioni danno evidenza empirica. Le sezioni RAS sono
+nominali e riguardano le condizioni iniziali provate,
+senza un certificato numerico di Lyapunov.
 
-Per avvicinarsi a una realizzazione fisica servirebbero dati di targa, limiti di coppia, misure dei drive e una gestione dell'integratore in saturazione. Nel perimetro del progetto, il risultato è un confronto riproducibile in cui equazioni, famiglie incerte, controllori e simulazioni usano le stesse ipotesi e permettono di spiegare sia i vantaggi sia i limiti delle scelte.
-
-Il contributo centrale è il collegamento fra origine fisica e forma
-matematica dell'incertezza. Un'unica massa condivisa conserva le
-correlazioni meccaniche; quattro scalari attuativi mantengono il significato
-di frequenza naturale e ritardo; due blocchi dinamici concentrano
-invece gli scostamenti dei drive lasciando esplicita la massa $m_2$. La LFT
-permette di rendere visibili queste dipendenze, distinguendo numero di
-parametri, ripetizioni e stati. Il fit non è scelto soltanto perché
-segue una curva: si controllano stabilità, proprietà, norma continua e
-quanto il peso eccede l'inviluppo, oltre alla verifica su casi indipendenti.
-
-Lo stesso ragionamento collega i risultati dei controllori. LQG separa
-progetto del feedback e dello stimatore, ma tale separazione nominale
-non è di per sé una garanzia robusta. LQGI introduce il modello interno
-delle costanti e rende evidente il compromesso fra precisione e tempo
-di risposta. La sensibilità mista controlla trasferimenti pesati, mentre
-il model following distingue forma desiderata del tracking e feedback.
-La sintesi strutturata limita la libertà del controllore; la D--K
-aggiunge la famiglia incerta al progetto, ma resta una ricerca non
-convessa con ordine e compromessi da verificare a posteriori.
-
-Anche le verifiche hanno ruoli diversi. I dieci impianti comuni
-mostrano esempi della dispersione fisica, senza dimostrare una probabilità
-di successo. I margini strutturati riguardano la famiglia lineare
-specificata. Le simulazioni non lineari controllano traiettorie complete
-a massa costante, e le quindici condizioni iniziali per candidato
-costituiscono soltanto sezioni empiriche nominali. La derivazione di
-Lyapunov spiega come si potrebbe ottenere un insieme interno, ma non
-aggiunge un certificato numerico ai risultati disponibili.
-
-La distinzione è particolarmente importante per il rumore. Una posizione
-regolare può nascondere impulsi di comando fra campioni, perché drive
-e meccanica filtrano la richiesta prima che raggiunga i link. Il
-campionamento dello Scope e la scansione intercampione non sono la
-stessa misura. Includere il rumore nel costo è una possibilità progettuale
-motivata da questa osservazione; la formulazione teorica non viene
-presentata come una nuova campagna eseguita.
-
-Gli otto SLX rendono leggibili le interfacce e permettono l'avvio con
-inizializzazione automatica. Il collaudo disponibile ne documenta
-l'esecuzione con parametri e controllori coerenti, senza trasformare
-il completamento dei run in un certificato prestazionale. Nel complesso,
-il progetto offre una catena verificabile di equazioni, dati, grafici
-e interpretazioni. Le proprietà non raggiunte restano esplicite e
-indicano quali aspetti richiederebbero identificazione e riprogettazione
-prima di un impiego sul manipolatore reale.
+Il modello opera senza saturazioni, attrito secco, giochi
+o cambi di massa durante il moto. Mancano misure sul
+robot reale, dati di targa completi e limiti verificati di
+coppia, velocità e campionamento. Le valutazioni sotto
+rumore quantificano dunque le richieste del controllore nel
+modello. Per scegliere un controllore da provare su hardware
+servirebbero misure dei ritardi e del rumore, i limiti dei
+motori e, per il servo integrale, una gestione della
+saturazione. I risultati delimitano il compromesso da
+verificare fra precisione, tempo di risposta, robustezza,
+rigetto dei disturbi e sforzo di controllo.

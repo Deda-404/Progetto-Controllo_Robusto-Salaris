@@ -1,107 +1,98 @@
 \chapter{Verifica pratica della robustezza su impianti incerti}
-\section{Scopo e costruzione degli impianti}
-Le prove campionate mostrano in modo diretto che cosa significa cambiare i parametri fisici. Usiamo dieci quintuple $(\omega_{n1},\tau_{d1},\omega_{n2},\tau_{d2},m_2)$, estratte una sola volta con seed 20261101. Tutti i controllori ricevono gli stessi impianti, oltre al nominale. I valori sono conservati nel file \texttt{parametri\_dieci\_impianti.csv}.
 
+\section{Dieci impianti fisici comuni}
+Per osservare come cambiano le prestazioni, estraiamo una volta
+dieci quintuple di parametri con seed 20261101. La frequenza
+naturale di ciascun drive cambia la zona in cui il comando è
+attenuato, il ritardo ne cambia la fase e la massa $m_2$ modifica
+la dinamica meccanica. Le frequenze sono fra 34 e 46 rad/s, i
+ritardi fra 12 e 18 ms e la massa fra 0.72 e 0.88 kg. Lo
+smorzamento dei drive resta a 0.8. Tutti i controllori sono
+confrontati sulle stesse dieci quintuple e sul nominale, così
+un caso sfavorevole può essere ripetuto con un altro controllore
+senza cambiare la pianta. I valori sono salvati in
+\texttt{parametri\_dieci\_impianti.csv}.
 \input{generated/finale_campioni_fisici.tex}
 
-Non campioniamo una seconda popolazione arbitraria di B. Per ogni impianto fisico ricaviamo invece le perturbazioni additive normalizzate che ricostruiscono esattamente i suoi drive, mantenendo identica la massa $m_2$. La risposta a controllore fissato è allora unica: A e B cambiano la descrizione della famiglia, non l'impianto che viene simulato.
+\section{Le rappresentazioni A e B sugli stessi campioni}
+In A le frequenze, i ritardi e la massa entrano direttamente
+come parametri fisici. In B il drive nominale riceve una
+correzione dinamica additiva: il peso $W_A$ scala lo
+scostamento possibile con la frequenza e una perturbazione
+normalizzata ne specifica la dinamica. La massa $m_2$ resta
+un parametro meccanico in entrambe.
 
-La tabella dei parametri è parte dell'esperimento: il solo seed non basta
-se cambiano ordine delle estrazioni, generatori o intervalli. Conservare
-le quintuple consente di ricostruire ogni pianta e di confrontare i
-controllori sul medesimo caso sfavorevole. I dieci impianti non sono le
-quindici condizioni iniziali della RAS: qui cambia il modello fisico,
-lì cambia lo stato iniziale della stessa pianta nominale.
+Per ciascuno dei dieci impianti la perturbazione additiva
+che ricostruisce il drive è la differenza rispetto al nominale
+divisa per $W_A$. È stata controllata per stabilità, proprietà
+e norma. Il massimo errore relativo di ricostruzione A/B è
+\FinErroreAB. A controllore fissato le risposte dei due modelli
+allo stesso campione coincidono entro questa precisione di
+rappresentazione. B ammette anche dinamiche senza una
+corrispondente coppia fisica di frequenza e ritardo, e la
+copertura dell'intero box A resta da dimostrare. Il confronto
+dei margini del Capitolo 9 valuta l'effetto di queste differenze
+sull'intera famiglia dichiarata.
 
-La ricostruzione dei drive attraverso $(G_{ai}-G_{a0})/W_A$ è verificata
-anche in stabilità, proprietà e norma. Il massimo errore relativo di
-ricostruzione A/B è \FinErroreAB. Una coppia di curve coincidenti
-non prova però che l'intera famiglia B coincida con A: prova che quel
-singolo impianto fisico è stato rappresentato coerentemente nei due modi.
-
-\section{Stabilità interna prima delle prestazioni}
-Controlliamo i poli della realizzazione completa prima di misurare il tracking. Per un caso instabile lasciamo le metriche temporali non definite e riportiamo il fallimento; non lo eliminiamo dal conteggio. I massimi di errore e coppia nelle tabelle sono calcolati sui casi stabili, specificandone il numero.
+\section{Stabilità interna e tracking}
+Prima di misurare il tracking si controllano tutti i poli
+della chiusura. Un polo con parte reale positiva fa crescere
+un modo interno, anche quando l'uscita di una certa prova
+lo mostra poco. I casi instabili restano nel conteggio
+(Tabella~\ref{tab:impianti-comuni}); i massimi di errore e
+comando usano soltanto i casi stabili.
 
 \input{generated/finale_impianti.tex}
 
-Dieci successi sono un'evidenza utile, ma non dimostrano robustezza su un continuo di parametri. Al contrario, un solo caso instabile basta a escludere la stabilità dell'intera famiglia. Per questo affianchiamo sempre le simulazioni alla $\mu$-analysis.
+Hinf2 resta stabile in \FinHinfTwoStable/10 campioni e PID in
+\FinPIDStable/10. Il basso errore DC riportato per Hinf2
+riguarda quindi un solo impianto incerto stabile. LQG, LQGI,
+Hinf1, Mu\_A e Mu\_B sono stabili in tutti e dieci.
+LQGI conserva un errore DC praticamente nullo nei campioni,
+mentre il massimo di LQG sale al 5.41\%. La precisione statica
+dei finali D--K è inferiore in questi casi, pur con tutti i
+campioni stabili.
 
-I casi stabili sono \FinLQGStable/10 per LQG, \FinLQGIStable/10 per LQGI, \FinHinfOneStable/10 per Hinf1, \FinHinfTwoStable/10 per Hinf2, \FinPIDStable/10 per PID, \FinMuAStable/10 per Mu\_A e \FinMuBStable/10 per Mu\_B.
-Il polo dominante rende visibile
-quanto rapidamente una perturbazione libera si spegne o cresce: una
-parte reale positiva è una violazione di stabilità, non semplicemente
-un tempo di assestamento molto lungo. Una cancellazione nella sola
-mappa riferimento--posizione potrebbe nascondere quel modo, perciò il
-controllo viene svolto sulla realizzazione interna completa.
-
-\section{Tracking e accoppiamento tra giunti}
-Applichiamo separatamente gradini di $5^\circ$ e misuriamo assestamento, sovraelongazione, errore DC e massimo movimento del giunto non comandato. La tabella nominale rende visibile il compromesso senza confondere le specifiche temporali con il costo pesato.
+La Figura~\ref{fig:dieci-impianti} mostra quanto si allargano
+i transitori al variare della pianta. Le metriche usano prove
+con gradini separati sui due giunti. Si leggono assestamento
+rispetto al valore finale, sovraelongazione rispetto al gradino,
+errore statico rispetto al riferimento e cross-coupling,
+ossia il picco del giunto non comandato diviso per i $5^\circ$
+richiesti al giunto comandato. Mu\_A, per esempio, sposta
+poco il secondo giunto ma manca il riferimento anche nel
+nominale. La Tabella~\ref{tab:quattro-target} riporta il nominale
+separatamente dai dieci campioni.
 
 \input{generated/finale_temporali.tex}
 
-\begin{figure}[htbp]\centering
-\includegraphics[width=.97\linewidth]{figures/definitiva/dieci_impianti.png}
-\caption{Risposta del primo giunto: nominale e dieci impianti comuni nei casi stabili, riferimento di $5^\circ$. Le metriche comprendono entrambi i giunti.}
+\begin{figure}[!tbp]\centering
+\includegraphics[width=.95\linewidth,height=.34\textheight,keepaspectratio]{figures/definitiva/dieci_impianti.png}
+\caption{Gradino di $5^\circ$ al primo giunto. Le curve mostrano
+il nominale e i campioni stabili. Il numero di curve di Hinf2 è
+ridotto per via delle instabilità registrate in tabella.}
+\label{fig:dieci-impianti}
 \end{figure}
 
-L'azione integrale protegge la precisione statica, ma il tempo di assestamento rimane una richiesta distinta. Anche un controllore nominalmente preciso può perdere stabilità quando il ritardo cambia. Le risposte rendono quindi leggibile ciò che i soli margini non mostrano: quanto il risultato si disperde nella famiglia fisica.
-
-Il cross viene normalizzato all'ampiezza del gradino richiesto, non
-all'eventuale risposta ridotta del giunto comandato. Altrimenti un
-controllore che quasi non muove il robot potrebbe apparire ben
-disaccoppiato soltanto perché entrambe le uscite sono piccole.
-Analogamente, un errore statico del \FinMuAEss\% non è accettabile anche se
-overshoot e cross sono minimi. Queste metriche vanno lette insieme,
-come accade per Mu\_A sul nominale.
-
-LQG segue rapidamente il riferimento nominale, ma la normalizzazione
-del prefiltro è legata alla pianta di progetto. L'integratore di LQGI
-può invece correggere l'offset quando il caso resta stabile, al costo
-di un transitorio più lento. Per Hinf2 la buona forma nominale della
-risposta non previene la perdita di stabilità quando massa e drive
-variano insieme. La dispersione delle curve distingue questi effetti
-che una singola risposta nominale non renderebbe visibili.
-
-\section{Reiezione della coppia lato link}
-Il disturbo di 0.5 N m viene applicato a un link alla volta, senza attraversare il drive. Riportiamo il massimo spostamento e il tempo di rientro entro $0.5^\circ$. Se l'errore rimane fuori dalla banda fino a 12 s, il recupero è segnato come non raggiunto nell'orizzonte. La coppia richiesta dal controllore è sempre valutata a monte del drive.
+\section{Rigetto di coppia sui campioni stabili}
+Con riferimento nullo applichiamo 0.5 N\,m a un link alla volta.
+Il tempo di recupero misura il rientro di entrambi i giunti entro
+$0.5^\circ$ dall'equilibrio per il resto della prova. In tabella,
+$\infty$ indica rientro mancato entro l'orizzonte di 12 s.
 
 \input{generated/finale_disturbo.tex}
 
-Il tempo di recupero misura l'ingresso definitivo nella fascia attorno
-all'equilibrio, non attorno al valore finale eventualmente spostato.
-Un controllore può assestarsi attorno a un offset e non recuperare mai
-la fascia richiesta. La reiezione del disturbo richiede quindi di leggere
-insieme massimo spostamento, residuo e tempo di recupero. Anche il
-comando va valutato: contenere lo spostamento chiedendo una coppia
-molto elevata non è lo stesso compromesso di un recupero più lento
-con sforzo moderato.
+Nel peggiore dei dieci casi LQGI rientra in circa 3.56 s,
+mentre LQG manca il rientro già nel nominale. Hinf2
+rientra in meno di un secondo nell'unico campione stabile.
+Il picco di posizione e lo sforzo di comando completano
+la lettura dei tempi di recupero.
 
-\section{Interpretazione e collegamento con la \texorpdfstring{$\mu$-analysis}{mu-analysis}}
-La descrizione parametrica conserva le correlazioni fra coefficienti causate dalla stessa massa e dallo stesso ritardo. La descrizione concentrata consente invece molte dinamiche che non corrispondono a un drive fisico della famiglia campionata. Un margine inferiore in B può essere il prezzo di questa maggiore libertà; non dimostra che il manipolatore reale sia cambiato.
-
-Il confronto finale tiene insieme quattro elementi: esito nominale, margini robusti, comportamento sugli impianti comuni e sensibilità al rumore. Nessuno dei quattro, preso isolatamente, descrive completamente il controllore.
-
-Un risultato campionato e un margine strutturato possono dare
-informazioni differenti senza essere incompatibili. Dieci casi stabili
-sono possibili anche con RS fallita, perché la perturbazione critica
-non è necessariamente fra le dieci estrazioni. In B può inoltre essere
-una dinamica stabile ammessa dal peso e priva di una coppia fisica
-corrispondente. Quando una garanzia RS è presente, rimane circoscritta
-al modello lineare e alla famiglia dichiarata, senza estendersi a
-saturazioni o ad ampiezze non lineari arbitrarie.
-
-\section{Candidati con rumore sugli stessi impianti}
-La formulazione ampliata dei Capitoli 8 e 9 suggerisce un confronto
-aggiuntivo con encoder rumorosi sugli stessi impianti congelati.
-Per attribuire un miglioramento al controllore occorrerebbe mantenere
-comuni sia le quintuple sia la sequenza encoder. Cambiare il peso di
-rumore nella sintesi non dovrebbe cambiare automaticamente la varianza
-fisica nella verifica: altrimenti si confronterebbero due problemi.
-
-Non è disponibile una nuova campagna di questo tipo sul modello corrente. I risultati della prova encoder nominale e quelli dei dieci
-impianti puliti sono distinti e non vengono sommati in una garanzia
-congiunta. L'analisi nominale di $T_{uv}$ individua la sensibilità alle
-misure; RS studia la stabilità della famiglia. Nessuna delle due,
-separatamente, fornisce il massimo comando rumoroso per tutti i membri.
-Questo chiarisce quali verifiche sarebbero necessarie prima di adottare
-una futura sintesi con rumore esplicito.
+\paragraph*{Portata della verifica.}
+Dieci successi sono un riscontro empirico, mentre anche un solo
+campione instabile esclude la garanzia di stabilità su A.
+La $\mu$-analysis valuta la famiglia lineare dichiarata, incluse
+dinamiche di B senza un corrispondente drive fisico della campagna.
+Per valutare insieme variazioni parametriche e rumore encoder
+servirebbe una campagna abbinata.
+\FloatBarrier

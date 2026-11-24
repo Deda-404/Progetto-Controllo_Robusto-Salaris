@@ -424,7 +424,7 @@ accumula memoria se si muove durante il transitorio dell'altro giunto.
 \begin{table}[!htb]\centering
 \begin{tabular}{lrrr}\toprule
 Indicatore & LQG & LQGI & Target\\\midrule
-Assestamento [s] & \FinLQGTs & \FinLQGITs & $\leq 2$\\
+Assestamento [s] & \FinLQGTs & \FinLQGITs & $\leq\FinTsLimit$\\
 Sovraelongazione [\%] & \FinLQGMp & \FinLQGIMp & $\leq 15$\\
 Errore DC [\%] & \FinLQGEss & \FinLQGIEss & $\leq 5$\\
 Cross-coupling [\%] & \FinLQGCross & \FinLQGICross & $\leq 25$\\
@@ -439,7 +439,7 @@ per ciascun indicatore nei due gradini da $5^\circ$.}
 \paragraph{Tracking nominale.}
 La Tabella~\ref{tab:cap7-tracking} mostra che LQG soddisfa i quattro
 target. LQGI riduce cross-coupling e picco di comando in queste prove,
-ma richiede \FinLQGITs\ s per assestarsi e supera il limite di 2 s.
+ma richiede \FinLQGITs\ s per assestarsi e supera il limite di \FinTsLimit\ s.
 L'errore DC si calcola all'equilibrio del modello lineare. L'ultimo
 campione a 12 s può ancora includere una parte del transitorio.
 
@@ -458,11 +458,12 @@ della regione di attrazione.
 La $\mu$-analysis del Capitolo~\ref{cap:mu} verifica la stabilità robusta (RS) per
 entrambi i controllori nelle rappresentazioni A e B. I limiti inferiori
 dei margini RS sono rispettivamente \FinLQGRSA\ e \FinLQGRSB\ per
-LQG, \FinLQGIRSA\ e \FinLQGIRSB\ per LQGI. Le norme pesate nominali
-\FinLQGNorma\ e \FinLQGINorma\ superano la soglia unitaria del
-criterio comune. Fallisce quindi la prestazione nominale pesata (NP),
-e con essa la prestazione robusta (RP). I quattro target di tracking
-confrontano invece direttamente le risposte nominali ai gradini.
+LQG, \FinLQGIRSA\ e \FinLQGIRSB\ per LQGI. Le norme pesate
+nominali sul solo riferimento sono \FinLQGNormaR\ per LQG e
+\FinLQGINormaR\ per LQGI. LQG soddisfa NP e RP sul riferimento
+in entrambe le famiglie. LQGI supera la soglia unitaria già sul
+nominale. I quattro target di tracking si valutano direttamente
+sui gradini. La reiezione della coppia si legge nelle prove dedicate.
 
 \paragraph{Limiti fisici.}
 Il modello lascia i comandi non saturati. Le coppie riportate sono

@@ -1,14 +1,15 @@
 \begin{table}[htbp]\centering\small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{lrrrr}\toprule
-Controllore & Target nominali & NP comune & RS A/B & RP A/B\\\midrule
-LQG & PASS & FAIL & PASS/PASS & FAIL/FAIL\\
-LQGI & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
-Hinf1 & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
-Hinf2 & PASS & PASS & FAIL/FAIL & FAIL/FAIL\\
-PID & FAIL & PASS & FAIL/FAIL & FAIL/FAIL\\
-Mu\_A & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
-Mu\_B & FAIL & FAIL & PASS/PASS & FAIL/FAIL\\
+\begin{tabular}{lrrrrrrr}\toprule
+Controllore & Target & NS & RS A/B & $\mathrm{NP}_r$ & $\mathrm{RP}_r$ A/B & $\mathrm{NP}_{rd}$ & $\mathrm{RP}_{rd}$ A/B\\\midrule
+LQG & PASS & PASS & PASS/PASS & PASS & PASS/PASS & FAIL & FAIL/FAIL\\
+LQGI & FAIL & PASS & PASS/PASS & FAIL & FAIL/FAIL & FAIL & FAIL/FAIL\\
+Hinf1 & FAIL & PASS & PASS/PASS & FAIL & FAIL/FAIL & FAIL & FAIL/FAIL\\
+Hinf2 & PASS & PASS & FAIL/FAIL & PASS & FAIL/FAIL & PASS & FAIL/FAIL\\
+PID & FAIL & PASS & FAIL/FAIL & PASS & FAIL/FAIL & PASS & FAIL/FAIL\\
+Mu\_A & FAIL & PASS & PASS/PASS & FAIL & FAIL/FAIL & FAIL & FAIL/FAIL\\
+Mu\_B & FAIL & PASS & PASS/PASS & PASS & FAIL/FAIL & FAIL & FAIL/FAIL\\
 \bottomrule\end{tabular}
-\caption{Confronto sul modello corrente: target temporali distinti dal costo pesato e dalle garanzie robuste.}
+\caption{Sette controllori della banca. Target indica il rispetto congiunto delle quattro specifiche nominali. I pedici r e rd indicano la mappa sul riferimento e quella su riferimento e coppia.}
+\label{tab:confronto-per-ruolo}
 \end{table}

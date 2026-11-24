@@ -12,7 +12,7 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{xcolor}
-\usepackage{float}
+\usepackage{float,placeins}
 \usepackage{tikz}
 \usepackage{listings}
 \lstset{language=Matlab,basicstyle=\ttfamily\footnotesize,
@@ -38,16 +38,7 @@ Valerio Rebechi \\ \small Matricola 722224}
 \maketitle
 \hypersetup{pageanchor=true}
 \pagenumbering{roman}
-\begin{abstract}
-Studiamo il controllo di un manipolatore planare a due giunti con attuatori elastici in serie e le due masse puntiformi assegnate dalla traccia. La massa del secondo link è un unico parametro incerto, comune a inerzia, termini centrifughi e gravità. Nei drive variano indipendentemente frequenza naturale e ritardo; lo smorzamento è noto.
-
-Confrontiamo una descrizione parametrica e una descrizione dinamica concentrata degli stessi attuatori. La presenza del ritardo variabile motiva una forma additiva, verificata mediante perturbazioni stabili e proprie. Le due rappresentazioni mantengono identica la meccanica incerta.
-
-Progettiamo controllori LQG, LQGI, $H_\infty$, PID strutturato e mediante iterazione D--K. Affianchiamo all'analisi di stabilità e prestazione robuste prove sui medesimi dieci impianti fisici, simulazioni non lineari e quindici condizioni iniziali per controllore. I risultati mostrano compromessi fra precisione, robustezza, ordine e sforzo di controllo; la sola norma pesata non basta a scegliere una soluzione utilizzabile.
-\end{abstract}
 \tableofcontents
-\listoffigures
-\listoftables
 \clearpage
 \pagenumbering{arabic}
 \input{sections/01_introduzione}
@@ -63,9 +54,4 @@ Progettiamo controllori LQG, LQGI, $H_\infty$, PID strutturato e mediante iteraz
 \input{sections/11_monte_carlo}
 \input{sections/12_confronto_finale}
 \input{sections/13_conclusioni_limiti}
-\appendix
-\input{sections/A_parametri}
-\input{sections/B_artifact_traceability}
-\input{sections/C_riproducibilita}
-\input{sections/D_codici_matlab}
 \end{document}
