@@ -1,8 +1,0 @@
-Name,Passed,Failed,Incomplete,Duration,Details
-noiseRedesignTest/independentClosedLoopMatchesNoisePorts,1,0,0,0.8565146,
-noiseRedesignTest/noiseCannotChangeThePhysicalPlant,1,0,0,0.0213555,
-noiseRedesignTest/baselineAndCandidateSelectionRemainDistinct,1,0,0,2.6027262,
-noiseRedesignTest/improvementsHoldForEveryDeclaredSeed,1,0,0,0.0786032,
-noiseRedesignTest/robustCertificatesBelongToTheNewMu,1,0,0,0.0154017,
-noiseRedesignTest/pairedSimulinkUsesIdenticalSavedProtocol,1,0,0,3.8405488,
-noiseRedesignTest/rasUsesNewFullStateAndPreservesUnknowns,1,0,0,0.2638654,

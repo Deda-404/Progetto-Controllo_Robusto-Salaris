@@ -1,7 +1,0 @@
-{
-  "status": "PASS",
-  "protected_count": 197,
-  "slx_count": 8,
-  "base": "a4b381756582d51a5e68d0b861fdf39010486d67",
-  "verification": "Every preexisting MAT and original SLX checked against initial exact-byte SHA-256; all eight also match source manifest."
-}

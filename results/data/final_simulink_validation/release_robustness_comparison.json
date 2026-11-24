@@ -1,9 +1,0 @@
-{
-  "source": "Actual console output of progetto_mu.m in the two local baseline runs; values at displayed precision",
-  "controller_and_physical_artifacts_unchanged": true,
-  "nominal_and_mu_classifications_reproduced": true,
-  "Hinf_RS_bounds_identical": false,
-  "R2025b": {"Hinf_RS": [0.018129, 0.018166], "Hinf_RP": [0.031847, 0.031208]},
-  "R2026b": {"Hinf_RS": [0.026154, 0.026207], "Hinf_RP": [0.030678, 0.030104], "Mu_RS": [1.7998, 1.8044], "Mu_RP": [1.6772, 1.6807]},
-  "interpretation": "Hinf RS remains FAIL and its inverted RP interval remains unvalidated. The Hinf numerical bounds are not release invariant; no equality of these intervals is asserted. Mu RS/RP remain PASS. No synthesis or controller change."
-}

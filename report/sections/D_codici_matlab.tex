@@ -15,7 +15,7 @@ $M^{-1}$ nelle accelerazioni dei link e non attraverso $J_m^{-1}$.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{modello_sea.m}.
-\lstinputlisting[firstline=9,lastline=23]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
+\lstinputlisting[firstline=35,lastline=60]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
 \end{minipage}\par\medskip
 
 La struttura a blocchi rende leggibile l'ordine $[q;\dot q;\theta;\dot\theta]$.
@@ -31,7 +31,7 @@ una porta distinta e non attraversa la cascata.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{modello_sea.m}.
-\lstinputlisting[firstline=26,lastline=34]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
+\lstinputlisting[firstline=68,lastline=82]{../File_di_Funzioni_Progetto-Accorpati/modello_sea.m}
 \end{minipage}\par\medskip
 
 Il controllo dell'interconnessione confronta il modello assemblato con
@@ -45,7 +45,7 @@ solo stato anche quando il tempo di ritardo è incerto.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{incertezze_attuatori.m}.
-\lstinputlisting[firstline=7,lastline=15]{../File_di_Funzioni_Progetto-Accorpati/incertezze_attuatori.m}
+\lstinputlisting[firstline=29,lastline=41]{../File_di_Funzioni_Progetto-Accorpati/incertezze_attuatori.m}
 \end{minipage}\par\medskip
 
 La forma additiva usa poi $G_{ai}=G_{a0}+W_A\Delta_{ai}$ con due
@@ -61,13 +61,13 @@ covarianza dell'errore. Il prefiltro nominale viene calcolato soltanto
 dopo avere stabilizzato il modello.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{progetto_lqg.m}.
-\lstinputlisting[firstline=9,lastline=13]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m}
+\noindent\textbf{File:} \path{progetto_lqg_lqgi.m}.
+\lstinputlisting[firstline=35,lastline=41]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg_lqgi.m}
 \end{minipage}\par\medskip
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{progetto_lqg.m}.
-\lstinputlisting[firstline=16,lastline=24]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg.m}
+\noindent\textbf{File:} \path{progetto_lqg_lqgi.m}.
+\lstinputlisting[firstline=51,lastline=63]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg_lqgi.m}
 \end{minipage}\par\medskip
 
 Il disturbo ignoto è incluso nel modello stocastico del filtro, mentre
@@ -81,13 +81,13 @@ finale conserva 14 stime e due memorie integrali; l'errore integrato è
 quello misurato, quindi comprende anche il rumore encoder.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{progetto_lqgi.m}.
-\lstinputlisting[firstline=9,lastline=12]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m}
+\noindent\textbf{File:} \path{progetto_lqg_lqgi.m}.
+\lstinputlisting[firstline=105,lastline=109]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg_lqgi.m}
 \end{minipage}\par\medskip
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{progetto_lqgi.m}.
-\lstinputlisting[firstline=16,lastline=19]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqgi.m}
+\noindent\textbf{File:} \path{progetto_lqg_lqgi.m}.
+\lstinputlisting[firstline=116,lastline=119]{../File_di_Funzioni_Progetto-Accorpati/progetto_lqg_lqgi.m}
 \end{minipage}\par\medskip
 
 Il termine $-BK_i$ nell'osservatore usa il comando effettivo prodotto
@@ -102,12 +102,12 @@ confrontare \texttt{mixsyn} e \texttt{hinfsyn} sul medesimo problema.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_hinf_tre_controllori.m}.
-\lstinputlisting[firstline=7,lastline=8]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
+\lstinputlisting[firstline=32,lastline=33]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
 \end{minipage}\par\medskip
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_hinf_tre_controllori.m}.
-\lstinputlisting[firstline=15,lastline=18]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
+\lstinputlisting[firstline=42,lastline=46]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
 \end{minipage}\par\medskip
 
 L'accordo delle norme verifica la formulazione, mentre il confronto
@@ -121,12 +121,12 @@ una sola memoria: le partizioni $K_r,K_y$ condividono questi stati.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_hinf_tre_controllori.m}.
-\lstinputlisting[firstline=19,lastline=19]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
+\lstinputlisting[firstline=48,lastline=48]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
 \end{minipage}\par\medskip
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_hinf_tre_controllori.m}.
-\lstinputlisting[firstline=26,lastline=26]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
+\lstinputlisting[firstline=61,lastline=61]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
 \end{minipage}\par\medskip
 
 Le ultime quattro uscite della pianta sono quelle accessibili a $K$,
@@ -141,7 +141,7 @@ convenzione comune $[r_1;r_2;q_1;q_2]$.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_hinf_tre_controllori.m}.
-\lstinputlisting[firstline=31,lastline=36]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
+\lstinputlisting[firstline=72,lastline=77]{../File_di_Funzioni_Progetto-Accorpati/progetto_hinf_tre_controllori.m}
 \end{minipage}\par\medskip
 
 Il numero degli avvii casuali è due, oltre all'avvio iniziale.
@@ -155,7 +155,7 @@ sintesi. Entrambe le D--K usano il punto iniziale comune e tre iterazioni.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{progetto_mu.m}.
-\lstinputlisting[firstline=17,lastline=21]{../File_di_Funzioni_Progetto-Accorpati/progetto_mu.m}
+\lstinputlisting[firstline=50,lastline=56]{../File_di_Funzioni_Progetto-Accorpati/progetto_mu.m}
 \end{minipage}\par\medskip
 
 La post-analisi tiene fisso $K$ e studia entrambe le famiglie. Il
@@ -164,8 +164,8 @@ realizzazione completa restano disponibili per controllare stabilità
 e interpretare le risposte.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{progetto_mu.m}.
-\lstinputlisting[firstline=46,lastline=53]{../File_di_Funzioni_Progetto-Accorpati/progetto_mu.m}
+\noindent\textbf{File:} \path{supporto/postanalisi_sea.m}.
+\lstinputlisting[firstline=97,lastline=108]{../File_di_Funzioni_Progetto-Accorpati/supporto/postanalisi_sea.m}
 \end{minipage}\par\medskip
 
 Quando NP fallisce, RP è già esclusa dal nominale. Quando RS fallisce,
@@ -181,7 +181,7 @@ ordine delle chiamate casuali.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{incertezze_attuatori.m}.
-\lstinputlisting[firstline=16,lastline=19]{../File_di_Funzioni_Progetto-Accorpati/incertezze_attuatori.m}
+\lstinputlisting[firstline=45,lastline=48]{../File_di_Funzioni_Progetto-Accorpati/incertezze_attuatori.m}
 \end{minipage}\par\medskip
 
 Per ciascun caso si controllano i poli prima del tracking. Le metriche
@@ -195,7 +195,7 @@ che arrivano effettivamente al controllore.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
 \noindent\textbf{File:} \path{confronto_ras.m}.
-\lstinputlisting[firstline=49,lastline=50]{../File_di_Funzioni_Progetto-Accorpati/confronto_ras.m}
+\lstinputlisting[firstline=92,lastline=93]{../File_di_Funzioni_Progetto-Accorpati/confronto_ras.m}
 \end{minipage}\par\medskip
 
 Per $\dot x=Ax+Bv_k$ a ingresso costante vale
@@ -216,8 +216,8 @@ Il comando attraversa i drive prima di raggiungere i rotori; la coppia
 esterna resta applicata direttamente ai link.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{simula_sea.m}.
-\lstinputlisting[firstline=65,lastline=69]{../File_di_Funzioni_Progetto-Accorpati/simula_sea.m}
+\noindent\textbf{File:} \path{supporto/simula_sea.m}.
+\lstinputlisting[firstline=78,lastline=82]{../File_di_Funzioni_Progetto-Accorpati/supporto/simula_sea.m}
 \end{minipage}\par\medskip
 
 La similitudine numerica di $K$ migliora il condizionamento senza
@@ -231,8 +231,8 @@ Il solver classifica la coda finale e mantiene separati mancata
 convergenza, allontanamento osservato, timeout ed errore numerico.
 
 \par\medskip\noindent\begin{minipage}{\linewidth}
-\noindent\textbf{File:} \path{simula_sea.m}.
-\lstinputlisting[firstline=36,lastline=40]{../File_di_Funzioni_Progetto-Accorpati/simula_sea.m}
+\noindent\textbf{File:} \path{supporto/simula_sea.m}.
+\lstinputlisting[firstline=49,lastline=53]{../File_di_Funzioni_Progetto-Accorpati/supporto/simula_sea.m}
 \end{minipage}\par\medskip
 
 Il metodo di Lyapunov del Capitolo 10 è un approfondimento teorico:
