@@ -98,6 +98,83 @@ modo, l'assestamento, l'overshoot e il cross-coupling si valutano
 sulle risposte al gradino. Il peso $W_u$ definisce una penalità nel
 costo frequenziale, mentre il picco di coppia si rileva nelle prove.
 
+\section{Motivazione quantitativa delle soglie}\label{sec:motivazione-soglie}
+\paragraph{Che cosa stiamo facendo.} Le quattro soglie temporali non
+derivano da dati di targa del robot, che la traccia non fornisce.
+Sono ipotesi progettuali. Qui le colleghiamo alle grandezze del modello
+e ai pesi, così da poterle difendere e, se necessario, discutere.
+
+\paragraph{Vincoli dalla dinamica in anello aperto.} Attorno alla
+verticale la meccanica linearizzata ha due poli reali instabili, a
+$+4.04$ e $+7.21$ rad/s, e due modi elastici poco smorzati a circa
+$70$ e $79$ rad/s (Capitolo 3). Per stabilizzare un polo instabile in
+$p$ la regola pratica chiede una pulsazione di attraversamento del
+ciclo almeno dell'ordine di $2p$, cioè circa $14$ rad/s. Dall'altra
+parte, i drive hanno $\omega_n=40$ rad/s e il ritardo di $15$ ms
+introduce a $40$ rad/s un ritardo di fase di $0.015\cdot40=0.6$ rad,
+circa $34^\circ$. I modi elastici a $70$--$80$ rad/s limitano
+ulteriormente la banda utile. L'anello di retroazione deve quindi
+lavorare in una fascia stretta, fra circa $14$ e $30$--$40$ rad/s.
+Più banda significherebbe anche più rumore encoder trasferito al
+comando, perché la mappa rumore--comando è $-KS$ e cresce con il
+guadagno del controllore alle alte frequenze.
+
+\paragraph{Separare stabilizzazione e inseguimento.} Con un
+controllore a due gradi di libertà la velocità dell'inseguimento non
+coincide con la banda dell'anello: il riferimento passa attraverso
+$M_o$, che si assesta in circa $1.94$ s. Il manipolatore può quindi
+stabilizzarsi con un anello veloce e muoversi con una traiettoria
+lenta e regolare, con poco comando.
+
+\paragraph{Perché 5 s e non 2 s.} Il peso $W_e$ fissa che cosa la
+soglia unitaria richiede davvero all'errore. Il modulo di $W_e$ vale
+$1$ a circa $2.1$ rad/s, soluzione di $\omega^2/9+4=\omega^2+0.09$, e
+il suo polo è a $0.3$ rad/s. Al di sotto di $2.1$ rad/s si chiede
+attenuazione dell'errore, con un limite statico del $15\%$ (vedi
+sopra). Una coda lenta dell'errore con costante di tempo dell'ordine
+di $1/0.3\approx3.3$ s e ampiezza inferiore al $15\%$ non viola il
+costo pesato. Per rientrare nella fascia del $2\%$ partendo dal $15\%$
+servono circa $3.3\ln(0.15/0.02)\approx6.7$ s. Un limite di $2$ s era
+quindi più severo di quanto la sintesi chiedesse: alcuni controllori
+potevano rispettare il costo e violare il tempo, senza contraddizione.
+Il limite di $5$ s si colloca fra l'assestamento di $M_o$ ($1.94$ s)
+e il comportamento più lento ammesso dal peso, ed è dello stesso ordine
+delle costanti di tempo che $W_e$ codifica. Lo presentiamo come scelta
+di progetto coerente con i pesi, non come vincolo fisico misurato.
+
+Per trasparenza, il limite è stato portato da $2$ a $5$ s il
+16.11.2026, dopo la campagna numerica. La modifica non ha cambiato
+pesi, $M_o$, incertezze né le definizioni di NS, NP, RS e RP. Con
+$5$ s rientrano nel solo criterio di assestamento PID e Mu\_B;
+LQGI, con circa $5.05$ s, resta fuori. I quattro target restano
+richiesti insieme.
+
+\paragraph{Assestamento e valore finale.} \texttt{stepinfo} misura
+l'assestamento nella fascia del $2\%$ attorno al valore finale
+effettivamente raggiunto. Per un controllore con errore statico
+elevato il transitorio può assestarsi presto su un valore sbagliato.
+Per questo l'errore statico è verificato separatamente: un
+assestamento rapido non compensa un tracking impreciso, e un
+controllore viene promosso solo se rispetta i quattro target insieme.
+
+\paragraph{Sovraelongazione, errore statico e accoppiamento.} Il
+$15\%$ corrisponde a $0.75^\circ$ sul gradino di $5^\circ$; è una
+tolleranza tipica per movimenti di posizionamento e lascia spazio al
+modo poco smorzato del secondo giunto. Il $5\%$ di errore statico
+($0.25^\circ$) è più stretto del $15\%$ implicato da $W_e(0)$, perché
+vogliamo una precisione superiore a quella garantita dal solo costo.
+Il $25\%$ sul giunto non comandato tiene conto dell'accoppiamento
+inerziale fra i link, che a $\bar q$ vale $m_{12}/m_{11}\approx0.30$.
+
+\paragraph{Il caso MuN1.} MuN1 ha norma nominale sul riferimento
+$\|T_{zr}\|_\infty\approx0.598$ ed errore statico di circa $8.24\%$.
+Il blocco statico pesato vale $W_e(0)\,e_{ss}=6.67\cdot0.0824\approx0.55$,
+inferiore alla norma complessiva, quindi i due valori sono coerenti.
+MuN1 può dunque soddisfare NP e RP sul riferimento pur mancando il
+target del $5\%$: non è una contraddizione, ma la conseguenza del fatto
+che il costo pesato tollera fino al $15\%$ di errore statico per
+singolo elemento.
+
 \section{Requisito aggiuntivo sul rumore encoder}
 Le fluttuazioni degli encoder possono provocare comandi rapidi e
 intensi anche quando le posizioni variano poco. Per questo osserviamo

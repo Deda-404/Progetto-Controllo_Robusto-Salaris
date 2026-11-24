@@ -210,6 +210,39 @@ progetto. Gli RMS di questa prova \texttt{lsim} riguardano i campioni
 di risposta. La prova del Capitolo~6 tiene invece ogni campione di
 rumore costante per 2 ms e valuta il comando anche fra campioni.
 
+\subsection{Varianza della stima e varianza della misura}\label{sec:varianza-kalman}
+
+Il confronto fra la stima di Kalman e la misura rumorosa va fatto su
+grandezze omogenee. Conviene distinguere tre oggetti.
+\begin{itemize}
+\item La \emph{varianza del segnale} misurato o stimato, per esempio
+$\operatorname{var}(\hat q_1)$: dipende anche dal moto vero del braccio,
+quindi non dice da sola quanto la stima sia accurata.
+\item La \emph{varianza dell'errore di misura}, $\operatorname{var}(y_i-q_i)
+=\operatorname{var}(v_i)=\sigma_y^2$, fissata dall'encoder.
+\item La \emph{varianza dell'errore di stima}, $\operatorname{var}(q_i-\hat q_i)$,
+che il filtro cerca di rendere minima.
+\end{itemize}
+La matrice di covarianza dell'errore di stima $P=E[e_xe_x^T]$, calcolata
+da \texttt{lqe} come soluzione della Riccati del filtro, contiene sulla
+diagonale le varianze delle singole componenti. Per questo la sua traccia
+coincide con la somma delle varianze:
+$\operatorname{tr}P=\sum_i E[e_{x,i}^2]$. Il filtro di Kalman minimizza
+proprio $\operatorname{tr}P$ fra tutti gli stimatori lineari, sotto le
+ipotesi di rumori bianchi gaussiani con intensità $Q_n$ e $R_n$.
+
+Nella prova di sensibilità con il fattore unitario (Tabella dei dati in
+\path{risultati/kalman.csv}) l'RMS dell'errore di stima delle due posizioni
+dei link vale circa $2.32\cdot10^{-4}$ rad. L'errore della misura diretta
+ha invece RMS $\sigma_y=0.05\pi/180\approx8.73\cdot10^{-4}$ rad. Il
+rapporto fra le varianze è quindi circa $(2.32/8.73)^2\approx0.07$:
+nella prova, la posizione stimata è più vicina a quella vera della
+misura grezza. Il risultato riguarda questa sequenza di rumore, il
+modello nominale e l'anello chiuso con LQR; non afferma che il filtro
+riduca qualsiasi metrica di varianza. Per esempio, la varianza del
+segnale $\hat q$ non è stata confrontata con quella di $y$, perché
+includerebbe il moto del braccio indotto dal rumore stesso.
+
 \subsection{Principio di separazione}
 
 Pianta e stimatore ricevono lo stesso comando, quindi il termine $Bu$
