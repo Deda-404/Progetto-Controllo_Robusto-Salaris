@@ -1,5 +1,7 @@
 \chapter{Tracciabilità dei risultati}
-I risultati provengono dagli script della cartella di consegna \texttt{File\_di\_Funzioni\_Progetto-Accorpati}, l\'unica necessaria per eseguire il progetto. La cartella \texttt{risultati} conserva i dati a precisione di calcolo; tabelle e formule della relazione sono esportate da quei file. L'arrotondamento avviene solo nella presentazione.
+I risultati provengono dagli script della cartella di consegna, l'unica necessaria per eseguire il progetto:
+\begin{center}\path{File_di_Funzioni_Progetto-Accorpati}\end{center}
+La cartella \texttt{risultati} conserva i dati a precisione di calcolo; tabelle e formule della relazione sono esportate da quei file. L'arrotondamento avviene solo nella presentazione.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{.24\linewidth}>{\raggedright\arraybackslash}p{.34\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}\toprule
 Argomento (capitolo) & Script & Evidenza in \path{risultati/}\\\midrule\endhead
@@ -8,7 +10,7 @@ Meccanica e nominale (2--4) & \path{modello_sea.m}, \path{supporto/matrici_sea.m
 Famiglie A/B (5) & \path{incertezze_attuatori.m} & \path{incertezze.mat}, \path{ordini_peso.csv}, \path{parametri_dieci_impianti.csv}\\
 LQG e LQGI (7) & \path{progetto_lqg_lqgi.m} & \path{lqg.mat}, \path{lqgi.mat}, \path{kalman.csv}\\
 $H_\infty$ e PID (8) & \path{progetto_hinf_tre_controllori.m} & \path{sintesi_hinf.mat}, \path{hinf.csv}\\
-Robustezza e D--K (9, 12) & \path{progetto_mu.m}, \path{supporto/postanalisi_sea.m}, \path{supporto/interconnessione_sea.m} & \path{confronto_robusto_r.csv}, \path{confronto_robusto_rd.csv}, \path{mappa_completa_nominale.csv}, \path{dk_1.csv}, \path{dk_2.csv}, \path{studio_mu_riferimento/}\\
+Robustezza e D--K (9, 12) & \path{progetto_mu.m}, \path{supporto/postanalisi_sea.m}, \path{supporto/interconnessione_sea.m} & \path{confronto_robusto_r.csv}, \path{confronto_robusto.csv}, \path{verifica_rp_mappa_completa_20261124.csv}, \path{dk_1.csv}, \path{dk_2.csv}, \path{studio_mu_riferimento/}\\
 Campioni, rumore, RAS (10, 11) & \path{confronto_ras.m}, \path{supporto/simula_sea.m}, \path{supporto/rumore_continuo_sea.m} & \path{dieci_impianti.csv}, \path{rumore.csv}, \path{ras.csv}, \path{ras.mat}\\
 Simulink (10) & \path{collaudo_simulink.m}, \path{simulink/} & \path{simulink.csv}, \path{simulink_autonomo.csv}\\
 Verifiche (tutti) & \path{test/verifica_sea.m}, \path{test/seaFinaleTest.m} & \path{verifiche.csv}, \path{riassunto_numerico.json}\\\bottomrule

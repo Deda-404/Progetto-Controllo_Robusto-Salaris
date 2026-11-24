@@ -72,3 +72,10 @@ __pycache__/
 # Archivio di consegna generato da tools/consegna_definitiva.py
 /delivery/
 *.zip
+
+# Uscite dell esportatore non incluse negli elaborati
+report/generated/finale_carico.tex
+report/generated/finale_frequenze.tex
+report/generated/finale_kalman.tex
+report/generated/finale_ritardo.tex
+report/figures/definitiva/nominale.png

@@ -209,21 +209,21 @@ Pesi: posizione 2, velocità 1, deformazione 0.1.
 
 \begin{frame}{D--K: stessi pesi e stessa inizializzazione}
 \begin{columns}[T]
-\column{.46\textwidth}
+\column{.40\textwidth}
 \resizebox{\linewidth}{!}{\input{../report/figures/schemes/dk.tex}}
 \small Tre iterazioni, \texttt{MixedMU=on}, fit $[2,1]$, 121 frequenze.
-\column{.51\textwidth}\small
-{\setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{lrrr}\toprule
-Candidato & Ordine & Norma $r$ & $\mathrm{RP}_r$ A/B\\\midrule
-Mu\_A &\FinMuAOrdine&\FinMuANormaR&\FinMuARPesitoA/\FinMuARPesitoB\\
-Mu\_B &\FinMuBOrdine&\FinMuBNormaR&\FinMuBRPesitoA/\FinMuBRPesitoB\\
-MuN1 &\FinMuNOneOrdine&\FinMuNOneNormaR&\FinMuNOneEsitoRPA/\FinMuNOneEsitoRPB\\\bottomrule
+\column{.58\textwidth}\small
+{\footnotesize\setlength{\tabcolsep}{2pt}
+\begin{tabular}{lrrrr}\toprule
+Candidato & Ordine & Norma $r$ & $\mathrm{RP}_r$ & $\mathrm{RP}_{rd}$\\\midrule
+Mu\_A &\FinMuAOrdine&\FinMuANormaR&\FinMuARPesitoA/\FinMuARPesitoB&FAIL/FAIL\\
+Mu\_B &\FinMuBOrdine&\FinMuBNormaR&\FinMuBRPesitoA/\FinMuBRPesitoB&FAIL/FAIL\\
+MuN1 &\FinMuNOneOrdine&\FinMuNOneNormaR&\FinMuNOneEsitoRPA/\FinMuNOneEsitoRPB&\FinMuNOneEsitoRPrd\\\bottomrule
 \end{tabular}}
 \par\medskip Obiettivo D--K: \FinDkA\ su A, \FinDkB\ su B. Soglia desiderata: 1.
 \par\medskip D--K su $[r;d]$. MuN1 è il controllore iniziale comune.
 \end{columns}
-\medskip\bad{MuN1 soddisfa RP sul riferimento, con errore statico nominale \FinMuNOneDC\%.}
+\medskip\bad{Il picco $\mu$ scende, la prestazione no: MuN1 passa RP su $r$ e su $rd$.}
 \end{frame}
 
 \begin{frame}{La post-analisi distingue le due rappresentazioni}
@@ -234,13 +234,12 @@ MuN1 &\FinMuNOneOrdine&\FinMuNOneNormaR&\FinMuNOneEsitoRPA/\FinMuNOneEsitoRPB\\\
 \end{frame}
 
 \begin{frame}{Robustezza pesata e target temporali sono distinti}
-\centering\small\input{generated/finale_slide_esiti.tex}
-\begin{itemize}
-\item $T_s$: solo assestamento nominale entro $\FinTsLimit$ s.
-\item NP$_r$ e RP$_r$: riferimento verso errore e comando pesati.
+\centering\footnotesize{\setlength{\tabcolsep}{3pt}\input{generated/finale_slide_esiti.tex}}
+\begin{itemize}\small
+\item $T_s$ entro $\FinTsLimit$ s; $r$: solo riferimento; $rd$: riferimento e coppia.
 \item Hinf2 e PID perdono stabilità nella famiglia.
 \end{itemize}
-\good{LQG soddisfa RP sul riferimento in A e B.}
+\good{LQG soddisfa RP sul riferimento; MuN1 anche sulla mappa completa.}
 \end{frame}
 
 
@@ -332,8 +331,8 @@ MuN1 &\FinMuNOneRumore&\FinMuNOneRMSRumore\\\bottomrule
 \item A conserva le dipendenze dei cinque parametri fisici.
 \item B concentra i drive in due dinamiche pesate; la massa resta esplicita.
 \item LQG soddisfa i quattro target nominali e RP sul riferimento in A e B.
-\item MuN1 passa RP sul riferimento, con errore statico \FinMuNOneDC\%.
-\item Sulla mappa riferimento--coppia, nessuno dei sette passa RP.
+\item Sulla mappa riferimento--coppia nessuno dei sette passa RP.
+\item MuN1 passa RP su entrambe le mappe in A e B, con errore statico \FinMuNOneDC\%.
 \item Restano aperte copertura globale di B, RAS certificata e prove con saturazioni sul robot.
 \end{itemize}
 \end{frame}

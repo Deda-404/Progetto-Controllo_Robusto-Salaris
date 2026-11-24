@@ -235,12 +235,6 @@ def main():
                 values[tag+'OrdineChiuso']=str(14+int(x['Ordine']))
                 values[tag+'IntervalloRS'+a]=interval(x,'RS')
                 values[tag+'Frequenza'+a]=num(x['FrequenzaCritica'],4)
-    table('confronto_finale',
-          ['Controllore', 'Target', 'NS', 'RS A/B', r'$\mathrm{NP}_r$', r'$\mathrm{RP}_r$ A/B',
-           r'$\mathrm{NP}_{rd}$', r'$\mathrm{RP}_{rd}$ A/B'], finalrows,
-          'Sette controllori della banca. Target indica il rispetto congiunto delle quattro specifiche nominali. '
-          'I pedici r e rd indicano la mappa sul riferimento e quella su riferimento e coppia.',
-          'tab:confronto-per-ruolo')
     table('frequenze',['Controllore','A/B',r'$\omega_{RS}$ [rad/s]'],
           [[esc(x['Controllore']),x['Analisi'][0],num(x['FrequenzaCritica'],4)] for x in robust],
           'Frequenze critiche restituite dall\'analisi di stabilità robusta dello stesso controllore su A e B.')
@@ -265,12 +259,6 @@ def main():
           [[esc(x["Controllore"].replace("_nuovo","")),x["Ordine"],num(x["NormaComune"],4)] for x in hinf],"",slide=True)
     table("slide_rs",["Controllore","A","B"],
           [[esc(name)]+[num(next(x["RS_lower"] for x in robust if x["Controllore"]==name and x["Analisi"].startswith(a)),4) for a in ["A","B"]] for name in CURRENT],"",slide=True)
-    table("slide_esiti",["Controllore",r"$T_s$","NS",r"Norma $r$",r"$\mathrm{NP}_r$","RS A/B",r"$\mathrm{RP}_r$ A/B"],
-          [[esc(name),settling_results[name],"PASS" if all(x["NS"]=="1" for x in robust if x["Controllore"]==name) else "FAIL",
-            num(next(x["NormaNominaleR"] for x in robust if x["Controllore"]==name),4),
-            "PASS" if next(x for x in robust if x["Controllore"]==name)["NP_r"]=="1" else "FAIL"]+
-            ["/".join(short_status(x[key]) for x in robust if x["Controllore"]==name)
-             for key in ["RS","RP_r"]] for name in CURRENT],"",slide=True)
     table("slide_carico",["Controllore","0.72 kg","0.8 kg","0.88 kg"],loadrows[:2],"",slide=True)
     study = "studio_mu_riferimento/"
     iterations = read(study + "iterazioni")
@@ -307,6 +295,66 @@ def main():
                    "MuNOneDisturbo": num(math.degrees(float(mu_test["PiccoDisturboRad"])), 4),
                    "MuNOneRumore": num(mu_test["PiccoRumore"], 4),
                    "MuNOneRMSRumore": num(mu_test["RMSRumore"], 4)})
+    def rd_status(rows):
+        return "/".join("PASS" if x["Metodo"] == "robgain" and float(x["RPrd_lower"]) > 1 else
+                        "INC." if x["Metodo"] == "robgain" and float(x["RPrd_upper"]) >= 1 else "FAIL" for x in rows)
+    # Verifica del 24.11.2026 sulla mappa completa Tz[r;d], MuN1 compreso.
+    verifica = read("verifica_rp_mappa_completa_20261124")
+    mun1 = [x for x in verifica if x["Controllore"] == "MuN1_fisso"]
+    assert [x["Famiglia"] for x in mun1] == ["A", "B"]
+    for name in CURRENT:
+        rows = [x for x in verifica if x["Controllore"] == name]
+        old = [x for x in full if x["Controllore"] == name]
+        assert [x["Famiglia"] for x in rows] == ["A", "B"]
+        # stessi esiti NS/RS/NP della campagna del 4 novembre
+        assert all((float(x["RS_lower"]) > 1) == (y["RS"] == "PASS") for x, y in zip(rows, old))
+        assert all((float(x["NormaRD"]) < 1) == (y["NP"] == "1") for x, y in zip(rows, old))
+    def rd_margin(x):
+        if x["Metodo"] == "NP_FAIL":
+            return "0"
+        if x["Metodo"] == "LIMITE_DA_RS":
+            return r"$\leq$" + num(x["RPrd_upper"], 4)
+        return f'[{num(x["RPrd_lower"], 4)}, {num(x["RPrd_upper"], 4)}]'
+    fullrows = []
+    for name in ["MuN1_fisso"] + CURRENT:
+        rows = [x for x in verifica if x["Controllore"] == name]
+        fullrows.append([esc(name.replace("_fisso", "")), num(rows[0]["NormaRD"], 4),
+                         "PASS" if float(rows[0]["NormaRD"]) < 1 else "FAIL",
+                         *[num(x["RS_lower"], 4) for x in rows], *[rd_margin(x) for x in rows]])
+    table("mappa_completa", ["Controllore", r"Norma $rd$", r"$\mathrm{NP}_{rd}$", "RS A", "RS B",
+                             r"$\mathrm{RP}_{rd}$ A", r"$\mathrm{RP}_{rd}$ B"], fullrows,
+          r"Mappa completa $T_{z[r;d]}$, verifica del 24.11.2026 (MATLAB R2026a). Per RS è mostrato il limite "
+          r"inferiore; per RP l'intervallo di \texttt{robgain}, zero se NP fallisce, il limite superiore se RS fallisce.",
+          "tab:cap9-mappa-completa")
+    mu_ts_ok = float(mu_test["Assestamento"]) <= ts_limit
+    mu_ok = (mu_ts_ok and float(mu_test["OvershootPercent"]) <= 15 and float(mu_test["ErroreDC"]) <= .05
+             and float(mu_test["Cross"]) <= .25)
+    finalrows.append(["MuN1", "PASS" if mu_ok else "FAIL", "PASS",
+                      "/".join(short_status(x["RS"]) for x in mu),
+                      "PASS" if mu[0]["NP_r"] == "1" else "FAIL", "/".join(short_status(x["RP_r"]) for x in mu),
+                      "PASS" if float(mun1[0]["NormaRD"]) < 1 else "FAIL", rd_status(mun1)])
+    values.update({"MuNOneRPrdA": rd_margin(mun1[0]), "MuNOneRPrdB": rd_margin(mun1[1]),
+                   "MuNOneRSrdA": f'[{num(mun1[0]["RS_lower"], 4)}, {num(mun1[0]["RS_upper"], 4)}]',
+                   "MuNOneRSrdB": f'[{num(mun1[1]["RS_lower"], 4)}, {num(mun1[1]["RS_upper"], 4)}]',
+                   "MuNOneEsitoRPrd": rd_status(mun1)})
+    slide_rows = []
+    for name in CURRENT:
+        rows = [x for x in robust if x["Controllore"] == name]
+        slide_rows.append([esc(name), settling_results[name], "PASS" if all(x["NS"] == "1" for x in rows) else "FAIL",
+                           num(rows[0]["NormaNominaleR"], 4), "PASS" if rows[0]["NP_r"] == "1" else "FAIL",
+                           "/".join(short_status(x["RS"]) for x in rows), "/".join(short_status(x["RP_r"]) for x in rows),
+                           rd_status([x for x in verifica if x["Controllore"] == name])])
+    slide_rows.append(["MuN1", "PASS" if mu_ts_ok else "FAIL", "PASS", num(mu[0]["NormaNominaleR"], 4),
+                       "PASS" if mu[0]["NP_r"] == "1" else "FAIL", "/".join(short_status(x["RS"]) for x in mu),
+                       "/".join(short_status(x["RP_r"]) for x in mu), rd_status(mun1)])
+    table("slide_esiti", ["Controllore", r"$T_s$", "NS", r"Norma $r$", r"$\mathrm{NP}_r$", "RS A/B",
+                          r"$\mathrm{RP}_r$ A/B", r"$\mathrm{RP}_{rd}$ A/B"], slide_rows, "", slide=True)
+    table('confronto_finale',
+          ['Controllore', 'Target', 'NS', 'RS A/B', r'$\mathrm{NP}_r$', r'$\mathrm{RP}_r$ A/B',
+           r'$\mathrm{NP}_{rd}$', r'$\mathrm{RP}_{rd}$ A/B'], finalrows,
+          'Sette controllori della banca e MuN1 (riesame D--K). Target indica il rispetto congiunto delle quattro specifiche nominali. '
+          'I pedici r e rd indicano la mappa sul riferimento e quella su riferimento e coppia.',
+          'tab:confronto-per-ruolo')
     tex="\n".join(r"\newcommand{\Fin"+name+"}{"+value+"}" for name,value in values.items())+"\n"
     (GEN/"finale_values.tex").write_text(tex,encoding="utf-8")
     (ROOT/"presentation/generated/finale_values.tex").write_text(tex,encoding="utf-8")

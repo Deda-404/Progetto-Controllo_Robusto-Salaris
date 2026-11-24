@@ -1,0 +1,16 @@
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}\toprule
+Controllore & Norma $rd$ & $\mathrm{NP}_{rd}$ & RS A & RS B & $\mathrm{RP}_{rd}$ A & $\mathrm{RP}_{rd}$ B\\\midrule
+MuN1 & \num{0.6822} & PASS & \num{2.316} & \num{2.328} & [\num{1.599}, \num{1.897}] & [\num{1.533}, \num{1.536}]\\
+LQG & \num{2.168} & FAIL & \num{1.453} & \num{1.195} & 0 & 0\\
+LQGI & \num{1.261} & FAIL & \num{1.406} & \num{1.153} & 0 & 0\\
+Hinf1 & \num{2.131} & FAIL & \num{1.372} & \num{1.014} & 0 & 0\\
+Hinf2 & \num{0.0312} & PASS & \num{0.1478} & \num{0.03666} & $\leq$\num{0.1488} & $\leq$\num{0.03673}\\
+PID & \num{0.8298} & PASS & \num{0.2323} & \num{0.1702} & $\leq$\num{0.2346} & $\leq$\num{0.1706}\\
+Mu\_A & \num{1.895} & FAIL & \num{2.181} & \num{1.957} & 0 & 0\\
+Mu\_B & \num{1.087} & FAIL & \num{2.47} & \num{1.825} & 0 & 0\\
+\bottomrule\end{tabular}
+\caption{Mappa completa $T_{z[r;d]}$, verifica del 24.11.2026 (MATLAB R2026a). Per RS è mostrato il limite inferiore; per RP l'intervallo di \texttt{robgain}, zero se NP fallisce, il limite superiore se RS fallisce.}
+\label{tab:cap9-mappa-completa}
+\end{table}
