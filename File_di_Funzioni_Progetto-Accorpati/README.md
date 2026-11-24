@@ -11,7 +11,7 @@ Questa cartella è tutto ciò che serve: codice MATLAB, 8 modelli Simulink, dati
 3. Facoltativo: `runtests('test/seaFinaleTest.m')` e, per rigenerare tutto, `run_all('completa')`.
 4. Ogni `.slx` in `simulink/` si apre e si avvia con *Run*: la callback `InitFcn` chiama `collaudo_simulink` e carica da sola modello e controllori.
 
-Toolbox: Control System, Robust Control, Simulink. Se un path personale nasconde funzioni dei toolbox: `restoredefaultpath; rehash toolboxcache` (non eseguire `savepath`).
+Toolbox: Control System, Robust Control, Simulink; per lo SLX `LQG_linear_sim` anche DSP System Toolbox (blocchi di varianza su misura e stima). Se un path personale nasconde funzioni dei toolbox: `restoredefaultpath; rehash toolboxcache` (non eseguire `savepath`).
 
 **Rapida** ricalcola modello, incertezze, peso WI, LQG/LQGI, analisi H∞ nominali, norme nominali delle due mappe, dieci impianti, rumore e una simulazione non lineare di controllo; **carica** (dopo controllo della firma di configurazione e dell'identità dei controllori) sintesi H∞/PID, D–K, margini robusti, prove non lineari e RAS della campagna completa. **Completa** rigenera davvero tutto, comprese le due D–K, la µ-analysis su entrambe le mappe e i 20 collaudi Simulink (ore di calcolo). Il log è in `risultati/esecuzione_<modalità>.txt`.
 
@@ -49,7 +49,20 @@ Pesi: We(s) = (s/3+2)/(s+0.3), Wu(s) = 0.003(s+80)/(s/6+80), Mo(s) = 9/(s+3)², 
 
 ## Esiti principali
 
-<!-- ESITI -->
+Nominale (prove lineari, Capitolo 10) e robustezza (Capitolo 9) per i sette controllori della banca e per MuN1, inizializzazione comune delle due D–K.
+
+| Controllore | 4 target nominali | NS | RS A/B | NP / RP su Tzr (A/B) | NP / RP su Tz[r;d] (A/B) |
+|---|---|---|---|---|---|
+| LQG | PASS | PASS | PASS/PASS | PASS / PASS-PASS | FAIL / FAIL-FAIL |
+| LQGI | FAIL (Ts) | PASS | PASS/PASS | FAIL / FAIL-FAIL | FAIL / FAIL-FAIL |
+| Hinf1 | FAIL (Mp, ess, cross) | PASS | PASS/PASS | FAIL / FAIL-FAIL | FAIL / FAIL-FAIL |
+| Hinf2 | PASS | PASS | FAIL/FAIL | PASS / FAIL-FAIL | PASS / FAIL-FAIL |
+| PID | FAIL (cross) | PASS | FAIL/FAIL | PASS / FAIL-FAIL | PASS / FAIL-FAIL |
+| Mu_A | FAIL (Ts, ess) | PASS | PASS/PASS | FAIL / FAIL-FAIL | FAIL / FAIL-FAIL |
+| Mu_B | FAIL (ess) | PASS | PASS/PASS | PASS / FAIL-FAIL | FAIL / FAIL-FAIL |
+| MuN1 | FAIL (ess 8.24 %) | PASS | PASS/PASS | PASS / PASS-PASS | PASS / PASS-PASS |
+
+Margini RP di MuN1 su Tz[r;d]: [1.599, 1.897] in A e [1.533, 1.536] in B (`risultati/verifica_rp_mappa_completa_20261124.csv`). Fonti: `confronto_robusto_r.csv`, `confronto_robusto.csv`, `studio_mu_riferimento/`, `dieci_impianti.csv`.
 
 ## Release e verifiche
 

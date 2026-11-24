@@ -60,6 +60,11 @@ release non sono attese differenze di contenuto, ma ogni prova riporta
 la release con cui è stata ottenuta.
 
 \section{Gli originali Simulink}
+Gli otto SLX sono i modelli costruiti dagli autori, salvati con MATLAB
+R2026a; rispetto agli originali è stata sostituita soltanto la callback
+\texttt{InitFcn}, che ora richiama \texttt{collaudo\_simulink}. Il
+modello \texttt{LQG\_linear\_sim} contiene anche due blocchi di varianza
+su misura e stima, che richiedono il DSP System Toolbox.
 Il comando \texttt{collaudo\_simulink} prepara i parametri, assegna i
 valori dei generatori incorporati per i campioni e acquisisce gli Scope.
 I modelli su disco conservano la loro struttura; il runner applica
