@@ -1,0 +1,34 @@
+PROGETTO CONTROLLO ROBUSTO - MANIPOLATORE 2R CON ATTUATORI SEA
+Alessio de Dato, Valerio Rebechi - prof. Salaris, Traccia n. 2
+Elaborato del 01.12.2026
+
+COME SI USA (3 passi)
+1. Estrarre lo ZIP in una cartella qualsiasi.
+2. In MATLAB selezionare come Current Folder la cartella
+   File_di_Funzioni_Progetto-Accorpati.
+3. Scrivere nella Command Window:   run_all
+   (richiede alcuni minuti; il riepilogo finale indica PASS/FAIL dei controlli
+   e il log viene salvato in risultati/esecuzione_rapida.txt)
+
+ALTRE ESECUZIONI
+  runtests('test/seaFinaleTest.m')   5 test unitari del modello
+  run_all('completa')                rigenera sintesi, mu-analysis, RAS e
+                                     collaudi Simulink (ore di calcolo)
+  simulink/*.slx                     si aprono e si avviano con Run: i dati
+                                     vengono caricati automaticamente
+
+SERVONO
+  MATLAB con Control System Toolbox, Robust Control Toolbox, Simulink.
+  Non servono Python, Git, la repository o variabili gia presenti nel
+  Workspace. Se il path personale crea conflitti:
+  restoredefaultpath; rehash toolboxcache   (senza savepath)
+
+DOVE SONO LE COSE
+  README.md          indice di script, capitoli, file prodotti, esiti
+  elaborati/         traccia, relazione PDF, presentazione PDF e PPTX
+  risultati/         CSV, MAT e figure citati nella relazione
+  supporto/          funzioni condivise
+  simulink/          8 modelli Simulink e funzioni dei blocchi
+  test/              test unitari e controlli scientifici
+  dati/              controllori di riferimento e pesi approvati
+  MANIFEST_SHA256.json  impronte SHA-256 per verificare l'integrita
