@@ -3317,3 +3317,15 @@ Compilazione integrale di 92 pagine e controllo visivo delle pagine PDF 49–56 
 - Eseguiti 5/5 test `seaFinaleTest`. Un avvio dell'audit supplementare ha restituito l'errore MathWorks 5201. Il tentativo successivo ha completato la verifica in MATLAB di 16 chiusure nominali e il confronto MAT/CSV per post-analisi, riesame, RAS e traiettorie non lineari. Controllati 77 casi lineari, 105 esiti RAS, 14 prove nominali non lineari, 21 prove di massa, 7 prove encoder e 20 collaudi Simulink salvati.
 - La prima impaginazione lasciava due code brevi a fine capitolo. Riorganizzate figure e paragrafi prima di ricompilare la relazione di 70 pagine. Verificate le 42 figure, i collegamenti interni, il rendering e la corrispondenza dei Capitoli 1–9. Compilate e controllate le 23 slide. PowerPoint 16.0 ha renderizzato tutte le pagine e ha aperto la versione finale con tabella della slide 15 e note orali modificabili.
 - Gate editoriale COMPLETE/PASS. Nuove sintesi, nuovi margini robusti, nuove campagne di simulazione e prova orale dal vivo NOT RUN. I dati e i modelli di calcolo sono quelli delle campagne documentate.
+
+## 2026-11-24 — Revisione definitiva per l'elaborato del 01.12.2026
+
+Responsabile: Alessio
+
+- Riorganizzata la cartella `File_di_Funzioni_Progetto-Accorpati` come consegna autonoma: script principali in radice, funzioni condivise in `supporto/`, test in `test/`, 8 SLX in `simulink/`, elaborati in `elaborati/`. Accorpati LQG e LQGI in `progetto_lqg_lqgi.m`; lo studio sul riferimento è ora una funzione locale di `progetto_mu.m`. Commentati gli script con le funzioni dei toolbox usate. Valori numerici e firma di configurazione invariati.
+- Sostituito il confronto bit a bit delle cache con un confronto a tolleranza delle risposte in frequenza (`stessi_controllori`): con R2026a la modalità rapida sul `main` precedente si fermava sul controllo di identità dei controllori.
+- Rimossi dalla versione corrente runner storici, risultati superati e strumenti non usati (1300 → 208 file tracciati, 761.6 → 39 MB). Restano nella cronologia Git.
+- Eseguita con MATLAB R2026a la verifica NS/NP/RS/RP sulla mappa completa Tz[r;d] per MuN1, i sette controllori e i passi D–K 2 e 3 (1026 s). MuN1 PASS in A [1.599, 1.897] e B [1.533, 1.536]; gli altri NP_FAIL o RP limitata da RS. Esiti NS/NP/RS identici alla campagna del 4 novembre; alcuni intervalli RS differiscono numericamente (Hinf2 A, Mu_A A) senza cambiare esito.
+- 5/5 test `seaFinaleTest` PASS in R2026a. `run_all('rapida')` sul codice precedente FAIL in `progetto_mu` per il controllo di identità della cache (motivo della correzione sopra).
+- Gli SLX del 4 novembre, salvati in R2026b, non si aprono in R2026a. Su indicazione degli autori sono stati ripresi i loro SLX salvati in R2026a, sostituendo solo la callback `InitFcn` con quella del progetto; massa m2 e drive per campione restano assegnati in memoria da `collaudo_simulink`. `LQG_linear_sim` conserva il ramo di varianza (DSP System Toolbox).
+- Aggiornati Capitoli 6, 7, 9, 12, 13 e appendici B, C, D; slide 13, 15, 23, note orali e PowerPoint con tabella modificabile. Stima del parlato 17:03.

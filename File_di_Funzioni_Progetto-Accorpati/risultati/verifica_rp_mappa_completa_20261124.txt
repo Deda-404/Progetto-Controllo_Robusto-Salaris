@@ -1,0 +1,13 @@
+VERIFICA RP SULLA MAPPA COMPLETA Tz[r;d] - 24 novembre 2026
+MATLAB 26.1.0.3312084 (R2026a) Update 4, PC di Valerio Rebechi.
+Codice: commit bf77668 (stessi controllori, pesi, incertezze e interconnessione della consegna).
+Mappa: CL(5:8,1:4), ingressi [r1 r2 d1 d2], uscite [ze1 ze2 zu1 zu2].
+Chiamate: robstab(CL) sul chiuso completo; robgain(Tz,1) solo se NP e RS passano.
+Tempo di calcolo 1026.5 s (24 analisi: MuN1, sette controllori ufficiali, passi D-K 2 e 3).
+Esito: MuN1 unico con NP e RS PASS sulla mappa completa; RP PASS in A [1.599, 1.897]
+e in B [1.533, 1.536]. Gli altri: NP_FAIL o RP limitata da RS < 1.
+Mu_A coincide con DK_A_3 e Mu_B con DK_B_3 (stessi numeri).
+Confronto con la campagna del 4 novembre (R2026b): esiti RS identici per tutti;
+alcuni intervalli numerici differiscono (es. Hinf2 A RS [0.044, 0.048] contro
+[0.148, 0.149]; Mu_A A RS [2.66, 3.45] contro [2.18, 2.23]) senza cambiare esito.
+Simulink: gli 8 SLX sono salvati in R2026b e non si caricano in R2026a.

@@ -1,67 +1,85 @@
 \chapter{Riproducibilità}
-\section{Verifiche senza ripetere le sintesi}
-La consegna autonoma contiene gli stessi sorgenti del repository, i controllori ottenuti, i dati necessari e gli otto SLX. Dopo aver estratto lo ZIP e selezionato la cartella in MATLAB si esegue
+\section{Struttura della consegna}
+La cartella \texttt{File\_di\_Funzioni\_Progetto-Accorpati} è autonoma:
+contiene gli script del progetto, le funzioni condivise in
+\texttt{supporto/}, gli otto SLX in \texttt{simulink/}, i dati fissati in
+\texttt{dati/}, i risultati citati in \texttt{risultati/}, i test in
+\texttt{test/} e gli elaborati in \texttt{elaborati/}. Il suo
+\texttt{README.md} indica per ogni script capitolo, ingressi, uscite e
+possibilità di esecuzione isolata; \texttt{LEGGIMI.txt} riassume l'avvio
+in tre passi. Non sono richiesti la repository, Python o variabili
+preesistenti nel Workspace.
+
+\section{Le due modalità}
+Dopo aver estratto lo ZIP e selezionato la cartella in MATLAB si esegue
 \begin{lstlisting}
-run_all('rapida')
+run_all            % equivale a run_all('rapida')
+run_all('completa')
 \end{lstlisting}
-Gli SLX possono anche essere aperti singolarmente: la callback di inizializzazione assegna automaticamente i dati nominali.
-
-Sono richiesti Control System Toolbox e Robust Control Toolbox; per i collaudi dei modelli serve anche Simulink. L'ambiente verificato è MATLAB R2026b. Non sono richiesti accesso al repository, Python o variabili preesistenti nel Workspace.
-
-La modalità rapida ricostruisce meccanica, incertezze, peso e campioni, sintetizza LQG e LQGI e ripete i confronti temporali e sul rumore. Carica esplicitamente le sintesi $H_\infty$/D--K, l'analisi robusta e la RAS della campagna completa, verificandone configurazione e identità dei controllori. Ripete anche una simulazione locale LQG. Un risultato caricato non viene indicato come nuova sintesi.
+La modalità rapida ricostruisce meccanica, incertezze, peso e campioni,
+sintetizza LQG e LQGI, calcola le norme nominali sulle due mappe e ripete
+i confronti temporali e sul rumore. Carica esplicitamente le sintesi
+$H_\infty$/D--K, l'analisi robusta e la RAS della campagna completa,
+verificandone configurazione e identità dei controllori. Un risultato
+caricato non viene indicato come nuova sintesi.
 
 La firma di configurazione controlla parametri, pesi e scelte che
 influenzano i risultati. I dati di robustezza e RAS devono anche
-appartenere alle stesse matrici dei controllori: una firma fisica uguale
-non giustificherebbe riutilizzare la RAS di un altro regolatore.
-Un errore di coerenza richiede una campagna compatibile, non di
-rimuovere il controllo o rinominare il dato per farlo caricare.
+appartenere agli stessi controllori: il confronto usa le risposte in
+frequenza con una tolleranza relativa di $10^{-6}$, così che differenze
+di arrotondamento tra release non invalidino la cache, mentre un
+controllore diverso viene rifiutato. Un errore di coerenza richiede una
+campagna compatibile, non di rimuovere il controllo.
 
-\section{Esperimenti MATLAB}
-Per ripetere le sintesi, la robustezza, le 105 prove RAS, le altre simulazioni non lineari e Simulink si usa
+La modalità completa ripete le due D--K, la $\mu$-analysis su
+$T_{zr}$ e $T_{z[r;d]}$, le 105 prove RAS, le simulazioni non lineari e
+i 20 collaudi Simulink. Il tempo maggiore è assorbito dalla D--K e
+dall'analisi robusta. I parametri modificabili sono centralizzati in
+\texttt{parametri\_sea.m}.
+
+\section{Test}
+I cinque test di \texttt{test/seaFinaleTest.m} verificano in modo
+indipendente equilibrio, Jacobiano, identità di $m_2$ puntiforme,
+coerenza energetica e ricostruzione A/B:
 \begin{lstlisting}
-run_all('completa')
+runtests('test/seaFinaleTest.m')
 \end{lstlisting}
-I parametri modificabili sono centralizzati in \texttt{parametri\_sea.m}. Una firma numerica impedisce di usare risultati incompatibili con il modello o con i pesi. La modalità completa può richiedere diversi minuti; il tempo maggiore è assorbito dalla D--K e dall'analisi robusta.
+\texttt{test/verifica\_sea.m}, eseguito alla fine di \texttt{run\_all},
+ripete otto controlli scientifici e li salva in
+\texttt{risultati/verifiche.csv}. Un esito PASS di questi controlli
+riguarda la correttezza del software; non implica che un controllore
+soddisfi le specifiche.
 
-Nel repository i cinque test di \texttt{tests/seaFinaleTest.m} verificano in modo indipendente equilibrio, Jacobiano, identità di $m_2$ puntiforme, coerenza energetica e ricostruzione A/B. Il comando \texttt{verifica\_sea} ripete i controlli essenziali anche nella consegna.
-
-La selezione dei sette candidati è comune ai confronti. I controllori
-di riferimento possono essere richiesti separatamente con
-\texttt{controllori\_sea(p,true)}, senza sostituirli implicitamente ai
-candidati della traccia. Le prove non eseguite e i risultati caricati
-restano riconoscibili; una compilazione della relazione non esegue
-né sintetizza alcun controllore.
+\section{Release e verifiche effettivamente eseguite}
+La campagna completa del 4 novembre 2026 (sintesi, $\mu$-analysis, RAS,
+Simulink) è stata eseguita con MATLAB R2026b. Le verifiche successive
+alla riorganizzazione del codice, comprese quelle sulla mappa
+$T_{z[r;d]}$ di MuN1, sono state eseguite con MATLAB R2026a; il loro
+esito è riportato nel \texttt{README.md} della consegna. Tra le due
+release non sono attese differenze di contenuto, ma ogni prova riporta
+la release con cui è stata ottenuta.
 
 \section{Gli originali Simulink}
-Il comando \texttt{collaudo\_simulink} prepara i parametri, assegna i valori dei generatori incorporati per i campioni e acquisisce gli Scope. I modelli su disco conservano la loro struttura; il runner applica nominale e primo campione comune. Aprendo un modello isolatamente, la callback assegna il nominale; il runner estende la prova ai campioni. Gli estratti delle curve salvate sono diradati, mentre i controlli di finitezza e i picchi usano l'acquisizione integrale.
-
-Aprendo uno SLX isolato, la callback nominale localizza gli script a
-partire dal percorso del modello. Il runner campionato può invece
-assegnare dati della singola prova senza che l'inizializzazione li
-sostituisca con il nominale. Sono due modalità dello stesso modello,
-non due topologie diverse. In entrambi i casi è importante distinguere
-completamento del solver, finitezza degli stati e prestazione ottenuta.
-Gli avvii autonomi e la campagna campionata risultano dai collaudi
-salvati; qui non vengono dichiarati ripetuti dalla compilazione del PDF.
+Gli otto SLX sono i modelli costruiti dagli autori, salvati con MATLAB
+R2026a; rispetto agli originali è stata sostituita soltanto la callback
+\texttt{InitFcn}, che ora richiama \texttt{collaudo\_simulink}. Il
+modello \texttt{LQG\_linear\_sim} contiene anche due blocchi di varianza
+su misura e stima, che richiedono il DSP System Toolbox.
+Il comando \texttt{collaudo\_simulink} prepara i parametri, assegna i
+valori dei generatori incorporati per i campioni e acquisisce gli Scope.
+I modelli su disco conservano la loro struttura; il runner applica
+nominale e primo campione comune. Aprendo uno SLX isolato, la callback
+\texttt{InitFcn} localizza gli script a partire dal percorso del modello
+e assegna il nominale. Sono due modalità dello stesso modello, non due
+topologie diverse. In entrambi i casi si distinguono completamento del
+solver, finitezza degli stati e prestazione ottenuta.
 
 \section{Compilazione e consegna}
-Nel repository \texttt{tools/esporta\_definitiva.py} aggiorna tabelle e figure dai dati MATLAB. Relazione e slide sono compilate dai rispettivi \texttt{main.tex}. Lo script \texttt{tools/consegna\_definitiva.py} copia i sorgenti autorevoli, i dati coerenti e i PDF in un solo ZIP e ne verifica gli hash SHA-256. Il collaudo da una cartella estratta esterna al repository controlla che l'esecuzione non dipenda da percorsi di sviluppo.
-
-Per le visualizzazioni editoriali da dati salvati si esegue dalla radice
-\begin{lstlisting}[language={}]
-python report/figures/editoriale/esporta.py
-\end{lstlisting}
-Per il capitolo 7 è disponibile un esportatore dedicato delle figure LQG.
-Questi strumenti richiedono Python, NumPy, SciPy e Matplotlib per
-preparare il documento, senza aggiungere dipendenze alla sua esecuzione
-MATLAB. La compilazione integrale usa \texttt{latexmk -pdf main.tex}
-nella cartella \texttt{report}, oppure passaggi ripetuti di
-\texttt{pdflatex} fino alla risoluzione di indice e riferimenti.
-È necessario conservare anche gli elementi in \texttt{generated} e
-\texttt{figures}: il solo sorgente di un capitolo non basta a compilare.
-
-Il collaudo da estrazione esterna identifica il contenuto eseguibile
-e i dati effettivamente confezionati. La firma dei parametri e gli hash
-consentono di confrontare quella configurazione con il repository,
-senza confondere una verifica del documento con una prova numerica.
+Nel repository \texttt{tools/esporta\_definitiva.py} aggiorna tabelle e
+figure dai dati MATLAB; relazione e slide si compilano con
+\texttt{latexmk -pdf main.tex} nelle cartelle \texttt{report} e
+\texttt{presentation}. Lo script \texttt{tools/consegna\_definitiva.py}
+elenca i file della cartella di consegna, scrive
+\texttt{MANIFEST\_SHA256.json} e crea lo ZIP, verificandone integrità e
+impronte. Il collaudo da una cartella estratta esterna alla repository
+controlla che l'esecuzione non dipenda da percorsi di sviluppo.

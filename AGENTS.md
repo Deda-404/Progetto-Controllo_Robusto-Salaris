@@ -14,7 +14,7 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 ## Ambienti e integrità accademica
 
 - Google Drive è **reference only**: non creare, modificare, rinominare, spostare o cancellare file sul Drive.
-- Il repository GitHub `Deda-404/Progetto_CR` è la **source of truth** e l'unica area di lavoro del progetto.
+- Il repository GitHub `Deda-404/Progetto-Controllo_Robusto-Salaris` (in precedenza `Deda-404/Progetto_CR`) è la **source of truth** e l'unica area di lavoro del progetto.
 - Studiare il progetto precedente senza copiarne automaticamente testo, codice, controllori, grafici, numeri o conclusioni.
 - Le scelte del gruppo precedente restano proposte finché non vengono comprese, riprodotte, motivate e approvate.
 - Non inventare mai risultati numerici, matrici, poli, \(\gamma\), \(\mu\), margini, RAS, metriche temporali, Monte Carlo o output Simulink.
@@ -53,7 +53,7 @@ Queste regole sono permanenti e si applicano a ogni attività nel repository.
 ## Documentazione obbligatoria
 
 - Semplicita didattica prioritaria: pochi ingressi e funzioni locali; funzioni esterne solo per correttezza, riuso effettivo o leggibilita. Evitare proliferazione di file e cache.
-- Il percorso corrente e `run_all.m` con gli script accorpati. I runner storici in `analysis/`, `src/`, `controllers/` restano archivio di provenienza, fuori dal percorso operativo.
+- Il percorso corrente e `File_di_Funzioni_Progetto-Accorpati/run_all.m` con gli script accorpati; la cartella e autonoma e costituisce la consegna. I runner storici (`analysis/`, `src/`, `controllers/`, `results/`) sono stati rimossi dalla versione corrente il 24.11.2026 e restano consultabili nella cronologia Git.
 - La consegna deriva dagli stessi sorgenti. Tracciabilita, seed e test reali restano obbligatori; non richiedono infrastrutture sproporzionate.
 
 - `README.md`: scopo, struttura, prerequisiti, esecuzione e stato sintetico; non è un diario.

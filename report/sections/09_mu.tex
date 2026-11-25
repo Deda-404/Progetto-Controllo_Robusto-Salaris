@@ -410,19 +410,77 @@ Nel caso peggiore entrambi restano fuori fascia a 12 s. Il picco sotto rumore sa
 \FinLQGRms\ a \FinMuNOneRMSRumore\ N m. LQG resta la scelta
 più equilibrata per le specifiche e le prove considerate.
 
+\subsection{Prestazione robusta sulla mappa completa}
+
+Le verifiche precedenti dichiarano la prestazione robusta su
+$T_{zr}$. Per MuN1 restava aperta la stessa domanda sulla mappa
+$T_{z[r;d]}$, quella usata dalla D--K, che aggiunge le coppie di
+disturbo agli ingressi prestazionali con gli stessi pesi. Abbiamo
+quindi ripetuto NS, NP, RS e RP su $T_{z[r;d]}$ per MuN1 e per i
+sette controllori della banca, con le stesse chiamate
+\texttt{robstab} e \texttt{robgain} della
+Tabella~\ref{tab:cap9-robustezza}. La verifica è del 24.11.2026,
+con MATLAB R2026a.
+
+\input{generated/finale_mappa_completa.tex}
+
+MuN1 è l'unico controllore con NP, RS e RP soddisfatte su
+$T_{z[r;d]}$ in entrambe le famiglie. La norma nominale vale
+\FinMuNOneNorma, con picco a $0.3$ rad/s, cioè al polo di $W_e$.
+In quella direzione prevale il disturbo ($\approx0.97$ del peso di
+ingresso contro $\approx0.24$ del riferimento) e il contributo del
+comando pesato è trascurabile ($\approx0.004$). I margini RP sono
+\FinMuNOneRPrdA\ in A e \FinMuNOneRPrdB\ in B: la prestazione
+pesata resta sotto uno anche con semiampiezze di incertezza
+superiori di oltre il $50\%$ a quelle dichiarate.
+
+Gli altri sette non arrivano al calcolo di RP. LQG, LQGI, Hinf1,
+Mu\_A e Mu\_B falliscono già NP sulla mappa completa; Hinf2 e PID
+passano NP ma perdono RS, che limita il margine RP sotto uno.
+Gli esiti NS, NP e RS coincidono con quelli della campagna del
+4 novembre (MATLAB R2026b). Alcuni intervalli numerici di RS
+differiscono, per esempio Hinf2 su A ($[0.044,\,0.048]$ contro
+$[0.148,\,0.149]$) e Mu\_A su A ($[2.66,\,3.45]$ contro
+$[2.18,\,2.23]$), senza cambiare esito. Per incertezze reali il
+limite inferiore è calcolato su una griglia di frequenze e può
+risultare ottimistico, mentre il limite superiore deriva da una
+perturbazione effettivamente trovata. Per questo leggiamo gli esiti
+e non le cifre oltre la seconda.
+
+\paragraph{Cosa dice questo della D--K.}
+Il passo 1 di entrambe le ricerche è MuN1, con picco $\mu$
+$6.260$ su A e $3.456$ su B (Tabella~\ref{tab:cap9-dk}), cioè
+ben sopra uno. La post-analisi dello stesso controllore sulla
+stessa mappa dà invece RP soddisfatta con margine maggiore di
+$1.5$. Il picco del passo D è un limite superiore costruito con
+scaling D/G adattati da fit di ordine basso su blocchi reali e
+dinamici; su questo problema risulta molto conservativo. La
+ricerca ha poi ridotto il proprio limite superiore (fino a
+\FinDkA\ e \FinDkB) con controllori di ordine $242$ e $106$, che
+sulla pianta originale perdono la prestazione nominale
+(norma $1.895$ e $1.087$). Anche i passi 2 hanno norma nominale
+sopra uno ($1.738$ su A e $1.119$ su B). La discesa del picco
+$\mu$ misura quindi il progresso nel problema scalato, non la
+prestazione effettiva: l'esito RP si legge sulla post-analisi del
+controllore sulla pianta originale. Il controllore migliore per
+$T_{z[r;d]}$ è l'inizializzazione, non il risultato finale delle
+iterazioni.
+
 \section{Risultati raggiunti e limite sul costo robusto}
 
 L'analisi a controllore fissato e le due D--K rispondono alla parte
 della traccia su metodi e confronto. Fra i sette controllori
 del confronto principale, LQG soddisfa RP sul riferimento nelle due
-famiglie. Il riesame aggiunge MuN1 come secondo caso verificato.
-La verifica storica su $[r;d]$ escludeva RP per i sette controllori.
+famiglie, ma nessuno soddisfa RP sulla mappa completa. MuN1, fuori
+dalla banca ufficiale, soddisfa RP su entrambe le mappe e in
+entrambe le famiglie. Il suo limite è nominale: l'errore statico
+dell'$8.24\%$ supera il target del $5\%$, pur restando entro il
+$15\%$ ammesso dal peso $W_e$.
 
-La garanzia di LQG e MuN1 riguarda il riferimento a coppie di disturbo
-e rumore nulli. Per la reiezione delle coppie si leggono le
-prove del Capitolo 11. Un obiettivo robusto che includa quelle
-coppie richiederebbe una verifica dedicata ed eventualmente un
-diverso bilanciamento dei requisiti di errore e comando.
+La garanzia su $T_{z[r;d]}$ riguarda il riferimento e le coppie
+pesate, con rumore nullo. Le risposte al rumore encoder e le
+coppie di grande ampiezza nel modello non lineare si leggono nelle
+prove del Capitolo 11.
 
 L'estensione teorica del Capitolo~\ref{cap:hinf} aggiungerebbe il
 rumore encoder fra gli ingressi esterni della pianta generalizzata,

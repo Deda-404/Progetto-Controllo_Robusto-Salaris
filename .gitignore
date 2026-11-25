@@ -64,3 +64,18 @@ __pycache__/
 /delivery/Consegna_SEA_2026-10-13.zip
 /delivery/Consegna_SEA_Rumore_Orale_2026-10-13/
 /delivery/Consegna_SEA_Rumore_Orale_2026-10-13.zip
+
+# Revisione 01.12.2026: artefatti rigenerabili della cartella di consegna
+/File_di_Funzioni_Progetto-Accorpati/risultati/simulink.mat
+/File_di_Funzioni_Progetto-Accorpati/risultati/esecuzione_completa.txt
+/File_di_Funzioni_Progetto-Accorpati/risultati/verifica_rp_mappa_completa.csv
+# Archivio di consegna generato da tools/consegna_definitiva.py
+/delivery/
+*.zip
+
+# Uscite dell esportatore non incluse negli elaborati
+report/generated/finale_carico.tex
+report/generated/finale_frequenze.tex
+report/generated/finale_kalman.tex
+report/generated/finale_ritardo.tex
+report/figures/definitiva/nominale.png

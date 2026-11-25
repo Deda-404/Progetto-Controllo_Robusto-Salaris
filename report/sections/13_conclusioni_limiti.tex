@@ -32,14 +32,17 @@ campioni incerti. Mu\_A e Mu\_B mantengono RS, con limiti
 nella precisione e nella risposta al rumore.
 Le due D--K sono state limitate a tre passi salvati
 per rappresentazione. Il risultato dipende da quella
-ricerca e dalla mappa scelta. MuN1 aggiunge una garanzia
-sul riferimento con maggiore
-riserva pesata, al costo di errore statico oltre il 5\%
-e maggiore esposizione alla coppia e al rumore rispetto
-a LQG nelle prove dedicate. Nessuno dei sette controllori
+ricerca e dalla mappa scelta. Nessuno dei sette controllori
 della banca passa RP sulla mappa completa riferimento--disturbo.
-I margini di MuN1 discussi nel riesame riguardano la mappa
-sul riferimento.
+MuN1, inizializzazione comune delle due D--K, è l'unico a
+soddisfare RP su entrambe le mappe e in entrambe le famiglie,
+con margini \FinMuNOneRPrdA\ e \FinMuNOneRPrdB\ su
+$T_{z[r;d]}$. Il prezzo è un errore statico dell'$8.24\%$, oltre
+il 5\%, e una maggiore esposizione al rumore e al picco di
+coppia rispetto a LQG nelle prove dedicate. Le iterazioni
+successive hanno ridotto il limite superiore della D--K
+peggiorando la prestazione effettiva: la scelta va fatta sulla
+post-analisi, non sul picco $\mu$ della ricerca.
 
 \paragraph*{Limiti sperimentali e modellistici}
 Gli intervalli sono ipotesi di progetto, da confrontare con

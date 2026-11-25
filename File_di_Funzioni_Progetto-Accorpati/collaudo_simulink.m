@@ -1,14 +1,27 @@
 function risultati=collaudo_simulink(nomeModello)
-%COLLAUDO_SIMULINK Inizializzazione automatica o collaudo dei modelli esistenti.
-% Con il nome del modello assegna solo i parametri nominali, senza simulare.
+%COLLAUDO_SIMULINK Inizializzazione e collaudo degli otto modelli Simulink (Capitolo 10).
+%
+% Due usi:
+%   collaudo_simulink('LQG_linear_sim')  chiamata automatica dalla callback
+%       InitFcn di ogni SLX: assegna al Model Workspace matrici del modello,
+%       controllori e drive nominali letti da risultati/, senza simulare.
+%       Per questo un SLX si apre e si avvia con Run senza preparare il
+%       Workspace: basta che la cartella simulink/ stia dentro la cartella
+%       di consegna (la callback cerca collaudo_simulink.m nella cartella
+%       superiore).
+%   collaudo_simulink  (senza argomenti, usato da run_all('completa'))
+%       simula ogni modello per 2 s sul nominale e sul primo impianto
+%       campionato, controlla che stati e Scope siano finiti e salva
+%       risultati/simulink.csv. E un test di esecuzione: RS/RP e specifiche
+%       sono valutate negli script MATLAB.
+% Gli SLX non vengono mai salvati: le modifiche (massa m2 dei blocchi
+% MATLAB Function, sistema Gact dei drive) restano in memoria.
 if nargin==0,nomeModello="";end
 inizializza=strlength(string(nomeModello))>0;
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
-radice=fileparts(cartella); modelliDir=fullfile(radice,'simulink','student_originals');
-support=fullfile(radice,'src','model');
-if ~isfolder(modelliDir)
-    modelliDir=fullfile(cartella,'simulink'); support=fullfile(modelliDir,'support');
-end
+% Modelli e funzioni esterne dei blocchi MATLAB Function (sea_link_inertia,
+% sea_coriolis, sea_gravity, sea_elastic_torque) sono nella cartella simulink/.
+modelliDir=fullfile(cartella,'simulink'); support=fullfile(modelliDir,'supporto');
 addpath(modelliDir,support);
 assert(license('test','Simulink'),'SEA:Simulink','Simulink non disponibile.');
 a=load(fullfile(p.dati,'banca_validata.mat')); b=a.banca;

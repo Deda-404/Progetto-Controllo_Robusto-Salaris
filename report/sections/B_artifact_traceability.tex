@@ -1,16 +1,19 @@
 \chapter{Tracciabilità dei risultati}
-I risultati provengono dagli script in \texttt{File\_di\_Funzioni\_Progetto-Accorpati}. La cartella \texttt{risultati} conserva i dati a precisione di calcolo; tabelle e formule della relazione sono esportate da quei file. L'arrotondamento avviene solo nella presentazione.
+I risultati provengono dagli script della cartella di consegna, l'unica necessaria per eseguire il progetto:
+\begin{center}\path{File_di_Funzioni_Progetto-Accorpati}\end{center}
+La cartella \texttt{risultati} conserva i dati a precisione di calcolo; tabelle e formule della relazione sono esportate da quei file. L'arrotondamento avviene solo nella presentazione.
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{.26\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}\toprule
-Argomento & Script & Evidenza\\\midrule\endhead
-Meccanica e nominale & \path{modello_sea.m}, \path{matrici_sea.m} & \path{modello.mat}, estremi di $m_2$, verifica Jacobiano\\
-Famiglie A/B & \path{incertezze_attuatori.m} & \path{incertezze.mat}, ordini del peso, parametri comuni\\
-LQG e LQGI & \path{progetto_lqg.m}, \path{progetto_lqgi.m} & CARE, \path{kalman.csv}, guadagni nei MAT\\
-$H_\infty$ e PID & \path{progetto_hinf_tre_controllori.m} & \path{sintesi_hinf.mat}, \path{hinf.csv}\\
-Robustezza e D--K & \path{progetto_mu.m} & \path{confronto_robusto.csv}, \path{dk_1.csv}, \path{dk_2.csv}\\
-Campioni, rumore, RAS & \path{confronto_ras.m}, \path{simula_sea.m} & \path{dieci_impianti.csv}, \path{rumore.csv}, \path{ras.mat}\\
-Simulink & \path{collaudo_simulink.m} & \path{simulink.csv}, parametri e Scope in \path{simulink.mat}\\
-Verifiche fisiche & \path{verifica_sea.m}, test MATLAB & \path{verifiche.csv}, \path{riassunto_numerico.json}\\\bottomrule
+\begin{longtable}{>{\raggedright\arraybackslash}p{.24\linewidth}>{\raggedright\arraybackslash}p{.34\linewidth}>{\raggedright\arraybackslash}p{.32\linewidth}}\toprule
+Argomento (capitolo) & Script & Evidenza in \path{risultati/}\\\midrule\endhead
+Parametri (2, 4--6) & \path{parametri_sea.m} & firma di configurazione nei MAT\\
+Meccanica e nominale (2--4) & \path{modello_sea.m}, \path{supporto/matrici_sea.m}, \path{supporto/dinamica_sea.m} & \path{modello.mat}, \path{candidati_massa.csv}\\
+Famiglie A/B (5) & \path{incertezze_attuatori.m} & \path{incertezze.mat}, \path{ordini_peso.csv}, \path{parametri_dieci_impianti.csv}\\
+LQG e LQGI (7) & \path{progetto_lqg_lqgi.m} & \path{lqg.mat}, \path{lqgi.mat}, \path{kalman.csv}\\
+$H_\infty$ e PID (8) & \path{progetto_hinf_tre_controllori.m} & \path{sintesi_hinf.mat}, \path{hinf.csv}\\
+Robustezza e D--K (9, 12) & \path{progetto_mu.m}, \path{supporto/postanalisi_sea.m}, \path{supporto/interconnessione_sea.m} & \path{confronto_robusto_r.csv}, \path{confronto_robusto.csv}, \path{verifica_rp_mappa_completa_20261124.csv}, \path{dk_1.csv}, \path{dk_2.csv}, \path{studio_mu_riferimento/}\\
+Campioni, rumore, RAS (10, 11) & \path{confronto_ras.m}, \path{supporto/simula_sea.m}, \path{supporto/rumore_continuo_sea.m} & \path{dieci_impianti.csv}, \path{rumore.csv}, \path{ras.csv}, \path{ras.mat}\\
+Simulink (10) & \path{collaudo_simulink.m}, \path{simulink/} & \path{simulink.csv}, \path{simulink_autonomo.csv}\\
+Verifiche (tutti) & \path{test/verifica_sea.m}, \path{test/seaFinaleTest.m} & \path{verifiche.csv}, \path{riassunto_numerico.json}\\\bottomrule
 \end{longtable}
 
 La catena dati--figura--testo permette di distinguere quattro situazioni.
@@ -38,8 +41,8 @@ metriche. \path{rumore.csv} distingue esplicitamente campioni, massimi
 intercampione e RMS integrato; una figura a barre di tali metriche
 non viene presentata come una traccia temporale encoder.
 
-\path{simulink.mat} conserva parametri e acquisizioni degli Scope;
-\path{simulink.csv} identifica modello, campione, candidato e durata.
+\path{simulink.mat}, rigenerato dalla modalità completa, conserva parametri
+e acquisizioni degli Scope; \path{simulink.csv} identifica modello, campione, candidato e durata.
 \path{simulink_autonomo.csv} riguarda invece gli avvii con callback
 nominale. Le due verifiche hanno scopi distinti e non si sommano a una
 certificazione prestazionale. Gli estratti grafici diradati conservano

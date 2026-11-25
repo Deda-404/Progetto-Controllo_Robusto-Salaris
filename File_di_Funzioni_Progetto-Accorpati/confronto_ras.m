@@ -1,3 +1,38 @@
+%% CONFRONTO_RAS - Dieci impianti, rumore, prove non lineari e RAS (Capitoli 10-12)
+%
+% Obiettivo (punti 1-3 e 5 della traccia): confrontare tutti i controllori
+% nelle stesse condizioni fisiche.
+%   2) dieci impianti incerti comuni (gli stessi campioni per tutti) piu il
+%      nominale: stabilita, errore statico, assestamento, sovraelongazione,
+%      cross-coupling, picco di comando e reiezione del disturbo;
+%   3) rumore encoder comune (sigma 0.05 gradi, campioni ogni 2 ms tenuti
+%      costanti fra un istante e il successivo, cioe ZOH): picco e RMS del
+%      comando, anche fra i campioni (rumore_continuo_sea);
+%   4) simulazioni non lineari (simula_sea): gradino, disturbo e massa m2
+%      ai bordi dell'intervallo;
+%   5) RAS empirica: 15 condizioni iniziali attorno all'equilibrio.
+%
+% Il campionamento mostra la risposta di alcune realizzazioni: e evidenza
+% empirica, non una garanzia sull'insieme (quella viene dalla mu-analysis).
+% A e B sono due descrizioni dell'incertezza: a parita di impianto fisico
+% e controllore la risposta e unica, quindi qui non si distingue A da B.
+%
+% La RAS e una stima empirica della regione di attrazione: un punto marcato
+% CONVERGENZA converge entro 15 s, ma l'insieme dei punti non e una regione
+% certificata (nessuna funzione di Lyapunov). Esiti possibili:
+%   CONVERGENZA          posizioni, velocita e comando entro le tolleranze
+%                        nell'ultimo secondo;
+%   MANCATA_CONVERGENZA  simulazione completata senza convergere;
+%   DIVERGENZA_OSSERVATA stato oltre 4*pi rad o 1000 rad/s;
+%   TIMEOUT              tempo di calcolo esaurito (NON prova instabilita);
+%   ERRORE_NUMERICO      solver interrotto o stato non finito.
+%
+% Modalita rapida: ricalcola dieci impianti e rumore (lineari, veloci),
+% carica prove non lineari e RAS dalla campagna completa e ripete una
+% simulazione locale di controllo. Modalita completa: ricalcola tutto.
+% Salva: dieci_impianti.csv, rumore.csv, nonlineare.csv, massa_nonlineare.csv,
+% ras.csv, ras.mat e le figure correlate.
+
 %% 1 - Banca comune: dieci impianti fisici e quindici condizioni RAS separate
 cartella=fileparts(mfilename('fullpath')); addpath(cartella); p=parametri_sea;
 if ~isfile(fullfile(p.risultati,'incertezze.mat')),run(fullfile(cartella,'incertezze_attuatori.m'));end
@@ -17,6 +52,8 @@ for k=1:numel(nomi)
         stabile=isstable(CL); polo=max(real(pole(CL)));
         erroreDC=NaN; picco=NaN; disturbo=NaN; ts=NaN; overshoot=NaN; cross=NaN; recupero=NaN;
         if stabile
+            % step: risposta al gradino di ampiezza rAmp (5 gradi) su ciascun
+            % riferimento; risposta(:,uscita,ingresso).
             risposta=step(CL(1:4,1:2)*p.rAmp,p.tempo); risposte{k,j+1}=risposta;
             erroreDC=max(abs(dcgain(CL(1:2,1:2))-eye(2)),[],'all');
             picco=max(abs(risposta(:,3:4,:)),[],'all');
@@ -31,6 +68,10 @@ for k=1:numel(nomi)
                 end
             end
             for asse=1:2
+                % stepinfo calcola assestamento (banda 2%) e sovraelongazione;
+                % il terzo argomento e il valore finale effettivo, quindi
+                % l'assestamento e rispetto al valore raggiunto. L'errore
+                % rispetto al riferimento e misurato a parte (ErroreDC).
                 info=stepinfo(risposta(:,asse,asse),p.tempo,p.rAmp*dcgain(CL(asse,asse)));
                 % Un assestamento non determinato entro la finestra non vale zero.
                 if ~isfinite(info.SettlingTime),ts=Inf;
@@ -46,6 +87,8 @@ impianti=cell2table(righe,'VariableNames',{'Controllore','Impianto','Stabile','P
 writetable(impianti,fullfile(p.risultati,'dieci_impianti.csv'));
 
 %% 3 - Rumore encoder comune, ZOH esplicito e comando non saturato
+% Stessa sequenza gaussiana per tutti i controllori (seed fisso). Nessuna
+% saturazione: i picchi elevati di alcuni H-infinito/mu restano visibili.
 statoRng=rng; rng(p.seed,'twister'); v=p.sigmaY*randn(numel(p.tempoRumore),4); rng(statoRng);
 righe=cell(numel(nomi),7);
 for k=1:numel(nomi)
@@ -89,6 +132,9 @@ if p.modalita=="completa"
     carico=cell2table(carico,'VariableNames',{'Controllore','Massa2','Esito','PiccoU','ErroreFinale','Completato'});
     writetable(carico,fullfile(p.risultati,'massa_nonlineare.csv'));
     %% 5 - RAS: cinque direzioni per tre distanze, nessuna frontiera dedotta
+    % Punti nel piano (dq1,dq2) a 5, 15 e 30 gradi dall'equilibrio qbar,
+    % su cinque direzioni. Gli altri stati partono dall'equilibrio (vedi
+    % simula_sea): motori spostati come i link, velocita nulle.
     punti=zeros(numel(p.rasRaggi)*numel(p.rasDirezioni),2);
     for j=1:numel(p.rasRaggi)
         indici=(j-1)*numel(p.rasDirezioni)+(1:numel(p.rasDirezioni));
@@ -108,7 +154,7 @@ else
     if ~isfile(fileRas),fileRas=fullfile(p.dati,'ras.mat');end
     assert(isfile(fileRas),'SEA:Cache','RAS assente: eseguire modalita completa.');
     a=load(fileRas); ras=a.ras; percorsi=a.percorsi; punti=a.punti;
-    assert(isfield(a,'firma') && isequal(a.firma,p.firma) && isequal(nomi,a.nomi) && isequaln(controllori,a.controllori), ...
+    assert(isfield(a,'firma') && isequal(a.firma,p.firma) && isequal(nomi,a.nomi) && stessi_controllori(controllori,a.controllori,p.omega), ...
         'SEA:CacheRAS','Controllori diversi dalla campagna RAS salvata.');
     nonlineare=a.nonlineare; traiettorie=a.traiettorie;
     disp('RAS CARICATA dalla campagna completa. Verifica locale LQG eseguita ora.');
